@@ -1,4 +1,4 @@
-import { getPageImage, articlesSource } from '@/lib/source';
+import { getPageImage, labsSource } from '@/lib/source';
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
 
@@ -6,10 +6,10 @@ export const revalidate = false;
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<'/og/docs/[...slug]'>,
+  { params }: RouteContext<'/og/labs/[...slug]'>,
 ) => {
   const { slug } = await params;
-  const page = articlesSource.getPage(slug.slice(0, -1));
+  const page = labsSource.getPage(slug.slice(0, -1));
   if (!page) notFound();
 
   return new ImageResponse(
@@ -55,7 +55,7 @@ export const GET = async (
           marginTop: '40px',
         }}
       >
-        My Blog
+        My Blog - Labs
       </p>
     </div>,
     {
@@ -66,7 +66,7 @@ export const GET = async (
 };
 
 export const generateStaticParams = () => {
-  return articlesSource.getPages().map((page) => ({
+  return labsSource.getPages().map((page) => ({
     lang: page.locale,
     slug: getPageImage(page).segments,
   }));

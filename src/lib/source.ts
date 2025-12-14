@@ -1,27 +1,34 @@
-import { docs } from 'fumadocs-mdx:collections/server';
+import { articles, labs } from 'fumadocs-mdx:collections/server';
 import { type InferPageType, loader } from 'fumadocs-core/source';
 import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 
 // See https://fumadocs.dev/docs/headless/source-api for more info
-export const source = loader({
-  baseUrl: '/docs',
-  source: docs.toFumadocsSource(),
+export const articlesSource = loader({
+  baseUrl: '/articles',
+  source: articles.toFumadocsSource(),
   plugins: [lucideIconsPlugin()],
 });
 
-export function getPageImage(page: InferPageType<typeof source>) {
+export const labsSource = loader({
+  baseUrl: '/labs',
+  source: labs.toFumadocsSource(),
+  plugins: [lucideIconsPlugin()],
+});
+
+export const getPageImage = (page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>) => {
   const segments = [...page.slugs, 'image.png'];
+  const type = page.url.includes('/labs') ? 'labs' : 'articles';
 
   return {
     segments,
-    url: `/og/docs/${segments.join('/')}`,
+    url: `/og/${type}/${segments.join('/')}`,
   };
-}
+};
 
-export async function getLLMText(page: InferPageType<typeof source>) {
+export const getLLMText = async (page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>) => {
   const processed = await page.data.getText('processed');
 
   return `# ${page.data.title}
 
 ${processed}`;
-}
+};

@@ -1,17 +1,27 @@
-import { RootProvider } from 'fumadocs-ui/provider/next';
-import './global.css';
-import { Inter } from 'next/font/google';
+import './styles.css';
+import { Space_Mono, Plus_Jakarta_Sans } from 'next/font/google';
 
-const inter = Inter({
+const spaceMono = Space_Mono({
+  weight: ['400', '700'],
   subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
 });
 
-export default function Layout({ children }: LayoutProps<'/'>) {
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+});
+
+const Layout = ({ children }: LayoutProps<'/'>) => {
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
-        <RootProvider>{children}</RootProvider>
+    <html lang="en" className={`${spaceMono.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
+      <body className="grid min-h-screen font-mono bg-oatmeal-50 text-oatmeal-950">
+        {children}
       </body>
     </html>
   );
-}
+};
+
+export default Layout;

@@ -4,13 +4,38 @@ import {
   frontmatterSchema,
   metaSchema,
 } from 'fumadocs-mdx/config';
+import { z } from 'zod';
 
-// You can customise Zod schemas for frontmatter and `meta.json` here
-// see https://fumadocs.dev/docs/mdx/collections
-export const docs = defineDocs({
-  dir: 'content/docs',
+const schema = frontmatterSchema.extend({
+  date: z
+    .union([
+      z.string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
+        .transform(val => new Date(val)),
+      z.date()
+    ])
+    .optional(),
+  draft: z.boolean().default(false),
+  topics: z.array(z.string()).optional(),
+});
+
+export const articles = defineDocs({
+  dir: 'content/articles',
   docs: {
-    schema: frontmatterSchema,
+    schema,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
+export const labs = defineDocs({
+  dir: 'content/labs',
+  docs: {
+    schema,
     postprocess: {
       includeProcessedMarkdown: true,
     },

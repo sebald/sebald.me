@@ -1,9 +1,7 @@
-import type { BaseLayoutProps } from 'fumadocs-ui/layouts/shared';
-
-export function baseOptions(): BaseLayoutProps {
+export const baseOptions = () => {
   return {
     nav: {
-      title: 'My App',
+      title: 'My Blog',
     },
   };
-}
+};
