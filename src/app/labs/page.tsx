@@ -26,9 +26,7 @@ const LabsIndex = async () => {
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex gap-4">
                 {page.data.date && (
-                  <span>
-                    {new Date(page.data.date).toLocaleDateString()}
-                  </span>
+                  <span>{new Date(page.data.date).toLocaleDateString()}</span>
                 )}
               </div>
               {page.data.draft && (

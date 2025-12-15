@@ -31,7 +31,7 @@ const generateStaticParams = async () => {
 };
 
 const generateMetadata = async (
-  props: PageProps<'/labs/[...slug]'>,
+  props: PageProps<'/labs/[...slug]'>
 ): Promise<Metadata> => {
   const params = await props.params;
   const page = labsSource.getPage(params.slug);

@@ -9,10 +9,11 @@ import { z } from 'zod';
 const schema = frontmatterSchema.extend({
   date: z
     .union([
-      z.string()
+      z
+        .string()
         .regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be in YYYY-MM-DD format')
-        .transform(val => new Date(val)),
-      z.date()
+        .transform((val) => new Date(val)),
+      z.date(),
     ])
     .optional(),
   draft: z.boolean().default(false),

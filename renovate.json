@@ -1,0 +1,32 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":semanticCommitTypeAll(chore)",
+    ":rebaseStalePrs"
+  ],
+  "schedule": ["before 4am on Monday"],
+  "timezone": "Europe/Berlin",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "minimumReleaseAge": "3 days"
+    },
+    {
+      "groupName": "Next.js",
+      "matchPackagePatterns": ["^next$", "^@next/", "^nextjs"]
+    },
+    {
+      "groupName": "ESLint",
+      "matchPackagePatterns": ["^eslint", "^@eslint"]
+    },
+    {
+      "groupName": "Tailwind CSS",
+      "matchPackagePatterns": ["^tailwindcss$", "^@tailwindcss/", "/postcss/"]
+    },
+    {
+      "groupName": "Fumadocs",
+      "matchPackagePatterns": ["^fumadocs-"]
+    }
+  ]
+}

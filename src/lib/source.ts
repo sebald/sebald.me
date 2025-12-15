@@ -15,7 +15,9 @@ export const labsSource = loader({
   plugins: [lucideIconsPlugin()],
 });
 
-export const getPageImage = (page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>) => {
+export const getPageImage = (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>
+) => {
   const segments = [...page.slugs, 'image.png'];
   const type = page.url.includes('/labs') ? 'labs' : 'articles';
 
@@ -25,7 +27,9 @@ export const getPageImage = (page: InferPageType<typeof articlesSource> | InferP
   };
 };
 
-export const getLLMText = async (page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>) => {
+export const getLLMText = async (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>
+) => {
   const processed = await page.data.getText('processed');
 
   return `# ${page.data.title}

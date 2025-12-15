@@ -16,7 +16,11 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 const Layout = ({ children }: LayoutProps<'/'>) => {
   return (
-    <html lang="en" className={`${spaceMono.variable} ${plusJakarta.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${spaceMono.variable} ${plusJakarta.variable}`}
+      suppressHydrationWarning
+    >
       <body className="grid min-h-screen font-mono bg-oatmeal-50 text-oatmeal-950">
         {children}
       </body>
