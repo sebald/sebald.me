@@ -1,4 +1,4 @@
-import { getLLMText, articlesSource, labsSource } from '@/lib/source';
+import { articlesSource, getLLMText, labsSource } from '@/lib/source';
 
 export const revalidate = false;
 

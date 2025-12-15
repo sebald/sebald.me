@@ -1,5 +1,6 @@
-import { articlesSource, labsSource } from '@/lib/source';
 import { createFromSource } from 'fumadocs-core/search/server';
+
+import { articlesSource, labsSource } from '@/lib/source';
 
 const articlesSearch = createFromSource(articlesSource, {
   // https://docs.orama.com/docs/orama-js/supported-languages

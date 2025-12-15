@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import { articlesSource } from '@/lib/source';
 
 const ArticlesIndex = async () => {
@@ -10,7 +11,7 @@ const ArticlesIndex = async () => {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-8">Articles</h1>
+      <h1 className="mb-8 text-4xl font-bold">Articles</h1>
       <div className="space-y-6">
         {pages.map((page) => (
           <article
@@ -18,11 +19,11 @@ const ArticlesIndex = async () => {
             className="border-b border-gray-200 pb-6 last:border-b-0"
           >
             <Link href={page.url} className="group">
-              <h2 className="text-2xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
+              <h2 className="mb-2 text-2xl font-bold transition-colors group-hover:text-blue-600">
                 {page.data.title}
               </h2>
             </Link>
-            <p className="text-gray-600 mb-3">{page.data.description}</p>
+            <p className="mb-3 text-gray-600">{page.data.description}</p>
             <div className="flex items-center justify-between text-sm text-gray-500">
               <div className="flex gap-4">
                 {page.data.date && (
@@ -30,7 +31,7 @@ const ArticlesIndex = async () => {
                 )}
               </div>
               {page.data.draft && (
-                <span className="text-orange-600 font-semibold">Draft</span>
+                <span className="font-semibold text-orange-600">Draft</span>
               )}
             </div>
           </article>

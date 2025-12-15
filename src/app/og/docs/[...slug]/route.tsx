@@ -1,6 +1,7 @@
-import { getPageImage, articlesSource } from '@/lib/source';
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
+
+import { articlesSource, getPageImage } from '@/lib/source';
 
 export const revalidate = false;
 
