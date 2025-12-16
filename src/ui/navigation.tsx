@@ -102,14 +102,12 @@ export const Navigation = () => (
       'flex w-full max-w-full items-center justify-between',
       'fixed top-0 left-1/2 z-50 -translate-x-1/2',
       'transition-all',
-
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
-
       'px-8 py-6'
     )}
   >
     <Logo
-      className="animate-shrink scroll-trigger scroll-trigger-to-25"
+      className="animate-shrink shrink-scale-75 scroll-trigger scroll-trigger-to-25"
       href="/"
     />
     <LargeScreenNav />
