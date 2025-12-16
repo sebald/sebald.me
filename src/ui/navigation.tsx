@@ -7,6 +7,7 @@ import { Cancel01Icon, Menu01Icon } from 'hugeicons-react';
 import { usePathname } from 'next/navigation';
 
 import { navItems } from '@/app.config';
+import { cn } from '@/lib/styles.utils';
 
 import { Logo } from './logo';
 
@@ -14,37 +15,11 @@ const navItemStyles = cva({
   base: 'transition-colors',
   variants: {
     variant: {
-      desktop: 'text-sm font-medium hover:text-black',
+      desktop: 'text-sm font-medium text-oatmeal-900',
       mobile:
         'block rounded-md px-3 py-2 text-base font-medium hover:bg-gray-50 hover:text-black',
     },
-    active: {
-      true: '',
-      false: '',
-    },
   },
-  compoundVariants: [
-    {
-      variant: 'desktop',
-      active: true,
-      className: 'font-semibold text-black',
-    },
-    {
-      variant: 'desktop',
-      active: false,
-      className: 'text-gray-600',
-    },
-    {
-      variant: 'mobile',
-      active: true,
-      className: 'bg-gray-100 text-black',
-    },
-    {
-      variant: 'mobile',
-      active: false,
-      className: 'text-gray-700',
-    },
-  ],
 });
 
 interface NavItemProps {
@@ -60,7 +35,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
   return (
     <Link
       href={href}
-      className={navItemStyles({ variant, active: isActive })}
+      className={navItemStyles({ variant })}
       aria-current={isActive ? 'page' : undefined}
     >
       {label}
@@ -122,12 +97,22 @@ const SmallScreenNav = () => (
 );
 
 export const Navigation = () => (
-  <nav className="w-fullbackdrop-blur-md sticky top-0 z-50">
-    <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
-      <Logo href="/" />
+  <nav
+    className={cn(
+      'flex w-full max-w-full items-center justify-between',
+      'fixed top-0 left-1/2 z-50 -translate-x-1/2',
+      'transition-all',
 
-      <LargeScreenNav />
-      <SmallScreenNav />
-    </div>
+      'animate-floating-nav scroll-trigger scroll-trigger-to-25',
+
+      'px-8 py-6'
+    )}
+  >
+    <Logo
+      className="animate-shrink scroll-trigger scroll-trigger-to-25"
+      href="/"
+    />
+    <LargeScreenNav />
+    <SmallScreenNav />
   </nav>
 );

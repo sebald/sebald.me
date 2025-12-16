@@ -1,4 +1,15 @@
 @import 'tailwindcss';
+@plugin 'tailwind-scrollbar';
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    --tw-animate: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
 
 @theme {
   --font-mono: var(--font-mono), monospace;
@@ -27,6 +38,9 @@
   --color-blueberry-800: oklch(0.24 0.08 261);
   --color-blueberry-900: oklch(0.18 0.06 263);
   --color-blueberry-950: oklch(0.13 0.03 264);
+
+  --color-frosted-glas: --alpha(var(--color-white) / 50%);
+  --color-frosted-border: --alpha(var(--color-oatmeal-50) / 75%);
 
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
@@ -114,4 +128,51 @@
       border-radius: 0%;
     }
   }
+
+  --animate-floating-nav: floating-nav linear both;
+
+  @keyframes floating-nav {
+    from {
+      border-radius: 0;
+      background-color: transparent;
+      border: 1px solid transparent;
+    }
+    to {
+      /* Target Dimensions */
+      width: 90%;
+      max-width: 600px;
+      top: 1.5rem;
+      border-radius: calc(infinity * 1px);
+      padding-block: --spacing(1.5);
+
+      /* Frosted Glass */
+      background-color: var(--color-frosted-glas);
+      backdrop-filter: blur(var(--blur-md));
+      border: 1px solid var(--color-frosted-border);
+      box-shadow: 0 10px 30px -5px rgba(84, 69, 53, 0.08);
+    }
+  }
+
+  --animate-shrink: shrink linear both;
+
+  @keyframes shrink {
+    to {
+      transform: scale(var(--shrink-scale, 0.8));
+    }
+  }
+}
+
+@utility shrink-scale-* {
+  --shrink-scale: calc(--value(integer) * 1%);
+}
+
+@utility scroll-trigger {
+  animation-timeline: scroll();
+  animation-range: var(--scroll-trigger-from, 0) var(--scroll-trigger-to, 100%);
+}
+@utility scroll-trigger-from-* {
+  --scroll-trigger-from: calc(--value(integer) * 4px);
+}
+@utility scroll-trigger-to-* {
+  --scroll-trigger-to: calc(--value(integer) * 4px);
 }

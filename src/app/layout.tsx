@@ -19,10 +19,13 @@ const plusJakarta = Plus_Jakarta_Sans({
 
 const Layout = ({ children }: LayoutProps<'/'>) => {
   return (
-    <html lang="en" className={`${spaceMono.variable} ${plusJakarta.variable}`}>
+    <html
+      lang="en"
+      className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
+    >
       <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] font-mono">
         <Navigation />
-        <main>{children}</main>
+        <main className="pt-24">{children}</main>
         <footer>TODO</footer>
       </body>
     </html>
