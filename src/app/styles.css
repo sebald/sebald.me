@@ -39,6 +39,8 @@
   --color-blueberry-900: oklch(0.18 0.06 263);
   --color-blueberry-950: oklch(0.13 0.03 264);
 
+  --spacing-content: min(100% - 2rem, var(--container-5xl));
+
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
     0% {
@@ -141,6 +143,8 @@
       top: 1.5rem;
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
+      padding-left: --spacing(1.5); /* Different because logo gets shrinked. */
+      padding-right: --spacing(5);
 
       /* Frosted Glass */
       background-color: oklab(1 0 0 / 0.15);
@@ -150,7 +154,7 @@
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 oklab(1 0 0 / 0.5),
         inset 0 -1px 0 oklab(1 0 0 / 0.1),
-        inset 0 0 20px 4px oklab(1 0 0 / 1);
+        inset 0 0 24px 4px oklab(1 0 0 / 1);
     }
   }
 

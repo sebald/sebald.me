@@ -15,7 +15,7 @@ const navItemStyles = cva({
   base: 'transition-colors',
   variants: {
     variant: {
-      desktop: 'text-sm font-medium text-oatmeal-900',
+      desktop: 'font-medium text-oatmeal-800 hover:font-semibold',
       mobile:
         'block rounded-md px-3 py-2 text-base font-medium hover:bg-gray-50 hover:text-black',
     },
@@ -44,7 +44,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
 };
 
 const LargeScreenNav = () => (
-  <nav className="hidden gap-8 md:flex">
+  <nav className="hidden gap-12 md:flex">
     {navItems.map((item) => (
       <NavItem
         key={item.label}
@@ -99,11 +99,11 @@ const SmallScreenNav = () => (
 export const Navigation = () => (
   <nav
     className={cn(
-      'flex w-full max-w-full items-center justify-between',
+      'max-w-content flex w-full items-center justify-between',
       'fixed top-0 left-1/2 z-50 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
-      'px-8 py-6'
+      'py-3'
     )}
   >
     <Logo

@@ -23,9 +23,9 @@ const Layout = ({ children }: LayoutProps<'/'>) => {
       lang="en"
       className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
     >
-      <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] font-mono">
+      <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] justify-items-center font-mono">
         <Navigation />
-        <main className="pt-24">{children}</main>
+        <main className="w-content pt-24">{children}</main>
         <footer>TODO</footer>
       </body>
     </html>
