@@ -19,7 +19,7 @@ export const Logo = ({ className, href = '/' }: LogoProps) => {
       href={href}
       className={cn(
         'text-oatmeal-950 flex items-baseline gap-[3px] font-sans text-4xl font-extrabold tracking-tighter',
-        className
+        className,
       )}
     >
       sebald

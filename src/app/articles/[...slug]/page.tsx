@@ -32,7 +32,7 @@ const generateStaticParams = async () => {
 };
 
 const generateMetadata = async (
-  props: PageProps<'/articles/[...slug]'>
+  props: PageProps<'/articles/[...slug]'>,
 ): Promise<Metadata> => {
   const params = await props.params;
   const page = articlesSource.getPage(params.slug);

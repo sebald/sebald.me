@@ -16,7 +16,7 @@ export const labsSource = loader({
 });
 
 export const getPageImage = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
 ) => {
   const segments = [...page.slugs, 'image.png'];
   const type = page.url.includes('/labs') ? 'labs' : 'articles';
@@ -28,7 +28,7 @@ export const getPageImage = (
 };
 
 export const getLLMText = async (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
 ) => {
   const processed = await page.data.getText('processed');
 

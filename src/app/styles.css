@@ -41,6 +41,8 @@
 
   --spacing-content: min(100% - 2rem, var(--container-5xl));
 
+  --container-navigation: 500px;
+
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
     0% {
@@ -139,7 +141,7 @@
     to {
       /* Target Dimensions */
       width: 90%;
-      max-width: 600px;
+      max-width: 700px;
       top: 1.5rem;
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);

@@ -44,7 +44,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
 };
 
 const LargeScreenNav = () => (
-  <nav className="hidden gap-12 md:flex">
+  <nav className="@navigation:flex hidden gap-12">
     {navItems.map((item) => (
       <NavItem
         key={item.label}
@@ -57,7 +57,7 @@ const LargeScreenNav = () => (
 );
 
 const SmallScreenNav = () => (
-  <div className="md:hidden">
+  <div className="@navigation:hidden">
     <Dialog.Root>
       <Dialog.Trigger
         className="flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100"
@@ -99,11 +99,12 @@ const SmallScreenNav = () => (
 export const Navigation = () => (
   <nav
     className={cn(
+      '@container',
       'max-w-content flex w-full items-center justify-between',
       'fixed top-0 left-1/2 z-50 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
-      'py-3'
+      'py-3',
     )}
   >
     <Logo
