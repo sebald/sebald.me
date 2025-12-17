@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'fumadocs-core/link';
 
 import { articlesSource } from '@/lib/source';
 
