@@ -23,10 +23,12 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
     lang="en"
     className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
   >
-    <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] justify-items-center font-mono">
-      <Navigation />
-      <main className="w-content pt-24">{children}</main>
-      <footer>TODO</footer>
+    <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate font-mono">
+      <div className="grid min-h-screen grid-rows-[1fr_auto] justify-items-center">
+        <Navigation />
+        <main className="w-content pt-24">{children}</main>
+        <footer>TODO</footer>
+      </div>
       <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
     </body>
   </html>

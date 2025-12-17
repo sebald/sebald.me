@@ -40,8 +40,15 @@
   --color-blueberry-950: oklch(0.13 0.03 264);
 
   --spacing-content: min(100% - 2rem, var(--container-5xl));
+  --container-navigation: 500px; /* Container threshold to switch to mobile navigation */
 
-  --container-navigation: 500px;
+  /* Glass */
+  --color-glass-surface: oklab(1 0 0 / 0.15);
+  --color-glass-stroke: oklab(1 0 0 / 0.3);
+  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 oklab(1 0 0 / 0.5), inset 0 -1px 0 oklab(1 0 0 / 0.1),
+    inset 0 0 24px 4px oklab(1 0 0 / 1);
+  --backdrop-glass: blur(var(--blur-md));
 
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
@@ -149,14 +156,10 @@
       padding-right: --spacing(5);
 
       /* Frosted Glass */
-      background-color: oklab(1 0 0 / 0.15);
-      backdrop-filter: blur(var(--blur-md));
-      border: 1px solid oklab(1 0 0 / 0.3);
-      box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 oklab(1 0 0 / 0.5),
-        inset 0 -1px 0 oklab(1 0 0 / 0.1),
-        inset 0 0 24px 4px oklab(1 0 0 / 1);
+      background-color: var(--color-glass-surface);
+      backdrop-filter: var(--backdrop-glass);
+      border: 1px solid var(--color-glass-stroke);
+      box-shadow: var(--shadow-glass);
     }
   }
 
