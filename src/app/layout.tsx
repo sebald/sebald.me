@@ -1,5 +1,6 @@
 import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
 
+import { Analytics } from '@/ui/analytics/analytics';
 import { Navigation } from '@/ui/navigation';
 
 import './styles.css';
@@ -17,19 +18,18 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: '--font-sans',
 });
 
-const Layout = ({ children }: LayoutProps<'/'>) => {
-  return (
-    <html
-      lang="en"
-      className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
-    >
-      <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] justify-items-center font-mono">
-        <Navigation />
-        <main className="w-content pt-24">{children}</main>
-        <footer>TODO</footer>
-      </body>
-    </html>
-  );
-};
+const Layout = async ({ children }: LayoutProps<'/'>) => (
+  <html
+    lang="en"
+    className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
+  >
+    <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate grid min-h-screen grid-rows-[auto_1fr_auto] justify-items-center font-mono">
+      <Navigation />
+      <main className="w-content pt-24">{children}</main>
+      <footer>TODO</footer>
+      <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
+    </body>
+  </html>
+);
 
 export default Layout;

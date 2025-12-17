@@ -13,22 +13,24 @@
     "format": "prettier --write ."
   },
   "dependencies": {
-    "@base-ui/react": "^1.0.0",
+    "@base-ui/react": "1.0.0",
+    "@next/third-parties": "16.0.10",
+    "cookies-next": "6.1.1",
     "cva": "1.0.0-beta.4",
     "fumadocs-core": "16.2.5",
     "fumadocs-mdx": "14.1.0",
     "fumadocs-ui": "16.2.5",
-    "hugeicons-react": "^0.3.0",
+    "hugeicons-react": "0.3.0",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "tailwind-merge": "^3.4.0",
-    "tailwind-scrollbar": "^4.0.2",
+    "tailwind-merge": "3.4.0",
+    "tailwind-scrollbar": "4.0.2",
     "zod": "4.1.13"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.17",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/mdx": "2.0.13",
     "@types/node": "24.10.2",
     "@types/react": "19.2.7",
@@ -37,7 +39,7 @@
     "eslint-config-next": "16.0.10",
     "postcss": "8.5.6",
     "prettier": "3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.5",
+    "prettier-plugin-tailwindcss": "0.6.5",
     "tailwindcss": "4.1.17",
     "typescript": "5.9.3"
   }
