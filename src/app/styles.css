@@ -45,23 +45,36 @@
   /* Glass */
   --backdrop-glass: blur(var(--blur-md));
 
-  --color-glass-surface: oklab(1 0 0 / 0.15);
-  --color-glass-stroke: oklab(1 0 0 / 0.3);
-  --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 1px 0 oklab(1 0 0 / 0.5), inset 0 -1px 0 oklab(1 0 0 / 0.1),
-    inset 0 0 24px 4px oklab(1 0 0 / 1);
+  --color-glass-surface: oklch(1 0 0 / 0.15);
+  --color-glass-stroke: oklch(1 0 0 / 0.3);
+  --shadow-glass: 0 8px 32px oklch(0 0 0 / 0.1),
+    inset 0 1px 0 oklch(1 0 0 / 0.5), inset 0 -1px 0 oklch(1 0 0 / 0.1),
+    inset 0 0 24px 4px oklch(1 0 0 / 1);
 
-  /* Dark Glass Variables (New) */
-  /* Uses Oatmeal 900 for base and lighter oatmeals for rim lights */
-  --color-glass-dark-surface: color-mix(
-    in oklch,
-    var(--color-oatmeal-900),
-    transparent 70%
+  --blur-glass-dark: 20px;
+  --background-image-glass-dark-surface: linear-gradient(
+    135deg,
+    --alpha(var(--color-oatmeal-900) / 80%),
+    --alpha(var(--color-oatmeal-950) / 90%)
   );
-  --color-glass-dark-stroke: oklab(1 0 0 / 0.5);
-  --shadow-glass-dark: 0 8px 32px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 oklab(1 0 0 / 0.5), inset 0 -1px 0 oklab(1 0 0 / 0.5),
-    inset 0 0 18px 4px oklab(0 0 0 / 0.1);
+  /* prettier-ignore */
+  --color-glass-dark-stroke: 
+    --alpha(var(--color-oatmeal-500) / 60%)
+    --alpha(var(--color-oatmeal-700) / 60%)
+    --alpha(var(--color-oatmeal-700) / 60%)
+    --alpha(var(--color-oatmeal-500) / 60%);
+  /* prettier-ignore */
+  --shadow-glass-dark:
+    /* Inner Highlight (Top Edge) */
+    inset 0 1px 0 0 --alpha(var(--color-oatmeal-200) / 10%),
+    /* Inner Shadow (Bottom/Right) for volume */
+    inset -1px -1px 0 0 --alpha(var(--color-oatmeal-950) / 30%),
+    /* Layered Drop Shadows */
+    0px 0.8px 0.7px --alpha(var(--color-oatmeal-950) / 8%),
+    0px 1.6px 1.4px -0.8px --alpha(var(--color-oatmeal-950) / 8%),
+    0px 3.5px 3.1px -1.5px --alpha(var(--color-oatmeal-950) / 9%),
+    0px 7.4px 6.5px -2.3px --alpha(var(--color-oatmeal-950) / 9%),
+    0px 14.8px 13px -3px --alpha(var(--color-oatmeal-950) / 10%);
 
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
