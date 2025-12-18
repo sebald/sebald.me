@@ -1,0 +1,30 @@
+@import 'tailwindcss';
+@plugin 'tailwind-scrollbar';
+
+@import './theme.css';
+@import './surface.css';
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    --tw-animate: none !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@utility shrink-scale-* {
+  --shrink-scale: calc(--value(integer) * 1%);
+}
+
+@utility scroll-trigger {
+  animation-timeline: scroll();
+  animation-range: var(--scroll-trigger-from, 0) var(--scroll-trigger-to, 100%);
+}
+@utility scroll-trigger-from-* {
+  --scroll-trigger-from: calc(--value(integer) * 4px);
+}
+@utility scroll-trigger-to-* {
+  --scroll-trigger-to: calc(--value(integer) * 4px);
+}

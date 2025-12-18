@@ -3,7 +3,7 @@ import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
 import { Analytics } from '@/ui/analytics/analytics';
 import { Navigation } from '@/ui/navigation';
 
-import './styles.css';
+import './css/styles.css';
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
