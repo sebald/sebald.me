@@ -3,9 +3,24 @@
 import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
 import { cva, VariantProps } from 'cva';
-import { ComponentProps } from 'react';
+import { createContext, use } from 'react';
+import type { ComponentProps } from 'react';
 
 import { styles as buttonStyles } from './button';
+
+interface DialogContextType {
+  modal: PrimitiveRootProps['modal'];
+}
+
+const DialogContext = createContext<DialogContextType | undefined>(undefined);
+
+export const useDialogContext = () => {
+  const context = use(DialogContext);
+  if (!context) {
+    throw new Error('Dialog components must be used within Dialog.Root');
+  }
+  return context;
+};
 
 export const styles = {
   trigger: buttonStyles,
@@ -34,21 +49,29 @@ export const styles = {
   }),
 };
 
-const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
-  <Primitive.Root {...props}>{children}</Primitive.Root>
+const DialogRoot = ({ children, modal, ...props }: PrimitiveRootProps) => (
+  <DialogContext.Provider value={{ modal }}>
+    <Primitive.Root {...props}>{children}</Primitive.Root>
+  </DialogContext.Provider>
 );
 
 const DialogContent = ({
   children,
   ...props
-}: ComponentProps<typeof Primitive.Popup>) => (
-  <Primitive.Portal>
-    <Primitive.Backdrop className={styles.backdrop()} />
-    <Primitive.Popup {...props} className={styles.popup()}>
-      {children}
-    </Primitive.Popup>
-  </Primitive.Portal>
-);
+}: ComponentProps<typeof Primitive.Popup>) => {
+  const { modal } = useDialogContext();
+
+  return (
+    <Primitive.Portal>
+      {modal === true ? (
+        <Primitive.Backdrop className={styles.backdrop()} />
+      ) : null}
+      <Primitive.Popup {...props} className={styles.popup()}>
+        {children}
+      </Primitive.Popup>
+    </Primitive.Portal>
+  );
+};
 
 const DialogTitle = ({
   children,
@@ -96,12 +119,11 @@ const DialogClose = ({
   </Primitive.Close>
 );
 
-export const Dialog = {
+export const Dialog = Object.assign(DialogContent, {
   Root: DialogRoot,
-  Content: DialogContent,
   Title: DialogTitle,
   Description: DialogDescription,
   Actions: DialogActions,
   Trigger: DialogTrigger,
   Close: DialogClose,
-};
+});

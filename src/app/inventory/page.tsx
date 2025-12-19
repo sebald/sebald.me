@@ -10,7 +10,7 @@ const InventoryPage = () => (
     <div className="grid gap-10">
       <Dialog.Root>
         <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-        <Dialog.Content>
+        <Dialog>
           <Dialog.Title>Dialog Title</Dialog.Title>
           <Dialog.Description>
             This is a simple dialog example.
@@ -18,7 +18,7 @@ const InventoryPage = () => (
           <Dialog.Actions>
             <Dialog.Close>Close</Dialog.Close>
           </Dialog.Actions>
-        </Dialog.Content>
+        </Dialog>
       </Dialog.Root>
     </div>
 
