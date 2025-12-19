@@ -6,11 +6,11 @@ export const styles = cva({
   base: ['rounded-3xl p-6 flex flex-col gap-5'],
   variants: {
     variant: {
-      default: ['surface', 'text-oatmeal-50'],
-      clear: ['surface-clear', 'text-oatmeal-900'],
-      ghost: ['surface-ghost', 'text-oatmeal-50'],
-      tinted: ['surface-tinted', 'text-oatmeal-50'],
-      opaque: ['surface-opaque', 'text-oatmeal-50'],
+      default: ['surface'],
+      clear: ['surface-clear'],
+      ghost: ['surface-ghost'],
+      tinted: ['surface-tinted'],
+      opaque: ['surface-opaque'],
     },
   },
   defaultVariants: {
