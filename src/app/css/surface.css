@@ -47,7 +47,7 @@
     oklch(from var(--color-oatmeal-950) l c h / 0.5)
   );
   backdrop-filter: blur(40px);
-  border: 1px solid oklch(from var(--color-oatmeal-300) l c h / 0.1);
+  /* border: 1px solid oklch(from var(--color-oatmeal-300) l c h / 0.1); */
 
   /* prettier-ignore */
   box-shadow:
