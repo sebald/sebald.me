@@ -26,7 +26,7 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
-      <Dialog.Content>
+      <Dialog>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <div className="text-center md:text-left">
             <Dialog.Title>We value your privacy</Dialog.Title>
@@ -44,7 +44,7 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
             </Button>
           </Dialog.Actions>
         </div>
-      </Dialog.Content>
+      </Dialog>
     </Dialog.Root>
   );
 };
