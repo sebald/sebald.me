@@ -134,15 +134,22 @@
       padding-left: --spacing(1.5); /* Different because logo gets shrinked. */
       padding-right: --spacing(5);
 
-      /* Frosted Glass */
-      background-color: oklch(1 0 0 / 0.15);
+      /* slightly adjusted clear surface */
+      background: linear-gradient(
+        135deg,
+        oklch(1 0 0 / 0.6),
+        oklch(1 0 0 / 0.2)
+      );
       backdrop-filter: blur(var(--blur-md));
-      border: 1px solid oklch(1 0 0 / 0.3);
+      border: 1px solid oklch(1 0 0 / 0.4);
+      border-top: 1px solid oklch(1 0 0 / 0.8);
+      border-left: 1px solid oklch(1 0 0 / 0.8);
       box-shadow:
-        0 8px 32px oklch(0 0 0 / 0.1),
-        inset 0 1px 0 oklch(1 0 0 / 0.5),
-        inset 0 -1px 0 oklch(1 0 0 / 0.1),
-        inset 0 0 24px 4px oklch(1 0 0 / 1);
+        inset 0 1px 0 0 oklch(1 0 0 / 0.5),
+        0px 1px 2px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+        0px 3.4px 3.8px -0.5px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+        0px 7.8px 8.7px -1px oklch(from var(--color-oatmeal-900) l c h / 0.06),
+        0px 18px 20px -1.5px oklch(from var(--color-oatmeal-900) l c h / 0.07);
     }
   }
 

@@ -26,13 +26,12 @@
 
 @utility surface-clear {
   background: linear-gradient(135deg, oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.2));
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(var(--blur-md));
 
   border: 1px solid oklch(1 0 0 / 0.8);
   border-top: 1px solid oklch(1 0 0 / 0.9);
   border-left: 1px solid oklch(1 0 0 / 0.9);
 
-  /* prettier-ignore */
   box-shadow:
     inset 0 1px 0 0 oklch(1 0 0 / 1),
     0px 1px 2px oklch(from var(--color-oatmeal-900) l c h / 0.05),
