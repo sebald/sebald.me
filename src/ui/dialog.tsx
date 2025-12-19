@@ -1,0 +1,107 @@
+'use client';
+
+import { Dialog as Primitive } from '@base-ui/react/dialog';
+import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
+import { cva, VariantProps } from 'cva';
+import { ComponentProps } from 'react';
+
+import { styles as buttonStyles } from './button';
+
+export const styles = {
+  trigger: buttonStyles,
+  backdrop: cva({
+    base: [
+      'blur-md fixed inset-0 min-h-dvh bg-black opacity-20 transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
+      // iOS 26+: Ensure the backdrop covers the entire visible viewport.
+      'supports-[-webkit-touch-callout:none]:absolute',
+    ],
+  }),
+  popup: cva({
+    base: [
+      'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 max-w-[calc(100vw-3rem)] -mt-8',
+      'transition-all duration-150 data-starting-style:opacity-0 data-starting-style:scale-90 data-ending-style:opacity-0 data-ending-style:scale-90',
+      'surface rounded-3xl p-6',
+    ],
+  }),
+  title: cva({
+    base: 'text-base font-bold',
+  }),
+  description: cva({
+    base: 'mt-1 text-sm text-gray-600',
+  }),
+  actions: cva({
+    base: 'flex shrink-0 gap-3',
+  }),
+};
+
+const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
+  <Primitive.Root {...props}>{children}</Primitive.Root>
+);
+
+const DialogContent = ({
+  children,
+  ...props
+}: ComponentProps<typeof Primitive.Popup>) => (
+  <Primitive.Portal>
+    <Primitive.Backdrop className={styles.backdrop()} />
+    <Primitive.Popup {...props} className={styles.popup()}>
+      {children}
+    </Primitive.Popup>
+  </Primitive.Portal>
+);
+
+const DialogTitle = ({
+  children,
+  ...props
+}: ComponentProps<typeof Primitive.Title>) => (
+  <Primitive.Title {...props} className={styles.title()}>
+    {children}
+  </Primitive.Title>
+);
+
+const DialogDescription = ({
+  children,
+  ...props
+}: ComponentProps<typeof Primitive.Description>) => (
+  <Primitive.Description {...props} className={styles.description()}>
+    {children}
+  </Primitive.Description>
+);
+
+const DialogActions = ({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} className={styles.actions()}>
+    {children}
+  </div>
+);
+
+interface DialogTriggerProps
+  extends ComponentProps<typeof Primitive.Trigger>,
+    VariantProps<typeof styles.trigger> {}
+
+const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
+  <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
+    {children}
+  </Primitive.Trigger>
+);
+
+const DialogClose = ({
+  children,
+  ...props
+}: Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>) => (
+  <Primitive.Close {...props} className={buttonStyles()}>
+    {children}
+  </Primitive.Close>
+);
+
+export const Dialog = {
+  Root: DialogRoot,
+  Content: DialogContent,
+  Title: DialogTitle,
+  Description: DialogDescription,
+  Actions: DialogActions,
+  Trigger: DialogTrigger,
+  Close: DialogClose,
+};
