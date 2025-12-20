@@ -2,11 +2,25 @@
 
 import { useState } from 'react';
 
+import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
 
 const InventoryPage = () => (
   <div className="grid gap-24">
+    <div className="grid gap-4">
+      <div className="flex flex-nowrap gap-4">
+        <Button variant="primary">Button</Button>
+        <Button>Button</Button>
+        <Button variant="ghost">Button</Button>
+      </div>
+      <Card>
+        <div className="flex flex-nowrap justify-end gap-4">
+          <Button variant="cutout">Button</Button>
+          <Button variant="cutout-primary">Button</Button>
+        </div>
+      </Card>
+    </div>
     <div className="grid gap-10">
       <Dialog.Root>
         <Dialog.Trigger>Open Dialog</Dialog.Trigger>
