@@ -14,12 +14,6 @@ const InventoryPage = () => (
         <Button>Button</Button>
         <Button variant="ghost">Button</Button>
       </div>
-      <Card>
-        <div className="flex flex-nowrap justify-end gap-4">
-          <Button variant="cutout">Button</Button>
-          <Button variant="cutout-primary">Button</Button>
-        </div>
-      </Card>
     </div>
     <div className="grid gap-10">
       <Dialog.Root>
@@ -37,7 +31,19 @@ const InventoryPage = () => (
     </div>
 
     <div className="grid justify-items-center gap-10 *:aspect-video *:w-1/2">
-      <Card>Default</Card>
+      <Card>
+        <div className="flex flex-col gap-4">
+          <div>Default</div>
+          <div className="flex flex-nowrap justify-end gap-4">
+            <Button variant="cutout">Button</Button>
+            <Button variant="cutout-primary">Button</Button>
+          </div>
+          <div className="flex flex-nowrap justify-end gap-4">
+            <Button variant="cutout">Button</Button>
+            <Button variant="glass">Button</Button>
+          </div>
+        </div>
+      </Card>
       <Card variant="clear">Clear</Card>
       <Card variant="ghost">Ghost</Card>
       <Card variant="tinted">Tinted</Card>
