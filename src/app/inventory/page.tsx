@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
@@ -10,6 +8,7 @@ const InventoryPage = () => (
   <div className="grid gap-24">
     <div className="grid gap-4">
       <div className="flex flex-nowrap gap-4">
+        <Button variant="highlight">Button</Button>
         <Button variant="primary">Button</Button>
         <Button>Button</Button>
         <Button variant="ghost">Button</Button>
@@ -34,20 +33,45 @@ const InventoryPage = () => (
       <Card>
         <div className="flex flex-col gap-4">
           <div>Default</div>
-          <div className="flex flex-nowrap justify-end gap-4">
-            <Button variant="cutout">Button</Button>
-            <Button variant="cutout-primary">Button</Button>
-          </div>
-          <div className="flex flex-nowrap justify-end gap-4">
-            <Button variant="cutout">Button</Button>
-            <Button variant="glass">Button</Button>
+          <div className="flex flex-nowrap gap-4">
+            <Button variant="primary">Button</Button>
+            <Button>Button</Button>
+            <Button variant="ghost">Button</Button>
           </div>
         </div>
       </Card>
-      <Card variant="clear">Clear</Card>
-      <Card variant="ghost">Ghost</Card>
-      <Card variant="tinted">Tinted</Card>
-      <Card variant="opaque">Opaque</Card>
+      <Card variant="clear">
+        <div>Clear</div>
+        <div className="flex flex-nowrap gap-4">
+          <Button variant="primary">Button</Button>
+          <Button>Button</Button>
+          <Button variant="ghost">Button</Button>
+        </div>
+      </Card>
+      <Card variant="ghost">
+        <div>Ghost</div>
+        <div className="flex flex-nowrap gap-4">
+          <Button variant="primary">Button</Button>
+          <Button>Button</Button>
+          <Button variant="ghost">Button</Button>
+        </div>
+      </Card>
+      <Card variant="tinted">
+        <div>Tinted</div>
+        <div className="flex flex-nowrap gap-4">
+          <Button variant="primary">Button</Button>
+          <Button>Button</Button>
+          <Button variant="ghost">Button</Button>
+        </div>
+      </Card>
+      <Card variant="opaque">
+        <div>Opaque</div>
+        <div className="flex flex-nowrap gap-4">
+          <Button variant="primary">Button</Button>
+          <Button>Button</Button>
+          <Button variant="ghost">Button</Button>
+        </div>
+      </Card>
     </div>
   </div>
 );

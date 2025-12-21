@@ -131,7 +131,7 @@ const DialogClose = ({
   children,
   ...props
 }: Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>) => (
-  <Primitive.Close {...props} className={buttonStyles({ variant: 'cutout' })}>
+  <Primitive.Close {...props} className={buttonStyles({ variant: 'ghost' })}>
     {children}
   </Primitive.Close>
 );
