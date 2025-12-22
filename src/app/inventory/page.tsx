@@ -12,6 +12,7 @@ const InventoryPage = () => (
         <Button variant="primary">Button</Button>
         <Button>Button</Button>
         <Button variant="ghost">Button</Button>
+        <Button disabled>Button</Button>
       </div>
     </div>
     <div className="grid gap-10">

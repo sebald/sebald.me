@@ -6,25 +6,42 @@ import { cva, VariantProps } from 'cva';
 
 export const styles = cva({
   base: [
-    'inline-flex items-center justify-center rounded-full gap-0.5',
-    'cursor-pointer border',
-    'h-11 px-8 font-semibold',
-    'transition-all ease-in-out',
+    'relative inline-flex items-center justify-center gap-2',
+    'h-11 rounded-full px-8',
+    'text-sm font-semibold',
+    'cursor-pointer select-none',
+    'transition-transform duration-200',
+
+    /* States */
     'focus-visible:focus-ring',
     'active:scale-[0.98]',
-    'disabled:opacity-50 disabled:pointer-events-none',
+    'disabled:cursor-not-allowed disabled:opacity-50',
   ],
   variants: {
     variant: {
       primary: [
-        'bg-linear-135 from-oatmeal-200 to-oatmeal-300 text-oatmeal-950',
-        'border-t-oatmeal-200 border-l-oatmeal-200 border-r-oatmeal-400 border-b-oatmeal-400',
-        'shadow-[inset_0_1px_0_0_oklch(1_0_0/0.6),inset_0_-2px_4px_0_oklch(from_var(--color-oatmeal-500)_l_c_h/0.1),0_2px_4px_-1px_oklch(0_0_0/0.15),0_4px_6px_-1px_oklch(0_0_0/0.1)]',
-        'hover:from-oatmeal-100 hover:to-oatmeal-200 hover:border-oatmeal-300',
+        'text-oatmeal-950',
+
+        'surface-gradient',
+        // Default
+        '[--surface-bg:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-300))]',
+        '[--surface-border:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-400))]',
+        // Hover
+        '[--surface-bg-hover:linear-gradient(135deg,var(--color-oatmeal-100),var(--color-oatmeal-200))_padding-box]',
+        '[--surface-border-hover:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-300))_border-box]',
+        // Shadow
+        '[--surface-shadow:inset_0_1px_0_0_oklch(1_0_0/0.55),inset_0_-2px_4px_0_oklch(from_var(--color-oatmeal-500)_l_c_h/0.1),0_2px_4px_-1px_oklch(0_0_0/0.15),0_4px_6px_-1px_oklch(0_0_0/0.1)]',
       ],
       secondary: [
-        'bg-oatmeal-200 text-oatmeal-900',
-        'hover:bg-oatmeal-300 hover:border-oatmeal-400',
+        'surface-gradient',
+        // Default
+        '[--surface-bg:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-300))]',
+        '[--surface-border:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-400))]',
+        // Hover
+        '[--surface-bg-hover:linear-gradient(135deg,var(--color-oatmeal-100),var(--color-oatmeal-200))_padding-box]',
+        '[--surface-border-hover:linear-gradient(135deg,var(--color-oatmeal-200),var(--color-oatmeal-300))_border-box]',
+        // Shadow
+        '[--surface-shadow:inset_0_1px_0_0_oklch(1_0_0/0.55),inset_0_-2px_4px_0_oklch(from_var(--color-oatmeal-500)_l_c_h/0.1),0_2px_4px_-1px_oklch(0_0_0/0.15),0_4px_6px_-1px_oklch(0_0_0/0.1)]',
       ],
       ghost: [
         'text-current border-transparent opacity-70',

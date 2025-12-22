@@ -1,0 +1,46 @@
+/*
+ * Custom utility to handle dual-gradient borders and backgrounds 
+ * (padding-box + border-box) using layered pseudo-element. CSS 
+ * variables allows the logic to be reusable and in one place.
+ */
+@utility surface-gradient {
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    border: 1px solid transparent;
+    z-index: -1;
+    box-shadow: var(--surface-shadow);
+  }
+
+  /* Slot: Background */
+  &::before {
+    background:
+      var(--surface-bg) padding-box,
+      var(--surface-border) border-box;
+  }
+
+  /* Slot: Hover Background */
+  &::after {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    background:
+      var(--surface-bg-hover) padding-box,
+      var(--surface-border-hover) border-box;
+  }
+
+  /* Reveal ::after element on hover */
+  &:enabled:hover::after {
+    opacity: 1;
+  }
+
+  /* Ensure label and icon sit above backgrounds */
+  & span,
+  & svg {
+    position: relative;
+    z-index: 1;
+  }
+}
