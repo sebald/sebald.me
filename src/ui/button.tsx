@@ -43,7 +43,6 @@ export const styles = cva({
         '[--btn-border-hover:linear-gradient(to_bottom,var(--color-oatmeal-500),var(--color-oatmeal-800))]',
         '[--btn-shadow:inset_0_1px_0_0_oklch(1_0_0/0.4),inset_0_-2px_4px_0_oklch(0_0_0/0.5),0_4px_12px_-2px_oklch(0_0_0/0.4),0_2px_4px_-1px_oklch(0_0_0/0.1)]',
       ],
-      ghost: ['text-current', 'bg-oatmeal-500/30', 'hover:bg-oatmeal-500/15'],
       highlight: [
         'text-blueberry-50',
         '[--btn-bg:linear-gradient(to_bottom,var(--color-blueberry-500),var(--color-blueberry-600))]',
@@ -52,6 +51,7 @@ export const styles = cva({
         '[--btn-border-hover:linear-gradient(to_bottom,var(--color-blueberry-300),var(--color-blueberry-600))]',
         '[--btn-shadow:inset_0_1px_0_0_oklch(1_0_0/0.4),inset_0_-2px_4px_0_oklch(0_0_0/0.2),0_4px_12px_-2px_oklch(0_0_0/0.4),0_2px_4px_-1px_oklch(0_0_0/0.1)]',
       ],
+      ghost: ['text-current', 'bg-oatmeal-500/25', 'hover:bg-oatmeal-500/15'],
     },
   },
   defaultVariants: {

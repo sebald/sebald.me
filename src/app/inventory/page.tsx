@@ -15,7 +15,7 @@ const InventoryPage = () => (
         <Button disabled>Button</Button>
       </div>
     </div>
-    <div className="grid gap-10">
+    <div>
       <Dialog.Root>
         <Dialog.Trigger>Open Dialog</Dialog.Trigger>
         <Dialog>
