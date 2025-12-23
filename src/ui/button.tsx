@@ -2,7 +2,8 @@
 
 import { Button as Primitive } from '@base-ui/react/button';
 import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
-import { cva, VariantProps } from 'cva';
+
+import { cva, VariantProps } from '@/lib/styles.utils';
 
 export const styles = cva({
   base: [
@@ -43,7 +44,7 @@ export const styles = cva({
         '[--btn-border-hover:linear-gradient(to_bottom,var(--color-oatmeal-500),var(--color-oatmeal-800))]',
         '[--btn-shadow:inset_0_1px_0_0_oklch(1_0_0/0.4),inset_0_-2px_4px_0_oklch(0_0_0/0.5),0_4px_12px_-2px_oklch(0_0_0/0.4),0_2px_4px_-1px_oklch(0_0_0/0.1)]',
       ],
-      highlight: [
+      accent: [
         'text-blueberry-50',
         '[--btn-bg:linear-gradient(to_bottom,var(--color-blueberry-500),var(--color-blueberry-600))]',
         '[--btn-border:linear-gradient(to_bottom,var(--color-blueberry-400),var(--color-blueberry-700))]',
@@ -52,6 +53,11 @@ export const styles = cva({
         '[--btn-shadow:inset_0_1px_0_0_oklch(1_0_0/0.4),inset_0_-2px_4px_0_oklch(0_0_0/0.2),0_4px_12px_-2px_oklch(0_0_0/0.4),0_2px_4px_-1px_oklch(0_0_0/0.1)]',
       ],
       ghost: ['text-current', 'bg-oatmeal-500/25', 'hover:bg-oatmeal-500/15'],
+      outline: [
+        'text-current',
+        'border-[oklch(from_currentColor_l_c_h/0.4)]',
+        'hover:bg-[oklch(from_var(--color-oatmeal-500)_l_c_h/0.2)] hover:border-[oklch(from_currentColor_l_c_h/0.5)]',
+      ],
     },
   },
   defaultVariants: {

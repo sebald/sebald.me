@@ -10,8 +10,9 @@ const InventoryPage = () => (
       <div className="flex flex-wrap gap-4">
         <Button>Button</Button>
         <Button variant="dark">Button</Button>
-        <Button variant="highlight">Button</Button>
+        <Button variant="accent">Button</Button>
         <Button variant="ghost">Button</Button>
+        <Button variant="outline">Button</Button>
         <Button disabled>Button</Button>
       </div>
     </div>
@@ -34,16 +35,17 @@ const InventoryPage = () => (
       <Card>
         <div className="flex flex-col gap-4">
           <div>Default</div>
-          <div className="flex flex-nowrap gap-4">
+          <div className="flex flex-wrap gap-4">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
         </div>
       </Card>
       <Card variant="clear">
         <div>Clear</div>
-        <div className="flex flex-nowrap gap-4">
+        <div className="flex flex-wrap gap-4">
           <Button>Button</Button>
           <Button variant="dark">Button</Button>
           <Button variant="ghost">Button</Button>
@@ -51,7 +53,7 @@ const InventoryPage = () => (
       </Card>
       <Card variant="ghost">
         <div>Ghost</div>
-        <div className="flex flex-nowrap gap-4">
+        <div className="flex flex-wrap gap-4">
           <Button>Button</Button>
           <Button variant="dark">Button</Button>
           <Button variant="ghost">Button</Button>
@@ -59,7 +61,7 @@ const InventoryPage = () => (
       </Card>
       <Card variant="tinted">
         <div>Tinted</div>
-        <div className="flex flex-nowrap gap-4">
+        <div className="flex flex-wrap gap-4">
           <Button>Button</Button>
           <Button variant="dark">Button</Button>
           <Button variant="ghost">Button</Button>
@@ -67,7 +69,7 @@ const InventoryPage = () => (
       </Card>
       <Card variant="opaque">
         <div>Opaque</div>
-        <div className="flex flex-nowrap gap-4">
+        <div className="flex flex-wrap gap-4">
           <Button>Button</Button>
           <Button variant="dark">Button</Button>
           <Button variant="ghost">Button</Button>

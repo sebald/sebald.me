@@ -26,7 +26,7 @@ export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
     base: [
-      'blur-md fixed inset-0 min-h-dvh bg-black opacity-20 transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
+      'blur-md fixed inset-0 min-h-dvh bg-oatmeal-950 opacity-40 transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.
       'supports-[-webkit-touch-callout:none]:absolute',
     ],
@@ -77,10 +77,10 @@ const DialogContent = ({
 }: ComponentProps<typeof Primitive.Popup> &
   VariantProps<typeof styles.popup>) => {
   const { modal } = useDialogContext();
-
+  console.log(modal);
   return (
     <Primitive.Portal>
-      {modal === true ? (
+      {modal === true || modal === undefined ? (
         <Primitive.Backdrop className={styles.backdrop()} />
       ) : null}
       <Primitive.Popup {...props} className={styles.popup({ position })}>
@@ -117,7 +117,7 @@ const DialogActions = ({
   </div>
 );
 
-interface DialogTriggerProps
+export interface DialogTriggerProps
   extends ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
 
