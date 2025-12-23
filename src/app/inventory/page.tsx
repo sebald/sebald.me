@@ -31,7 +31,7 @@ const InventoryPage = () => (
       </Dialog.Root>
     </div>
 
-    <div className="grid justify-items-center gap-10 *:aspect-video *:w-1/2">
+    <div className="grid w-1/2 gap-10 *:aspect-video">
       <Card>
         <div className="flex flex-col gap-4">
           <div>Default</div>
