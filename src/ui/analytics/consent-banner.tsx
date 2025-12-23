@@ -36,12 +36,8 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
           </div>
 
           <Dialog.Actions>
-            <Button onClick={handleDecline} variant="secondary">
-              Decline
-            </Button>
-            <Button onClick={handleAccept} variant="primary">
-              Accept
-            </Button>
+            <Button onClick={handleDecline}>Decline</Button>
+            <Button onClick={handleAccept}>Accept</Button>
           </Dialog.Actions>
         </div>
       </Dialog>
