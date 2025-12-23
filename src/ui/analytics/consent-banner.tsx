@@ -25,7 +25,12 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen} modal={false}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={setOpen}
+      modal={false}
+      disablePointerDismissal
+    >
       <Dialog>
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
           <div className="text-center md:text-left">

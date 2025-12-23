@@ -33,7 +33,7 @@ export const styles = {
   }),
   popup: cva({
     base: [
-      'fixed w-96 max-w-[calc(100vw-3rem)]',
+      'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       'surface rounded-3xl p-6',
     ],
@@ -48,9 +48,14 @@ export const styles = {
           'data-starting-style:translate-y-full data-ending-style:translate-y-full',
         ],
       },
+      size: {
+        default: 'w-96',
+        full: 'w-full',
+      },
     },
     defaultVariants: {
       position: 'center',
+      size: 'default',
     },
   }),
   title: cva({
@@ -64,8 +69,8 @@ export const styles = {
   }),
 };
 
-const DialogRoot = ({ children, modal, ...props }: PrimitiveRootProps) => (
-  <DialogContext.Provider value={{ modal }}>
+const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
+  <DialogContext.Provider value={{ modal: props.modal }}>
     <Primitive.Root {...props}>{children}</Primitive.Root>
   </DialogContext.Provider>
 );
@@ -73,17 +78,18 @@ const DialogRoot = ({ children, modal, ...props }: PrimitiveRootProps) => (
 const DialogContent = ({
   children,
   position,
+  size,
   ...props
 }: ComponentProps<typeof Primitive.Popup> &
   VariantProps<typeof styles.popup>) => {
   const { modal } = useDialogContext();
-  console.log(modal);
+
   return (
     <Primitive.Portal>
       {modal === true || modal === undefined ? (
         <Primitive.Backdrop className={styles.backdrop()} />
       ) : null}
-      <Primitive.Popup {...props} className={styles.popup({ position })}>
+      <Primitive.Popup {...props} className={styles.popup({ position, size })}>
         {children}
       </Primitive.Popup>
     </Primitive.Portal>

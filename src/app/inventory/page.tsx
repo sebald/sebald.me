@@ -16,7 +16,7 @@ const InventoryPage = () => (
         <Button disabled>Button</Button>
       </div>
     </div>
-    <div>
+    <div className="flex flex-wrap gap-4">
       <Dialog.Root>
         <Dialog.Trigger>Open Dialog</Dialog.Trigger>
         <Dialog>
@@ -29,9 +29,21 @@ const InventoryPage = () => (
           </Dialog.Actions>
         </Dialog>
       </Dialog.Root>
+      <Dialog.Root modal={false} disablePointerDismissal>
+        <Dialog.Trigger>Open Non-modal Dialog (bottom)</Dialog.Trigger>
+        <Dialog position="bottom" size="full">
+          <Dialog.Title>Dialog Title</Dialog.Title>
+          <Dialog.Description>
+            This is a simple dialog example.
+          </Dialog.Description>
+          <Dialog.Actions>
+            <Dialog.Close>Close</Dialog.Close>
+          </Dialog.Actions>
+        </Dialog>
+      </Dialog.Root>
     </div>
 
-    <div className="grid w-1/2 gap-10 *:aspect-video">
+    <div className="grid auto-rows-fr grid-cols-1 gap-10 md:w-2/3">
       <Card>
         <div className="flex flex-col gap-4">
           <div>Default</div>
