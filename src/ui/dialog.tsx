@@ -26,22 +26,25 @@ export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
     base: [
-      'blur-md fixed inset-0 min-h-dvh bg-oatmeal-950 opacity-40 transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
+      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-white/40',
+      'z-100',
+      'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.
       'supports-[-webkit-touch-callout:none]:absolute',
     ],
   }),
   popup: cva({
     base: [
+      'z-100',
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
-      'surface rounded-3xl p-6',
+      'surface-opaque rounded-3xl p-6',
     ],
     variants: {
       position: {
         center: [
           'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-8',
-          'data-starting-style:scale-90 data-ending-style:scale-90',
+          'transition-all duration-150 data-starting-style:scale-90 data-ending-style:scale-90',
         ],
         bottom: [
           'bottom-0 left-1/2 -translate-x-1/2 mb-4',
@@ -59,7 +62,7 @@ export const styles = {
     },
   }),
   title: cva({
-    base: 'text-base font-bold',
+    base: 'text-lg font-semibold font-sans',
   }),
   description: cva({
     base: 'mt-1 text-sm text-gray-600',
