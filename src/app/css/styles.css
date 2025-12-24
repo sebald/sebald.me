@@ -15,7 +15,7 @@
 }
 
 @utility focus-ring {
-  @apply focus-visible:ring-oatmeal-900/50 outline-none focus-visible:ring-4 focus-visible:ring-offset-2;
+  @apply ring-blueberry-500 ring-offset-oatmeal-50 ring-[3px] ring-offset-2;
 }
 
 @utility shrink-scale-* {
