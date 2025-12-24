@@ -52,13 +52,15 @@ export const styles = {
         ],
       },
       size: {
-        default: 'w-96',
+        small: 'w-sm',
+        medium: 'w-md',
+        large: 'w-2xl',
         full: 'w-full',
       },
     },
     defaultVariants: {
       position: 'center',
-      size: 'default',
+      size: 'medium',
     },
   }),
   title: cva({
