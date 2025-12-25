@@ -11,6 +11,11 @@ export const styles = cva({
       ghost: ['surface-ghost'],
       tinted: ['surface-tinted'],
       opaque: ['surface-opaque'],
+      'default-2': ['surface-2'],
+      'clear-2': ['surface-clear-2'],
+      'ghost-2': ['surface-ghost-2'],
+      'tinted-2': ['surface-tinted-2'],
+      'opaque-2': ['surface-opaque-2'],
     },
   },
   defaultVariants: {

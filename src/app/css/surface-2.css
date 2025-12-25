@@ -1,0 +1,158 @@
+@utility surface-2 {
+  --surface-border-width: 1px;
+
+  background-image: linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-900) l c h / 0.8),
+      oklch(from var(--color-oatmeal-950) l c h / 0.9)
+    ),
+    linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-500) l c h / 0.6),
+      oklch(from var(--color-oatmeal-700) l c h / 0.6)
+    );
+  background-clip: padding-box, border-box;
+
+  backdrop-filter: blur(20px);
+
+  border: var(--surface-border-width) solid transparent;
+
+  /* prettier-ignore */
+  box-shadow:
+    /* Inner Highlight (Top Edge) */
+    inset 0 1px 0 0 oklch(from var(--color-oatmeal-200) l c h / 0.1),
+    /* Inner Shadow (Bottom/Right) for volume */
+    inset -1px -1px 0 0 oklch(from var(--color-oatmeal-950) l c h / 0.3),
+    /* Layered Drop Shadows */ 
+    0px 0.8px 0.7px oklch(from var(--color-oatmeal-950) l c h / 0.08),
+    0px 1.6px 1.4px -0.8px oklch(from var(--color-oatmeal-950) l c h / 0.08),
+    0px 3.5px 3.1px -1.5px oklch(from var(--color-oatmeal-950) l c h / 0.09),
+    0px 7.4px 6.5px -2.3px oklch(from var(--color-oatmeal-950) l c h / 0.09),
+    0px 14.8px 13px -3px oklch(from var(--color-oatmeal-950) l c h / 0.1);
+
+  color: var(--color-oatmeal-100);
+}
+
+@utility surface-clear-2 {
+  --surface-border-width: 1px;
+
+  background-image: linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.4),
+      oklch(1 0 0 / 0.2)
+    ),
+    linear-gradient(135deg, oklch(1 0 0 / 0.5), oklch(1 0 0 / 0.3));
+  background-clip: padding-box, border-box;
+  backdrop-filter: blur(var(--blur-md));
+
+  border: var(--surface-border-width) solid transparent;
+
+  box-shadow:
+    inset 0 1px 0 0 oklch(1 0 0 / 1),
+    0px 1px 2px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+    0px 3.4px 3.8px -0.5px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+    0px 7.8px 8.7px -1px oklch(from var(--color-oatmeal-900) l c h / 0.06),
+    0px 18px 20px -1.5px oklch(from var(--color-oatmeal-900) l c h / 0.07);
+
+  color: var(--color-oatmeal-900);
+}
+
+@utility surface-ghost-2 {
+  --surface-border-width: 1px;
+
+  background-image: linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-800) l c h / 0.35),
+      oklch(from var(--color-oatmeal-950) l c h / 0.5)
+    ),
+    linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-100) l c h / 0.12),
+      oklch(from var(--color-oatmeal-300) l c h / 0.06)
+    );
+  background-clip: padding-box, border-box;
+
+  backdrop-filter: blur(40px);
+
+  border: var(--surface-border-width) solid transparent;
+
+  /* prettier-ignore */
+  box-shadow:
+    /* Soft Inner Glow */
+    inset 0 0 20px oklch(from var(--color-oatmeal-200) l c h / 0.05),
+    /* Drop Shadows */
+    0px 1px 2px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+    0px 3.4px 3.8px -0.5px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+    0px 7.8px 8.7px -1px oklch(from var(--color-oatmeal-900) l c h / 0.06),
+    0px 18px 20px -1.5px oklch(from var(--color-oatmeal-900) l c h / 0.07);
+
+  color: var(--color-oatmeal-50);
+}
+
+@utility surface-tinted-2 {
+  --surface-border-width: 1px;
+
+  background-image: linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-600) l c h / 0.65),
+      oklch(from var(--color-oatmeal-800) l c h / 0.75)
+    ),
+    linear-gradient(
+      135deg,
+      oklch(from var(--color-oatmeal-400) l c h / 0.4),
+      oklch(from var(--color-oatmeal-600) l c h / 0.5)
+    );
+  background-clip: padding-box, border-box;
+
+  backdrop-filter: blur(12px);
+
+  border: var(--surface-border-width) solid transparent;
+
+  /* prettier-ignore */
+  box-shadow:
+    /* Subtle Top Highlight */
+    inset 0 1px 0 0 oklch(from var(--color-oatmeal-100) l c h / 0.15),
+    /* Deep Inner Shadow for Density */ 
+    inset 0 0 80px oklch(from var(--color-oatmeal-900) l c h / 0.4),
+    /* Drop Shadows */ 
+    0px 0.5px 0.6px oklch(from var(--color-oatmeal-800) l c h / 0.1),
+    0px 1.6px 1.8px -0.6px oklch(from var(--color-oatmeal-800) l c h / 0.1),
+    0px 3.6px 4.1px -1.1px oklch(from var(--color-oatmeal-800) l c h / 0.12),
+    0px 8.4px 9.6px -1.7px oklch(from var(--color-oatmeal-800) l c h / 0.12);
+
+  color: var(--color-white);
+}
+
+@utility surface-opaque-2 {
+  --surface-border-width: 1px;
+
+  background-image: linear-gradient(
+      145deg,
+      oklch(from var(--color-oatmeal-800) l c h / 0.95) 0%,
+      oklch(from var(--color-oatmeal-950) l c h / 1) 100%
+    ),
+    linear-gradient(
+      145deg,
+      oklch(from var(--color-oatmeal-700) l c h / 1),
+      oklch(from var(--color-oatmeal-900) l c h / 1)
+    );
+  background-clip: padding-box, border-box;
+  backdrop-filter: blur(4px);
+
+  border: var(--surface-border-width) solid transparent;
+
+  /* prettier-ignore */
+  box-shadow:
+    /* Sharp Top */
+    inset 0 1px 0 0 oklch(1 0 0 / 0.25),
+    /* Soft Bottom */ 
+    inset 0 -1px 0 0 oklch(from var(--color-oatmeal-500) l c h / 0.1),
+    /* Drop Shadows */
+    0px 1.1px 1.2px oklch(0 0 0 / 0.12),
+    0px 2.7px 3px -0.6px oklch(0 0 0 / 0.12),
+    0px 5.4px 6px -1.1px oklch(0 0 0 / 0.15),
+    0px 10.8px 12px -1.7px oklch(0 0 0 / 0.15),
+    0px 21.6px 24px -2.2px oklch(0 0 0 / 0.2);
+
+  color: var(--color-oatmeal-100);
+}

@@ -3,6 +3,7 @@
 
 @import './theme.css';
 @import './surface.css';
+@import './surface-2.css';
 
 @media (prefers-reduced-motion: reduce) {
   *,
