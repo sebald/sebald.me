@@ -1,6 +1,9 @@
 @theme {
   --font-mono: var(--font-mono), monospace;
   --font-sans: var(--font-sans), sans-serif;
+
+  --color-text: var(--oatmeal-950);
+  --color-headline: var(--oatmeal-900);
   --typescale: 1.25; /* Major third */
 
   --color-oatmeal-50: oklch(0.97 0.01 87);

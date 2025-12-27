@@ -21,6 +21,7 @@
  */
 
 @utility surface {
+  color: var(--color-text);
   background: var(--surface-bg);
   backdrop-filter: var(--surface-blur);
   /* prettier-ignore */

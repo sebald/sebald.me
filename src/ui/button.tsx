@@ -51,11 +51,15 @@ export const styles = cva({
         '[--btn-border-hover:linear-gradient(to_bottom,var(--color-blueberry-300),var(--color-blueberry-600))]',
         'shadow-[inset_0_1px_0_0_oklch(1_0_0/0.4),inset_0_-2px_4px_0_oklch(0_0_0/0.2),0_4px_12px_-2px_oklch(0_0_0/0.4),0_2px_4px_-1px_oklch(0_0_0/0.1)]',
       ],
-      ghost: ['text-current', 'bg-oatmeal-500/20', 'hover:bg-oatmeal-500/10'],
+      ghost: [
+        'text-current',
+        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
+        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
+      ],
       outline: [
         'text-current',
         'border-[oklch(from_currentColor_l_c_h/0.4)]',
-        'hover:bg-[oklch(from_var(--color-oatmeal-500)_l_c_h/0.2)] hover:border-[oklch(from_currentColor_l_c_h/0.5)]',
+        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
       ],
     },
   },
