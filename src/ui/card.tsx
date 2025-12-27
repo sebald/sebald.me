@@ -2,16 +2,16 @@ import type { VariantProps } from 'cva';
 import { cva } from 'cva';
 import type { PropsWithChildren } from 'react';
 
-// TODO: create utitlies to set classes directly instead of "knowing" the css var for surface (buttons too)
+// TODO: create utitlies to set classes directly instead of "knowing" the css var for panel (buttons too)
 export const styles = cva({
   base: ['rounded-3xl p-6 flex flex-col gap-5'],
   variants: {
     variant: {
-      dark: ['surface', 'surface-dark'],
-      clear: ['surface', 'surface-clear'],
-      ghost: ['surface', 'surface-ghost'],
-      tinted: ['surface', 'surface-tinted'],
-      opaque: ['surface', 'surface-opaque'],
+      dark: ['panel', 'panel-dark'],
+      clear: ['panel', 'panel-clear'],
+      ghost: ['panel', 'panel-ghost'],
+      tinted: ['panel', 'panel-tinted'],
+      opaque: ['panel', 'panel-opaque'],
     },
   },
   defaultVariants: {

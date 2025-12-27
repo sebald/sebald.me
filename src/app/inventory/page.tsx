@@ -245,9 +245,7 @@ const InventoryPage = () => (
         <div className="flex h-full flex-col gap-4">
           <div>
             <Headline level="5">Dark Variant</Headline>
-            <Text size="caption">
-              A dark surface with high contrast content.
-            </Text>
+            <Text size="caption">A dark panel with high contrast content.</Text>
           </div>
           <div className="mt-auto flex flex-wrap gap-4">
             <Button>Button</Button>
@@ -261,7 +259,7 @@ const InventoryPage = () => (
         <div className="flex h-full flex-col gap-4">
           <div>
             <Headline level="5">Clear Variant</Headline>
-            <Text size="caption">A glass-like surface with transparency.</Text>
+            <Text size="caption">A glass-like panel with transparency.</Text>
           </div>
           <div className="mt-auto flex flex-wrap gap-4">
             <Button>Button</Button>
@@ -275,7 +273,7 @@ const InventoryPage = () => (
         <div className="flex h-full flex-col gap-4">
           <div>
             <Headline level="5">Ghost Variant</Headline>
-            <Text size="caption">A subtle, ethereal surface treatment.</Text>
+            <Text size="caption">A subtle, ethereal panel treatment.</Text>
           </div>
           <div className="mt-auto flex flex-wrap gap-4">
             <Button>Button</Button>
@@ -289,9 +287,7 @@ const InventoryPage = () => (
         <div className="flex h-full flex-col gap-4">
           <div>
             <Headline level="5">Tinted Variant</Headline>
-            <Text size="caption">
-              A warm, colored surface with blur effect.
-            </Text>
+            <Text size="caption">A warm, colored panel with blur effect.</Text>
           </div>
           <div className="mt-auto flex flex-wrap gap-4">
             <Button>Button</Button>
@@ -305,7 +301,7 @@ const InventoryPage = () => (
         <div className="flex h-full flex-col gap-4">
           <div>
             <Headline level="5">Opaque Variant</Headline>
-            <Text size="caption">A solid, fully opaque surface.</Text>
+            <Text size="caption">A solid, fully opaque panel.</Text>
           </div>
           <div className="mt-auto flex flex-wrap gap-4">
             <Button>Button</Button>

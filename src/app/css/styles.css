@@ -2,7 +2,7 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
-@import './surface.css';
+@import './panel.css';
 @import './utilities.css';
 
 @media (prefers-reduced-motion: reduce) {

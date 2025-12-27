@@ -138,7 +138,7 @@
       padding-left: --spacing(1.5); /* Different because logo gets shrinked. */
       padding-right: --spacing(5);
 
-      /* slightly adjusted clear surface */
+      /* slightly adjusted clear panel */
       background: linear-gradient(
         135deg,
         oklch(1 0 0 / 0.6),
