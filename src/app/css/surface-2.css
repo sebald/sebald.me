@@ -15,17 +15,17 @@
     0 16px 16px var(--surface-shadow);
 }
 
-@utility surface-default-2 {
+@utility surface-dark-2 {
   --surface-bg: linear-gradient(
     135deg,
     oklch(from var(--color-oatmeal-900) l c h / 0.8),
     oklch(from var(--color-oatmeal-950) l c h / 0.9)
   );
   --surface-blur: var(--blur-xl);
-  --surface-border: oklch(from var(--color-oatmeal-700) l c h / 0.6);
+  --surface-border: oklch(from var(--color-oatmeal-900) l c h / 0.7);
   --surface-edge: oklch(from var(--color-oatmeal-500) l c h / 0.6);
-  --surface-highlight: oklch(from var(--color-oatmeal-200) l c h / 0.1);
-  --surface-inner-shadow: oklch(from var(--color-oatmeal-950) l c h / 0.3);
+  --surface-highlight: oklch(from var(--color-oatmeal-200) l c h / 0.3);
+  --surface-inner-shadow: oklch(from var(--color-oatmeal-950) l c h / 0.6);
   --surface-shadow: oklch(from var(--color-oatmeal-950) l c h / 0.09);
   --surface-text: var(--color-oatmeal-200);
 }
