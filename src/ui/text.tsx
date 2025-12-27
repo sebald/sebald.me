@@ -1,29 +1,22 @@
 import { cva, type VariantProps } from 'cva';
 
 const style = cva({
-  base: 'text-oatmeal-900',
+  base: 'leading-relaxed',
   variants: {
-    size: {
-      sm: 'text-sm leading-relaxed',
-      base: 'text-base leading-relaxed',
-      lg: 'text-lg leading-relaxed',
-      xl: 'text-xl leading-relaxed',
-    },
-    weight: {
-      normal: 'font-normal',
-      medium: 'font-medium',
-      semibold: 'font-semibold',
-    },
     variant: {
-      default: '',
-      muted: 'text-oatmeal-600',
-      lead: 'text-xl leading-relaxed font-normal',
+      default: 'text-oatmeal-800',
+      muted: 'opacity-60',
+    },
+    size: {
+      caption: 'text-sm',
+      body: 'text-base',
+      emphasis: 'text-lg',
+      lead: 'text-lg',
     },
   },
   defaultVariants: {
-    size: 'base',
-    weight: 'normal',
     variant: 'default',
+    size: 'body',
   },
 });
 
@@ -34,17 +27,7 @@ interface TextProps extends TextVariants {
   as?: 'p' | 'span' | 'div';
 }
 
-export const Text = ({
-  size,
-  weight,
-  variant,
-  children,
-  as = 'p',
-}: TextProps) => {
+export const Text = ({ variant, size, children, as = 'p' }: TextProps) => {
   const Component = as;
-  return (
-    <Component className={style({ size, weight, variant })}>
-      {children}
-    </Component>
-  );
+  return <Component className={style({ variant, size })}>{children}</Component>;
 };

@@ -146,22 +146,24 @@ const InventoryPage = () => (
         <Headline level="4">Text</Headline>
         <div className="grid gap-4">
           <Text>
-            This is a default paragraph with base size and normal weight. It
-            uses leading-relaxed for comfortable reading.
+            This is a default paragraph with body size. It uses leading-relaxed
+            for comfortable reading.
           </Text>
-          <Text variant="lead">
+          <Text size="lead">
             This is a lead paragraph, typically used for introductory text. It
             has a larger font size to draw attention.
           </Text>
-          <Text size="sm">
-            This is small text, useful for captions or supplementary
-            information.
+          <Text size="caption">
+            This is caption text, useful for fine print, metadata, or
+            supplementary information like timestamps.
           </Text>
           <Text variant="muted">
             This is muted text with reduced contrast, perfect for secondary
             content.
           </Text>
-          <Text weight="semibold">This text has semibold weight.</Text>
+          <Text size="emphasis" variant="default">
+            This is emphasized text with increased size.
+          </Text>
         </div>
       </div>
 
