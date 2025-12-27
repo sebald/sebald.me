@@ -1,17 +1,16 @@
-'use client';
-
 import type { Metadata } from 'next';
 
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
-import { Dialog } from '@/ui/dialog';
+
+import { DialogExample } from './dialog-example';
 
 // Meta
 // ---------------
-// export const metadata: Metadata = {
-//   title: 'Inventory',
-//   description: 'Overview of styles and components.',
-// };
+export const metadata: Metadata = {
+  title: 'Inventory',
+  description: 'Overview of styles and components.',
+};
 
 // Page
 // ---------------
@@ -129,32 +128,7 @@ const InventoryPage = () => (
         <Button disabled>Button</Button>
       </div>
     </div>
-    <div className="flex flex-wrap gap-4">
-      <Dialog.Root>
-        <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-        <Dialog>
-          <Dialog.Title>Dialog Title</Dialog.Title>
-          <Dialog.Description>
-            This is a simple dialog example.
-          </Dialog.Description>
-          <Dialog.Actions>
-            <Dialog.Close>Close</Dialog.Close>
-          </Dialog.Actions>
-        </Dialog>
-      </Dialog.Root>
-      <Dialog.Root modal={false} disablePointerDismissal>
-        <Dialog.Trigger>Open Non-modal Dialog (bottom)</Dialog.Trigger>
-        <Dialog position="bottom" size="full">
-          <Dialog.Title>Dialog Title</Dialog.Title>
-          <Dialog.Description>
-            This is a simple dialog example.
-          </Dialog.Description>
-          <Dialog.Actions>
-            <Dialog.Close>Close</Dialog.Close>
-          </Dialog.Actions>
-        </Dialog>
-      </Dialog.Root>
-    </div>
+    <DialogExample />
 
     <div className="grid gap-4">
       <Card variant="dark">
