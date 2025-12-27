@@ -41,6 +41,7 @@ export const styles = {
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       'surface surface-opaque rounded-3xl p-6',
+      'grid gap-4',
     ],
     variants: {
       position: {
@@ -59,27 +60,22 @@ export const styles = {
         large: 'w-2xl',
         full: 'w-full',
       },
-    },
-    defaultVariants: {
-      position: 'center',
-      size: 'medium',
-    },
-  }),
-  content: cva({
-    base: 'grid gap-4',
-    variants: {
       layout: {
         stack: [
           'grid-cols-1',
-          '[grid-template-areas:"title""description""actions"]',
+          '[grid-template-areas:"title""description""body""actions"]',
         ],
         inline: [
-          'grid-cols-[1fr_auto] gap-6',
-          '[grid-template-areas:"title_._""description_actions"]',
+          'grid-cols-1 md:grid-cols-[1fr_auto]',
+          '[grid-template-areas:"title""description""body""actions"]',
+          'md:[grid-template-areas:"title_._""description_._""body_actions"]',
+          'gap-4 md:gap-6',
         ],
       },
     },
     defaultVariants: {
+      position: 'center',
+      size: 'medium',
       layout: 'stack',
     },
   }),
@@ -101,8 +97,7 @@ const DialogContent = ({
   layout,
   ...props
 }: ComponentProps<typeof Primitive.Popup> &
-  VariantProps<typeof styles.popup> &
-  VariantProps<typeof styles.content>) => {
+  VariantProps<typeof styles.popup>) => {
   const { modal } = useDialogContext();
 
   return (
@@ -113,7 +108,7 @@ const DialogContent = ({
         ) : null}
         <Primitive.Popup
           {...props}
-          className={`${styles.popup({ position, size })} ${styles.content({ layout })}`}
+          className={styles.popup({ position, size, layout })}
         >
           {children}
         </Primitive.Popup>
@@ -140,22 +135,29 @@ const DialogDescription = ({
 }: ComponentProps<typeof Primitive.Description>) => (
   <Primitive.Description
     {...props}
-    className={`${textStyle({ size: 'body' })} [grid-area:description]`}
+    className={`${textStyle({ size: 'caption' })} [grid-area:description]`}
   >
     {children}
   </Primitive.Description>
 );
 
+const DialogBody = ({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} className="[grid-area:body]">
+    {children}
+  </div>
+);
+
 const DialogActions = ({
   children,
   ...props
-}: React.HTMLAttributes<HTMLDivElement>) => {
-  return (
-    <div {...props} className={`${styles.actions()} [grid-area:actions]`}>
-      {children}
-    </div>
-  );
-};
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} className={`${styles.actions()} [grid-area:actions]`}>
+    {children}
+  </div>
+);
 
 export interface DialogTriggerProps
   extends ComponentProps<typeof Primitive.Trigger>,
@@ -180,6 +182,7 @@ export const Dialog = Object.assign(DialogContent, {
   Root: DialogRoot,
   Title: DialogTitle,
   Description: DialogDescription,
+  Body: DialogBody,
   Actions: DialogActions,
   Trigger: DialogTrigger,
   Close: DialogClose,
