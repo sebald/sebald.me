@@ -31,20 +31,16 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
       modal={false}
       disablePointerDismissal
     >
-      <Dialog>
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 md:flex-row">
-          <div className="text-center md:text-left">
-            <Dialog.Title>We value your privacy</Dialog.Title>
-            <Dialog.Description>
-              We use cookies to analyze traffic and improve your experience.
-            </Dialog.Description>
-          </div>
-
-          <Dialog.Actions>
-            <Button onClick={handleDecline}>Decline</Button>
-            <Button onClick={handleAccept}>Accept</Button>
-          </Dialog.Actions>
-        </div>
+      <Dialog layout="inline">
+        <Dialog.Title>I&apos;d like to learn from you</Dialog.Title>
+        <Dialog.Body>
+          I use minimal analytics to understand which articles and ideas
+          resonate with you most. It helps me write better content.
+        </Dialog.Body>
+        <Dialog.Actions>
+          <Button onClick={handleDecline}>Decline</Button>
+          <Button onClick={handleAccept}>Accept</Button>
+        </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
   );

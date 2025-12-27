@@ -13,10 +13,12 @@ export const DialogExample = () => (
         </Dialog.Description>
         <Dialog.Body>This is the body text of the dialog.</Dialog.Body>
         <Dialog.Actions>
+          <Dialog.Close>Okay</Dialog.Close>
           <Dialog.Close>Close</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
+
     <Dialog.Root modal={false} disablePointerDismissal>
       <Dialog.Trigger>Open Non-modal Dialog (bottom)</Dialog.Trigger>
       <Dialog position="bottom" size="full" layout="inline">
@@ -25,6 +27,7 @@ export const DialogExample = () => (
           This is a simple dialog example.
         </Dialog.Description>
         <Dialog.Actions>
+          <Dialog.Close>Okay</Dialog.Close>
           <Dialog.Close>Close</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
