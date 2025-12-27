@@ -2,6 +2,10 @@
   @apply ring-blueberry-500 ring-offset-oatmeal-50 ring-[3px] ring-offset-2;
 }
 
+@utility typescale-* {
+  font-size: calc(1rem * pow(var(--typescale), --value(integer)));
+}
+
 @utility shrink-scale-* {
   --shrink-scale: calc(--value(integer) * 1%);
 }

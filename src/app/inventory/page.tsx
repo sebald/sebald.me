@@ -18,8 +18,8 @@ export const metadata: Metadata = {
 const InventoryPage = () => (
   <div className="grid gap-24">
     <div className="grid gap-8">
-      <div>
-        <div className="mb-4 text-sm font-semibold">Oatmeal Palette</div>
+      <div className="grid gap-2">
+        <Headline level="4">Oatmeal Palette</Headline>
         <div className="flex flex-wrap gap-1">
           <div
             className="bg-oatmeal-50 h-12 w-12 rounded-lg"
@@ -68,8 +68,8 @@ const InventoryPage = () => (
         </div>
       </div>
 
-      <div>
-        <div className="mb-4 text-sm font-semibold">Blueberry Palette</div>
+      <div className="grid gap-2">
+        <Headline level="4">Blueberry Palette</Headline>
         <div className="flex flex-wrap gap-1">
           <div
             className="bg-blueberry-50 h-12 w-12 rounded-lg"
@@ -121,12 +121,12 @@ const InventoryPage = () => (
 
     <div className="grid gap-4">
       <div className="flex flex-col gap-4">
-        <Headline level="h1">Heading Level 1</Headline>
-        <Headline level="h2">Heading Level 2</Headline>
-        <Headline level="h3">Heading Level 3</Headline>
-        <Headline level="h4">Heading Level 4</Headline>
-        <Headline level="h5">Heading Level 5</Headline>
-        <Headline level="h6">Heading Level 6</Headline>
+        <Headline level="1">Heading Level 1</Headline>
+        <Headline level="2">Heading Level 2</Headline>
+        <Headline level="3">Heading Level 3</Headline>
+        <Headline level="4">Heading Level 4</Headline>
+        <Headline level="5">Heading Level 5</Headline>
+        <Headline level="6">Heading Level 6</Headline>
       </div>
     </div>
 
