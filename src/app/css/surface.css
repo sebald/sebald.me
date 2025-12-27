@@ -1,3 +1,10 @@
+/**
+ * Provides a versatile component surface for creating new visually distinct containers,
+ * such as cards, modals, and other panels. Each variant (dark, clear, ghost, tinted, 
+ * opaque) offers different visual treatments while maintaining consistent styling through 
+ * CSS variables.
+ */
+
 @utility surface {
   background: var(--surface-bg);
   backdrop-filter: var(--surface-blur);

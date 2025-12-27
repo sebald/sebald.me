@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
+import { Headline } from '@/ui/headline';
 
 import { DialogExample } from './dialog-example';
 
@@ -115,6 +116,17 @@ const InventoryPage = () => (
             title="blueberry-950"
           />
         </div>
+      </div>
+    </div>
+
+    <div className="grid gap-4">
+      <div className="flex flex-col gap-4">
+        <Headline level="h1">Heading Level 1</Headline>
+        <Headline level="h2">Heading Level 2</Headline>
+        <Headline level="h3">Heading Level 3</Headline>
+        <Headline level="h4">Heading Level 4</Headline>
+        <Headline level="h5">Heading Level 5</Headline>
+        <Headline level="h6">Heading Level 6</Headline>
       </div>
     </div>
 
