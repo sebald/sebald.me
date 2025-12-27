@@ -1,9 +1,9 @@
 'use client';
 
 import { Dialog } from '@base-ui/react/dialog';
+import { ListIcon, X } from '@phosphor-icons/react/ssr';
 import { cva } from 'cva';
 import Link from 'fumadocs-core/link';
-import { Cancel01Icon, Menu01Icon } from 'hugeicons-react';
 import { usePathname } from 'next/navigation';
 
 import { navItems } from '@/app.config';
@@ -63,7 +63,7 @@ const SmallScreenNav = () => (
         className="flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100"
         aria-label="Open navigation menu"
       >
-        <Menu01Icon className="size-6" />
+        <ListIcon size={24} weight="regular" />
       </Dialog.Trigger>
 
       <Dialog.Portal>
@@ -76,7 +76,7 @@ const SmallScreenNav = () => (
               className="rounded-md p-2 text-gray-500 hover:bg-gray-100"
               aria-label="Close navigation menu"
             >
-              <Cancel01Icon className="h-5 w-5" />
+              <X size={20} weight="regular" />
             </Dialog.Close>
           </div>
 

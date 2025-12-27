@@ -2,7 +2,8 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
-@import './surface.css';
+@import './panel.css';
+@import './utilities.css';
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -12,23 +13,4 @@
     transition: none !important;
     animation: none !important;
   }
-}
-
-@utility focus-ring {
-  @apply focus-visible:ring-oatmeal-900/50 outline-none focus-visible:ring-4 focus-visible:ring-offset-2;
-}
-
-@utility shrink-scale-* {
-  --shrink-scale: calc(--value(integer) * 1%);
-}
-
-@utility scroll-trigger {
-  animation-timeline: scroll();
-  animation-range: var(--scroll-trigger-from, 0) var(--scroll-trigger-to, 100%);
-}
-@utility scroll-trigger-from-* {
-  --scroll-trigger-from: calc(--value(integer) * 4px);
-}
-@utility scroll-trigger-to-* {
-  --scroll-trigger-to: calc(--value(integer) * 4px);
 }
