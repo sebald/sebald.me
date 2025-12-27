@@ -3,7 +3,8 @@
   "extends": [
     "config:recommended",
     ":semanticCommitTypeAll(chore)",
-    ":rebaseStalePrs"
+    ":rebaseStalePrs",
+    ":dependencyDashboard"
   ],
   "schedule": ["before 4am on Monday"],
   "timezone": "Europe/Berlin",
