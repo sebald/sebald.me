@@ -1,16 +1,15 @@
 import { cva, type VariantProps } from 'cva';
 
 const style = cva({
-  base: 'leading-relaxed',
+  base: 'leading-relaxed text-(--color-text,var(--color-oatmeal-800))',
   variants: {
     variant: {
-      default: 'text-oatmeal-800',
+      default: '',
       muted: 'opacity-60',
     },
     size: {
       caption: 'text-sm',
       body: 'text-base',
-      emphasis: 'text-lg',
       lead: 'text-lg',
     },
   },

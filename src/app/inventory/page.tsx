@@ -161,9 +161,6 @@ const InventoryPage = () => (
             This is muted text with reduced contrast, perfect for secondary
             content.
           </Text>
-          <Text size="emphasis" variant="default">
-            This is emphasized text with increased size.
-          </Text>
         </div>
       </div>
 
