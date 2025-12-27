@@ -17,9 +17,7 @@ const style = cva({
   },
 });
 
-type HeadlineVariants = VariantProps<typeof style>;
-
-interface HeadlineProps extends HeadlineVariants {
+export interface HeadlineProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
