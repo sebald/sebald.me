@@ -22,7 +22,7 @@ export const styles = cva({
 
     /* States */
     'focus-visible:focus-ring outline-none',
-    'active:scale-[0.98]',
+    'active:scale-[0.97]',
     'disabled:cursor-default disabled:opacity-50',
   ],
   variants: {
