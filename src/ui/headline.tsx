@@ -1,7 +1,11 @@
 import { cva, type VariantProps } from 'cva';
 
 export const style = cva({
-  base: 'font-sans font-bold -tracking-wide leading-tight text-(--color-headline,var(--color-oatmeal-900))',
+  base: [
+    'flex items-center',
+    'font-sans font-bold -tracking-wide leading-tight text-(--color-headline,var(--color-oatmeal-900))',
+    '[&_svg]:mr-2 [&_svg]:size-[1em]',
+  ],
   variants: {
     level: {
       '1': 'typescale-5',

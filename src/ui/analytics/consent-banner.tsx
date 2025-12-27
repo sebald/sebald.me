@@ -1,5 +1,6 @@
 'use client';
 
+import { CookieIcon } from '@phosphor-icons/react/ssr';
 import { useState } from 'react';
 
 import { Button } from '../button';
@@ -32,7 +33,10 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
       disablePointerDismissal
     >
       <Dialog position="bottom" size="full" layout="inline">
-        <Dialog.Title>I&apos;d like to learn from you</Dialog.Title>
+        <Dialog.Title>
+          <CookieIcon size={32} weight="duotone" />
+          I&apos;d like to learn from you
+        </Dialog.Title>
         <Dialog.Body>
           I use minimal analytics to understand which articles and ideas
           resonate with you most. It helps me write better content.
