@@ -88,7 +88,7 @@ export const styles = {
     base: `${textStyle()} [grid-area:body] mt-6`,
   }),
   actions: cva({
-    base: 'flex shrink-0 gap-3 [grid-area:actions] mt-6 justify-end',
+    base: 'flex shrink-0 gap-3 [grid-area:actions] mt-6 justify-end self-end',
   }),
 };
 

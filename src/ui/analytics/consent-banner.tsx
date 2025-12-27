@@ -31,7 +31,7 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
       modal={false}
       disablePointerDismissal
     >
-      <Dialog layout="inline">
+      <Dialog position="bottom" size="full" layout="inline">
         <Dialog.Title>I&apos;d like to learn from you</Dialog.Title>
         <Dialog.Body>
           I use minimal analytics to understand which articles and ideas
