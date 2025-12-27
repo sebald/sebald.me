@@ -1,4 +1,4 @@
-@utility surface-2 {
+@utility surface {
   background: var(--surface-bg);
   backdrop-filter: var(--surface-blur);
   color: var(--surface-text);
@@ -15,7 +15,7 @@
     0 16px 16px var(--surface-shadow);
 }
 
-@utility surface-dark-2 {
+@utility surface-dark {
   --surface-bg: linear-gradient(
     135deg,
     oklch(from var(--color-oatmeal-900) l c h / 0.8),
@@ -30,7 +30,7 @@
   --surface-text: var(--color-oatmeal-200);
 }
 
-@utility surface-clear-2 {
+@utility surface-clear {
   --surface-bg: linear-gradient(
     135deg,
     oklch(1 0 0 / 0.45),
@@ -45,7 +45,7 @@
   --surface-text: var(--color-oatmeal-700);
 }
 
-@utility surface-ghost-2 {
+@utility surface-ghost {
   --surface-bg: linear-gradient(
     135deg,
     oklch(from var(--color-oatmeal-800) l c h / 0.35),
@@ -60,7 +60,7 @@
   --surface-text: var(--color-oatmeal-50);
 }
 
-@utility surface-tinted-2 {
+@utility surface-tinted {
   --surface-bg: linear-gradient(
     135deg,
     oklch(from var(--color-oatmeal-700) l c h / 0.65),
@@ -75,7 +75,7 @@
   --surface-text: var(--color-oatmeal-100);
 }
 
-@utility surface-opaque-2 {
+@utility surface-opaque {
   --surface-bg: linear-gradient(
     135deg,
     oklch(from var(--color-oatmeal-900) l c h / 0.9),

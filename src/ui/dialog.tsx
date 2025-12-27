@@ -38,7 +38,7 @@ export const styles = {
       'z-100',
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
-      'surface-opaque rounded-3xl p-6',
+      'surface surface-opaque rounded-3xl p-6',
     ],
     variants: {
       position: {

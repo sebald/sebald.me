@@ -7,20 +7,15 @@ export const styles = cva({
   base: ['rounded-3xl p-6 flex flex-col gap-5'],
   variants: {
     variant: {
-      default: ['surface'],
-      clear: ['surface-clear'],
-      ghost: ['surface-ghost'],
-      tinted: ['surface-tinted'],
-      opaque: ['surface-opaque'],
-      'default-2': ['surface-2', 'surface-dark-2'],
-      'clear-2': ['surface-2', 'surface-clear-2'],
-      'ghost-2': ['surface-2', 'surface-ghost-2'],
-      'tinted-2': ['surface-2', 'surface-tinted-2'],
-      'opaque-2': ['surface-2', 'surface-opaque-2'],
+      dark: ['surface', 'surface-dark'],
+      clear: ['surface', 'surface-clear'],
+      ghost: ['surface', 'surface-ghost'],
+      tinted: ['surface', 'surface-tinted'],
+      opaque: ['surface', 'surface-opaque'],
     },
   },
   defaultVariants: {
-    variant: 'default',
+    variant: 'dark',
   },
 });
 

@@ -156,107 +156,62 @@ const InventoryPage = () => (
       </Dialog.Root>
     </div>
 
-    <div className="grid gap-10">
-      <div className="grid auto-rows-fr grid-cols-2 gap-4">
-        <Card>
-          <div className="flex flex-col gap-4">
-            <div>Default</div>
-            <div className="flex flex-wrap gap-4">
-              <Button>Button</Button>
-              <Button variant="dark">Button</Button>
-              <Button variant="ghost">Button</Button>
-              <Button variant="outline">Button</Button>
-            </div>
+    <div className="grid gap-4">
+      <Card variant="dark">
+        <div className="flex flex-col gap-4">
+          <div>Dark</div>
+          <div className="flex flex-wrap gap-4">
+            <Button>Button</Button>
+            <Button variant="dark">Button</Button>
+            <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
-        </Card>
-        <Card variant="default-2">
-          <div className="flex flex-col gap-4">
-            <div>Default-2</div>
-            <div className="flex flex-wrap gap-4">
-              <Button>Button</Button>
-              <Button variant="dark">Button</Button>
-              <Button variant="ghost">Button</Button>
-              <Button variant="outline">Button</Button>
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid auto-rows-fr grid-cols-2 gap-4">
-        <Card variant="clear">
+        </div>
+      </Card>
+      <Card variant="clear">
+        <div className="flex flex-col gap-4">
           <div>Clear</div>
           <div className="flex flex-wrap gap-4">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
-        </Card>
-        <Card variant="clear-2">
-          <div>Clear-2</div>
-          <div className="flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid auto-rows-fr grid-cols-2 gap-4">
-        <Card variant="ghost">
+        </div>
+      </Card>
+      <Card variant="ghost">
+        <div className="flex flex-col gap-4">
           <div>Ghost</div>
           <div className="flex flex-wrap gap-4">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
-        </Card>
-        <Card variant="ghost-2">
-          <div>Ghost-2</div>
-          <div className="flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid auto-rows-fr grid-cols-2 gap-4">
-        <Card variant="tinted">
+        </div>
+      </Card>
+      <Card variant="tinted">
+        <div className="flex flex-col gap-4">
           <div>Tinted</div>
           <div className="flex flex-wrap gap-4">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
-        </Card>
-        <Card variant="tinted-2">
-          <div>Tinted-2</div>
-          <div className="flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-          </div>
-        </Card>
-      </div>
-
-      <div className="grid auto-rows-fr grid-cols-2 gap-4">
-        <Card variant="opaque">
+        </div>
+      </Card>
+      <Card variant="opaque">
+        <div className="flex flex-col gap-4">
           <div>Opaque</div>
           <div className="flex flex-wrap gap-4">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
+            <Button variant="outline">Button</Button>
           </div>
-        </Card>
-        <Card variant="opaque-2">
-          <div>Opaque-2</div>
-          <div className="flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-          </div>
-        </Card>
-      </div>
+        </div>
+      </Card>
     </div>
   </div>
 );
