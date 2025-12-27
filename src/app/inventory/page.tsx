@@ -1,9 +1,20 @@
 'use client';
 
+import type { Metadata } from 'next';
+
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
 
+// Meta
+// ---------------
+// export const metadata: Metadata = {
+//   title: 'Inventory',
+//   description: 'Overview of styles and components.',
+// };
+
+// Page
+// ---------------
 const InventoryPage = () => (
   <div className="grid gap-24">
     <div className="grid gap-8">
