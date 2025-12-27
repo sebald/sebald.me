@@ -243,9 +243,14 @@ const InventoryPage = () => (
       <Headline level="3">Cards</Headline>
 
       <Card variant="dark">
-        <div className="flex flex-col gap-4">
-          <div>Dark</div>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4 h-full">
+          <div>
+            <Headline level="5">Dark Variant</Headline>
+            <Text size="caption">
+              A dark surface with high contrast content.
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-auto">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
@@ -254,9 +259,14 @@ const InventoryPage = () => (
         </div>
       </Card>
       <Card variant="clear">
-        <div className="flex flex-col gap-4">
-          <div>Clear</div>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4 h-full">
+          <div>
+            <Headline level="5">Clear Variant</Headline>
+            <Text size="caption">
+              A glass-like surface with transparency.
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-auto">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
@@ -265,9 +275,14 @@ const InventoryPage = () => (
         </div>
       </Card>
       <Card variant="ghost">
-        <div className="flex flex-col gap-4">
-          <div>Ghost</div>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4 h-full">
+          <div>
+            <Headline level="5">Ghost Variant</Headline>
+            <Text size="caption">
+              A subtle, ethereal surface treatment.
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-auto">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
@@ -276,9 +291,14 @@ const InventoryPage = () => (
         </div>
       </Card>
       <Card variant="tinted">
-        <div className="flex flex-col gap-4">
-          <div>Tinted</div>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4 h-full">
+          <div>
+            <Headline level="5">Tinted Variant</Headline>
+            <Text size="caption">
+              A warm, colored surface with blur effect.
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-auto">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
@@ -287,9 +307,14 @@ const InventoryPage = () => (
         </div>
       </Card>
       <Card variant="opaque">
-        <div className="flex flex-col gap-4">
-          <div>Opaque</div>
-          <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col gap-4 h-full">
+          <div>
+            <Headline level="5">Opaque Variant</Headline>
+            <Text size="caption">
+              A solid, fully opaque surface.
+            </Text>
+          </div>
+          <div className="flex flex-wrap gap-4 mt-auto">
             <Button>Button</Button>
             <Button variant="dark">Button</Button>
             <Button variant="ghost">Button</Button>
