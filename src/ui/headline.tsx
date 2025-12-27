@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'cva';
 
-const style = cva({
+export const style = cva({
   base: 'font-sans font-bold -tracking-wide leading-tight text-(--color-headline,var(--color-oatmeal-900))',
   variants: {
     level: {

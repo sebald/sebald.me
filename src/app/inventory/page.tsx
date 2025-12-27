@@ -233,7 +233,6 @@ const InventoryPage = () => (
 
     <div className="grid gap-4">
       <Headline level="3">Dialog</Headline>
-
       <DialogExample />
     </div>
 

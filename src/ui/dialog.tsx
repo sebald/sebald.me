@@ -7,6 +7,8 @@ import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
 
 import { styles as buttonStyles } from './button';
+import { style as headlineStyle } from './headline';
+import { style as textStyle } from './text';
 
 interface DialogContextType {
   modal: PrimitiveRootProps['modal'];
@@ -64,10 +66,10 @@ export const styles = {
     },
   }),
   title: cva({
-    base: 'text-lg font-semibold font-sans',
+    base: '',
   }),
   description: cva({
-    base: 'mt-1 text-sm text-gray-600',
+    base: '',
   }),
   actions: cva({
     base: 'flex shrink-0 gap-3',
@@ -105,7 +107,7 @@ const DialogTitle = ({
   children,
   ...props
 }: ComponentProps<typeof Primitive.Title>) => (
-  <Primitive.Title {...props} className={styles.title()}>
+  <Primitive.Title {...props} className={headlineStyle({ level: '4' })}>
     {children}
   </Primitive.Title>
 );
@@ -114,7 +116,7 @@ const DialogDescription = ({
   children,
   ...props
 }: ComponentProps<typeof Primitive.Description>) => (
-  <Primitive.Description {...props} className={styles.description()}>
+  <Primitive.Description {...props} className={textStyle({ size: 'body' })}>
     {children}
   </Primitive.Description>
 );
