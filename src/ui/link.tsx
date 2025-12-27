@@ -2,26 +2,18 @@ import { cva, type VariantProps } from 'cva';
 
 const style = cva({
   base: [
-    'underline',
-    'underline-offset-2',
-    'decoration-1',
-    'transition-colors',
-    'focus-visible:focus-ring',
-    'focus-visible:outline-none',
+    'underline underline-offset-2 decoration-1',
+    'transition-colors focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
     variant: {
       default: [
-        'text-blueberry-600',
-        'decoration-blueberry-600/40',
-        'hover:text-blueberry-700',
-        'hover:decoration-blueberry-700',
+        'text-blueberry-600 decoration-blueberry-600/40',
+        'hover:text-blueberry-700 hover:decoration-blueberry-700',
       ],
       muted: [
-        'text-oatmeal-700',
-        'decoration-oatmeal-700/40',
-        'hover:text-oatmeal-900',
-        'hover:decoration-oatmeal-900',
+        'text-oatmeal-700 decoration-oatmeal-700/40',
+        'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
       ],
     },
   },

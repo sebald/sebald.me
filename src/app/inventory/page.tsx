@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
-import { Code, Pre } from '@/ui/code';
+import { Code } from '@/ui/code';
 import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -203,10 +203,6 @@ const InventoryPage = () => (
         <Text>
           Use the <Code>useState</Code> hook to manage component state.
         </Text>
-        <Pre>{`function hello() {
-  console.log("Hello, world!");
-  return true;
-}`}</Pre>
       </div>
 
       <div className="grid gap-4">

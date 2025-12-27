@@ -2,18 +2,14 @@ import { cva } from 'cva';
 
 const style = cva({
   base: [
-    'border-l-4',
-    'border-oatmeal-300',
-    'pl-4',
-    'py-2',
-    'text-oatmeal-700',
-    'italic',
-    'my-6',
+    'border-l-4 border-oatmeal-300',
+    'pl-4 py-2 my-6',
+    'text-oatmeal-700 italic',
   ],
 });
 
 const citationStyle = cva({
-  base: ['block', 'mt-2', 'text-sm', 'text-oatmeal-600', 'not-italic'],
+  base: ['block mt-2', 'text-sm text-oatmeal-600', 'not-italic'],
 });
 
 interface BlockquoteProps {
