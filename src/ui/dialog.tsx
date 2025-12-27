@@ -41,7 +41,7 @@ export const styles = {
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       'surface surface-opaque rounded-3xl p-6',
-      'grid gap-4',
+      'grid',
     ],
     variants: {
       position: {
@@ -66,10 +66,9 @@ export const styles = {
           '[grid-template-areas:"title""description""body""actions"]',
         ],
         inline: [
-          'grid-cols-1 md:grid-cols-[1fr_auto]',
+          'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-6',
           '[grid-template-areas:"title""description""body""actions"]',
-          'md:[grid-template-areas:"title_._""description_._""body_actions"]',
-          'gap-4 md:gap-6',
+          'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
         ],
       },
     },
@@ -79,8 +78,17 @@ export const styles = {
       layout: 'stack',
     },
   }),
+  title: cva({
+    base: `${headlineStyle({ level: '4' })} [grid-area:title]`,
+  }),
+  description: cva({
+    base: `${textStyle({ size: 'caption', variant: 'muted' })} [grid-area:description]`,
+  }),
+  body: cva({
+    base: `${textStyle()} [grid-area:body] mt-6`,
+  }),
   actions: cva({
-    base: 'flex shrink-0 gap-3',
+    base: 'flex shrink-0 gap-3 [grid-area:actions] mt-6 justify-end',
   }),
 };
 
@@ -121,10 +129,7 @@ const DialogTitle = ({
   children,
   ...props
 }: ComponentProps<typeof Primitive.Title>) => (
-  <Primitive.Title
-    {...props}
-    className={`${headlineStyle({ level: '4' })} [grid-area:title]`}
-  >
+  <Primitive.Title {...props} className={styles.title()}>
     {children}
   </Primitive.Title>
 );
@@ -133,10 +138,7 @@ const DialogDescription = ({
   children,
   ...props
 }: ComponentProps<typeof Primitive.Description>) => (
-  <Primitive.Description
-    {...props}
-    className={`${textStyle({ size: 'caption' })} [grid-area:description]`}
-  >
+  <Primitive.Description {...props} className={styles.description()}>
     {children}
   </Primitive.Description>
 );
@@ -145,7 +147,7 @@ const DialogBody = ({
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} className="[grid-area:body]">
+  <div {...props} className={styles.body()}>
     {children}
   </div>
 );
@@ -154,7 +156,7 @@ const DialogActions = ({
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} className={`${styles.actions()} [grid-area:actions]`}>
+  <div {...props} className={styles.actions()}>
     {children}
   </div>
 );

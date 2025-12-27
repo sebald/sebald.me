@@ -11,6 +11,7 @@ export const DialogExample = () => (
         <Dialog.Description>
           This is a simple dialog example.
         </Dialog.Description>
+        <Dialog.Body>This is the body text of the dialog.</Dialog.Body>
         <Dialog.Actions>
           <Dialog.Close>Close</Dialog.Close>
         </Dialog.Actions>

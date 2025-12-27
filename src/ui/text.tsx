@@ -5,7 +5,7 @@ export const style = cva({
   variants: {
     variant: {
       default: '',
-      muted: 'opacity-60',
+      muted: 'opacity-75',
     },
     size: {
       caption: 'text-sm',
