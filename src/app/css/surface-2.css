@@ -37,9 +37,9 @@
     oklch(1 0 0 / 0.15)
   );
   --surface-blur: var(--blur-lg);
-  --surface-border: oklch(1 0 0 / 0.8);
+  --surface-border: oklch(1 0 0 / 0.95);
   --surface-edge: oklch(1 0 0 / 0.9);
-  --surface-highlight: oklch(1 0 0 / 1);
+  --surface-highlight: oklch(1 0 0 / 0.8);
   --surface-inner-shadow: transparent;
   --surface-shadow: oklch(from var(--color-oatmeal-900) l c h / 0.06);
   --surface-text: var(--color-oatmeal-700);
@@ -52,7 +52,7 @@
     oklch(from var(--color-oatmeal-950) l c h / 0.5)
   );
   --surface-blur: blur(40px);
-  --surface-border: oklch(from var(--color-oatmeal-300) l c h / 0.1);
+  --surface-border: oklch(from var(--color-oatmeal-300) l c h / 0.5);
   --surface-edge: transparent;
   --surface-highlight: transparent;
   --surface-inner-shadow: transparent;
@@ -63,13 +63,13 @@
 @utility surface-tinted-2 {
   --surface-bg: linear-gradient(
     135deg,
-    oklch(from var(--color-oatmeal-600) l c h / 0.65),
-    oklch(from var(--color-oatmeal-800) l c h / 0.75)
+    oklch(from var(--color-oatmeal-700) l c h / 0.65),
+    oklch(from var(--color-oatmeal-800) l c h / 0.8)
   );
   --surface-blur: blur(12px);
-  --surface-border: oklch(from var(--color-oatmeal-600) l c h / 0.5);
+  --surface-border: oklch(from var(--color-oatmeal-700) l c h / 0.5);
   --surface-edge: oklch(from var(--color-oatmeal-400) l c h / 0.4);
-  --surface-highlight: oklch(from var(--color-oatmeal-100) l c h / 0.15);
+  --surface-highlight: oklch(from var(--color-oatmeal-100) l c h / 0.25);
   --surface-inner-shadow: transparent;
   --surface-shadow: oklch(from var(--color-oatmeal-800) l c h / 0.11);
   --surface-text: var(--color-oatmeal-100);
@@ -77,9 +77,9 @@
 
 @utility surface-opaque-2 {
   --surface-bg: linear-gradient(
-    145deg,
-    oklch(from var(--color-oatmeal-800) l c h / 0.95) 0%,
-    oklch(from var(--color-oatmeal-950) l c h / 1) 100%
+    135deg,
+    oklch(from var(--color-oatmeal-900) l c h / 0.9),
+    oklch(from var(--color-oatmeal-950) l c h / 1)
   );
   --surface-blur: blur(4px);
   --surface-border: oklch(from var(--color-oatmeal-900) l c h);
