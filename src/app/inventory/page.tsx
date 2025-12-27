@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
 
+import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
+import { Code, Pre } from '@/ui/code';
+import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
+import { Link } from '@/ui/link';
+import { Text } from '@/ui/text';
 
 import { DialogExample } from './dialog-example';
 
@@ -18,6 +23,8 @@ export const metadata: Metadata = {
 const InventoryPage = () => (
   <div className="grid gap-24">
     <div className="grid gap-8">
+      <Headline level="3">Color Palettes</Headline>
+
       <div className="grid gap-2">
         <Headline level="4">Oatmeal Palette</Headline>
         <div className="flex flex-wrap gap-1">
@@ -119,7 +126,11 @@ const InventoryPage = () => (
       </div>
     </div>
 
+    <Divider />
+
     <div className="grid gap-4">
+      <Headline level="3">Typography</Headline>
+
       <div className="flex flex-col gap-4">
         <Headline level="1">Heading Level 1</Headline>
         <Headline level="2">Heading Level 2</Headline>
@@ -131,6 +142,88 @@ const InventoryPage = () => (
     </div>
 
     <div className="grid gap-4">
+      <div className="grid gap-4">
+        <Headline level="4">Text</Headline>
+        <div className="grid gap-4">
+          <Text>
+            This is a default paragraph with base size and normal weight. It
+            uses leading-relaxed for comfortable reading.
+          </Text>
+          <Text variant="lead">
+            This is a lead paragraph, typically used for introductory text. It
+            has a larger font size to draw attention.
+          </Text>
+          <Text size="sm">
+            This is small text, useful for captions or supplementary
+            information.
+          </Text>
+          <Text variant="muted">
+            This is muted text with reduced contrast, perfect for secondary
+            content.
+          </Text>
+          <Text weight="semibold">This text has semibold weight.</Text>
+        </div>
+      </div>
+
+      <div className="grid gap-4">
+        <Headline level="4">Links</Headline>
+        <div className="flex flex-col gap-2">
+          <Text>
+            Here is a <Link href="#">default link</Link> in a paragraph.
+          </Text>
+          <Text>
+            Here is a{' '}
+            <Link href="#" variant="muted">
+              muted link
+            </Link>{' '}
+            for subtle navigation.
+          </Text>
+          <Text>
+            External links{' '}
+            <Link href="https://example.com" target="_blank">
+              open in new tab
+            </Link>{' '}
+            with proper security attributes.
+          </Text>
+        </div>
+      </div>
+
+      <div className="grid gap-4">
+        <Headline level="4">Blockquote</Headline>
+        <Blockquote>
+          The best way to predict the future is to invent it.
+        </Blockquote>
+        <Blockquote attribution="Alan Kay">
+          The best way to predict the future is to invent it.
+        </Blockquote>
+      </div>
+
+      <div className="grid gap-4">
+        <Headline level="4">Code</Headline>
+        <Text>
+          Use the <Code>useState</Code> hook to manage component state.
+        </Text>
+        <Pre>{`function hello() {
+  console.log("Hello, world!");
+  return true;
+}`}</Pre>
+      </div>
+
+      <div className="grid gap-4">
+        <Headline level="4">Divider</Headline>
+        <Text>Content above the divider.</Text>
+        <Divider />
+        <Text>Content below the default divider.</Text>
+        <Divider variant="bold" />
+        <Text>Content below the bold divider.</Text>
+      </div>
+    </div>
+
+    <Divider />
+
+    <div className="grid gap-4">
+      <Headline level="3">Buttons</Headline>
+
       <div className="flex flex-wrap gap-4">
         <Button>Button</Button>
         <Button variant="dark">Button</Button>
@@ -140,9 +233,20 @@ const InventoryPage = () => (
         <Button disabled>Button</Button>
       </div>
     </div>
-    <DialogExample />
+
+    <Divider />
 
     <div className="grid gap-4">
+      <Headline level="3">Dialog</Headline>
+
+      <DialogExample />
+    </div>
+
+    <Divider />
+
+    <div className="grid gap-4">
+      <Headline level="3">Cards</Headline>
+
       <Card variant="dark">
         <div className="flex flex-col gap-4">
           <div>Dark</div>

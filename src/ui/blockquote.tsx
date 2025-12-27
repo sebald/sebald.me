@@ -1,0 +1,36 @@
+import { cva } from 'cva';
+
+const style = cva({
+  base: [
+    'border-l-4',
+    'border-oatmeal-300',
+    'pl-4',
+    'py-2',
+    'text-oatmeal-700',
+    'italic',
+    'my-6',
+  ],
+});
+
+const citationStyle = cva({
+  base: ['block', 'mt-2', 'text-sm', 'text-oatmeal-600', 'not-italic'],
+});
+
+interface BlockquoteProps {
+  children: React.ReactNode;
+  cite?: string;
+  attribution?: React.ReactNode;
+}
+
+export const Blockquote = ({
+  children,
+  cite,
+  attribution,
+}: BlockquoteProps) => {
+  return (
+    <blockquote className={style()} cite={cite}>
+      <div>{children}</div>
+      {attribution && <cite className={citationStyle()}>— {attribution}</cite>}
+    </blockquote>
+  );
+};
