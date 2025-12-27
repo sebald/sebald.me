@@ -24,6 +24,10 @@ export const metadata: Metadata = {
     types: {
       'application/rss+xml': [
         {
+          title: 'Sebastian Sebald',
+          url: 'https://sebald.me/rss.xml',
+        },
+        {
           title: 'Sebastian Sebald - Articles',
           url: 'https://sebald.me/articles/rss.xml',
         },
