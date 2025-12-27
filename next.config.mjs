@@ -6,6 +6,9 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   typedRoutes: true,
+  experimental: {
+    optimizePackageImports: ['@phosphor-icons/react'],
+  },
 };
 
 export default withMDX(config);
