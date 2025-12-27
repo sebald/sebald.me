@@ -1,1 +1,134 @@
-/* Legacy surface utilities - deprecated, use surface-2.css utilities instead */
+@utility surface {
+  background: var(--surface-bg);
+  backdrop-filter: var(--surface-blur);
+  color: var(--surface-text);
+  /* prettier-ignore */
+  box-shadow:
+    0 0 0 1px var(--surface-border),
+    inset 1px 1px 0 0 var(--surface-edge),
+    inset 0 1px 0 0 var(--surface-highlight),
+    inset -1px -1px 0 0 var(--surface-inner-shadow),
+    0 1px 1px var(--surface-shadow),
+    0 2px 2px var(--surface-shadow),
+    0 4px 4px var(--surface-shadow),
+    0 8px 8px var(--surface-shadow),
+    0 16px 16px var(--surface-shadow);
+}
+
+@utility surface-dark {
+  --surface-bg: linear-gradient(
+    135deg,
+    oklch(from var(--color-oatmeal-900) l c h / 0.8),
+    oklch(from var(--color-oatmeal-950) l c h / 0.9)
+  );
+  --surface-blur: var(--blur-xl);
+  --surface-border: oklch(from var(--color-oatmeal-900) l c h / 0.7);
+  --surface-edge: oklch(from var(--color-oatmeal-500) l c h / 0.6);
+  --surface-highlight: oklch(from var(--color-oatmeal-200) l c h / 0.3);
+  --surface-inner-shadow: oklch(from var(--color-oatmeal-950) l c h / 0.6);
+  --surface-shadow: oklch(from var(--color-oatmeal-950) l c h / 0.09);
+  --surface-text: var(--color-oatmeal-200);
+}
+
+@utility surface-clear {
+  --surface-bg: linear-gradient(
+    135deg,
+    oklch(1 0 0 / 0.45),
+    oklch(1 0 0 / 0.15)
+  );
+  --surface-blur: var(--blur-lg);
+  --surface-border: oklch(1 0 0 / 0.95);
+  --surface-edge: oklch(1 0 0 / 0.9);
+  --surface-highlight: oklch(1 0 0 / 0.8);
+  --surface-inner-shadow: transparent;
+  --surface-shadow: oklch(from var(--color-oatmeal-900) l c h / 0.06);
+  --surface-text: var(--color-oatmeal-700);
+}
+
+@utility surface-ghost {
+  --surface-bg: linear-gradient(
+    135deg,
+    oklch(from var(--color-oatmeal-800) l c h / 0.35),
+    oklch(from var(--color-oatmeal-950) l c h / 0.5)
+  );
+  --surface-blur: blur(40px);
+  --surface-border: oklch(from var(--color-oatmeal-300) l c h / 0.5);
+  --surface-edge: transparent;
+  --surface-highlight: transparent;
+  --surface-inner-shadow: transparent;
+  --surface-shadow: oklch(from var(--color-oatmeal-900) l c h / 0.06);
+  --surface-text: var(--color-oatmeal-50);
+}
+
+@utility surface-tinted {
+  --surface-bg: linear-gradient(
+    135deg,
+    oklch(from var(--color-oatmeal-700) l c h / 0.65),
+    oklch(from var(--color-oatmeal-800) l c h / 0.8)
+  );
+  --surface-blur: blur(12px);
+  --surface-border: oklch(from var(--color-oatmeal-700) l c h / 0.5);
+  --surface-edge: oklch(from var(--color-oatmeal-400) l c h / 0.4);
+  --surface-highlight: oklch(from var(--color-oatmeal-100) l c h / 0.25);
+  --surface-inner-shadow: transparent;
+  --surface-shadow: oklch(from var(--color-oatmeal-800) l c h / 0.11);
+  --surface-text: var(--color-oatmeal-100);
+}
+
+@utility surface-opaque {
+  --surface-bg: linear-gradient(
+    135deg,
+    oklch(from var(--color-oatmeal-900) l c h / 0.9),
+    oklch(from var(--color-oatmeal-950) l c h / 1)
+  );
+  --surface-blur: blur(4px);
+  --surface-border: oklch(from var(--color-oatmeal-900) l c h);
+  --surface-edge: transparent;
+  --surface-highlight: oklch(1 0 0 / 0.25);
+  --surface-inner-shadow: oklch(from var(--color-oatmeal-500) l c h / 0.1);
+  --surface-shadow: oklch(0 0 0 / 0.15);
+  --surface-text: var(--color-oatmeal-300);
+}
+
+/*
+* Utilities to set surface properties without using the CSS vars directly.
+*/
+@utility surface-bg-* {
+  --surface-bg: --value(--color- *);
+  --surface-bg: --value([ *]);
+}
+
+@utility surface-blur-* {
+  --surface-blur: --value(--blur- *);
+  --surface-blur: --value([ *]);
+}
+
+@utility surface-border-* {
+  --surface-border: --value(--color- *);
+  --surface-border: --value([ *]);
+}
+
+@utility surface-edge-* {
+  --surface-edge: --value(--color- *);
+  --surface-edge: --value([ *]);
+}
+
+@utility surface-highlight-* {
+  --surface-highlight: --value(--color- *);
+  --surface-highlight: --value([ *]);
+}
+
+@utility surface-inner-shadow-* {
+  --surface-inner-shadow: --value(--color- *);
+  --surface-inner-shadow: --value([ *]);
+}
+
+@utility surface-shadow-* {
+  --surface-shadow: --value(--color- *);
+  --surface-shadow: --value([ *]);
+}
+
+@utility surface-text-* {
+  --surface-text: --value(--color- *);
+  --surface-text: --value([ *]);
+}
