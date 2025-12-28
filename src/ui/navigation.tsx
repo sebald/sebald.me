@@ -12,15 +12,11 @@ import { Dialog } from './dialog';
 import { Logo } from './logo';
 
 const navItemStyles = cva({
-  base: 'transition-colors rounded-full',
+  base: 'transition-colors rounded-full font-medium',
   variants: {
     variant: {
-      desktop: [
-        'font-medium text-oatmeal-700',
-        'hover:bg-oatmeal-100',
-        'px-8 py-2',
-      ],
-      mobile: 'block font-medium hover:bg-oatmeal-50',
+      desktop: ['text-oatmeal-700', 'hover:bg-oatmeal-100', 'px-8 py-2'],
+      mobile: ['text-lg text-oatmeal-200 hover:text-oatmeal-50'],
     },
   },
 });
@@ -70,20 +66,20 @@ const SmallScreenNav = () => (
         <ListIcon size={24} weight="regular" />
       </Dialog.Trigger>
 
-      <Dialog position="bottom" size="full">
-        <Dialog.Title>Navigation</Dialog.Title>
-        <Dialog.Body>
-          <nav className="flex flex-col space-y-2">
-            {navItems.map((item) => (
-              <NavItem
-                key={item.label}
-                href={item.href}
-                label={item.label}
-                variant="mobile"
-              />
-            ))}
-          </nav>
-        </Dialog.Body>
+      <Dialog position="bottom" size="full" showCloseButton>
+        <p className="text-oatmeal-400 mb-2 font-sans text-xs font-semibold uppercase tracking-widest">
+          Navigation
+        </p>
+        <nav className="flex flex-col space-y-4">
+          {navItems.map((item) => (
+            <NavItem
+              key={item.label}
+              href={item.href}
+              label={item.label}
+              variant="mobile"
+            />
+          ))}
+        </nav>
       </Dialog>
     </Dialog.Root>
   </div>
