@@ -21,7 +21,7 @@ const schema = frontmatterSchema.extend({
 });
 
 export const articles = defineDocs({
-  dir: 'content/articles',
+  dir: 'content/(content)/articles',
   docs: {
     schema,
     postprocess: {
@@ -34,7 +34,7 @@ export const articles = defineDocs({
 });
 
 export const labs = defineDocs({
-  dir: 'content/labs',
+  dir: 'content/(content)/labs',
   docs: {
     schema,
     postprocess: {

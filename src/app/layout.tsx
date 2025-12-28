@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
 
+import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
 import { Navigation } from '@/ui/navigation';
-
-import './css/styles.css';
 
 const spaceMono = Space_Mono({
   weight: ['400', '700'],
