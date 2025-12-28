@@ -27,7 +27,7 @@ export function createRSSFeed(pages: PageType[], config: FeedConfig): Response {
     id: config.id,
     link: config.link,
     language: 'en',
-    copyright: 'All rights reserved 2025, Sebastian Sebald',
+    copyright: `All rights reserved ${new Date().getFullYear()}, Sebastian Sebald`,
   });
 
   // Sort pages by date, most recent first
