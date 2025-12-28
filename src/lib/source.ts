@@ -36,3 +36,25 @@ export const getLLMText = async (
 
 ${processed}`;
 };
+
+export const getPageBySlug = (
+  slug: string[],
+):
+  | InferPageType<typeof articlesSource>
+  | InferPageType<typeof labsSource>
+  | undefined => {
+  if (slug.length === 0) return undefined;
+
+  // First element indicates the source (articles or labs)
+  const source = slug[0];
+  const pageSlugs = slug.slice(1);
+
+  switch (source) {
+    case 'articles':
+      return articlesSource.getPage(pageSlugs);
+    case 'labs':
+      return labsSource.getPage(pageSlugs);
+    default:
+      return undefined;
+  }
+};

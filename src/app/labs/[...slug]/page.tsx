@@ -27,11 +27,11 @@ const Page = async (props: PageProps<'/labs/[...slug]'>) => {
   );
 };
 
-const generateStaticParams = async () => {
+export const generateStaticParams = async () => {
   return labsSource.generateParams();
 };
 
-const generateMetadata = async (
+export const generateMetadata = async (
   props: PageProps<'/labs/[...slug]'>,
 ): Promise<Metadata> => {
   const params = await props.params;
@@ -48,4 +48,3 @@ const generateMetadata = async (
 };
 
 export default Page;
-export { generateStaticParams, generateMetadata };
