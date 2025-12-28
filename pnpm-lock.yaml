@@ -24,7 +24,7 @@ importers:
         specifier: 1.0.0-beta.4
         version: 1.0.0-beta.4(typescript@5.9.3)
       feed:
-        specifier: ^5.1.0
+        specifier: 5.1.0
         version: 5.1.0
       fumadocs-core:
         specifier: 16.2.5
