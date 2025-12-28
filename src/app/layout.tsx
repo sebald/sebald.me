@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
 
 import { Analytics } from '@/ui/analytics/analytics';
@@ -17,6 +18,27 @@ const plusJakarta = Plus_Jakarta_Sans({
   display: 'swap',
   variable: '--font-sans',
 });
+
+export const metadata: Metadata = {
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        {
+          title: 'Sebastian Sebald',
+          url: 'https://sebald.me/rss.xml',
+        },
+        {
+          title: 'Sebastian Sebald - Articles',
+          url: 'https://sebald.me/articles/rss.xml',
+        },
+        {
+          title: 'Sebastian Sebald - Labs',
+          url: 'https://sebald.me/labs/rss.xml',
+        },
+      ],
+    },
+  },
+};
 
 const Layout = async ({ children }: LayoutProps<'/'>) => (
   <html
