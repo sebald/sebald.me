@@ -2,6 +2,7 @@
 
 import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
+import { XIcon } from '@phosphor-icons/react/ssr';
 import { cva, VariantProps } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
@@ -40,8 +41,6 @@ export const styles = {
       'z-100',
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
-      'panel panel-opaque rounded-3xl p-6',
-      'grid',
     ],
     variants: {
       position: {
@@ -60,6 +59,15 @@ export const styles = {
         large: 'w-2xl',
         full: 'w-full',
       },
+    },
+    defaultVariants: {
+      position: 'center',
+      size: 'medium',
+    },
+  }),
+  content: cva({
+    base: ['panel panel-opaque rounded-3xl p-6', 'grid'],
+    variants: {
       layout: {
         stack: [
           'grid-cols-1',
@@ -73,8 +81,6 @@ export const styles = {
       },
     },
     defaultVariants: {
-      position: 'center',
-      size: 'medium',
       layout: 'stack',
     },
   }),
@@ -92,6 +98,13 @@ export const styles = {
   }),
 };
 
+export interface DialogContentProps
+  extends ComponentProps<typeof Primitive.Popup>,
+    VariantProps<typeof styles.popup>,
+    VariantProps<typeof styles.content> {
+  showCloseButton?: boolean;
+}
+
 const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
   <DialogContext.Provider value={{ modal: props.modal }}>
     <Primitive.Root {...props}>{children}</Primitive.Root>
@@ -103,9 +116,9 @@ const DialogContent = ({
   position,
   size,
   layout,
+  showCloseButton,
   ...props
-}: ComponentProps<typeof Primitive.Popup> &
-  VariantProps<typeof styles.popup>) => {
+}: DialogContentProps) => {
   const { modal } = useDialogContext();
 
   return (
@@ -116,9 +129,21 @@ const DialogContent = ({
         ) : null}
         <Primitive.Popup
           {...props}
-          className={styles.popup({ position, size, layout })}
+          className={styles.popup({ position, size })}
         >
-          {children}
+          <div className={`relative ${styles.content({ layout })}`}>
+            {showCloseButton && (
+              <Primitive.Close
+                className={buttonStyles({
+                  variant: 'icon',
+                  className: 'absolute right-3 top-2.5',
+                })}
+              >
+                <XIcon size={20} weight="regular" />
+              </Primitive.Close>
+            )}
+            {children}
+          </div>
         </Primitive.Popup>
       </Primitive.Portal>
     </DialogContext.Provider>

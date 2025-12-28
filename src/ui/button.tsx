@@ -8,7 +8,7 @@ import { cva, VariantProps } from '@/lib/styles.utils';
 export const styles = cva({
   base: [
     'relative inline-flex items-center justify-center gap-2',
-    'h-11 px-8',
+    'h-11',
     'border border-transparent rounded-full',
     'text-sm font-semibold tracking-wide',
     'cursor-pointer',
@@ -56,6 +56,12 @@ export const styles = cva({
         'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
         'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
       ],
+      icon: [
+        'text-current',
+        'w-11', // height is set in base
+        'rounded-full',
+        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
+      ],
       outline: [
         'text-current',
         'border-[oklch(from_currentColor_l_c_h/0.4)]',
@@ -63,6 +69,12 @@ export const styles = cva({
       ],
     },
   },
+  compoundVariants: [
+    {
+      variant: ['light', 'dark', 'accent', 'ghost', 'outline'],
+      className: 'px-8',
+    },
+  ],
   defaultVariants: {
     variant: 'light',
   },
