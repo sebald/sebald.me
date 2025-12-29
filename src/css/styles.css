@@ -3,6 +3,7 @@
 
 @import './theme.css';
 @import './panel.css';
+@import './prose.css';
 @import './utilities.css';
 
 @media (prefers-reduced-motion: reduce) {

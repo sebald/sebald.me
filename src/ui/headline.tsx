@@ -24,9 +24,14 @@ export const style = cva({
 export interface HeadlineProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+  id?: string;
 }
 
-export const Headline = ({ level = '1', children, as }: HeadlineProps) => {
+export const Headline = ({ level = '1', children, as, id }: HeadlineProps) => {
   const Component = as || (`h${level}` as const);
-  return <Component className={style({ level })}>{children}</Component>;
+  return (
+    <Component id={id} className={style({ level })}>
+      {children}
+    </Component>
+  );
 };
