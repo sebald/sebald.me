@@ -70,3 +70,68 @@ Understanding the Wood Wide Web changes how we view conservation. We can no long
 > A forest is not a collection of objects; it is a community. Removing the oldest trees (the hubs) can cause the entire network to unravel, leaving the remaining forest vulnerable to disease and drought.
 
 Next time you lean against an old oak tree, remember: it is likely in the middle of a conversation.
+
+## Code Examples
+
+Here are some code examples showing different syntax highlighting features:
+
+### Inline
+
+This is a highlighted inline code: `console.log("hello world"){:js}`.
+
+### Basic JavaScript
+
+```js
+console.log('Hello World');
+```
+
+### With Title
+
+```js title="My Script"
+console.log('Hello World');
+```
+
+### With Line Numbers
+
+```ts lineNumbers
+const a = 'Hello World';
+console.log(a);
+```
+
+### Highlighted Lines
+
+```tsx
+// highlight a line
+<div>Hello World</div> // [!code highlight]
+```
+
+### Word Highlighting
+
+```tsx
+// highlight a word
+// [!code word:Fumadocs]
+<div>Fumadocs</div>
+```
+
+### Diff Styles
+
+```tsx
+console.log('hewwo'); // [!code --]
+console.log('hello'); // [!code ++]
+```
+
+### Focus
+
+```tsx
+return new ResizeObserver(() => {}) // [!code focus]
+```
+
+### Tab Groups
+
+```ts tab="Tab 1"
+console.log('A');
+```
+
+```ts tab="Tab 2"
+console.log('B');
+```

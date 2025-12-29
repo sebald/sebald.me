@@ -1,21 +1,15 @@
+import defaultComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
 import { Blockquote } from './ui/blockquote';
-import { Code } from './ui/code';
 import { Headline } from './ui/headline';
 import { Link } from './ui/link';
 
 export const getMDXComponents = (
   components?: MDXComponents,
 ): MDXComponents => ({
+  ...defaultComponents,
   a: ({ children, href }) => <Link href={href}>{children}</Link>,
-  code: ({ children, inline }) => {
-    if (inline) {
-      return <Code>{children}</Code>;
-    }
-    // For code blocks, use default behavior (handled by syntax highlighting)
-    return <code>{children}</code>;
-  },
   blockquote: ({ children, cite, ...props }) => (
     <Blockquote cite={cite} {...props}>
       {children}

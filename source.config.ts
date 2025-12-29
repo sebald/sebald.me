@@ -48,6 +48,9 @@ export const labs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    // MDX options
+    rehypeCodeOptions: {
+      theme: 'catppuccin-latte',
+      inline: 'tailing-curly-colon',
+    },
   },
 });
