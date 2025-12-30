@@ -6,6 +6,10 @@
     code span {
       color: var(--shiki-light);
     }
+
+    button {
+      cursor: pointer;
+    }
   }
 
   :is(pre *):is(.shiki *):not(.not-fumadocs-codeblock *) {
