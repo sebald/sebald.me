@@ -49,7 +49,11 @@ export const labs = defineDocs({
 export default defineConfig({
   mdxOptions: {
     rehypeCodeOptions: {
-      theme: 'catppuccin-latte',
+      // Seems like fumadocs does not support "theme" value
+      themes: {
+        light: 'github-light-default',
+        dark: 'github-light-default',
+      },
       inline: 'tailing-curly-colon',
     },
   },

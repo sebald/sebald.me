@@ -2,9 +2,14 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
-@import './panel.css';
-@import './prose.css';
 @import './utilities.css';
+
+@import './prose.css';
+@import './panel.css';
+
+/* For <CodeBlock> customization. */
+@import './shiki.css';
+@source '../../node_modules/fumadocs-ui/dist/components/codeblock.js';
 
 @media (prefers-reduced-motion: reduce) {
   *,
