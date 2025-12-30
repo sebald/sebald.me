@@ -33,14 +33,6 @@
   --spacing-content: min(100% - 2rem, var(--container-5xl));
   --container-navigation: 700px; /* Container threshold to switch to mobile navigation */
 
-  /* Shiki syntax highlighting colors */
-  --color-fd-muted-foreground: var(--color-oatmeal-700);
-  --color-fd-diff-remove: rgba(200, 10, 100, 0.12);
-  --color-fd-diff-remove-symbol: rgb(230, 10, 100);
-  --color-fd-diff-add: rgba(14, 180, 100, 0.1);
-  --color-fd-diff-add-symbol: rgb(10, 200, 100);
-  --color-fd-primary: var(--color-oatmeal-800);
-
   @keyframes jumping-square {
     /* Holds the square still for ~1.2s on load before action starts */
     0% {
