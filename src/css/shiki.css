@@ -29,12 +29,16 @@
       padding-right: var(--padding-right);
     }
 
-    .has-focused .line&:not(.focused) {
+    .shiki:has(.line.focused) .line:not(.focused)& {
+      opacity: 0.4;
       filter: blur(2px);
-      transition: filter 200ms;
+      transition:
+        filter 0.2s,
+        opacity 0.2s;
     }
 
-    .has-focused:hover .line&:not(.focused) {
+    .shiki:has(.line.focused):hover .line:not(.focused)& {
+      opacity: 1;
       filter: blur(0);
     }
 
