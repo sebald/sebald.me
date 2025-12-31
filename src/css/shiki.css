@@ -19,6 +19,26 @@
     button {
       cursor: pointer;
     }
+
+    .fd-scroll-container {
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+        background: oklch(from var(--color-oatmeal-800) l c h / 0.8);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-corner {
+        display: none;
+      }
+    }
   }
 
   :is(pre *):is(.shiki *):not(.not-fumadocs-codeblock *) {
