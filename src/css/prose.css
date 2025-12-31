@@ -2,10 +2,12 @@
   .prose {
     --prose-width: 75ch;
 
+    container-type: inline-size;
     font-family: var(--font-body);
     color: var(--color-text-body);
     line-height: 1.75;
-    font-size: clamp(var(--text-base), 0.8vw + 0.625rem, var(--text-lg));
+    /* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px container width */
+    font-size: clamp(var(--text-base), 1cqi + 0.5rem, var(--text-lg));
 
     display: grid;
     grid-template-columns:
