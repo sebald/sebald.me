@@ -50,7 +50,11 @@ export const Link = ({
       : { target, rel };
 
   return (
-    <a href={href} className={style({ variant, noUnderline })} {...externalProps}>
+    <a
+      href={href}
+      className={style({ variant, noUnderline })}
+      {...externalProps}
+    >
       {children}
     </a>
   );

@@ -5,7 +5,7 @@
     font-family: var(--font-body);
     color: var(--color-text-body);
     line-height: 1.75;
-    font-size: var(--text-lg);
+    font-size: clamp(var(--text-base), 0.8vw + 0.625rem, var(--text-lg));
 
     display: grid;
     grid-template-columns:

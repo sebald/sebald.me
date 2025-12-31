@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import { articlesSource, getPageImage } from '@/lib/source';
 import { getMDXComponents } from '@/mdx-components';
 import { Article } from '@/ui/article';
-import { Link } from '@/ui/link';
 
 const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   const params = await props.params;
