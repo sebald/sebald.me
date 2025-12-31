@@ -38,16 +38,14 @@
   }
 
   :is(.shiki *):is(pre *):not(.not-fumadocs-codeblock *) {
-    code {
-      font-size: var(--text-sm);
-      line-height: var(--text-sm--line-height);
-    }
-
     .line& {
       position: relative;
       min-height: 20px;
       padding-left: var(--padding-left);
       padding-right: var(--padding-right);
+
+      font-size: var(--text-sm);
+      line-height: var(--text-sm--line-height);
     }
 
     .shiki:has(.line.focused) .line:not(.focused)& {
