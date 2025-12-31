@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'cva';
 
 const style = cva({
   base: [
+    'inline-flex items-center gap-1.5',
     'underline underline-offset-2 decoration-1',
     'transition-colors focus-visible:focus-ring focus-visible:outline-none',
   ],
@@ -12,7 +13,7 @@ const style = cva({
         'hover:text-blueberry-700 hover:decoration-blueberry-700',
       ],
       muted: [
-        'text-oatmeal-700 decoration-oatmeal-700/40',
+        'text-muted decoration-muted/40',
         'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
       ],
     },

@@ -8,7 +8,10 @@ export const style = cva({
   ],
   variants: {
     level: {
-      '1': 'typescale-5',
+      '1': [
+        'typescale-5',
+        'text-transparent bg-clip-text bg-linear-to-br from-blueberry-700 to-blueberry-500',
+      ],
       '2': 'typescale-4',
       '3': 'typescale-3',
       '4': 'typescale-2',

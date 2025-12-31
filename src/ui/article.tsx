@@ -1,12 +1,30 @@
+import { BooksIcon, CalendarDotsIcon } from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
+import { cva } from '@/lib/styles.utils';
+
 import { Headline } from './headline';
+
+const styles = {
+  header: cva({
+    base: ['pb-16 flex flex-col gap-3'],
+  }),
+  caption: cva({
+    base: ['text-muted flex items-center gap-1.5 text-sm'],
+  }),
+  content: cva({
+    base: ['prose'],
+  }),
+  root: cva({
+    base: ['flex flex-col'],
+  }),
+};
 
 interface HeaderProps extends PropsWithChildren, AriaAttributes {}
 
 const Header = ({ children, ...ariaProps }: HeaderProps) => (
-  <header className="mb-8 flex flex-col gap-3" {...ariaProps}>
+  <header className={styles.header()} {...ariaProps}>
     {children}
   </header>
 );
@@ -30,16 +48,30 @@ const Time = ({ date, ...ariaProps }: TimeProps) => {
   const isoDate = dateObj.toISOString().split('T')[0];
 
   return (
-    <time dateTime={isoDate} className="text-text-muted text-sm" {...ariaProps}>
+    <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
+      <CalendarDotsIcon size={16} />
       {isoDate}
     </time>
+  );
+};
+
+interface TopicsProps extends AriaAttributes {
+  topics: string[];
+}
+
+const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
+  return (
+    <div className={styles.caption()} {...ariaProps}>
+      <BooksIcon size={16} />
+      {topics.join(', ')}
+    </div>
   );
 };
 
 interface ContentProps extends PropsWithChildren, AriaAttributes {}
 
 const Content = ({ children, ...ariaProps }: ContentProps) => (
-  <div className="prose" {...ariaProps}>
+  <div className={styles.content()} {...ariaProps}>
     {children}
   </div>
 );
@@ -47,7 +79,7 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
 interface RootProps extends PropsWithChildren, AriaAttributes {}
 
 const Root = ({ children, ...ariaProps }: RootProps) => (
-  <article className="flex flex-col" {...ariaProps}>
+  <article className={styles.root()} {...ariaProps}>
     {children}
   </article>
 );
@@ -56,5 +88,6 @@ export const Article = Object.assign(Root, {
   Header,
   Title,
   Time,
+  Topics,
   Content,
 });
