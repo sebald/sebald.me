@@ -2,7 +2,7 @@ import defaultComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
 import { Blockquote } from '@/ui/blockquote';
-import { CodeBlock } from '@/ui/codeblock';
+import { CodeBlock, CodeBlockTabs, CodeBlockTabsList } from '@/ui/codeblock';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 
@@ -47,5 +47,8 @@ export const getMDXComponents = (
     </Headline>
   ),
   pre: ({ children, ...props }) => <CodeBlock {...props}>{children}</CodeBlock>,
+  CodeBlockTabs,
+  CodeBlockTabsList,
+
   ...components,
 });
