@@ -1,7 +1,16 @@
+/** 
+ * FumaDocs CodeBlock (Shiki) customizations.
+ * based on https://github.com/fuma-nama/fumadocs/blob/dev/packages/ui/css/shiki.css
+ */
 @layer components {
   .shiki:not(.not-fumadocs-codeblock *) {
     --padding-left: calc(var(--spacing) * 4);
     --padding-right: calc(var(--spacing) * 4);
+
+    code {
+      font-size: var(--text-sm);
+      line-height: var(--text-sm--line-height);
+    }
 
     code span {
       color: var(--shiki-light);
@@ -41,13 +50,15 @@
     [data-line-numbers] .line&::after {
       position: absolute;
       content: counter(line);
-      color: color-mix(
-        in oklab,
-        var(--counter-color, var(--color-oatmeal-700)) 60%,
-        transparent
+      color: oklch(
+        from var(--counter-color, var(--color-oatmeal-700)) l c h / 0.6
       );
       left: 1rem;
       top: 0;
+    }
+
+    .diff& {
+      padding-left: calc(var(--padding-left) + var(--spacing));
     }
 
     .diff&::before {
@@ -79,26 +90,16 @@
     .highlighted& {
       --counter-color: var(--color-oatmeal-800);
       padding-left: calc(var(--padding-left) - 2px);
-      border-left: 2px solid
-        color-mix(in srgb, var(--color-oatmeal-800) 50%, transparent);
-      background-color: color-mix(
-        in srgb,
-        var(--color-oatmeal-800) 10%,
-        transparent
-      );
+      border-left: 2px solid oklch(from var(--color-oatmeal-800) l c h / 0.5);
+      background-color: oklch(from var(--color-oatmeal-800) l c h / 0.1);
     }
 
     .highlighted-word& {
-      padding: 1px;
-      border: 1px solid
-        color-mix(in srgb, var(--color-oatmeal-800) 30%, transparent);
-      background-color: color-mix(
-        in srgb,
-        var(--color-oatmeal-800) 10%,
-        transparent
-      );
+      padding: 1px 4px;
+      border-radius: var(--radius-sm);
+      border-bottom: 1px solid oklch(from var(--color-oatmeal-800) l c h / 0.3);
+      background-color: oklch(from var(--color-oatmeal-800) l c h / 0.1);
       margin: -1px;
-      border-radius: 0.375rem;
       font-weight: 500;
     }
   }
