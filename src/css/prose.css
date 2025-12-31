@@ -9,7 +9,7 @@
 
     /* Default spacing */
     & > * + * {
-      margin-top: theme(spacing.6);
+      margin-top: theme(spacing.8);
     }
 
     /* Give headings more breathing room top */
