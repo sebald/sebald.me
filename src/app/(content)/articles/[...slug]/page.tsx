@@ -1,4 +1,3 @@
-import { ArrowLeftIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
@@ -16,26 +15,25 @@ const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   const titleId = `article-${page.slugs.join('-')}`;
 
   return (
-    <div className="grid gap-2 pt-16">
-      <Link variant="muted" href="/articles">
-        <ArrowLeftIcon size={16} />
-        Articles
-      </Link>
-      <Article aria-labelledby={titleId}>
-        <Article.Header>
-          <Article.Title id={titleId}>{page.data.title}</Article.Title>
-          <div className="flex gap-4">
-            {page.data.date && <Article.Time date={page.data.date} />}
-            {page.data.topics && page.data.topics.length > 0 && (
-              <Article.Topics topics={page.data.topics} />
+    <Article aria-labelledby={titleId}>
+      <Article.Header>
+        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+        <div className="flex gap-2">
+          {page.data.date && <Article.Time date={page.data.date} />}
+          {page.data.date &&
+            page.data.topics &&
+            page.data.topics.length > 0 && (
+              <span className="text-muted text-sm">·</span>
             )}
-          </div>
-        </Article.Header>
-        <Article.Content>
-          <MDX components={getMDXComponents()} />
-        </Article.Content>
-      </Article>
-    </div>
+          {page.data.topics && page.data.topics.length > 0 && (
+            <Article.Topics topics={page.data.topics} />
+          )}
+        </div>
+      </Article.Header>
+      <Article.Content>
+        <MDX components={getMDXComponents()} />
+      </Article.Content>
+    </Article>
   );
 };
 

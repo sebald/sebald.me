@@ -8,16 +8,16 @@ import { Headline } from './headline';
 
 const styles = {
   header: cva({
-    base: ['pb-16 flex flex-col gap-3'],
+    base: ['pb-24 flex flex-col gap-3'],
   }),
   caption: cva({
-    base: ['text-muted flex items-center gap-1.5 text-sm'],
+    base: ['text-muted flex items-center gap-1.5 text-xs'],
   }),
   content: cva({
     base: ['prose'],
   }),
   root: cva({
-    base: ['flex flex-col'],
+    base: ['flex flex-col pt-16'],
   }),
 };
 

@@ -1,11 +1,29 @@
 @layer components {
   .prose {
+    --prose-width: 75ch;
+
     font-family: var(--font-body);
     color: var(--color-text-body);
     line-height: 1.75;
     font-size: var(--text-lg);
-    max-width: 75ch;
-    margin-inline: auto;
+
+    display: grid;
+    grid-template-columns:
+      1fr
+      min(var(--prose-width), 100%)
+      1fr;
+
+    & > * {
+      grid-column: 2;
+    }
+
+    & > figure,
+    & > img,
+    & > .breakout {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin-inline: auto;
+    }
 
     /* Default spacing */
     & > * + * {
