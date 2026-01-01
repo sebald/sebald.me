@@ -26,7 +26,7 @@ const ArticlesIndex = async () => {
 
       <div className="space-y-20">
         {articles.map(async (page) => {
-          const excerpt = await getExcerpt(page);
+          const excerpt = '';
           return (
             <Article key={page.url} aria-labelledby={page.url} space="2">
               <Article.Header flow="reverse">
