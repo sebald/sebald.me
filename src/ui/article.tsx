@@ -10,11 +10,11 @@ import type { HeadlineProps } from './headline';
 
 const styles = {
   header: cva({
-    base: ['pb-24 flex flex-col'],
+    base: ['flex flex-col'],
     variants: {
       flow: {
-        default: 'gap-3',
-        reverse: 'flex-col-reverse gap-0',
+        default: 'gap-3 pb-24',
+        reverse: 'flex-col-reverse gap-0 pb-2',
       },
     },
     defaultVariants: {
@@ -22,10 +22,13 @@ const styles = {
     },
   }),
   caption: cva({
-    base: ['text-muted flex items-center gap-1.5 text-xs'],
+    base: ['text-muted flex items-center gap-1 text-xs'],
   }),
   content: cva({
     base: ['prose'],
+  }),
+  excerpt: cva({
+    base: '',
   }),
   root: cva({
     base: ['flex flex-col'],
@@ -83,7 +86,7 @@ const Time = ({ date, ...ariaProps }: TimeProps) => {
 
   return (
     <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
-      <CalendarBlankIcon size={16} />
+      <CalendarBlankIcon size={14} />
       {isoDate}
     </time>
   );
@@ -96,7 +99,7 @@ interface TopicsProps extends AriaAttributes {
 const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   return (
     <div className={styles.caption()} {...ariaProps}>
-      <HashStraightIcon size={16} />
+      <HashStraightIcon size={14} />
       {topics.join(', ')}
     </div>
   );
@@ -125,6 +128,14 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
   </div>
 );
 
+interface ExcerptProps extends PropsWithChildren, AriaAttributes {}
+
+const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
+  <p className={styles.excerpt()} {...ariaProps}>
+    {children}
+  </p>
+);
+
 interface RootProps extends PropsWithChildren, AriaAttributes {}
 
 const Root = ({ children, ...ariaProps }: RootProps) => (
@@ -139,5 +150,6 @@ export const Article = Object.assign(Root, {
   Time,
   Topics,
   Meta,
+  Excerpt,
   Content,
 });
