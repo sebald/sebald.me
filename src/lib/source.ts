@@ -36,14 +36,11 @@ export const getLLMText = async (
 ${processed}`;
 };
 
-export const getExcerpt = async (
+export const getExcerpt = (
   page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
   length: number = 200,
 ) => {
-  const raw = await page.data.getText('raw');
-  const { contents } = structure(raw, [], {
-    types: ['paragraph'],
-  });
+  const { contents } = page.data.structuredData;
 
   if (contents.length === 0) return '';
 
