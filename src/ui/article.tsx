@@ -34,7 +34,7 @@ interface TitleProps extends PropsWithChildren {
 }
 
 const Title = ({ children, id }: TitleProps) => (
-  <Headline level="1" as="h2" id={id}>
+  <Headline level="display" id={id}>
     {children}
   </Headline>
 );

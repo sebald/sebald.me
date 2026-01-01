@@ -29,7 +29,8 @@
   --color-text: var(--color-oatmeal-900);
   --color-muted: var(--color-oatmeal-700);
   --color-headline: var(--color-oatmeal-900);
-  --typescale: 1.333; /* Perfect Fourth */
+  --min-typescale: 1.125; /* Major Second */
+  --max-typescale: 1.25; /* Major Third */
 
   --spacing-content: min(100% - 2rem, var(--container-5xl));
   --container-navigation: 700px; /* Container threshold to switch to mobile navigation */
