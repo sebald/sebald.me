@@ -18,9 +18,9 @@
       grid-column: 2;
     }
 
-    & > figure,
     & > img,
-    & > .breakout {
+    & > figure:has(img),
+    & > [data-breakout] {
       grid-column: 1 / -1;
       width: 100%;
       margin-inline: auto;
@@ -33,10 +33,10 @@
 
     /* Give headings more breathing room top */
     & > * + h2 {
-      margin-top: theme(spacing.10);
+      margin-top: theme(spacing.12);
     }
     & > * + h3 {
-      margin-top: theme(spacing.8);
+      margin-top: theme(spacing.10);
     }
 
     /* Ensure heading is attached to content below it */
