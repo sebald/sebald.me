@@ -27,7 +27,7 @@
   --color-blueberry-950: oklch(0.13 0.03 264);
 
   --color-text: var(--color-oatmeal-900);
-  --color-muted: var(--color-oatmeal-700);
+  --color-muted: var(--color-oatmeal-500);
   --color-link: var(--color-blueberry-500);
   --color-link-hover: var(--color-blueberry-400);
 
