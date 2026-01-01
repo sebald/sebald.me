@@ -10,18 +10,20 @@
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "lint": "eslint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
+    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'"
   },
   "dependencies": {
     "@base-ui/react": "1.0.0",
     "@next/third-parties": "16.0.10",
+    "@phosphor-icons/react": "2.1.10",
     "cookies-next": "6.1.1",
     "cva": "1.0.0-beta.4",
     "feed": "5.1.0",
     "fumadocs-core": "16.2.5",
     "fumadocs-mdx": "14.1.0",
     "fumadocs-ui": "16.2.5",
-    "@phosphor-icons/react": "2.1.10",
     "next": "16.0.10",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "4.1.17",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
+    "@types/hast": "3.0.4",
     "@types/mdx": "2.0.13",
     "@types/node": "24.10.4",
     "@types/react": "19.2.7",
@@ -41,7 +44,12 @@
     "postcss": "8.5.6",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.6.5",
+    "rehype-parse": "9.0.1",
+    "rehype-stringify": "10.0.1",
     "tailwindcss": "4.1.17",
-    "typescript": "5.9.3"
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "unified": "11.0.5",
+    "unist-util-visit": "5.0.0"
   }
 }

@@ -6,6 +6,8 @@ import {
 } from 'fumadocs-mdx/config';
 import { z } from 'zod';
 
+import rehypeUnwrapContent from '@/lib/rehype/rehypeUnwrapContent';
+
 const schema = frontmatterSchema.extend({
   date: z
     .union([
@@ -21,7 +23,7 @@ const schema = frontmatterSchema.extend({
 });
 
 export const articles = defineDocs({
-  dir: 'content/(content)/articles',
+  dir: 'content/articles',
   docs: {
     schema,
     postprocess: {
@@ -34,7 +36,7 @@ export const articles = defineDocs({
 });
 
 export const labs = defineDocs({
-  dir: 'content/(content)/labs',
+  dir: 'content/labs',
   docs: {
     schema,
     postprocess: {
@@ -48,6 +50,7 @@ export const labs = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
+    rehypePlugins: [rehypeUnwrapContent],
     rehypeCodeOptions: {
       // Seems like fumadocs does not support "theme" value
       themes: {

@@ -18,20 +18,10 @@
       grid-column: 2;
     }
 
-    & > img,
-    & > figure:has(img),
-    & > [data-breakout] {
-      grid-column: 1 / -1;
-      width: 100%;
-      margin-inline: auto;
-    }
-
-    /* Default spacing */
     & > * + * {
       margin-top: theme(spacing.8);
     }
 
-    /* Give headings more breathing room top */
     & > * + h2 {
       margin-top: theme(spacing.12);
     }
@@ -39,10 +29,20 @@
       margin-top: theme(spacing.10);
     }
 
-    /* Ensure heading is attached to content below it */
     & h2 + *,
     & h3 + * {
       margin-top: theme(spacing.3);
+    }
+
+    /* Breakout elements */
+    & > img,
+    & > figure:has(img),
+    & > [data-breakout] {
+      grid-column: 1 / -1;
+      margin-inline: auto;
+    }
+    & > [data-breakout] {
+      width: 100%;
     }
   }
 }
