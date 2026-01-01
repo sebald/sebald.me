@@ -1,4 +1,4 @@
-import { BooksIcon, CalendarDotsIcon } from '@phosphor-icons/react/ssr';
+import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
@@ -49,7 +49,7 @@ const Time = ({ date, ...ariaProps }: TimeProps) => {
 
   return (
     <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
-      <CalendarDotsIcon size={16} />
+      <CalendarBlankIcon size={16} />
       {isoDate}
     </time>
   );
@@ -62,7 +62,7 @@ interface TopicsProps extends AriaAttributes {
 const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   return (
     <div className={styles.caption()} {...ariaProps}>
-      <BooksIcon size={16} />
+      <HashStraightIcon size={16} />
       {topics.join(', ')}
     </div>
   );
