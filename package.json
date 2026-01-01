@@ -3,17 +3,6 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "pnpm@10.13.1",
-  "scripts": {
-    "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
-    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
-    "postinstall": "fumadocs-mdx",
-    "lint": "eslint",
-    "format": "prettier --write .",
-    "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
-    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'"
-  },
   "dependencies": {
     "@base-ui/react": "1.0.0",
     "@next/third-parties": "16.0.10",
@@ -51,5 +40,17 @@
     "typescript": "5.9.3",
     "unified": "11.0.5",
     "unist-util-visit": "5.0.0"
+  },
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "start": "next start",
+    "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
+    "postinstall": "fumadocs-mdx",
+    "lint": "eslint",
+    "format": "prettier --write .",
+    "test": "pnpm test:lib",
+    "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
+    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'"
   }
 }
