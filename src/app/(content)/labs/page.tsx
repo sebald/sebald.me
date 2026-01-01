@@ -1,13 +1,9 @@
 import Link from 'fumadocs-core/link';
 
-import { labsSource } from '@/lib/source';
+import { labsSource, sortByDate } from '@/lib/source';
 
 const LabsIndex = async () => {
-  const pages = labsSource.getPages().sort((a, b) => {
-    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
-    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
-    return dateB - dateA;
-  });
+  const pages = sortByDate(labsSource.getPages());
 
   return (
     <div>

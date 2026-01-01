@@ -1,23 +1,31 @@
 import Link from 'fumadocs-core/link';
 
-import { articlesSource } from '@/lib/source';
+import { articlesSource, sortByDate } from '@/lib/source';
+import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
 
 const ArticlesIndex = async () => {
-  const pages = articlesSource.getPages().sort((a, b) => {
-    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
-    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
-    return dateB - dateA;
-  });
+  const articles = sortByDate(articlesSource.getPages());
 
   return (
-    <div>
+    <div className="grid gap-10">
       <Headline level="1" variant="accent" as="h1">
         Articles
       </Headline>
 
+      {articles.map((page) => (
+        <Article key={page.url}>
+          <Article.Header flow="reverse" aria-labelledby={page.url}>
+            <Article.Title id={page.url} variant="list">
+              {page.data.title}
+            </Article.Title>
+            <Article.Meta date={page.data.date} topics={page.data.topics} />
+          </Article.Header>
+        </Article>
+      ))}
+
       <div className="space-y-6">
-        {pages.map((page) => (
+        {articles.map((page) => (
           <article
             key={page.url}
             className="border-b border-gray-200 pb-6 last:border-b-0"

@@ -3,12 +3,23 @@ import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
 import { cva } from '@/lib/styles.utils';
+import type { VariantProps } from '@/lib/styles.utils';
 
 import { Headline } from './headline';
+import type { HeadlineProps } from './headline';
 
 const styles = {
   header: cva({
-    base: ['pb-24 flex flex-col gap-3'],
+    base: ['pb-24 flex flex-col'],
+    variants: {
+      flow: {
+        default: 'gap-3',
+        reverse: 'flex-col-reverse gap-0',
+      },
+    },
+    defaultVariants: {
+      flow: 'default',
+    },
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-1.5 text-xs'],
@@ -21,23 +32,46 @@ const styles = {
   }),
 };
 
-interface HeaderProps extends PropsWithChildren, AriaAttributes {}
+interface HeaderProps
+  extends PropsWithChildren,
+    AriaAttributes,
+    VariantProps<typeof styles.header> {}
 
-const Header = ({ children, ...ariaProps }: HeaderProps) => (
-  <header className={styles.header()} {...ariaProps}>
+const Header = ({ children, flow, ...ariaProps }: HeaderProps) => (
+  <header className={styles.header({ flow })} {...ariaProps}>
     {children}
   </header>
 );
 
 interface TitleProps extends PropsWithChildren {
   id?: string;
+  /**
+   * Display style for the title
+   * - 'page': Large display heading with accent variant (for full article pages)
+   * - 'list': Smaller heading level 3 (for article lists/indexes)
+   */
+  variant?: 'page' | 'list';
 }
 
-const Title = ({ children, id }: TitleProps) => (
-  <Headline id={id} level="display" variant="accent">
-    {children}
-  </Headline>
-);
+const Title = ({ children, id, variant = 'page' }: TitleProps) => {
+  let headlineProps: Omit<HeadlineProps, 'children'>;
+
+  switch (variant) {
+    case 'list':
+      headlineProps = { level: '3', as: 'h2' };
+      break;
+    case 'page':
+    default:
+      headlineProps = { level: 'display', variant: 'accent' };
+      break;
+  }
+
+  return (
+    <Headline id={id} {...headlineProps}>
+      {children}
+    </Headline>
+  );
+};
 
 interface TimeProps extends AriaAttributes {
   date: Date | string;
@@ -68,6 +102,21 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
+interface MetaProps extends AriaAttributes {
+  date?: Date | string;
+  topics?: string[];
+}
+
+const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
+  <div className="flex gap-2" {...ariaProps}>
+    {date && <Time date={date} />}
+    {date && topics && topics.length > 0 && (
+      <span className="text-muted text-sm">·</span>
+    )}
+    {topics && topics.length > 0 && <Topics topics={topics} />}
+  </div>
+);
+
 interface ContentProps extends PropsWithChildren, AriaAttributes {}
 
 const Content = ({ children, ...ariaProps }: ContentProps) => (
@@ -89,5 +138,6 @@ export const Article = Object.assign(Root, {
   Title,
   Time,
   Topics,
+  Meta,
   Content,
 });

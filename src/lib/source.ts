@@ -37,6 +37,16 @@ export const getLLMText = async (
 ${processed}`;
 };
 
+export const sortByDate = <
+  T extends InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
+>(pages: T[]): T[] => {
+  return pages.sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  });
+};
+
 export const getPageBySlug = (
   slug: string[],
 ):

@@ -42,7 +42,7 @@ export const Headline = ({
   as,
   id,
 }: HeadlineProps) => {
-  const Component = as || level === 'display' ? 'h1' : (`h${level}` as const);
+  const Component = as || (level === 'display' ? 'h1' : (`h${level}` as const));
   return (
     <Component id={id} className={style({ level, variant })}>
       {children}
