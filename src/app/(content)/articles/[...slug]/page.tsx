@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { articlesSource, getPageImage } from '@/lib/source';
-import { getMDXComponents } from '@/ui/mdx';
 import { Article } from '@/ui/article';
+import { getMDXComponents } from '@/ui/mdx';
 
 const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   const params = await props.params;
