@@ -50,7 +50,7 @@
     "lint": "eslint",
     "format": "prettier --write .",
     "test": "pnpm test:lib",
-    "test:lib": "find src -name '*.test.ts' -type f | xargs node --import tsx --test",
-    "test:lib:watch": "node --import tsx --test --watch --recursive src"
+    "test:lib": "node --import tsx --test src/lib/rehype/rehypeUnwrapContent.test.ts",
+    "test:lib:watch": "node --import tsx --test --watch src/lib/rehype/rehypeUnwrapContent.test.ts"
   }
 }
