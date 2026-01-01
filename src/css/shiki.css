@@ -1,0 +1,141 @@
+/** 
+ * FumaDocs CodeBlock (Shiki) customizations.
+ * based on https://github.com/fuma-nama/fumadocs/blob/dev/packages/ui/css/shiki.css
+ */
+@layer components {
+  .shiki:not(.not-fumadocs-codeblock *) {
+    --padding-left: calc(var(--spacing) * 4);
+    --padding-right: calc(var(--spacing) * 4);
+
+    code span {
+      color: var(--shiki-light);
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* Override scrollbar */
+    .fd-scroll-container {
+      &::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-radius: 6px;
+        background: oklch(from var(--color-oatmeal-800) l c h / 0.8);
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-corner {
+        display: none;
+      }
+    }
+  }
+
+  :is(.shiki *):is(pre *):not(.not-fumadocs-codeblock *) {
+    .line& {
+      position: relative;
+      min-height: 20px;
+      padding-left: var(--padding-left);
+      padding-right: var(--padding-right);
+
+      font-size: var(--text-sm);
+      line-height: var(--text-sm--line-height);
+    }
+
+    .shiki:has(.line.focused) .line:not(.focused)& {
+      opacity: 0.4;
+      filter: blur(2px);
+      transition:
+        filter 0.2s,
+        opacity 0.2s;
+    }
+
+    .shiki:has(.line.focused):hover .line:not(.focused)& {
+      opacity: 1;
+      filter: blur(0);
+    }
+
+    [data-line-numbers] .twoslash-meta-line& {
+      padding-left: calc(var(--padding-left) + 7 * var(--spacing));
+    }
+
+    [data-line-numbers] .line& {
+      counter-increment: line;
+      padding-left: calc(var(--padding-left) + 7 * var(--spacing));
+    }
+
+    [data-line-numbers] .line&::after {
+      position: absolute;
+      content: counter(line);
+      color: oklch(
+        from var(--counter-color, var(--color-oatmeal-700)) l c h / 0.6
+      );
+      left: 1rem;
+      top: 0;
+    }
+
+    .diff& {
+      padding-left: calc(var(--padding-left) + var(--spacing));
+    }
+
+    .diff&::before {
+      position: absolute;
+      left: calc(var(--spacing) * 1.5);
+    }
+
+    .diff.remove& {
+      opacity: 0.7;
+      --counter-color: var(--color-red-700);
+      background-color: oklch(from var(--color-red-700) l c h / 0.1);
+    }
+
+    .diff.remove&::before {
+      content: '-';
+      color: var(--color-red-700);
+    }
+
+    .diff.add& {
+      --counter-color: var(--color-green-600);
+      background-color: oklch(from var(--color-green-700) l c h / 0.1);
+    }
+
+    .diff.add&::before {
+      content: '+';
+      color: var(--color-green-600);
+    }
+
+    .highlighted& {
+      --counter-color: var(--color-oatmeal-800);
+      padding-left: calc(var(--padding-left) - 2px);
+      border-left: 2px solid oklch(from var(--color-oatmeal-800) l c h / 0.5);
+      background-color: oklch(from var(--color-oatmeal-800) l c h / 0.1);
+    }
+
+    .highlighted-word& {
+      padding: 1px 4px;
+      border-radius: var(--radius-sm);
+      border-bottom: 1px solid oklch(from var(--color-oatmeal-800) l c h / 0.3);
+      background-color: oklch(from var(--color-oatmeal-800) l c h / 0.1);
+      margin: -1px;
+      font-weight: 500;
+    }
+  }
+
+  :is(.shiki *):not(pre *) {
+    .line& {
+      font-size: 90%;
+
+      background-color: oklch(from var(--color-oatmeal-100) l c h / 0.5);
+      border: 1px solid oklch(from var(--color-oatmeal-200) l c h / 0.5);
+      border-radius: var(--radius-md);
+
+      padding: 1px theme(spacing.2);
+    }
+  }
+}

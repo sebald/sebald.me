@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { articlesSource, getPageImage } from '@/lib/source';
 import { getMDXComponents } from '@/mdx-components';
+import { Article } from '@/ui/article';
 
 const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   const params = await props.params;
@@ -10,20 +11,28 @@ const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   if (!page) notFound();
 
   const MDX = page.data.body;
+  const titleId = `article-${page.slugs.join('-')}`;
 
   return (
-    <article className="prose prose-lg max-w-none">
-      <header className="mb-8 border-b border-gray-200 pb-8">
-        <h1 className="mb-4 text-4xl font-bold">{page.data.title}</h1>
-        <p className="text-gray-600">{page.data.description}</p>
-        {page.data.date && (
-          <p className="mt-4 text-sm text-gray-500">
-            {new Date(page.data.date).toLocaleDateString()}
-          </p>
-        )}
-      </header>
-      <MDX components={getMDXComponents()} />
-    </article>
+    <Article aria-labelledby={titleId}>
+      <Article.Header>
+        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+        <div className="flex gap-2">
+          {page.data.date && <Article.Time date={page.data.date} />}
+          {page.data.date &&
+            page.data.topics &&
+            page.data.topics.length > 0 && (
+              <span className="text-muted text-sm">·</span>
+            )}
+          {page.data.topics && page.data.topics.length > 0 && (
+            <Article.Topics topics={page.data.topics} />
+          )}
+        </div>
+      </Article.Header>
+      <Article.Content>
+        <MDX components={getMDXComponents()} />
+      </Article.Content>
+    </Article>
   );
 };
 

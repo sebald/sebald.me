@@ -2,10 +2,6 @@
   --font-mono: var(--font-mono), monospace;
   --font-sans: var(--font-sans), sans-serif;
 
-  --color-text: var(--oatmeal-950);
-  --color-headline: var(--oatmeal-900);
-  --typescale: 1.25; /* Major third */
-
   --color-oatmeal-50: oklch(0.97 0.01 87);
   --color-oatmeal-100: oklch(0.923 0.026 87);
   --color-oatmeal-200: oklch(0.86 0.035 87);
@@ -29,6 +25,12 @@
   --color-blueberry-800: oklch(0.24 0.08 261);
   --color-blueberry-900: oklch(0.18 0.06 263);
   --color-blueberry-950: oklch(0.13 0.03 264);
+
+  --color-text: var(--color-oatmeal-900);
+  --color-muted: var(--color-oatmeal-700);
+  --color-headline: var(--color-oatmeal-900);
+  --min-typescale: 1.125; /* Major Second */
+  --max-typescale: 1.25; /* Major Third */
 
   --spacing-content: min(100% - 2rem, var(--container-5xl));
   --container-navigation: 700px; /* Container threshold to switch to mobile navigation */

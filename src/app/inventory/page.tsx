@@ -132,6 +132,7 @@ const InventoryPage = () => (
       <Headline level="3">Typography</Headline>
 
       <div className="flex flex-col gap-4">
+        <Headline level="display">Heading Level Display</Headline>
         <Headline level="1">Heading Level 1</Headline>
         <Headline level="2">Heading Level 2</Headline>
         <Headline level="3">Heading Level 3</Headline>

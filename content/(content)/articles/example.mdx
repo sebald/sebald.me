@@ -1,6 +1,7 @@
 ---
 title: 'The Wood Wide Web: The Secret Social Life of Forests'
 description: Some random article
+topics: [foo, bar]
 date: 2025-12-14
 draft: false
 ---
@@ -8,6 +9,18 @@ draft: false
 When you walk through a forest, you might see trees as solitary individuals, competing for space and sunlight. However, look a little deeper—specifically underground—and you will find that the forest is actually a massive, interconnected superorganism.
 
 Scientists call this the **Mycorrhizal Network**, but it is more affectionately known as the "Wood Wide Web."
+
+## Image Examples
+
+Here are examples of how to include images in articles:
+
+### Standard Image
+
+![Forest mycorrhizal network](https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?w=800&q=80)
+
+### Image with Caption
+
+![Underground forest root system](https://images.unsplash.com/photo-1511497584788-876760111969?w=800&q=80 'The intricate underground network of tree roots and fungi')
 
 ## The Hidden Infrastructure
 
@@ -70,3 +83,152 @@ Understanding the Wood Wide Web changes how we view conservation. We can no long
 > A forest is not a collection of objects; it is a community. Removing the oldest trees (the hubs) can cause the entire network to unravel, leaving the remaining forest vulnerable to disease and drought.
 
 Next time you lean against an old oak tree, remember: it is likely in the middle of a conversation.
+
+## Code Examples
+
+Here are some code examples showing different syntax highlighting features:
+
+### Inline
+
+This is a highlighted inline code: `console.log("hello world"){:js}`.
+
+### Basic (with Breakout)
+
+```js
+console.log('Hello World');
+```
+
+```ts breakout
+// Using 'typeof' to infer types
+const person = { name: 'Alice', age: 30 };
+type PersonType = typeof person; // { name: string; age: number }
+
+// 'satisfies' to ensure a type matches but allows more specific types
+type Animal = { name: string };
+const dog = { name: 'Buddy', breed: 'Golden Retriever' } satisfies Animal;
+
+// Generics with 'extends' and default values
+function identity<T extends number | string = string>(arg: T): T {
+  return arg;
+}
+
+let str = identity(); // Default type is string
+let num = identity(42); // T inferred as number
+
+// 'extends' with interface and class
+interface HasLength {
+  length: number;
+}
+
+function logLength<T extends HasLength = string>(arg: T): void {
+  console.log(arg.length);
+}
+
+logLength('Hello'); // OK: string has length (default is string)
+logLength([1, 2, 3]); // OK: array has length
+// logLength(123);    // Error: number doesn't have length
+
+// 'typeof' with functions
+function add(x: number, y: number): number {
+  return x + y;
+}
+
+type AddFunctionType = typeof add; // (x: number, y: number) => number
+
+// Generic interfaces with 'extends' and default types
+interface Box<T extends object = { message: string }> {
+  content: T;
+}
+
+let defaultBox: Box = { content: { message: 'Hello' } }; // Uses default type
+let customBox: Box<{ status: number }> = { content: { status: 200 } };
+
+// Complex example with 'satisfies' and default generics
+type Task = {
+  title: string;
+  description?: string;
+  completed: boolean;
+};
+
+const myTask = {
+  title: 'Learn TypeScript',
+  completed: false,
+  priority: 'High',
+} satisfies Task; // Allows priority but ensures Task structure
+
+// Generic function with default type
+function wrapInArray<T = string>(value: T): T[] {
+  return [value];
+}
+
+const stringArray = wrapInArray(); // Default to string
+const numberArray = wrapInArray(42); // T inferred as number
+
+/**
+ * Combines two generic types into a tuple.
+ *
+ * @template T - The first type.
+ * @template U - The second type.
+ * @param {T} first - The first value.
+ * @param {U} second - The second value.
+ * @returns {[T, U]} A tuple containing both values.
+ */
+function combine<T, U>(first: T, second: U): [T, U] {
+  return [first, second];
+}
+```
+
+### With Title
+
+```js title="My Script"
+console.log('Hello World');
+```
+
+### With Line Numbers
+
+```ts lineNumbers
+const a = 'Hello World';
+console.log(a);
+```
+
+### Highlighted Lines
+
+```tsx
+// highlight a line
+<div>Hello World</div> // [!code highlight]
+```
+
+### Word Highlighting
+
+```tsx
+// highlight a word
+// [!code word:Fumadocs]
+<div>Fumadocs</div>
+```
+
+### Diff Styles
+
+```tsx
+console.log('hewwo'); // [!code --]
+console.log('hello'); // [!code ++]
+```
+
+### Focus
+
+```tsx
+const observer = new ResizeObserver(() => {
+  console.log('Element resized'); // [!code focus]
+})
+return observer
+observer.observe(element);
+```
+
+### Tab Groups
+
+```ts tab="Tab 1"
+console.log('A');
+```
+
+```ts tab="Tab 2"
+console.log('B');
+```

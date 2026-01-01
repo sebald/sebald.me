@@ -3,6 +3,12 @@
 }
 
 @utility typescale-* {
+  /* Pow only works with numbers, so no clamp. */
+  --typescale: var(--min-typescale);
+  @media (width >= 768px) {
+    --typescale: var(--max-typescale);
+  }
+
   font-size: calc(1rem * pow(var(--typescale), --value(integer)));
 }
 

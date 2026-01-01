@@ -1,0 +1,48 @@
+@layer components {
+  .prose {
+    --prose-width: 75ch;
+
+    font-family: var(--font-body);
+    color: var(--color-text-body);
+    line-height: 1.75;
+    /* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px viewport width */
+    font-size: clamp(var(--text-base), 1vw + 0.5rem, var(--text-lg));
+
+    display: grid;
+    grid-template-columns:
+      1fr
+      min(var(--prose-width), 100%)
+      1fr;
+
+    & > * {
+      grid-column: 2;
+    }
+
+    & > img,
+    & > figure:has(img),
+    & > [data-breakout] {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin-inline: auto;
+    }
+
+    /* Default spacing */
+    & > * + * {
+      margin-top: theme(spacing.8);
+    }
+
+    /* Give headings more breathing room top */
+    & > * + h2 {
+      margin-top: theme(spacing.12);
+    }
+    & > * + h3 {
+      margin-top: theme(spacing.10);
+    }
+
+    /* Ensure heading is attached to content below it */
+    & h2 + *,
+    & h3 + * {
+      margin-top: theme(spacing.3);
+    }
+  }
+}
