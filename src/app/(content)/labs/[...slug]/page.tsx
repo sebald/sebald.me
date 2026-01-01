@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { getPageImage, labsSource } from '@/lib/source';
-import { getMDXComponents } from '@/mdx-components';
+import { getMDXComponents } from '@/ui/mdx';
 
 const Page = async (props: PageProps<'/labs/[...slug]'>) => {
   const params = await props.params;
