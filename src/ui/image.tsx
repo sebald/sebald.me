@@ -7,9 +7,6 @@ const style = {
   image: cva({
     base: ['rounded-lg'],
   }),
-  figure: cva({
-    base: ['my-6'],
-  }),
   caption: cva({
     base: ['pt-1 text-center', 'text-xs text-muted', 'italic'],
   }),
@@ -33,7 +30,7 @@ export const Image = ({ title, alt, className, ...props }: ImageProps) => {
   );
 
   return title ? (
-    <figure className={style.figure()}>
+    <figure>
       {img}
       <figcaption className={style.caption()}>{title}</figcaption>
     </figure>
