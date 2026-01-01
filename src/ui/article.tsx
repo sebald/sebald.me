@@ -17,7 +17,7 @@ const styles = {
     base: ['prose'],
   }),
   root: cva({
-    base: ['flex flex-col pt-16'],
+    base: ['flex flex-col'],
   }),
 };
 
@@ -34,7 +34,7 @@ interface TitleProps extends PropsWithChildren {
 }
 
 const Title = ({ children, id }: TitleProps) => (
-  <Headline level="display" id={id}>
+  <Headline id={id} level="display" variant="accent">
     {children}
   </Headline>
 );

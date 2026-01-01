@@ -11,6 +11,11 @@
 @import './shiki.css';
 @source '../../node_modules/fumadocs-ui/dist/components/codeblock.js';
 
+::selection,
+::-moz-selection {
+  background-color: oklch(0.9 0.1 90 / 0.5);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   ::before,

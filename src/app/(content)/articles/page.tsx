@@ -1,6 +1,7 @@
 import Link from 'fumadocs-core/link';
 
 import { articlesSource } from '@/lib/source';
+import { Headline } from '@/ui/headline';
 
 const ArticlesIndex = async () => {
   const pages = articlesSource.getPages().sort((a, b) => {
@@ -11,7 +12,10 @@ const ArticlesIndex = async () => {
 
   return (
     <div>
-      <h1 className="mb-8 text-4xl font-bold">Articles</h1>
+      <Headline level="1" variant="accent" as="h1">
+        Articles
+      </Headline>
+
       <div className="space-y-6">
         {pages.map((page) => (
           <article
@@ -19,7 +23,7 @@ const ArticlesIndex = async () => {
             className="border-b border-gray-200 pb-6 last:border-b-0"
           >
             <Link href={page.url} className="group">
-              <h2 className="mb-2 text-2xl font-bold transition-colors group-hover:text-blue-600">
+              <h2 className="group-hover:text-blueberry-600 mb-2 text-2xl font-bold transition-colors">
                 {page.data.title}
               </h2>
             </Link>
