@@ -5,6 +5,7 @@ export const style = cva({
     'flex items-center',
     'font-sans font-bold',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
+    'text-balance',
   ],
   variants: {
     level: {

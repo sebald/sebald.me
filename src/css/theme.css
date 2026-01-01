@@ -28,6 +28,9 @@
 
   --color-text: var(--color-oatmeal-900);
   --color-muted: var(--color-oatmeal-700);
+  --color-link: var(--color-blueberry-500);
+  --color-link-hover: var(--color-blueberry-400);
+
   --color-headline: var(--color-oatmeal-900);
   --min-typescale: 1.125; /* Major Second */
   --max-typescale: 1.25; /* Major Third */

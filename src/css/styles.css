@@ -2,7 +2,7 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
-@import './utilities.css';
+@import './utils.css';
 
 @import './prose.css';
 @import './panel.css';

@@ -1,9 +1,10 @@
-import Link from 'fumadocs-core/link';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
+import { Link } from '@/ui/link';
 
 // Config
 // ---------------
@@ -30,7 +31,7 @@ const ArticlesIndex = async () => {
       {articles.map(async (page) => {
         const excerpt = await getExcerpt(page);
         return (
-          <Article key={page.url} aria-labelledby={page.url}>
+          <Article key={page.url} aria-labelledby={page.url} space="2">
             <Article.Header flow="reverse">
               <Article.Title id={page.url} variant="list">
                 {page.data.title}
@@ -38,6 +39,18 @@ const ArticlesIndex = async () => {
               <Article.Meta date={page.data.date} topics={page.data.topics} />
             </Article.Header>
             <Article.Excerpt>{excerpt}</Article.Excerpt>
+            <Link
+              href={page.url}
+              aria-label={`Read article: ${page.data.title}`}
+              noUnderline
+            >
+              Read full article
+              <ArrowRightIcon
+                className="transition-transform duration-200 group-hover/link:translate-x-1"
+                size={16}
+                weight="bold"
+              />
+            </Link>
           </Article>
         );
       })}

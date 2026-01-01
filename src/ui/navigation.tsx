@@ -17,8 +17,8 @@ const navItemStyles = cva({
     variant: {
       desktop: [
         'text-oatmeal-700',
-        'hover:text-blueberry-500',
-        'hover:underline underline-offset-4 decoration-2 decoration-blueberry-600/40',
+        'hover:text-oatmeal-900',
+        'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/40',
         'px-4 py-1',
       ],
       mobile: ['text-lg text-oatmeal-200 hover:text-oatmeal-50'],

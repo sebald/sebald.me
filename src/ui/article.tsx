@@ -2,7 +2,7 @@ import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
-import { cva } from '@/lib/styles.utils';
+import { cva, spacing } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
 
 import { Headline } from './headline';
@@ -14,7 +14,7 @@ const styles = {
     variants: {
       flow: {
         default: 'gap-3 pb-24',
-        reverse: 'flex-col-reverse gap-0 pb-2',
+        reverse: 'flex-col-reverse gap-0',
       },
     },
     defaultVariants: {
@@ -22,16 +22,16 @@ const styles = {
     },
   }),
   caption: cva({
-    base: ['text-muted flex items-center gap-1 text-xs'],
+    base: ['text-muted flex items-center gap-0.5 text-xs'],
   }),
   content: cva({
     base: ['prose'],
   }),
   excerpt: cva({
-    base: '',
+    base: 'text-pretty',
   }),
   root: cva({
-    base: ['flex flex-col'],
+    base: ['flex flex-col', 'gap-(--space)'],
   }),
 };
 
@@ -99,7 +99,8 @@ interface TopicsProps extends AriaAttributes {
 const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   return (
     <div className={styles.caption()} {...ariaProps}>
-      <HashStraightIcon size={14} />
+      {/* Optical correction for the hash icon */}
+      <HashStraightIcon size={14} className="-mr-px" />
       {topics.join(', ')}
     </div>
   );
@@ -136,10 +137,12 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
   </p>
 );
 
-interface RootProps extends PropsWithChildren, AriaAttributes {}
+interface RootProps extends PropsWithChildren, AriaAttributes {
+  space?: string | number;
+}
 
-const Root = ({ children, ...ariaProps }: RootProps) => (
-  <article className={styles.root()} {...ariaProps}>
+const Root = ({ children, space, ...ariaProps }: RootProps) => (
+  <article className={styles.root()} style={spacing(space)} {...ariaProps}>
     {children}
   </article>
 );
