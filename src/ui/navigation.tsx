@@ -12,13 +12,13 @@ import { Dialog } from './dialog';
 import { Logo } from './logo';
 
 const navItemStyles = cva({
-  base: 'transition-colors rounded-full font-medium',
+  base: 'transition-all rounded-full font-medium',
   variants: {
     variant: {
       desktop: [
         'text-oatmeal-700',
-        'hover:text-blueberry-600',
-        'hover:underline underline-offset-4 decoration-2 decoration-blueberry-600/40',
+        'hover:text-oatmeal-900',
+        'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/40',
         'px-4 py-1',
       ],
       mobile: ['text-lg text-oatmeal-200 hover:text-oatmeal-50'],

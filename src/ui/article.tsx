@@ -2,42 +2,79 @@ import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
-import { cva } from '@/lib/styles.utils';
+import { cva, spacing } from '@/lib/styles.utils';
+import type { VariantProps } from '@/lib/styles.utils';
 
 import { Headline } from './headline';
+import type { HeadlineProps } from './headline';
 
 const styles = {
   header: cva({
-    base: ['pb-24 flex flex-col gap-3'],
+    base: ['flex flex-col'],
+    variants: {
+      flow: {
+        default: 'gap-3 pb-24',
+        reverse: 'flex-col-reverse gap-0',
+      },
+    },
+    defaultVariants: {
+      flow: 'default',
+    },
   }),
   caption: cva({
-    base: ['text-muted flex items-center gap-1.5 text-xs'],
+    base: ['text-muted flex items-center gap-0.5 text-xs'],
   }),
   content: cva({
     base: ['prose'],
   }),
+  excerpt: cva({
+    base: 'text-pretty',
+  }),
   root: cva({
-    base: ['flex flex-col pt-16'],
+    base: ['flex flex-col', 'gap-(--space)'],
   }),
 };
 
-interface HeaderProps extends PropsWithChildren, AriaAttributes {}
+interface HeaderProps
+  extends PropsWithChildren,
+    AriaAttributes,
+    VariantProps<typeof styles.header> {}
 
-const Header = ({ children, ...ariaProps }: HeaderProps) => (
-  <header className={styles.header()} {...ariaProps}>
+const Header = ({ children, flow, ...ariaProps }: HeaderProps) => (
+  <header className={styles.header({ flow })} {...ariaProps}>
     {children}
   </header>
 );
 
 interface TitleProps extends PropsWithChildren {
   id?: string;
+  /**
+   * Display style for the title
+   * - 'page': Large display heading with accent variant (for full article pages)
+   * - 'list': Smaller heading level 3 (for article lists/indexes)
+   */
+  variant?: 'page' | 'list';
 }
 
-const Title = ({ children, id }: TitleProps) => (
-  <Headline level="display" id={id}>
-    {children}
-  </Headline>
-);
+const Title = ({ children, id, variant = 'page' }: TitleProps) => {
+  let headlineProps: Omit<HeadlineProps, 'children'>;
+
+  switch (variant) {
+    case 'list':
+      headlineProps = { level: '3', as: 'h2' };
+      break;
+    case 'page':
+    default:
+      headlineProps = { level: 'display', variant: 'accent' };
+      break;
+  }
+
+  return (
+    <Headline id={id} {...headlineProps}>
+      {children}
+    </Headline>
+  );
+};
 
 interface TimeProps extends AriaAttributes {
   date: Date | string;
@@ -49,7 +86,7 @@ const Time = ({ date, ...ariaProps }: TimeProps) => {
 
   return (
     <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
-      <CalendarBlankIcon size={16} />
+      <CalendarBlankIcon size={14} />
       {isoDate}
     </time>
   );
@@ -62,11 +99,27 @@ interface TopicsProps extends AriaAttributes {
 const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   return (
     <div className={styles.caption()} {...ariaProps}>
-      <HashStraightIcon size={16} />
+      {/* Optical correction for the hash icon */}
+      <HashStraightIcon size={14} className="-mr-px" />
       {topics.join(', ')}
     </div>
   );
 };
+
+interface MetaProps extends AriaAttributes {
+  date?: Date | string;
+  topics?: string[];
+}
+
+const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
+  <div className="flex gap-2" {...ariaProps}>
+    {date && <Time date={date} />}
+    {date && topics && topics.length > 0 && (
+      <span className="text-muted text-sm">·</span>
+    )}
+    {topics && topics.length > 0 && <Topics topics={topics} />}
+  </div>
+);
 
 interface ContentProps extends PropsWithChildren, AriaAttributes {}
 
@@ -76,10 +129,20 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
   </div>
 );
 
-interface RootProps extends PropsWithChildren, AriaAttributes {}
+interface ExcerptProps extends PropsWithChildren, AriaAttributes {}
 
-const Root = ({ children, ...ariaProps }: RootProps) => (
-  <article className={styles.root()} {...ariaProps}>
+const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
+  <p className={styles.excerpt()} {...ariaProps}>
+    {children}
+  </p>
+);
+
+interface RootProps extends PropsWithChildren, AriaAttributes {
+  space?: string | number;
+}
+
+const Root = ({ children, space, ...ariaProps }: RootProps) => (
+  <article className={styles.root()} style={spacing(space)} {...ariaProps}>
     {children}
   </article>
 );
@@ -89,5 +152,7 @@ export const Article = Object.assign(Root, {
   Title,
   Time,
   Topics,
+  Meta,
+  Excerpt,
   Content,
 });

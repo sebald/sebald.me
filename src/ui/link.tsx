@@ -2,14 +2,15 @@ import { cva, type VariantProps } from 'cva';
 
 const style = cva({
   base: [
+    'group/link',
     'inline-flex items-center gap-1.5',
     'transition-colors focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
     variant: {
       default: [
-        'text-blueberry-600 decoration-blueberry-600/40',
-        'hover:text-blueberry-700 hover:decoration-blueberry-700',
+        'text-link decoration-link/40',
+        'hover:text-link-hover hover:decoration-link-hover',
       ],
       muted: [
         'text-muted decoration-muted/40',

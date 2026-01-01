@@ -1,18 +1,17 @@
+import { structure } from 'fumadocs-core/mdx-plugins';
 import { type InferPageType, loader } from 'fumadocs-core/source';
-import { lucideIconsPlugin } from 'fumadocs-core/source/lucide-icons';
 import { articles, labs } from 'fumadocs-mdx:collections/server';
 
-// See https://fumadocs.dev/docs/headless/source-api for more info
+import { truncateAtWord } from './string.utils';
+
 export const articlesSource = loader({
   baseUrl: '/articles',
   source: articles.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
 });
 
 export const labsSource = loader({
   baseUrl: '/labs',
   source: labs.toFumadocsSource(),
-  plugins: [lucideIconsPlugin()],
 });
 
 export const getPageImage = (
@@ -35,6 +34,35 @@ export const getLLMText = async (
   return `# ${page.data.title}
 
 ${processed}`;
+};
+
+export const getExcerpt = async (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
+  length: number = 200,
+) => {
+  const raw = await page.data.getText('raw');
+  const { contents } = structure(raw, [], {
+    types: ['paragraph'],
+  });
+
+  if (contents.length === 0) return '';
+
+  const { content } = contents[0];
+  return truncateAtWord(content, length);
+};
+
+export const sortByDate = <
+  T extends
+    | InferPageType<typeof articlesSource>
+    | InferPageType<typeof labsSource>,
+>(
+  pages: T[],
+): T[] => {
+  return pages.sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  });
 };
 
 export const getPageBySlug = (
