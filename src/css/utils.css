@@ -1,7 +1,9 @@
+/* Focus ring utility for consistent focus styles. */
 @utility focus-ring {
   @apply ring-blueberry-500 ring-offset-oatmeal-50 ring-[3px] ring-offset-2;
 }
 
+/* Typescale utility for responsive font sizing based on CSS variables. */
 @utility typescale-* {
   /* Pow only works with numbers, so no clamp. */
   --typescale: var(--min-typescale);
@@ -12,19 +14,39 @@
   font-size: calc(1rem * pow(var(--typescale), --value(integer)));
 }
 
+/* Change font weight on hover without reflow. */
+@utility weight-on-hover-* {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+
+  &::after {
+    content: attr(data-text);
+    content: attr(data-text) / ''; /* Hide from screen readers */
+    font-weight: --value(--font-weight- *);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+
+  &:hover {
+    font-weight: --value(--font-weight- *);
+  }
+}
+
+/* Shrink scale utility use with shrink animation. */
 @utility shrink-scale-* {
   --shrink-scale: calc(--value(integer) * 1%);
 }
 
+/* Scroll-triggered animation utility */
 @utility scroll-trigger {
   animation-timeline: scroll();
   animation-range: var(--scroll-trigger-from, 0) var(--scroll-trigger-to, 100%);
 }
-
 @utility scroll-trigger-from-* {
   --scroll-trigger-from: calc(--value(integer) * 4px);
 }
-
 @utility scroll-trigger-to-* {
   --scroll-trigger-to: calc(--value(integer) * 4px);
 }

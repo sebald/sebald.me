@@ -12,14 +12,14 @@ import { Dialog } from './dialog';
 import { Logo } from './logo';
 
 const navItemStyles = cva({
-  base: 'transition-all rounded-full font-medium',
+  base: 'transition-color rounded-full font-medium',
   variants: {
     variant: {
       desktop: [
         'text-oatmeal-700',
+        'weight-on-hover-semibold',
         'hover:text-oatmeal-900',
-        'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/40',
-        'px-4 py-1',
+        'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/30',
       ],
       mobile: ['text-lg text-oatmeal-200 hover:text-oatmeal-50'],
     },
@@ -40,6 +40,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
     <Link
       href={href}
       className={navItemStyles({ variant })}
+      data-text={label}
       aria-current={isActive ? 'page' : undefined}
     >
       {label}
@@ -48,7 +49,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
 };
 
 const LargeScreenNav = () => (
-  <nav className="@navigation:flex hidden gap-4">
+  <nav className="@navigation:flex hidden gap-12">
     {navItems.map((item) => (
       <NavItem
         key={item.label}
