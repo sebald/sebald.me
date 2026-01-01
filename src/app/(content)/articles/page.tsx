@@ -5,6 +5,7 @@ import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
+import { Text } from '@/ui/text';
 
 // Config
 // ---------------
@@ -24,9 +25,15 @@ const ArticlesIndex = async () => {
 
   return (
     <div className="mx-auto grid max-w-[75ch] gap-20">
-      <Headline level="1" variant="accent" as="h1">
-        Articles
-      </Headline>
+      <div>
+        <Headline level="1" variant="accent" as="h1">
+          Articles
+        </Headline>
+        <Text variant="faded" size="lead" leading="inherit">
+          Notes from the road and lessons learned along the way. Welcome to the
+          archive.
+        </Text>
+      </div>
 
       {articles.map(async (page) => {
         const excerpt = await getExcerpt(page);
