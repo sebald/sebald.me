@@ -48,7 +48,7 @@ const NavItem = ({ href, label, variant }: NavItemProps) => {
   );
 };
 
-const LargeScreenNav = () => (
+const StaticNav = () => (
   <nav className="@navigation:flex hidden gap-12">
     {navItems.map((item) => (
       <NavItem
@@ -61,7 +61,7 @@ const LargeScreenNav = () => (
   </nav>
 );
 
-const SmallScreenNav = () => (
+const FloatingNav = () => (
   <div className="@navigation:hidden">
     <Dialog.Root>
       <Dialog.Trigger
@@ -106,7 +106,7 @@ export const Navigation = () => (
       className="animate-shrink shrink-scale-75 scroll-trigger scroll-trigger-to-25"
       href="/"
     />
-    <LargeScreenNav />
-    <SmallScreenNav />
+    <StaticNav />
+    <FloatingNav />
   </nav>
 );
