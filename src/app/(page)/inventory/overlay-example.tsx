@@ -36,16 +36,12 @@ export const OverlayExample = () => (
 
     <Popover.Root>
       <Popover.Trigger>Open Popover</Popover.Trigger>
-      <Popover.Portal>
-        <Popover.Positioner sideOffset={8}>
-          <Popover.Popup>
-            <Popover.Title>Popover Title</Popover.Title>
-            <Popover.Description>
-              This is a simple popover example with some useful content.
-            </Popover.Description>
-          </Popover.Popup>
-        </Popover.Positioner>
-      </Popover.Portal>
+      <Popover>
+        <Popover.Title>Popover Title</Popover.Title>
+        <Popover.Description>
+          This is a simple popover example with some useful content.
+        </Popover.Description>
+      </Popover>
     </Popover.Root>
   </div>
 );

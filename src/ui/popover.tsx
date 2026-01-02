@@ -10,11 +10,9 @@ import { styles as buttonStyles } from './button';
 import { style as headlineStyle } from './headline';
 import { style as textStyle } from './text';
 
-interface PopoverContextType {
-  modal: PrimitiveRootProps['modal'];
-}
+interface PopoverContextType extends Pick<PrimitiveRootProps, 'modal'> {}
 
-const PopoverContext = createContext<PopoverContextType | undefined>(undefined);
+const PopoverContext = createContext<PopoverContextType | null>(null);
 
 export const usePopoverContext = () => {
   const context = use(PopoverContext);
@@ -54,80 +52,72 @@ const PopoverRoot = ({ children, ...props }: PopoverRootProps) => (
   </PopoverContext.Provider>
 );
 
-interface PopoverTriggerProps
-  extends ComponentProps<typeof Primitive.Trigger>,
-    VariantProps<typeof styles.trigger> {}
+type PopoverTriggerProps = Omit<
+  ComponentProps<typeof Primitive.Trigger>,
+  'className' | 'style'
+>;
 
-const PopoverTrigger = ({
-  children,
-  variant,
-  ...props
-}: PopoverTriggerProps) => (
-  <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
+const PopoverTrigger = ({ children, ...props }: PopoverTriggerProps) => (
+  <Primitive.Trigger {...props} className={styles.trigger()}>
     {children}
   </Primitive.Trigger>
 );
 
-const PopoverPortal = ({
-  children,
-  ...props
-}: ComponentProps<typeof Primitive.Portal>) => (
-  <Primitive.Portal {...props}>{children}</Primitive.Portal>
-);
+type PopoverContentProps = Omit<
+  ComponentProps<typeof Primitive.Positioner>,
+  'className' | 'style'
+> & {
+  children: React.ReactNode;
+};
 
-const PopoverPositioner = ({
+const PopoverContent = ({
   children,
-  ...props
-}: ComponentProps<typeof Primitive.Positioner>) => (
-  <Primitive.Positioner {...props}>{children}</Primitive.Positioner>
-);
+  sideOffset = 8,
+  ...positionerProps
+}: PopoverContentProps) => {
+  const { modal } = usePopoverContext();
 
-const PopoverPopup = ({
-  children,
-  ...props
-}: ComponentProps<typeof Primitive.Popup>) => (
-  <Primitive.Popup {...props} className={styles.popup()}>
-    {children}
-  </Primitive.Popup>
-);
+  return (
+    <PopoverContext.Provider value={{ modal }}>
+      <Primitive.Portal>
+        <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
+          <Primitive.Popup className={styles.popup()}>
+            {children}
+          </Primitive.Popup>
+        </Primitive.Positioner>
+      </Primitive.Portal>
+    </PopoverContext.Provider>
+  );
+};
 
-const PopoverTitle = ({
-  children,
-  ...props
-}: ComponentProps<typeof Primitive.Title>) => (
+type PopoverTitleProps = Omit<
+  ComponentProps<typeof Primitive.Title>,
+  'className' | 'style'
+>;
+
+const PopoverTitle = ({ children, ...props }: PopoverTitleProps) => (
   <Primitive.Title {...props} className={styles.title()}>
     {children}
   </Primitive.Title>
 );
 
+type PopoverDescriptionProps = Omit<
+  ComponentProps<typeof Primitive.Description>,
+  'className' | 'style'
+>;
+
 const PopoverDescription = ({
   children,
   ...props
-}: ComponentProps<typeof Primitive.Description>) => (
+}: PopoverDescriptionProps) => (
   <Primitive.Description {...props} className={styles.description()}>
     {children}
   </Primitive.Description>
 );
 
-const PopoverArrow = ({
-  children,
-  ...props
-}: ComponentProps<typeof Primitive.Arrow>) => (
-  <Primitive.Arrow
-    {...props}
-    className="flex data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=right]:left-[-13px] data-[side=top]:bottom-[-8px] data-[side=left]:rotate-90 data-[side=right]:-rotate-90 data-[side=top]:rotate-180"
-  >
-    {children}
-  </Primitive.Arrow>
-);
-
-export const Popover = Object.assign(PopoverPopup, {
+export const Popover = Object.assign(PopoverContent, {
   Root: PopoverRoot,
   Trigger: PopoverTrigger,
-  Portal: PopoverPortal,
-  Positioner: PopoverPositioner,
-  Popup: PopoverPopup,
   Title: PopoverTitle,
   Description: PopoverDescription,
-  Arrow: PopoverArrow,
 });

@@ -15,7 +15,7 @@ interface DialogContextType {
   modal: PrimitiveRootProps['modal'];
 }
 
-const DialogContext = createContext<DialogContextType | undefined>(undefined);
+const DialogContext = createContext<DialogContextType | null>(null);
 
 export const useDialogContext = () => {
   const context = use(DialogContext);
