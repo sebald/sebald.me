@@ -72,8 +72,8 @@ const SmallScreenNav = () => (
         <ListIcon size={24} weight="regular" />
       </Dialog.Trigger>
 
-      <Dialog position="bottom" size="full" showCloseButton>
-        <p className="text-oatmeal-400 mb-2 font-sans text-xs font-semibold uppercase tracking-widest">
+      <Dialog position="top" size="full" showCloseButton>
+        <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
           Navigation
         </p>
         <nav className="flex flex-col space-y-4">
@@ -96,10 +96,10 @@ export const Navigation = () => (
     className={cn(
       '@container',
       'flex w-full items-center justify-between',
-      'fixed left-1/2 top-0 z-50 -translate-x-1/2',
+      'z-1000 fixed left-1/2 top-0 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
-      'lg:max-w-content max-w-5xl px-4 py-3 lg:px-0',
+      'lg:max-w-content px-4 py-3 lg:px-0',
     )}
   >
     <Logo

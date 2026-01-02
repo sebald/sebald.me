@@ -153,7 +153,7 @@
       top: 1.5rem;
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
-      padding-left: --spacing(1.5); /* Different because logo gets shrinked. */
+      padding-left: --spacing(1.5); /* Optical adjustment for logo */
       padding-right: --spacing(5);
 
       /* slightly adjusted clear panel */
