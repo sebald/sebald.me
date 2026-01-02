@@ -2,6 +2,7 @@
 
 import { Popover as Primitive } from '@base-ui/react/popover';
 import type { PopoverRootProps as PrimitiveRootProps } from '@base-ui/react/popover';
+import { XIcon } from '@phosphor-icons/react/ssr';
 import { cva, VariantProps } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
@@ -59,7 +60,7 @@ export const styles = {
     base: textStyle({ size: 'caption' }),
   }),
   body: cva({
-    base: textStyle(),
+    base: `${textStyle()} mt-4`,
   }),
 };
 
@@ -89,12 +90,14 @@ interface PopoverContentProps
     >,
     VariantProps<typeof styles.popup> {
   children: React.ReactNode;
+  showCloseButton?: boolean;
 }
 
 const PopoverContent = ({
   children,
   sideOffset = 8,
   variant,
+  showCloseButton,
   ...positionerProps
 }: PopoverContentProps) => {
   const { modal } = usePopoverContext();
@@ -106,6 +109,16 @@ const PopoverContent = ({
       ) : null}
       <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
         <Primitive.Popup className={styles.popup({ variant })}>
+          {showCloseButton && (
+            <Primitive.Close
+              className={buttonStyles({
+                variant: 'icon',
+                className: 'absolute right-2 top-2',
+              })}
+            >
+              <XIcon size={20} weight="regular" />
+            </Primitive.Close>
+          )}
           {children}
         </Primitive.Popup>
       </Primitive.Positioner>
@@ -138,9 +151,19 @@ const PopoverDescription = ({
   </Primitive.Description>
 );
 
+const PopoverBody = ({
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+  <div {...props} className={styles.body()}>
+    {children}
+  </div>
+);
+
 export const Popover = Object.assign(PopoverContent, {
   Root: PopoverRoot,
   Trigger: PopoverTrigger,
   Title: PopoverTitle,
   Description: PopoverDescription,
+  Body: PopoverBody,
 });
