@@ -1,8 +1,9 @@
 'use client';
 
 import { Dialog } from '@/ui/dialog';
+import { Popover } from '@/ui/popover';
 
-export const DialogExample = () => (
+export const OverlayExample = () => (
   <div className="flex flex-wrap gap-4">
     <Dialog.Root>
       <Dialog.Trigger>Open Dialog</Dialog.Trigger>
@@ -32,5 +33,19 @@ export const DialogExample = () => (
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
+
+    <Popover.Root>
+      <Popover.Trigger>Open Popover</Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner sideOffset={8}>
+          <Popover.Popup>
+            <Popover.Title>Popover Title</Popover.Title>
+            <Popover.Description>
+              This is a simple popover example with some useful content.
+            </Popover.Description>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   </div>
 );

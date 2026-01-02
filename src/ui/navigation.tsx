@@ -96,7 +96,7 @@ export const Navigation = () => (
     className={cn(
       '@container',
       'flex w-full items-center justify-between',
-      'z-1000 fixed left-1/2 top-0 -translate-x-1/2',
+      'z-100 fixed left-1/2 top-0 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
       'lg:max-w-content px-4 py-3 lg:px-0',

@@ -9,7 +9,7 @@ import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
 
-import { DialogExample } from './dialog-example';
+import { OverlayExample } from './overlay-example';
 
 // Meta
 // ---------------
@@ -233,8 +233,8 @@ const InventoryPage = () => (
     <Divider />
 
     <div className="grid gap-4">
-      <Headline level="3">Dialog</Headline>
-      <DialogExample />
+      <Headline level="3">Overlays</Headline>
+      <OverlayExample />
     </div>
 
     <Divider />
