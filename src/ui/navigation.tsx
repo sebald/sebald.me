@@ -1,10 +1,10 @@
 'use client';
 
-import useResizeObserver from '@react-hook/resize-observer';
 import { cva } from 'cva';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
+import { useResizeObserver } from 'usehooks-ts';
 
 import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
@@ -70,11 +70,14 @@ const FloatingNav = () => {
    * The ref element is only as wide as the trigger, but that is more than sufficient here.
    * Also helps triggereing the resize observer only when nav is shown or hidden.
    */
-  const ref = useRef<HTMLDivElement>(null);
-  useResizeObserver(ref, ({ contentRect }) => {
-    if (contentRect.width === 0 && popupHandler.isOpen) {
-      popupHandler.close();
-    }
+  const ref = useRef<HTMLDivElement>(null!);
+  useResizeObserver({
+    ref,
+    onResize: ({ width }) => {
+      if (width === 0 && popupHandler.isOpen) {
+        popupHandler.close();
+      }
+    },
   });
 
   return (
