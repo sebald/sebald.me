@@ -15,19 +15,23 @@
     },
     {
       "groupName": "Next.js",
-      "matchPackagePatterns": ["^next$", "^@next/", "^nextjs"]
+      "matchPackageNames": ["/^next$/", "/^@next//", "/^nextjs/"]
     },
     {
       "groupName": "ESLint",
-      "matchPackagePatterns": ["^eslint", "^@eslint"]
+      "matchPackageNames": ["/^eslint/", "/^@eslint/"]
     },
     {
       "groupName": "Tailwind CSS",
-      "matchPackagePatterns": ["^tailwindcss$", "^@tailwindcss/", "/postcss/"]
+      "matchPackageNames": [
+        "/^tailwindcss$/",
+        "/^@tailwindcss//",
+        "//postcss//"
+      ]
     },
     {
       "groupName": "Fumadocs",
-      "matchPackagePatterns": ["^fumadocs-"]
+      "matchPackageNames": ["/^fumadocs-/"]
     }
   ]
 }
