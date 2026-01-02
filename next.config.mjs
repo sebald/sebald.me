@@ -16,8 +16,8 @@ const config = {
         destination: '/llms.mdx/articles/:path*',
       },
       {
-        source: '/labs/:path*.mdx',
-        destination: '/llms.mdx/labs/:path*',
+        source: '/lab/:path*.mdx',
+        destination: '/llms.mdx/lab/:path*',
       },
     ];
   },
