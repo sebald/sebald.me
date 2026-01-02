@@ -11,10 +11,10 @@ export const style = cva({
     level: {
       display: 'typescale-6 leading-tight -tracking-[0.04em]',
       '1': 'typescale-5 leading-tight -tracking-wide',
-      '2': 'typescale-4 leading-snug -tracking-wide',
-      '3': 'typescale-3 leading-snug -tracking-wide',
-      '4': 'typescale-2 leading-relaxed -tracking-wide',
-      '5': 'typescale-1 leading-relaxed -tracking-wide',
+      '2': 'typescale-4 leading-tight -tracking-wide',
+      '3': 'typescale-3 leading-tight -tracking-wide',
+      '4': 'typescale-2 leading-snug -tracking-wide',
+      '5': 'typescale-1 leading-snug -tracking-wide',
       '6': 'typescale-0 leading-relaxed -tracking-wide',
     },
     variant: {
