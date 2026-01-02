@@ -1,4 +1,5 @@
 import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
+import Link from 'fumadocs-core/link';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
@@ -50,6 +51,7 @@ const Header = ({ children, flow, className, ...ariaProps }: HeaderProps) => (
 
 interface TitleProps extends PropsWithChildren {
   id?: string;
+  href?: string;
   /**
    * Display style for the title
    * - 'page': Large display heading with accent variant (for full article pages)
@@ -58,7 +60,7 @@ interface TitleProps extends PropsWithChildren {
   variant?: 'page' | 'list';
 }
 
-const Title = ({ children, id, variant = 'page' }: TitleProps) => {
+const Title = ({ children, id, href, variant = 'page' }: TitleProps) => {
   let headlineProps: Omit<HeadlineProps, 'children'>;
 
   switch (variant) {
@@ -71,10 +73,21 @@ const Title = ({ children, id, variant = 'page' }: TitleProps) => {
       break;
   }
 
-  return (
+  const headline = (
     <Headline id={id} {...headlineProps}>
       {children}
     </Headline>
+  );
+
+  return href ? (
+    <Link
+      href={href}
+      className="decoration-3 decoration-link-hover/75 underline-offset-4 hover:underline"
+    >
+      {headline}
+    </Link>
+  ) : (
+    headline
   );
 };
 

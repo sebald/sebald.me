@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
@@ -31,10 +30,10 @@ const ArticlesIndex = async () => {
             <Article
               key={page.url}
               aria-labelledby={page.url}
-              className="gap-2"
+              className="gap-2.5"
             >
               <Article.Header flow="reverse">
-                <Article.Title id={page.url} variant="list">
+                <Article.Title id={page.url} href={page.url} variant="list">
                   {page.data.title}
                 </Article.Title>
                 <Article.Meta date={page.data.date} topics={page.data.topics} />
@@ -43,14 +42,8 @@ const ArticlesIndex = async () => {
               <Link
                 href={page.url}
                 aria-label={`Read article: ${page.data.title}`}
-                noUnderline
               >
-                Read full article
-                <ArrowRightIcon
-                  className="transition-transform duration-200 group-hover/link:translate-x-1"
-                  size={16}
-                  weight="bold"
-                />
+                Read more
               </Link>
             </Article>
           );
