@@ -5,6 +5,10 @@ import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 
+// Config
+// ---------------
+export const relative = false;
+
 // Meta
 // ---------------
 export const metadata: Metadata = {
