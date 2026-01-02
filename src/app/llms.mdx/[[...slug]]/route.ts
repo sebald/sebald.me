@@ -4,7 +4,7 @@ import {
   articlesSource,
   getLLMText,
   getPageBySlug,
-  labsSource,
+  labSource,
 } from '@/lib/source';
 
 export const revalidate = false;
@@ -36,8 +36,8 @@ export function generateStaticParams() {
     slug: ['articles', ...page.slugs],
   }));
 
-  const labsParams = labsSource.getPages().map((page) => ({
-    slug: ['labs', ...page.slugs],
+  const labsParams = labSource.getPages().map((page) => ({
+    slug: ['lab', ...page.slugs],
   }));
 
   return [...articlesParams, ...labsParams];
