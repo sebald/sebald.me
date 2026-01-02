@@ -1,13 +1,13 @@
 import { Feed } from 'feed';
 import { type InferPageType } from 'fumadocs-core/source';
 
-import { type articlesSource, type labsSource } from '@/lib/source';
+import { type articlesSource, type labSource } from '@/lib/source';
 
 const baseUrl = 'https://sebald.me';
 
 type PageType =
   | InferPageType<typeof articlesSource>
-  | InferPageType<typeof labsSource>;
+  | InferPageType<typeof labSource>;
 
 interface FeedConfig {
   title: string;

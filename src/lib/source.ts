@@ -1,6 +1,6 @@
 import { structure } from 'fumadocs-core/mdx-plugins';
 import { type InferPageType, loader } from 'fumadocs-core/source';
-import { articles, labs } from 'fumadocs-mdx:collections/server';
+import { articles, lab } from 'fumadocs-mdx:collections/server';
 
 import { truncateAtWord } from './string.utils';
 
@@ -9,16 +9,16 @@ export const articlesSource = loader({
   source: articles.toFumadocsSource(),
 });
 
-export const labsSource = loader({
-  baseUrl: '/labs',
-  source: labs.toFumadocsSource(),
+export const labSource = loader({
+  baseUrl: '/lab',
+  source: lab.toFumadocsSource(),
 });
 
 export const getPageImage = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
 ) => {
   const segments = [...page.slugs, 'image.png'];
-  const type = page.url.includes('/labs') ? 'labs' : 'articles';
+  const type = page.url.includes('/lab') ? 'lab' : 'articles';
 
   return {
     segments,
@@ -27,7 +27,7 @@ export const getPageImage = (
 };
 
 export const getLLMText = async (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
 ) => {
   const processed = await page.data.getText('processed');
 
@@ -37,7 +37,7 @@ ${processed}`;
 };
 
 export const getExcerpt = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labsSource>,
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
   length: number = 200,
 ) => {
   const { contents } = page.data.structuredData;
@@ -51,7 +51,7 @@ export const getExcerpt = (
 export const sortByDate = <
   T extends
     | InferPageType<typeof articlesSource>
-    | InferPageType<typeof labsSource>,
+    | InferPageType<typeof labSource>,
 >(
   pages: T[],
 ): T[] => {
@@ -66,19 +66,19 @@ export const getPageBySlug = (
   slug: string[],
 ):
   | InferPageType<typeof articlesSource>
-  | InferPageType<typeof labsSource>
+  | InferPageType<typeof labSource>
   | undefined => {
   if (slug.length === 0) return undefined;
 
-  // First element indicates the source (articles or labs)
+  // First element indicates the source (articles or lab)
   const source = slug[0];
   const pageSlugs = slug.slice(1);
 
   switch (source) {
     case 'articles':
       return articlesSource.getPage(pageSlugs);
-    case 'labs':
-      return labsSource.getPage(pageSlugs);
+    case 'lab':
+      return labSource.getPage(pageSlugs);
     default:
       return undefined;
   }

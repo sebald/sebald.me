@@ -1,9 +1,9 @@
 import Link from 'fumadocs-core/link';
 
-import { labsSource, sortByDate } from '@/lib/source';
+import { labSource, sortByDate } from '@/lib/source';
 
-const LabsIndex = async () => {
-  const pages = sortByDate(labsSource.getPages());
+const LabIndex = async () => {
+  const pages = sortByDate(labSource.getPages());
 
   return (
     <div>
@@ -37,4 +37,4 @@ const LabsIndex = async () => {
   );
 };
 
-export default LabsIndex;
+export default LabIndex;

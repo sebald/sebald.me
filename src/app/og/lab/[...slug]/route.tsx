@@ -1,16 +1,16 @@
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
 
-import { getPageImage, labsSource } from '@/lib/source';
+import { getPageImage, labSource } from '@/lib/source';
 
 export const revalidate = false;
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<'/og/labs/[...slug]'>,
+  { params }: RouteContext<'/og/lab/[...slug]'>,
 ) => {
   const { slug } = await params;
-  const page = labsSource.getPage(slug.slice(0, -1));
+  const page = labSource.getPage(slug.slice(0, -1));
   if (!page) notFound();
 
   return new ImageResponse(

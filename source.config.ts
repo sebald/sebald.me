@@ -35,8 +35,8 @@ export const articles = defineDocs({
   },
 });
 
-export const labs = defineDocs({
-  dir: 'content/labs',
+export const lab = defineDocs({
+  dir: 'content/lab',
   docs: {
     schema,
     postprocess: {

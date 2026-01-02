@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { getPageImage, labsSource } from '@/lib/source';
+import { getPageImage, labSource } from '@/lib/source';
 import { getMDXComponents } from '@/ui/mdx';
 
-const Page = async (props: PageProps<'/labs/[...slug]'>) => {
+const Page = async (props: PageProps<'/lab/[...slug]'>) => {
   const params = await props.params;
-  const page = labsSource.getPage(params.slug);
+  const page = labSource.getPage(params.slug);
   if (!page) notFound();
 
   const MDX = page.data.body;
@@ -28,14 +28,14 @@ const Page = async (props: PageProps<'/labs/[...slug]'>) => {
 };
 
 export const generateStaticParams = async () => {
-  return labsSource.generateParams();
+  return labSource.generateParams();
 };
 
 export const generateMetadata = async (
-  props: PageProps<'/labs/[...slug]'>,
+  props: PageProps<'/lab/[...slug]'>,
 ): Promise<Metadata> => {
   const params = await props.params;
-  const page = labsSource.getPage(params.slug);
+  const page = labSource.getPage(params.slug);
   if (!page) notFound();
 
   return {
