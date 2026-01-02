@@ -2,7 +2,7 @@ import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
-import { cva, spacing } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
 
 import { Headline } from './headline';
@@ -13,7 +13,7 @@ const styles = {
     base: ['flex flex-col'],
     variants: {
       flow: {
-        default: 'gap-3 pb-24',
+        default: 'gap-3',
         reverse: 'flex-col-reverse gap-0',
       },
     },
@@ -31,17 +31,19 @@ const styles = {
     base: 'text-pretty',
   }),
   root: cva({
-    base: ['flex flex-col', 'gap-(--space)'],
+    base: ['flex flex-col'],
   }),
 };
 
 interface HeaderProps
   extends PropsWithChildren,
     AriaAttributes,
-    VariantProps<typeof styles.header> {}
+    VariantProps<typeof styles.header> {
+  className?: string;
+}
 
-const Header = ({ children, flow, ...ariaProps }: HeaderProps) => (
-  <header className={styles.header({ flow })} {...ariaProps}>
+const Header = ({ children, flow, className, ...ariaProps }: HeaderProps) => (
+  <header className={styles.header({ flow, className })} {...ariaProps}>
     {children}
   </header>
 );
@@ -138,11 +140,11 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
 );
 
 interface RootProps extends PropsWithChildren, AriaAttributes {
-  space?: string | number;
+  className?: string;
 }
 
-const Root = ({ children, space, ...ariaProps }: RootProps) => (
-  <article className={styles.root()} style={spacing(space)} {...ariaProps}>
+const Root = ({ children, className, ...ariaProps }: RootProps) => (
+  <article className={styles.root({ className })} {...ariaProps}>
     {children}
   </article>
 );

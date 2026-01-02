@@ -19,8 +19,8 @@ const ArticlesIndex = async () => {
   const articles = sortByDate(articlesSource.getPages());
 
   return (
-    <div className="mx-auto grid max-w-[75ch] gap-6">
-      <Headline level="5" variant="accent" as="h1">
+    <div className="mx-auto grid max-w-[75ch] gap-12 md:gap-16">
+      <Headline level="4" variant="accent" as="h1">
         Articles
       </Headline>
 
@@ -28,7 +28,11 @@ const ArticlesIndex = async () => {
         {articles.map((page) => {
           const excerpt = getExcerpt(page);
           return (
-            <Article key={page.url} aria-labelledby={page.url} space="2">
+            <Article
+              key={page.url}
+              aria-labelledby={page.url}
+              className="gap-2"
+            >
               <Article.Header flow="reverse">
                 <Article.Title id={page.url} variant="list">
                   {page.data.title}

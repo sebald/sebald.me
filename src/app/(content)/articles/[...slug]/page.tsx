@@ -38,7 +38,7 @@ const Page = async (props: PageProps<'/articles/[...slug]'>) => {
   const titleId = `article-${page.slugs.join('-')}`;
 
   return (
-    <Article aria-labelledby={titleId}>
+    <Article aria-labelledby={titleId} className="gap-12 md:gap-24">
       <Article.Header>
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
         <Article.Meta date={page.data.date} topics={page.data.topics} />

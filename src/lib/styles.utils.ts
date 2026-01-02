@@ -17,12 +17,3 @@ export const cva: CVA = (options) => {
   const cvaClassName = _cva(options);
   return (props) => twMerge(cvaClassName(props));
 };
-
-/**
- * Create dynamic spacing style object using CSS custom properties (--space).
- */
-export const spacing = (value: string | number = 0) => {
-  return {
-    '--space': `calc(var(--spacing) * ${value})`,
-  } as CSSProperties;
-};
