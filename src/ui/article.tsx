@@ -11,16 +11,7 @@ import type { HeadlineProps } from './headline';
 
 const styles = {
   header: cva({
-    base: ['flex flex-col'],
-    variants: {
-      flow: {
-        default: 'gap-3',
-        reverse: 'flex-col-reverse gap-0',
-      },
-    },
-    defaultVariants: {
-      flow: 'default',
-    },
+    base: ['flex flex-col-reverse'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -43,8 +34,8 @@ interface HeaderProps
   className?: string;
 }
 
-const Header = ({ children, flow, className, ...ariaProps }: HeaderProps) => (
-  <header className={styles.header({ flow, className })} {...ariaProps}>
+const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
+  <header className={styles.header({ className })} {...ariaProps}>
     {children}
   </header>
 );

@@ -9,7 +9,8 @@ import { Link } from '@/ui/link';
 // ---------------
 export const metadata: Metadata = {
   title: 'Articles',
-  description: 'A collection of articles about web development and design.',
+  description:
+    'Notes from the road and lessons learned along the way. Welcome to the archive.',
 };
 
 // Page
@@ -32,7 +33,7 @@ const ArticlesIndex = async () => {
               aria-labelledby={page.url}
               className="gap-2.5"
             >
-              <Article.Header flow="reverse">
+              <Article.Header>
                 <Article.Title id={page.url} href={page.url} variant="list">
                   {page.data.title}
                 </Article.Title>
