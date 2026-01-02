@@ -10,8 +10,11 @@ import { Headline } from './headline';
 import type { HeadlineProps } from './headline';
 
 const styles = {
+  root: cva({
+    base: ['flex flex-col items-start'],
+  }),
   header: cva({
-    base: ['flex flex-col-reverse'],
+    base: ['flex flex-col-reverse items-start'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -21,9 +24,6 @@ const styles = {
   }),
   excerpt: cva({
     base: 'text-pretty',
-  }),
-  root: cva({
-    base: ['flex flex-col'],
   }),
 };
 
@@ -71,10 +71,7 @@ const Title = ({ children, id, href, variant = 'page' }: TitleProps) => {
   );
 
   return href ? (
-    <Link
-      href={href}
-      className="decoration-3 decoration-link-hover/75 underline-offset-4 hover:underline"
-    >
+    <Link href={href} className="*:hover:text-link">
       {headline}
     </Link>
   ) : (
