@@ -1,8 +1,10 @@
 'use client';
 
+import useResizeObserver from '@react-hook/resize-observer';
 import { cva } from 'cva';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
+import { useRef } from 'react';
 
 import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
@@ -21,7 +23,7 @@ const navItemStyles = cva({
         'hover:text-black-900',
         'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/30',
       ],
-      mobile: ['text-lg text-oatmeal-200 hover:text-oatmeal-50'],
+      mobile: ['text-lg text-text hover:text-oatmeal-50'],
     },
   },
 });
@@ -61,35 +63,52 @@ const StaticNav = () => (
   </nav>
 );
 
-const FloatingNav = () => (
-  <div className="@navigation:hidden">
-    <Popover.Root modal>
-      <Popover.Trigger
-        variant="icon"
-        // className="flex items-center justify-center"
-        aria-label="Open navigation menu"
-      >
-        <MenuIcon size={24} />
-      </Popover.Trigger>
+const FloatingNav = () => {
+  const popupHandler = Popover.createHandle();
 
-      <Popover variant="opaque" align="end" sideOffset={16}>
-        {/* <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
+  /**
+   * The ref element is only as wide as the trigger, but that is more than sufficient here.
+   * Also helps triggereing the resize observer only when nav is shown or hidden.
+   */
+  const ref = useRef<HTMLDivElement>(null);
+  useResizeObserver(ref, ({ contentRect }) => {
+    if (contentRect.width === 0 && popupHandler.isOpen) {
+      popupHandler.close();
+    }
+  });
+
+  return (
+    <div ref={ref} className="@navigation:hidden">
+      <Popover.Root modal handle={popupHandler}>
+        <Popover.Trigger variant="icon" aria-label="Open navigation menu">
+          <MenuIcon size={24} />
+        </Popover.Trigger>
+
+        <Popover
+          variant="opaque"
+          align="end"
+          alignOffset={-22}
+          sideOffset={16}
+          collisionPadding={16}
+        >
+          {/* <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
           Navigation
         </p> */}
-        <nav className="flex flex-col space-y-4">
-          {navItems.map((item) => (
-            <NavItem
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              variant="mobile"
-            />
-          ))}
-        </nav>
-      </Popover>
-    </Popover.Root>
-  </div>
-);
+          <nav className="flex flex-col space-y-4">
+            {navItems.map((item) => (
+              <NavItem
+                key={item.label}
+                href={item.href}
+                label={item.label}
+                variant="mobile"
+              />
+            ))}
+          </nav>
+        </Popover>
+      </Popover.Root>
+    </div>
+  );
+};
 
 export const Navigation = () => (
   <nav

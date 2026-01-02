@@ -3,7 +3,9 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/styles.utils';
 
 /**
- * Use Web Animations API to create a subtle pop animation when the popup opens or closes.
+ * Animates the icon with a subtle pop effect when the popup opens or closes.
+ * Uses the Web Animations API for precise control over timing and easing,
+ * and to trigger animations based on popup state changes.
  */
 const usePopupAnimation = () => {
   const ref = useRef<SVGSVGElement>(null);

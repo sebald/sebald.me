@@ -217,4 +217,5 @@ export const Dialog = Object.assign(DialogContent, {
   Actions: DialogActions,
   Trigger: DialogTrigger,
   Close: DialogClose,
+  createHandle: Primitive.createHandle,
 });

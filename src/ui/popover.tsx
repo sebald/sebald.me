@@ -89,7 +89,7 @@ const PopoverTrigger = ({
 interface PopoverContentProps
   extends Pick<
       ComponentProps<typeof Primitive.Positioner>,
-      'align' | 'alignOffset' | 'side' | 'sideOffset'
+      'align' | 'alignOffset' | 'side' | 'sideOffset' | 'collisionPadding'
     >,
     VariantProps<typeof styles.popup> {
   children: React.ReactNode;
@@ -169,4 +169,5 @@ export const Popover = Object.assign(PopoverContent, {
   Title: PopoverTitle,
   Description: PopoverDescription,
   Body: PopoverBody,
+  createHandle: Primitive.createHandle,
 });
