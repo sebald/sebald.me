@@ -86,14 +86,16 @@ const FloatingNav = () => {
 
         <Popover
           variant="opaque"
+          stretch="navigation"
+          inset="relaxed"
           align="end"
           alignOffset={-22}
           sideOffset={16}
           collisionPadding={16}
         >
-          {/* <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
-          Navigation
-        </p> */}
+          <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
+            Navigation
+          </p>
           <nav className="flex flex-col space-y-4">
             {navItems.map((item) => (
               <NavItem

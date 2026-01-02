@@ -148,8 +148,7 @@
     }
     to {
       /* Target Dimensions */
-      width: 90%;
-      max-width: 700px;
+      width: clamp(0px, calc(100% - 32px), var(--container-navigation));
       top: 1.5rem;
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);

@@ -35,8 +35,8 @@ export const styles = {
   }),
   popup: cva({
     base: [
-      'panel rounded-2xl px-4 py-3 grid',
-      'transition-all duration-200',
+      'panel rounded-2xl grid',
+      'transition-[opacity,scale] duration-200',
       'data-starting-style:opacity-0 data-ending-style:opacity-0',
       'data-starting-style:scale-90 data-ending-style:scale-90',
     ],
@@ -48,9 +48,20 @@ export const styles = {
         dark: 'panel-dark',
         opaque: 'panel-opaque',
       },
+      stretch: {
+        content: '',
+        navigation:
+          'w-[min(var(--available-width),var(--container-navigation))]',
+      },
+      inset: {
+        default: 'p-6',
+        relaxed: 'p-8',
+      },
     },
     defaultVariants: {
       variant: 'clear',
+      stretch: 'content',
+      inset: 'default',
     },
   }),
   title: cva({
@@ -66,7 +77,7 @@ export const styles = {
 
 interface PopoverRootProps extends PrimitiveRootProps {}
 
-const PopoverRoot = ({ children, ...props }: PopoverRootProps) => (
+const Root = ({ children, ...props }: PopoverRootProps) => (
   <PopoverContext.Provider value={{ modal: props.modal }}>
     <Primitive.Root {...props}>{children}</Primitive.Root>
   </PopoverContext.Provider>
@@ -76,11 +87,7 @@ export interface PopoverTriggerProps
   extends Omit<ComponentProps<typeof Primitive.Trigger>, 'className' | 'style'>,
     VariantProps<typeof styles.trigger> {}
 
-const PopoverTrigger = ({
-  children,
-  variant,
-  ...props
-}: PopoverTriggerProps) => (
+const Trigger = ({ children, variant, ...props }: PopoverTriggerProps) => (
   <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
     {children}
   </Primitive.Trigger>
@@ -96,10 +103,12 @@ interface PopoverContentProps
   showCloseButton?: boolean;
 }
 
-const PopoverContent = ({
+const Content = ({
   children,
   sideOffset = 8,
   variant,
+  stretch,
+  inset,
   showCloseButton,
   ...positionerProps
 }: PopoverContentProps) => {
@@ -111,7 +120,7 @@ const PopoverContent = ({
         <Primitive.Backdrop className={styles.backdrop()} />
       ) : null}
       <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
-        <Primitive.Popup className={styles.popup({ variant })}>
+        <Primitive.Popup className={styles.popup({ variant, stretch, inset })}>
           {showCloseButton && (
             <Primitive.Close
               className={buttonStyles({
@@ -134,7 +143,7 @@ type PopoverTitleProps = Omit<
   'className' | 'style'
 >;
 
-const PopoverTitle = ({ children, ...props }: PopoverTitleProps) => (
+const Title = ({ children, ...props }: PopoverTitleProps) => (
   <Primitive.Title {...props} className={styles.title()}>
     {children}
   </Primitive.Title>
@@ -145,29 +154,23 @@ type PopoverDescriptionProps = Omit<
   'className' | 'style'
 >;
 
-const PopoverDescription = ({
-  children,
-  ...props
-}: PopoverDescriptionProps) => (
+const Description = ({ children, ...props }: PopoverDescriptionProps) => (
   <Primitive.Description {...props} className={styles.description()}>
     {children}
   </Primitive.Description>
 );
 
-const PopoverBody = ({
-  children,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+const Body = ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div {...props} className={styles.body()}>
     {children}
   </div>
 );
 
-export const Popover = Object.assign(PopoverContent, {
-  Root: PopoverRoot,
-  Trigger: PopoverTrigger,
-  Title: PopoverTitle,
-  Description: PopoverDescription,
-  Body: PopoverBody,
+export const Popover = Object.assign(Content, {
+  Root: Root,
+  Trigger: Trigger,
+  Title: Title,
+  Description: Description,
+  Body: Body,
   createHandle: Primitive.createHandle,
 });
