@@ -46,7 +46,7 @@ export const OverlayExample = () => (
 
     <Popover.Root modal={true}>
       <Popover.Trigger>Open Modal Popover</Popover.Trigger>
-      <Popover>
+      <Popover variant="opaque" align="end">
         <Popover.Title>Modal Popover</Popover.Title>
         <Popover.Description>
           This popover has a backdrop and modal behavior.

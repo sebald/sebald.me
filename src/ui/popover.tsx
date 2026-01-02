@@ -41,15 +41,15 @@ export const styles = {
     ],
     variants: {
       variant: {
-        opaque: 'panel-opaque',
-        dark: 'panel-dark',
         clear: 'panel-clear',
         ghost: 'panel-ghost',
         tinted: 'panel-tinted',
+        dark: 'panel-dark',
+        opaque: 'panel-opaque',
       },
     },
     defaultVariants: {
-      variant: 'opaque',
+      variant: 'clear',
     },
   }),
   title: cva({
@@ -83,9 +83,9 @@ const PopoverTrigger = ({ children, ...props }: PopoverTriggerProps) => (
 );
 
 interface PopoverContentProps
-  extends Omit<
+  extends Pick<
       ComponentProps<typeof Primitive.Positioner>,
-      'className' | 'style'
+      'align' | 'alignOffset' | 'side' | 'sideOffset'
     >,
     VariantProps<typeof styles.popup> {
   children: React.ReactNode;
