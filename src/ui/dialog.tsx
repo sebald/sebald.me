@@ -30,7 +30,7 @@ export const styles = {
   backdrop: cva({
     base: [
       'backdrop-blur-xs fixed inset-0 min-h-dvh bg-white/40',
-      'z-100',
+      'z-1000',
       'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.
       'supports-[-webkit-touch-callout:none]:absolute',
@@ -38,7 +38,7 @@ export const styles = {
   }),
   popup: cva({
     base: [
-      'z-100',
+      'z-1000',
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
@@ -47,6 +47,10 @@ export const styles = {
         center: [
           'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-8',
           'transition-all duration-150 data-starting-style:scale-90 data-ending-style:scale-90',
+        ],
+        top: [
+          'top-0 left-1/2 -translate-x-1/2 mt-4',
+          'data-starting-style:-translate-y-full data-ending-style:-translate-y-full',
         ],
         bottom: [
           'bottom-0 left-1/2 -translate-x-1/2 mb-4',
