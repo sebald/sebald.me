@@ -1,4 +1,6 @@
 import { cva, type VariantProps } from 'cva';
+import FumaLink from 'fumadocs-core/link';
+import type { LinkProps as FumaLinkProps } from 'fumadocs-core/link';
 
 const style = cva({
   base: [
@@ -28,14 +30,9 @@ const style = cva({
   },
 });
 
-type LinkVariants = VariantProps<typeof style>;
-
-interface LinkProps extends LinkVariants {
-  children: React.ReactNode;
-  href: string;
-  target?: string;
-  rel?: string;
-}
+export interface LinkProps
+  extends VariantProps<typeof style>,
+    Omit<FumaLinkProps, 'className' | 'style'> {}
 
 export const Link = ({
   variant,
@@ -51,12 +48,12 @@ export const Link = ({
       : { target, rel };
 
   return (
-    <a
+    <FumaLink
       href={href}
       className={style({ variant, noUnderline })}
       {...externalProps}
     >
       {children}
-    </a>
+    </FumaLink>
   );
 };
