@@ -1,7 +1,25 @@
 'use client';
 
+import { useState } from 'react';
+
+import { Button } from '@/ui/button';
 import { Dialog } from '@/ui/dialog';
+import { MenuIcon } from '@/ui/icon/menu-icon';
 import { Popover } from '@/ui/popover';
+
+const MenuButtonExample = () => {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Button
+      variant="icon"
+      onClick={() => setOpen(!open)}
+      data-popup-open={open ? '' : undefined}
+    >
+      <MenuIcon size={24} />
+    </Button>
+  );
+};
 
 export const OverlayExample = () => (
   <div className="flex flex-wrap gap-4">
@@ -44,7 +62,7 @@ export const OverlayExample = () => (
       </Popover>
     </Popover.Root>
 
-    <Popover.Root modal={true}>
+    <Popover.Root modal>
       <Popover.Trigger>Open Modal Popover</Popover.Trigger>
       <Popover variant="opaque" align="end" showCloseButton>
         <Popover.Title>Modal Popover</Popover.Title>
@@ -53,5 +71,7 @@ export const OverlayExample = () => (
         </Popover.Body>
       </Popover>
     </Popover.Root>
+
+    <MenuButtonExample />
   </div>
 );

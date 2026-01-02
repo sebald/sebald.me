@@ -1,6 +1,5 @@
 'use client';
 
-import { ListIcon } from '@phosphor-icons/react/ssr';
 import { cva } from 'cva';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
@@ -8,8 +7,9 @@ import { usePathname } from 'next/navigation';
 import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
 
-import { Dialog } from './dialog';
+import { MenuIcon } from './icon/menu-icon';
 import { Logo } from './logo';
+import { Popover } from './popover';
 
 const navItemStyles = cva({
   base: 'transition-color rounded-full font-medium',
@@ -63,19 +63,19 @@ const StaticNav = () => (
 
 const FloatingNav = () => (
   <div className="@navigation:hidden">
-    <Dialog.Root>
-      <Dialog.Trigger
+    <Popover.Root modal>
+      <Popover.Trigger
         variant="icon"
-        className="flex items-center justify-center"
+        // className="flex items-center justify-center"
         aria-label="Open navigation menu"
       >
-        <ListIcon size={24} weight="regular" />
-      </Dialog.Trigger>
+        <MenuIcon size={24} />
+      </Popover.Trigger>
 
-      <Dialog position="top" size="full" showCloseButton>
-        <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
+      <Popover variant="opaque" align="end" sideOffset={16}>
+        {/* <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
           Navigation
-        </p>
+        </p> */}
         <nav className="flex flex-col space-y-4">
           {navItems.map((item) => (
             <NavItem
@@ -86,8 +86,8 @@ const FloatingNav = () => (
             />
           ))}
         </nav>
-      </Dialog>
-    </Dialog.Root>
+      </Popover>
+    </Popover.Root>
   </div>
 );
 

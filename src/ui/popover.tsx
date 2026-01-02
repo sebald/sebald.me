@@ -36,7 +36,7 @@ export const styles = {
   popup: cva({
     base: [
       'panel rounded-2xl px-4 py-3 grid',
-      'transition-all duration-150',
+      'transition-all duration-200',
       'data-starting-style:opacity-0 data-ending-style:opacity-0',
       'data-starting-style:scale-90 data-ending-style:scale-90',
     ],
@@ -72,13 +72,16 @@ const PopoverRoot = ({ children, ...props }: PopoverRootProps) => (
   </PopoverContext.Provider>
 );
 
-type PopoverTriggerProps = Omit<
-  ComponentProps<typeof Primitive.Trigger>,
-  'className' | 'style'
->;
+export interface PopoverTriggerProps
+  extends Omit<ComponentProps<typeof Primitive.Trigger>, 'className' | 'style'>,
+    VariantProps<typeof styles.trigger> {}
 
-const PopoverTrigger = ({ children, ...props }: PopoverTriggerProps) => (
-  <Primitive.Trigger {...props} className={styles.trigger()}>
+const PopoverTrigger = ({
+  children,
+  variant,
+  ...props
+}: PopoverTriggerProps) => (
+  <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
     {children}
   </Primitive.Trigger>
 );
