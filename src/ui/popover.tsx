@@ -24,14 +24,33 @@ export const usePopoverContext = () => {
 
 export const styles = {
   trigger: buttonStyles,
+  backdrop: cva({
+    base: [
+      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-white/40',
+      'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
+      // iOS 26+: Ensure the backdrop covers the entire visible viewport.
+      'supports-[-webkit-touch-callout:none]:absolute',
+    ],
+  }),
   popup: cva({
     base: [
-      'panel panel-opaque rounded-2xl px-4 py-3 grid',
-      'z-100',
+      'panel rounded-2xl px-4 py-3 grid',
       'transition-all duration-150',
       'data-starting-style:opacity-0 data-ending-style:opacity-0',
       'data-starting-style:scale-90 data-ending-style:scale-90',
     ],
+    variants: {
+      variant: {
+        opaque: 'panel-opaque',
+        dark: 'panel-dark',
+        clear: 'panel-clear',
+        ghost: 'panel-ghost',
+        tinted: 'panel-tinted',
+      },
+    },
+    defaultVariants: {
+      variant: 'opaque',
+    },
   }),
   title: cva({
     base: headlineStyle({ level: '5' }),
@@ -63,30 +82,34 @@ const PopoverTrigger = ({ children, ...props }: PopoverTriggerProps) => (
   </Primitive.Trigger>
 );
 
-type PopoverContentProps = Omit<
-  ComponentProps<typeof Primitive.Positioner>,
-  'className' | 'style'
-> & {
+interface PopoverContentProps
+  extends Omit<
+      ComponentProps<typeof Primitive.Positioner>,
+      'className' | 'style'
+    >,
+    VariantProps<typeof styles.popup> {
   children: React.ReactNode;
-};
+}
 
 const PopoverContent = ({
   children,
   sideOffset = 8,
+  variant,
   ...positionerProps
 }: PopoverContentProps) => {
   const { modal } = usePopoverContext();
 
   return (
-    <PopoverContext.Provider value={{ modal }}>
-      <Primitive.Portal>
-        <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
-          <Primitive.Popup className={styles.popup()}>
-            {children}
-          </Primitive.Popup>
-        </Primitive.Positioner>
-      </Primitive.Portal>
-    </PopoverContext.Provider>
+    <Primitive.Portal>
+      {modal === true ? (
+        <Primitive.Backdrop className={styles.backdrop()} />
+      ) : null}
+      <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
+        <Primitive.Popup className={styles.popup({ variant })}>
+          {children}
+        </Primitive.Popup>
+      </Primitive.Positioner>
+    </Primitive.Portal>
   );
 };
 
