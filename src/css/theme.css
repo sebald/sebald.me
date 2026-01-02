@@ -26,12 +26,25 @@
   --color-blueberry-900: oklch(0.18 0.06 263);
   --color-blueberry-950: oklch(0.13 0.03 264);
 
+  /* Override black with "branded black" (oatmeal-based hue) */
+  --color-black-50: oklch(0.985 0.002 87);
+  --color-black-100: oklch(0.95 0.004 87);
+  --color-black-200: oklch(0.88 0.006 87);
+  --color-black-300: oklch(0.78 0.008 87);
+  --color-black-400: oklch(0.66 0.01 87);
+  --color-black-500: oklch(0.52 0.012 87);
+  --color-black-600: oklch(0.42 0.012 87);
+  --color-black-700: oklch(0.32 0.012 87);
+  --color-black-800: oklch(0.22 0.011 87);
+  --color-black-900: oklch(0.15 0.009 87);
+  --color-black-950: oklch(0.1 0.006 87);
+
+  --color-headline: var(--color-oatmeal-900);
   --color-text: var(--color-oatmeal-900);
-  --color-muted: var(--color-oatmeal-500);
+  --color-muted: var(--color-black-500);
   --color-link: var(--color-blueberry-500);
   --color-link-hover: var(--color-blueberry-400);
 
-  --color-headline: var(--color-oatmeal-900);
   --min-typescale: 1.125; /* Major Second */
   --max-typescale: 1.25; /* Major Third */
 

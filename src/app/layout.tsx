@@ -45,7 +45,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
     className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
     suppressHydrationWarning
   >
-    <body className="bg-oatmeal-50 text-oatmeal-950 relative isolate font-mono">
+    <body className="bg-oatmeal-50 text-text relative isolate font-mono">
       <div className="grid min-h-screen grid-rows-[1fr_auto] justify-items-center">
         <Navigation />
         <main className="w-content pt-40">{children}</main>
