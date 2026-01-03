@@ -1,5 +1,6 @@
 'use client';
 
+import { FocusTrap } from 'focus-trap-react';
 import type { LinkProps } from 'fumadocs-core/link';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
@@ -87,39 +88,42 @@ const FloatingNav = () => {
           sideOffset={16}
           collisionPadding={16}
         >
-          <nav className="grid grid-cols-[min-content_1fr]">
-            {navItems.map(item => {
-              const Icon = item.Icon;
-              return (
-                <NavItem
-                  key={item.title}
-                  href={item.href}
-                  className={cn(
-                    'group',
-                    'col-span-full grid grid-cols-subgrid gap-4',
-                    'hover:bg-black-500/15 rounded-xl',
-                    'px-6 py-4',
-                  )}
-                >
-                  <div
+          {/* BaseUI Popover does not trap focus when used as modal. */}
+          <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
+            <nav className="grid grid-cols-[min-content_1fr]">
+              {navItems.map(item => {
+                const Icon = item.Icon;
+                return (
+                  <NavItem
+                    key={item.title}
+                    href={item.href}
                     className={cn(
-                      'grid place-items-center',
-                      'text-black-500',
-                      'group-hover:text-link-hover',
+                      'group',
+                      'col-span-full grid grid-cols-subgrid gap-4',
+                      'hover:bg-black-500/15 rounded-xl',
+                      'px-6 py-4',
                     )}
                   >
-                    <Icon size={32} weight="duotone" />
-                  </div>
-                  <div>
-                    <Headline level="5">{item.title}</Headline>
-                    <div className="text-black-600 font-sans text-sm leading-snug">
-                      {item.description}
+                    <div
+                      className={cn(
+                        'grid place-items-center',
+                        'text-black-500',
+                        'group-hover:text-link-hover',
+                      )}
+                    >
+                      <Icon size={32} weight="duotone" />
                     </div>
-                  </div>
-                </NavItem>
-              );
-            })}
-          </nav>
+                    <div>
+                      <Headline level="5">{item.title}</Headline>
+                      <div className="text-black-600 font-sans text-sm leading-snug">
+                        {item.description}
+                      </div>
+                    </div>
+                  </NavItem>
+                );
+              })}
+            </nav>
+          </FocusTrap>
         </Popover>
       </Popover.Root>
     </div>
