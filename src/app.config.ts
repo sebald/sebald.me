@@ -12,6 +12,17 @@ export const navItems = [
     description:
       'Notes from the road and lessons learned along the way. Welcome to the archive.',
   },
-  { title: 'Lab', href: '/lab', Icon: FlaskIcon },
-  { title: 'About', href: '/about', Icon: HandWavingIcon },
+  {
+    title: 'Lab',
+    href: '/lab',
+    Icon: FlaskIcon,
+    description:
+      'Code, concepts, and curiosities. Feel free to grab what you need.',
+  },
+  {
+    title: 'About',
+    href: '/about',
+    Icon: HandWavingIcon,
+    description: 'Who I am and the work I do. Don’t hesitate to say hello.',
+  },
 ] as const;

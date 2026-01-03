@@ -97,20 +97,23 @@ const FloatingNav = () => {
                   className={cn(
                     'group',
                     'col-span-full grid grid-cols-subgrid gap-6',
-                    'hover:bg-oatmeal-50/50 rounded-xl',
+                    'hover:bg-black-500/5 rounded-xl',
                     'p-2',
                   )}
                 >
                   <div
                     className={cn(
-                      'text-black-500 rounded-lg p-2',
+                      'text-black-500 h-fit rounded-lg p-2',
                       'group-hover:bg-link-hover/5 group-hover:text-link-hover',
                     )}
                   >
                     <Icon size={32} weight="duotone" />
                   </div>
-                  <div className="*:leading-0 pt-4">
+                  <div>
                     <Headline level="5">{item.title}</Headline>
+                    <div className="text-muted font-sans text-sm">
+                      {item.description}
+                    </div>
                   </div>
                 </NavItem>
               );
