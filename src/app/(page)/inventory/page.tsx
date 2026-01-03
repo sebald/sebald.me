@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
-import { Code } from '@/ui/code';
 import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -246,19 +245,16 @@ const InventoryPage = () => (
       </div>
 
       <div className="grid gap-4">
-        <Headline level="4">Code</Headline>
-        <Text>
-          Use the <Code>useState</Code> hook to manage component state.
-        </Text>
-      </div>
-
-      <div className="grid gap-4">
         <Headline level="4">Divider</Headline>
         <Text>Content above the divider.</Text>
         <Divider />
         <Text>Content below the default divider.</Text>
-        <Divider variant="bold" />
-        <Text>Content below the bold divider.</Text>
+        <div className="flex gap-2">
+          <Text>Content left the vertical divider.</Text>
+          <Divider orientation="vertical" />
+          <Text>Content right the vertical divider.</Text>
+        </div>
+        <Divider variant="light" />
       </div>
     </div>
 

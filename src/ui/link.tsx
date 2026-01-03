@@ -2,6 +2,8 @@ import { cva, type VariantProps } from 'cva';
 import FumaLink from 'fumadocs-core/link';
 import type { LinkProps as FumaLinkProps } from 'fumadocs-core/link';
 
+// Styles
+// ---------------
 const style = cva({
   base: [
     'group/link',
@@ -30,10 +32,14 @@ const style = cva({
   },
 });
 
+// Props
+// ---------------
 export interface LinkProps
   extends VariantProps<typeof style>,
     Omit<FumaLinkProps, 'className' | 'style'> {}
 
+// Component
+// ---------------
 export const Link = ({
   variant,
   noUnderline,

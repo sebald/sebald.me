@@ -11,18 +11,8 @@ import { styles as buttonStyles } from './button';
 import { style as headlineStyle } from './headline';
 import { style as textStyle } from './text';
 
-interface PopoverContextType extends Pick<PrimitiveRootProps, 'modal'> {}
-
-const PopoverContext = createContext<PopoverContextType | null>(null);
-
-export const usePopoverContext = () => {
-  const context = use(PopoverContext);
-  if (!context) {
-    throw new Error('Popover components must be used within Popover.Root');
-  }
-  return context;
-};
-
+// Styles
+// ---------------
 export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
@@ -78,6 +68,22 @@ export const styles = {
   }),
 };
 
+// Context
+// ---------------
+interface PopoverContextType extends Pick<PrimitiveRootProps, 'modal'> {}
+
+const PopoverContext = createContext<PopoverContextType | null>(null);
+
+export const usePopoverContext = () => {
+  const context = use(PopoverContext);
+  if (!context) {
+    throw new Error('Popover components must be used within Popover.Root');
+  }
+  return context;
+};
+
+// Popover.Root
+// ---------------
 interface PopoverRootProps extends PrimitiveRootProps {}
 
 const Root = ({ children, ...props }: PopoverRootProps) => (
@@ -86,6 +92,8 @@ const Root = ({ children, ...props }: PopoverRootProps) => (
   </PopoverContext.Provider>
 );
 
+// Popover.Trigger
+// ---------------
 export interface PopoverTriggerProps
   extends Omit<ComponentProps<typeof Primitive.Trigger>, 'className' | 'style'>,
     VariantProps<typeof styles.trigger> {}
@@ -96,7 +104,9 @@ const Trigger = ({ children, variant, ...props }: PopoverTriggerProps) => (
   </Primitive.Trigger>
 );
 
-interface PopoverContentProps
+// Popover
+// ---------------
+export interface PopoverContentProps
   extends Pick<
       ComponentProps<typeof Primitive.Positioner>,
       'align' | 'alignOffset' | 'side' | 'sideOffset' | 'collisionPadding'
@@ -145,10 +155,10 @@ const Content = ({
   );
 };
 
-type PopoverTitleProps = Omit<
-  ComponentProps<typeof Primitive.Title>,
-  'className' | 'style'
->;
+// Popover.Title
+// ---------------
+export interface PopoverTitleProps
+  extends Omit<ComponentProps<typeof Primitive.Title>, 'className' | 'style'> {}
 
 const Title = ({ children, ...props }: PopoverTitleProps) => (
   <Primitive.Title {...props} className={styles.title()}>
@@ -156,10 +166,13 @@ const Title = ({ children, ...props }: PopoverTitleProps) => (
   </Primitive.Title>
 );
 
-type PopoverDescriptionProps = Omit<
-  ComponentProps<typeof Primitive.Description>,
-  'className' | 'style'
->;
+// Popover.Description
+// ---------------
+export interface PopoverDescriptionProps
+  extends Omit<
+    ComponentProps<typeof Primitive.Description>,
+    'className' | 'style'
+  > {}
 
 const Description = ({ children, ...props }: PopoverDescriptionProps) => (
   <Primitive.Description {...props} className={styles.description()}>
@@ -167,12 +180,19 @@ const Description = ({ children, ...props }: PopoverDescriptionProps) => (
   </Primitive.Description>
 );
 
-const Body = ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+// Popover.Body
+// ---------------
+export interface PopoverBodyProps
+  extends React.HTMLAttributes<HTMLDivElement> {}
+
+const Body = ({ children, ...props }: PopoverBodyProps) => (
   <div {...props} className={styles.body()}>
     {children}
   </div>
 );
 
+// Popover API
+// ---------------
 export const Popover = Object.assign(Content, {
   Root: Root,
   Trigger: Trigger,

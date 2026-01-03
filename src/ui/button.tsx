@@ -5,6 +5,8 @@ import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
 
 import { cva, VariantProps } from '@/lib/styles.utils';
 
+// Styles
+// ---------------
 export const styles = cva({
   base: [
     'relative inline-flex items-center justify-center gap-2',
@@ -80,8 +82,12 @@ export const styles = cva({
   },
 });
 
+// Props
+// ---------------
 export type ButtonProps = PrimitiveProps & VariantProps<typeof styles>;
 
+// Component
+// ---------------
 export const Button = ({ variant, ...props }: ButtonProps) => (
   <Primitive {...props} className={styles({ variant })} />
 );

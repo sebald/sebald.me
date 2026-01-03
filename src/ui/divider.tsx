@@ -1,22 +1,33 @@
 import { cva, type VariantProps } from 'cva';
 
+// Styles
+// ---------------
 const style = cva({
-  base: 'border-0 border-t my-8',
+  base: ['rounded-[1px]'],
   variants: {
     variant: {
-      default: 'border-oatmeal-200',
-      bold: 'border-oatmeal-300 border-t-2',
+      light:
+        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
+      default:
+        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.2)]',
+    },
+    orientation: {
+      horizontal: 'h-0.5 w-full',
+      vertical: 'w-0.5 h-full min-h-4',
     },
   },
   defaultVariants: {
     variant: 'default',
+    orientation: 'horizontal',
   },
 });
 
-type DividerVariants = VariantProps<typeof style>;
+// Props
+// ---------------
+interface DividerProps extends VariantProps<typeof style> {}
 
-interface DividerProps extends DividerVariants {}
-
-export const Divider = ({ variant }: DividerProps) => {
-  return <hr className={style({ variant })} />;
-};
+// Component
+// ---------------
+export const Divider = ({ variant, orientation }: DividerProps) => (
+  <div role="separator" className={style({ variant, orientation })} />
+);

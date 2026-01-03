@@ -10,6 +10,7 @@ import { useResizeObserver } from 'usehooks-ts';
 import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
 
+import { Divider } from './divider';
 import { Headline } from './headline';
 import { MenuIcon } from './icon/menu-icon';
 import { Logo } from './logo';
@@ -90,38 +91,41 @@ const FloatingNav = () => {
         >
           {/* BaseUI Popover does not trap focus when used as modal. */}
           <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
-            <nav className="grid grid-cols-[min-content_1fr]">
-              {navItems.map(item => {
-                const Icon = item.Icon;
-                return (
-                  <NavItem
-                    key={item.title}
-                    href={item.href}
-                    className={cn(
-                      'group',
-                      'col-span-full grid grid-cols-subgrid gap-4',
-                      'hover:bg-black-500/15 rounded-xl',
-                      'px-6 py-4',
-                    )}
-                  >
-                    <div
+            <nav className="grid gap-4">
+              <div className="grid grid-cols-[min-content_1fr]">
+                {navItems.map(item => {
+                  const Icon = item.Icon;
+                  return (
+                    <NavItem
+                      key={item.title}
+                      href={item.href}
                       className={cn(
-                        'grid place-items-center',
-                        'text-black-500',
-                        'group-hover:text-link-hover',
+                        'group',
+                        'col-span-full grid grid-cols-subgrid gap-4',
+                        'hover:bg-black-500/15 rounded-xl',
+                        'px-6 py-4',
                       )}
                     >
-                      <Icon size={32} weight="duotone" />
-                    </div>
-                    <div>
-                      <Headline level="5">{item.title}</Headline>
-                      <div className="text-black-600 font-sans text-sm leading-snug">
-                        {item.description}
+                      <div
+                        className={cn(
+                          'grid place-items-center',
+                          'text-black-500',
+                          'group-hover:text-link-hover',
+                        )}
+                      >
+                        <Icon size={32} weight="duotone" />
                       </div>
-                    </div>
-                  </NavItem>
-                );
-              })}
+                      <div>
+                        <Headline level="5">{item.title}</Headline>
+                        <div className="text-black-600 font-sans text-sm leading-snug">
+                          {item.description}
+                        </div>
+                      </div>
+                    </NavItem>
+                  );
+                })}
+              </div>
+              <Divider variant="light" />
             </nav>
           </FocusTrap>
         </Popover>

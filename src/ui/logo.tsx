@@ -2,15 +2,21 @@ import Link from 'fumadocs-core/link';
 
 import { cn } from '@/lib/styles.utils';
 
+// Helper
+// ---------------
 export const Dot = () => (
   <div className="bg-blueberry-600 relative inline-block size-[0.25em] origin-bottom animate-[jumping-square_12s_infinite] rounded-none" />
 );
 
-interface LogoProps {
+// Props
+// ---------------
+export interface LogoProps {
   className?: string;
   href?: string;
 }
 
+// Component
+// ---------------
 export const Logo = ({ className, href = '/' }: LogoProps) => {
   const Component = href ? Link : 'div';
 
