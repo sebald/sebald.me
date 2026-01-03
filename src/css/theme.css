@@ -1,3 +1,13 @@
+:root {
+  --navigation-top: 16px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navigation-top: 24px;
+  }
+}
+
 @theme {
   --font-mono: var(--font-mono), monospace;
   --font-sans: var(--font-sans), sans-serif;
@@ -149,7 +159,7 @@
     to {
       /* Target Dimensions */
       width: clamp(0px, calc(100% - 32px), var(--container-navigation));
-      top: 1.5rem;
+      top: var(--navigation-top, 16px);
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
       padding-left: --spacing(1.5); /* Optical adjustment for logo */

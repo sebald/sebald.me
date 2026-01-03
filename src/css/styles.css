@@ -25,11 +25,3 @@
     animation: none !important;
   }
 }
-
-.line-transition {
-  transform-box: fill-box;
-  transform-origin: center;
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 600ms;
-}

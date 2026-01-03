@@ -21,7 +21,7 @@ const usePopupAnimation = () => {
       svg.animate(
         [
           { transform: 'scale(1)' },
-          { transform: 'scale(1.2)' },
+          { transform: 'scale(1.4)' },
           { transform: 'scale(1)' },
         ],
         {
