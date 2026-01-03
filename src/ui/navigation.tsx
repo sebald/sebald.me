@@ -1,6 +1,5 @@
 'use client';
 
-import { cva } from 'cva';
 import type { LinkProps } from 'fumadocs-core/link';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
@@ -79,7 +78,7 @@ const FloatingNav = () => {
         </Popover.Trigger>
 
         <Popover
-          variant="opaque"
+          variant="clear"
           stretch="navigation"
           inset="relaxed"
           align="end"
@@ -87,9 +86,6 @@ const FloatingNav = () => {
           sideOffset={16}
           collisionPadding={16}
         >
-          <p className="text-oatmeal-400 mb-4 font-sans text-xs font-semibold uppercase tracking-widest">
-            Navigation
-          </p>
           <nav className="flex flex-col space-y-4">
             {navItems.map((item) => (
               <NavItem
@@ -117,7 +113,7 @@ export const Navigation = () => (
     className={cn(
       '@container',
       'flex w-full items-center justify-between',
-      'z-100 fixed left-1/2 top-0 -translate-x-1/2',
+      'z-90 fixed left-1/2 top-0 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
       'lg:max-w-content px-4 py-3 lg:px-0',

@@ -119,7 +119,11 @@ const Content = ({
       {modal === true ? (
         <Primitive.Backdrop className={styles.backdrop()} />
       ) : null}
-      <Primitive.Positioner {...positionerProps} sideOffset={sideOffset}>
+      <Primitive.Positioner
+        className="z-100"
+        sideOffset={sideOffset}
+        {...positionerProps}
+      >
         <Primitive.Popup className={styles.popup({ variant, stretch, inset })}>
           {showCloseButton && (
             <Primitive.Close
