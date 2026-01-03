@@ -1,5 +1,7 @@
 import { cva, type VariantProps } from 'cva';
 
+// Styles
+// ---------------
 export const style = cva({
   base: 'leading-relaxed text-(--color-text,var(--color-oatmeal-800))',
   variants: {
@@ -19,13 +21,15 @@ export const style = cva({
   },
 });
 
-type TextVariants = VariantProps<typeof style>;
-
-interface TextProps extends TextVariants {
+// Props
+// ---------------
+interface TextProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'p' | 'span' | 'div';
 }
 
+// Component
+// ---------------
 export const Text = ({ variant, size, children, as = 'p' }: TextProps) => {
   const Component = as;
   return <Component className={style({ variant, size })}>{children}</Component>;

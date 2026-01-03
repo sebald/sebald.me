@@ -1,5 +1,7 @@
 import { cva, type VariantProps } from 'cva';
 
+// Styles
+// ---------------
 export const style = cva({
   base: [
     'flex items-center',
@@ -30,12 +32,16 @@ export const style = cva({
   },
 });
 
+// Props
+// ---------------
 export interface HeadlineProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   id?: string;
 }
 
+// Component
+// ---------------
 export const Headline = ({
   level = '2',
   variant = 'default',

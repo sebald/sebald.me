@@ -9,6 +9,8 @@ import type { VariantProps } from '@/lib/styles.utils';
 import { Headline } from './headline';
 import type { HeadlineProps } from './headline';
 
+// Styles
+// ---------------
 const styles = {
   root: cva({
     base: ['flex flex-col items-start'],
@@ -27,6 +29,8 @@ const styles = {
   }),
 };
 
+// Article.Header
+// ---------------
 interface HeaderProps
   extends PropsWithChildren,
     AriaAttributes,
@@ -40,6 +44,8 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
   </header>
 );
 
+// Article.Title
+// ---------------
 interface TitleProps extends PropsWithChildren {
   id?: string;
   /**
@@ -70,6 +76,8 @@ const Title = ({ children, id, variant = 'page' }: TitleProps) => {
   );
 };
 
+// Article.Time
+// ---------------
 interface TimeProps extends AriaAttributes {
   date: Date | string;
 }
@@ -86,6 +94,8 @@ const Time = ({ date, ...ariaProps }: TimeProps) => {
   );
 };
 
+// Article.Topics
+// ---------------
 interface TopicsProps extends AriaAttributes {
   topics: string[];
 }
@@ -100,6 +110,8 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
+// Article.Meta
+// ---------------
 interface MetaProps extends AriaAttributes {
   date?: Date | string;
   topics?: string[];
@@ -115,6 +127,8 @@ const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
   </div>
 );
 
+// Article
+// ---------------
 interface ContentProps extends PropsWithChildren, AriaAttributes {}
 
 const Content = ({ children, ...ariaProps }: ContentProps) => (
@@ -123,6 +137,8 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
   </div>
 );
 
+// Article.Excerpt
+// ---------------
 interface ExcerptProps extends PropsWithChildren, AriaAttributes {}
 
 const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
@@ -131,6 +147,8 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
   </p>
 );
 
+// Article.Root
+// ---------------
 interface RootProps extends PropsWithChildren, AriaAttributes {
   className?: string;
 }
@@ -141,6 +159,8 @@ const Root = ({ children, className, ...ariaProps }: RootProps) => (
   </article>
 );
 
+// Article API
+// ---------------
 export const Article = Object.assign(Root, {
   Header,
   Title,

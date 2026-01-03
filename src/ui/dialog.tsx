@@ -11,20 +11,8 @@ import { styles as buttonStyles } from './button';
 import { style as headlineStyle } from './headline';
 import { style as textStyle } from './text';
 
-interface DialogContextType {
-  modal: PrimitiveRootProps['modal'];
-}
-
-const DialogContext = createContext<DialogContextType | null>(null);
-
-export const useDialogContext = () => {
-  const context = use(DialogContext);
-  if (!context) {
-    throw new Error('Dialog components must be used within Dialog.Root');
-  }
-  return context;
-};
-
+// Styles
+// ---------------
 export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
@@ -102,18 +90,38 @@ export const styles = {
   }),
 };
 
+// Context
+// ---------------
+interface DialogContextType {
+  modal: PrimitiveRootProps['modal'];
+}
+
+const DialogContext = createContext<DialogContextType | null>(null);
+
+export const useDialogContext = () => {
+  const context = use(DialogContext);
+  if (!context) {
+    throw new Error('Dialog components must be used within Dialog.Root');
+  }
+  return context;
+};
+
+// Dialog.Root
+// ---------------
+const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
+  <DialogContext.Provider value={{ modal: props.modal }}>
+    <Primitive.Root {...props}>{children}</Primitive.Root>
+  </DialogContext.Provider>
+);
+
+// Dialog
+// ---------------
 export interface DialogContentProps
   extends ComponentProps<typeof Primitive.Popup>,
     VariantProps<typeof styles.popup>,
     VariantProps<typeof styles.content> {
   showCloseButton?: boolean;
 }
-
-const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
-  <DialogContext.Provider value={{ modal: props.modal }}>
-    <Primitive.Root {...props}>{children}</Primitive.Root>
-  </DialogContext.Provider>
-);
 
 const DialogContent = ({
   children,
@@ -154,6 +162,8 @@ const DialogContent = ({
   );
 };
 
+// Dialog.Title
+// ---------------
 const DialogTitle = ({
   children,
   ...props
@@ -163,6 +173,8 @@ const DialogTitle = ({
   </Primitive.Title>
 );
 
+// Dialog.Description
+// ---------------
 const DialogDescription = ({
   children,
   ...props
@@ -172,6 +184,8 @@ const DialogDescription = ({
   </Primitive.Description>
 );
 
+// Dialog.Body
+// ---------------
 const DialogBody = ({
   children,
   ...props
@@ -181,6 +195,8 @@ const DialogBody = ({
   </div>
 );
 
+// Dialog.Actions
+// ---------------
 const DialogActions = ({
   children,
   ...props
@@ -190,6 +206,8 @@ const DialogActions = ({
   </div>
 );
 
+// Dialog.Trigger
+// ---------------
 export interface DialogTriggerProps
   extends ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
@@ -200,6 +218,8 @@ const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
   </Primitive.Trigger>
 );
 
+// Dialog.Close
+// ---------------
 const DialogClose = ({
   children,
   ...props
@@ -209,6 +229,8 @@ const DialogClose = ({
   </Primitive.Close>
 );
 
+// Dialog API
+// ---------------
 export const Dialog = Object.assign(DialogContent, {
   Root: DialogRoot,
   Title: DialogTitle,
