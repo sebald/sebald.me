@@ -40,13 +40,15 @@ const ArticlesPage = async () => {
               className="gap-2.5"
             >
               <Article.Header>
-                <Article.Title
-                  id={article.url}
+                <Link
                   href={article.url}
-                  variant="list"
+                  aria-label={`Read article: ${article.data.title}`}
+                  noUnderline
                 >
-                  {article.data.title}
-                </Article.Title>
+                  <Article.Title id={article.url} variant="list">
+                    {article.data.title}
+                  </Article.Title>
+                </Link>
                 <Article.Meta
                   date={article.data.date}
                   topics={article.data.topics}

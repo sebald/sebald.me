@@ -21,7 +21,7 @@ const style = cva({
     },
     noUnderline: {
       false: ['underline underline-offset-4 decoration-1'],
-      true: ['no-underline underline-offset-4 decoration-1', 'hover:underline'],
+      true: ['no-underline'],
     },
   },
   defaultVariants: {

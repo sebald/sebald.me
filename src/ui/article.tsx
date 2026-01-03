@@ -42,7 +42,6 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
 
 interface TitleProps extends PropsWithChildren {
   id?: string;
-  href?: string;
   /**
    * Display style for the title
    * - 'page': Large display heading with accent variant (for full article pages)
@@ -51,7 +50,7 @@ interface TitleProps extends PropsWithChildren {
   variant?: 'page' | 'list';
 }
 
-const Title = ({ children, id, href, variant = 'page' }: TitleProps) => {
+const Title = ({ children, id, variant = 'page' }: TitleProps) => {
   let headlineProps: Omit<HeadlineProps, 'children'>;
 
   switch (variant) {
@@ -64,18 +63,10 @@ const Title = ({ children, id, href, variant = 'page' }: TitleProps) => {
       break;
   }
 
-  const headline = (
+  return (
     <Headline id={id} {...headlineProps}>
       {children}
     </Headline>
-  );
-
-  return href ? (
-    <Link href={href} className="*:hover:text-link">
-      {headline}
-    </Link>
-  ) : (
-    headline
   );
 };
 

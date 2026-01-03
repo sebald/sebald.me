@@ -81,13 +81,13 @@ const FloatingNav = () => {
         <Popover
           variant="clear"
           stretch="navigation"
-          inset="none"
+          inset="snug"
           align="end"
           alignOffset={-22}
           sideOffset={16}
           collisionPadding={16}
         >
-          <nav className="grid grid-cols-[min-content_1fr] px-2 py-4">
+          <nav className="grid grid-cols-[min-content_1fr]">
             {navItems.map(item => {
               const Icon = item.Icon;
               return (
@@ -97,13 +97,19 @@ const FloatingNav = () => {
                   className={cn(
                     'group',
                     'col-span-full grid grid-cols-subgrid gap-6',
-                    'rounded-xl hover:bg-white',
+                    'hover:bg-oatmeal-50/50 rounded-xl',
+                    'p-2',
                   )}
                 >
-                  <div className="rounded-lg p-4 group-hover:bg-white/80">
-                    <Icon size={32} />
+                  <div
+                    className={cn(
+                      'text-black-500 rounded-lg p-2',
+                      'group-hover:bg-link-hover/5 group-hover:text-link-hover',
+                    )}
+                  >
+                    <Icon size={32} weight="duotone" />
                   </div>
-                  <div>
+                  <div className="*:leading-0 pt-4">
                     <Headline level="5">{item.title}</Headline>
                   </div>
                 </NavItem>

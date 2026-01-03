@@ -3,7 +3,7 @@ import Link from 'fumadocs-core/link';
 import { cn } from '@/lib/styles.utils';
 
 export const Dot = () => (
-  <div className="bg-blueberry-500 relative inline-block size-[0.25em] origin-bottom animate-[jumping-square_12s_infinite] rounded-none" />
+  <div className="bg-blueberry-600 relative inline-block size-[0.25em] origin-bottom animate-[jumping-square_12s_infinite] rounded-none" />
 );
 
 interface LogoProps {
