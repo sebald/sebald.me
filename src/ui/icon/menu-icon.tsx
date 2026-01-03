@@ -46,7 +46,7 @@ const usePopupAnimation = () => {
 // Props
 // ---------------
 export interface MenuIconProps {
-  size?: number;
+  size?: number | string;
 }
 
 // Component

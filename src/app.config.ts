@@ -26,3 +26,9 @@ export const navItems = [
     description: 'Who I am and the work I do. Don’t hesitate to say hello.',
   },
 ] as const;
+
+export const socialLinks = {
+  github: 'https://github.com/sebald',
+  linkedin: 'https://www.linkedin.com/in/sebastian-sebald',
+  x: 'https://x.com/sebastiansebald',
+} as const;

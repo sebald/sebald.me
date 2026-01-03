@@ -7,12 +7,15 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useResizeObserver } from 'usehooks-ts';
 
-import { navItems } from '@/app.config';
+import { navItems, socialLinks } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
 
 import { Divider } from './divider';
 import { Headline } from './headline';
+import { GithubIcon } from './icon/github-icon';
+import { LinkedInIcon } from './icon/linkedin-icon';
 import { MenuIcon } from './icon/menu-icon';
+import { XComIcon } from './icon/x-com-icon';
 import { Logo } from './logo';
 import { Popover } from './popover';
 
@@ -92,7 +95,7 @@ const FloatingNav = () => {
         >
           {/* BaseUI Popover does not trap focus when used as modal. */}
           <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
-            <nav className="grid gap-4">
+            <nav>
               <div className="grid grid-cols-[min-content_1fr]">
                 {navItems.map(item => {
                   const Icon = item.Icon;
@@ -127,7 +130,35 @@ const FloatingNav = () => {
                   );
                 })}
               </div>
-              <Divider variant="light" />
+              <div className="pb-4 pt-2">
+                <Divider variant="light" inset="2" />
+              </div>
+              <div className="text-black-500 flex items-center justify-end gap-8 px-6 pb-4">
+                <div className="text-black-400 font-sans text-sm font-medium uppercase leading-none">
+                  Find me elsewhere
+                </div>
+                <Link
+                  className="hover:text-link-hover"
+                  href={socialLinks.github}
+                  target="_blank"
+                >
+                  <GithubIcon size={28} />
+                </Link>
+                <Link
+                  className="hover:text-link-hover"
+                  href={socialLinks.linkedin}
+                  target="_blank"
+                >
+                  <LinkedInIcon size={28} />
+                </Link>
+                <Link
+                  className="hover:text-link-hover"
+                  href={socialLinks.x}
+                  target="_blank"
+                >
+                  <XComIcon size={28} />
+                </Link>
+              </div>
             </nav>
           </FocusTrap>
         </Popover>

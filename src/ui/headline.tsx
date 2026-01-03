@@ -18,6 +18,7 @@ export const style = cva({
       '4': 'typescale-2 leading-snug -tracking-wide',
       '5': 'typescale-1 leading-snug -tracking-wide',
       '6': 'typescale-0 leading-relaxed -tracking-wide',
+      overline: 'uppercase text-text text-xs tracking-wider',
     },
     variant: {
       default: 'text-(--color-headline,var(--color-oatmeal-900))',
@@ -49,7 +50,14 @@ export const Headline = ({
   as,
   id,
 }: HeadlineProps) => {
-  const Component = as || (level === 'display' ? 'h1' : (`h${level}` as const));
+  const Component =
+    as ||
+    (level === 'display'
+      ? 'h1'
+      : level === 'overline'
+        ? 'h6'
+        : (`h${level}` as const));
+
   return (
     <Component id={id} className={style({ level, variant })}>
       {children}

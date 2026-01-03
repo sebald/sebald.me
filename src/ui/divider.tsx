@@ -1,4 +1,5 @@
 import { cva, type VariantProps } from 'cva';
+import type { CSSProperties } from 'react';
 
 // Styles
 // ---------------
@@ -12,8 +13,8 @@ const style = cva({
         'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.2)]',
     },
     orientation: {
-      horizontal: 'h-0.5 w-full',
-      vertical: 'w-0.5 h-full min-h-4',
+      horizontal: 'h-0.5 w-[calc(100%-var(--inset)*2)] mx-auto',
+      vertical: 'w-0.5 h-[calc(100%-var(--inset)*2)] min-h-4 my-auto',
     },
   },
   defaultVariants: {
@@ -24,14 +25,17 @@ const style = cva({
 
 // Props
 // ---------------
-interface DividerProps extends VariantProps<typeof style> {}
+interface DividerProps extends VariantProps<typeof style> {
+  inset?: string | number;
+}
 
 // Component
 // ---------------
-export const Divider = ({ variant, orientation }: DividerProps) => (
+export const Divider = ({ variant, orientation, inset = 0 }: DividerProps) => (
   <div
     role="separator"
     aria-orientation={orientation}
     className={style({ variant, orientation })}
+    style={{ '--inset': `calc(var(--spacing) * ${inset})` } as CSSProperties}
   />
 );
