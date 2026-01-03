@@ -130,33 +130,30 @@ const FloatingNav = () => {
                   );
                 })}
               </div>
-              <div className="pb-4 pt-2">
+              <div className="pb-6 pt-2">
                 <Divider variant="light" inset="2" />
               </div>
-              <div className="text-black-500 flex items-center justify-end gap-8 px-6 pb-4">
-                <div className="text-black-400 font-sans text-sm font-medium uppercase leading-none">
-                  Find me elsewhere
-                </div>
+              <div className="text-oatmeal-800 flex items-center justify-end gap-12 px-6 pb-4">
                 <Link
                   className="hover:text-link-hover"
                   href={socialLinks.github}
                   target="_blank"
                 >
-                  <GithubIcon size={28} />
+                  <GithubIcon size={24} />
                 </Link>
                 <Link
                   className="hover:text-link-hover"
                   href={socialLinks.linkedin}
                   target="_blank"
                 >
-                  <LinkedInIcon size={28} />
+                  <LinkedInIcon size={24} />
                 </Link>
                 <Link
                   className="hover:text-link-hover"
                   href={socialLinks.x}
                   target="_blank"
                 >
-                  <XComIcon size={28} />
+                  <XComIcon size={24} />
                 </Link>
               </div>
             </nav>
