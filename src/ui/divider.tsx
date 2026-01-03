@@ -29,5 +29,9 @@ interface DividerProps extends VariantProps<typeof style> {}
 // Component
 // ---------------
 export const Divider = ({ variant, orientation }: DividerProps) => (
-  <div role="separator" className={style({ variant, orientation })} />
+  <div
+    role="separator"
+    aria-orientation={orientation}
+    className={style({ variant, orientation })}
+  />
 );

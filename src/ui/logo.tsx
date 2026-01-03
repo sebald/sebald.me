@@ -1,4 +1,5 @@
-import Link from 'fumadocs-core/link';
+import type { LinkProps } from 'next/link';
+import Link from 'next/link';
 
 import { cn } from '@/lib/styles.utils';
 
@@ -10,10 +11,7 @@ export const Dot = () => (
 
 // Props
 // ---------------
-export interface LogoProps {
-  className?: string;
-  href?: string;
-}
+export interface LogoProps extends LinkProps<'a'> {}
 
 // Component
 // ---------------

@@ -1,8 +1,8 @@
 'use client';
 
 import { FocusTrap } from 'focus-trap-react';
-import type { LinkProps } from 'fumadocs-core/link';
-import Link from 'fumadocs-core/link';
+import type { LinkProps } from 'next/link';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useResizeObserver } from 'usehooks-ts';
@@ -18,12 +18,13 @@ import { Popover } from './popover';
 
 // Nav Item (set aria-current if active))
 // ---------------
-const NavItem = ({ children, ...props }: LinkProps) => {
+const NavItem = ({ children, ...props }: LinkProps<'a'>) => {
   const pathname = usePathname();
-  const isActive = props.href
-    ? props.href === '/'
-      ? pathname === props.href
-      : pathname.startsWith(props.href)
+  const href = typeof props.href === 'string' ? props.href : undefined;
+  const isActive = href
+    ? href === '/'
+      ? pathname === href
+      : pathname.startsWith(href)
     : undefined;
 
   return (
@@ -105,6 +106,7 @@ const FloatingNav = () => {
                         'hover:bg-black-500/15 rounded-xl',
                         'px-6 py-4',
                       )}
+                      onClick={() => popupHandler.close()}
                     >
                       <div
                         className={cn(

@@ -1,5 +1,4 @@
 import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
-import Link from 'fumadocs-core/link';
 import type { PropsWithChildren } from 'react';
 import type { AriaAttributes } from 'react';
 
