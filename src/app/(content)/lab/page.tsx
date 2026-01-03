@@ -9,7 +9,7 @@ const LabIndex = async () => {
     <div>
       <h1 className="mb-8 text-4xl font-bold">Labs</h1>
       <div className="space-y-6">
-        {pages.map((page) => (
+        {pages.map(page => (
           <article
             key={page.url}
             className="border-b border-gray-200 pb-6 last:border-b-0"

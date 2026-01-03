@@ -54,14 +54,16 @@ export const styles = {
           'w-[min(var(--available-width),var(--container-navigation))]',
       },
       inset: {
-        default: 'p-6',
+        none: '',
+        snug: 'p-4',
+        normal: 'p-6',
         relaxed: 'p-8',
       },
     },
     defaultVariants: {
       variant: 'clear',
       stretch: 'content',
-      inset: 'default',
+      inset: 'normal',
     },
   }),
   title: cva({

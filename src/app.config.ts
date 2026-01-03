@@ -1,12 +1,17 @@
-import type { Route } from 'next';
+import {
+  FlaskIcon,
+  HandWavingIcon,
+  PencilIcon,
+} from '@phosphor-icons/react/dist/ssr';
 
-export type NavItem = {
-  label: string;
-  href: Route;
-};
-
-export const navItems: NavItem[] = [
-  { label: 'Articles', href: '/articles' },
-  { label: 'Lab', href: '/lab' },
-  { label: 'About', href: '/about' },
-];
+export const navItems = [
+  {
+    title: 'Articles',
+    href: '/articles',
+    Icon: PencilIcon,
+    description:
+      'Notes from the road and lessons learned along the way. Welcome to the archive.',
+  },
+  { title: 'Lab', href: '/lab', Icon: FlaskIcon },
+  { title: 'About', href: '/about', Icon: HandWavingIcon },
+] as const;

@@ -4,6 +4,7 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "printWidth": 80,
+  "arrowParens": "avoid",
   "plugins": [
     "@trivago/prettier-plugin-sort-imports",
     "prettier-plugin-tailwindcss"

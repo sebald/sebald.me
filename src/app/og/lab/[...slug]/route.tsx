@@ -69,7 +69,7 @@ export const GET = async (
 };
 
 export const generateStaticParams = () => {
-  return labSource.getPages().map((page) => ({
+  return labSource.getPages().map(page => ({
     lang: page.locale,
     slug: getPageImage(page).segments,
   }));

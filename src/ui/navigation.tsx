@@ -9,6 +9,7 @@ import { useResizeObserver } from 'usehooks-ts';
 import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
 
+import { Headline } from './headline';
 import { MenuIcon } from './icon/menu-icon';
 import { Logo } from './logo';
 import { Popover } from './popover';
@@ -34,18 +35,18 @@ const NavItem = ({ children, ...props }: LinkProps) => {
 // ---------------
 const StaticNav = () => (
   <nav className="@navigation:flex hidden gap-12">
-    {navItems.map((item) => (
+    {navItems.map(item => (
       <NavItem
-        key={item.label}
+        key={item.title}
         href={item.href}
-        data-text={item.label}
+        data-text={item.title}
         className={cn(
           'text-black-700 transition-color rounded-full font-medium',
           'decoration-oatmeal-600/30 decoration-2 underline-offset-4',
           'hover:text-black-900 weight-on-hover-semibold hover:underline',
         )}
       >
-        {item.label}
+        {item.title}
       </NavItem>
     ))}
   </nav>
@@ -80,25 +81,34 @@ const FloatingNav = () => {
         <Popover
           variant="clear"
           stretch="navigation"
-          inset="relaxed"
+          inset="none"
           align="end"
           alignOffset={-22}
           sideOffset={16}
           collisionPadding={16}
         >
-          <nav className="flex flex-col space-y-4">
-            {navItems.map((item) => (
-              <NavItem
-                key={item.label}
-                href={item.href}
-                className={cn(
-                  'transition-color rounded-full font-medium',
-                  'text-text hover:text-oatmeal-50 text-lg',
-                )}
-              >
-                {item.label}
-              </NavItem>
-            ))}
+          <nav className="grid grid-cols-[min-content_1fr] px-2 py-4">
+            {navItems.map(item => {
+              const Icon = item.Icon;
+              return (
+                <NavItem
+                  key={item.title}
+                  href={item.href}
+                  className={cn(
+                    'group',
+                    'col-span-full grid grid-cols-subgrid gap-6',
+                    'rounded-xl hover:bg-white',
+                  )}
+                >
+                  <div className="rounded-lg p-4 group-hover:bg-white/80">
+                    <Icon size={32} />
+                  </div>
+                  <div>
+                    <Headline level="5">{item.title}</Headline>
+                  </div>
+                </NavItem>
+              );
+            })}
           </nav>
         </Popover>
       </Popover.Root>

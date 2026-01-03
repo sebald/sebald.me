@@ -32,11 +32,11 @@ export async function GET(_req: Request, { params }: RouteContext) {
 }
 
 export function generateStaticParams() {
-  const articlesParams = articlesSource.getPages().map((page) => ({
+  const articlesParams = articlesSource.getPages().map(page => ({
     slug: ['articles', ...page.slugs],
   }));
 
-  const labsParams = labSource.getPages().map((page) => ({
+  const labsParams = labSource.getPages().map(page => ({
     slug: ['lab', ...page.slugs],
   }));
 
