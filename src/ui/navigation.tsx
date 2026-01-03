@@ -139,7 +139,7 @@ export const Navigation = () => (
     )}
   >
     <Logo
-      className="animate-shrink shrink-scale-75 scroll-trigger scroll-trigger-to-25"
+      className="animate-shrink shrink-scale-90 scroll-trigger scroll-trigger-to-25 @navigation:shrink-scale-80"
       href="/"
     />
     <StaticNav />

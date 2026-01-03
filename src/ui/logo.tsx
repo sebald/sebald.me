@@ -18,7 +18,7 @@ export const Logo = ({ className, href = '/' }: LogoProps) => {
     <Component
       href={href}
       className={cn(
-        'text-oatmeal-950 flex items-baseline gap-[3px] font-sans text-4xl font-extrabold tracking-tighter',
+        'text-oatmeal-950 @navigation:text-4xl flex items-baseline gap-[3px] font-sans text-3xl font-extrabold tracking-tighter',
         className,
       )}
     >
