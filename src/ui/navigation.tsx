@@ -89,7 +89,7 @@ const FloatingNav = () => {
           stretch="navigation"
           inset="tight"
           align="end"
-          alignOffset={-22}
+          alignOffset={-15}
           sideOffset={16}
           collisionPadding={16}
         >
