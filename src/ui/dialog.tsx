@@ -29,7 +29,7 @@ export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
     base: [
-      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-white/40',
+      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-black-200/40',
       'z-100',
       'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.

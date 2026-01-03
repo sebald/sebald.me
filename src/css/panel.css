@@ -54,7 +54,7 @@
 }
 
 @utility panel-clear {
-  --panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.2));
+  --panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.45));
   --panel-blur: var(--blur-lg);
   --panel-border: oklch(1 0 0 / 0.95);
   --panel-edge: oklch(1 0 0 / 0.9);

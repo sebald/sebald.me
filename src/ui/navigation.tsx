@@ -81,7 +81,7 @@ const FloatingNav = () => {
         <Popover
           variant="clear"
           stretch="navigation"
-          inset="snug"
+          inset="tight"
           align="end"
           alignOffset={-22}
           sideOffset={16}
@@ -97,21 +97,22 @@ const FloatingNav = () => {
                   className={cn(
                     'group',
                     'col-span-full grid grid-cols-subgrid gap-4',
-                    'hover:bg-black-500/10 rounded-xl',
-                    'px-2 py-4',
+                    'hover:bg-black-500/15 rounded-xl',
+                    'px-6 py-4',
                   )}
                 >
                   <div
                     className={cn(
-                      'text-black-500 h-fit rounded-lg p-2',
-                      'group-hover:bg-link-hover/10 group-hover:text-link-hover',
+                      'grid place-items-center',
+                      'text-black-500',
+                      'group-hover:text-link-hover',
                     )}
                   >
                     <Icon size={32} weight="duotone" />
                   </div>
                   <div>
                     <Headline level="5">{item.title}</Headline>
-                    <div className="text-muted font-sans text-sm">
+                    <div className="text-black-600 font-sans text-sm leading-snug">
                       {item.description}
                     </div>
                   </div>

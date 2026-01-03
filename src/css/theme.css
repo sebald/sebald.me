@@ -162,8 +162,8 @@
       top: var(--navigation-top, 16px);
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
-      padding-left: --spacing(4); /* Optical adjustment for logo */
-      padding-right: --spacing(5);
+      padding-left: --spacing(5); /* Optical adjustment for logo */
+      padding-right: --spacing(3.5);
 
       /* slightly adjusted clear panel */
       background: linear-gradient(
