@@ -1,12 +1,10 @@
 :root {
   --navigation-top: 16px;
-  --navigation-left-padding: 16px;
 }
 
 @media (min-width: 768px) {
   :root {
     --navigation-top: 24px;
-    --navigation-left-padding: 16px;
   }
 }
 
@@ -164,9 +162,7 @@
       top: var(--navigation-top, 16px);
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
-      padding-left: var(
-        --navigation-left-padding
-      ); /* Optical adjustment for logo */
+      padding-left: --spacing(4); /* Optical adjustment for logo */
       padding-right: --spacing(5);
 
       /* slightly adjusted clear panel */
