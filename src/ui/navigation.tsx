@@ -1,6 +1,7 @@
 'use client';
 
 import { cva } from 'cva';
+import type { LinkProps } from 'fumadocs-core/link';
 import Link from 'fumadocs-core/link';
 import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
@@ -13,61 +14,51 @@ import { MenuIcon } from './icon/menu-icon';
 import { Logo } from './logo';
 import { Popover } from './popover';
 
-const navItemStyles = cva({
-  base: 'transition-color rounded-full font-medium',
-  variants: {
-    variant: {
-      desktop: [
-        'text-black-700',
-        'weight-on-hover-semibold',
-        'hover:text-black-900',
-        'hover:underline underline-offset-4 decoration-2 decoration-oatmeal-600/30',
-      ],
-      mobile: ['text-lg text-text hover:text-oatmeal-50'],
-    },
-  },
-});
-
-interface NavItemProps {
-  href: string;
-  label: string;
-  variant: 'desktop' | 'mobile';
-}
-
-const NavItem = ({ href, label, variant }: NavItemProps) => {
+// Nav Item (set aria-current if active))
+// ---------------
+const NavItem = ({ children, ...props }: LinkProps) => {
   const pathname = usePathname();
-  const isActive = href === '/' ? pathname === href : pathname.startsWith(href);
+  const isActive = props.href
+    ? props.href === '/'
+      ? pathname === props.href
+      : pathname.startsWith(props.href)
+    : undefined;
 
   return (
-    <Link
-      href={href}
-      className={navItemStyles({ variant })}
-      data-text={label}
-      aria-current={isActive ? 'page' : undefined}
-    >
-      {label}
+    <Link {...props} aria-current={isActive ? 'page' : undefined}>
+      {children}
     </Link>
   );
 };
 
+// Static (large screens, scrolled top)
+// ---------------
 const StaticNav = () => (
   <nav className="@navigation:flex hidden gap-12">
     {navItems.map((item) => (
       <NavItem
         key={item.label}
         href={item.href}
-        label={item.label}
-        variant="desktop"
-      />
+        data-text={item.label}
+        className={cn(
+          'text-black-700 transition-color rounded-full font-medium',
+          'decoration-oatmeal-600/30 decoration-2 underline-offset-4',
+          'hover:text-black-900 weight-on-hover-semibold hover:underline',
+        )}
+      >
+        {item.label}
+      </NavItem>
     ))}
   </nav>
 );
 
+// Small screens, scrolled
+// ---------------
 const FloatingNav = () => {
   const popupHandler = Popover.createHandle();
 
   /**
-   * The ref element is only as wide as the trigger, but that is more than sufficient here.
+   * Hide the popup when the fluid nav would be hidden because the browser window is resized.
    * Also helps triggereing the resize observer only when nav is shown or hidden.
    */
   const ref = useRef<HTMLDivElement>(null!);
@@ -104,9 +95,13 @@ const FloatingNav = () => {
               <NavItem
                 key={item.label}
                 href={item.href}
-                label={item.label}
-                variant="mobile"
-              />
+                className={cn(
+                  'transition-color rounded-full font-medium',
+                  'text-text hover:text-oatmeal-50 text-lg',
+                )}
+              >
+                {item.label}
+              </NavItem>
             ))}
           </nav>
         </Popover>
@@ -115,6 +110,8 @@ const FloatingNav = () => {
   );
 };
 
+// Component
+// ---------------
 export const Navigation = () => (
   <nav
     className={cn(
