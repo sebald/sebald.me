@@ -96,15 +96,15 @@ const FloatingNav = () => {
                   href={item.href}
                   className={cn(
                     'group',
-                    'col-span-full grid grid-cols-subgrid gap-6',
-                    'hover:bg-black-500/5 rounded-xl',
-                    'p-2',
+                    'col-span-full grid grid-cols-subgrid gap-4',
+                    'hover:bg-black-500/10 rounded-xl',
+                    'px-2 py-4',
                   )}
                 >
                   <div
                     className={cn(
                       'text-black-500 h-fit rounded-lg p-2',
-                      'group-hover:bg-link-hover/5 group-hover:text-link-hover',
+                      'group-hover:bg-link-hover/10 group-hover:text-link-hover',
                     )}
                   >
                     <Icon size={32} weight="duotone" />
