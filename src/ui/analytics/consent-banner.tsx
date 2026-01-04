@@ -7,10 +7,14 @@ import { Button } from '../button';
 import { Dialog } from '../dialog';
 import { useConsent } from './use-consent';
 
-type ConsentBannerProps = {
+// Props
+// ---------------
+export interface ConsentBannerProps {
   shouldShow: boolean;
-};
+}
 
+// Component
+// ---------------
 export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
   const [open, setOpen] = useState(shouldShow);
   const { accept, decline } = useConsent();

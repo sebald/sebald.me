@@ -3,7 +3,10 @@
 import { Button as Primitive } from '@base-ui/react/button';
 import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
 
-import { cva, VariantProps } from '@/lib/styles.utils';
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
+
+import { styles as linkStyles } from './link';
 
 // Styles
 // ---------------
@@ -69,6 +72,7 @@ export const styles = cva({
         'border-[oklch(from_currentColor_l_c_h/0.4)]',
         'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
       ],
+      muted: linkStyles({ variant: 'muted', noUnderline: true }),
     },
   },
   compoundVariants: [

@@ -3,7 +3,8 @@
 import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
 import { XIcon } from '@phosphor-icons/react/ssr';
-import { cva, VariantProps } from 'cva';
+import type { VariantProps } from 'cva';
+import { cva } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
 
@@ -220,11 +221,16 @@ const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
 
 // Dialog.Close
 // ---------------
+export interface DialogCloseProps
+  extends Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>,
+    VariantProps<typeof buttonStyles> {}
+
 const DialogClose = ({
   children,
+  variant = 'ghost',
   ...props
-}: Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>) => (
-  <Primitive.Close {...props} className={buttonStyles({ variant: 'ghost' })}>
+}: DialogCloseProps) => (
+  <Primitive.Close {...props} className={buttonStyles({ variant })}>
     {children}
   </Primitive.Close>
 );

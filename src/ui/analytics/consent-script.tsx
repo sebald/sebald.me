@@ -2,10 +2,14 @@
 
 import Script from 'next/script';
 
-type ConsentScriptProps = {
+// Props
+// ---------------
+interface ConsentScriptProps {
   consent: 'granted' | 'denied';
-};
+}
 
+// Component
+// ---------------
 export const ConsentScript = ({ consent }: ConsentScriptProps) => (
   <Script id="consent-init" strategy="afterInteractive">
     {`
