@@ -133,7 +133,7 @@ const FloatingNav = () => {
               <div className="pb-6 pt-2">
                 <Divider variant="light" inset="2" />
               </div>
-              <div className="text-oatmeal-800 flex items-center justify-end gap-12 px-6 pb-4">
+              <div className="text-black-600 flex items-center justify-around gap-12 px-6 pb-4 md:justify-end">
                 <Link
                   className="hover:text-link-hover"
                   href={socialLinks.github}
