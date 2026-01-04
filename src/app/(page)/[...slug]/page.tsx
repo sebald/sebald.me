@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { miscSource, pageImage } from '@/lib/source';
+import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { getMDXComponents } from '@/ui/mdx';
 
@@ -36,7 +36,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
 
   return (
     <Article aria-labelledby={titleId} className="gap-12 md:gap-24">
-      <Article.Header>
+      <Article.Header stretch="prose">
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
       </Article.Header>
       <Article.Content>
