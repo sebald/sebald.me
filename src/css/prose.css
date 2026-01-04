@@ -1,10 +1,10 @@
 @layer components {
   .prose {
+    @apply text-fluid;
+
     font-family: var(--font-body);
     color: var(--color-text-body);
     line-height: 1.75;
-    /* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px viewport width */
-    font-size: clamp(var(--text-base), 1vw + 0.5rem, var(--text-lg));
 
     display: grid;
     grid-template-columns:
