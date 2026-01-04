@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
-import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
+import { articlesSource, excerpt, sortByDate } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -32,7 +32,7 @@ const ArticlesPage = async () => {
 
       <div className="space-y-20">
         {articles.map(article => {
-          const excerpt = getExcerpt(article);
+          const excerpt = excerpt(article);
           return (
             <Article
               key={article.url}

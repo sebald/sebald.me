@@ -1,9 +1,10 @@
-import { structure } from 'fumadocs-core/mdx-plugins';
 import { type InferPageType, loader } from 'fumadocs-core/source';
-import { articles, lab } from 'fumadocs-mdx:collections/server';
+import { articles, lab, misc } from 'fumadocs-mdx:collections/server';
 
 import { truncateAtWord } from './string.utils';
 
+// Loaders
+// ---------------
 export const articlesSource = loader({
   baseUrl: '/articles',
   source: articles.toFumadocsSource(),
@@ -14,54 +15,13 @@ export const labSource = loader({
   source: lab.toFumadocsSource(),
 });
 
-export const getPageImage = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-) => {
-  const segments = [...page.slugs, 'image.png'];
-  const type = page.url.includes('/lab') ? 'lab' : 'articles';
+export const miscSource = loader({
+  baseUrl: '/misc',
+  source: misc.toFumadocsSource(),
+});
 
-  return {
-    segments,
-    url: `/og/${type}/${segments.join('/')}`,
-  };
-};
-
-export const getLLMText = async (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-) => {
-  const processed = await page.data.getText('processed');
-
-  return `# ${page.data.title}
-
-${processed}`;
-};
-
-export const getExcerpt = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-  length: number = 200,
-) => {
-  const { contents } = page.data.structuredData;
-
-  if (contents.length === 0) return '';
-
-  const { content } = contents[0];
-  return truncateAtWord(content, length);
-};
-
-export const sortByDate = <
-  T extends
-    | InferPageType<typeof articlesSource>
-    | InferPageType<typeof labSource>,
->(
-  pages: T[],
-): T[] => {
-  return pages.sort((a, b) => {
-    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
-    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
-    return dateB - dateA;
-  });
-};
-
+// Getters
+// ---------------
 export const getPageBySlug = (
   slug: string[],
 ):
@@ -82,4 +42,42 @@ export const getPageBySlug = (
     default:
       return undefined;
   }
+};
+
+export const getLLMText = async (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
+) => {
+  const processed = await page.data.getText('processed');
+
+  return `# ${page.data.title}
+
+${processed}`;
+};
+
+// Utilities
+// ---------------
+export const sortByDate = <
+  T extends
+    | InferPageType<typeof articlesSource>
+    | InferPageType<typeof labSource>,
+>(
+  pages: T[],
+): T[] => {
+  return pages.sort((a, b) => {
+    const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
+    const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
+    return dateB - dateA;
+  });
+};
+
+export const excerpt = (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
+  length: number = 200,
+) => {
+  const { contents } = page.data.structuredData;
+
+  if (contents.length === 0) return '';
+
+  const { content } = contents[0];
+  return truncateAtWord(content, length);
 };

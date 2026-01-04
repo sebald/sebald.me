@@ -48,6 +48,19 @@ export const lab = defineDocs({
   },
 });
 
+export const misc = defineDocs({
+  dir: 'content/misc',
+  docs: {
+    schema: frontmatterSchema,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     rehypePlugins: [rehypeUnwrapContent],
