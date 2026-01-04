@@ -1,3 +1,13 @@
+:root {
+  --navigation-top: 16px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navigation-top: 24px;
+  }
+}
+
 @theme {
   --font-mono: var(--font-mono), monospace;
   --font-sans: var(--font-sans), sans-serif;
@@ -14,17 +24,17 @@
   --color-oatmeal-900: oklch(0.27 0.05 87);
   --color-oatmeal-950: oklch(0.18 0.035 87);
 
-  --color-blueberry-50: oklch(0.97 0.015 233);
-  --color-blueberry-100: oklch(0.93 0.03 233);
-  --color-blueberry-200: oklch(0.85 0.05 233);
-  --color-blueberry-300: oklch(0.718 0.077 233);
-  --color-blueberry-400: oklch(0.57 0.11 245);
-  --color-blueberry-500: oklch(0.425 0.144 257);
-  --color-blueberry-600: oklch(0.36 0.12 259);
-  --color-blueberry-700: oklch(0.3 0.1 260);
-  --color-blueberry-800: oklch(0.24 0.08 261);
-  --color-blueberry-900: oklch(0.18 0.06 263);
-  --color-blueberry-950: oklch(0.13 0.03 264);
+  --color-blueberry-50: oklch(0.975 0.025 233);
+  --color-blueberry-100: oklch(0.94 0.05 233);
+  --color-blueberry-200: oklch(0.86 0.09 233);
+  --color-blueberry-300: oklch(0.74 0.14 238);
+  --color-blueberry-400: oklch(0.6 0.19 250);
+  --color-blueberry-500: oklch(0.48 0.23 260);
+  --color-blueberry-600: oklch(0.38 0.18 264);
+  --color-blueberry-700: oklch(0.31 0.14 265);
+  --color-blueberry-800: oklch(0.25 0.1 266);
+  --color-blueberry-900: oklch(0.19 0.08 268);
+  --color-blueberry-950: oklch(0.12 0.05 270);
 
   /* Override black with "branded black" (oatmeal-based hue) */
   --color-black-50: oklch(0.985 0.002 87);
@@ -42,8 +52,8 @@
   --color-headline: var(--color-oatmeal-900);
   --color-text: var(--color-oatmeal-900);
   --color-muted: var(--color-black-500);
-  --color-link: var(--color-blueberry-500);
-  --color-link-hover: var(--color-blueberry-400);
+  --color-link: var(--color-blueberry-600);
+  --color-link-hover: var(--color-blueberry-500);
 
   --min-typescale: 1.125; /* Major Second */
   --max-typescale: 1.25; /* Major Third */
@@ -148,13 +158,12 @@
     }
     to {
       /* Target Dimensions */
-      width: 90%;
-      max-width: 700px;
-      top: 1.5rem;
+      width: min(calc(100% - 32px), var(--container-navigation));
+      top: var(--navigation-top, 16px);
       border-radius: calc(infinity * 1px);
       padding-block: --spacing(1.5);
-      padding-left: --spacing(1.5); /* Optical adjustment for logo */
-      padding-right: --spacing(5);
+      padding-left: --spacing(5); /* Optical adjustment for logo */
+      padding-right: --spacing(3.5);
 
       /* slightly adjusted clear panel */
       background: linear-gradient(

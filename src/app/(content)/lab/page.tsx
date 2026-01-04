@@ -1,4 +1,4 @@
-import Link from 'fumadocs-core/link';
+import Link from 'next/link';
 
 import { labSource, sortByDate } from '@/lib/source';
 
@@ -9,12 +9,12 @@ const LabIndex = async () => {
     <div>
       <h1 className="mb-8 text-4xl font-bold">Labs</h1>
       <div className="space-y-6">
-        {pages.map((page) => (
+        {pages.map(page => (
           <article
             key={page.url}
             className="border-b border-gray-200 pb-6 last:border-b-0"
           >
-            <Link href={page.url} className="group">
+            <Link href={page.url as any} className="group">
               <h2 className="mb-2 text-2xl font-bold transition-colors group-hover:text-blue-600">
                 {page.data.title}
               </h2>

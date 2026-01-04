@@ -24,7 +24,7 @@ const isUnwrappableMdxElement = (child: Element['children'][0]): boolean =>
  * Also removes empty paragraphs and supports MDX JSX elements.
  */
 const rehypeUnwrapContent: Plugin<[], Root> = () => {
-  return (tree) => {
+  return tree => {
     visit(tree, 'element', (node, index, parent) => {
       if (node.tagName !== 'p' || !parent || typeof index !== 'number') {
         return;
@@ -40,7 +40,7 @@ const rehypeUnwrapContent: Plugin<[], Root> = () => {
 
       // Check if paragraph contains only unwrappable elements and whitespace
       const isUnwrappable = children.every(
-        (child) =>
+        child =>
           isWhitespaceOnly(child) ||
           isUnwrappableElement(child) ||
           isUnwrappableMdxElement(child),
@@ -52,8 +52,7 @@ const rehypeUnwrapContent: Plugin<[], Root> = () => {
 
       // Keep whitespace only for multiple element children
       const elementChildren = children.filter(
-        (child) =>
-          isUnwrappableElement(child) || isUnwrappableMdxElement(child),
+        child => isUnwrappableElement(child) || isUnwrappableMdxElement(child),
       );
       const childrenToInsert =
         elementChildren.length > 1 ? children : elementChildren;

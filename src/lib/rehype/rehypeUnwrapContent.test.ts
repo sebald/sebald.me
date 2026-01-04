@@ -16,7 +16,7 @@ const html = unified()
 // Processes MDX HAST trees
 const mdx = unified().use(rehypeUnwrapContent).use(rehypeStringify);
 
-test('rehypeUnwrapContent', async (t) => {
+test('rehypeUnwrapContent', async t => {
   t.test('should unwrap images', async () => {
     const file = await html.process(
       '<p><img src="image.jpg" alt="An image" /></p>',

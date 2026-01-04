@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { navItems } from '@/app.config';
 import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
@@ -9,44 +10,54 @@ import { Link } from '@/ui/link';
 // ---------------
 export const relative = false;
 
+const page = navItems.find(item => item.href === '/articles')!;
+
 // Meta
 // ---------------
 export const metadata: Metadata = {
-  title: 'Articles',
-  description:
-    'Notes from the road and lessons learned along the way. Welcome to the archive.',
+  title: page.title,
+  description: page.description,
 };
 
 // Page
 // ---------------
-const ArticlesIndex = async () => {
+const ArticlesPage = async () => {
   const articles = sortByDate(articlesSource.getPages());
 
   return (
     <div className="mx-auto grid max-w-[75ch] gap-12 md:gap-16">
       <Headline level="4" variant="accent" as="h1">
-        Articles
+        {page.title}
       </Headline>
 
       <div className="space-y-20">
-        {articles.map((page) => {
-          const excerpt = getExcerpt(page);
+        {articles.map(article => {
+          const excerpt = getExcerpt(article);
           return (
             <Article
-              key={page.url}
-              aria-labelledby={page.url}
+              key={article.url}
+              aria-labelledby={article.url}
               className="gap-2.5"
             >
               <Article.Header>
-                <Article.Title id={page.url} href={page.url} variant="list">
-                  {page.data.title}
-                </Article.Title>
-                <Article.Meta date={page.data.date} topics={page.data.topics} />
+                <Link
+                  href={article.url}
+                  aria-label={`Read article: ${article.data.title}`}
+                  noUnderline
+                >
+                  <Article.Title id={article.url} variant="list">
+                    {article.data.title}
+                  </Article.Title>
+                </Link>
+                <Article.Meta
+                  date={article.data.date}
+                  topics={article.data.topics}
+                />
               </Article.Header>
               <Article.Excerpt>{excerpt}</Article.Excerpt>
               <Link
-                href={page.url}
-                aria-label={`Read article: ${page.data.title}`}
+                href={article.url}
+                aria-label={`Read article: ${article.data.title}`}
               >
                 Read more
               </Link>
@@ -58,4 +69,4 @@ const ArticlesIndex = async () => {
   );
 };
 
-export default ArticlesIndex;
+export default ArticlesPage;

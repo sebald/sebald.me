@@ -1,7 +1,10 @@
 import { cva, type VariantProps } from 'cva';
-import FumaLink from 'fumadocs-core/link';
-import type { LinkProps as FumaLinkProps } from 'fumadocs-core/link';
+import type { Route } from 'next';
+import type { LinkProps as NextLinkProps } from 'next/link';
+import NextLink from 'next/link';
 
+// Styles
+// ---------------
 const style = cva({
   base: [
     'group/link',
@@ -21,7 +24,7 @@ const style = cva({
     },
     noUnderline: {
       false: ['underline underline-offset-4 decoration-1'],
-      true: ['no-underline underline-offset-4 decoration-1', 'hover:underline'],
+      true: ['no-underline'],
     },
   },
   defaultVariants: {
@@ -30,10 +33,16 @@ const style = cva({
   },
 });
 
+// Props
+// ---------------
 export interface LinkProps
   extends VariantProps<typeof style>,
-    Omit<FumaLinkProps, 'className' | 'style'> {}
+    Omit<NextLinkProps<'a'>, 'className' | 'style' | 'href'> {
+  href: NextLinkProps<'a'>['href'] | string;
+}
 
+// Component
+// ---------------
 export const Link = ({
   variant,
   noUnderline,
@@ -41,19 +50,24 @@ export const Link = ({
   href,
   target,
   rel,
+  ...props
 }: LinkProps) => {
+  const Component =
+    typeof href === 'string' && /^(https?:|\/\/)/.test(href) ? 'a' : NextLink;
+
   const externalProps =
     target === '_blank'
       ? { target: '_blank', rel: rel || 'noopener noreferrer' }
       : { target, rel };
 
   return (
-    <FumaLink
-      href={href}
+    <Component
+      href={href as Route}
       className={style({ variant, noUnderline })}
+      {...props}
       {...externalProps}
     >
       {children}
-    </FumaLink>
+    </Component>
   );
 };

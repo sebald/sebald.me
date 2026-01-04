@@ -9,6 +9,8 @@ import type { PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 
+// Styles
+// ---------------
 const style = {
   codeblock: cva({
     base: [
@@ -33,6 +35,8 @@ const style = {
   }),
 };
 
+// Component
+// ---------------
 export const CodeBlock = ({ children, ...props }: CodeBlockProps) => (
   <FumaCodeBlock {...props} className={style.codeblock()}>
     <Pre>{children}</Pre>
@@ -42,7 +46,6 @@ export const CodeBlock = ({ children, ...props }: CodeBlockProps) => (
 /**
  * Override fumadocs-ui default components for code blocks to adjust styles
  */
-
 export const CodeBlockTabs = ({ children, ...props }: PropsWithChildren) => (
   <FumaCodeBlockTabs {...props} className={style.codeblockTabs()}>
     {children}

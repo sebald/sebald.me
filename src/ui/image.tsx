@@ -3,6 +3,8 @@ import type { ComponentProps } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 
+// Styles
+// ---------------
 const style = {
   image: cva({
     base: ['rounded-lg'],
@@ -12,6 +14,8 @@ const style = {
   }),
 };
 
+// Props
+// ---------------
 export interface ImageProps extends ComponentProps<typeof FumaImage> {
   /**
    * Image title to be displayed as a caption below the image
@@ -20,6 +24,8 @@ export interface ImageProps extends ComponentProps<typeof FumaImage> {
   alt: string;
 }
 
+// Component
+// ---------------
 export const Image = ({ title, alt, className, ...props }: ImageProps) => {
   const img = (
     <FumaImage

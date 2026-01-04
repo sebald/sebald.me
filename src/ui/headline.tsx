@@ -1,10 +1,13 @@
 import { cva, type VariantProps } from 'cva';
 
+// Styles
+// ---------------
 export const style = cva({
   base: [
     'flex items-center',
     'font-sans font-bold',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
+    'in-[a:hover]:text-link',
   ],
   variants: {
     level: {
@@ -15,6 +18,7 @@ export const style = cva({
       '4': 'typescale-2 leading-snug -tracking-wide',
       '5': 'typescale-1 leading-snug -tracking-wide',
       '6': 'typescale-0 leading-relaxed -tracking-wide',
+      overline: 'uppercase text-text text-xs tracking-wider',
     },
     variant: {
       default: 'text-(--color-headline,var(--color-oatmeal-900))',
@@ -29,12 +33,16 @@ export const style = cva({
   },
 });
 
+// Props
+// ---------------
 export interface HeadlineProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   id?: string;
 }
 
+// Component
+// ---------------
 export const Headline = ({
   level = '2',
   variant = 'default',
@@ -42,7 +50,14 @@ export const Headline = ({
   as,
   id,
 }: HeadlineProps) => {
-  const Component = as || (level === 'display' ? 'h1' : (`h${level}` as const));
+  const Component =
+    as ||
+    (level === 'display'
+      ? 'h1'
+      : level === 'overline'
+        ? 'h6'
+        : (`h${level}` as const));
+
   return (
     <Component id={id} className={style({ level, variant })}>
       {children}

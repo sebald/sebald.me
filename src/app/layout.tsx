@@ -46,7 +46,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
     <body className="bg-oatmeal-50 text-text relative isolate font-mono">
       <div className="grid min-h-screen grid-rows-[1fr_auto] justify-items-center">
         <Navigation />
-        <main className="w-content pt-40">{children}</main>
+        <main className="w-content pt-32 md:pt-40">{children}</main>
         <footer>TODO</footer>
       </div>
       <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />

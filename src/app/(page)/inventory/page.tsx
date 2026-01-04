@@ -3,13 +3,12 @@ import type { Metadata } from 'next';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
-import { Code } from '@/ui/code';
 import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
 
-import { DialogExample } from './dialog-example';
+import { OverlayExample } from './overlay-example';
 
 // Meta
 // ---------------
@@ -124,6 +123,53 @@ const InventoryPage = () => (
           />
         </div>
       </div>
+
+      <div className="grid gap-2">
+        <Headline level="4">Black Palette</Headline>
+        <div className="flex flex-wrap gap-1">
+          <div className="bg-black-50 h-12 w-12 rounded-lg" title="black-50" />
+          <div
+            className="bg-black-100 h-12 w-12 rounded-lg"
+            title="black-100"
+          />
+          <div
+            className="bg-black-200 h-12 w-12 rounded-lg"
+            title="black-200"
+          />
+          <div
+            className="bg-black-300 h-12 w-12 rounded-lg"
+            title="black-300"
+          />
+          <div
+            className="bg-black-400 h-12 w-12 rounded-lg"
+            title="black-400"
+          />
+          <div
+            className="bg-black-500 h-12 w-12 rounded-lg"
+            title="black-500"
+          />
+          <div
+            className="bg-black-600 h-12 w-12 rounded-lg"
+            title="black-600"
+          />
+          <div
+            className="bg-black-700 h-12 w-12 rounded-lg"
+            title="black-700"
+          />
+          <div
+            className="bg-black-800 h-12 w-12 rounded-lg"
+            title="black-800"
+          />
+          <div
+            className="bg-black-900 h-12 w-12 rounded-lg"
+            title="black-900"
+          />
+          <div
+            className="bg-black-950 h-12 w-12 rounded-lg"
+            title="black-950"
+          />
+        </div>
+      </div>
     </div>
 
     <Divider />
@@ -199,19 +245,16 @@ const InventoryPage = () => (
       </div>
 
       <div className="grid gap-4">
-        <Headline level="4">Code</Headline>
-        <Text>
-          Use the <Code>useState</Code> hook to manage component state.
-        </Text>
-      </div>
-
-      <div className="grid gap-4">
         <Headline level="4">Divider</Headline>
         <Text>Content above the divider.</Text>
         <Divider />
         <Text>Content below the default divider.</Text>
-        <Divider variant="bold" />
-        <Text>Content below the bold divider.</Text>
+        <div className="flex gap-2">
+          <Text>Content left the vertical divider.</Text>
+          <Divider orientation="vertical" />
+          <Text>Content right the vertical divider.</Text>
+        </div>
+        <Divider variant="light" />
       </div>
     </div>
 
@@ -233,8 +276,8 @@ const InventoryPage = () => (
     <Divider />
 
     <div className="grid gap-4">
-      <Headline level="3">Dialog</Headline>
-      <DialogExample />
+      <Headline level="3">Overlays</Headline>
+      <OverlayExample />
     </div>
 
     <Divider />

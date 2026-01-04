@@ -13,7 +13,7 @@ export type { VariantProps } from 'cva';
 /**
  * Enhanced cva with Tailwind CSS merge support.
  */
-export const cva: CVA = (options) => {
+export const cva: CVA = options => {
   const cvaClassName = _cva(options);
-  return (props) => twMerge(cvaClassName(props));
+  return props => twMerge(cvaClassName(props));
 };

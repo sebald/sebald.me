@@ -11,26 +11,14 @@ import { styles as buttonStyles } from './button';
 import { style as headlineStyle } from './headline';
 import { style as textStyle } from './text';
 
-interface DialogContextType {
-  modal: PrimitiveRootProps['modal'];
-}
-
-const DialogContext = createContext<DialogContextType | undefined>(undefined);
-
-export const useDialogContext = () => {
-  const context = use(DialogContext);
-  if (!context) {
-    throw new Error('Dialog components must be used within Dialog.Root');
-  }
-  return context;
-};
-
+// Styles
+// ---------------
 export const styles = {
   trigger: buttonStyles,
   backdrop: cva({
     base: [
-      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-white/40',
-      'z-1000',
+      'backdrop-blur-xs fixed inset-0 min-h-dvh bg-black-200/50',
+      'z-100',
       'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.
       'supports-[-webkit-touch-callout:none]:absolute',
@@ -38,7 +26,7 @@ export const styles = {
   }),
   popup: cva({
     base: [
-      'z-1000',
+      'z-100',
       'fixed max-w-content',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
@@ -92,7 +80,7 @@ export const styles = {
     base: `${headlineStyle({ level: '4' })} [grid-area:title]`,
   }),
   description: cva({
-    base: `${textStyle({ size: 'caption', variant: 'muted' })} [grid-area:description]`,
+    base: `${textStyle({ size: 'caption' })} [grid-area:description]`,
   }),
   body: cva({
     base: `${textStyle()} [grid-area:body] mt-6`,
@@ -102,18 +90,38 @@ export const styles = {
   }),
 };
 
+// Context
+// ---------------
+interface DialogContextType {
+  modal: PrimitiveRootProps['modal'];
+}
+
+const DialogContext = createContext<DialogContextType | null>(null);
+
+export const useDialogContext = () => {
+  const context = use(DialogContext);
+  if (!context) {
+    throw new Error('Dialog components must be used within Dialog.Root');
+  }
+  return context;
+};
+
+// Dialog.Root
+// ---------------
+const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
+  <DialogContext.Provider value={{ modal: props.modal }}>
+    <Primitive.Root {...props}>{children}</Primitive.Root>
+  </DialogContext.Provider>
+);
+
+// Dialog
+// ---------------
 export interface DialogContentProps
   extends ComponentProps<typeof Primitive.Popup>,
     VariantProps<typeof styles.popup>,
     VariantProps<typeof styles.content> {
   showCloseButton?: boolean;
 }
-
-const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
-  <DialogContext.Provider value={{ modal: props.modal }}>
-    <Primitive.Root {...props}>{children}</Primitive.Root>
-  </DialogContext.Provider>
-);
 
 const DialogContent = ({
   children,
@@ -154,6 +162,8 @@ const DialogContent = ({
   );
 };
 
+// Dialog.Title
+// ---------------
 const DialogTitle = ({
   children,
   ...props
@@ -163,6 +173,8 @@ const DialogTitle = ({
   </Primitive.Title>
 );
 
+// Dialog.Description
+// ---------------
 const DialogDescription = ({
   children,
   ...props
@@ -172,6 +184,8 @@ const DialogDescription = ({
   </Primitive.Description>
 );
 
+// Dialog.Body
+// ---------------
 const DialogBody = ({
   children,
   ...props
@@ -181,6 +195,8 @@ const DialogBody = ({
   </div>
 );
 
+// Dialog.Actions
+// ---------------
 const DialogActions = ({
   children,
   ...props
@@ -190,6 +206,8 @@ const DialogActions = ({
   </div>
 );
 
+// Dialog.Trigger
+// ---------------
 export interface DialogTriggerProps
   extends ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
@@ -200,6 +218,8 @@ const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
   </Primitive.Trigger>
 );
 
+// Dialog.Close
+// ---------------
 const DialogClose = ({
   children,
   ...props
@@ -209,6 +229,8 @@ const DialogClose = ({
   </Primitive.Close>
 );
 
+// Dialog API
+// ---------------
 export const Dialog = Object.assign(DialogContent, {
   Root: DialogRoot,
   Title: DialogTitle,
@@ -217,4 +239,5 @@ export const Dialog = Object.assign(DialogContent, {
   Actions: DialogActions,
   Trigger: DialogTrigger,
   Close: DialogClose,
+  createHandle: Primitive.createHandle,
 });

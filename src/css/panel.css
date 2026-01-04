@@ -54,7 +54,7 @@
 }
 
 @utility panel-clear {
-  --panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.15));
+  --panel-bg: linear-gradient(135deg, oklch(1 0 0 / 0.6), oklch(1 0 0 / 0.45));
   --panel-blur: var(--blur-lg);
   --panel-border: oklch(1 0 0 / 0.95);
   --panel-edge: oklch(1 0 0 / 0.9);
@@ -71,7 +71,7 @@
     oklch(from var(--color-oatmeal-800) l c h / 0.35),
     oklch(from var(--color-oatmeal-950) l c h / 0.5)
   );
-  --panel-blur: blur(40px);
+  --panel-blur: var(--blur-2xl);
   --panel-border: oklch(from var(--color-oatmeal-300) l c h / 0.5);
   --panel-edge: transparent;
   --panel-highlight: transparent;
@@ -87,7 +87,7 @@
     oklch(from var(--color-oatmeal-700) l c h / 0.65),
     oklch(from var(--color-oatmeal-800) l c h / 0.8)
   );
-  --panel-blur: blur(12px);
+  --panel-blur: var(--blur-md);
   --panel-border: oklch(from var(--color-oatmeal-700) l c h / 0.5);
   --panel-edge: oklch(from var(--color-oatmeal-400) l c h / 0.4);
   --panel-highlight: oklch(from var(--color-oatmeal-100) l c h / 0.25);
@@ -103,7 +103,7 @@
     oklch(from var(--color-oatmeal-900) l c h / 0.9),
     oklch(from var(--color-oatmeal-950) l c h / 1)
   );
-  --panel-blur: blur(4px);
+  --panel-blur: var(--blur-xs);
   --panel-border: oklch(from var(--color-oatmeal-900) l c h);
   --panel-edge: transparent;
   --panel-highlight: oklch(1 0 0 / 0.25);
@@ -111,47 +111,4 @@
   --panel-shadow: oklch(0 0 0 / 0.15);
   --color-text: var(--color-oatmeal-300);
   --color-headline: var(--color-oatmeal-100);
-}
-
-/*
-* Utilities to set panel properties without using the CSS vars directly.
-*/
-@utility panel-bg-* {
-  --panel-bg: --value(--color- *);
-  --panel-bg: --value([ *]);
-}
-
-@utility panel-blur-* {
-  --panel-blur: --value(--blur- *);
-  --panel-blur: --value([ *]);
-}
-
-@utility panel-border-* {
-  --panel-border: --value(--color- *);
-  --panel-border: --value([ *]);
-}
-
-@utility panel-edge-* {
-  --panel-edge: --value(--color- *);
-  --panel-edge: --value([ *]);
-}
-
-@utility panel-highlight-* {
-  --panel-highlight: --value(--color- *);
-  --panel-highlight: --value([ *]);
-}
-
-@utility panel-inner-shadow-* {
-  --panel-inner-shadow: --value(--color- *);
-  --panel-inner-shadow: --value([ *]);
-}
-
-@utility panel-shadow-* {
-  --panel-shadow: --value(--color- *);
-  --panel-shadow: --value([ *]);
-}
-
-@utility panel-text-* {
-  --panel-text: --value(--color- *);
-  --panel-text: --value([ *]);
 }
