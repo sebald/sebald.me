@@ -56,6 +56,18 @@ ${processed}`;
 
 // Utilities
 // ---------------
+export const pageImage = (
+  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
+) => {
+  const segments = [...page.slugs, 'image.png'];
+  const type = page.url.includes('/lab') ? 'lab' : 'articles';
+
+  return {
+    segments,
+    url: `/og/${type}/${segments.join('/')}`,
+  };
+};
+
 export const sortByDate = <
   T extends
     | InferPageType<typeof articlesSource>

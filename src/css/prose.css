@@ -1,7 +1,5 @@
 @layer components {
   .prose {
-    --prose-width: 75ch;
-
     font-family: var(--font-body);
     color: var(--color-text-body);
     line-height: 1.75;
@@ -43,6 +41,44 @@
     }
     & > [data-breakout] {
       width: 100%;
+    }
+
+    /* Lists */
+    & ul {
+      list-style: none;
+      padding-left: 0;
+
+      & li::before {
+        content: '-';
+        color: var(--color-black-400);
+        font-size: 1.25em;
+        display: inline-flex;
+        margin-right: 6px;
+        align-items: center;
+      }
+    }
+
+    & ol {
+      list-style: none;
+      padding-left: 0;
+      counter-reset: item;
+
+      & li::before {
+        content: counter(item) '.';
+        counter-increment: item;
+        color: var(--color-black-400);
+        display: inline-block;
+        width: 1.5em;
+        margin-right: 2px;
+      }
+    }
+
+    & li {
+      margin-top: theme(spacing.1);
+    }
+
+    & li > p {
+      margin-top: 0;
     }
   }
 }
