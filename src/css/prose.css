@@ -16,10 +16,12 @@
       grid-column: 2;
     }
 
+    /* Default spacing */
     & > * + * {
       margin-top: theme(spacing.8);
     }
 
+    /* Headlines */
     & > * + h2 {
       margin-top: theme(spacing.12);
     }
@@ -50,40 +52,46 @@
 
     /* Lists */
     & ul {
-      list-style: none;
-      padding-left: 0;
+      margin: 1rem 0;
 
-      & li::before {
-        content: '-';
-        color: var(--color-black-400);
-        font-size: 1.25em;
-        display: inline-flex;
-        margin-right: 6px;
-        align-items: center;
+      & li {
+        position: relative;
+        padding-left: 1.25em;
+        margin-bottom: 0.5rem;
+        line-height: 1.5;
+
+        &::before {
+          content: '•';
+          position: absolute;
+          left: 0;
+          top: 0;
+          font-weight: bold;
+          color: var(--color-black-400);
+        }
       }
     }
 
     & ol {
       list-style: none;
+      counter-reset: prose-counter;
       padding-left: 0;
-      counter-reset: item;
+      margin: 1rem 0;
 
-      & li::before {
-        content: counter(item) '.';
-        counter-increment: item;
-        color: var(--color-black-400);
-        display: inline-block;
-        width: 1.5em;
-        margin-right: 2px;
+      & li {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        counter-increment: prose-counter;
+        margin-bottom: 0.5rem;
+
+        &::before {
+          content: counter(prose-counter) '.';
+          font-weight: bold;
+          color: var(--color-black-400);
+          flex-shrink: 0; /* Prevents number from squishing */
+          min-width: 1ch; /* Align single vs double digits */
+        }
       }
-    }
-
-    & li {
-      margin-top: theme(spacing.1);
-    }
-
-    & li > p {
-      margin-top: 0;
     }
   }
 }
