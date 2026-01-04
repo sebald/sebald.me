@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { ImageResponse } from 'next/og';
 
-import { articlesSource, getPageImage } from '@/lib/source';
+import { articlesSource, pageImage } from '@/lib/source';
 
 export const revalidate = false;
 
@@ -71,6 +71,6 @@ export const GET = async (
 export const generateStaticParams = () => {
   return articlesSource.getPages().map(page => ({
     lang: page.locale,
-    slug: getPageImage(page).segments,
+    slug: pageImage(page).segments,
   }));
 };

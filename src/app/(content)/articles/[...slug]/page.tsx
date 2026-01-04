@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { articlesSource, getPageImage } from '@/lib/source';
+import { articlesSource, pageImage } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { getMDXComponents } from '@/ui/mdx';
 
@@ -22,7 +22,7 @@ export const generateMetadata = async (
     title: page.data.title,
     description: page.data.description,
     openGraph: {
-      images: getPageImage(page).url,
+      images: pageImage(page).url,
     },
   };
 };
