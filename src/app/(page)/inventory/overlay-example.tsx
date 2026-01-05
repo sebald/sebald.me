@@ -32,8 +32,8 @@ export const OverlayExample = () => (
         </Dialog.Description>
         <Dialog.Body>This is the body text of the dialog.</Dialog.Body>
         <Dialog.Actions>
-          <Dialog.Close>Okay</Dialog.Close>
           <Dialog.Close>Close</Dialog.Close>
+          <Dialog.Close variant="light">Okay</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
@@ -46,8 +46,8 @@ export const OverlayExample = () => (
           This is a simple dialog example.
         </Dialog.Description>
         <Dialog.Actions>
-          <Dialog.Close>Okay</Dialog.Close>
           <Dialog.Close>Close</Dialog.Close>
+          <Dialog.Close variant="light">Okay</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>

@@ -2,7 +2,7 @@
 
 import { HandshakeIcon } from '@phosphor-icons/react/ssr';
 
-import { Button } from '@/ui/button';
+import type { DialogTriggerProps } from '@/ui/dialog';
 import { Dialog } from '@/ui/dialog';
 
 import { useConsent } from './use-consent';
@@ -28,11 +28,15 @@ const intl = {
 // ---------------
 export interface ConsentUpdateProps {
   locale?: keyof typeof intl;
+  triggerVariant?: DialogTriggerProps['variant'];
 }
 
 // Component
 // ---------------
-export const ConsentUpdate = ({ locale = 'en' }: ConsentUpdateProps) => {
+export const ConsentUpdate = ({
+  locale = 'en',
+  triggerVariant = 'inherit',
+}: ConsentUpdateProps) => {
   const { accept, decline } = useConsent();
   const t = intl[locale];
 
@@ -40,7 +44,7 @@ export const ConsentUpdate = ({ locale = 'en' }: ConsentUpdateProps) => {
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger variant="muted">{t.title}</Dialog.Trigger>
+      <Dialog.Trigger variant={triggerVariant}>{t.title}</Dialog.Trigger>
       <Dialog size="large">
         <Dialog.Title>
           <HandshakeIcon size={32} weight="duotone" />
