@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 
+import { siteUrl } from '@/app.config';
 import { plusJakarta, spaceMono } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
@@ -9,9 +10,7 @@ import { Navigation } from '@/ui/layout/navigation';
 // Meta
 // ---------------
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000',
-  ),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Welcome',
     template: '%s | Sebastian Sebald',

@@ -21,14 +21,13 @@ export const miscSource = loader({
   source: toFumadocsSource(misc, []),
 });
 
+export type ContentPage =
+  | InferPageType<typeof articlesSource>
+  | InferPageType<typeof labSource>;
+
 // Getters
 // ---------------
-export const getPageBySlug = (
-  slug: string[],
-):
-  | InferPageType<typeof articlesSource>
-  | InferPageType<typeof labSource>
-  | undefined => {
+export const getPageBySlug = (slug: string[]): ContentPage | undefined => {
   if (slug.length === 0) return undefined;
 
   // First element indicates the source (articles or lab)
@@ -45,9 +44,7 @@ export const getPageBySlug = (
   }
 };
 
-export const formatPageForLLM = async (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-) => {
+export const formatPageForLLM = async (page: ContentPage) => {
   const processed = (await page.data.getText('processed')).trim();
   const date = page.data.date
     ? new Date(page.data.date).toISOString().split('T')[0]
@@ -63,12 +60,7 @@ Topics: ${topics}
 ${processed}`;
 };
 
-export const formatPagesForLLM = async (
-  pages: (
-    | InferPageType<typeof articlesSource>
-    | InferPageType<typeof labSource>
-  )[],
-) => {
+export const formatPagesForLLM = async (pages: ContentPage[]) => {
   const all = await Promise.all(
     pages.map(async page => {
       const content = await formatPageForLLM(page);
@@ -83,9 +75,7 @@ ${content}
 
 // Utilities
 // ---------------
-export const pageImage = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-) => {
+export const pageImage = (page: ContentPage) => {
   const segments = [...page.slugs, 'image.png'];
   const type = page.url.includes('/lab') ? 'lab' : 'articles';
 
@@ -95,13 +85,7 @@ export const pageImage = (
   };
 };
 
-export const sortByDate = <
-  T extends
-    | InferPageType<typeof articlesSource>
-    | InferPageType<typeof labSource>,
->(
-  pages: T[],
-): T[] => {
+export const sortByDate = <T extends ContentPage>(pages: T[]): T[] => {
   return pages.sort((a, b) => {
     const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
     const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
@@ -109,10 +93,7 @@ export const sortByDate = <
   });
 };
 
-export const excerpt = (
-  page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
-  length: number = 200,
-) => {
+export const excerpt = (page: ContentPage, length: number = 200) => {
   const { contents } = page.data.structuredData;
 
   if (contents.length === 0) return '';

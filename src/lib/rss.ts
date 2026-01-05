@@ -1,60 +1,39 @@
 import { Feed } from 'feed';
-import { type InferPageType } from 'fumadocs-core/source';
 
-import { type articlesSource, type labSource } from '@/lib/source';
+import { siteUrl } from '@/app.config';
+import { type ContentPage, excerpt, sortByDate } from '@/lib/source';
 
-const baseUrl = 'https://sebald.me';
-
-type PageType =
-  | InferPageType<typeof articlesSource>
-  | InferPageType<typeof labSource>;
-
-interface FeedConfig {
-  title: string;
-  id: string;
-  link: string;
-}
-
-/**
- * Creates an RSS feed from pages
- * @param pages - Array of pages to include in the feed
- * @param config - Feed configuration (title, id, link)
- * @returns Response with RSS XML
- */
-export function createRSSFeed(pages: PageType[], config: FeedConfig): Response {
+export const createRSSFeed = (pages: ContentPage[]) => {
   const feed = new Feed({
-    title: config.title,
-    id: config.id,
-    link: config.link,
+    title: 'sebald.me',
+    description: 'Thoughts on software development and Next.js',
+    id: siteUrl,
+    link: siteUrl,
     language: 'en',
+    favicon: `${siteUrl}/favicon.ico`,
     copyright: `All rights reserved ${new Date().getFullYear()}, Sebastian Sebald`,
-  });
-
-  // Sort pages by date, most recent first
-  const sortedPages = [...pages].sort((a, b) => {
-    const dateA: number = a.data.date ? new Date(a.data.date).getTime() : 0;
-    const dateB: number = b.data.date ? new Date(b.data.date).getTime() : 0;
-    return dateB - dateA;
-  });
-
-  for (const page of sortedPages) {
-    // Skip draft items
-    if (page.data.draft) {
-      continue;
-    }
-
-    feed.addItem({
-      id: page.url,
-      title: page.data.title,
-      description: page.data.description ?? '',
-      link: `${baseUrl}${page.url}`,
-      date: page.data.date ? new Date(page.data.date) : new Date(),
-    });
-  }
-
-  return new Response(feed.rss2(), {
-    headers: {
-      'Content-Type': 'application/rss+xml; charset=utf-8',
+    updated: new Date(),
+    feedLinks: {
+      rss2: `${siteUrl}/feed.xml`,
+    },
+    author: {
+      name: 'Sebastian Sebald',
+      email: 'sebastian.sebald@gmail.com',
+      link: siteUrl,
     },
   });
-}
+
+  sortByDate(pages).forEach(page => {
+    if (page.data.draft) return;
+
+    feed.addItem({
+      title: page.data.title,
+      id: page.url,
+      link: `${siteUrl}${page.url}`,
+      date: page.data.date ? new Date(page.data.date) : new Date(),
+      content: excerpt(page, 200),
+    });
+  });
+
+  return feed.rss2();
+};

@@ -4,6 +4,9 @@ import {
   PencilIcon,
 } from '@phosphor-icons/react/dist/ssr';
 
+export const siteUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+
 export const navItems = [
   {
     title: 'Articles',
