@@ -3,7 +3,8 @@
 import { Popover as Primitive } from '@base-ui/react/popover';
 import type { PopoverRootProps as PrimitiveRootProps } from '@base-ui/react/popover';
 import { XIcon } from '@phosphor-icons/react/ssr';
-import { cva, VariantProps } from 'cva';
+import type { VariantProps } from 'cva';
+import { cva } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
 
