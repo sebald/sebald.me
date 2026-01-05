@@ -18,7 +18,7 @@ const intl = {
     decline: 'Nein, nur Essenzielle',
   },
   en: {
-    title: 'Manage consent',
+    title: 'Manage Consent',
     text: 'I use Google Analytics to better understand which content is relevant to you. This may involve transferring data to the USA. Do you consent to this?',
     note: 'Note: The page will reload to apply your selection.',
     accept: 'Yes, I agree',

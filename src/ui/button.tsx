@@ -65,7 +65,10 @@ export const styles = cva({
       link: linkStyles({
         className: 'appearance-none leading-[inherit] inline w-fit',
       }),
-      inherit: 'text-current appearance-none leading-[inherit] inline w-fit',
+      inherit: [
+        'text-current appearance-none leading-[inherit] inline w-fit',
+        'hover:text-link-hover',
+      ],
     },
   },
   compoundVariants: [

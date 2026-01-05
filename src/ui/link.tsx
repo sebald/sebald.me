@@ -21,6 +21,10 @@ export const styles = cva({
         'text-muted decoration-muted/40',
         'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
       ],
+      inherit: [
+        'text-inherit decoration-inherit',
+        'hover:text-link-hover hover:decoration-link-hover',
+      ],
     },
     noUnderline: {
       false: ['underline underline-offset-4 decoration-1'],
