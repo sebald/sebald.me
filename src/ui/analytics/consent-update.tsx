@@ -54,7 +54,7 @@ export const ConsentUpdate = ({
   return (
     <Dialog.Root>
       <Dialog.Trigger variant={triggerVariant}>{t.title}</Dialog.Trigger>
-      <Dialog size="large">
+      <Dialog size="large" showCloseButton>
         <Dialog.Title>
           <HandshakeIcon size={32} weight="duotone" />
           {t.title}
