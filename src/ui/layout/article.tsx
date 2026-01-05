@@ -18,7 +18,7 @@ const styles = {
     variants: {
       stretch: {
         full: '',
-        prose: 'text-fluid w-[min(var(--prose-width),100%)] mx-auto',
+        prose: 'fit-prose',
       },
     },
   }),

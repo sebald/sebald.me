@@ -1,1 +1,1 @@
-export const Footer = () => <div className="w-full">footer</div>;
+export const Footer = () => <div className="fit-prose">footer</div>;
