@@ -1,4 +1,5 @@
 import { type InferPageType, loader } from 'fumadocs-core/source';
+import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 import { articles, lab, misc } from 'fumadocs-mdx:collections/server';
 
 import { truncateAtWord } from './string.utils';
@@ -7,17 +8,17 @@ import { truncateAtWord } from './string.utils';
 // ---------------
 export const articlesSource = loader({
   baseUrl: '/articles',
-  source: articles.toFumadocsSource(),
+  source: toFumadocsSource(articles, []),
 });
 
 export const labSource = loader({
   baseUrl: '/lab',
-  source: lab.toFumadocsSource(),
+  source: toFumadocsSource(lab, []),
 });
 
 export const miscSource = loader({
   baseUrl: '/misc',
-  source: misc.toFumadocsSource(),
+  source: toFumadocsSource(misc, []),
 });
 
 // Getters
@@ -50,7 +51,6 @@ export const getLLMText = async (
   const processed = await page.data.getText('processed');
 
   return `# ${page.data.title}
-
 ${processed}`;
 };
 

@@ -28,6 +28,7 @@ export const Footer = () => (
 
         <div className="flex items-center gap-8">
           <Link
+            aria-label="Me on X GitHub"
             variant="inherit"
             noUnderline
             href={socialLinks.github}
@@ -36,6 +37,7 @@ export const Footer = () => (
             <GithubIcon size={16} />
           </Link>
           <Link
+            aria-label="Me on LinkedIn"
             variant="inherit"
             noUnderline
             href={socialLinks.linkedin}
@@ -44,6 +46,7 @@ export const Footer = () => (
             <LinkedInIcon size={16} />
           </Link>
           <Link
+            aria-label="Me on X (formerly Twitter)"
             variant="inherit"
             noUnderline
             href={socialLinks.x}
