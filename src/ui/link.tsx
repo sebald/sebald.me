@@ -7,7 +7,7 @@ import NextLink from 'next/link';
 // ---------------
 export const styles = cva({
   base: [
-    'group/link',
+    'group/link ensure-hitbox',
     'inline-flex items-center gap-1.5',
     'transition-colors focus-visible:focus-ring focus-visible:outline-none',
   ],
@@ -20,6 +20,10 @@ export const styles = cva({
       muted: [
         'text-muted decoration-muted/40',
         'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
+      ],
+      inherit: [
+        'text-inherit decoration-inherit',
+        'hover:text-link-hover hover:decoration-link-hover',
       ],
     },
     noUnderline: {

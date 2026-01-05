@@ -1,6 +1,6 @@
 @layer components {
   .prose {
-    @apply text-fluid;
+    @apply text-prose;
 
     font-family: var(--font-body);
     color: var(--color-text-body);

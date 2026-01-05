@@ -3,7 +3,8 @@ import type { Metadata } from 'next';
 import { plusJakarta, spaceMono } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
-import { Navigation } from '@/ui/navigation';
+import { Footer } from '@/ui/layout/footer';
+import { Navigation } from '@/ui/layout/navigation';
 
 // Meta
 // ---------------
@@ -47,7 +48,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
       <div className="grid min-h-screen grid-rows-[1fr_auto] justify-items-center">
         <Navigation />
         <main className="w-content pt-32 md:pt-40">{children}</main>
-        <footer>TODO</footer>
+        <Footer />
       </div>
       <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
     </body>

@@ -3,6 +3,25 @@
   @apply ring-blueberry-500 ring-offset-oatmeal-50 ring-[3px] ring-offset-2;
 }
 
+/* Utility to ensure a minimum hitbox for interactive elements. */
+@utility ensure-hitbox {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    /* 24x24px is WCAG 2.1, to support 2.2 this would need to be 44x44px */
+    min-height: 24px;
+    min-width: 24px;
+    z-index: 9999;
+  }
+}
+
 /* Typescale utility for responsive font sizing based on CSS variables. */
 @utility typescale-* {
   /* Pow only works with numbers, so no clamp. */
@@ -15,8 +34,15 @@
 }
 
 /* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px viewport width */
-@utility text-fluid {
+@utility text-prose {
   font-size: clamp(var(--text-base), 1vw + 0.5rem, var(--text-lg));
+}
+
+/* Utility to fit prose content within a max width container. */
+@utility fit-prose {
+  @apply text-prose;
+  margin-inline: auto;
+  width: min(var(--prose-width), 100%);
 }
 
 /* Change font weight on hover without reflow. */

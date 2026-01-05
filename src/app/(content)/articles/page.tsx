@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
 import { articlesSource, excerpt, sortByDate } from '@/lib/source';
-import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
+import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
 
 // Config
@@ -25,7 +25,7 @@ const ArticlesPage = async () => {
   const articles = sortByDate(articlesSource.getPages());
 
   return (
-    <div className="mx-auto grid max-w-[75ch] gap-12 md:gap-16">
+    <div className="fit-prose grid gap-12 md:gap-16">
       <Headline level="4" variant="accent" as="h1">
         {page.title}
       </Headline>

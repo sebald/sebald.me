@@ -4,24 +4,23 @@ import type { AriaAttributes } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
-
-import { Headline } from './headline';
-import type { HeadlineProps } from './headline';
+import type { HeadlineProps } from '@/ui/headline';
+import { Headline } from '@/ui/headline';
 
 // Styles
 // ---------------
 const styles = {
   root: cva({
     base: ['flex flex-col items-start'],
-  }),
-  header: cva({
-    base: ['flex flex-col-reverse items-start'],
     variants: {
       stretch: {
         full: '',
-        prose: 'text-fluid w-[min(var(--prose-width),100%)] mx-auto',
+        prose: 'fit-prose',
       },
     },
+  }),
+  header: cva({
+    base: ['flex flex-col-reverse items-start'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -30,7 +29,7 @@ const styles = {
     base: ['prose'],
   }),
   excerpt: cva({
-    base: 'text-pretty',
+    base: 'text-pretty text-base',
   }),
 };
 
@@ -43,13 +42,8 @@ interface HeaderProps
   className?: string;
 }
 
-const Header = ({
-  children,
-  stretch,
-  className,
-  ...ariaProps
-}: HeaderProps) => (
-  <header className={styles.header({ stretch, className })} {...ariaProps}>
+const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
+  <header className={styles.header({ className })} {...ariaProps}>
     {children}
   </header>
 );
@@ -159,12 +153,15 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
 
 // Article.Root
 // ---------------
-interface RootProps extends PropsWithChildren, AriaAttributes {
+interface RootProps
+  extends PropsWithChildren,
+    AriaAttributes,
+    VariantProps<typeof styles.root> {
   className?: string;
 }
 
-const Root = ({ children, className, ...ariaProps }: RootProps) => (
-  <article className={styles.root({ className })} {...ariaProps}>
+const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
+  <article className={styles.root({ className, stretch })} {...ariaProps}>
     {children}
   </article>
 );

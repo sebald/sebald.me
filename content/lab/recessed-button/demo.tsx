@@ -2,7 +2,8 @@
 
 import { Button as Primitive } from '@base-ui/react/button';
 import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
-import { cva, VariantProps } from 'cva';
+import type { VariantProps } from 'cva';
+import { cva } from 'cva';
 
 export const styles = cva({
   base: [
