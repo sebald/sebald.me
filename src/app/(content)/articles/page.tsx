@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
 import { articlesSource, excerpt, sortByDate } from '@/lib/source';
-import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
+import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
 
 // Config

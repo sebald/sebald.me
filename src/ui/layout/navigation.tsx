@@ -9,15 +9,14 @@ import { useResizeObserver } from 'usehooks-ts';
 
 import { navItems, socialLinks } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
-
-import { Divider } from './divider';
-import { Headline } from './headline';
-import { GithubIcon } from './icon/github-icon';
-import { LinkedInIcon } from './icon/linkedin-icon';
-import { MenuIcon } from './icon/menu-icon';
-import { XComIcon } from './icon/x-com-icon';
-import { Logo } from './logo';
-import { Popover } from './popover';
+import { Divider } from '@/ui/divider';
+import { Headline } from '@/ui/headline';
+import { GithubIcon } from '@/ui/icon/github-icon';
+import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
+import { MenuIcon } from '@/ui/icon/menu-icon';
+import { XComIcon } from '@/ui/icon/x-com-icon';
+import { Logo } from '@/ui/logo';
+import { Popover } from '@/ui/popover';
 
 // Nav Item (set aria-current if active))
 // ---------------

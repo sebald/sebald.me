@@ -4,9 +4,8 @@ import type { AriaAttributes } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
-
-import { Headline } from './headline';
-import type { HeadlineProps } from './headline';
+import type { HeadlineProps } from '@/ui/headline';
+import { Headline } from '@/ui/headline';
 
 // Styles
 // ---------------
