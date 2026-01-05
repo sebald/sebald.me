@@ -48,10 +48,34 @@ export const getPageBySlug = (
 export const getLLMText = async (
   page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
 ) => {
-  const processed = await page.data.getText('processed');
+  const processed = (await page.data.getText('processed')).trim();
+  const date = page.data.date
+    ? new Date(page.data.date).toISOString().split('T')[0]
+    : '';
+  const url = `https://sebald.me${page.url}`;
+  const topics = page.data.topics?.join(', ') || '';
 
-  return `# ${page.data.title}
+  return `Title: "${page.data.title}"
+Date: ${date}
+URL: ${url}
+Topics: ${topics}
+
 ${processed}`;
+};
+
+export const getAllLLMText = async () => {
+  const pages = [...articlesSource.getPages(), ...labSource.getPages()];
+
+  const all = await Promise.all(
+    pages.map(async page => {
+      const content = await getLLMText(page);
+      return `<article id="${page.url}">
+${content}
+</article>`;
+    }),
+  );
+
+  return all.join('\n\n');
 };
 
 // Utilities
