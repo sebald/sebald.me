@@ -25,7 +25,7 @@ const ArticlesPage = async () => {
   const articles = sortByDate(articlesSource.getPages());
 
   return (
-    <div className="mx-auto grid max-w-[75ch] gap-12 md:gap-16">
+    <div className="fit-prose grid gap-12 md:gap-16">
       <Headline level="4" variant="accent" as="h1">
         {page.title}
       </Headline>
