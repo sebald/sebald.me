@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
-import { articlesSource, getExcerpt, sortByDate } from '@/lib/source';
+import { articlesSource, excerpt, sortByDate } from '@/lib/source';
 import { Article } from '@/ui/article';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -31,39 +31,36 @@ const ArticlesPage = async () => {
       </Headline>
 
       <div className="space-y-20">
-        {articles.map(article => {
-          const excerpt = getExcerpt(article);
-          return (
-            <Article
-              key={article.url}
-              aria-labelledby={article.url}
-              className="gap-2.5"
-            >
-              <Article.Header>
-                <Link
-                  href={article.url}
-                  aria-label={`Read article: ${article.data.title}`}
-                  noUnderline
-                >
-                  <Article.Title id={article.url} variant="list">
-                    {article.data.title}
-                  </Article.Title>
-                </Link>
-                <Article.Meta
-                  date={article.data.date}
-                  topics={article.data.topics}
-                />
-              </Article.Header>
-              <Article.Excerpt>{excerpt}</Article.Excerpt>
+        {articles.map(article => (
+          <Article
+            key={article.url}
+            aria-labelledby={article.url}
+            className="gap-2.5"
+          >
+            <Article.Header>
               <Link
                 href={article.url}
                 aria-label={`Read article: ${article.data.title}`}
+                noUnderline
               >
-                Read more
+                <Article.Title id={article.url} variant="list">
+                  {article.data.title}
+                </Article.Title>
               </Link>
-            </Article>
-          );
-        })}
+              <Article.Meta
+                date={article.data.date}
+                topics={article.data.topics}
+              />
+            </Article.Header>
+            <Article.Excerpt>{excerpt(article)}</Article.Excerpt>
+            <Link
+              href={article.url}
+              aria-label={`Read article: ${article.data.title}`}
+            >
+              Read more
+            </Link>
+          </Article>
+        ))}
       </div>
     </div>
   );

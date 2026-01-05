@@ -3,24 +3,17 @@
 import { Button as Primitive } from '@base-ui/react/button';
 import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
 
-import { cva, VariantProps } from '@/lib/styles.utils';
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
+
+import { styles as linkStyles } from './link';
 
 // Styles
 // ---------------
 export const styles = cva({
   base: [
-    'relative inline-flex items-center justify-center gap-2',
-    'h-11',
-    'border border-transparent rounded-full',
-    'text-sm font-semibold tracking-wide',
+    'relative',
     'cursor-pointer',
-    'transition-transform duration-200',
-
-    '[background-clip:padding-box,border-box]',
-    '[background-origin:padding-box,border-box]',
-
-    '[background-image:var(--btn-bg),var(--btn-border)]',
-    'enabled:hover:[background-image:var(--btn-bg-hover),var(--btn-border-hover)]',
 
     /* States */
     'focus-visible:focus-ring outline-none',
@@ -69,12 +62,34 @@ export const styles = cva({
         'border-[oklch(from_currentColor_l_c_h/0.4)]',
         'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
       ],
+      link: linkStyles({
+        className: 'appearance-none leading-[inherit] inline w-fit',
+      }),
+      inherit: 'text-current appearance-none leading-[inherit] inline w-fit',
     },
   },
   compoundVariants: [
     {
+      variant: ['light', 'dark', 'accent', 'ghost', 'outline', 'icon'],
+      className: [
+        [
+          'relative inline-flex items-center justify-center gap-2',
+          'h-11',
+          'border border-transparent rounded-full',
+          'text-sm font-medium tracking-wide',
+          'transition-transform duration-200',
+
+          '[background-clip:padding-box,border-box]',
+          '[background-origin:padding-box,border-box]',
+
+          '[background-image:var(--btn-bg),var(--btn-border)]',
+          'enabled:hover:[background-image:var(--btn-bg-hover),var(--btn-border-hover)]',
+        ],
+      ],
+    },
+    {
       variant: ['light', 'dark', 'accent', 'ghost', 'outline'],
-      className: 'px-8',
+      className: ['px-8'],
     },
   ],
   defaultVariants: {

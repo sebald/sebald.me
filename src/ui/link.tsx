@@ -5,7 +5,7 @@ import NextLink from 'next/link';
 
 // Styles
 // ---------------
-const style = cva({
+export const styles = cva({
   base: [
     'group/link',
     'inline-flex items-center gap-1.5',
@@ -36,7 +36,7 @@ const style = cva({
 // Props
 // ---------------
 export interface LinkProps
-  extends VariantProps<typeof style>,
+  extends VariantProps<typeof styles>,
     Omit<NextLinkProps<'a'>, 'className' | 'style' | 'href'> {
   href: NextLinkProps<'a'>['href'] | string;
 }
@@ -63,7 +63,7 @@ export const Link = ({
   return (
     <Component
       href={href as Route}
-      className={style({ variant, noUnderline })}
+      className={styles({ variant, noUnderline })}
       {...props}
       {...externalProps}
     >

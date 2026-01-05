@@ -11,7 +11,7 @@ export const style = cva({
   ],
   variants: {
     level: {
-      display: 'typescale-6 leading-tight -tracking-[0.04em]',
+      display: 'text-4xl md:text-6xl leading-tight -tracking-[0.04em]',
       '1': 'typescale-5 leading-tight -tracking-wide',
       '2': 'typescale-4 leading-tight -tracking-wide',
       '3': 'typescale-3 leading-tight -tracking-wide',

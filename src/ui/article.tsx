@@ -16,6 +16,12 @@ const styles = {
   }),
   header: cva({
     base: ['flex flex-col-reverse items-start'],
+    variants: {
+      stretch: {
+        full: '',
+        prose: 'text-fluid w-[min(var(--prose-width),100%)] mx-auto',
+      },
+    },
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -37,8 +43,13 @@ interface HeaderProps
   className?: string;
 }
 
-const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
-  <header className={styles.header({ className })} {...ariaProps}>
+const Header = ({
+  children,
+  stretch,
+  className,
+  ...ariaProps
+}: HeaderProps) => (
+  <header className={styles.header({ stretch, className })} {...ariaProps}>
     {children}
   </header>
 );

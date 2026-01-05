@@ -7,10 +7,14 @@ import { Button } from '../button';
 import { Dialog } from '../dialog';
 import { useConsent } from './use-consent';
 
-type ConsentBannerProps = {
+// Props
+// ---------------
+export interface ConsentBannerProps {
   shouldShow: boolean;
-};
+}
 
+// Component
+// ---------------
 export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
   const [open, setOpen] = useState(shouldShow);
   const { accept, decline } = useConsent();
@@ -42,10 +46,10 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
           resonate with you most. It helps me write better content.
         </Dialog.Body>
         <Dialog.Actions>
+          <Button onClick={handleAccept}>Accept</Button>
           <Button variant="ghost" onClick={handleDecline}>
             Decline
           </Button>
-          <Button onClick={handleAccept}>Accept</Button>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
