@@ -1,4 +1,7 @@
-import { CopyrightIcon } from '@phosphor-icons/react/dist/ssr';
+import {
+  CopyrightIcon,
+  MarkdownLogoIcon,
+} from '@phosphor-icons/react/dist/ssr';
 
 import { socialLinks } from '@/app.config';
 import { ConsentUpdate } from '@/ui/analytics/consent-update';
@@ -53,6 +56,14 @@ export const Footer = () => (
             target="_blank"
           >
             <XComIcon size={16} />
+          </Link>
+          <Link
+            aria-label="Me on X GitHub"
+            variant="inherit"
+            noUnderline
+            href="/llms.txt"
+          >
+            <MarkdownLogoIcon weight="regular" size={20} />
           </Link>
         </div>
       </div>

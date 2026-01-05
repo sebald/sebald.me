@@ -35,7 +35,7 @@ const ArticlesPage = async () => {
           <Article
             key={article.url}
             aria-labelledby={article.url}
-            className="gap-2.5"
+            className="gap-2.5 text-base"
           >
             <Article.Header>
               <Link

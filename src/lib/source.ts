@@ -45,7 +45,7 @@ export const getPageBySlug = (
   }
 };
 
-export const getLLMText = async (
+export const formatPageForLLM = async (
   page: InferPageType<typeof articlesSource> | InferPageType<typeof labSource>,
 ) => {
   const processed = (await page.data.getText('processed')).trim();
@@ -63,12 +63,15 @@ Topics: ${topics}
 ${processed}`;
 };
 
-export const getAllLLMText = async () => {
-  const pages = [...articlesSource.getPages(), ...labSource.getPages()];
-
+export const formatPagesForLLM = async (
+  pages: (
+    | InferPageType<typeof articlesSource>
+    | InferPageType<typeof labSource>
+  )[],
+) => {
   const all = await Promise.all(
     pages.map(async page => {
-      const content = await getLLMText(page);
+      const content = await formatPageForLLM(page);
       return `<article id="${page.url}">
 ${content}
 </article>`;

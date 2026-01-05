@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import {
   articlesSource,
-  getLLMText,
+  formatPageForLLM,
   getPageBySlug,
   labSource,
 } from '@/lib/source';
@@ -23,7 +23,7 @@ export async function GET(_req: Request, { params }: RouteContext) {
     notFound();
   }
 
-  const markdown = await getLLMText(page);
+  const markdown = await formatPageForLLM(page);
   return new Response(markdown, {
     headers: {
       'Content-Type': 'text/markdown; charset=utf-8',
