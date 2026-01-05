@@ -13,8 +13,8 @@ const style = cva({
         'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.2)]',
     },
     orientation: {
-      horizontal: 'h-0.5 w-[calc(100%-var(--inset)*2)] mx-auto',
-      vertical: 'w-0.5 h-[calc(100%-var(--inset)*2)] min-h-4 my-auto',
+      horizontal: 'h-px w-[calc(100%-var(--inset)*2)] mx-auto',
+      vertical: 'w-px h-[calc(100%-var(--inset)*2)] min-h-4 my-auto',
     },
   },
   defaultVariants: {

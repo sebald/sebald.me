@@ -2,7 +2,7 @@
 
 import { FocusTrap } from 'focus-trap-react';
 import type { LinkProps } from 'next/link';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useResizeObserver } from 'usehooks-ts';
@@ -15,6 +15,7 @@ import { GithubIcon } from '@/ui/icon/github-icon';
 import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
 import { MenuIcon } from '@/ui/icon/menu-icon';
 import { XComIcon } from '@/ui/icon/x-com-icon';
+import { Link } from '@/ui/link';
 import { Logo } from '@/ui/logo';
 import { Popover } from '@/ui/popover';
 
@@ -30,9 +31,9 @@ const NavItem = ({ children, ...props }: LinkProps<'a'>) => {
     : undefined;
 
   return (
-    <Link {...props} aria-current={isActive ? 'page' : undefined}>
+    <NextLink {...props} aria-current={isActive ? 'page' : undefined}>
       {children}
-    </Link>
+    </NextLink>
   );
 };
 
@@ -130,29 +131,32 @@ const FloatingNav = () => {
                 })}
               </div>
               <div className="pb-6 pt-2">
-                <Divider variant="light" inset="2" />
+                <Divider variant="light" inset="4" />
               </div>
               <div className="text-black-600 flex items-center justify-around gap-12 px-6 pb-4 md:justify-end">
                 <Link
-                  className="hover:text-link-hover"
+                  variant="inherit"
+                  noUnderline
                   href={socialLinks.github}
                   target="_blank"
                 >
-                  <GithubIcon size={24} />
+                  <GithubIcon size={20} />
                 </Link>
                 <Link
-                  className="hover:text-link-hover"
+                  variant="inherit"
+                  noUnderline
                   href={socialLinks.linkedin}
                   target="_blank"
                 >
-                  <LinkedInIcon size={24} />
+                  <LinkedInIcon size={20} />
                 </Link>
                 <Link
-                  className="hover:text-link-hover"
+                  variant="inherit"
+                  noUnderline
                   href={socialLinks.x}
                   target="_blank"
                 >
-                  <XComIcon size={24} />
+                  <XComIcon size={20} />
                 </Link>
               </div>
             </nav>
