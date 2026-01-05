@@ -12,13 +12,15 @@ import { useConsent } from './use-consent';
 const intl = {
   de: {
     title: 'Einwilligung verwalten',
-    body: 'Ich nutze Google Analytics, um besser zu verstehen, welche Inhalte für dich relevant sind. Dabei können Daten auch in die USA übertragen werden. Bist du damit einverstanden?',
+    text: 'Ich nutze Google Analytics, um besser zu verstehen, welche Inhalte für dich relevant sind. Dabei können Daten auch in die USA übertragen werden. Bist du damit einverstanden?',
+    note: 'Hinweis: Die Seite wird neu geladen, um deine Auswahl anzuwenden.',
     accept: 'Ja, einverstanden',
     decline: 'Nein, nur Essenzielle',
   },
   en: {
     title: 'Manage consent',
-    body: 'I use Google Analytics to better understand which content is relevant to you. This may involve transferring data to the USA. Do you consent to this?',
+    text: 'I use Google Analytics to better understand which content is relevant to you. This may involve transferring data to the USA. Do you consent to this?',
+    note: 'Note: The page will reload to apply your selection.',
     accept: 'Yes, I agree',
     decline: 'No, essential only',
   },
@@ -40,7 +42,14 @@ export const ConsentUpdate = ({
   const { accept, decline } = useConsent();
   const t = intl[locale];
 
-  // TODO: Reload page after consent update.
+  const handleAccept = () => {
+    accept();
+    window.location.reload();
+  };
+  const handleDecline = () => {
+    decline();
+    window.location.reload();
+  };
 
   return (
     <Dialog.Root>
@@ -50,13 +59,16 @@ export const ConsentUpdate = ({
           <HandshakeIcon size={32} weight="duotone" />
           {t.title}
         </Dialog.Title>
-        <Dialog.Body>{t.body}</Dialog.Body>
+        <Dialog.Body>
+          <div>{t.text}</div>
+          <div className="italic">{t.note}</div>
+        </Dialog.Body>
         <Dialog.Actions>
-          <Dialog.Close variant="ghost" onClick={decline}>
-            {t.decline}
-          </Dialog.Close>
-          <Dialog.Close variant="light" onClick={accept}>
+          <Dialog.Close variant="light" onClick={handleAccept}>
             {t.accept}
+          </Dialog.Close>
+          <Dialog.Close variant="ghost" onClick={handleDecline}>
+            {t.decline}
           </Dialog.Close>
         </Dialog.Actions>
       </Dialog>

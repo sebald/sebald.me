@@ -269,7 +269,7 @@ const InventoryPage = () => (
         <Button variant="accent">Button</Button>
         <Button variant="ghost">Button</Button>
         <Button variant="outline">Button</Button>
-        <Button variant="outline">Button</Button>
+        <Button variant="link">Button</Button>
         <Button disabled>Button</Button>
       </div>
     </div>

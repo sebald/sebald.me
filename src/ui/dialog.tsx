@@ -84,10 +84,14 @@ export const styles = {
     base: `${textStyle({ size: 'caption' })} [grid-area:description]`,
   }),
   body: cva({
-    base: `${textStyle()} [grid-area:body] mt-6`,
+    base: `${textStyle()} [grid-area:body] mt-6 grid gap-4`,
   }),
   actions: cva({
-    base: 'flex shrink-0 gap-3 [grid-area:actions] mt-6 justify-end self-end',
+    base: [
+      'flex shrink-0 gap-3 [grid-area:actions] mt-6',
+      'flex-col',
+      'md:flex-row-reverse md:justify-start md:self-end',
+    ],
   }),
 };
 

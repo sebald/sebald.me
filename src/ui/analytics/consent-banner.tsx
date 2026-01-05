@@ -46,10 +46,10 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
           resonate with you most. It helps me write better content.
         </Dialog.Body>
         <Dialog.Actions>
+          <Button onClick={handleAccept}>Accept</Button>
           <Button variant="ghost" onClick={handleDecline}>
             Decline
           </Button>
-          <Button onClick={handleAccept}>Accept</Button>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
