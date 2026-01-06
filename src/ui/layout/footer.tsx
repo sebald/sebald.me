@@ -7,7 +7,6 @@ import {
 import type { PropsWithChildren } from 'react';
 
 import { socialLinks } from '@/app.config';
-import { cn } from '@/lib/styles.utils';
 import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Divider } from '@/ui/divider';
 import { GithubIcon } from '@/ui/icon/github-icon';
@@ -15,16 +14,8 @@ import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
 import { XComIcon } from '@/ui/icon/x-com-icon';
 import { Link } from '@/ui/link';
 
-const Headline = ({
-  children,
-  className,
-}: PropsWithChildren<{ className?: string }>) => (
-  <h6
-    className={cn(
-      'text-black-400 font-sans text-xs font-bold uppercase leading-none',
-      className,
-    )}
-  >
+const Headline = ({ children }: PropsWithChildren) => (
+  <h6 className="text-black-400 hidden font-sans text-xs font-bold uppercase leading-none md:block">
     {children}
   </h6>
 );
@@ -96,7 +87,7 @@ const Links = () => (
 
 const Legal = () => (
   <div className="col-span-2 flex justify-between md:col-span-1 md:flex-col md:gap-2">
-    <Headline className="hidden md:block">Legal</Headline>
+    <Headline>Legal</Headline>
     <Link variant="inherit" noUnderline href="/imprint">
       Imprint
     </Link>
@@ -114,7 +105,7 @@ const Legal = () => (
 export const Footer = () => (
   <div className="fit-prose text-muted px-4 pb-8 pt-28 md:px-0">
     <Divider variant="light" />
-    <div className="grid grid-cols-[1fr_max-content] gap-y-10 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
+    <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
       <Legal />
       <Social />
