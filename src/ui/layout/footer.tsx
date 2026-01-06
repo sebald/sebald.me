@@ -57,50 +57,46 @@ const Social = () => (
 const Links = () => (
   <div className="flex flex-col gap-2">
     <Headline>Links</Headline>
-    <div className="flex flex-col gap-2">
-      <Link
-        aria-label="View site content formatted for LLMs"
-        variant="inherit"
-        noUnderline
-        href="/llms.txt"
-      >
-        <FileTextIcon size={16} />
-        llms.txt
-      </Link>
-      <Link
-        aria-label="View RSS feed"
-        variant="inherit"
-        noUnderline
-        href="/rss.xml"
-      >
-        <RssIcon size={16} />
-        RSS Feed
-      </Link>
-      <Link
-        aria-label="View inventory"
-        variant="inherit"
-        noUnderline
-        href="/inventory"
-      >
-        <CubeIcon size={16} />
-        Inventory
-      </Link>
-    </div>
+    <Link
+      aria-label="View site content formatted for LLMs"
+      variant="inherit"
+      noUnderline
+      href="/llms.txt"
+    >
+      <FileTextIcon size={16} />
+      llms.txt
+    </Link>
+    <Link
+      aria-label="View RSS feed"
+      variant="inherit"
+      noUnderline
+      href="/rss.xml"
+    >
+      <RssIcon size={16} />
+      RSS Feed
+    </Link>
+    <Link
+      aria-label="View inventory"
+      variant="inherit"
+      noUnderline
+      href="/inventory"
+    >
+      <CubeIcon size={16} />
+      Inventory
+    </Link>
   </div>
 );
 
 const Legal = () => (
   <div className="flex flex-col gap-2">
     <Headline>Legal</Headline>
-    <div className="flex flex-col gap-1.5">
-      <Link variant="inherit" noUnderline href="/imprint">
-        Imprint
-      </Link>
-      <Link variant="inherit" noUnderline href="/privacy">
-        Privacy Policy
-      </Link>
-      <ConsentUpdate />
-    </div>
+    <Link variant="inherit" noUnderline href="/imprint">
+      Imprint
+    </Link>
+    <Link variant="inherit" noUnderline href="/privacy">
+      Privacy Policy
+    </Link>
+    <ConsentUpdate />
   </div>
 );
 
@@ -114,7 +110,7 @@ export const Footer = () => (
       <Legal />
       <Social />
     </div>
-    <div className="flex items-center justify-end gap-1 pt-12 text-sm">
+    <div className="flex items-center gap-1 pt-8 text-sm">
       <CopyrightIcon size={14} />
       {new Date().getFullYear()} Sebastian Sebald
     </div>
