@@ -3,12 +3,9 @@ import { articlesSource } from '@/lib/source';
 
 export const revalidate = false;
 
-export function GET() {
-  const pages = articlesSource.getPages();
-
-  return createRSSFeed(pages, {
-    title: 'Sebastian Sebald - Articles',
-    id: 'https://sebald.me/articles',
-    link: 'https://sebald.me/articles',
+export const GET = () =>
+  createRSSFeed(articlesSource.getPages(), {
+    title: 'Articles | sebald.me',
+    description:
+      'Articles about software development and design by Sebastian Sebald',
   });
-}

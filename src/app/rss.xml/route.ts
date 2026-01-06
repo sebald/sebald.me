@@ -3,7 +3,7 @@ import { articlesSource, labSource } from '@/lib/source';
 
 export const revalidate = false;
 
-export function GET() {
+export const GET = () => {
   const feed = createRSSFeed([
     ...articlesSource.getPages(),
     ...labSource.getPages(),
@@ -14,4 +14,4 @@ export function GET() {
       'Content-Type': 'application/xml; charset=utf-8',
     },
   });
-}
+};

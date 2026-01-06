@@ -3,10 +3,19 @@ import { Feed } from 'feed';
 import { siteUrl } from '@/app.config';
 import { type ContentPage, excerpt, sortByDate } from '@/lib/source';
 
-export const createRSSFeed = (pages: ContentPage[]) => {
+interface CreateRSSFeedConfig {
+  title?: string;
+  description?: string;
+}
+
+export const createRSSFeed = (
+  pages: ContentPage[],
+  config?: CreateRSSFeedConfig,
+) => {
   const feed = new Feed({
-    title: 'sebald.me',
-    description: 'Thoughts on software development and Next.js',
+    title: config?.title ?? 'sebald.me',
+    description:
+      config?.description ?? 'Personal blog and portfolio of Sebastian Sebald',
     id: siteUrl,
     link: siteUrl,
     language: 'en',
