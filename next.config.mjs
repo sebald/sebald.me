@@ -9,18 +9,6 @@ const config = {
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react'],
   },
-  async rewrites() {
-    return [
-      {
-        source: '/articles/:path*.mdx',
-        destination: '/llms.mdx/articles/:path*',
-      },
-      {
-        source: '/lab/:path*.mdx',
-        destination: '/llms.mdx/lab/:path*',
-      },
-    ];
-  },
 };
 
 export default withMDX(config);
