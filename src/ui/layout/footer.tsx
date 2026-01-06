@@ -110,9 +110,9 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="fit-prose text-muted pt-28 md:pb-8">
+  <div className="fit-prose text-muted px-8 pt-28 md:px-0 md:pb-8">
     <Divider variant="light" />
-    <div className="grid grid-cols-[max-content_1fr_max-content] gap-24 pt-10 text-sm">
+    <div className="grid grid-cols-2 gap-x-24 gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content]">
       <Links />
       <Social />
       <Legal />
