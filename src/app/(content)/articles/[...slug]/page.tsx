@@ -7,8 +7,13 @@ import { getMDXComponents } from '@/ui/mdx';
 
 // Config
 // ---------------
+export const dynamic = 'force-static';
 export const dynamicParams = false;
-export const generateStaticParams = async () => articlesSource.generateParams();
+export const generateStaticParams = () => {
+  return articlesSource.getPages().map(page => ({
+    slug: page.slugs,
+  }));
+};
 
 // Meta
 // ---------------
