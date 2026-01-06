@@ -7,6 +7,7 @@ import {
 import type { PropsWithChildren } from 'react';
 
 import { socialLinks } from '@/app.config';
+import { cn } from '@/lib/styles.utils';
 import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Divider } from '@/ui/divider';
 import { GithubIcon } from '@/ui/icon/github-icon';
@@ -14,16 +15,22 @@ import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
 import { XComIcon } from '@/ui/icon/x-com-icon';
 import { Link } from '@/ui/link';
 
-const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-black-400 font-sans text-xs font-bold uppercase leading-none">
+const Headline = ({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) => (
+  <h6
+    className={cn(
+      'text-black-400 font-sans text-xs font-bold uppercase leading-none',
+      className,
+    )}
+  >
     {children}
   </h6>
 );
 
-/* <span className="text-muted text-sm">·</span> */
-
 const Social = () => (
-  <div className="flex items-start gap-8">
+  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
@@ -88,14 +95,16 @@ const Links = () => (
 );
 
 const Legal = () => (
-  <div className="flex flex-col gap-2">
-    <Headline>Legal</Headline>
+  <div className="col-span-2 flex justify-between md:col-span-1 md:flex-col md:gap-2">
+    <Headline className="hidden md:block">Legal</Headline>
     <Link variant="inherit" noUnderline href="/imprint">
       Imprint
     </Link>
+    <span className="text-muted text-sm md:hidden">·</span>
     <Link variant="inherit" noUnderline href="/privacy">
       Privacy Policy
     </Link>
+    <span className="text-muted text-sm md:hidden">·</span>
     <ConsentUpdate />
   </div>
 );
@@ -103,14 +112,14 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="fit-prose text-muted px-8 pt-28 md:px-0 md:pb-8">
+  <div className="fit-prose text-muted px-4 pb-8 pt-28 md:px-0">
     <Divider variant="light" />
-    <div className="grid grid-cols-2 gap-x-24 gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content]">
+    <div className="grid grid-cols-[1fr_max-content] gap-y-10 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
       <Legal />
       <Social />
     </div>
-    <div className="flex items-center gap-1 pt-8 text-sm">
+    <div className="flex items-center justify-center gap-1 pt-4 text-sm md:justify-start md:pt-8">
       <CopyrightIcon size={14} />
       {new Date().getFullYear()} Sebastian Sebald
     </div>
