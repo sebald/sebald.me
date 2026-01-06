@@ -1,11 +1,21 @@
-import { articlesSource, formatPagesForLLM, labSource } from '@/lib/source';
+import {
+  articlesSource,
+  formatPagesForLLM,
+  labSource,
+  sortByDate,
+} from '@/lib/source';
 
+// Config
+// ---------------
 export const revalidate = false;
 
+// Route
+// ---------------
 export const GET = async () => {
-  const text = await formatPagesForLLM([
+  const pages = sortByDate([
     ...articlesSource.getPages(),
     ...labSource.getPages(),
   ]);
+  const text = await formatPagesForLLM(pages);
   return new Response(`# sebald.me - Content Archive\n\n${text}`);
 };
