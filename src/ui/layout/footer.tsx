@@ -1,7 +1,7 @@
 import {
   CopyrightIcon,
   CubeIcon,
-  MarkdownLogoIcon,
+  FileTextIcon,
   RssIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import type { PropsWithChildren } from 'react';
@@ -14,105 +14,112 @@ import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
 import { XComIcon } from '@/ui/icon/x-com-icon';
 import { Link } from '@/ui/link';
 
-const Legal = () => (
-  <div className="flex items-center gap-2">
-    <Link variant="inherit" noUnderline href="/imprint">
-      Imprint
-    </Link>
-    <span className="text-muted text-sm">·</span>
-    <Link variant="inherit" noUnderline href="/privacy">
-      Privacy Policy
-    </Link>
-    <span className="text-muted text-sm">·</span>
-    <ConsentUpdate />
-  </div>
+const Headline = ({ children }: PropsWithChildren) => (
+  <h6 className="text-black-400 font-sans text-xs font-bold uppercase leading-none">
+    {children}
+  </h6>
 );
 
+/* <span className="text-muted text-sm">·</span> */
+
 const Social = () => (
-  <div className="flex items-center gap-8">
-    <Link
-      aria-label="Me on X GitHub"
-      variant="inherit"
-      noUnderline
-      href={socialLinks.github}
-      target="_blank"
-    >
-      <GithubIcon size={20} />
-    </Link>
-    <Link
-      aria-label="Me on LinkedIn"
-      variant="inherit"
-      noUnderline
-      href={socialLinks.linkedin}
-      target="_blank"
-    >
-      <LinkedInIcon size={20} />
-    </Link>
-    <Link
-      aria-label="Me on X (formerly Twitter)"
-      variant="inherit"
-      noUnderline
-      href={socialLinks.x}
-      target="_blank"
-    >
-      <XComIcon size={20} />
-    </Link>
+  <div className="flex flex-col gap-3">
+    <Headline>Connect</Headline>
+    <div className="flex items-center gap-6">
+      <Link
+        aria-label="Sebastian's GitHub Profile"
+        variant="inherit"
+        noUnderline
+        href={socialLinks.github}
+        target="_blank"
+      >
+        <GithubIcon size={24} />
+      </Link>
+      <Link
+        aria-label="Sebastian's LinkedIn Profile"
+        variant="inherit"
+        noUnderline
+        href={socialLinks.linkedin}
+        target="_blank"
+      >
+        <LinkedInIcon size={24} />
+      </Link>
+      <Link
+        aria-label="Sebastian's X Profile"
+        variant="inherit"
+        noUnderline
+        href={socialLinks.x}
+        target="_blank"
+      >
+        <XComIcon size={24} />
+      </Link>
+    </div>
   </div>
 );
 
 const Links = () => (
-  <div className="flex items-center gap-6">
-    <Link
-      aria-label="View all content formatted for LLMs"
-      variant="inherit"
-      noUnderline
-      href="/llms.txt"
-    >
-      <MarkdownLogoIcon size={16} />
-      llms.txt
-    </Link>
-    <Link
-      aria-label="View RSS feed"
-      variant="inherit"
-      noUnderline
-      href="/rss.xml"
-    >
-      <RssIcon size={16} />
-      RSS Feed
-    </Link>
-    <Link
-      aria-label="View inventory"
-      variant="inherit"
-      noUnderline
-      href="/inventory"
-    >
-      <CubeIcon size={16} />
-      Inventory
-    </Link>
+  <div className="flex flex-col gap-2">
+    <Headline>Links</Headline>
+    <div className="flex flex-col gap-2">
+      <Link
+        aria-label="View site content formatted for LLMs"
+        variant="inherit"
+        noUnderline
+        href="/llms.txt"
+      >
+        <FileTextIcon size={16} />
+        llms.txt
+      </Link>
+      <Link
+        aria-label="View RSS feed"
+        variant="inherit"
+        noUnderline
+        href="/rss.xml"
+      >
+        <RssIcon size={16} />
+        RSS Feed
+      </Link>
+      <Link
+        aria-label="View inventory"
+        variant="inherit"
+        noUnderline
+        href="/inventory"
+      >
+        <CubeIcon size={16} />
+        Inventory
+      </Link>
+    </div>
   </div>
 );
 
-const Copyright = () => (
-  <div className="flex items-center justify-center gap-1 md:justify-start">
-    <CopyrightIcon size={14} />
-    {new Date().getFullYear()} Sebastian Sebald
+const Legal = () => (
+  <div className="flex flex-col gap-2">
+    <Headline>Legal</Headline>
+    <div className="flex flex-col gap-1.5">
+      <Link variant="inherit" noUnderline href="/imprint">
+        Imprint
+      </Link>
+      <Link variant="inherit" noUnderline href="/privacy">
+        Privacy Policy
+      </Link>
+      <ConsentUpdate />
+    </div>
   </div>
 );
 
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="fit-prose pb-4 pt-28 md:pb-6">
+  <div className="fit-prose text-muted pt-28 md:pb-8">
     <Divider variant="light" />
-    <div className="text-muted grid gap-10 pt-6 text-sm">
-      <div className="flex justify-between">
-        <Links />
-        <Social />
-      </div>
-      <div className="flex justify-between">
-        <Legal />
-        <Copyright />
-      </div>
+    <div className="grid grid-cols-[max-content_1fr_max-content] gap-24 pt-10 text-sm">
+      <Links />
+      <Social />
+      <Legal />
+    </div>
+    <div className="flex items-center justify-end gap-1 pt-12 text-sm">
+      <CopyrightIcon size={14} />
+      {new Date().getFullYear()} Sebastian Sebald
     </div>
   </div>
 );
