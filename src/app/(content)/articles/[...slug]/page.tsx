@@ -7,6 +7,7 @@ import { getMDXComponents } from '@/ui/mdx';
 
 // Config
 // ---------------
+export const dynamicParams = false;
 export const generateStaticParams = async () => articlesSource.generateParams();
 
 // Meta
