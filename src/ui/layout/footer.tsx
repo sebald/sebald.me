@@ -23,37 +23,34 @@ const Headline = ({ children }: PropsWithChildren) => (
 /* <span className="text-muted text-sm">·</span> */
 
 const Social = () => (
-  <div className="flex flex-col gap-3">
-    <Headline>Connect</Headline>
-    <div className="flex items-center gap-6">
-      <Link
-        aria-label="Sebastian's GitHub Profile"
-        variant="inherit"
-        noUnderline
-        href={socialLinks.github}
-        target="_blank"
-      >
-        <GithubIcon size={24} />
-      </Link>
-      <Link
-        aria-label="Sebastian's LinkedIn Profile"
-        variant="inherit"
-        noUnderline
-        href={socialLinks.linkedin}
-        target="_blank"
-      >
-        <LinkedInIcon size={24} />
-      </Link>
-      <Link
-        aria-label="Sebastian's X Profile"
-        variant="inherit"
-        noUnderline
-        href={socialLinks.x}
-        target="_blank"
-      >
-        <XComIcon size={24} />
-      </Link>
-    </div>
+  <div className="flex items-start gap-8">
+    <Link
+      aria-label="Sebastian's GitHub Profile"
+      variant="inherit"
+      noUnderline
+      href={socialLinks.github}
+      target="_blank"
+    >
+      <GithubIcon size={24} />
+    </Link>
+    <Link
+      aria-label="Sebastian's LinkedIn Profile"
+      variant="inherit"
+      noUnderline
+      href={socialLinks.linkedin}
+      target="_blank"
+    >
+      <LinkedInIcon size={24} />
+    </Link>
+    <Link
+      aria-label="Sebastian's X Profile"
+      variant="inherit"
+      noUnderline
+      href={socialLinks.x}
+      target="_blank"
+    >
+      <XComIcon size={24} />
+    </Link>
   </div>
 );
 
@@ -114,8 +111,8 @@ export const Footer = () => (
     <Divider variant="light" />
     <div className="grid grid-cols-2 gap-x-24 gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content]">
       <Links />
-      <Social />
       <Legal />
+      <Social />
     </div>
     <div className="flex items-center justify-end gap-1 pt-12 text-sm">
       <CopyrightIcon size={14} />
