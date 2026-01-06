@@ -28,7 +28,7 @@ const ArticlesPage = async () => {
   return (
     <div className="fit-prose grid gap-12 md:gap-16">
       <div className="flex items-end justify-between">
-        <Headline level="2" variant="accent" as="h1">
+        <Headline level="3" variant="accent" as="h1">
           {page.title}
         </Headline>
         <div className="text-muted flex items-center gap-2 text-sm">
