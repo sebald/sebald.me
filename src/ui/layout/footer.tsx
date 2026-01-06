@@ -30,7 +30,7 @@ const Headline = ({
 );
 
 const Social = () => (
-  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto">
+  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
