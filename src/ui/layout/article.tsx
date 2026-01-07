@@ -26,7 +26,13 @@ const styles = {
     },
   }),
   header: cva({
-    base: ['flex flex-col-reverse items-start'],
+    base: [
+      'grid',
+      'grid-cols-2',
+      'gap-x-4',
+      'items-start',
+      '[grid-template-areas:"meta_actions""title_title"]',
+    ],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -87,7 +93,7 @@ const Title = ({ children, id, variant = 'page' }: TitleProps) => {
   }
 
   return (
-    <Headline id={id} {...headlineProps}>
+    <Headline id={id} {...headlineProps} className="[grid-area:title]">
       {children}
     </Headline>
   );
@@ -140,6 +146,16 @@ const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
   </Link>
 );
 
+// Article.Actions
+// ---------------
+interface ActionsProps extends PropsWithChildren, AriaAttributes {}
+
+const Actions = ({ children, ...ariaProps }: ActionsProps) => (
+  <div className="justify-self-end [grid-area:actions]" {...ariaProps}>
+    {children}
+  </div>
+);
+
 // Article.Meta
 // ---------------
 interface MetaProps extends AriaAttributes {
@@ -148,7 +164,7 @@ interface MetaProps extends AriaAttributes {
 }
 
 const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
-  <div className="flex gap-2" {...ariaProps}>
+  <div className="flex gap-2 [grid-area:meta]" {...ariaProps}>
     {date && <Time date={date} />}
     {date && topics && topics.length > 0 && (
       <span className="text-muted text-sm">·</span>
@@ -200,6 +216,7 @@ export const Article = Object.assign(Root, {
   Time,
   Topics,
   Meta,
+  Actions,
   Excerpt,
   Content,
   MarkdownLink,

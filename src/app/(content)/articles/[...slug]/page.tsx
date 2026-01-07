@@ -44,10 +44,12 @@ const Page = async (props: PageProps<'/articles/[...slug]'>) => {
       <Article.Header>
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
         <Article.Meta date={page.data.date} topics={page.data.topics} />
-        <Article.MarkdownLink
-          aria-label={`View "${page.data.title}" as markdown`}
-          href={`${page.url}.md`}
-        />
+        <Article.Actions>
+          <Article.MarkdownLink
+            aria-label={`View "${page.data.title}" as markdown`}
+            href={`${page.url}.md`}
+          />
+        </Article.Actions>
       </Article.Header>
       <Article.Content>
         <MDX components={getMDXComponents()} />
