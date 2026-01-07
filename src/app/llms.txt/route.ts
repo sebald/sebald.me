@@ -17,5 +17,9 @@ export const GET = async () => {
     ...labSource.getPages(),
   ]);
   const text = await formatPagesForLLM(pages);
-  return new Response(`# sebald.me - Content Archive\n\n${text}`);
+  return new Response(`# sebald.me - Content Archive\n\n${text}`, {
+    headers: {
+      'Content-Type': 'text/markdown; charset=utf-8',
+    },
+  });
 };

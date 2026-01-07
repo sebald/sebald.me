@@ -1,8 +1,10 @@
+import { MarkdownLogoIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { articlesSource, pageImage } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
+import { Link } from '@/ui/link';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -43,6 +45,17 @@ const Page = async (props: PageProps<'/articles/[...slug]'>) => {
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
         <Article.Meta date={page.data.date} topics={page.data.topics} />
       </Article.Header>
+      <div>
+        <Link
+          aria-label={`View "${page.data.title}" as markdown`}
+          variant="inherit"
+          noUnderline
+          href={`${page.url}.md`}
+        >
+          <MarkdownLogoIcon size={16} />
+          View as Markdown
+        </Link>
+      </div>
       <Article.Content>
         <MDX components={getMDXComponents()} />
       </Article.Content>
