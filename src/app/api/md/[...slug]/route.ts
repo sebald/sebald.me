@@ -3,6 +3,18 @@ import { notFound } from 'next/navigation';
 import { type ContentPage, formatPageForLLM, labSource } from '@/lib/source';
 import { articlesSource } from '@/lib/source';
 
+// Config
+// ---------------
+export const generateStaticParams = async () => {
+  const articlesParams = await articlesSource.generateParams();
+  const labParams = await labSource.generateParams();
+
+  return [
+    ...articlesParams.map(p => ({ slug: ['articles', ...p.slug] })),
+    ...labParams.map(p => ({ slug: ['lab', ...p.slug] })),
+  ];
+};
+
 // Route
 // ---------------
 export async function GET(_: Request, ctx: RouteContext<'/api/md/[...slug]'>) {
