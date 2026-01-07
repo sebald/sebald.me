@@ -1,8 +1,7 @@
 import {
+  defineCollections,
   defineConfig,
-  defineDocs,
   frontmatterSchema,
-  metaSchema,
 } from 'fumadocs-mdx/config';
 import { z } from 'zod';
 
@@ -22,50 +21,44 @@ const schema = frontmatterSchema.extend({
   topics: z.array(z.string()).optional(),
 });
 
-export const articles = defineDocs({
+const stripDatePrefix = (file: { flattenedPath: string }) => {
+  const parts = file.flattenedPath.split('/');
+  const fileName = parts.pop() ?? '';
+  const cleanName = fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
+
+  return [...parts, cleanName];
+};
+
+export const articles = defineCollections({
+  type: 'doc',
   dir: 'content/articles',
-  docs: {
-    schema,
-    postprocess: {
-      includeProcessedMarkdown: true,
-    },
-  },
-  meta: {
-    schema: metaSchema,
+  schema,
+  // slugs: stripDatePrefix, // Applies the URL cleaner
+  postprocess: {
+    includeProcessedMarkdown: true,
   },
 });
 
-export const lab = defineDocs({
+export const lab = defineCollections({
+  type: 'doc',
   dir: 'content/lab',
-  docs: {
-    schema,
-    postprocess: {
-      includeProcessedMarkdown: true,
-    },
-  },
-  meta: {
-    schema: metaSchema,
+  schema,
+  postprocess: {
+    includeProcessedMarkdown: true,
   },
 });
 
-export const misc = defineDocs({
+export const misc = defineCollections({
+  type: 'doc',
   dir: 'content/misc',
-  docs: {
-    schema: frontmatterSchema,
-    postprocess: {
-      includeProcessedMarkdown: true,
-    },
-  },
-  meta: {
-    schema: metaSchema,
-  },
+  schema: frontmatterSchema,
 });
 
+// 4. Global Config
 export default defineConfig({
   mdxOptions: {
     rehypePlugins: [rehypeUnwrapContent],
     rehypeCodeOptions: {
-      // Seems like fumadocs does not support "theme" value
       themes: {
         light: 'github-light-default',
         dark: 'github-light-default',

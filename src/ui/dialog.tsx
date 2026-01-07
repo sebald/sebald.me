@@ -153,7 +153,7 @@ const DialogContent = ({
               <Primitive.Close
                 className={buttonStyles({
                   variant: 'icon',
-                  className: 'absolute right-3 top-2.5',
+                  className: 'absolute right-3 top-3',
                 })}
               >
                 <XIcon size={20} weight="regular" />

@@ -135,6 +135,7 @@ const FloatingNav = () => {
               </div>
               <div className="text-black-600 flex items-center justify-around gap-12 px-6 pb-4 md:justify-end">
                 <Link
+                  aria-label="Sebastian's GitHub Profile"
                   variant="inherit"
                   noUnderline
                   href={socialLinks.github}
@@ -143,6 +144,7 @@ const FloatingNav = () => {
                   <GithubIcon size={20} />
                 </Link>
                 <Link
+                  aria-label="Sebastian's LinkedIn Profile"
                   variant="inherit"
                   noUnderline
                   href={socialLinks.linkedin}
@@ -151,6 +153,7 @@ const FloatingNav = () => {
                   <LinkedInIcon size={20} />
                 </Link>
                 <Link
+                  aria-label="Sebastian's X Profile"
                   variant="inherit"
                   noUnderline
                   href={socialLinks.x}

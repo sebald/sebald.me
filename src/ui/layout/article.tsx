@@ -1,6 +1,12 @@
-import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
-import type { PropsWithChildren } from 'react';
-import type { AriaAttributes } from 'react';
+import {
+  CalendarBlankIcon,
+  HashStraightIcon,
+  MarkdownLogoIcon,
+} from '@phosphor-icons/react/ssr';
+import type { Route } from 'next';
+import type { LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
@@ -20,10 +26,23 @@ const styles = {
     },
   }),
   header: cva({
-    base: ['flex flex-col-reverse items-start'],
+    base: [
+      'grid',
+      'grid-cols-2',
+      'gap-x-4',
+      'items-start',
+      '[grid-template-areas:"meta_actions""title_title"]',
+    ],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
+  }),
+  action: cva({
+    base: [
+      'text-muted flex items-center gap-0.5 text-xs',
+      'ensure-hitbox',
+      'hover:text-link-hover',
+    ],
   }),
   content: cva({
     base: ['prose'],
@@ -74,7 +93,7 @@ const Title = ({ children, id, variant = 'page' }: TitleProps) => {
   }
 
   return (
-    <Headline id={id} {...headlineProps}>
+    <Headline id={id} {...headlineProps} className="[grid-area:title]">
       {children}
     </Headline>
   );
@@ -114,6 +133,29 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
+// Article.MarkdownLink
+// ---------------
+interface MarkdownLinkProps extends AriaAttributes {
+  href: string;
+}
+
+const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
+  <Link {...props} href={href as Route} className={styles.action()}>
+    <MarkdownLogoIcon size={16} />
+    View as Markdown
+  </Link>
+);
+
+// Article.Actions
+// ---------------
+interface ActionsProps extends PropsWithChildren, AriaAttributes {}
+
+const Actions = ({ children, ...ariaProps }: ActionsProps) => (
+  <div className="justify-self-end [grid-area:actions]" {...ariaProps}>
+    {children}
+  </div>
+);
+
 // Article.Meta
 // ---------------
 interface MetaProps extends AriaAttributes {
@@ -122,7 +164,7 @@ interface MetaProps extends AriaAttributes {
 }
 
 const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
-  <div className="flex gap-2" {...ariaProps}>
+  <div className="flex gap-2 [grid-area:meta]" {...ariaProps}>
     {date && <Time date={date} />}
     {date && topics && topics.length > 0 && (
       <span className="text-muted text-sm">·</span>
@@ -174,6 +216,8 @@ export const Article = Object.assign(Root, {
   Time,
   Topics,
   Meta,
+  Actions,
   Excerpt,
   Content,
+  MarkdownLink,
 });

@@ -1,3 +1,4 @@
+import { MarkdownLogoIcon, RssIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
@@ -26,16 +27,39 @@ const ArticlesPage = async () => {
 
   return (
     <div className="fit-prose grid gap-12 md:gap-16">
-      <Headline level="4" variant="accent" as="h1">
-        {page.title}
-      </Headline>
+      <div className="flex items-end justify-between">
+        <Headline level="3" variant="accent" as="h1">
+          {page.title}
+        </Headline>
+        <div className="text-muted flex items-center gap-2 text-sm">
+          <Link
+            aria-label="View articles as markdown"
+            variant="inherit"
+            noUnderline
+            href="/articles.md"
+          >
+            <MarkdownLogoIcon size={16} />
+            Markdown
+          </Link>
+          <span className="text-muted text-sm">·</span>
+          <Link
+            aria-label="View article RSS feed"
+            variant="inherit"
+            noUnderline
+            href="/rss.xml"
+          >
+            <RssIcon size={16} />
+            RSS Feed
+          </Link>
+        </div>
+      </div>
 
       <div className="space-y-20">
         {articles.map(article => (
           <Article
             key={article.url}
             aria-labelledby={article.url}
-            className="gap-2.5"
+            className="gap-2.5 text-base"
           >
             <Article.Header>
               <Link

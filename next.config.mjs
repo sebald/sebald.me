@@ -12,12 +12,8 @@ const config = {
   async rewrites() {
     return [
       {
-        source: '/articles/:path*.mdx',
-        destination: '/llms.mdx/articles/:path*',
-      },
-      {
-        source: '/lab/:path*.mdx',
-        destination: '/llms.mdx/lab/:path*',
+        source: '/:section/:path*.md',
+        destination: '/api/md/:section/:path*',
       },
     ];
   },
