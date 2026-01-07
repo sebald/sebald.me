@@ -1,10 +1,8 @@
-import { MarkdownLogoIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { articlesSource, pageImage } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
-import { Link } from '@/ui/link';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
