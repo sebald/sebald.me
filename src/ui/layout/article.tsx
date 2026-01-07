@@ -1,6 +1,12 @@
-import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
-import type { PropsWithChildren } from 'react';
-import type { AriaAttributes } from 'react';
+import {
+  CalendarBlankIcon,
+  HashStraightIcon,
+  MarkdownLogoIcon,
+} from '@phosphor-icons/react/ssr';
+import type { Route } from 'next';
+import type { LinkProps } from 'next/link';
+import Link from 'next/link';
+import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 import type { VariantProps } from '@/lib/styles.utils';
@@ -24,6 +30,15 @@ const styles = {
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
+  }),
+  action: cva({
+    base: [
+      'inline-flex items-center gap-1',
+      'px-2',
+      'text-sm font-medium text-muted-foreground',
+      'bg-oatmeal-200/75 rounded-lg',
+      'hover:text-link',
+    ],
   }),
   content: cva({
     base: ['prose'],
@@ -114,6 +129,19 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
+// Article.MarkdownLink
+// ---------------
+interface MarkdownLinkProps extends AriaAttributes {
+  href: string;
+}
+
+const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
+  <Link {...props} href={href as Route} className={styles.action()}>
+    <MarkdownLogoIcon size={16} />
+    View as Markdown
+  </Link>
+);
+
 // Article.Meta
 // ---------------
 interface MetaProps extends AriaAttributes {
@@ -176,4 +204,5 @@ export const Article = Object.assign(Root, {
   Meta,
   Excerpt,
   Content,
+  MarkdownLink,
 });
