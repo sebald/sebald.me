@@ -10,6 +10,10 @@ import { Text } from '@/ui/text';
 
 import { OverlayExample } from './overlay-example';
 
+// Config
+// ---------------
+export const revalidate = false;
+
 // Meta
 // ---------------
 export const metadata: Metadata = {
