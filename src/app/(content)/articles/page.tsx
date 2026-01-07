@@ -66,6 +66,7 @@ const ArticlesPage = async () => {
                 href={article.url}
                 aria-label={`Read article: ${article.data.title}`}
                 noUnderline
+                className="[grid-area:title]"
               >
                 <Article.Title id={article.url} variant="list">
                   {article.data.title}

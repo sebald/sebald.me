@@ -41,7 +41,7 @@ export const styles = cva({
 // ---------------
 export interface LinkProps
   extends VariantProps<typeof styles>,
-    Omit<NextLinkProps<'a'>, 'className' | 'style' | 'href'> {
+    Omit<NextLinkProps<'a'>, 'style' | 'href'> {
   href: NextLinkProps<'a'>['href'] | string;
 }
 
