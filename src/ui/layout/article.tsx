@@ -33,11 +33,9 @@ const styles = {
   }),
   action: cva({
     base: [
-      'inline-flex items-center gap-1',
-      'px-2',
-      'text-sm font-medium text-muted-foreground',
-      'bg-oatmeal-200/75 rounded-lg',
-      'hover:text-link',
+      'text-muted flex items-center gap-0.5 text-xs',
+      'ensure-hitbox',
+      'hover:text-link-hover',
     ],
   }),
   content: cva({
