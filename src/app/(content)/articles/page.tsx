@@ -9,8 +9,7 @@ import { Link } from '@/ui/link';
 
 // Config
 // ---------------
-export const relative = false;
-export const dynamic = 'force-static';
+export const revalidate = false;
 
 // Meta
 // ---------------

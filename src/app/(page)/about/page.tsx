@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 
 // Config
 // ---------------
-export const dynamic = 'force-static';
 export const revalidate = false;
 
 // Meta

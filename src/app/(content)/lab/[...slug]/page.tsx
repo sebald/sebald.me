@@ -2,35 +2,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { labSource, pageImage } from '@/lib/source';
+import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 
-const Page = async (props: PageProps<'/lab/[...slug]'>) => {
-  const params = await props.params;
-  const page = labSource.getPage(params.slug);
-  if (!page) notFound();
+// Config
+// ---------------
+export const generateStaticParams = async () => labSource.generateParams();
 
-  const MDX = page.data.body;
-
-  return (
-    <article className="prose prose-lg max-w-none">
-      <header className="mb-8 border-b border-gray-200 pb-8">
-        <h1 className="mb-4 text-4xl font-bold">{page.data.title}</h1>
-        <p className="text-gray-600">{page.data.description}</p>
-        {page.data.date && (
-          <p className="mt-4 text-sm text-gray-500">
-            {new Date(page.data.date).toLocaleDateString()}
-          </p>
-        )}
-      </header>
-      <MDX components={getMDXComponents()} />
-    </article>
-  );
-};
-
-export const generateStaticParams = async () => {
-  return labSource.generateParams();
-};
-
+// Meta
+// ---------------
 export const generateMetadata = async (
   props: PageProps<'/lab/[...slug]'>,
 ): Promise<Metadata> => {
@@ -45,6 +25,35 @@ export const generateMetadata = async (
       images: pageImage(page).url,
     },
   };
+};
+
+// Page
+// ---------------
+const Page = async (props: PageProps<'/lab/[...slug]'>) => {
+  const params = await props.params;
+  const page = labSource.getPage(params.slug);
+  if (!page) notFound();
+
+  const MDX = page.data.body;
+  const titleId = `article-${page.slugs.join('-')}`;
+
+  return (
+    <Article aria-labelledby={titleId} className="gap-12 md:gap-24">
+      <Article.Header>
+        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+        <Article.Meta date={page.data.date} topics={page.data.topics} />
+        <Article.Actions>
+          <Article.MarkdownLink
+            aria-label={`View "${page.data.title}" as markdown`}
+            href={`${page.url}.md`}
+          />
+        </Article.Actions>
+      </Article.Header>
+      <Article.Content>
+        <MDX components={getMDXComponents()} />
+      </Article.Content>
+    </Article>
+  );
 };
 
 export default Page;

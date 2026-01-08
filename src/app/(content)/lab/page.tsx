@@ -2,15 +2,14 @@ import { MarkdownLogoIcon, RssIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
-import { excerpt, labSource, sortByDate } from '@/lib/source';
+import { labSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
 
 // Config
 // ---------------
-export const relative = false;
-export const dynamic = 'force-static';
+export const revalidate = false;
 
 // Meta
 // ---------------
@@ -54,7 +53,7 @@ const LabIndex = async () => {
         </div>
       </div>
 
-      <div className="space-y-20">
+      <div className="grid grid-cols-2 gap-12">
         {items.map(item => (
           <Article
             key={item.url}
