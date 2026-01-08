@@ -10,14 +10,6 @@ import { useAnalytics } from './analytics-context';
 export const ConsentBanner = () => {
   const { accept, decline, hasChoice, hasLoaded } = useAnalytics();
 
-  const handleAccept = () => {
-    accept();
-  };
-
-  const handleDecline = () => {
-    decline();
-  };
-
   // Don't render on server to avoid hydration mismatch
   if (!hasLoaded) return null;
 
@@ -36,8 +28,8 @@ export const ConsentBanner = () => {
           resonate with you most. It helps me write better content.
         </Dialog.Body>
         <Dialog.Actions>
-          <Button onClick={handleAccept}>Accept</Button>
-          <Button variant="ghost" onClick={handleDecline}>
+          <Button onClick={accept}>Accept</Button>
+          <Button variant="ghost" onClick={decline}>
             Decline
           </Button>
         </Dialog.Actions>
