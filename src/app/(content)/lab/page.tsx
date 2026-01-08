@@ -53,7 +53,7 @@ const LabIndex = async () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-12">
+      <div className="grid grid-cols-2 gap-x-12 gap-y-16">
         {items.map(item => (
           <Article
             key={item.url}
@@ -73,12 +73,16 @@ const LabIndex = async () => {
               </Link>
             </Article.Header>
             <Article.Excerpt>{item.data.description}</Article.Excerpt>
-            <Link
-              href={item.url}
-              aria-label={`Read article: ${item.data.title}`}
-            >
-              View
-            </Link>
+            <div className="pt-4">
+              <Link
+                href={item.url}
+                aria-label={`Read article: ${item.data.title}`}
+                variant="ghost"
+                noUnderline
+              >
+                View
+              </Link>
+            </div>
           </Article>
         ))}
       </div>

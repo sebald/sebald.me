@@ -25,6 +25,13 @@ export const styles = cva({
         'text-inherit decoration-inherit',
         'hover:text-link-hover hover:decoration-link-hover',
       ],
+      ghost: [
+        'text-current text-sm',
+        'h-11 px-8 rounded-full',
+        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
+        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
+        'active:scale-[0.97] transition-all duration-200',
+      ],
     },
     noUnderline: {
       false: ['underline underline-offset-4 decoration-1'],
