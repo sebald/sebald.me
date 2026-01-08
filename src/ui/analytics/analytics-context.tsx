@@ -8,7 +8,7 @@ import {
   useSyncExternalStore,
 } from 'react';
 
-import { CONSENT_DURATION, COOKIE_NAME, DEFAULT_CONSENT } from './config';
+export const COOKIE_NAME = 'cookie_consent';
 
 // Types
 // ---------------
@@ -57,11 +57,11 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
 
   // Indicates whether the user has previously made a consent decision
   const hasMadeChoice = cookieValue !== undefined;
-  const consent = cookieValue === 'granted' ? 'granted' : DEFAULT_CONSENT;
+  const consent = cookieValue === 'granted' ? 'granted' : 'denied';
 
   const updateConsent = (consent: ConsentStatus) => {
     setCookie(COOKIE_NAME, consent, {
-      maxAge: CONSENT_DURATION,
+      maxAge: 60 * 60 * 24 * 365, // 1 year
       path: '/',
       sameSite: 'lax',
       secure: process.env.NODE_ENV === 'production',
