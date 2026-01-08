@@ -1,41 +1,23 @@
 'use client';
 
 import { CookieIcon } from '@phosphor-icons/react/ssr';
-import { useState } from 'react';
 
-import { Button } from '../button';
-import { Dialog } from '../dialog';
-import { useConsent } from './use-consent';
+import { Button } from '@/ui/button';
+import { Dialog } from '@/ui/dialog';
 
-// Props
-// ---------------
-export interface ConsentBannerProps {
-  shouldShow: boolean;
-}
+import { useAnalytics } from './analytics-context';
 
-// Component
-// ---------------
-export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
-  const [open, setOpen] = useState(shouldShow);
-  const { accept, decline } = useConsent();
+export const ConsentBanner = () => {
+  const { accept, decline, hasMadeChoice } = useAnalytics();
 
-  const handleAccept = () => {
-    accept();
-    setOpen(false);
-  };
+  // Don't render on server to avoid hydration mismatch
+  if (typeof window === 'undefined') return null;
 
-  const handleDecline = () => {
-    decline();
-    setOpen(false);
-  };
+  // Only show if user hasn't made a choice yet
+  if (hasMadeChoice) return null;
 
   return (
-    <Dialog.Root
-      open={open}
-      onOpenChange={setOpen}
-      modal={false}
-      disablePointerDismissal
-    >
+    <Dialog.Root open={true} modal={false} disablePointerDismissal>
       <Dialog position="bottom" size="full" layout="inline">
         <Dialog.Title>
           <CookieIcon size={32} weight="duotone" />
@@ -46,8 +28,8 @@ export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
           resonate with you most. It helps me write better content.
         </Dialog.Body>
         <Dialog.Actions>
-          <Button onClick={handleAccept}>Accept</Button>
-          <Button variant="ghost" onClick={handleDecline}>
+          <Button onClick={accept}>Accept</Button>
+          <Button variant="ghost" onClick={decline}>
             Decline
           </Button>
         </Dialog.Actions>
