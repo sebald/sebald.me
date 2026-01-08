@@ -31,7 +31,7 @@ const styles = {
       'grid-cols-2',
       'gap-x-4',
       'items-start',
-      '[grid-template-areas:"meta_actions""title_title"]',
+      '[grid-template-areas:"meta_meta""actions_actions""title_title"] min-[500px]:[grid-template-areas:"meta_actions""title_title"]',
     ],
   }),
   caption: cva({
