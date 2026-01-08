@@ -1,36 +1,89 @@
-import Link from 'next/link';
+import { MarkdownLogoIcon, RssIcon } from '@phosphor-icons/react/dist/ssr';
+import type { Metadata } from 'next';
 
+import { navItems } from '@/app.config';
 import { labSource, sortByDate } from '@/lib/source';
+import { Headline } from '@/ui/headline';
+import { Article } from '@/ui/layout/article';
+import { Link } from '@/ui/link';
 
+// Config
+// ---------------
+export const revalidate = false;
+
+// Meta
+// ---------------
+const page = navItems.find(item => item.href === '/lab')!;
+export const metadata: Metadata = {
+  title: page.title,
+  description: page.description,
+};
+
+// Page
+// ---------------
 const LabIndex = async () => {
-  const pages = sortByDate(labSource.getPages());
+  const items = sortByDate(labSource.getPages());
 
   return (
-    <div>
-      <h1 className="mb-8 text-4xl font-bold">Labs</h1>
-      <div className="space-y-6">
-        {pages.map(page => (
-          <article
-            key={page.url}
-            className="border-b border-gray-200 pb-6 last:border-b-0"
+    <div className="fit-prose grid gap-12 md:gap-16">
+      <div className="flex items-end justify-between">
+        <Headline level="4" variant="muted" as="h1">
+          {page.title}
+        </Headline>
+        <div className="text-muted flex gap-2 text-sm">
+          <Link
+            aria-label="View lab items as markdown"
+            variant="inherit"
+            noUnderline
+            href="/lab.md"
           >
-            <Link href={page.url as any} className="group">
-              <h2 className="mb-2 text-2xl font-bold transition-colors group-hover:text-blue-600">
-                {page.data.title}
-              </h2>
-            </Link>
-            <p className="mb-3 text-gray-600">{page.data.description}</p>
-            <div className="flex items-center justify-between text-sm text-gray-500">
-              <div className="flex gap-4">
-                {page.data.date && (
-                  <span>{new Date(page.data.date).toLocaleDateString()}</span>
-                )}
-              </div>
-              {page.data.draft && (
-                <span className="font-semibold text-orange-600">Draft</span>
-              )}
+            <MarkdownLogoIcon size={16} />
+            Markdown
+          </Link>
+          <span className="text-muted text-sm">·</span>
+          <Link
+            aria-label="View article RSS feed"
+            variant="inherit"
+            noUnderline
+            href="/rss.xml"
+          >
+            <RssIcon size={16} />
+            RSS Feed
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-x-12 gap-y-16">
+        {items.map(item => (
+          <Article
+            key={item.url}
+            aria-labelledby={item.url}
+            className="gap-2.5 text-base"
+          >
+            <Article.Header>
+              <Link
+                href={item.url}
+                aria-label={`Read article: ${item.data.title}`}
+                noUnderline
+                className="[grid-area:title]"
+              >
+                <Article.Title id={item.url} variant="list">
+                  {item.data.title}
+                </Article.Title>
+              </Link>
+            </Article.Header>
+            <Article.Excerpt>{item.data.description}</Article.Excerpt>
+            <div className="pt-4">
+              <Link
+                href={item.url}
+                aria-label={`Read article: ${item.data.title}`}
+                variant="ghost"
+                noUnderline
+              >
+                View
+              </Link>
             </div>
-          </article>
+          </Article>
         ))}
       </div>
     </div>

@@ -12,7 +12,6 @@ import { OverlayExample } from './overlay-example';
 
 // Config
 // ---------------
-export const dynamic = 'force-static';
 export const revalidate = false;
 
 // Meta
