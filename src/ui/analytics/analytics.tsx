@@ -18,8 +18,6 @@ export const Analytics = async ({ gaId }: AnalyticsProps) => {
   const consentCookie = cookieStore.get(COOKIE_NAME);
   const hasCookie = !!consentCookie;
 
-  console.log(hasCookie);
-
   const consent =
     consentCookie?.value === 'granted' ? 'granted' : DEFAULT_CONSENT;
 

@@ -8,7 +8,7 @@ Accessibility compliance creates a direct conflict in high-density UI design. WC
 
 The solution is to decouple the visual layer from the interaction layer. You can strictly maintain the compact visual design while expanding the functional hit area. This technique uses a transparent pseudo-element to enforce a minimum interaction size without altering the visual grid.
 
-Here is the implementation using a Tailwind CSS 4 `@utility`.
+Here is the implementation using a Tailwind CSS 4 `@utility{:css}`.
 
 ```css
 @utility ensure-hitbox {
