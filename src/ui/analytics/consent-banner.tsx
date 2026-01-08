@@ -8,10 +8,10 @@ import { Dialog } from '@/ui/dialog';
 import { useAnalytics } from './analytics-context';
 
 export const ConsentBanner = () => {
-  const { accept, decline, hasChoice, hasLoaded } = useAnalytics();
+  const { accept, decline, hasChoice } = useAnalytics();
 
   // Don't render on server to avoid hydration mismatch
-  if (!hasLoaded) return null;
+  if (typeof window === 'undefined') return null;
 
   // Only show if user hasn't made a choice yet
   if (hasChoice) return null;

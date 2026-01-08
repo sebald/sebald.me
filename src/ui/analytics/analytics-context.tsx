@@ -32,7 +32,6 @@ const getServerSnapshot = () => undefined;
 // ---------------
 export interface AnalyticsContextValue {
   consent: ConsentStatus;
-  hasLoaded: boolean;
   hasChoice: boolean;
   accept: () => void;
   decline: () => void;
@@ -56,7 +55,6 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
     getServerSnapshot,
   );
 
-  const hasLoaded = true; // SyncExternalStore handles the loading state implicitly
   const hasChoice = cookieValue !== undefined;
   const consent = cookieValue === 'granted' ? 'granted' : DEFAULT_CONSENT;
 
@@ -89,7 +87,6 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
     <AnalyticsContext.Provider
       value={{
         consent,
-        hasLoaded,
         hasChoice,
         accept: () => updateConsent('granted'),
         decline: () => updateConsent('denied'),
