@@ -41,7 +41,6 @@ const Page = async (props: PageProps<'/lab/[...slug]'>) => {
     <Article aria-labelledby={titleId} className="gap-12 md:gap-24">
       <Article.Header>
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
-        <Article.Meta date={page.data.date} topics={page.data.topics} />
         <Article.Actions>
           <Article.MarkdownLink
             aria-label={`View "${page.data.title}" as markdown`}
