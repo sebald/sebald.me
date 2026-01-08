@@ -1,0 +1,35 @@
+---
+title: Tailwind Utility for Minimum Touch Compliance
+description: Expand touch targets to meet WCAG standards without breaking compact UI layouts.
+date: 2026-01-01
+---
+
+Accessibility compliance creates a direct conflict in high-density UI design. WCAG standards generally require minimum touch targets of 44 pixels (or 24 pixels for older criteria) to accommodate human motor precision. However, complex interfaces often rely on compact 16 pixel elements to maintain information density. Scaling these visual elements to meet the compliance standard breaks the layout and reduces usability.
+
+The solution is to decouple the visual layer from the interaction layer. You can strictly maintain the compact visual design while expanding the functional hit area. This technique uses a transparent pseudo-element to enforce a minimum interaction size without altering the visual grid.
+
+Here is the implementation using a Tailwind CSS 4 `@utility`.
+
+```css
+@utility ensure-hitbox {
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    /* 24x24px is WCAG 2.1, to support 2.2 change to 44px */
+    min-height: 24px;
+    min-width: 24px;
+    z-index: 9999;
+  }
+}
+```
+
+This utility anchors a centered before pseudo-element to the parent container. It forces the interactive area to meet specific minimum dimensions regardless of the parent's visual size.
+
+The snippet currently sets a 24px floor, which meets older WCAG 2.1 criteria. For modern WCAG 2.2 compliance, increase these values to 44px. This ensures the system captures input reliably without forcing the visual design to expand.
