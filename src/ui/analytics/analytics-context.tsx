@@ -14,6 +14,20 @@ import { CONSENT_DURATION, COOKIE_NAME, DEFAULT_CONSENT } from './config';
 // ---------------
 export type ConsentStatus = 'granted' | 'denied';
 
+// Store (external)
+// ---------------
+const subscribe = (callback: () => void) => {
+  window.addEventListener('consent-change', callback);
+  return () => window.removeEventListener('consent-change', callback);
+};
+
+const getSnapshot = () => {
+  const value = getCookie(COOKIE_NAME);
+  return typeof value === 'string' ? value : undefined;
+};
+
+const getServerSnapshot = () => undefined;
+
 // Context
 // ---------------
 export interface AnalyticsContextValue {
@@ -33,20 +47,8 @@ export const useAnalytics = () => {
   return context;
 };
 
-// Store (external)
+// Provider
 // ---------------
-const subscribe = (callback: () => void) => {
-  window.addEventListener('consent-change', callback);
-  return () => window.removeEventListener('consent-change', callback);
-};
-
-const getSnapshot = () => {
-  const value = getCookie(COOKIE_NAME);
-  return typeof value === 'string' ? value : undefined;
-};
-
-const getServerSnapshot = () => undefined;
-
 export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
   const cookieValue = useSyncExternalStore(
     subscribe,
@@ -59,15 +61,24 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
   const consent = cookieValue === 'granted' ? 'granted' : DEFAULT_CONSENT;
 
   const updateConsent = (consent: ConsentStatus) => {
-    setCookie(COOKIE_NAME, consent, { maxAge: CONSENT_DURATION });
+    setCookie(COOKIE_NAME, consent, {
+      maxAge: CONSENT_DURATION,
+      path: '/',
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
 
-    if (typeof window !== 'undefined' && window.gtag) {
-      window.gtag('consent', 'update', {
-        ad_storage: consent,
-        analytics_storage: consent,
-        ad_user_data: consent,
-        ad_personalization: consent,
-      });
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      try {
+        window.gtag('consent', 'update', {
+          ad_storage: consent,
+          analytics_storage: consent,
+          ad_user_data: consent,
+          ad_personalization: consent,
+        });
+      } catch (error) {
+        console.error('Failed to update gtag consent:', error);
+      }
     }
 
     // Notify the store
