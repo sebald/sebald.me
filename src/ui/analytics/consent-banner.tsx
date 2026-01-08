@@ -1,41 +1,31 @@
 'use client';
 
 import { CookieIcon } from '@phosphor-icons/react/ssr';
-import { useState } from 'react';
 
-import { Button } from '../button';
-import { Dialog } from '../dialog';
-import { useConsent } from './use-consent';
+import { Button } from '@/ui/button';
+import { Dialog } from '@/ui/dialog';
 
-// Props
-// ---------------
-export interface ConsentBannerProps {
-  shouldShow: boolean;
-}
+import { useAnalytics } from './analytics-context';
 
-// Component
-// ---------------
-export const ConsentBanner = ({ shouldShow }: ConsentBannerProps) => {
-  const [open, setOpen] = useState(shouldShow);
-  const { accept, decline } = useConsent();
+export const ConsentBanner = () => {
+  const { accept, decline, hasChoice, hasLoaded } = useAnalytics();
 
   const handleAccept = () => {
     accept();
-    setOpen(false);
   };
 
   const handleDecline = () => {
     decline();
-    setOpen(false);
   };
 
+  // Don't render on server to avoid hydration mismatch
+  if (!hasLoaded) return null;
+
+  // Only show if user hasn't made a choice yet
+  if (hasChoice) return null;
+
   return (
-    <Dialog.Root
-      open={open}
-      onOpenChange={setOpen}
-      modal={false}
-      disablePointerDismissal
-    >
+    <Dialog.Root open={true} modal={false} disablePointerDismissal>
       <Dialog position="bottom" size="full" layout="inline">
         <Dialog.Title>
           <CookieIcon size={32} weight="duotone" />
