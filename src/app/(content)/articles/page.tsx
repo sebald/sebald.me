@@ -27,10 +27,10 @@ const ArticlesPage = async () => {
   return (
     <div className="fit-prose grid gap-12 md:gap-16">
       <div className="flex items-end justify-between">
-        <Headline level="3" variant="accent" as="h1">
+        <Headline level="4" variant="muted" as="h1">
           {page.title}
         </Headline>
-        <div className="text-muted flex items-center gap-2 text-sm">
+        <div className="text-muted flex gap-2 text-sm">
           <Link
             aria-label="View articles as markdown"
             variant="inherit"
