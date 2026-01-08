@@ -32,7 +32,7 @@ const getServerSnapshot = () => undefined;
 // ---------------
 export interface AnalyticsContextValue {
   consent: ConsentStatus;
-  hasChoice: boolean;
+  hasMadeChoice: boolean;
   accept: () => void;
   decline: () => void;
 }
@@ -55,7 +55,8 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
     getServerSnapshot,
   );
 
-  const hasChoice = cookieValue !== undefined;
+  // Indicates whether the user has previously made a consent decision
+  const hasMadeChoice = cookieValue !== undefined;
   const consent = cookieValue === 'granted' ? 'granted' : DEFAULT_CONSENT;
 
   const updateConsent = (consent: ConsentStatus) => {
@@ -87,7 +88,7 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
     <AnalyticsContext.Provider
       value={{
         consent,
-        hasChoice,
+        hasMadeChoice,
         accept: () => updateConsent('granted'),
         decline: () => updateConsent('denied'),
       }}

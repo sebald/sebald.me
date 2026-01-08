@@ -5,7 +5,7 @@ import { HandshakeIcon } from '@phosphor-icons/react/ssr';
 import type { DialogTriggerProps } from '@/ui/dialog';
 import { Dialog } from '@/ui/dialog';
 
-import { useConsent } from './use-consent';
+import { useAnalytics } from './analytics-context';
 
 // Poor mans i18n
 // ---------------
@@ -39,7 +39,7 @@ export const ConsentUpdate = ({
   locale = 'en',
   triggerVariant = 'inherit',
 }: ConsentUpdateProps) => {
-  const { accept, decline } = useConsent();
+  const { accept, decline } = useAnalytics();
   const t = intl[locale];
 
   const handleAccept = () => {
