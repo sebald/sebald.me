@@ -2,25 +2,19 @@
 
 import Script from 'next/script';
 
-// Props
-// ---------------
-interface ConsentScriptProps {
-  consent: 'granted' | 'denied';
-}
-
 // Component
 // ---------------
-export const ConsentScript = ({ consent }: ConsentScriptProps) => (
+export const ConsentScript = () => (
   <Script id="consent-init" strategy="afterInteractive">
     {`
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         
         gtag('consent', 'default', {
-          'ad_storage': '${consent}',
-          'analytics_storage': '${consent}',
-          'ad_user_data': '${consent}',
-          'ad_personalization': '${consent}',
+          'ad_storage': 'denied',
+          'analytics_storage': 'denied',
+          'ad_user_data': 'denied',
+          'ad_personalization': 'denied',
           'wait_for_update': 500
         });
 
