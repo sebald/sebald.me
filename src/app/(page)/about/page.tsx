@@ -23,22 +23,29 @@ const AboutPage = () => {
       <Headline level="2" variant="accent" as="h1">
         About
       </Headline>
-      <div className="grid grid-cols-[max-content,1fr] gap-4">
-        <Avatar />
+      <div className="grid gap-8">
+        <div className="grid grid-cols-[minmax(0,40%)_1fr] gap-12">
+          <Avatar />
+          <div className="prose place-self-end">
+            <p className="text-3xl font-semibold">
+              Hey there! My name is Sebastian.
+            </p>
+            <p>
+              I am a software architect at Reservix located in Freiburg,
+              Germany. My focus is design engineering, allowing me to operate
+              right in the middle where code meets user experience. I create
+              digital products that are accessible, intuitive, and delightful to
+              use.
+            </p>
+          </div>
+        </div>
         <div className="prose">
           <p>
-            Hey, my name is Sebastian. I am a Software Architect at Reservix
-            located in Freiburg, Germany. My focus is Design Engineering,
-            allowing me to operate right in the middle where code meets user
-            experience. I create digital products that are accessible,
-            intuitive, and delightful to use.
-          </p>
-          <p>
-            The core of my work is in Design Systems. To me, they are much more
-            than just a UI kit or component library. They are the infrastructure
-            that helps teams ship great products smoothly at scale. The services
-            and processes within them help bridge the gap between design vision
-            and code.
+            Design Systems are at the core of my work. To me, design sytems are
+            much more than just a UI kit or component library. They are the
+            infrastructure that helps teams ship great products smoothly at
+            scale. The services and processes within them help bridge the gap
+            between design vision and code.
           </p>
         </div>
       </div>
