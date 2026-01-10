@@ -18,7 +18,6 @@
     /* 24x24px is WCAG 2.1, to support 2.2 this would need to be 44x44px */
     min-height: 24px;
     min-width: 24px;
-    z-index: 9999;
   }
 }
 
