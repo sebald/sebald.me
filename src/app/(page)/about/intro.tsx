@@ -44,7 +44,7 @@ export const Intro = () => (
       layers={layers}
       width="350px"
       aspect="5/6"
-      className="float-left mb-6 mr-12 rounded-3xl"
+      className="mx-auto mb-12 rounded-3xl md:float-left md:mb-6 md:mr-12"
     />
     <p className="mt-0 font-sans text-4xl font-bold">
       Hi there! My name is Sebastian.

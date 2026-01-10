@@ -72,7 +72,7 @@ export const ParallaxImage = ({
     <div
       className={cn(
         'relative touch-none overflow-hidden',
-        'w-(--container-width) aspect-(--container-aspect)',
+        'max-w-(--container-width) aspect-(--container-aspect) w-full',
         className,
       )}
       style={toCSSVars({
