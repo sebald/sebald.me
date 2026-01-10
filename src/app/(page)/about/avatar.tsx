@@ -106,12 +106,10 @@ export const Avatar = () => {
   return (
     <div
       className="aspect-5/6 w-87.5 relative touch-none overflow-hidden rounded-2xl"
-      style={
-        {
-          '--x': 0,
-          '--y': 0,
-        } as CSSProperties
-      }
+      style={toCSSVars({
+        x: 0,
+        y: 0,
+      })}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
