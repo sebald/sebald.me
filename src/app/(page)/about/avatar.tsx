@@ -8,8 +8,6 @@ const layers = [
     height: 1000,
     config: {
       width: '400px',
-      xOrigin: '50%',
-      yOrigin: '50%',
       xMove: '-10px',
       yMove: '-10px',
     },
@@ -21,10 +19,8 @@ const layers = [
     height: 1000,
     config: {
       width: '400px',
-      xOrigin: '50%',
-      yOrigin: '50%',
       xMove: '-15px',
-      yMove: '-15px',
+      yMove: '-10px',
     },
   },
   {
@@ -32,12 +28,12 @@ const layers = [
     src: '/2-person.webp',
     width: 1000,
     height: 1000,
+    // slightly move to center the person
+    className: 'left-[56%]',
     config: {
       width: '450px',
-      xOrigin: '50%',
-      yOrigin: '50%',
-      xMove: '-50px',
-      yMove: '-30px',
+      xMove: '-30px',
+      yMove: '-25px',
     },
   },
 ];
