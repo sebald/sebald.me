@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import type { CSSProperties, PointerEvent } from 'react';
 
-import { cva } from '@/lib/styles.utils';
+import { cva, toCSSVars } from '@/lib/styles.utils';
 
 // Config
 // ---------------
@@ -15,7 +15,7 @@ const styles = cva({
     'transition-[object-position,translate] duration-300 ease-out will-change-transform',
     // Movement based on config
     'w-(--width,auto) h-(--height,auto)',
-    'object-[calc(var(--x-base,50%)+calc(var(--x)*var(--x-scale,0px)))_calc(var(--y-base,50%)+calc(var(--y)*var(--y-scale,0px)))]',
+    'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
   ],
 });
 
@@ -27,11 +27,11 @@ const layers = [
     width: 1000,
     height: 1000,
     config: {
-      '--width': '400px',
-      '--x-base': '50%',
-      '--y-base': '50%',
-      '--x-scale': '-10px',
-      '--y-scale': '-10px',
+      width: '400px',
+      xOrigin: '50%',
+      yOrigin: '50%',
+      xMove: '-10px',
+      yMove: '-10px',
     },
   },
   {
@@ -41,11 +41,11 @@ const layers = [
     width: 1000,
     height: 1000,
     config: {
-      '--width': '400px',
-      '--x-base': '50%',
-      '--y-base': '50%',
-      '--x-scale': '-15px',
-      '--y-scale': '-15px',
+      width: '400px',
+      xOrigin: '50%',
+      yOrigin: '50%',
+      xMove: '-15px',
+      yMove: '-15px',
     },
   },
   {
@@ -55,11 +55,11 @@ const layers = [
     width: 1000,
     height: 1000,
     config: {
-      '--width': '450px',
-      '--x-base': '50%',
-      '--y-base': '50%',
-      '--x-scale': '-50px',
-      '--y-scale': '-30px',
+      width: '450px',
+      xOrigin: '50%',
+      yOrigin: '50%',
+      xMove: '-50px',
+      yMove: '-30px',
     },
   },
 ];
@@ -123,7 +123,7 @@ export const Avatar = () => {
           width={layer.width}
           height={layer.height}
           className={styles()}
-          style={layer.config as CSSProperties}
+          style={toCSSVars(layer.config)}
         />
       ))}
     </div>
