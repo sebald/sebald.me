@@ -56,6 +56,21 @@ export const ParallaxImage = ({
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
 
+    /**
+     * Reset if pointer is outside of the container. This happens
+     * when using touch and the user scrolls while touching the element.
+     */
+    if (
+      offsetX < 0 ||
+      offsetX > rect.width ||
+      offsetY < 0 ||
+      offsetY > rect.height
+    ) {
+      container.style.setProperty('--x', '0');
+      container.style.setProperty('--y', '0');
+      return;
+    }
+
     const x = mapRange(0, rect.width, -1, 1, offsetX);
     const y = mapRange(0, rect.height, -1, 1, offsetY);
 
