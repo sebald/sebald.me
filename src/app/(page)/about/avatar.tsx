@@ -26,8 +26,7 @@ const layers = [
     className: styles({
       className: [
         'w-[400px]',
-        '[object-position:calc(-50%+(var(--x)*10px))_calc(43%+(var(--y)*-10px))]',
-        '-translate-x-1/2',
+        '[object-position:calc(-50%+(var(--x)*-10px))_calc(50%+(var(--y)*-10px))]',
       ],
     }),
   },
@@ -39,8 +38,8 @@ const layers = [
     height: 1000,
     className: styles({
       className: [
-        'z-10 w-[410px]',
-        '[object-position:calc(-50%+(var(--x)*20px))_calc(47%+(var(--y)*-15px))]',
+        'z-10 w-[400px]',
+        '[object-position:calc(-50%+(var(--x)*-15px))_calc(-80%+(var(--y)*-15px))]',
       ],
     }),
   },
@@ -53,7 +52,7 @@ const layers = [
     className: styles({
       className: [
         'z-20 w-[435px]',
-        '[object-position:calc(-50%+(var(--x)*50px))_calc(52%+(var(--y)*-30px))]',
+        '[object-position:calc(-50%+(var(--x)*-50px))_calc(50%+(var(--y)*-30px))]',
       ],
     }),
   },
