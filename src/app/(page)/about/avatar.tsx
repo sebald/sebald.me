@@ -13,6 +13,9 @@ const styles = cva({
     'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-none',
     'pointer-events-none object-cover',
     'transition-[object-position,translate] duration-300 ease-out will-change-transform',
+    // Movement based on config
+    'w-(--width,auto) h-(--height,auto)',
+    'object-[calc(var(--x-base,50%)+calc(var(--x)*var(--x-scale,0px)))_calc(var(--y-base,50%)+calc(var(--y)*var(--y-scale,0px)))]',
   ],
 });
 
@@ -23,12 +26,13 @@ const layers = [
     src: '/0-background.webp',
     width: 1000,
     height: 1000,
-    className: styles({
-      className: [
-        'w-[400px]',
-        '[object-position:calc(-50%+(var(--x)*-10px))_calc(50%+(var(--y)*-10px))]',
-      ],
-    }),
+    config: {
+      '--width': '400px',
+      '--x-base': '50%',
+      '--y-base': '50%',
+      '--x-scale': '-10px',
+      '--y-scale': '-10px',
+    },
   },
   {
     id: 'window',
@@ -36,12 +40,13 @@ const layers = [
     src: '/1-window.webp',
     width: 1000,
     height: 1000,
-    className: styles({
-      className: [
-        'z-10 w-[400px]',
-        '[object-position:calc(-50%+(var(--x)*-15px))_calc(-80%+(var(--y)*-15px))]',
-      ],
-    }),
+    config: {
+      '--width': '400px',
+      '--x-base': '50%',
+      '--y-base': '50%',
+      '--x-scale': '-15px',
+      '--y-scale': '-15px',
+    },
   },
   {
     id: 'person',
@@ -49,12 +54,13 @@ const layers = [
     src: '/2-person.webp',
     width: 1000,
     height: 1000,
-    className: styles({
-      className: [
-        'z-20 w-[435px]',
-        '[object-position:calc(-50%+(var(--x)*-50px))_calc(50%+(var(--y)*-30px))]',
-      ],
-    }),
+    config: {
+      '--width': '450px',
+      '--x-base': '50%',
+      '--y-base': '50%',
+      '--x-scale': '-50px',
+      '--y-scale': '-30px',
+    },
   },
 ];
 
@@ -99,7 +105,7 @@ export const Avatar = () => {
 
   return (
     <div
-      className="aspect-5/6 relative w-[350px] touch-none overflow-hidden rounded-2xl"
+      className="aspect-5/6 w-87.5 relative touch-none overflow-hidden rounded-2xl"
       style={
         {
           '--x': 0,
@@ -116,7 +122,8 @@ export const Avatar = () => {
           alt=""
           width={layer.width}
           height={layer.height}
-          className={layer.className}
+          className={styles()}
+          style={layer.config as CSSProperties}
         />
       ))}
     </div>
