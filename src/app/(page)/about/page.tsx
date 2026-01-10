@@ -24,10 +24,10 @@ const AboutPage = () => {
         About
       </Headline>
       <div className="grid gap-8">
-        <div className="grid grid-cols-[minmax(0,40%)_1fr] gap-12">
+        <div className="grid grid-cols-[max-content_1fr] gap-12">
           <Avatar />
           <div className="prose place-self-end">
-            <p className="text-3xl font-semibold">
+            <p className="font-sans text-4xl font-bold">
               Hey there! My name is Sebastian.
             </p>
             <p>

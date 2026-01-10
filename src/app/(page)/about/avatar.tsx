@@ -1,44 +1,125 @@
+'use client';
+
 import Image from 'next/image';
+import type { CSSProperties, PointerEvent } from 'react';
+
+import { cva } from '@/lib/styles.utils';
+
+// Config
+// ---------------
+const styles = cva({
+  base: [
+    'absolute object-cover pointer-events-none select-none',
+    'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-none',
+    'pointer-events-none object-cover',
+    'transition-[object-position,translate] duration-300 ease-out will-change-transform',
+  ],
+});
 
 const layers = [
   {
     id: 'background',
     speed: 0.2,
     src: '/0-background.webp',
-    width: 500,
-    height: 500,
+    width: 1000,
+    height: 1000,
+    className: styles({
+      className: [
+        'w-[400px]',
+        '[object-position:calc(-50%+(var(--x)*10px))_calc(43%+(var(--y)*-10px))]',
+        '-translate-x-1/2',
+      ],
+    }),
   },
   {
     id: 'window',
     speed: 0.6,
     src: '/1-window.webp',
-    width: 500,
-    height: 500,
+    width: 1000,
+    height: 1000,
+    className: styles({
+      className: [
+        'z-10 w-[410px]',
+        '[object-position:calc(-50%+(var(--x)*20px))_calc(47%+(var(--y)*-15px))]',
+      ],
+    }),
   },
   {
     id: 'person',
     speed: 1.5,
     src: '/2-person.webp',
-    width: 700,
-    height: 700,
+    width: 1000,
+    height: 1000,
+    className: styles({
+      className: [
+        'z-20 w-[435px]',
+        '[object-position:calc(-50%+(var(--x)*50px))_calc(52%+(var(--y)*-30px))]',
+      ],
+    }),
   },
 ];
 
+// Helpers
+// ---------------
+// Maps a number's relative placement within one range to the equivalent position in another range.
+const mapRange = (
+  inMin: number,
+  inMax: number,
+  outMin: number,
+  outMax: number,
+  value: number,
+) => {
+  return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+};
+
+// Component
+// ---------------
 export const Avatar = () => {
+  const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const rect = container.getBoundingClientRect();
+
+    // Calculate mouse position relative to the card
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
+
+    // Map to -1 to 1 range
+    const x = mapRange(0, rect.width, -1, 1, offsetX);
+    const y = mapRange(0, rect.height, -1, 1, offsetY);
+
+    // Update CSS variables directly on the element
+    container.style.setProperty('--x', x.toFixed(2));
+    container.style.setProperty('--y', y.toFixed(2));
+  };
+
+  const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
+    // Reset to center using currentTarget
+    e.currentTarget.style.setProperty('--x', '0');
+    e.currentTarget.style.setProperty('--y', '0');
+  };
+
   return (
-    <div className="aspect-5/6 group relative w-full overflow-hidden rounded-2xl">
-      <div className="grid size-full place-items-center *:[grid-area:1/1]">
-        {layers.map(layer => (
-          <Image
-            key={layer.id}
-            src={layer.src}
-            alt=""
-            width={layer.width}
-            height={layer.height}
-            className="size-full object-cover"
-          />
-        ))}
-      </div>
+    <div
+      className="aspect-5/6 relative w-[350px] touch-none overflow-hidden rounded-2xl"
+      style={
+        {
+          '--x': 0,
+          '--y': 0,
+        } as CSSProperties
+      }
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+    >
+      {layers.map(layer => (
+        <Image
+          key={layer.id}
+          src={layer.src}
+          alt=""
+          width={layer.width}
+          height={layer.height}
+          className={layer.className}
+        />
+      ))}
     </div>
   );
 };
