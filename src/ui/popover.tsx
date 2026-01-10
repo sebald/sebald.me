@@ -20,6 +20,7 @@ export const styles = {
     base: [
       'backdrop-blur-xs fixed inset-0 min-h-dvh bg-black-200/50',
       'transition-opacity duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
+      'z-80',
       // iOS 26+: Ensure the backdrop covers the entire visible viewport.
       'supports-[-webkit-touch-callout:none]:absolute',
     ],
