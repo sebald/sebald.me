@@ -84,7 +84,7 @@ export const Avatar = () => {
     const container = e.currentTarget;
     const rect = container.getBoundingClientRect();
 
-    // Calculate mouse position relative to the card
+    // Relative pointer position to the container
     const offsetX = e.clientX - rect.left;
     const offsetY = e.clientY - rect.top;
 
@@ -92,13 +92,12 @@ export const Avatar = () => {
     const x = mapRange(0, rect.width, -1, 1, offsetX);
     const y = mapRange(0, rect.height, -1, 1, offsetY);
 
-    // Update CSS variables directly on the element
     container.style.setProperty('--x', x.toFixed(2));
     container.style.setProperty('--y', y.toFixed(2));
   };
 
+  // Reset to center
   const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
-    // Reset to center using currentTarget
     e.currentTarget.style.setProperty('--x', '0');
     e.currentTarget.style.setProperty('--y', '0');
   };
