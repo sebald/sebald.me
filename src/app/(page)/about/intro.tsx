@@ -58,8 +58,9 @@ export const Intro = () => (
     <p>
       Design Systems are at the core of my work. To me, design sytems are much
       more than just a UI kit or component library. They are the infrastructure
-      that helps teams ship great products smoothly at scale. The services and
-      processes within them help bridge the gap between design vision and code.
+      that help organizations ship great products smoothly at scale. The
+      services and processes within them help bridge the gap between design
+      vision and code.
     </p>
   </div>
 );
