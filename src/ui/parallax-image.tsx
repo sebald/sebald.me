@@ -97,11 +97,11 @@ export const ParallaxImage = ({
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      {layers.map(layer => (
+      {layers.map(({ alt, className, config, ...rest }) => (
         <Image
-          {...layer}
-          key={layer.id}
-          alt={layer.alt || ''}
+          {...rest}
+          key={rest.id}
+          alt={alt || ''}
           placeholder="blur"
           className={cn(
             'pointer-events-none absolute select-none object-cover',
@@ -109,9 +109,9 @@ export const ParallaxImage = ({
             'duration-400 transition-[object-position,translate] ease-out will-change-transform',
             'w-(--width,auto) h-(--height,auto)',
             'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
-            layer.className,
+            className,
           )}
-          style={toCSSVars(layer.config)}
+          style={toCSSVars(config)}
         />
       ))}
     </div>

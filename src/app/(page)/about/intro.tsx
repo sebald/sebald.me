@@ -7,7 +7,10 @@ import window from './images/intro-window.webp';
 const layers = [
   {
     id: 'background',
-    ...background,
+    src: background.src,
+    width: background.width,
+    height: background.height,
+    blurDataURL: background.blurDataURL,
     config: {
       width: '400px',
       xMove: '-10px',
@@ -16,7 +19,10 @@ const layers = [
   },
   {
     id: 'window',
-    ...window,
+    src: window.src,
+    width: window.width,
+    height: window.height,
+    blurDataURL: window.blurDataURL,
     config: {
       width: '400px',
       xMove: '-15px',
@@ -25,7 +31,10 @@ const layers = [
   },
   {
     id: 'person',
-    ...person,
+    src: person.src,
+    width: person.width,
+    height: person.height,
+    blurDataURL: person.blurDataURL,
     // slightly move to center the person
     className: 'left-[56%]',
     config: {
