@@ -18,23 +18,21 @@ export const Building = () => (
     </div>
     <div className="prose">
       <p>
-        Currently, I am working primarily on Marigold, the design system at
-        Reservix I helped to establish. We are undertaking the massive task of
-        updating a design language that has served us for over a decade.
+        My current focus is Marigold, the design system at Reservix that I
+        helped establish. We are updating a design language that has served us
+        for over a decade.
       </p>
       <p>
         We are modernizing not just the look and feel of our platform but also
         the way we build it. My team and I actively advocate for modern
-        engineering standards and mentor our colleagues to ensure we are all
-        moving forward together.
+        engineering standards and mentor our colleagues to ensure we all move
+        forward together.
       </p>
       <p>
-        Marigold is utilized throughout the entire software department, spanning
-        from our public ticket marketplace to our core ticketing software. We
-        made sure that are not limited to modern React applications. We built a
-        system which is universally applicable, allowing us to incrementally
-        update our entire software landscape no matter how old the underlying
-        technology might be.
+        Marigold spans our entire product suite, from the marketplace to our
+        core ticketing software. Although focused on React, its technology
+        agnostic architecture allows us to incrementally modernize our landscape
+        regardless of the underlying technology.
       </p>
     </div>
   </div>
