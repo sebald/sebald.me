@@ -55,10 +55,9 @@ export const Intro = () => (
     </p>
     <p>
       Design systems are at the core of my work. To me, they are much more than
-      just a UI kit or component library. They serve as the infrastructure that
-      empowers organizations to ship great products smoothly, providing the
-      framework needed to translate creative vision into technical reality at
-      scale.
+      just a UI kit or component library. They provide the infrastructure for
+      organizations to ship great products, translating creative vision into
+      reality at scale.
     </p>
   </div>
 );

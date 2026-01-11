@@ -106,7 +106,7 @@ export const ParallaxImage = ({
           className={cn(
             'pointer-events-none absolute select-none object-cover',
             'left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
-            'transition-[object-position,translate] duration-300 ease-out will-change-transform',
+            'duration-400 transition-[object-position,translate] ease-out will-change-transform',
             'w-(--width,auto) h-(--height,auto)',
             'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
             layer.className,
