@@ -1,5 +1,6 @@
 'use client';
 
+import type { ImageProps } from 'next/image';
 import Image from 'next/image';
 import type { PointerEvent } from 'react';
 
@@ -7,11 +8,8 @@ import { cn, toCSSVars } from '@/lib/styles.utils';
 
 // Types
 // ---------------
-export type ParallaxLayer = {
+export interface ParallaxLayer extends Omit<ImageProps, 'alt'> {
   id: string;
-  src: string;
-  width: number;
-  height: number;
   alt?: string;
   config: {
     width?: string;
@@ -21,7 +19,7 @@ export type ParallaxLayer = {
     yMove?: string;
   };
   className?: string;
-};
+}
 
 export type ParallaxImageProps = {
   layers: ParallaxLayer[];
@@ -101,11 +99,10 @@ export const ParallaxImage = ({
     >
       {layers.map(layer => (
         <Image
+          {...layer}
           key={layer.id}
-          src={layer.src}
-          alt={layer.alt ?? ''}
-          width={layer.width}
-          height={layer.height}
+          alt={layer.alt || ''}
+          placeholder="blur"
           className={cn(
             'pointer-events-none absolute select-none object-cover',
             'left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',

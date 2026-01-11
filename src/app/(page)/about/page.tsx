@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import { Headline } from '@/ui/headline';
 
+import { Building } from './building';
 import { Intro } from './intro';
 
 // Config
@@ -24,6 +25,7 @@ const AboutPage = () => {
         About
       </Headline>
       <Intro />
+      <Building />
     </div>
   );
 };

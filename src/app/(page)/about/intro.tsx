@@ -1,11 +1,13 @@
 import { ParallaxImage } from '@/ui/parallax-image';
 
+import background from './images/intro-background.webp';
+import person from './images/intro-person.webp';
+import window from './images/intro-window.webp';
+
 const layers = [
   {
     id: 'background',
-    src: '/0-background.webp',
-    width: 1000,
-    height: 1000,
+    ...background,
     config: {
       width: '400px',
       xMove: '-10px',
@@ -14,9 +16,7 @@ const layers = [
   },
   {
     id: 'window',
-    src: '/1-window.webp',
-    width: 1000,
-    height: 1000,
+    ...window,
     config: {
       width: '400px',
       xMove: '-15px',
@@ -25,9 +25,7 @@ const layers = [
   },
   {
     id: 'person',
-    src: '/2-person.webp',
-    width: 1000,
-    height: 1000,
+    ...person,
     // slightly move to center the person
     className: 'left-[56%]',
     config: {
