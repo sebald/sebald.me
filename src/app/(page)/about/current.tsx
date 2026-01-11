@@ -4,10 +4,10 @@ import { Headline } from '@/ui/headline';
 
 import mariggoldLogo from './images/marigold-logo.svg';
 
-export const Building = () => (
+export const Current = () => (
   <div>
     <Headline level="3" as="h2">
-      Today
+      Current Role
     </Headline>
     <div className="grid grid-cols-2 items-center justify-between gap-4">
       <Image

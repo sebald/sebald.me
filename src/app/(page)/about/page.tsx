@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 
 import { Headline } from '@/ui/headline';
 
-import { Building } from './building';
-import { Intro } from './intro';
+import { Bio } from './bio';
+import { Current } from './current';
 
 // Config
 // ---------------
@@ -20,12 +20,12 @@ export const metadata: Metadata = {
 // ---------------
 const AboutPage = () => {
   return (
-    <div className="fit-prose grid gap-12 md:gap-16">
+    <div className="fit-prose grid gap-16 md:gap-24">
       <Headline level="2" variant="accent" as="h1">
         About
       </Headline>
-      <Intro />
-      <Building />
+      <Bio />
+      <Current />
     </div>
   );
 };
