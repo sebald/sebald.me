@@ -26,6 +26,7 @@ const AboutPage = () => {
       </Headline>
       <Bio />
       <Current />
+      <div>get in touch</div>
     </div>
   );
 };
