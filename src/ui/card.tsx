@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react';
 // Styles
 // ---------------
 export const styles = cva({
-  base: ['rounded-3xl p-6 flex flex-col gap-5'],
+  base: ['rounded-3xl flex flex-col gap-5'],
   variants: {
     variant: {
       dark: ['panel', 'panel-dark'],
@@ -14,9 +14,17 @@ export const styles = cva({
       tinted: ['panel', 'panel-tinted'],
       opaque: ['panel', 'panel-opaque'],
     },
+    inset: {
+      none: '',
+      tight: 'p-2',
+      snug: 'p-4',
+      normal: 'p-6',
+      relaxed: 'p-8',
+    },
   },
   defaultVariants: {
     variant: 'dark',
+    inset: 'normal',
   },
 });
 
@@ -28,6 +36,6 @@ export interface CardProps
 
 // Component
 // ---------------
-export const Card = ({ children, variant }: CardProps) => (
-  <div className={styles({ variant })}>{children}</div>
+export const Card = ({ children, variant, inset }: CardProps) => (
+  <div className={styles({ variant, inset })}>{children}</div>
 );

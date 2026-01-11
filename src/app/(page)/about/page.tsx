@@ -1,5 +1,10 @@
 import type { Metadata } from 'next';
 
+import { Headline } from '@/ui/headline';
+
+import { Bio } from './bio';
+import { Current } from './current';
+
 // Config
 // ---------------
 export const revalidate = false;
@@ -13,11 +18,17 @@ export const metadata: Metadata = {
 
 // Page
 // ---------------
-export default function About() {
+const AboutPage = () => {
   return (
-    <div>
-      <h1>About</h1>
-      <p>Welcome to the about page.</p>
+    <div className="fit-prose grid gap-16 md:gap-24">
+      <Headline level="2" variant="accent" as="h1">
+        About
+      </Headline>
+      <Bio />
+      <Current />
+      <div>get in touch</div>
     </div>
   );
-}
+};
+
+export default AboutPage;

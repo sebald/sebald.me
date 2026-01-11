@@ -4,7 +4,6 @@ import {
   MarkdownLogoIcon,
 } from '@phosphor-icons/react/ssr';
 import type { Route } from 'next';
-import type { LinkProps } from 'next/link';
 import Link from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
