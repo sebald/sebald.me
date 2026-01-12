@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Headline } from '@/ui/headline';
 
 import { Bio } from './bio';
+import { Connect } from './connect';
 import { Work } from './work';
 
 // Config
@@ -26,7 +27,7 @@ const AboutPage = () => {
       </Headline>
       <Bio />
       <Work />
-      <div>get in touch</div>
+      <Connect />
     </div>
   );
 };

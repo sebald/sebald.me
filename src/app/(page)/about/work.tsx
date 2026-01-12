@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { Headline } from '@/ui/headline';
+import { Link } from '@/ui/link';
 
 import marigold from './images/marigold.svg';
 
@@ -12,9 +13,10 @@ export const Work = () => (
     <Image className="w-52 md:w-72" src={marigold} alt="Marigold Logo" />
     <div className="prose">
       <p>
-        My current focus is Marigold, the design system at Reservix that I
-        helped establish. We are updating a design language that has served us
-        for over a decade.
+        My current focus is{' '}
+        <Link href="https://www.marigold-ui.io/">Marigold</Link>, the design
+        system at Reservix that I helped establish. We are updating a design
+        language that has served us for over a decade.
       </p>
       <p>
         We are modernizing not just the look and feel of our platform but also
