@@ -5,20 +5,21 @@ import { cva, type VariantProps } from 'cva';
 export const style = cva({
   base: [
     'flex items-center',
-    'font-sans font-bold',
+    'font-sans',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
     'in-[a:hover]:text-link',
   ],
   variants: {
     level: {
-      display: 'text-4xl md:text-6xl leading-tight -tracking-[0.04em]',
-      '1': 'typescale-5 leading-tight -tracking-wide',
-      '2': 'typescale-4 leading-tight -tracking-wide',
-      '3': 'typescale-3 leading-tight -tracking-wide',
-      '4': 'typescale-2 leading-snug -tracking-wide',
-      '5': 'typescale-1 leading-snug -tracking-wide',
-      '6': 'typescale-0 leading-relaxed -tracking-wide',
-      overline: 'uppercase text-text text-xs tracking-wider',
+      display:
+        'text-4xl md:text-6xl leading-tight -tracking-[0.04em] font-bold',
+      '1': 'typescale-5 leading-tight -tracking-wide font-semibold',
+      '2': 'typescale-4 leading-tight -tracking-wide font-semibold',
+      '3': 'typescale-3 leading-tight -tracking-wide font-semibold',
+      '4': 'typescale-2 leading-snug -tracking-wide font-medium',
+      '5': 'typescale-1 leading-snug -tracking-wide font-medium',
+      '6': 'typescale-0 leading-relaxed -tracking-wide font-medium',
+      overline: 'uppercase text-text text-xs tracking-wider font-medium',
     },
     variant: {
       default: 'text-(--color-headline,var(--color-oatmeal-900))',

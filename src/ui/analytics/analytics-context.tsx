@@ -8,8 +8,6 @@ import {
   useSyncExternalStore,
 } from 'react';
 
-export const COOKIE_NAME = 'cookie_consent';
-
 // Types
 // ---------------
 export type ConsentStatus = 'granted' | 'denied';
@@ -22,7 +20,7 @@ const subscribe = (callback: () => void) => {
 };
 
 const getSnapshot = () => {
-  const value = getCookie(COOKIE_NAME);
+  const value = getCookie('cookie_consent');
   return typeof value === 'string' ? value : undefined;
 };
 
@@ -60,7 +58,7 @@ export const AnalyticsProvider = ({ children }: PropsWithChildren) => {
   const consent = cookieValue === 'granted' ? 'granted' : 'denied';
 
   const updateConsent = (consent: ConsentStatus) => {
-    setCookie(COOKIE_NAME, consent, {
+    setCookie('cookie_consent', consent, {
       maxAge: 60 * 60 * 24 * 365, // 1 year
       path: '/',
       sameSite: 'lax',

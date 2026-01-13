@@ -3,8 +3,9 @@
     @apply text-prose;
 
     font-family: var(--font-mono);
-    color: var(--color-oatmeal-950);
+    color: var(--color-black-900);
     line-height: 1.75;
+    text-box-trim: trim-both;
 
     display: grid;
     grid-template-columns:
