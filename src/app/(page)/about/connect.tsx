@@ -1,8 +1,10 @@
 import { ChatsIcon } from '@phosphor-icons/react/ssr';
 
 export const Connect = () => (
-  <div className="flex gap-6 px-16">
-    <ChatsIcon size={64} weight="light" />
+  <div className="flex justify-start gap-6 px-16">
+    <div className="bg-oatmeal-100 grid size-72 place-items-center place-self-start rounded-full">
+      <ChatsIcon size={64} weight="light" />
+    </div>
     <div>
       <div className="font-sans text-3xl leading-tight md:text-4xl">
         <span>Let&apos;s start a</span>{' '}

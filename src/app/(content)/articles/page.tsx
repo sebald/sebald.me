@@ -10,10 +10,10 @@ import { Link } from '@/ui/link';
 // Config
 // ---------------
 export const revalidate = false;
+const page = navItems.find(item => item.href === '/articles')!;
 
 // Meta
 // ---------------
-const page = navItems.find(item => item.href === '/articles')!;
 export const metadata: Metadata = {
   title: page.title,
   description: page.description,
