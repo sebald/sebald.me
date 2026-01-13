@@ -1,5 +1,5 @@
 import { createRSSFeed } from '@/lib/rss';
-import { articlesSource, labSource } from '@/lib/source';
+import { labSource, notesSource } from '@/lib/source';
 
 // Config
 // ---------------
@@ -9,7 +9,7 @@ export const revalidate = false;
 // ---------------
 export const GET = () => {
   const feed = createRSSFeed([
-    ...articlesSource.getPages(),
+    ...notesSource.getPages(),
     ...labSource.getPages(),
   ]);
 

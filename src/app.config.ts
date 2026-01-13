@@ -9,8 +9,8 @@ export const siteUrl =
 
 export const navItems = [
   {
-    title: 'Articles',
-    href: '/articles',
+    title: 'Notes',
+    href: '/notes',
     Icon: PencilIcon,
     description:
       'Notes from the road and lessons learned along the way. Welcome to the archive.',

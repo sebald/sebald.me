@@ -54,7 +54,8 @@ const styles = {
 // Article.Header
 // ---------------
 interface HeaderProps
-  extends PropsWithChildren,
+  extends
+    PropsWithChildren,
     AriaAttributes,
     VariantProps<typeof styles.header> {
   className?: string;
@@ -195,9 +196,7 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
 // Article.Root
 // ---------------
 interface RootProps
-  extends PropsWithChildren,
-    AriaAttributes,
-    VariantProps<typeof styles.root> {
+  extends PropsWithChildren, AriaAttributes, VariantProps<typeof styles.root> {
   className?: string;
 }
 
@@ -207,9 +206,9 @@ const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
   </article>
 );
 
-// Article API
+// Note API
 // ---------------
-export const Article = Object.assign(Root, {
+export const Note = Object.assign(Root, {
   Header,
   Title,
   Time,

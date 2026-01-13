@@ -2,15 +2,15 @@ import { MarkdownLogoIcon, RssIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { navItems } from '@/app.config';
-import { articlesSource, excerpt, sortByDate } from '@/lib/source';
+import { excerpt, notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
-import { Article } from '@/ui/layout/article';
+import { Note } from '@/ui/layout/note';
 import { Link } from '@/ui/link';
 
 // Config
 // ---------------
 export const revalidate = false;
-const page = navItems.find(item => item.href === '/articles')!;
+const page = navItems.find(item => item.href === '/notes')!;
 
 // Meta
 // ---------------
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 
 // Page
 // ---------------
-const ArticlesPage = async () => {
-  const articles = sortByDate(articlesSource.getPages());
+const NotesPage = async () => {
+  const notes = sortByDate(notesSource.getPages());
 
   return (
     <div className="fit-prose grid gap-12 md:gap-16">
@@ -32,10 +32,10 @@ const ArticlesPage = async () => {
         </Headline>
         <div className="text-muted flex gap-2 text-sm">
           <Link
-            aria-label="View articles as markdown"
+            aria-label="View notes as markdown"
             variant="inherit"
             noUnderline
-            href="/articles.md"
+            href="/notes.md"
           >
             <MarkdownLogoIcon size={16} />
             Markdown
@@ -54,40 +54,34 @@ const ArticlesPage = async () => {
       </div>
 
       <div className="space-y-20">
-        {articles.map(article => (
-          <Article
-            key={article.url}
-            aria-labelledby={article.url}
+        {notes.map(note => (
+          <Note
+            key={note.url}
+            aria-labelledby={note.url}
             className="gap-2.5 text-base"
           >
-            <Article.Header>
+            <Note.Header>
               <Link
-                href={article.url}
-                aria-label={`Read article: ${article.data.title}`}
+                href={note.url}
+                aria-label={`Read note: ${note.data.title}`}
                 noUnderline
                 className="[grid-area:title]"
               >
-                <Article.Title id={article.url} variant="list">
-                  {article.data.title}
-                </Article.Title>
+                <Note.Title id={note.url} variant="list">
+                  {note.data.title}
+                </Note.Title>
               </Link>
-              <Article.Meta
-                date={article.data.date}
-                topics={article.data.topics}
-              />
-            </Article.Header>
-            <Article.Excerpt>{excerpt(article)}</Article.Excerpt>
-            <Link
-              href={article.url}
-              aria-label={`Read article: ${article.data.title}`}
-            >
+              <Note.Meta date={note.data.date} topics={note.data.topics} />
+            </Note.Header>
+            <Note.Excerpt>{excerpt(note)}</Note.Excerpt>
+            <Link href={note.url} aria-label={`Read note: ${note.data.title}`}>
               Read more
             </Link>
-          </Article>
+          </Note>
         ))}
       </div>
     </div>
   );
 };
 
-export default ArticlesPage;
+export default NotesPage;

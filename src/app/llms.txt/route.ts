@@ -1,7 +1,7 @@
 import {
-  articlesSource,
   formatPagesForLLM,
   labSource,
+  notesSource,
   sortByDate,
 } from '@/lib/source';
 
@@ -13,7 +13,7 @@ export const revalidate = false;
 // ---------------
 export const GET = async () => {
   const pages = sortByDate([
-    ...articlesSource.getPages(),
+    ...notesSource.getPages(),
     ...labSource.getPages(),
   ]);
   const text = await formatPagesForLLM(pages);

@@ -1,14 +1,14 @@
 import { type InferPageType, loader } from 'fumadocs-core/source';
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
-import { articles, lab, misc } from 'fumadocs-mdx:collections/server';
+import { lab, misc, notes } from 'fumadocs-mdx:collections/server';
 
 import { truncateAtWord } from './string.utils';
 
 // Loaders
 // ---------------
-export const articlesSource = loader({
-  baseUrl: '/articles',
-  source: toFumadocsSource(articles, []),
+export const notesSource = loader({
+  baseUrl: '/notes',
+  source: toFumadocsSource(notes, []),
 });
 
 export const labSource = loader({
@@ -22,7 +22,7 @@ export const miscSource = loader({
 });
 
 export type ContentPage =
-  | InferPageType<typeof articlesSource>
+  | InferPageType<typeof notesSource>
   | InferPageType<typeof labSource>;
 
 // Getters
@@ -30,13 +30,13 @@ export type ContentPage =
 export const getPageBySlug = (slug: string[]): ContentPage | undefined => {
   if (slug.length === 0) return undefined;
 
-  // First element indicates the source (articles or lab)
+  // First element indicates the source (notes or lab)
   const source = slug[0];
   const pageSlugs = slug.slice(1);
 
   switch (source) {
-    case 'articles':
-      return articlesSource.getPage(pageSlugs);
+    case 'notes':
+      return notesSource.getPage(pageSlugs);
     case 'lab':
       return labSource.getPage(pageSlugs);
     default:
@@ -77,7 +77,7 @@ ${content}
 // ---------------
 export const pageImage = (page: ContentPage) => {
   const segments = [...page.slugs, 'image.png'];
-  const type = page.url.includes('/lab') ? 'lab' : 'articles';
+  const type = page.url.includes('/lab') ? 'lab' : 'notes';
 
   return {
     segments,

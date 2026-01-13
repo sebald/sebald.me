@@ -29,9 +29,9 @@ const stripDatePrefix = (file: { flattenedPath: string }) => {
   return [...parts, cleanName];
 };
 
-export const articles = defineCollections({
+export const notes = defineCollections({
   type: 'doc',
-  dir: 'content/articles',
+  dir: 'content/notes',
   schema,
   // slugs: stripDatePrefix, // Applies the URL cleaner
   postprocess: {

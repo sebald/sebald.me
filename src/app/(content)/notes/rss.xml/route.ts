@@ -1,5 +1,5 @@
 import { createRSSFeed } from '@/lib/rss';
-import { articlesSource } from '@/lib/source';
+import { notesSource } from '@/lib/source';
 
 // Config
 // ---------------
@@ -8,10 +8,10 @@ export const revalidate = false;
 // Route
 // ---------------
 export const GET = () => {
-  const feed = createRSSFeed(articlesSource.getPages(), {
-    title: 'Articles | sebald.me',
+  const feed = createRSSFeed(notesSource.getPages(), {
+    title: 'Notes | sebald.me',
     description:
-      'Articles about software development and design by Sebastian Sebald',
+      'Notes about software development and design by Sebastian Sebald',
   });
 
   return new Response(feed, {
