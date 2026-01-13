@@ -1,9 +1,5 @@
-import Image from 'next/image';
-
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
-
-import marigold from './images/marigold.svg';
 
 export const Work = () => (
   <div className="grid gap-8">
@@ -17,11 +13,6 @@ export const Work = () => (
         system at Reservix that I helped establish. We are updating a design
         language that has served us for over a decade.
       </p>
-      <Image
-        className="mx-auto mt-4 w-52 md:w-72"
-        src={marigold}
-        alt="Marigold Logo"
-      />
       <p>
         We are modernizing not just the look and feel of our platform but also
         the way we build it. My team and I actively advocate for modern
