@@ -54,11 +54,11 @@ const layers = [
 
 export const Bio = () => (
   <div className="grid gap-8 sm:gap-10">
-    <div className="grid gap-1" aria-hidden="true">
-      <Headline level="2" as="h5">
+    <div className="grid gap-0.5" aria-hidden="true">
+      <Headline variant="accent" level="2" as="h5">
         Hi there! I am Sebastian.
       </Headline>
-      <div className="text-oatmeal-700 hidden flex-wrap gap-x-8 gap-y-1 text-sm sm:flex">
+      <div className="text-black-700 hidden flex-wrap gap-x-8 gap-y-1 text-sm sm:flex">
         <div className="flex items-center gap-1">
           <AddressBookIcon />
           Software Architect

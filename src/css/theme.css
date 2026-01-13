@@ -49,8 +49,8 @@
   --color-black-900: oklch(0.15 0.009 87);
   --color-black-950: oklch(0.1 0.006 87);
 
-  --color-headline: var(--color-oatmeal-900);
-  --color-text: var(--color-oatmeal-900);
+  --color-headline: var(--color-black-700);
+  --color-text: var(--color-black-700);
   --color-muted: var(--color-black-500);
   --color-link: var(--color-blueberry-600);
   --color-link-hover: var(--color-blueberry-500);
