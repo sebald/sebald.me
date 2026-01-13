@@ -95,73 +95,39 @@ const FloatingNav = () => {
         >
           {/* BaseUI Popover does not trap focus when used as modal. */}
           <FocusTrap focusTrapOptions={{ allowOutsideClick: true }}>
-            <nav>
-              <div className="grid grid-cols-[min-content_1fr]">
-                {navItems.map(item => {
-                  const Icon = item.Icon;
-                  return (
-                    <NavItem
-                      key={item.title}
-                      href={item.href}
+            <nav className="grid grid-cols-[min-content_1fr]">
+              {navItems.map(item => {
+                const Icon = item.Icon;
+                return (
+                  <NavItem
+                    key={item.title}
+                    href={item.href}
+                    className={cn(
+                      'group',
+                      'col-span-full grid grid-cols-subgrid gap-4',
+                      'hover:bg-black-500/15 rounded-xl',
+                      'px-6 py-4',
+                    )}
+                    onClick={() => popupHandler.close()}
+                  >
+                    <div
                       className={cn(
-                        'group',
-                        'col-span-full grid grid-cols-subgrid gap-4',
-                        'hover:bg-black-500/15 rounded-xl',
-                        'px-6 py-4',
+                        'grid place-items-center',
+                        'text-black-500',
+                        'group-hover:text-link-hover',
                       )}
-                      onClick={() => popupHandler.close()}
                     >
-                      <div
-                        className={cn(
-                          'grid place-items-center',
-                          'text-black-500',
-                          'group-hover:text-link-hover',
-                        )}
-                      >
-                        <Icon size={32} weight="duotone" />
+                      <Icon size={32} weight="duotone" />
+                    </div>
+                    <div>
+                      <Headline level="5">{item.title}</Headline>
+                      <div className="text-black-600 font-sans text-sm leading-snug">
+                        {item.description}
                       </div>
-                      <div>
-                        <Headline level="5">{item.title}</Headline>
-                        <div className="text-black-600 font-sans text-sm leading-snug">
-                          {item.description}
-                        </div>
-                      </div>
-                    </NavItem>
-                  );
-                })}
-              </div>
-              <div className="pb-6 pt-2">
-                <Divider variant="light" inset="4" />
-              </div>
-              <div className="text-black-600 flex items-center justify-around gap-12 px-6 pb-4 md:justify-end">
-                <Link
-                  aria-label="Sebastian's GitHub Profile"
-                  variant="inherit"
-                  noUnderline
-                  href={socialLinks.github}
-                  target="_blank"
-                >
-                  <GithubIcon size={20} />
-                </Link>
-                <Link
-                  aria-label="Sebastian's LinkedIn Profile"
-                  variant="inherit"
-                  noUnderline
-                  href={socialLinks.linkedin}
-                  target="_blank"
-                >
-                  <LinkedInIcon size={20} />
-                </Link>
-                <Link
-                  aria-label="Sebastian's X Profile"
-                  variant="inherit"
-                  noUnderline
-                  href={socialLinks.x}
-                  target="_blank"
-                >
-                  <XComIcon size={20} />
-                </Link>
-              </div>
+                    </div>
+                  </NavItem>
+                );
+              })}
             </nav>
           </FocusTrap>
         </Popover>
@@ -177,7 +143,7 @@ export const Navigation = () => (
     className={cn(
       '@container',
       'flex w-full items-center justify-between',
-      'z-90 fixed left-1/2 top-0 -translate-x-1/2',
+      'fixed top-0 left-1/2 z-90 -translate-x-1/2',
       'transition-all',
       'animate-floating-nav scroll-trigger scroll-trigger-to-25',
       'lg:max-w-content px-4 py-3 lg:px-0',

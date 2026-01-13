@@ -2,20 +2,20 @@ import {
   CopyrightIcon,
   CubeIcon,
   FileTextIcon,
+  GithubLogoIcon,
+  LinkedinLogoIcon,
   RssIcon,
+  XLogoIcon,
 } from '@phosphor-icons/react/dist/ssr';
 import type { PropsWithChildren } from 'react';
 
 import { socialLinks } from '@/app.config';
 import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Divider } from '@/ui/divider';
-import { GithubIcon } from '@/ui/icon/github-icon';
-import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
-import { XComIcon } from '@/ui/icon/x-com-icon';
 import { Link } from '@/ui/link';
 
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-black-400 hidden font-sans text-xs font-bold uppercase leading-none md:block">
+  <h6 className="text-black-400 hidden font-sans text-xs leading-none font-bold uppercase md:block">
     {children}
   </h6>
 );
@@ -29,7 +29,7 @@ const Social = () => (
       href={socialLinks.github}
       target="_blank"
     >
-      <GithubIcon size={24} />
+      <GithubLogoIcon size={28} />
     </Link>
     <Link
       aria-label="Sebastian's LinkedIn Profile"
@@ -38,7 +38,7 @@ const Social = () => (
       href={socialLinks.linkedin}
       target="_blank"
     >
-      <LinkedInIcon size={24} />
+      <LinkedinLogoIcon size={28} />
     </Link>
     <Link
       aria-label="Sebastian's X Profile"
@@ -47,7 +47,7 @@ const Social = () => (
       href={socialLinks.x}
       target="_blank"
     >
-      <XComIcon size={24} />
+      <XLogoIcon size={28} />
     </Link>
   </div>
 );
@@ -103,7 +103,7 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="fit-prose text-muted px-4 pb-8 pt-28 md:px-0">
+  <div className="fit-prose text-muted px-4 pt-28 pb-8 md:px-0">
     <Divider variant="light" />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
