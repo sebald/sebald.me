@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { miscSource } from '@/lib/source';
-import { Article } from '@/ui/layout/note';
+import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
