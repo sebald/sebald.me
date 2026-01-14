@@ -208,7 +208,7 @@ const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
 
 // Note API
 // ---------------
-export const Note = Object.assign(Root, {
+export const Article = Object.assign(Root, {
   Header,
   Title,
   Time,

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { miscSource } from '@/lib/source';
-import { Note } from '@/ui/layout/note';
+import { Article } from '@/ui/layout/note';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -35,18 +35,18 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const titleId = `misc-${page.slugs.join('-')}`;
 
   return (
-    <Note
+    <Article
       aria-labelledby={titleId}
       stretch="prose"
       className="gap-12 md:gap-16"
     >
-      <Note.Header>
-        <Note.Title id={titleId}>{page.data.title}</Note.Title>
-      </Note.Header>
-      <Note.Content>
+      <Article.Header>
+        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+      </Article.Header>
+      <Article.Content>
         <MDX components={getMDXComponents()} />
-      </Note.Content>
-    </Note>
+      </Article.Content>
+    </Article>
   );
 };
 

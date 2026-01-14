@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { notesSource, pageImage } from '@/lib/source';
-import { Note } from '@/ui/layout/note';
+import { Article } from '@/ui/layout/note';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -38,21 +38,21 @@ const Page = async (props: PageProps<'/notes/[...slug]'>) => {
   const titleId = `note-${page.slugs.join('-')}`;
 
   return (
-    <Note aria-labelledby={titleId} className="gap-12 md:gap-24">
-      <Note.Header>
-        <Note.Title id={titleId}>{page.data.title}</Note.Title>
-        <Note.Meta date={page.data.date} topics={page.data.topics} />
-        <Note.Actions>
-          <Note.MarkdownLink
+    <Article aria-labelledby={titleId} className="gap-12 md:gap-24">
+      <Article.Header>
+        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+        <Article.Meta date={page.data.date} topics={page.data.topics} />
+        <Article.Actions>
+          <Article.MarkdownLink
             aria-label={`View "${page.data.title}" as markdown`}
             href={`${page.url}.md`}
           />
-        </Note.Actions>
-      </Note.Header>
-      <Note.Content>
+        </Article.Actions>
+      </Article.Header>
+      <Article.Content>
         <MDX components={getMDXComponents()} />
-      </Note.Content>
-    </Note>
+      </Article.Content>
+    </Article>
   );
 };
 

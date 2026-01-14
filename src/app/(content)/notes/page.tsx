@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { navItems } from '@/app.config';
 import { excerpt, notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
-import { Note } from '@/ui/layout/note';
+import { Article } from '@/ui/layout/note';
 import { Link } from '@/ui/link';
 
 // Config
@@ -55,29 +55,29 @@ const NotesPage = async () => {
 
       <div className="space-y-20">
         {notes.map(note => (
-          <Note
+          <Article
             key={note.url}
             aria-labelledby={note.url}
             className="gap-2.5 text-base"
           >
-            <Note.Header>
+            <Article.Header>
               <Link
                 href={note.url}
                 aria-label={`Read note: ${note.data.title}`}
                 noUnderline
                 className="[grid-area:title]"
               >
-                <Note.Title id={note.url} variant="list">
+                <Article.Title id={note.url} variant="list">
                   {note.data.title}
-                </Note.Title>
+                </Article.Title>
               </Link>
-              <Note.Meta date={note.data.date} topics={note.data.topics} />
-            </Note.Header>
-            <Note.Excerpt>{excerpt(note)}</Note.Excerpt>
+              <Article.Meta date={note.data.date} topics={note.data.topics} />
+            </Article.Header>
+            <Article.Excerpt>{excerpt(note)}</Article.Excerpt>
             <Link href={note.url} aria-label={`Read note: ${note.data.title}`}>
               Read more
             </Link>
-          </Note>
+          </Article>
         ))}
       </div>
     </div>
