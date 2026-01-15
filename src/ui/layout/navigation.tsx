@@ -102,6 +102,7 @@ const FloatingNav = () => {
                   <NavItem
                     key={item.title}
                     href={item.href}
+                    aria-describedby={`title-${item.href}`}
                     className={cn(
                       'group',
                       'col-span-full grid grid-cols-subgrid gap-4',
@@ -120,8 +121,17 @@ const FloatingNav = () => {
                       <Icon size={32} weight="duotone" />
                     </div>
                     <div>
-                      <Headline level="5">{item.title}</Headline>
-                      <div className="text-black-600 font-sans text-sm leading-snug">
+                      <div
+                        id={`title-${item.href}`}
+                        aria-describedby={`description-${item.href}`}
+                        className="text-oatmeal-950 group-hover:text-link-hover font-sans text-2xl font-bold"
+                      >
+                        {item.title}
+                      </div>
+                      <div
+                        id={`description-${item.href}`}
+                        className="text-oatmeal-800 text-sm leading-snug"
+                      >
                         {item.description}
                       </div>
                     </div>

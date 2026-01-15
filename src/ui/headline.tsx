@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'cva';
 export const style = cva({
   base: [
     'flex items-center',
-    'font-sans',
+    'font-mono',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
     'in-[a:hover]:text-link',
   ],
@@ -13,9 +13,9 @@ export const style = cva({
     level: {
       display:
         'text-4xl md:text-6xl leading-tight -tracking-[0.04em] font-bold',
-      '1': 'typescale-5 leading-tight -tracking-wide font-semibold',
-      '2': 'typescale-4 leading-tight -tracking-wide font-semibold',
-      '3': 'typescale-3 leading-tight -tracking-wide font-semibold',
+      '1': 'typescale-5 leading-tight -tracking-wide font-medium',
+      '2': 'typescale-4 leading-tight -tracking-wide font-medium',
+      '3': 'typescale-3 leading-tight -tracking-wide font-medium',
       '4': 'typescale-2 leading-snug -tracking-wide font-medium',
       '5': 'typescale-1 leading-snug -tracking-wide font-medium',
       '6': 'typescale-0 leading-relaxed -tracking-wide font-medium',
@@ -28,6 +28,16 @@ export const style = cva({
       muted: 'text-(--color-muted,var(--color-oatmeal-700))',
     },
   },
+  compoundVariants: [
+    {
+      level: 'display',
+      className: 'font-sans',
+    },
+    {
+      level: ['1', '2', '3', '4', '5', '6', 'overline'],
+      className: 'font-mono',
+    },
+  ],
   defaultVariants: {
     level: '2',
     variant: 'default',

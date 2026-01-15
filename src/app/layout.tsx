@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { siteUrl } from '@/app.config';
-import { plusJakarta, spaceMono } from '@/css/fonts';
+import { firaMono, plusJakarta } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
 import { AnalyticsProvider } from '@/ui/analytics/analytics-context';
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: LayoutProps<'/'>) => (
   <html
     lang="en"
-    className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${spaceMono.variable} ${plusJakarta.variable}`}
+    className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${firaMono.variable} ${plusJakarta.variable}`}
     suppressHydrationWarning
   >
     <body className="bg-oatmeal-50 text-text relative isolate font-mono">

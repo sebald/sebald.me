@@ -1,7 +1,7 @@
-import { Plus_Jakarta_Sans, Space_Mono } from 'next/font/google';
+import { Fira_Mono, Plus_Jakarta_Sans } from 'next/font/google';
 
-export const spaceMono = Space_Mono({
-  weight: ['400', '700'],
+export const firaMono = Fira_Mono({
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-mono',
