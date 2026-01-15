@@ -47,9 +47,9 @@ const StaticNav = () => (
         href={item.href}
         data-text={item.title}
         className={cn(
-          'text-black-700 transition-color rounded-full font-medium',
-          'decoration-oatmeal-600/30 decoration-2 underline-offset-4',
-          'hover:text-black-900 weight-on-hover-semibold hover:underline',
+          'text-oatmeal-800 transition-color rounded-full text-lg leading-none',
+          'decoration-oatmeal-600/30 decoration-2 underline-offset-5',
+          'hover:text-oatmeal-900 weight-on-hover-medium hover:underline',
         )}
       >
         {item.title}
