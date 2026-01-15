@@ -55,6 +55,26 @@
   --color-link: var(--color-blueberry-600);
   --color-link-hover: var(--color-blueberry-500);
 
+  /* @link https://utopia.fyi/type/calculator?c=480,16,1.2,1024,18,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  /* --text-scale--2: clamp(0.6944rem, 0.6179rem + 0.2553vw, 0.7813rem);
+  --text-scale--1: clamp(0.8333rem, 0.7414rem + 0.3064vw, 0.9375rem);
+  --text-scale-0: clamp(1rem, 0.8897rem + 0.3676vw, 1.125rem);
+  --text-scale-1: clamp(1.2rem, 1.0676rem + 0.4412vw, 1.35rem);
+  --text-scale-2: clamp(1.44rem, 1.2812rem + 0.5294vw, 1.62rem);
+  --text-scale-3: clamp(1.728rem, 1.5374rem + 0.6353vw, 1.944rem);
+  --text-scale-4: clamp(2.0736rem, 1.8449rem + 0.7624vw, 2.3328rem);
+  --text-scale-5: clamp(2.4883rem, 2.2139rem + 0.9148vw, 2.7994rem); */
+
+  /* @link https://utopia.fyi/type/calculator?c=480,16,1.125,1024,18,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --text-scale--2: clamp(0.7813rem, 0.798rem + -0.0261vw, 0.7901rem);
+  --text-scale--1: clamp(0.8889rem, 0.846rem + 0.143vw, 0.9375rem);
+  --text-scale-0: clamp(1rem, 0.8897rem + 0.3676vw, 1.125rem);
+  --text-scale-1: clamp(1.125rem, 0.9265rem + 0.6618vw, 1.35rem);
+  --text-scale-2: clamp(1.2656rem, 0.9529rem + 1.0423vw, 1.62rem);
+  --text-scale-3: clamp(1.4238rem, 0.9649rem + 1.5299vw, 1.944rem);
+  --text-scale-4: clamp(1.6018rem, 0.9568rem + 2.15vw, 2.3328rem);
+  --text-scale-5: clamp(1.802rem, 0.922rem + 2.9333vw, 2.7994rem);
+
   --min-typescale: 1.125; /* Major Second */
   --max-typescale: 1.25; /* Major Third */
 
