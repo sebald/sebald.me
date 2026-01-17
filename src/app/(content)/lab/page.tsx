@@ -30,7 +30,7 @@ const LabIndex = async () => {
         <Headline level="4" variant="muted" as="h1">
           {page.title}
         </Headline>
-        <div className="text-muted list-separator flex gap-2 text-sm">
+        <div className="text-muted list-separator flex text-sm">
           <Link
             aria-label="View lab items as markdown"
             variant="inherit"
