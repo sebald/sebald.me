@@ -10,8 +10,7 @@ export const style = cva({
   ],
   variants: {
     level: {
-      display:
-        'text-4xl md:text-6xl leading-tight -tracking-[0.04em] font-bold',
+      display: 'text-display leading-tight -tracking-wider font-bold',
       '1': 'text-scale-5 leading-tight -tracking-wide font-semibold',
       '2': 'text-scale-4 leading-tight -tracking-wide font-semibold',
       '3': 'text-scale-3 leading-tight -tracking-wide font-semibold',

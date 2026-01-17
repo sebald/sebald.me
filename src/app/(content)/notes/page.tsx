@@ -30,7 +30,7 @@ const NotesPage = async () => {
         <Headline level="4" variant="muted" as="h1">
           {page.title}
         </Headline>
-        <div className="text-muted flex gap-2 text-sm">
+        <div className="text-muted list-separator flex text-sm">
           <Link
             aria-label="View notes as markdown"
             variant="inherit"
@@ -40,7 +40,6 @@ const NotesPage = async () => {
             <MarkdownLogoIcon size={16} />
             Markdown
           </Link>
-          <span className="text-muted text-sm">·</span>
           <Link
             aria-label="View article RSS feed"
             variant="inherit"

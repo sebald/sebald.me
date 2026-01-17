@@ -21,14 +21,9 @@
   }
 }
 
-/* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px viewport width */
-@utility text-prose {
-  font-size: var(--text-scale-0);
-}
-
 /* Utility to fit prose content within a max width container. */
 @utility fit-prose {
-  @apply text-prose;
+  font-size: var(--text-scale-0);
   margin-inline: auto;
   width: min(var(--prose-width), 100%);
 }
@@ -50,6 +45,13 @@
 
   &:hover {
     font-weight: --value(--font-weight-*);
+  }
+}
+
+@utility list-separator {
+  & > *:not(:last-child)::after {
+    content: '·';
+    @apply text-muted text-scale--1 px-1.5;
   }
 }
 
