@@ -27,10 +27,6 @@ export const metadata: Metadata = {
           title: 'Sebastian Sebald - Notes',
           url: 'https://sebald.me/notes/rss.xml',
         },
-        {
-          title: 'Sebastian Sebald - Lab',
-          url: 'https://sebald.me/lab/rss.xml',
-        },
       ],
     },
   },

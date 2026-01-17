@@ -39,15 +39,6 @@ export const notes = defineCollections({
   },
 });
 
-export const lab = defineCollections({
-  type: 'doc',
-  dir: 'content/lab',
-  schema,
-  postprocess: {
-    includeProcessedMarkdown: true,
-  },
-});
-
 export const misc = defineCollections({
   type: 'doc',
   dir: 'content/misc',

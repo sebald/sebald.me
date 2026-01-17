@@ -1,8 +1,4 @@
-import {
-  FlaskIcon,
-  HandWavingIcon,
-  PencilIcon,
-} from '@phosphor-icons/react/dist/ssr';
+import { HandWavingIcon, PencilIcon } from '@phosphor-icons/react/dist/ssr';
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
@@ -14,13 +10,6 @@ export const navItems = [
     Icon: PencilIcon,
     description:
       'Notes from the road and lessons learned along the way. Welcome to the archive.',
-  },
-  {
-    title: 'Lab',
-    href: '/lab',
-    Icon: FlaskIcon,
-    description:
-      'Code, concepts, and curiosities. Feel free to grab what you need.',
   },
   {
     title: 'About',

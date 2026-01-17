@@ -1,17 +1,15 @@
 import { notFound } from 'next/navigation';
 
-import { type ContentPage, formatPageForLLM, labSource } from '@/lib/source';
+import { type ContentPage, formatPageForLLM } from '@/lib/source';
 import { notesSource } from '@/lib/source';
 
 // Config
 // ---------------
 export const generateStaticParams = async () => {
   const notesParams = await notesSource.generateParams();
-  const labParams = await labSource.generateParams();
 
   return [
     ...notesParams.map(p => ({ slug: ['notes', ...p.slug] })),
-    ...labParams.map(p => ({ slug: ['lab', ...p.slug] })),
   ];
 };
 
@@ -25,9 +23,6 @@ export async function GET(_: Request, ctx: RouteContext<'/api/md/[...slug]'>) {
   switch (type) {
     case 'notes':
       page = notesSource.getPage(path);
-      break;
-    case 'lab':
-      page = labSource.getPage(path);
       break;
     default:
   }
