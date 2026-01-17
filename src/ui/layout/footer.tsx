@@ -53,7 +53,7 @@ const Social = () => (
 );
 
 const Links = () => (
-  <div className="flex flex-col gap-2">
+  <div className="flex flex-col gap-2.5 *:leading-none">
     <Headline>Links</Headline>
     <Link
       aria-label="View site content formatted for LLMs"
@@ -86,7 +86,7 @@ const Links = () => (
 );
 
 const Legal = () => (
-  <div className="col-span-2 flex justify-between md:col-span-1 md:flex-col md:gap-2">
+  <div className="col-span-2 flex justify-center gap-2 md:col-span-1 md:flex-col md:gap-2.5 md:*:leading-none">
     <Headline>Legal</Headline>
     <Link variant="inherit" noUnderline href="/imprint">
       Imprint

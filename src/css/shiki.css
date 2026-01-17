@@ -44,8 +44,8 @@
       padding-left: var(--padding-left);
       padding-right: var(--padding-right);
 
-      font-size: var(--text-sm);
-      line-height: var(--text-sm--line-height);
+      font-size: var(--text-scale--1);
+      line-height: 1.4;
     }
 
     .shiki:has(.line.focused) .line:not(.focused)& {

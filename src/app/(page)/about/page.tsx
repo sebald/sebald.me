@@ -27,7 +27,7 @@ const AboutPage = () => {
       <Headline level="4" variant="muted" as="h1">
         {page.title}
       </Headline>
-      <div className="grid gap-40">
+      <div className="grid gap-24">
         <Bio />
         <Work />
         <Connect />

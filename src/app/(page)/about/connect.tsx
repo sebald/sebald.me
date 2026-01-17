@@ -10,26 +10,26 @@ import { Link } from '@/ui/link';
 
 export const Connect = () => (
   <div className="group flex items-center gap-10 px-16">
-    <div className="bg-oatmeal-100 text-oatmeal-700 grid size-28 shrink-0 place-items-center self-center rounded-full">
+    <div className="bg-oatmeal-100/50 text-oatmeal-700 grid size-28 shrink-0 place-items-center self-center rounded-full">
       <ChatIcon size={60} />
     </div>
-    <div className="grid gap-6">
+    <div className="grid gap-4">
       <div className="grid gap-2">
         <Headline level="3" as="h2">
           Let&apos;s start a conversation.
         </Headline>
-        <div className="text-muted font-sans text-lg">
+        <div className="text-muted">
           Whether you have a question about my work or simply want to say hello,
           my inbox is open. I look forward to hearing from you.
         </div>
       </div>
-      <div className="flex gap-16 text-base">
+      <div className="text-scale-0 flex gap-16">
         <Link
           variant="inherit"
           noUnderline
           href="mailto:sebastian.sebald+me@gmail.com"
         >
-          <EnvelopeSimpleIcon size={20} /> E-Mail
+          <EnvelopeSimpleIcon size={18} /> E-Mail
         </Link>
         <Link
           variant="inherit"
@@ -37,7 +37,7 @@ export const Connect = () => (
           href={socialLinks.linkedin}
           target="_blank"
         >
-          <LinkedinLogoIcon size={20} /> LinkedIn
+          <LinkedinLogoIcon size={18} /> LinkedIn
         </Link>
       </div>
     </div>

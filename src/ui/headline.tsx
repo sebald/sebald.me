@@ -5,21 +5,19 @@ import { cva, type VariantProps } from 'cva';
 export const style = cva({
   base: [
     'flex items-center',
-    'font-sans',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
     'in-[a:hover]:text-link',
   ],
   variants: {
     level: {
-      display:
-        'text-4xl md:text-6xl leading-tight -tracking-[0.04em] font-bold',
-      '1': 'typescale-5 leading-tight -tracking-wide font-semibold',
-      '2': 'typescale-4 leading-tight -tracking-wide font-semibold',
-      '3': 'typescale-3 leading-tight -tracking-wide font-semibold',
-      '4': 'typescale-2 leading-snug -tracking-wide font-medium',
-      '5': 'typescale-1 leading-snug -tracking-wide font-medium',
-      '6': 'typescale-0 leading-relaxed -tracking-wide font-medium',
-      overline: 'uppercase text-text text-xs tracking-wider font-medium',
+      display: 'text-display leading-tight -tracking-wider font-bold',
+      '1': 'text-scale-5 leading-tight -tracking-wide font-semibold',
+      '2': 'text-scale-4 leading-tight -tracking-wide font-semibold',
+      '3': 'text-scale-3 leading-tight -tracking-wide font-semibold',
+      '4': 'text-scale-2 leading-snug -tracking-wide font-semibold',
+      '5': 'text-scale-1 leading-snug -tracking-wide font-semibold',
+      '6': 'text-scale-0 leading-relaxed -tracking-wide font-semibold',
+      overline: 'uppercase text-text text-scale--2 tracking-wide font-semibold',
     },
     variant: {
       default: 'text-(--color-headline,var(--color-oatmeal-900))',
@@ -28,6 +26,16 @@ export const style = cva({
       muted: 'text-(--color-muted,var(--color-oatmeal-700))',
     },
   },
+  compoundVariants: [
+    {
+      level: 'display',
+      className: 'font-sans',
+    },
+    {
+      level: ['1', '2', '3', '4', '5', '6', 'overline'],
+      className: 'font-sans',
+    },
+  ],
   defaultVariants: {
     level: '2',
     variant: 'default',

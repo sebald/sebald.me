@@ -7,15 +7,9 @@ import { usePathname } from 'next/navigation';
 import { useRef } from 'react';
 import { useResizeObserver } from 'usehooks-ts';
 
-import { navItems, socialLinks } from '@/app.config';
+import { navItems } from '@/app.config';
 import { cn } from '@/lib/styles.utils';
-import { Divider } from '@/ui/divider';
-import { Headline } from '@/ui/headline';
-import { GithubIcon } from '@/ui/icon/github-icon';
-import { LinkedInIcon } from '@/ui/icon/linkedin-icon';
 import { MenuIcon } from '@/ui/icon/menu-icon';
-import { XComIcon } from '@/ui/icon/x-com-icon';
-import { Link } from '@/ui/link';
 import { Logo } from '@/ui/logo';
 import { Popover } from '@/ui/popover';
 
@@ -47,9 +41,9 @@ const StaticNav = () => (
         href={item.href}
         data-text={item.title}
         className={cn(
-          'text-black-700 transition-color rounded-full font-medium',
-          'decoration-oatmeal-600/30 decoration-2 underline-offset-4',
-          'hover:text-black-900 weight-on-hover-semibold hover:underline',
+          'text-oatmeal-800 transition-color rounded-full leading-none',
+          'decoration-oatmeal-600/30 decoration-2 underline-offset-5',
+          'hover:text-oatmeal-900 weight-on-hover-medium hover:underline',
         )}
       >
         {item.title}
@@ -88,6 +82,7 @@ const FloatingNav = () => {
           variant="clear"
           stretch="navigation"
           inset="tight"
+          className="rounded-4xl"
           align="end"
           alignOffset={-15}
           sideOffset={16}
@@ -102,11 +97,12 @@ const FloatingNav = () => {
                   <NavItem
                     key={item.title}
                     href={item.href}
+                    aria-describedby={`title-${item.href}`}
                     className={cn(
                       'group',
                       'col-span-full grid grid-cols-subgrid gap-4',
-                      'hover:bg-black-500/15 rounded-xl',
-                      'px-6 py-4',
+                      'hover:bg-black-500/15 rounded-3xl',
+                      'px-6 py-3',
                     )}
                     onClick={() => popupHandler.close()}
                   >
@@ -120,8 +116,17 @@ const FloatingNav = () => {
                       <Icon size={32} weight="duotone" />
                     </div>
                     <div>
-                      <Headline level="5">{item.title}</Headline>
-                      <div className="text-black-600 font-sans text-sm leading-snug">
+                      <div
+                        id={`title-${item.href}`}
+                        aria-describedby={`description-${item.href}`}
+                        className="text-oatmeal-950 group-hover:text-link-hover text-scale-2 font-sans font-semibold"
+                      >
+                        {item.title}
+                      </div>
+                      <div
+                        id={`description-${item.href}`}
+                        className="text-oatmeal-800 text-scale--1 leading-snug"
+                      >
                         {item.description}
                       </div>
                     </div>

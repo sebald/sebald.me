@@ -10,9 +10,9 @@ export const style = cva({
       muted: 'text-muted',
     },
     size: {
-      caption: 'text-sm',
-      body: 'text-base',
-      lead: 'text-lg',
+      caption: 'text-(length:--text-scale--1)',
+      body: 'text-(length:--text-scale-0)',
+      lead: 'text-(length:--text-scale-1)',
     },
   },
   defaultVariants: {

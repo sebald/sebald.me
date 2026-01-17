@@ -21,25 +21,9 @@
   }
 }
 
-/* Typescale utility for responsive font sizing based on CSS variables. */
-@utility typescale-* {
-  /* Pow only works with numbers, so no clamp. */
-  --typescale: var(--min-typescale);
-  @media (width >= 768px) {
-    --typescale: var(--max-typescale);
-  }
-
-  font-size: calc(1rem * pow(var(--typescale), --value(integer)));
-}
-
-/* Scales from 16px (text-base) at 800px to 18px (text-lg) at 1000px viewport width */
-@utility text-prose {
-  font-size: clamp(var(--text-base), 1vw + 0.5rem, var(--text-lg));
-}
-
 /* Utility to fit prose content within a max width container. */
 @utility fit-prose {
-  @apply text-prose;
+  font-size: var(--text-scale-0);
   margin-inline: auto;
   width: min(var(--prose-width), 100%);
 }
@@ -53,14 +37,21 @@
   &::after {
     content: attr(data-text);
     content: attr(data-text) / ''; /* Hide from screen readers */
-    font-weight: --value(--font-weight- *);
+    font-weight: --value(--font-weight-*);
     height: 0;
     overflow: hidden;
     visibility: hidden;
   }
 
   &:hover {
-    font-weight: --value(--font-weight- *);
+    font-weight: --value(--font-weight-*);
+  }
+}
+
+@utility list-separator {
+  & > *:not(:last-child)::after {
+    content: '·';
+    @apply text-muted text-scale--1 px-1.5;
   }
 }
 

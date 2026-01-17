@@ -30,8 +30,11 @@ const styles = {
       'grid-cols-2',
       'gap-x-4',
       'items-start',
-      '[grid-template-areas:"meta_meta""actions_actions""title_title"] min-[500px]:[grid-template-areas:"meta_actions""title_title"]',
+      '[grid-template-areas:"meta_meta""actions_actions""title_title"] min-[480px]:[grid-template-areas:"meta_actions""title_title"]',
     ],
+  }),
+  meta: cva({
+    base: ['flex [grid-area:meta]', 'list-separator'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -164,11 +167,8 @@ interface MetaProps extends AriaAttributes {
 }
 
 const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
-  <div className="flex gap-2 [grid-area:meta]" {...ariaProps}>
+  <div className={styles.meta()} {...ariaProps}>
     {date && <Time date={date} />}
-    {date && topics && topics.length > 0 && (
-      <span className="text-muted text-sm">·</span>
-    )}
     {topics && topics.length > 0 && <Topics topics={topics} />}
   </div>
 );

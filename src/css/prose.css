@@ -1,7 +1,6 @@
 @layer components {
   .prose {
-    @apply text-prose;
-
+    font-size: var(--text-scale-0);
     font-family: var(--font-mono);
     color: var(--color-black-900);
     line-height: 1.75;
