@@ -97,7 +97,8 @@ const Root = ({ children, ...props }: PopoverRootProps) => (
 // Popover.Trigger
 // ---------------
 export interface PopoverTriggerProps
-  extends Omit<ComponentProps<typeof Primitive.Trigger>, 'className' | 'style'>,
+  extends
+    Omit<ComponentProps<typeof Primitive.Trigger>, 'className' | 'style'>,
     VariantProps<typeof styles.trigger> {}
 
 const Trigger = ({ children, variant, ...props }: PopoverTriggerProps) => (
@@ -109,13 +110,15 @@ const Trigger = ({ children, variant, ...props }: PopoverTriggerProps) => (
 // Popover
 // ---------------
 export interface PopoverContentProps
-  extends Pick<
+  extends
+    Pick<
       ComponentProps<typeof Primitive.Positioner>,
       'align' | 'alignOffset' | 'side' | 'sideOffset' | 'collisionPadding'
     >,
     VariantProps<typeof styles.popup> {
   children: React.ReactNode;
   showCloseButton?: boolean;
+  className?: string;
 }
 
 const Content = ({
@@ -124,6 +127,7 @@ const Content = ({
   variant,
   stretch,
   inset,
+  className,
   showCloseButton,
   ...positionerProps
 }: PopoverContentProps) => {
@@ -139,12 +143,14 @@ const Content = ({
         sideOffset={sideOffset}
         {...positionerProps}
       >
-        <Primitive.Popup className={styles.popup({ variant, stretch, inset })}>
+        <Primitive.Popup
+          className={styles.popup({ variant, stretch, inset, className })}
+        >
           {showCloseButton && (
             <Primitive.Close
               className={buttonStyles({
                 variant: 'icon',
-                className: 'absolute right-2 top-2',
+                className: 'absolute top-2 right-2',
               })}
             >
               <XIcon size={20} weight="regular" />
@@ -159,8 +165,10 @@ const Content = ({
 
 // Popover.Title
 // ---------------
-export interface PopoverTitleProps
-  extends Omit<ComponentProps<typeof Primitive.Title>, 'className' | 'style'> {}
+export interface PopoverTitleProps extends Omit<
+  ComponentProps<typeof Primitive.Title>,
+  'className' | 'style'
+> {}
 
 const Title = ({ children, ...props }: PopoverTitleProps) => (
   <Primitive.Title {...props} className={styles.title()}>
@@ -170,11 +178,10 @@ const Title = ({ children, ...props }: PopoverTitleProps) => (
 
 // Popover.Description
 // ---------------
-export interface PopoverDescriptionProps
-  extends Omit<
-    ComponentProps<typeof Primitive.Description>,
-    'className' | 'style'
-  > {}
+export interface PopoverDescriptionProps extends Omit<
+  ComponentProps<typeof Primitive.Description>,
+  'className' | 'style'
+> {}
 
 const Description = ({ children, ...props }: PopoverDescriptionProps) => (
   <Primitive.Description {...props} className={styles.description()}>
@@ -184,8 +191,7 @@ const Description = ({ children, ...props }: PopoverDescriptionProps) => (
 
 // Popover.Body
 // ---------------
-export interface PopoverBodyProps
-  extends React.HTMLAttributes<HTMLDivElement> {}
+export interface PopoverBodyProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const Body = ({ children, ...props }: PopoverBodyProps) => (
   <div {...props} className={styles.body()}>
