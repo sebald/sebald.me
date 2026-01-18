@@ -15,7 +15,7 @@ const style = {
   codeblock: cva({
     base: [
       'bg-oatmeal-100/50 border-oatmeal-200/50 rounded-xl border',
-      'shadow-none my-8 mx-0', // override fumadocs-ui default
+      'shadow-none mt-8 mb-0 mx-0', // override fumadocs-ui default
       '[&>div:has(figcaption)]:border-oatmeal-200/50',
     ],
   }),
