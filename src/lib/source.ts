@@ -1,4 +1,5 @@
-import { type InferPageType, loader } from 'fumadocs-core/source';
+import type { InferPageType } from 'fumadocs-core/source';
+import { getSlugs, loader } from 'fumadocs-core/source';
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 import { lab, misc, notes } from 'fumadocs-mdx:collections/server';
 
@@ -9,6 +10,8 @@ import { truncateAtWord } from './string.utils';
 export const notesSource = loader({
   baseUrl: '/notes',
   source: toFumadocsSource(notes, []),
+  // Remove date prefixes from slugs (only use this for ordering in the actual folder)
+  slugs: file => getSlugs(file.path.replace(/(\/)?\d{4}-\d{2}-\d{2}-/, '$1')),
 });
 
 export const labSource = loader({

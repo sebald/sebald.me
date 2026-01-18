@@ -21,19 +21,10 @@ const schema = frontmatterSchema.extend({
   topics: z.array(z.string()).optional(),
 });
 
-const stripDatePrefix = (file: { flattenedPath: string }) => {
-  const parts = file.flattenedPath.split('/');
-  const fileName = parts.pop() ?? '';
-  const cleanName = fileName.replace(/^\d{4}-\d{2}-\d{2}-/, '');
-
-  return [...parts, cleanName];
-};
-
 export const notes = defineCollections({
   type: 'doc',
   dir: 'content/notes',
   schema,
-  // slugs: stripDatePrefix, // Applies the URL cleaner
   postprocess: {
     includeProcessedMarkdown: true,
   },
