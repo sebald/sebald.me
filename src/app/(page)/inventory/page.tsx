@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
+import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -113,6 +114,20 @@ const InventoryPage = () => (
         </Button>
         <Button variant="link">Button</Button>
         <Button disabled>Button</Button>
+      </div>
+    </div>
+
+    <div className="grid gap-4">
+      <Headline level="2">Card</Headline>
+
+      <div className="flex flex-wrap gap-4">
+        <Card>
+          <Headline level="2">Card Title</Headline>
+          <Text>
+            This is an example of a card component. Cards are used to group
+            related information together in a visually distinct container.
+          </Text>
+        </Card>
       </div>
     </div>
 
