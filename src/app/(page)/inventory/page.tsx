@@ -107,7 +107,7 @@ const InventoryPage = () => (
         <Button variant="primary">Button</Button>
         <Button variant="secondary">Button</Button>
         <Button variant="icon">
-          <DropIcon />
+          <DropIcon weight="bold" />
         </Button>
         <Button variant="link">Button</Button>
         <Button disabled>Button</Button>
