@@ -14,16 +14,17 @@ export const styles = cva({
   base: [
     'relative inline-flex items-center justify-center gap-1.5',
     'cursor-pointer',
+    'transition-all duration-150',
 
     /* States */
     'focus-visible:focus-ring outline-none',
     'active:scale-[0.97]',
-    'disabled:cursor-default disabled:opacity-50',
+    'disabled:cursor-default disabled:opacity-40',
   ],
   variants: {
     variant: {
-      primary: ['bg-mist-600 text-mist-50', 'hover:bg-mist-700'],
-      secondary: [],
+      primary: ['bg-mist-100 text-mist-800 font-medium', 'hover:bg-mist-50'],
+      secondary: ['bg-mist-700 text-mist-200', 'hover:bg-mist-600'],
       icon: ['text-current size-11 rounded-full', 'hover:bg-mist-700'],
       link: linkStyles({
         className: 'appearance-none leading-[inherit] inline w-fit',
@@ -33,7 +34,15 @@ export const styles = cva({
   compoundVariants: [
     {
       variant: ['primary', 'secondary'],
-      className: ['h-11 px-8', 'text-base font-semibold rounded-lg'],
+      className: ['h-11 px-6', 'text-base rounded-xl'],
+    },
+    {
+      variant: ['primary', 'secondary', 'link'],
+      className: ['[&_svg]:size-4'],
+    },
+    {
+      variant: ['icon'],
+      className: ['[&_svg]:size-5'],
     },
   ],
   defaultVariants: {

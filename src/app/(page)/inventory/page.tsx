@@ -1,3 +1,4 @@
+import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { Blockquote } from '@/ui/blockquote';
@@ -103,10 +104,11 @@ const InventoryPage = () => (
       <Headline level="2">Buttons</Headline>
 
       <div className="flex flex-wrap gap-4">
-        <Button>Button</Button>
         <Button variant="primary">Button</Button>
-        <Button variant="secondary">Button</Button>
-        <Button variant="icon">Button</Button>
+        <Button variant="secondary">Button (default)</Button>
+        <Button variant="icon">
+          <DropIcon />
+        </Button>
         <Button variant="link">Button</Button>
         <Button disabled>Button</Button>
       </div>
