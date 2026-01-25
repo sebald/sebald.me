@@ -12,12 +12,14 @@
   --color-mist-950: oklch(0.12 0.01 270);
 
   --color-background: var(--color-mist-900);
-  --color-foreground: var(--color-mist-300);
+  --color-foreground: var(--color-mist-200);
+
+  --color-accent-foreground: var(--color-mist-50);
 
   --color-muted: var(--color-mist-600);
   --color-muted-foreground: var(--color-mist-400);
 
-  --color-link: var(--color-mist-100);
+  --color-link: var(--color-mist-50);
 
   --spacing-content: min(75ch, 100%);
 }

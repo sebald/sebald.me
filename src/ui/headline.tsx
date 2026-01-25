@@ -5,7 +5,7 @@ import { cva, type VariantProps } from 'cva';
 export const style = cva({
   base: [
     'flex items-center',
-    'text-mist-100 tracking-wide',
+    'text-accent-foreground tracking-wide',
     '[&_svg]:mr-2 [&_svg]:size-[1em]',
   ],
   variants: {

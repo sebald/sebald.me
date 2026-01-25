@@ -10,7 +10,7 @@ export const styles = cva({
     'inline-flex items-center gap-1.5',
     'text-link',
     'underline decoration-link/15 underline-offset-3',
-    'hover:decoration-link/60',
+    'hover:decoration-link/75',
     'transition-all duration-200',
     'focus-visible:focus-ring focus-visible:outline-none',
   ],
