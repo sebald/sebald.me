@@ -10,8 +10,8 @@
   background-image:
     linear-gradient(
       135deg,
-      oklch(from var(--color-background) l c h / 0.5),
-      oklch(from var(--color-background) l c h / 0.5)
+      oklch(from var(--color-background) l c h / 0.6),
+      oklch(from var(--color-background) l c h / 0.45)
     ),
-    linear-gradient(135deg, oklch(1 0 0 / 0.5), oklch(1 0 0 / 0.1));
+    linear-gradient(135deg, oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.1));
 }
