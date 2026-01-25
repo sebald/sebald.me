@@ -1,0 +1,205 @@
+:root {
+  --navigation-top: 16px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navigation-top: 24px;
+  }
+}
+
+@theme {
+  --font-mono: var(--font-mono), monospace;
+  --font-sans: var(--font-sans), sans-serif;
+
+  --color-oatmeal-50: oklch(0.97 0.01 87);
+  --color-oatmeal-100: oklch(0.923 0.026 87);
+  --color-oatmeal-200: oklch(0.86 0.035 87);
+  --color-oatmeal-300: oklch(0.78 0.05 87);
+  --color-oatmeal-400: oklch(0.7 0.07 87);
+  --color-oatmeal-500: oklch(0.62 0.09 87);
+  --color-oatmeal-600: oklch(0.53 0.09 87);
+  --color-oatmeal-700: oklch(0.44 0.08 87);
+  --color-oatmeal-800: oklch(0.35 0.065 87);
+  --color-oatmeal-900: oklch(0.27 0.05 87);
+  --color-oatmeal-950: oklch(0.18 0.035 87);
+
+  --color-blueberry-50: oklch(0.975 0.025 233);
+  --color-blueberry-100: oklch(0.94 0.05 233);
+  --color-blueberry-200: oklch(0.86 0.09 233);
+  --color-blueberry-300: oklch(0.74 0.14 238);
+  --color-blueberry-400: oklch(0.6 0.19 250);
+  --color-blueberry-500: oklch(0.48 0.23 260);
+  --color-blueberry-600: oklch(0.38 0.18 264);
+  --color-blueberry-700: oklch(0.31 0.14 265);
+  --color-blueberry-800: oklch(0.25 0.1 266);
+  --color-blueberry-900: oklch(0.19 0.08 268);
+  --color-blueberry-950: oklch(0.12 0.05 270);
+
+  /* Override black with "branded black" (oatmeal-based hue) */
+  --color-black-50: oklch(0.985 0.002 87);
+  --color-black-100: oklch(0.95 0.004 87);
+  --color-black-200: oklch(0.88 0.006 87);
+  --color-black-300: oklch(0.78 0.008 87);
+  --color-black-400: oklch(0.66 0.01 87);
+  --color-black-500: oklch(0.52 0.012 87);
+  --color-black-600: oklch(0.42 0.012 87);
+  --color-black-700: oklch(0.32 0.012 87);
+  --color-black-800: oklch(0.22 0.011 87);
+  --color-black-900: oklch(0.15 0.009 87);
+  --color-black-950: oklch(0.1 0.006 87);
+
+  --color-headline: var(--color-oatmeal-950);
+  --color-text: var(--color-oatmeal-900);
+  --color-muted: var(--color-black-500);
+  --color-link: var(--color-blueberry-600);
+  --color-link-hover: var(--color-blueberry-500);
+
+  /* @link https://utopia.fyi/clamp/calculator?a=480,1024,32—60&p=text-display */
+  --text-display: clamp(2rem, 0.4559rem + 5.1471vw, 3.75rem);
+
+  /* @link https://utopia.fyi/type/calculator?c=480,16,1.125,1024,16,1.2,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+  --text-scale--2: clamp(0.6944rem, 0.8745rem + -0.2814vw, 0.7901rem);
+  --text-scale--1: clamp(0.8333rem, 0.9379rem + -0.1634vw, 0.8889rem);
+  --text-scale-0: clamp(1rem, 1rem + 0vw, 1rem);
+  --text-scale-1: clamp(1.125rem, 1.0588rem + 0.2206vw, 1.2rem);
+  --text-scale-2: clamp(1.2656rem, 1.1118rem + 0.5129vw, 1.44rem);
+  --text-scale-3: clamp(1.4238rem, 1.1554rem + 0.8946vw, 1.728rem);
+  --text-scale-4: clamp(1.6018rem, 1.1855rem + 1.3876vw, 2.0736rem);
+  --text-scale-5: clamp(1.802rem, 1.1965rem + 2.0185vw, 2.4883rem);
+
+  --prose-width: 75ch;
+  --spacing-content: min(100% - 2rem, var(--container-5xl));
+  --container-navigation: 700px; /* Container threshold to switch to mobile navigation */
+
+  @keyframes jumping-square {
+    /* Holds the square still for ~1.2s on load before action starts */
+    0% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 0%;
+    }
+    10% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 0%;
+    }
+
+    /* Wobble & Anticipation */
+    11.5% {
+      transform: translateY(0) scale(0.9, 1.1);
+      border-radius: 0%;
+    }
+    13.5% {
+      transform: translateY(0) scale(1.3, 0.7);
+      border-radius: 10%;
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    /* Jump */
+    18% {
+      /* Use to em to make jump height equal to the font height */
+      transform: translateY(-1em) scale(0.9, 1.1);
+      border-radius: 50%;
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    }
+
+    /* Landing & Bounce */
+    22% {
+      transform: translateY(0) scale(1.25, 0.75);
+      border-radius: 50%;
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    25% {
+      /* Second bounce scaled based on font size */
+      transform: translateY(-0.375em) scale(0.95, 1.05);
+      border-radius: 50%;
+      animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    }
+    28% {
+      transform: translateY(0) scale(1.05, 0.95);
+      border-radius: 50%;
+    }
+    30% {
+      /* Scaled micro hop */
+      transform: translateY(-0.06em) scale(1, 1);
+      border-radius: 50%;
+    }
+    31% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 50%;
+    }
+
+    /* Short Bridge */
+    32% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 50%;
+    }
+
+    /* Squeeze Back to Square */
+    34% {
+      transform: translateY(0) scale(0.85, 1.15);
+      border-radius: 50%;
+    }
+    36% {
+      transform: translateY(0) scale(1.3, 0.75);
+      border-radius: 15%;
+    }
+    37.5% {
+      transform: translateY(0) scale(0.95, 1.05);
+      border-radius: 0%;
+    }
+    39% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 0%;
+    }
+
+    /* Long Pause */
+    100% {
+      transform: translateY(0) scale(1, 1);
+      border-radius: 0%;
+    }
+  }
+
+  --animate-floating-nav: floating-nav linear both;
+
+  @keyframes floating-nav {
+    from {
+      border-radius: 0;
+      background-color: transparent;
+      border: 1px solid transparent;
+    }
+    to {
+      /* Target Dimensions */
+      width: min(calc(100% - 32px), var(--container-navigation));
+      top: var(--navigation-top, 16px);
+      border-radius: calc(infinity * 1px);
+      padding-block: --spacing(1.5);
+      padding-left: --spacing(5); /* Optical adjustment for logo */
+      padding-right: --spacing(3.5);
+
+      /* slightly adjusted clear panel */
+      background: linear-gradient(
+        135deg,
+        oklch(1 0 0 / 0.6),
+        oklch(1 0 0 / 0.3)
+      );
+      backdrop-filter: blur(var(--blur-md));
+      border: 1px solid oklch(1 0 0 / 0.4);
+      border-top: 1px solid oklch(1 0 0 / 0.8);
+      border-left: 1px solid oklch(1 0 0 / 0.8);
+      box-shadow:
+        inset 0 1px 0 0 oklch(1 0 0 / 0.5),
+        0px 1px 2px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+        0px 4px 4px -0.5px oklch(from var(--color-oatmeal-900) l c h / 0.05),
+        0px 8px 9px -1px oklch(from var(--color-oatmeal-900) l c h / 0.06),
+        0px 18px 20px -1.5px oklch(from var(--color-oatmeal-900) l c h / 0.07);
+    }
+  }
+
+  --animate-shrink: shrink linear both;
+
+  @keyframes shrink {
+    to {
+      transform: scale(var(--shrink-scale, 0.8));
+    }
+  }
+}

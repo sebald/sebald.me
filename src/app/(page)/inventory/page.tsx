@@ -2,13 +2,10 @@ import type { Metadata } from 'next';
 
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
-import { Card } from '@/ui/card';
-import { Divider } from '@/ui/divider';
+import { Dialog } from '@/ui/dialog';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
-
-import { OverlayExample } from './overlay-example';
 
 // Config
 // ---------------
@@ -29,154 +26,22 @@ const InventoryPage = () => (
       <Headline level="3">Color Palettes</Headline>
 
       <div className="grid gap-2">
-        <Headline level="4">Oatmeal Palette</Headline>
+        <Headline level="4">Mist Palette</Headline>
         <div className="flex flex-wrap gap-1">
-          <div
-            className="bg-oatmeal-50 h-12 w-12 rounded-lg"
-            title="oatmeal-50"
-          />
-          <div
-            className="bg-oatmeal-100 h-12 w-12 rounded-lg"
-            title="oatmeal-100"
-          />
-          <div
-            className="bg-oatmeal-200 h-12 w-12 rounded-lg"
-            title="oatmeal-200"
-          />
-          <div
-            className="bg-oatmeal-300 h-12 w-12 rounded-lg"
-            title="oatmeal-300"
-          />
-          <div
-            className="bg-oatmeal-400 h-12 w-12 rounded-lg"
-            title="oatmeal-400"
-          />
-          <div
-            className="bg-oatmeal-500 h-12 w-12 rounded-lg"
-            title="oatmeal-500"
-          />
-          <div
-            className="bg-oatmeal-600 h-12 w-12 rounded-lg"
-            title="oatmeal-600"
-          />
-          <div
-            className="bg-oatmeal-700 h-12 w-12 rounded-lg"
-            title="oatmeal-700"
-          />
-          <div
-            className="bg-oatmeal-800 h-12 w-12 rounded-lg"
-            title="oatmeal-800"
-          />
-          <div
-            className="bg-oatmeal-900 h-12 w-12 rounded-lg"
-            title="oatmeal-900"
-          />
-          <div
-            className="bg-oatmeal-950 h-12 w-12 rounded-lg"
-            title="oatmeal-950"
-          />
-        </div>
-      </div>
-
-      <div className="grid gap-2">
-        <Headline level="4">Blueberry Palette</Headline>
-        <div className="flex flex-wrap gap-1">
-          <div
-            className="bg-blueberry-50 h-12 w-12 rounded-lg"
-            title="blueberry-50"
-          />
-          <div
-            className="bg-blueberry-100 h-12 w-12 rounded-lg"
-            title="blueberry-100"
-          />
-          <div
-            className="bg-blueberry-200 h-12 w-12 rounded-lg"
-            title="blueberry-200"
-          />
-          <div
-            className="bg-blueberry-300 h-12 w-12 rounded-lg"
-            title="blueberry-300"
-          />
-          <div
-            className="bg-blueberry-400 h-12 w-12 rounded-lg"
-            title="blueberry-400"
-          />
-          <div
-            className="bg-blueberry-500 h-12 w-12 rounded-lg"
-            title="blueberry-500"
-          />
-          <div
-            className="bg-blueberry-600 h-12 w-12 rounded-lg"
-            title="blueberry-600"
-          />
-          <div
-            className="bg-blueberry-700 h-12 w-12 rounded-lg"
-            title="blueberry-700"
-          />
-          <div
-            className="bg-blueberry-800 h-12 w-12 rounded-lg"
-            title="blueberry-800"
-          />
-          <div
-            className="bg-blueberry-900 h-12 w-12 rounded-lg"
-            title="blueberry-900"
-          />
-          <div
-            className="bg-blueberry-950 h-12 w-12 rounded-lg"
-            title="blueberry-950"
-          />
-        </div>
-      </div>
-
-      <div className="grid gap-2">
-        <Headline level="4">Black Palette</Headline>
-        <div className="flex flex-wrap gap-1">
-          <div className="bg-black-50 h-12 w-12 rounded-lg" title="black-50" />
-          <div
-            className="bg-black-100 h-12 w-12 rounded-lg"
-            title="black-100"
-          />
-          <div
-            className="bg-black-200 h-12 w-12 rounded-lg"
-            title="black-200"
-          />
-          <div
-            className="bg-black-300 h-12 w-12 rounded-lg"
-            title="black-300"
-          />
-          <div
-            className="bg-black-400 h-12 w-12 rounded-lg"
-            title="black-400"
-          />
-          <div
-            className="bg-black-500 h-12 w-12 rounded-lg"
-            title="black-500"
-          />
-          <div
-            className="bg-black-600 h-12 w-12 rounded-lg"
-            title="black-600"
-          />
-          <div
-            className="bg-black-700 h-12 w-12 rounded-lg"
-            title="black-700"
-          />
-          <div
-            className="bg-black-800 h-12 w-12 rounded-lg"
-            title="black-800"
-          />
-          <div
-            className="bg-black-900 h-12 w-12 rounded-lg"
-            title="black-900"
-          />
-          <div
-            className="bg-black-950 h-12 w-12 rounded-lg"
-            title="black-950"
-          />
+          <div className="bg-mist-50 size-12 rounded-lg" title="mist-50" />
+          <div className="bg-mist-100 size-12 rounded-lg" title="mist-100" />
+          <div className="bg-mist-200 size-12 rounded-lg" title="mist-200" />
+          <div className="bg-mist-300 size-12 rounded-lg" title="mist-300" />
+          <div className="bg-mist-400 size-12 rounded-lg" title="mist-400" />
+          <div className="bg-mist-500 size-12 rounded-lg" title="mist-500" />
+          <div className="bg-mist-600 size-12 rounded-lg" title="mist-600" />
+          <div className="bg-mist-700 size-12 rounded-lg" title="mist-700" />
+          <div className="bg-mist-800 size-12 rounded-lg" title="mist-800" />
+          <div className="bg-mist-900 size-12 rounded-lg" title="mist-900" />
+          <div className="bg-mist-950 size-12 rounded-lg" title="mist-950" />
         </div>
       </div>
     </div>
-
-    <Divider />
 
     <div className="grid gap-4">
       <Headline level="3">Typography</Headline>
@@ -247,119 +112,53 @@ const InventoryPage = () => (
           The best way to predict the future is to invent it.
         </Blockquote>
       </div>
-
-      <div className="grid gap-4">
-        <Headline level="4">Divider</Headline>
-        <Text>Content above the divider.</Text>
-        <Divider />
-        <Text>Content below the default divider.</Text>
-        <div className="flex gap-2">
-          <Text>Content left the vertical divider.</Text>
-          <Divider orientation="vertical" />
-          <Text>Content right the vertical divider.</Text>
-        </div>
-        <Divider variant="light" />
-      </div>
     </div>
-
-    <Divider />
 
     <div className="grid gap-4">
       <Headline level="3">Buttons</Headline>
 
       <div className="flex flex-wrap gap-4">
         <Button>Button</Button>
-        <Button variant="dark">Button</Button>
-        <Button variant="accent">Button</Button>
-        <Button variant="ghost">Button</Button>
-        <Button variant="outline">Button</Button>
+        <Button variant="primary">Button</Button>
+        <Button variant="secondary">Button</Button>
+        <Button variant="icon">Button</Button>
         <Button variant="link">Button</Button>
         <Button disabled>Button</Button>
       </div>
     </div>
 
-    <Divider />
-
     <div className="grid gap-4">
       <Headline level="3">Overlays</Headline>
-      <OverlayExample />
-    </div>
+      <div className="flex flex-wrap gap-4">
+        <Dialog.Root>
+          <Dialog.Trigger>Open Dialog</Dialog.Trigger>
+          <Dialog>
+            <Dialog.Title>Dialog Title</Dialog.Title>
+            <Dialog.Description>
+              This is a simple dialog example.
+            </Dialog.Description>
+            <Dialog.Body>This is the body text of the dialog.</Dialog.Body>
+            <Dialog.Actions>
+              <Dialog.Close>Close</Dialog.Close>
+              <Dialog.Close variant="light">Okay</Dialog.Close>
+            </Dialog.Actions>
+          </Dialog>
+        </Dialog.Root>
 
-    <Divider />
-
-    <div className="grid gap-4">
-      <Headline level="3">Cards</Headline>
-
-      <Card variant="dark">
-        <div className="flex h-full flex-col gap-4">
-          <div>
-            <Headline level="5">Dark Variant</Headline>
-            <Text size="caption">A dark panel with high contrast content.</Text>
-          </div>
-          <div className="mt-auto flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-            <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </Card>
-      <Card variant="clear">
-        <div className="flex h-full flex-col gap-4">
-          <div>
-            <Headline level="5">Clear Variant</Headline>
-            <Text size="caption">A glass-like panel with transparency.</Text>
-          </div>
-          <div className="mt-auto flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-            <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </Card>
-      <Card variant="ghost">
-        <div className="flex h-full flex-col gap-4">
-          <div>
-            <Headline level="5">Ghost Variant</Headline>
-            <Text size="caption">A subtle, ethereal panel treatment.</Text>
-          </div>
-          <div className="mt-auto flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-            <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </Card>
-      <Card variant="tinted">
-        <div className="flex h-full flex-col gap-4">
-          <div>
-            <Headline level="5">Tinted Variant</Headline>
-            <Text size="caption">A warm, colored panel with blur effect.</Text>
-          </div>
-          <div className="mt-auto flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-            <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </Card>
-      <Card variant="opaque">
-        <div className="flex h-full flex-col gap-4">
-          <div>
-            <Headline level="5">Opaque Variant</Headline>
-            <Text size="caption">A solid, fully opaque panel.</Text>
-          </div>
-          <div className="mt-auto flex flex-wrap gap-4">
-            <Button>Button</Button>
-            <Button variant="dark">Button</Button>
-            <Button variant="ghost">Button</Button>
-            <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </Card>
+        <Dialog.Root modal={false} disablePointerDismissal>
+          <Dialog.Trigger>Open Non-modal Dialog (bottom)</Dialog.Trigger>
+          <Dialog position="bottom" size="full" layout="inline">
+            <Dialog.Title>Dialog Title</Dialog.Title>
+            <Dialog.Description>
+              This is a simple dialog example.
+            </Dialog.Description>
+            <Dialog.Actions>
+              <Dialog.Close>Close</Dialog.Close>
+              <Dialog.Close variant="light">Okay</Dialog.Close>
+            </Dialog.Actions>
+          </Dialog>
+        </Dialog.Root>
+      </div>
     </div>
   </div>
 );

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 
 import { siteUrl } from '@/app.config';
-import { fontMono } from '@/css/fonts';
+import { firaMono, plusJakarta } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
 import { AnalyticsProvider } from '@/ui/analytics/analytics-context';
+import { Footer } from '@/ui/layout/footer';
+import { Navigation } from '@/ui/layout/navigation';
 
 // Meta
 // ---------------
@@ -21,6 +23,14 @@ export const metadata: Metadata = {
           title: 'Sebastian Sebald',
           url: 'https://sebald.me/rss.xml',
         },
+        {
+          title: 'Sebastian Sebald - Notes',
+          url: 'https://sebald.me/notes/rss.xml',
+        },
+        {
+          title: 'Sebastian Sebald - Lab',
+          url: 'https://sebald.me/lab/rss.xml',
+        },
       ],
     },
   },
@@ -31,15 +41,15 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: LayoutProps<'/'>) => (
   <html
     lang="en"
-    className={`bg-background text-foreground ${fontMono.variable}`}
+    className={`scrollbar scrollbar-thumb-oatmeal-800 scrollbar-track-transparent ${firaMono.variable} ${plusJakarta.variable}`}
     suppressHydrationWarning
   >
-    <body className="relative isolate">
+    <body className="bg-oatmeal-50 text-text relative isolate font-mono">
       <AnalyticsProvider>
-        <div className="">
-          {/* <Navigation /> */}
-          <main className="">{children}</main>
-          {/* <Footer /> */}
+        <div className="grid min-h-screen grid-rows-[1fr_auto] justify-items-center">
+          <Navigation />
+          <main className="w-content pt-32 md:pt-40">{children}</main>
+          <Footer />
         </div>
         <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
       </AnalyticsProvider>

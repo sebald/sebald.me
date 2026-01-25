@@ -30,22 +30,12 @@ export const notes = defineCollections({
   },
 });
 
-export const lab = defineCollections({
-  type: 'doc',
-  dir: 'content/lab',
-  schema,
-  postprocess: {
-    includeProcessedMarkdown: true,
-  },
-});
-
 export const misc = defineCollections({
   type: 'doc',
   dir: 'content/misc',
   schema: frontmatterSchema,
 });
 
-// 4. Global Config
 export default defineConfig({
   mdxOptions: {
     rehypePlugins: [rehypeUnwrapContent],
