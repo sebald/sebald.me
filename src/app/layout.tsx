@@ -31,14 +31,14 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: LayoutProps<'/'>) => (
   <html
     lang="en"
-    className={`bg-background text-foreground ${fontMono.variable}`}
+    className={`bg-background text-foreground font-mono ${fontMono.variable}`}
     suppressHydrationWarning
   >
     <body className="relative isolate">
       <AnalyticsProvider>
         <div className="">
           {/* <Navigation /> */}
-          <main className="">{children}</main>
+          <main className="w-content mx-auto">{children}</main>
           {/* <Footer /> */}
         </div>
         <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />

@@ -14,7 +14,7 @@
 
 * {
   min-width: 0;
-  text-box: trim cap alphabetic;
+  text-box: trim-both cap alphabetic;
 }
 
 :root {

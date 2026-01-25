@@ -127,7 +127,7 @@ const InventoryPage = () => (
       </div>
     </div>
 
-    <div className="grid gap-4">
+    {/* <div className="grid gap-4">
       <Headline level="3">Overlays</Headline>
       <div className="flex flex-wrap gap-4">
         <Dialog.Root>
@@ -159,7 +159,7 @@ const InventoryPage = () => (
           </Dialog>
         </Dialog.Root>
       </div>
-    </div>
+    </div>*/}
   </div>
 );
 
