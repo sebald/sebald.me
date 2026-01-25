@@ -122,11 +122,13 @@ const InventoryPage = () => (
 
       <div className="flex flex-wrap gap-4">
         <Card>
-          <Headline level="2">Card Title</Headline>
-          <Text>
-            This is an example of a card component. Cards are used to group
-            related information together in a visually distinct container.
-          </Text>
+          <div className="grid gap-8">
+            <Headline level="2">Card Title</Headline>
+            <Text>
+              This is an example of a card component. Cards are used to group
+              related information together in a visually distinct container.
+            </Text>
+          </div>
         </Card>
       </div>
     </div>

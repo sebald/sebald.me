@@ -85,7 +85,7 @@ export const styles = {
     base: `${headlineStyle({ level: '4' })} [grid-area:title]`,
   }),
   description: cva({
-    base: `${textStyle({ variant: 'muted', size: 'caption' })} [grid-area:description]`,
+    base: `${textStyle({ size: 'caption' })} [grid-area:description]`,
   }),
   body: cva({
     base: `${textStyle()} [grid-area:body] mt-6 grid gap-4`,

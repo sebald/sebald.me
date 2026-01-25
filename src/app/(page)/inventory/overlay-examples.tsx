@@ -6,7 +6,7 @@ export const OverlayExamples = () => (
   <>
     <Dialog.Root>
       <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-      <Dialog>
+      <Dialog showCloseButton>
         <Dialog.Title>Dialog Title</Dialog.Title>
         <Dialog.Description>
           This is a simple dialog example.
