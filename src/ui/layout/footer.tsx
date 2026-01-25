@@ -25,7 +25,6 @@ const Social = () => (
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
-      noUnderline
       href={socialLinks.github}
       target="_blank"
     >
@@ -34,7 +33,6 @@ const Social = () => (
     <Link
       aria-label="Sebastian's LinkedIn Profile"
       variant="inherit"
-      noUnderline
       href={socialLinks.linkedin}
       target="_blank"
     >
@@ -43,7 +41,6 @@ const Social = () => (
     <Link
       aria-label="Sebastian's X Profile"
       variant="inherit"
-      noUnderline
       href={socialLinks.x}
       target="_blank"
     >
@@ -58,27 +55,16 @@ const Links = () => (
     <Link
       aria-label="View site content formatted for LLMs"
       variant="inherit"
-      noUnderline
       href="/llms.txt"
     >
       <FileTextIcon size={16} />
       llms.txt
     </Link>
-    <Link
-      aria-label="View RSS feed"
-      variant="inherit"
-      noUnderline
-      href="/rss.xml"
-    >
+    <Link aria-label="View RSS feed" variant="inherit" href="/rss.xml">
       <RssIcon size={16} />
       RSS Feed
     </Link>
-    <Link
-      aria-label="View inventory"
-      variant="inherit"
-      noUnderline
-      href="/inventory"
-    >
+    <Link aria-label="View inventory" variant="inherit" href="/inventory">
       <CubeIcon size={16} />
       Inventory
     </Link>
@@ -88,14 +74,14 @@ const Links = () => (
 const Legal = () => (
   <div className="col-span-2 flex justify-center gap-2 md:col-span-1 md:flex-col md:gap-2.5 md:*:leading-none">
     <Headline>Legal</Headline>
-    <Link variant="inherit" noUnderline href="/imprint">
+    <Link variant="inherit" href="/imprint">
       Imprint
     </Link>
-    <span className="text-muted text-sm md:hidden">·</span>
-    <Link variant="inherit" noUnderline href="/privacy">
+    <span className="text-muted text-sm md:hidden">&#9642;</span>
+    <Link variant="inherit" href="/privacy">
       Privacy Policy
     </Link>
-    <span className="text-muted text-sm md:hidden">·</span>
+    <span className="text-muted text-sm md:hidden">&#9642;</span>
     <ConsentUpdate />
   </div>
 );
@@ -103,8 +89,8 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="fit-prose text-muted px-4 pt-28 pb-8 md:px-0">
-    <Divider variant="light" />
+  <div className="w-content mx-auto pt-36 pb-8">
+    <Divider />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
       <Legal />

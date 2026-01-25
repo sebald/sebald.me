@@ -8,15 +8,20 @@ import NextLink from 'next/link';
 export const styles = cva({
   base: [
     'inline-flex items-center gap-1.5',
-    'text-link font-medium',
-    'underline decoration-link/15 underline-offset-3',
     'hover:decoration-link/75',
     'transition-all duration-200',
     'focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
     variant: {
-      default: '',
+      default: [
+        'text-link font-medium',
+        'underline decoration-link/15 underline-offset-3',
+      ],
+      inherit: [
+        'text-inherit decoration-inherit',
+        'hover:text-link hover:decoration-link',
+      ],
     },
   },
 });
