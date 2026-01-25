@@ -7,9 +7,9 @@ import NextLink from 'next/link';
 // ---------------
 export const styles = cva({
   base: [
+    'group/link ensure-hitbox',
     'inline-flex items-center gap-1.5',
-    'text-mist-50 font-medium whitespace-nowrap',
-    'focus-visible:focus-ring outline-none',
+    'transition-colors focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
     variant: {
@@ -17,10 +17,30 @@ export const styles = cva({
         'text-link decoration-link/40',
         'hover:text-link-hover hover:decoration-link-hover',
       ],
+      muted: [
+        'text-muted decoration-muted/40',
+        'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
+      ],
+      inherit: [
+        'text-inherit decoration-inherit',
+        'hover:text-link-hover hover:decoration-link-hover',
+      ],
+      ghost: [
+        'text-current text-sm',
+        'h-11 px-8 rounded-full',
+        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
+        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
+        'active:scale-[0.97] transition-all duration-200',
+      ],
+    },
+    noUnderline: {
+      false: ['underline underline-offset-4 decoration-1'],
+      true: ['no-underline'],
     },
   },
   defaultVariants: {
     variant: 'default',
+    noUnderline: false,
   },
 });
 
@@ -37,6 +57,7 @@ export interface LinkProps
 // ---------------
 export const Link = ({
   variant,
+  noUnderline,
   children,
   href,
   target,
@@ -54,7 +75,7 @@ export const Link = ({
   return (
     <Component
       href={href as Route}
-      className={styles({ variant })}
+      className={styles({ variant, noUnderline })}
       {...props}
       {...externalProps}
     >

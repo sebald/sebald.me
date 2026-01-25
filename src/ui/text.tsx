@@ -7,9 +7,11 @@ export const style = cva({
   variants: {
     variant: {
       default: '',
+      muted: 'text-muted-foreground',
     },
     size: {
       default: '',
+      caption: 'text-xs -tracking-wide',
     },
   },
   defaultVariants: {

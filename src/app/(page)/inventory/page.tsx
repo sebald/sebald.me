@@ -60,40 +60,29 @@ const InventoryPage = () => (
           This is a default paragraph with body size. It uses leading-relaxed
           for comfortable reading.
         </Text>
-        <Text size="lead">
-          This is a lead paragraph, typically used for introductory text. It has
-          a larger font size to draw attention.
+        <Text variant="muted">
+          This is muted text with reduced contrast, perfect for secondary
+          content.
         </Text>
         <Text size="caption">
           This is caption text, useful for fine print, metadata, or
           supplementary information like timestamps.
-        </Text>
-        <Text variant="muted">
-          This is muted text with reduced contrast, perfect for secondary
-          content.
         </Text>
       </div>
     </div>
 
     <div className="grid gap-4">
       <Headline level="2">Links</Headline>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-8">
         <Text>
           Here is a <Link href="#">default link</Link> in a paragraph.
-        </Text>
-        <Text>
-          Here is a{' '}
-          <Link href="#" variant="muted">
-            muted link
-          </Link>{' '}
-          for subtle navigation.
         </Text>
         <Text>
           External links{' '}
           <Link href="https://example.com" target="_blank">
             open in new tab
           </Link>{' '}
-          with proper security attributes.
+          with proper attributes.
         </Text>
       </div>
     </div>

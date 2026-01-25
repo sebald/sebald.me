@@ -7,47 +7,25 @@ import NextLink from 'next/link';
 // ---------------
 export const styles = cva({
   base: [
-    'group/link ensure-hitbox',
     'inline-flex items-center gap-1.5',
-    'transition-colors focus-visible:focus-ring focus-visible:outline-none',
+    'text-link',
+    'underline decoration-link/15 underline-offset-3',
+    'hover:decoration-link/60',
+    'transition-all duration-200',
+    'focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
     variant: {
-      default: [
-        'text-link decoration-link/40',
-        'hover:text-link-hover hover:decoration-link-hover',
-      ],
-      muted: [
-        'text-muted decoration-muted/40',
-        'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
-      ],
-      inherit: [
-        'text-inherit decoration-inherit',
-        'hover:text-link-hover hover:decoration-link-hover',
-      ],
-      ghost: [
-        'text-current text-sm',
-        'h-11 px-8 rounded-full',
-        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
-        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
-        'active:scale-[0.97] transition-all duration-200',
-      ],
+      default: '',
     },
-    noUnderline: {
-      false: ['underline underline-offset-4 decoration-1'],
-      true: ['no-underline'],
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    noUnderline: false,
   },
 });
 
 // Props
 // ---------------
 export interface LinkProps
-  extends VariantProps<typeof styles>,
+  extends
+    VariantProps<typeof styles>,
     Omit<NextLinkProps<'a'>, 'style' | 'href'> {
   href: NextLinkProps<'a'>['href'] | string;
 }
@@ -56,7 +34,6 @@ export interface LinkProps
 // ---------------
 export const Link = ({
   variant,
-  noUnderline,
   children,
   href,
   target,
@@ -74,7 +51,7 @@ export const Link = ({
   return (
     <Component
       href={href as Route}
-      className={styles({ variant, noUnderline })}
+      className={styles({ variant })}
       {...props}
       {...externalProps}
     >

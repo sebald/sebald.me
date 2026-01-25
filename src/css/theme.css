@@ -14,5 +14,10 @@
   --color-background: var(--color-mist-900);
   --color-foreground: var(--color-mist-300);
 
+  --color-muted: var(--color-mist-600);
+  --color-muted-foreground: var(--color-mist-400);
+
+  --color-link: var(--color-mist-100);
+
   --spacing-content: min(75ch, 100%);
 }
