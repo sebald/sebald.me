@@ -3,15 +3,19 @@ import { cva, type VariantProps } from 'cva';
 // Styles
 // ---------------
 export const style = cva({
-  base: ['flex items-center', '[&_svg]:mr-2 [&_svg]:size-[1em]'],
+  base: [
+    'flex items-center',
+    'text-mist-100 tracking-wide',
+    '[&_svg]:mr-2 [&_svg]:size-[1em]',
+  ],
   variants: {
     level: {
-      '1': '',
-      '2': '',
-      '3': '',
-      '4': '',
-      '5': '',
-      '6': '',
+      '1': 'text-lg font-semibold',
+      '2': 'text-base font-semibold',
+      '3': 'text-base font-semibold',
+      '4': 'text-base font-medium',
+      '5': 'text-base font-medium',
+      '6': 'text-sm font-semibold',
     },
   },
   defaultVariants: {

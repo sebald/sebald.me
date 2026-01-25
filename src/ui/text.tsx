@@ -3,21 +3,18 @@ import { cva, type VariantProps } from 'cva';
 // Styles
 // ---------------
 export const style = cva({
-  base: 'leading-relaxed text-(--color-text,var(--color-oatmeal-800))',
+  base: 'leading-relaxed text-foreground',
   variants: {
     variant: {
       default: '',
-      muted: 'text-muted',
     },
     size: {
-      caption: 'text-(length:--text-scale--1)',
-      body: 'text-(length:--text-scale-0)',
-      lead: 'text-(length:--text-scale-1)',
+      default: '',
     },
   },
   defaultVariants: {
     variant: 'default',
-    size: 'body',
+    size: 'default',
   },
 });
 
