@@ -13,6 +13,18 @@
   --color-mist-900: oklch(0.19 0.02 268);
   --color-mist-950: oklch(0.12 0.01 270);
 
+  --color-black-50: oklch(0.96 0.005 270);
+  --color-black-100: oklch(0.92 0.01 270);
+  --color-black-200: oklch(0.84 0.015 270);
+  --color-black-300: oklch(0.72 0.02 270);
+  --color-black-400: oklch(0.58 0.025 270);
+  --color-black-500: oklch(0.44 0.03 270);
+  --color-black-600: oklch(0.32 0.03 270);
+  --color-black-700: oklch(0.24 0.025 270);
+  --color-black-800: oklch(0.16 0.02 270);
+  --color-black-900: oklch(0.1 0.02 270);
+  --color-black-950: oklch(0.06 0.01 270);
+
   --color-background: var(--color-mist-900);
   --color-foreground: var(--color-mist-200);
 
