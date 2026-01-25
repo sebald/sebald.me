@@ -43,7 +43,7 @@ const InventoryPage = () => (
     <div className="grid gap-4">
       <Headline level="2">Headlines</Headline>
 
-      <div className="flex flex-col gap-2">
+      <div className="grid gap-2">
         <Headline level="1">Heading Level 1</Headline>
         <Headline level="2">Heading Level 2</Headline>
         <Headline level="3">Heading Level 3</Headline>
@@ -73,7 +73,7 @@ const InventoryPage = () => (
 
     <div className="grid gap-4">
       <Headline level="2">Links</Headline>
-      <div className="flex flex-col gap-8">
+      <div className="grid gap-8">
         <Text>
           Here is a <Link href="#">default link</Link> in a paragraph.
         </Text>
@@ -89,12 +89,14 @@ const InventoryPage = () => (
 
     <div className="grid gap-4">
       <Headline level="2">Blockquote</Headline>
-      <Blockquote>
-        The best way to predict the future is to invent it.
-      </Blockquote>
-      <Blockquote attribution="Alan Kay">
-        The best way to predict the future is to invent it.
-      </Blockquote>
+      <div className="grid gap-8">
+        <Blockquote>
+          The best way to predict the future is to invent it.
+        </Blockquote>
+        <Blockquote attribution="Alan Kay">
+          The best way to predict the future is to invent it.
+        </Blockquote>
+      </div>
     </div>
 
     <div className="grid gap-4">

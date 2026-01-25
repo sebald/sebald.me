@@ -8,7 +8,7 @@ import NextLink from 'next/link';
 export const styles = cva({
   base: [
     'inline-flex items-center gap-1.5',
-    'text-link',
+    'text-link font-medium',
     'underline decoration-link/15 underline-offset-3',
     'hover:decoration-link/75',
     'transition-all duration-200',
