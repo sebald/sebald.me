@@ -8,6 +8,8 @@ import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
 
+import { OverlayExamples } from './overlay-examples';
+
 // Config
 // ---------------
 export const revalidate = false;
@@ -114,39 +116,13 @@ const InventoryPage = () => (
       </div>
     </div>
 
-    {/* <div className="grid gap-4">
-      <Headline level="3">Overlays</Headline>
-      <div className="flex flex-wrap gap-4">
-        <Dialog.Root>
-          <Dialog.Trigger>Open Dialog</Dialog.Trigger>
-          <Dialog>
-            <Dialog.Title>Dialog Title</Dialog.Title>
-            <Dialog.Description>
-              This is a simple dialog example.
-            </Dialog.Description>
-            <Dialog.Body>This is the body text of the dialog.</Dialog.Body>
-            <Dialog.Actions>
-              <Dialog.Close>Close</Dialog.Close>
-              <Dialog.Close variant="light">Okay</Dialog.Close>
-            </Dialog.Actions>
-          </Dialog>
-        </Dialog.Root>
+    <div className="grid gap-4">
+      <Headline level="2">Overlays</Headline>
 
-        <Dialog.Root modal={false} disablePointerDismissal>
-          <Dialog.Trigger>Open Non-modal Dialog (bottom)</Dialog.Trigger>
-          <Dialog position="bottom" size="full" layout="inline">
-            <Dialog.Title>Dialog Title</Dialog.Title>
-            <Dialog.Description>
-              This is a simple dialog example.
-            </Dialog.Description>
-            <Dialog.Actions>
-              <Dialog.Close>Close</Dialog.Close>
-              <Dialog.Close variant="light">Okay</Dialog.Close>
-            </Dialog.Actions>
-          </Dialog>
-        </Dialog.Root>
+      <div className="flex flex-wrap gap-4">
+        <OverlayExamples />
       </div>
-    </div>*/}
+    </div>
   </div>
 );
 

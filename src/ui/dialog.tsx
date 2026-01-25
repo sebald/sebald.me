@@ -4,11 +4,12 @@ import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
 import { XIcon } from '@phosphor-icons/react/ssr';
 import type { VariantProps } from 'cva';
-import { cva } from 'cva';
+import { compose, cva } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
 
 import { styles as buttonStyles } from './button';
+import { styles as cardStyles } from './card';
 import { style as headlineStyle } from './headline';
 import { style as textStyle } from './text';
 
@@ -28,7 +29,7 @@ export const styles = {
   popup: cva({
     base: [
       'z-100',
-      'fixed max-w-content',
+      'fixed max-w-4xl px-4',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
     variants: {
@@ -58,30 +59,33 @@ export const styles = {
       size: 'medium',
     },
   }),
-  content: cva({
-    base: ['panel panel-opaque rounded-3xl p-6', 'grid'],
-    variants: {
-      layout: {
-        stack: [
-          'grid-cols-1',
-          '[grid-template-areas:"title""description""body""actions"]',
-        ],
-        inline: [
-          'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-6',
-          '[grid-template-areas:"title""description""body""actions"]',
-          'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
-        ],
+  content: compose(
+    cardStyles,
+    cva({
+      base: ['grid'],
+      variants: {
+        layout: {
+          stack: [
+            'grid-cols-1',
+            '[grid-template-areas:"title""description""body""actions"]',
+          ],
+          inline: [
+            'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-6',
+            '[grid-template-areas:"title""description""body""actions"]',
+            'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
+          ],
+        },
       },
-    },
-    defaultVariants: {
-      layout: 'stack',
-    },
-  }),
+      defaultVariants: {
+        layout: 'stack',
+      },
+    }),
+  ),
   title: cva({
     base: `${headlineStyle({ level: '4' })} [grid-area:title]`,
   }),
   description: cva({
-    base: `${textStyle({ size: 'caption' })} [grid-area:description]`,
+    base: `${textStyle({ variant: 'muted', size: 'caption' })} [grid-area:description]`,
   }),
   body: cva({
     base: `${textStyle()} [grid-area:body] mt-6 grid gap-4`,
@@ -122,7 +126,8 @@ const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
 // Dialog
 // ---------------
 export interface DialogContentProps
-  extends ComponentProps<typeof Primitive.Popup>,
+  extends
+    ComponentProps<typeof Primitive.Popup>,
     VariantProps<typeof styles.popup>,
     VariantProps<typeof styles.content> {
   showCloseButton?: boolean;
@@ -153,7 +158,7 @@ const DialogContent = ({
               <Primitive.Close
                 className={buttonStyles({
                   variant: 'icon',
-                  className: 'absolute right-3 top-3',
+                  className: 'absolute top-3 right-3',
                 })}
               >
                 <XIcon size={20} weight="regular" />
@@ -214,7 +219,8 @@ const DialogActions = ({
 // Dialog.Trigger
 // ---------------
 export interface DialogTriggerProps
-  extends ComponentProps<typeof Primitive.Trigger>,
+  extends
+    ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
 
 const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
@@ -226,12 +232,13 @@ const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
 // Dialog.Close
 // ---------------
 export interface DialogCloseProps
-  extends Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>,
+  extends
+    Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>,
     VariantProps<typeof buttonStyles> {}
 
 const DialogClose = ({
   children,
-  variant = 'ghost',
+  variant = 'secondary',
   ...props
 }: DialogCloseProps) => (
   <Primitive.Close {...props} className={buttonStyles({ variant })}>
