@@ -5,6 +5,7 @@ import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
+import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
@@ -116,6 +117,21 @@ const InventoryPage = () => (
         <Blockquote attribution="Alan Kay">
           The best way to predict the future is to invent it.
         </Blockquote>
+      </div>
+    </div>
+
+    <div className="grid gap-4">
+      <Headline level="2">Divider</Headline>
+
+      <div className="grid gap-8">
+        <Text>Content above the divider.</Text>
+        <Divider />
+        <Text>Content below the default divider.</Text>
+        <div className="flex gap-2">
+          <Text>Content left the vertical divider.</Text>
+          <Divider orientation="vertical" />
+          <Text>Content right the vertical divider.</Text>
+        </div>
       </div>
     </div>
 

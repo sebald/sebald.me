@@ -5,6 +5,7 @@ import { fontMono } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
 import { AnalyticsProvider } from '@/ui/analytics/analytics-context';
+import { Footer } from '@/ui/layout/footer';
 
 // Meta
 // ---------------
@@ -39,7 +40,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
         <div className="">
           {/* <Navigation /> */}
           <main className="w-content mx-auto">{children}</main>
-          {/* <Footer /> */}
+          <Footer />
         </div>
         <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
       </AnalyticsProvider>
