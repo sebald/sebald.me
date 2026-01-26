@@ -27,6 +27,7 @@ export const styles = cva({
       secondary: ['bg-mist-500/25 text-mist-200', 'hover:bg-mist-500/50'],
       icon: ['text-current size-11 rounded-full', 'hover:bg-mist-500/50'],
       link: linkStyles({
+        variant: 'inherit',
         className: 'appearance-none leading-[inherit] inline w-fit',
       }),
     },

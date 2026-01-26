@@ -35,7 +35,7 @@ export interface ConsentUpdateProps {
 // ---------------
 export const ConsentUpdate = ({
   locale = 'en',
-  triggerVariant = 'inherit',
+  triggerVariant = 'link',
 }: ConsentUpdateProps) => {
   const { accept, decline } = useAnalytics();
   const t = intl[locale];

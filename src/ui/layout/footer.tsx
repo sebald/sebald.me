@@ -5,8 +5,9 @@ import {
   GithubLogoIcon,
   LinkedinLogoIcon,
   RssIcon,
+  SquareIcon,
   XLogoIcon,
-} from '@phosphor-icons/react/dist/ssr';
+} from '@phosphor-icons/react/ssr';
 import type { PropsWithChildren } from 'react';
 
 import { socialLinks } from '@/app.config';
@@ -15,7 +16,7 @@ import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-black-400 hidden font-sans text-xs leading-none font-bold uppercase md:block">
+  <h6 className="text-mist-400 hidden font-sans text-xs leading-none font-bold uppercase md:block">
     {children}
   </h6>
 );
@@ -72,16 +73,16 @@ const Links = () => (
 );
 
 const Legal = () => (
-  <div className="col-span-2 flex justify-center gap-2 md:col-span-1 md:flex-col md:gap-2.5 md:*:leading-none">
+  <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-stretch md:gap-2.5 md:*:leading-none">
     <Headline>Legal</Headline>
     <Link variant="inherit" href="/imprint">
       Imprint
     </Link>
-    <span className="text-muted text-sm md:hidden">&#9642;</span>
+    <SquareIcon size={5} weight="fill" className="text-mist-600 md:hidden" />
     <Link variant="inherit" href="/privacy">
       Privacy Policy
     </Link>
-    <span className="text-muted text-sm md:hidden">&#9642;</span>
+    <SquareIcon size={5} weight="fill" className="text-mist-600 md:hidden" />
     <ConsentUpdate />
   </div>
 );
@@ -89,7 +90,7 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="w-content mx-auto pt-36 pb-8">
+  <div className="w-content text-mist-500 mx-auto pt-36 pb-8">
     <Divider />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
