@@ -22,7 +22,7 @@ const Headline = ({ children }: PropsWithChildren) => (
 );
 
 const Social = () => (
-  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
+  <div className="text-mist-400 col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
