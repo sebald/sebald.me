@@ -50,12 +50,10 @@ export const ConsentUpdate = ({
         </Dialog.Title>
         <Dialog.Body>{t.text}</Dialog.Body>
         <Dialog.Actions>
-          <Dialog.Close variant="light" onClick={accept}>
+          <Dialog.Close variant="primary" onClick={accept}>
             {t.accept}
           </Dialog.Close>
-          <Dialog.Close variant="ghost" onClick={decline}>
-            {t.decline}
-          </Dialog.Close>
+          <Dialog.Close onClick={decline}>{t.decline}</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>

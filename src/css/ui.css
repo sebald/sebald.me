@@ -1,8 +1,8 @@
 @utility ui-panel {
   @apply relative overflow-hidden;
   @apply rounded-2xl border border-transparent;
-  @apply inset-shadow-[0_1px_0_0_oklch(0_0_0/0.2)];
-  @apply backdrop-blur-xl;
+  @apply inset-shadow-[0_1px_0_0_oklch(1_0_0/0.1)];
+  @apply backdrop-blur-2xl backdrop-saturate-150;
 
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
@@ -10,8 +10,8 @@
   background-image:
     linear-gradient(
       135deg,
-      oklch(from var(--color-background) l c h / 0.6),
-      oklch(from var(--color-background) l c h / 0.45)
+      oklch(from var(--color-mist-800) l c h / 0.4),
+      oklch(from var(--color-mist-900) l c h / 0.3)
     ),
-    linear-gradient(135deg, oklch(1 0 0 / 0.45), oklch(1 0 0 / 0.1));
+    linear-gradient(135deg, oklch(1 0 0 / 0.15), oklch(1 0 0 / 0.05));
 }
