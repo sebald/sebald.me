@@ -16,13 +16,13 @@ import { Headline } from '@/ui/headline';
 // ---------------
 const styles = {
   root: cva({
-    base: ['flex flex-col items-start', 'pt-24'],
+    base: ['flex flex-col', 'pt-24'],
   }),
   header: cva({
-    base: ['flex flex-col gap-4'],
+    base: ['flex flex-col gap-4', 'w-full'],
   }),
   nav: cva({
-    base: ['flex items-center gap-2'],
+    base: ['flex items-center justify-between', 'w-full'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -149,11 +149,7 @@ interface ActionsProps extends PropsWithChildren, AriaAttributes {}
 
 const Actions = ({ children, ...ariaProps }: ActionsProps) => (
   <nav className={styles.nav()} {...ariaProps}>
-    <Link
-      href="/"
-      className={styles.action({ className: 'flex-1' })}
-      aria-label="Back to home"
-    >
+    <Link href="/" className={styles.action()} aria-label="Back to home">
       <ArrowLeftIcon weight="bold" />
     </Link>
     <div className="flex gap-2">{children}</div>
