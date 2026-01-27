@@ -16,7 +16,7 @@ import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-mist-300 hidden font-sans text-xs leading-none font-bold uppercase md:block">
+  <h6 className="text-mist-300 hidden font-sans text-xs font-bold uppercase md:block">
     {children}
   </h6>
 );
@@ -51,7 +51,7 @@ const Social = () => (
 );
 
 const Links = () => (
-  <div className="flex flex-col gap-2.5 *:leading-none">
+  <div className="flex flex-col gap-2.5">
     <Headline>Links</Headline>
     <Link
       aria-label="View site content formatted for LLMs"
@@ -73,7 +73,7 @@ const Links = () => (
 );
 
 const Legal = () => (
-  <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-stretch md:gap-2.5 md:*:leading-none">
+  <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-stretch md:gap-2.5">
     <Headline>Legal</Headline>
     <Link variant="inherit" href="/imprint">
       Imprint
