@@ -29,7 +29,7 @@ export const styles = {
   popup: cva({
     base: [
       'z-100',
-      'fixed max-w-4xl px-4',
+      'fixed max-w-5xl px-4',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
     variants: {
@@ -70,7 +70,7 @@ export const styles = {
             '[grid-template-areas:"title""description""body""actions"]',
           ],
           inline: [
-            'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-6',
+            'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-12',
             '[grid-template-areas:"title""description""body""actions"]',
             'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
           ],
@@ -82,7 +82,7 @@ export const styles = {
     }),
   ),
   title: cva({
-    base: `${headlineStyle({ level: '4' })} [grid-area:title]`,
+    base: `${headlineStyle({ level: '1' })} [grid-area:title]`,
   }),
   description: cva({
     base: `${textStyle({ size: 'caption' })} [grid-area:description]`,

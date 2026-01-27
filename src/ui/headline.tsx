@@ -6,7 +6,7 @@ export const style = cva({
   base: [
     'flex items-center',
     'text-accent-foreground tracking-wide',
-    '[&_svg]:mr-2 [&_svg]:size-[1em]',
+    '[&_svg]:mr-[1ch] [&_svg]:size-[1.25em]',
   ],
   variants: {
     level: {
