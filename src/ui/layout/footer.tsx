@@ -16,13 +16,13 @@ import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-mist-400 hidden font-sans text-xs leading-none font-bold uppercase md:block">
+  <h6 className="text-mist-300 hidden font-sans text-xs leading-none font-bold uppercase md:block">
     {children}
   </h6>
 );
 
 const Social = () => (
-  <div className="text-mist-400 col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
+  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
@@ -90,7 +90,7 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="w-content text-mist-500 mx-auto pt-36 pb-8">
+  <div className="w-content text-mist-400 mx-auto pt-36 pb-8">
     <Divider />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
