@@ -9,7 +9,7 @@ export const styles = cva({
   base: [
     'inline-flex items-center gap-1.5',
     'hover:decoration-link/75',
-    'transition-all duration-200',
+    'transition-all duration-150',
     'focus-visible:focus-ring focus-visible:outline-none',
   ],
   variants: {
