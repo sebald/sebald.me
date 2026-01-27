@@ -1,4 +1,5 @@
 import {
+  ArrowLeftIcon,
   CalendarBlankIcon,
   HashStraightIcon,
   MarkdownLogoIcon,
@@ -8,7 +9,6 @@ import Link from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
-import type { VariantProps } from '@/lib/styles.utils';
 import type { HeadlineProps } from '@/ui/headline';
 import { Headline } from '@/ui/headline';
 
@@ -16,38 +16,32 @@ import { Headline } from '@/ui/headline';
 // ---------------
 const styles = {
   root: cva({
-    base: ['flex flex-col items-start'],
-    variants: {
-      stretch: {
-        full: '',
-        prose: 'fit-prose',
-      },
-    },
+    base: ['flex flex-col items-start', 'pt-24'],
   }),
   header: cva({
-    base: [
-      'grid',
-      'grid-cols-2',
-      'gap-x-4',
-      'items-start',
-      '[grid-template-areas:"meta_meta""actions_actions""title_title"] min-[480px]:[grid-template-areas:"meta_actions""title_title"]',
-    ],
+    base: ['flex flex-col gap-4'],
   }),
-  meta: cva({
-    base: ['flex [grid-area:meta]', 'list-separator'],
+  nav: cva({
+    base: ['flex items-center gap-2'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
   }),
   action: cva({
     base: [
-      'text-muted flex items-center gap-0.5 text-xs',
-      'ensure-hitbox',
-      'hover:text-link-hover',
+      'flex items-center justify-center',
+      'size-12 rounded-full',
+      'bg-mist-800 text-mist-500',
+      'hover:bg-mist-500/50 hover:text-mist-50',
+      'transition-all duration-150',
+      '[&_svg]:size-5',
     ],
   }),
   content: cva({
     base: ['prose'],
+  }),
+  footer: cva({
+    base: ['flex', 'list-separator'],
   }),
   excerpt: cva({
     base: 'text-pretty text-base',
@@ -56,11 +50,7 @@ const styles = {
 
 // Article.Header
 // ---------------
-interface HeaderProps
-  extends
-    PropsWithChildren,
-    AriaAttributes,
-    VariantProps<typeof styles.header> {
+interface HeaderProps extends PropsWithChildren, AriaAttributes {
   className?: string;
 }
 
@@ -91,12 +81,12 @@ const Title = ({ children, id, variant = 'page' }: TitleProps) => {
       break;
     case 'page':
     default:
-      headlineProps = { level: 'display', variant: 'accent' };
+      headlineProps = { level: '1', as: 'h1' };
       break;
   }
 
   return (
-    <Headline id={id} {...headlineProps} className="[grid-area:title]">
+    <Headline id={id} {...headlineProps}>
       {children}
     </Headline>
   );
@@ -143,9 +133,13 @@ interface MarkdownLinkProps extends AriaAttributes {
 }
 
 const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
-  <Link {...props} href={href as Route} className={styles.action()}>
-    <MarkdownLogoIcon size={16} />
-    View as Markdown
+  <Link
+    {...props}
+    href={href as Route}
+    className={styles.action()}
+    aria-label="View as Markdown"
+  >
+    <MarkdownLogoIcon weight="bold" />
   </Link>
 );
 
@@ -154,23 +148,26 @@ const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
 interface ActionsProps extends PropsWithChildren, AriaAttributes {}
 
 const Actions = ({ children, ...ariaProps }: ActionsProps) => (
-  <div className="justify-self-end [grid-area:actions]" {...ariaProps}>
-    {children}
-  </div>
+  <nav className={styles.nav()} {...ariaProps}>
+    <Link
+      href="/"
+      className={styles.action({ className: 'flex-1' })}
+      aria-label="Back to home"
+    >
+      <ArrowLeftIcon weight="bold" />
+    </Link>
+    <div className="flex gap-2">{children}</div>
+  </nav>
 );
 
-// Article.Meta
+// Article.Footer
 // ---------------
-interface MetaProps extends AriaAttributes {
-  date?: Date | string;
-  topics?: string[];
-}
+interface FooterProps extends PropsWithChildren, AriaAttributes {}
 
-const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
-  <div className={styles.meta()} {...ariaProps}>
-    {date && <Time date={date} />}
-    {topics && topics.length > 0 && <Topics topics={topics} />}
-  </div>
+const Footer = ({ children, ...ariaProps }: FooterProps) => (
+  <footer className={styles.footer()} {...ariaProps}>
+    {children}
+  </footer>
 );
 
 // Article
@@ -195,13 +192,12 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
 
 // Article.Root
 // ---------------
-interface RootProps
-  extends PropsWithChildren, AriaAttributes, VariantProps<typeof styles.root> {
+interface RootProps extends PropsWithChildren, AriaAttributes {
   className?: string;
 }
 
-const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
-  <article className={styles.root({ className, stretch })} {...ariaProps}>
+const Root = ({ children, className, ...ariaProps }: RootProps) => (
+  <article className={styles.root({ className })} {...ariaProps}>
     {children}
   </article>
 );
@@ -211,11 +207,11 @@ const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
 export const Article = Object.assign(Root, {
   Header,
   Title,
+  Actions,
+  Content,
+  Footer,
   Time,
   Topics,
-  Meta,
-  Actions,
   Excerpt,
-  Content,
   MarkdownLink,
 });
