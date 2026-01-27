@@ -73,7 +73,7 @@ const Links = () => (
 );
 
 const Legal = () => (
-  <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-stretch md:gap-2.5">
+  <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-start md:justify-start md:gap-2.5">
     <Headline>Legal</Headline>
     <Link variant="inherit" href="/imprint">
       Imprint
