@@ -3,6 +3,7 @@ import type { MDXComponents } from 'mdx/types';
 
 import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Blockquote } from '@/ui/blockquote';
+import { Callout } from '@/ui/callout';
 import { CodeBlock, CodeBlockTabs, CodeBlockTabsList } from '@/ui/codeblock';
 import { Headline } from '@/ui/headline';
 import { Image } from '@/ui/image';
@@ -57,6 +58,7 @@ export const getMDXComponents = (
   CodeBlockTabs,
   CodeBlockTabsList,
 
+  Callout,
   ConsentUpdate,
 
   ...components,
