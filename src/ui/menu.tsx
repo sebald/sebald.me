@@ -6,6 +6,8 @@ import type { VariantProps } from 'cva';
 import { cva } from 'cva';
 import type { ComponentProps } from 'react';
 
+import { cn } from '@/lib/styles.utils';
+
 import { styles as buttonStyles } from './button';
 
 // Styles
@@ -53,16 +55,25 @@ export interface MenuTriggerProps
     ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
 
-const MenuTrigger = ({ children, variant, ...props }: MenuTriggerProps) => (
-  <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
+const MenuTrigger = ({
+  children,
+  variant,
+  className,
+  ...props
+}: MenuTriggerProps) => (
+  <Primitive.Trigger
+    {...props}
+    className={cn(styles.trigger({ variant }), className)}
+  >
     {children}
   </Primitive.Trigger>
 );
 
 // Menu (Popup)
 // ---------------
-export interface MenuPopupProps
-  extends ComponentProps<typeof Primitive.Popup> {}
+export interface MenuPopupProps extends ComponentProps<
+  typeof Primitive.Popup
+> {}
 
 const MenuPopup = ({ children, ...props }: MenuPopupProps) => (
   <Primitive.Portal>
@@ -81,8 +92,7 @@ const MenuPopup = ({ children, ...props }: MenuPopupProps) => (
 
 // Menu.Item
 // ---------------
-export interface MenuItemProps
-  extends ComponentProps<typeof Primitive.Item> {}
+export interface MenuItemProps extends ComponentProps<typeof Primitive.Item> {}
 
 const MenuItem = ({ children, ...props }: MenuItemProps) => (
   <Primitive.Item {...props} className={styles.item()}>
@@ -92,8 +102,9 @@ const MenuItem = ({ children, ...props }: MenuItemProps) => (
 
 // Menu.Separator
 // ---------------
-export interface MenuSeparatorProps
-  extends ComponentProps<typeof Primitive.Separator> {}
+export interface MenuSeparatorProps extends ComponentProps<
+  typeof Primitive.Separator
+> {}
 
 const MenuSeparator = (props: MenuSeparatorProps) => (
   <Primitive.Separator {...props} className={styles.separator()} />
@@ -107,3 +118,6 @@ export const Menu = Object.assign(MenuPopup, {
   Item: MenuItem,
   Separator: MenuSeparator,
 });
+
+// Individual exports for server component compatibility
+export { MenuRoot, MenuTrigger, MenuPopup, MenuItem, MenuSeparator };

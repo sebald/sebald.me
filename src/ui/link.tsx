@@ -8,7 +8,6 @@ import NextLink from 'next/link';
 export const styles = cva({
   base: [
     'inline-flex items-center gap-1.5',
-    'hover:decoration-link/75',
     'transition-all duration-150',
     'focus-visible:focus-ring focus-visible:outline-none',
   ],
@@ -17,10 +16,18 @@ export const styles = cva({
       default: [
         'text-link font-medium',
         'underline decoration-link/15 underline-offset-3',
+        'hover:decoration-link/75',
       ],
       inherit: [
         'text-inherit decoration-inherit',
         'hover:text-link hover:decoration-link',
+      ],
+      icon: [
+        'justify-center no-underline',
+        'size-11 rounded-full',
+        'bg-mist-800 text-mist-500',
+        'hover:bg-mist-500/50 hover:text-mist-50',
+        '[&_svg]:size-5',
       ],
     },
   },

@@ -1,16 +1,24 @@
 import {
   ArrowLeftIcon,
   CalendarBlankIcon,
+  DotsThreeVerticalIcon,
   HashStraightIcon,
-  MarkdownLogoIcon,
 } from '@phosphor-icons/react/ssr';
 import type { Route } from 'next';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
-import type { HeadlineProps } from '@/ui/headline';
 import { Headline } from '@/ui/headline';
+import type { HeadlineProps } from '@/ui/headline';
+import { Link } from '@/ui/link';
+import {
+  MenuItem,
+  MenuPopup,
+  MenuRoot,
+  MenuSeparator,
+  MenuTrigger,
+} from '@/ui/menu';
 
 // Styles
 // ---------------
@@ -26,16 +34,6 @@ const styles = {
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
-  }),
-  action: cva({
-    base: [
-      'flex items-center justify-center',
-      'size-12 rounded-full',
-      'bg-mist-800 text-mist-500',
-      'hover:bg-mist-500/50 hover:text-mist-50',
-      'transition-all duration-150',
-      '[&_svg]:size-5',
-    ],
   }),
   content: cva({
     base: ['prose'],
@@ -126,35 +124,55 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
-// Article.MarkdownLink
-// ---------------
-interface MarkdownLinkProps extends AriaAttributes {
-  href: string;
-}
-
-const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
-  <Link
-    {...props}
-    href={href as Route}
-    className={styles.action()}
-    aria-label="View as Markdown"
-  >
-    <MarkdownLogoIcon weight="bold" />
-  </Link>
-);
-
 // Article.Actions
 // ---------------
 interface ActionsProps extends PropsWithChildren, AriaAttributes {}
 
 const Actions = ({ children, ...ariaProps }: ActionsProps) => (
   <nav className={styles.nav()} {...ariaProps}>
-    <Link href="/" className={styles.action()} aria-label="Back to home">
+    <Link href="/" variant="icon" aria-label="Back to home">
       <ArrowLeftIcon weight="bold" />
     </Link>
-    <div className="flex gap-2">{children}</div>
+    <MenuRoot>
+      <MenuTrigger variant="icon" aria-label="Article actions">
+        <DotsThreeVerticalIcon weight="bold" />
+      </MenuTrigger>
+      <MenuPopup>{children}</MenuPopup>
+    </MenuRoot>
   </nav>
 );
+
+// Article.ActionsItem
+// ---------------
+interface ActionsItemProps extends PropsWithChildren, AriaAttributes {
+  href?: string;
+  onClick?: () => void;
+}
+
+const ActionsItem = ({
+  children,
+  href,
+  onClick,
+  ...ariaProps
+}: ActionsItemProps) => {
+  if (href) {
+    return (
+      <MenuItem render={<NextLink href={href as Route} />} {...ariaProps}>
+        {children}
+      </MenuItem>
+    );
+  }
+
+  return (
+    <MenuItem onClick={onClick} {...ariaProps}>
+      {children}
+    </MenuItem>
+  );
+};
+
+// Article.ActionsSeparator
+// ---------------
+const ActionsSeparator = () => <MenuSeparator />;
 
 // Article.Footer
 // ---------------
@@ -198,16 +216,17 @@ const Root = ({ children, className, ...ariaProps }: RootProps) => (
   </article>
 );
 
-// Note API
+// Article API
 // ---------------
 export const Article = Object.assign(Root, {
   Header,
   Title,
   Actions,
+  ActionsItem,
+  ActionsSeparator,
   Content,
   Footer,
   Time,
   Topics,
   Excerpt,
-  MarkdownLink,
 });

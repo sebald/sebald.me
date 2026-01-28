@@ -1,9 +1,13 @@
+import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { miscSource } from '@/lib/source';
-import { CopyLinkButton } from '@/ui/copy-link-button';
 import { Article } from '@/ui/layout/article';
+import {
+  CopyLinkItem,
+  CopyMarkdownLinkItem,
+} from '@/ui/layout/article-actions';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -39,8 +43,13 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
     <Article aria-labelledby={titleId}>
       <Article.Header>
         <Article.Actions>
-          <CopyLinkButton />
-          <Article.MarkdownLink href={`${page.url}.md`} />
+          <CopyLinkItem />
+          <CopyMarkdownLinkItem href={`${page.url}.md`} />
+          <Article.ActionsSeparator />
+          <Article.ActionsItem href={`${page.url}.md`}>
+            <MarkdownLogoIcon size={16} />
+            View as markdown
+          </Article.ActionsItem>
         </Article.Actions>
         <Article.Title id={titleId}>{page.data.title}</Article.Title>
       </Article.Header>

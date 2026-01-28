@@ -9,7 +9,7 @@ const styles = {
   action: cva({
     base: [
       'flex items-center justify-center',
-      'size-12 rounded-full',
+      'size-11 rounded-full',
       'bg-mist-800 text-mist-500',
       'hover:bg-mist-500/50 hover:text-mist-50',
       'transition-all duration-150',
