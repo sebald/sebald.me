@@ -27,10 +27,21 @@ const styles = {
     base: ['flex flex-col', 'pt-24'],
   }),
   header: cva({
-    base: ['flex flex-col gap-20', 'w-full', 'pb-8'],
+    base: [
+      'grid items-center pb-8 w-full',
+      'grid-cols-[auto_1fr]',
+      '[grid-template-areas:"back_actions"_"title_title"]',
+      'gap-y-20',
+    ],
   }),
-  nav: cva({
-    base: ['flex items-center justify-between', 'w-full'],
+  back: cva({
+    base: ['[grid-area:back]'],
+  }),
+  actions: cva({
+    base: ['[grid-area:actions]', 'justify-self-end'],
+  }),
+  title: cva({
+    base: ['[grid-area:title]', 'flex flex-col'],
   }),
   caption: cva({
     base: ['text-muted flex items-center gap-0.5 text-xs'],
@@ -54,6 +65,11 @@ interface HeaderProps extends PropsWithChildren, AriaAttributes {
 
 const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
   <header className={styles.header({ className })} {...ariaProps}>
+    <div className={styles.back()}>
+      <Link href="/" variant="icon" aria-label="Back to home">
+        <ArrowLeftIcon weight="bold" />
+      </Link>
+    </div>
     {children}
   </header>
 );
@@ -63,7 +79,9 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
 interface TitleProps extends HeadlineProps {}
 
 const Title = ({ children, ...props }: TitleProps) => (
-  <Headline {...props}>{children}</Headline>
+  <div className={styles.title()}>
+    <Headline {...props}>{children}</Headline>
+  </div>
 );
 
 // Article.Time
@@ -105,17 +123,14 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
 interface ActionsProps extends PropsWithChildren, AriaAttributes {}
 
 const Actions = ({ children, ...ariaProps }: ActionsProps) => (
-  <nav className={styles.nav()} {...ariaProps}>
-    <Link href="/" variant="icon" aria-label="Back to home">
-      <ArrowLeftIcon weight="bold" />
-    </Link>
+  <div className={styles.actions()}>
     <MenuRoot>
-      <MenuTrigger variant="icon" aria-label="Article actions">
+      <MenuTrigger variant="icon" aria-label="Article actions" {...ariaProps}>
         <DotsThreeVerticalIcon weight="bold" />
       </MenuTrigger>
       <MenuPopup align="end">{children}</MenuPopup>
     </MenuRoot>
-  </nav>
+  </div>
 );
 
 // Article.ActionsItem
