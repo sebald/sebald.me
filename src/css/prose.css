@@ -36,6 +36,11 @@
       margin-top: theme(spacing.2);
     }
 
+    /* Strong */
+    & strong {
+      color: var(--color-mist-50);
+    }
+
     /* Breakout elements */
     & > img,
     & > figure:has(img),
