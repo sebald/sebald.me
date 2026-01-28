@@ -35,6 +35,7 @@ export const styles = {
       'transition-colors duration-100',
       'data-highlighted:bg-mist-500/25',
       'data-disabled:opacity-40 data-disabled:cursor-default',
+      '[&_svg]:size-4',
     ],
   }),
   separator: cva({

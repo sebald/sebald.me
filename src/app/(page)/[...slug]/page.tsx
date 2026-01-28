@@ -4,10 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
-import {
-  CopyLinkItem,
-  CopyMarkdownLinkItem,
-} from '@/ui/layout/article-actions';
+import { CopyLinkItem } from '@/ui/layout/article-actions';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -44,10 +41,8 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
       <Article.Header>
         <Article.Actions>
           <CopyLinkItem />
-          <CopyMarkdownLinkItem href={`${page.url}.md`} />
-          <Article.ActionsSeparator />
           <Article.ActionsItem href={`${page.url}.md`}>
-            <MarkdownLogoIcon size={16} />
+            <MarkdownLogoIcon weight="bold" />
             View as markdown
           </Article.ActionsItem>
         </Article.Actions>
