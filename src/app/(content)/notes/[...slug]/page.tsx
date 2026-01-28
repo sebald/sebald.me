@@ -2,13 +2,14 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { miscSource } from '@/lib/source';
+import { notesSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { CopyLinkItem } from '@/ui/layout/article-actions';
+import { getMDXComponents } from '@/ui/mdx';
 
 // Config
 // ---------------
-export const generateStaticParams = async () => miscSource.generateParams();
+export const generateStaticParams = async () => notesSource.generateParams();
 
 // Meta
 // ---------------
@@ -16,7 +17,7 @@ export const generateMetadata = async (
   props: PageProps<'/[...slug]'>,
 ): Promise<Metadata> => {
   const params = await props.params;
-  const page = miscSource.getPage(params.slug);
+  const page = notesSource.getPage(params.slug);
   if (!page) notFound();
 
   return {
@@ -25,17 +26,15 @@ export const generateMetadata = async (
   };
 };
 
-// Layout
+// Page
 // ---------------
-const SlugLayout = async ({
-  children,
-  params,
-}: LayoutProps<'/[...slug]'>) => {
-  const { slug } = await params;
-  const page = miscSource.getPage(slug);
+const Page = async (props: PageProps<'/[...slug]'>) => {
+  const params = await props.params;
+  const page = notesSource.getPage(params.slug);
   if (!page) notFound();
 
-  const titleId = `misc-${page.slugs.join('-')}`;
+  const titleId = page.url;
+  const MDX = page.data.body;
 
   return (
     <Article aria-labelledby={titleId}>
@@ -51,9 +50,11 @@ const SlugLayout = async ({
           {page.data.title}
         </Article.Title>
       </Article.Header>
-      <Article.Content>{children}</Article.Content>
+      <Article.Content>
+        <MDX components={getMDXComponents()} />
+      </Article.Content>
     </Article>
   );
 };
 
-export default SlugLayout;
+export default Page;
