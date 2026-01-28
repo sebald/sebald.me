@@ -37,13 +37,6 @@ const SlugLayout = async ({ children, params }: LayoutProps<'/[...slug]'>) => {
   return (
     <Article aria-labelledby={titleId}>
       <Article.Header>
-        <Article.Actions>
-          <CopyLinkItem />
-          <Article.ActionsItem href={`${page.url}.md`}>
-            <MarkdownLogoIcon weight="bold" />
-            View as markdown
-          </Article.ActionsItem>
-        </Article.Actions>
         <Article.Title id={titleId} level="1">
           {page.data.title}
         </Article.Title>
