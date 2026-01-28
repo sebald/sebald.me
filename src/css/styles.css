@@ -2,6 +2,7 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
+@import './prose.css';
 
 /* ::selection,
 ::-moz-selection {

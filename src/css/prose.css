@@ -1,0 +1,84 @@
+@layer components {
+  .prose {
+    line-height: 1.75;
+    text-box-trim: trim-both;
+
+    display: grid;
+    grid-template-columns:
+      1fr
+      min(var(--prose-width), 100%)
+      1fr;
+
+    & > * {
+      grid-column: 2;
+    }
+
+    /* Default spacing */
+    & > * + * {
+      margin-top: theme(spacing.8);
+    }
+
+    /* Headlines */
+    & > * + h2 {
+      margin-top: theme(spacing.12);
+    }
+    & > * + h3 {
+      margin-top: theme(spacing.10);
+    }
+
+    & h2 + *,
+    & h3 + * {
+      margin-top: theme(spacing.3);
+    }
+
+    & h4 + *,
+    & h5 + * {
+      margin-top: theme(spacing.2);
+    }
+
+    /* Breakout elements */
+    & > img,
+    & > figure:has(img),
+    & > [data-breakout] {
+      grid-column: 1 / -1;
+      margin-inline: auto;
+    }
+    & > [data-breakout] {
+      width: 100%;
+    }
+
+    /* Lists */
+    & :is(ul, ol) {
+      padding-left: 1.5em;
+
+      & li {
+        padding-left: 0.5em;
+
+        &::marker {
+          color: var(--color-black-400);
+        }
+      }
+
+      & li + li {
+        margin-top: theme(spacing.8);
+      }
+
+      /* Nested lists */
+      & :is(ul, ol) {
+        margin-top: theme(spacing.4);
+      }
+    }
+
+    & ul {
+      list-style-type: disc;
+
+      & ul {
+        list-style-type: circle;
+      }
+    }
+
+    & ol {
+      list-style-type: decimal;
+    }
+  }
+}
