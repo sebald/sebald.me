@@ -27,7 +27,7 @@ const styles = {
     base: ['flex flex-col', 'pt-24'],
   }),
   header: cva({
-    base: ['flex flex-col gap-4', 'w-full'],
+    base: ['flex flex-col gap-20', 'w-full', 'pb-8'],
   }),
   nav: cva({
     base: ['flex items-center justify-between', 'w-full'],
@@ -60,35 +60,11 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
 
 // Article.Title
 // ---------------
-interface TitleProps extends PropsWithChildren {
-  id?: string;
-  /**
-   * Display style for the title
-   * - 'page': Large display heading with accent variant (for full article pages)
-   * - 'list': Smaller heading level 3 (for article lists/indexes)
-   */
-  variant?: 'page' | 'list';
-}
+interface TitleProps extends HeadlineProps {}
 
-const Title = ({ children, id, variant = 'page' }: TitleProps) => {
-  let headlineProps: Omit<HeadlineProps, 'children'>;
-
-  switch (variant) {
-    case 'list':
-      headlineProps = { level: '3', as: 'h2' };
-      break;
-    case 'page':
-    default:
-      headlineProps = { level: '1', as: 'h1' };
-      break;
-  }
-
-  return (
-    <Headline id={id} {...headlineProps}>
-      {children}
-    </Headline>
-  );
-};
+const Title = ({ children, ...props }: TitleProps) => (
+  <Headline {...props}>{children}</Headline>
+);
 
 // Article.Time
 // ---------------

@@ -46,7 +46,9 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
             View as markdown
           </Article.ActionsItem>
         </Article.Actions>
-        <Article.Title id={titleId}>{page.data.title}</Article.Title>
+        <Article.Title id={titleId} level="1">
+          {page.data.title}
+        </Article.Title>
       </Article.Header>
       <Article.Content>
         <MDX components={getMDXComponents()} />
