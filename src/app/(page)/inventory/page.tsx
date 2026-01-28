@@ -2,8 +2,8 @@ import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { Blockquote } from '@/ui/blockquote';
-import { Callout } from '@/ui/callout';
 import { Button } from '@/ui/button';
+import { Callout } from '@/ui/callout';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
 import { Divider } from '@/ui/divider';
@@ -124,19 +124,19 @@ const InventoryPage = () => (
     <div className="grid gap-4">
       <Headline level="2">Callout</Headline>
       <div className="grid gap-4">
-        <Callout>
+        <Callout title="Note">
           This is a note callout for general remarks and tips.
         </Callout>
-        <Callout variant="info">
+        <Callout variant="info" title="Info">
           This is an info callout for contextual information.
         </Callout>
-        <Callout variant="success">
+        <Callout variant="success" title="Success">
           This is a success callout for positive outcomes.
         </Callout>
-        <Callout variant="warning">
+        <Callout variant="warning" title="Warning">
           This is a warning callout for potential issues.
         </Callout>
-        <Callout variant="danger">
+        <Callout variant="danger" title="Danger">
           This is a danger callout for critical information.
         </Callout>
       </div>
