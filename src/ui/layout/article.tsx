@@ -137,7 +137,7 @@ const Actions = ({ children, ...ariaProps }: ActionsProps) => (
       <MenuTrigger variant="icon" aria-label="Article actions">
         <DotsThreeVerticalIcon weight="bold" />
       </MenuTrigger>
-      <MenuPopup>{children}</MenuPopup>
+      <MenuPopup align="end">{children}</MenuPopup>
     </MenuRoot>
   </nav>
 );

@@ -71,17 +71,25 @@ const MenuTrigger = ({
 
 // Menu (Popup)
 // ---------------
-export interface MenuPopupProps extends ComponentProps<
-  typeof Primitive.Popup
-> {}
+export interface MenuPopupProps extends ComponentProps<typeof Primitive.Popup> {
+  side?: 'top' | 'bottom' | 'left' | 'right';
+  align?: 'start' | 'center' | 'end';
+  sideOffset?: number;
+}
 
-const MenuPopup = ({ children, ...props }: MenuPopupProps) => (
+const MenuPopup = ({
+  children,
+  side = 'bottom',
+  align = 'start',
+  sideOffset = 4,
+  ...props
+}: MenuPopupProps) => (
   <Primitive.Portal>
     <Primitive.Positioner
       className={styles.positioner()}
-      side="bottom"
-      align="start"
-      sideOffset={4}
+      side={side}
+      align={align}
+      sideOffset={sideOffset}
     >
       <Primitive.Popup {...props} className={styles.popup()}>
         {children}
