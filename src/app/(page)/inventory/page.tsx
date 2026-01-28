@@ -2,6 +2,7 @@ import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
 import { Blockquote } from '@/ui/blockquote';
+import { Callout } from '@/ui/callout';
 import { Button } from '@/ui/button';
 import { Card } from '@/ui/card';
 import { Dialog } from '@/ui/dialog';
@@ -117,6 +118,27 @@ const InventoryPage = () => (
         <Blockquote attribution="Alan Kay">
           The best way to predict the future is to invent it.
         </Blockquote>
+      </div>
+    </div>
+
+    <div className="grid gap-4">
+      <Headline level="2">Callout</Headline>
+      <div className="grid gap-4">
+        <Callout>
+          This is a note callout for general remarks and tips.
+        </Callout>
+        <Callout variant="info">
+          This is an info callout for contextual information.
+        </Callout>
+        <Callout variant="success">
+          This is a success callout for positive outcomes.
+        </Callout>
+        <Callout variant="warning">
+          This is a warning callout for potential issues.
+        </Callout>
+        <Callout variant="danger">
+          This is a danger callout for critical information.
+        </Callout>
       </div>
     </div>
 
