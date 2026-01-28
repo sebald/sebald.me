@@ -31,6 +31,7 @@ export const styles = cva({
       ],
     },
   },
+  defaultVariants: { variant: 'default' },
 });
 
 // Props
