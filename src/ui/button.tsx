@@ -25,30 +25,14 @@ export const styles = cva({
     variant: {
       primary: ['bg-mist-100 text-mist-800 font-medium', 'hover:bg-mist-50'],
       secondary: ['bg-mist-500/25 text-mist-200', 'hover:bg-mist-500/50'],
-      icon: [
-        'size-11 rounded-full',
-        'bg-mist-800 text-mist-500',
-        'hover:bg-mist-500/50 hover:text-mist-50',
-        '[&_svg]:size-5',
-      ],
-      link: linkStyles({
-        variant: 'inherit',
-        className: 'appearance-none w-fit',
-      }),
+      icon: linkStyles({ variant: 'icon' }),
+      link: linkStyles({ variant: 'inherit', className: 'appearance-none w-fit [&_svg]:size-4' }),
     },
   },
   compoundVariants: [
     {
       variant: ['primary', 'secondary'],
-      className: ['h-11 px-6', 'text-base rounded-xl'],
-    },
-    {
-      variant: ['primary', 'secondary', 'link'],
-      className: ['[&_svg]:size-4'],
-    },
-    {
-      variant: ['icon'],
-      className: ['[&_svg]:size-5'],
+      className: ['h-11 px-6', 'text-base rounded-xl', '[&_svg]:size-4'],
     },
   ],
   defaultVariants: {
