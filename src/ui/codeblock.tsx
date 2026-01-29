@@ -14,9 +14,10 @@ import { cva } from '@/lib/styles.utils';
 const style = {
   codeblock: cva({
     base: [
-      'bg-oatmeal-100/50 border-oatmeal-200/50 rounded-xl border',
+      'bg-(--shiki-dark-bg) border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.05)_c_h)] rounded-xl border',
       'shadow-none mt-8 mb-0 mx-0', // override fumadocs-ui default
-      '[&>div:has(figcaption)]:border-oatmeal-200/50',
+      'px-4 py-6',
+      '[&>div:has(figcaption)]:border-mist-800/50',
     ],
   }),
   codeblockTabs: cva({
@@ -26,11 +27,11 @@ const style = {
     base: [
       'px-0 pb-1 space-x-1',
       // Add style to fumadocs tab buttons
-      '[&_button]:text-oatmeal-900/50 [&_button]:text-sm',
+      '[&_button]:text-mist-400 [&_button]:text-sm',
       '[&_button]:px-4 [&_button]:py-1.5 [&_button]:rounded-lg',
       '[&_button]:cursor-pointer',
-      '[&_button]:aria-selected:text-oatmeal-900 [&_button]:aria-selected:bg-oatmeal-800/10',
-      '[&_button]:hover:text-oatmeal-900',
+      '[&_button]:aria-selected:text-mist-100 [&_button]:aria-selected:bg-mist-800/30',
+      '[&_button]:hover:text-mist-200',
     ],
   }),
 };

@@ -41,8 +41,8 @@ export default defineConfig({
     rehypePlugins: [rehypeUnwrapContent],
     rehypeCodeOptions: {
       themes: {
-        light: 'github-light-default',
-        dark: 'github-light-default',
+        light: 'github-dark-default',
+        dark: 'github-dark-default',
       },
       inline: 'tailing-curly-colon',
     },
