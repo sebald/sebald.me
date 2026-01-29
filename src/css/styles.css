@@ -11,7 +11,6 @@
 code[data-theme],
 code span {
   color: var(--shiki-dark) !important;
-  background-color: var(--shiki-dark-bg) !important;
 }
 
 /* ::selection,

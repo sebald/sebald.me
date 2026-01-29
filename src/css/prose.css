@@ -38,7 +38,7 @@
 
     /* Strong */
     & strong {
-      color: var(--color-mist-50);
+      color: var(--color-accent-foreground);
     }
 
     /* Breakout elements */

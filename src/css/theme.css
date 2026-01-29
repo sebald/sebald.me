@@ -28,7 +28,7 @@
   --color-background: var(--color-mist-900);
   --color-foreground: var(--color-mist-200);
 
-  --color-accent-foreground: var(--color-mist-50);
+  --color-accent-foreground: var(--color-mist-100);
 
   --color-muted: var(--color-mist-600);
   --color-muted-foreground: var(--color-mist-400);
