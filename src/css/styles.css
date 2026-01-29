@@ -4,15 +4,6 @@
 @import './theme.css';
 @import './prose.css';
 
-/*------------------*/
-/* Shiki Highlights */
-/*------------------*/
-
-code[data-theme],
-code span {
-  color: var(--shiki-dark) !important;
-}
-
 /* ::selection,
 ::-moz-selection {
   background-color: oklch(0.9 0.1 90 / 0.5);
@@ -45,6 +36,15 @@ h4 {
 
 p {
   text-wrap: pretty;
+}
+
+/*------------------*/
+/*      Shiki       */
+/*------------------*/
+
+code[data-theme],
+code span {
+  color: var(--shiki-dark) !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
