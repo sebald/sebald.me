@@ -8,12 +8,12 @@ import type { AriaAttributes, PropsWithChildren } from 'react';
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
-import { Link } from '@/ui/link';
 import {
   ActionMenu,
   ActionMenuItem,
   ActionMenuSeparator,
 } from '@/ui/layout/article-action-menu';
+import { Link } from '@/ui/link';
 
 // Styles
 // ---------------
@@ -39,7 +39,7 @@ const styles = {
     base: ['[grid-area:title]', 'flex flex-col'],
   }),
   caption: cva({
-    base: ['text-muted flex items-center gap-0.5 text-xs'],
+    base: ['text-muted-foreground flex items-center gap-0.5 text-xs'],
   }),
   content: cva({
     base: ['prose'],

@@ -10,7 +10,7 @@ const style = {
     base: ['rounded-lg'],
   }),
   caption: cva({
-    base: ['pt-1 text-center', 'text-xs text-muted', 'italic'],
+    base: ['pt-3 text-center', 'text-sm text-muted-foreground', 'italic'],
   }),
 };
 
