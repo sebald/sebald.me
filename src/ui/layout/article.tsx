@@ -1,11 +1,8 @@
 import {
   ArrowLeftIcon,
   CalendarBlankIcon,
-  DotsThreeVerticalIcon,
   HashStraightIcon,
 } from '@phosphor-icons/react/ssr';
-import type { Route } from 'next';
-import NextLink from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
@@ -13,12 +10,10 @@ import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import {
-  MenuItem,
-  MenuPopup,
-  MenuRoot,
-  MenuSeparator,
-  MenuTrigger,
-} from '@/ui/menu';
+  ActionMenu,
+  ActionMenuItem,
+  ActionMenuSeparator,
+} from '@/ui/layout/article-action-menu';
 
 // Styles
 // ---------------
@@ -118,52 +113,13 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
-// Article.Actions
+// Article.Actions (wraps client ActionMenu with grid positioning)
 // ---------------
-interface ActionsProps extends PropsWithChildren, AriaAttributes {}
-
-const Actions = ({ children, ...ariaProps }: ActionsProps) => (
+const Actions = ({ children }: PropsWithChildren) => (
   <div className={styles.actions()}>
-    <MenuRoot>
-      <MenuTrigger variant="icon" aria-label="Article actions" {...ariaProps}>
-        <DotsThreeVerticalIcon weight="bold" />
-      </MenuTrigger>
-      <MenuPopup align="end">{children}</MenuPopup>
-    </MenuRoot>
+    <ActionMenu>{children}</ActionMenu>
   </div>
 );
-
-// Article.ActionsItem
-// ---------------
-interface ActionsItemProps extends PropsWithChildren, AriaAttributes {
-  href?: string;
-  onClick?: () => void;
-}
-
-const ActionsItem = ({
-  children,
-  href,
-  onClick,
-  ...ariaProps
-}: ActionsItemProps) => {
-  if (href) {
-    return (
-      <MenuItem render={<NextLink href={href as Route} />} {...ariaProps}>
-        {children}
-      </MenuItem>
-    );
-  }
-
-  return (
-    <MenuItem onClick={onClick} {...ariaProps}>
-      {children}
-    </MenuItem>
-  );
-};
-
-// Article.ActionsSeparator
-// ---------------
-const ActionsSeparator = () => <MenuSeparator />;
 
 // Article.Footer
 // ---------------
@@ -213,8 +169,8 @@ export const Article = Object.assign(Root, {
   Header,
   Title,
   Actions,
-  ActionsItem,
-  ActionsSeparator,
+  ActionsItem: ActionMenuItem,
+  ActionsSeparator: ActionMenuSeparator,
   Content,
   Footer,
   Time,

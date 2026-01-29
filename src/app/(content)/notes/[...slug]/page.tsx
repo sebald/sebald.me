@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { notesSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
-import { CopyLinkItem } from '@/ui/layout/article-actions';
+import { CopyLinkItem } from '@/ui/layout/article-action-menu';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
