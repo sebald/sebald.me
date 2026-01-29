@@ -1,7 +1,7 @@
 import {
-  ArrowLeftIcon,
   CalendarBlankIcon,
   HashStraightIcon,
+  HouseSimpleIcon,
 } from '@phosphor-icons/react/ssr';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
@@ -62,7 +62,7 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
   <header className={styles.header({ className })} {...ariaProps}>
     <div className={styles.back()}>
       <Link href="/" variant="icon" aria-label="Back to home">
-        <ArrowLeftIcon weight="bold" />
+        <HouseSimpleIcon weight="bold" />
       </Link>
     </div>
     {children}
