@@ -8,25 +8,19 @@ import type { Route } from 'next';
 import NextLink from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
-import {
-  MenuItem,
-  MenuPopup,
-  MenuRoot,
-  MenuSeparator,
-  MenuTrigger,
-} from '@/ui/menu';
+import { Menu } from '@/ui/menu';
 
 // ActionMenu
 // ---------------
 interface ActionMenuProps extends PropsWithChildren, AriaAttributes {}
 
 export const ActionMenu = ({ children, ...ariaProps }: ActionMenuProps) => (
-  <MenuRoot>
-    <MenuTrigger variant="icon" aria-label="Article actions" {...ariaProps}>
+  <Menu.Root>
+    <Menu.Trigger variant="icon" aria-label="Article actions" {...ariaProps}>
       <DotsThreeVerticalIcon weight="bold" />
-    </MenuTrigger>
-    <MenuPopup align="end">{children}</MenuPopup>
-  </MenuRoot>
+    </Menu.Trigger>
+    <Menu align="end">{children}</Menu>
+  </Menu.Root>
 );
 
 // ActionMenuItem
@@ -44,22 +38,22 @@ export const ActionMenuItem = ({
 }: ActionMenuItemProps) => {
   if (href) {
     return (
-      <MenuItem render={<NextLink href={href as Route} />} {...ariaProps}>
+      <Menu.Item render={<NextLink href={href as Route} />} {...ariaProps}>
         {children}
-      </MenuItem>
+      </Menu.Item>
     );
   }
 
   return (
-    <MenuItem onClick={onClick} {...ariaProps}>
+    <Menu.Item onClick={onClick} {...ariaProps}>
       {children}
-    </MenuItem>
+    </Menu.Item>
   );
 };
 
 // ActionMenuSeparator
 // ---------------
-export const ActionMenuSeparator = () => <MenuSeparator />;
+export const ActionMenuSeparator = () => <Menu.Separator />;
 
 // CopyLinkItem
 // ---------------
