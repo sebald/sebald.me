@@ -1,3 +1,6 @@
+'use client';
+
+import { CheckIcon, CopyIcon } from '@phosphor-icons/react/ssr';
 import type { CodeBlockProps } from 'fumadocs-ui/components/codeblock';
 import {
   CodeBlock as FumaCodeBlock,
@@ -5,9 +8,12 @@ import {
   CodeBlockTabsList as FumaCodeBlockTabsList,
   Pre,
 } from 'fumadocs-ui/components/codeblock';
-import type { PropsWithChildren } from 'react';
+import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
+import { type PropsWithChildren, type RefObject, useRef } from 'react';
 
-import { cva } from '@/lib/styles.utils';
+import { cn, cva } from '@/lib/styles.utils';
+
+import { Button } from './button';
 
 // Styles
 // ---------------
@@ -36,13 +42,60 @@ const style = {
   }),
 };
 
+// Copy Button
+// ---------------
+interface CopyButtonProps {
+  containerRef: RefObject<HTMLElement | null>;
+}
+
+const CopyButton = ({ containerRef }: CopyButtonProps) => {
+  const [checked, onClick] = useCopyButton(() => {
+    const pre = containerRef.current?.getElementsByTagName('pre').item(0);
+    if (!pre) return;
+
+    const clone = pre.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll('.nd-copy-ignore').forEach(node => {
+      node.replaceWith('\n');
+    });
+
+    navigator.clipboard.writeText(clone.textContent ?? '');
+  });
+
+  return (
+    <Button
+      variant="link"
+      aria-label={checked ? 'Copied Text' : 'Copy Text'}
+      onClick={onClick}
+    >
+      {checked ? (
+        <CheckIcon size={20} weight="bold" />
+      ) : (
+        <CopyIcon size={20} weight="bold" />
+      )}
+    </Button>
+  );
+};
+
 // Component
 // ---------------
-export const CodeBlock = ({ children, ...props }: CodeBlockProps) => (
-  <FumaCodeBlock {...props} className={style.codeblock()}>
-    <Pre>{children}</Pre>
-  </FumaCodeBlock>
-);
+export const CodeBlock = ({ children, ...props }: CodeBlockProps) => {
+  const areaRef = useRef<HTMLElement>(null);
+  return (
+    <FumaCodeBlock
+      {...props}
+      ref={areaRef}
+      className={style.codeblock()}
+      allowCopy={false}
+      Actions={() => (
+        <div className="absolute top-6 right-4 z-2">
+          <CopyButton containerRef={areaRef} />
+        </div>
+      )}
+    >
+      <Pre>{children}</Pre>
+    </FumaCodeBlock>
+  );
+};
 
 /**
  * Override fumadocs-ui default components for code blocks to adjust styles

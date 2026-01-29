@@ -26,7 +26,10 @@ export const styles = cva({
       primary: ['bg-mist-100 text-mist-800 font-medium', 'hover:bg-mist-50'],
       secondary: ['bg-mist-500/25 text-mist-200', 'hover:bg-mist-500/50'],
       icon: linkStyles({ variant: 'icon' }),
-      link: linkStyles({ variant: 'inherit', className: 'appearance-none w-fit [&_svg]:size-4' }),
+      link: linkStyles({
+        variant: 'inherit',
+        className: 'appearance-none w-fit',
+      }),
     },
   },
   compoundVariants: [
