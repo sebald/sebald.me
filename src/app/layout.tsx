@@ -37,7 +37,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
   >
     <body className="relative isolate">
       <AnalyticsProvider>
-        <div className="">
+        <div className="px-8 md:px-4">
           <main className="w-content mx-auto">{children}</main>
           <Footer />
         </div>

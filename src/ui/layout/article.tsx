@@ -19,7 +19,7 @@ import { Link } from '@/ui/link';
 // ---------------
 const styles = {
   root: cva({
-    base: ['flex flex-col', 'pt-24'],
+    base: ['flex flex-col', 'pt-32'],
   }),
   header: cva({
     base: [
