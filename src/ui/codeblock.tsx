@@ -31,6 +31,13 @@ const style = {
 
       // Code container
       '**:[[role=region]]:pt-6',
+
+      // Focus styles - dim unfocused lines when .focused class is present
+      '[&_code:has(.focused)_.line:not(.focused)]:opacity-30',
+      '[&_code:has(.focused)_.line]:transition-opacity',
+      '[&_code:has(.focused)_.line]:duration-200',
+      'hover:[&_code:has(.focused)_.line:not(.focused)]:opacity-100',
+      '[&_code_.line.focused]:opacity-100',
     ],
   }),
   codeblockTabs: cva({
