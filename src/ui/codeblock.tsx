@@ -97,8 +97,8 @@ export const CodeBlock = ({ children, ...props }: CodeBlockProps) => {
       Actions={() => (
         <div
           className={cn(
-            'absolute right-4 z-2',
-            !!props.title ? 'top-18' : 'top-6',
+            'absolute top-6 z-2',
+            !!props.title ? 'right-4' : 'right-0',
           )}
         >
           <CopyButton containerRef={areaRef} />
