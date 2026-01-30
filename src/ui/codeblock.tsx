@@ -20,10 +20,17 @@ import { Button } from './button';
 const style = {
   codeblock: cva({
     base: [
-      'bg-(--shiki-dark-bg) border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.05)_c_h)] rounded-xl border',
+      'bg-(--shiki-dark-bg) border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.1)_c_h)] rounded-xl border',
       'shadow-none mt-8 mb-0 mx-0', // override fumadocs-ui default
-      'px-4 py-6',
-      '[&>div:has(figcaption)]:border-mist-800/50',
+      '*:px-4 pb-6',
+
+      // Title styles
+      '[&>div:has(figcaption)]:border-b [&>div:has(figcaption)]:border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.1)_c_h)]',
+      '[&>div:has(figcaption)]:py-4',
+      '[&_svg]:size-4 [&_figcaption]:text-xs',
+
+      // Code container
+      '**:[[role=region]]:pt-6',
     ],
   }),
   codeblockTabs: cva({
@@ -80,6 +87,7 @@ const CopyButton = ({ containerRef }: CopyButtonProps) => {
 // ---------------
 export const CodeBlock = ({ children, ...props }: CodeBlockProps) => {
   const areaRef = useRef<HTMLElement>(null);
+
   return (
     <FumaCodeBlock
       {...props}
@@ -87,7 +95,12 @@ export const CodeBlock = ({ children, ...props }: CodeBlockProps) => {
       className={style.codeblock()}
       allowCopy={false}
       Actions={() => (
-        <div className="absolute top-6 right-4 z-2">
+        <div
+          className={cn(
+            'absolute right-4 z-2',
+            !!props.title ? 'top-18' : 'top-6',
+          )}
+        >
           <CopyButton containerRef={areaRef} />
         </div>
       )}
