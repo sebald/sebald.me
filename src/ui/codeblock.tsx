@@ -21,7 +21,7 @@ const style = {
   codeblock: cva({
     base: [
       'bg-(--shiki-dark-bg) border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.1)_c_h)] rounded-xl border',
-      'shadow-none mt-8 mb-0 mx-0', // override fumadocs-ui default
+      'shadow-none mb-0 mx-0', // override fumadocs-ui default
       'in-[[role=tabpanel]]:mt-2', // reduced top margin inside tab panels
       '*:px-4 pb-6',
 

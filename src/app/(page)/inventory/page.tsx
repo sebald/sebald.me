@@ -11,6 +11,7 @@ import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
 import { Text } from '@/ui/text';
 
+import { CodeExamples } from './code-examples';
 import { OverlayExamples } from './overlay-examples';
 
 // Config
@@ -229,6 +230,11 @@ const InventoryPage = () => (
           <div className="flex flex-wrap gap-4">
             <OverlayExamples />
           </div>
+        </div>
+
+        <div className="grid gap-4">
+          <Headline level="2">Code</Headline>
+          <CodeExamples />
         </div>
       </div>
     </Article.Content>
