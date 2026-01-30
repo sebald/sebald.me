@@ -3,10 +3,11 @@ import { cva, type VariantProps } from 'cva';
 // Styles
 // ---------------
 export const style = cva({
-  base: 'leading-relaxed text-foreground',
+  base: 'leading-relaxed',
   variants: {
     variant: {
-      default: '',
+      default: 'text-foreground',
+      accent: 'text-mist-100',
       muted: 'text-muted-foreground',
     },
     size: {

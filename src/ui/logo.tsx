@@ -11,7 +11,6 @@ export const LogoIcon = ({ className, size = 24, ...props }: LogoIconProps) => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 780.055 1025.027"
-      width={size}
       height={size}
       className={className}
       fill="currentColor"
@@ -29,8 +28,8 @@ export const Logo = ({ className, ...props }: LogoIconProps) => {
   return (
     <span
       className={cn(
-        'inline-flex items-center justify-center',
-        'aspect-square shrink-0',
+        'flex items-center justify-center',
+        'aspect-square w-fit shrink-0',
         'rounded-full p-4',
         'bg-mist-800 text-mist-500',
         className,

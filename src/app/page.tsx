@@ -5,19 +5,19 @@ import { Text } from '@/ui/text';
 
 export const HomeHeader = () => {
   return (
-    <header className="grid gap-8 sm:grid-cols-[auto_1fr] sm:gap-12">
-      <Logo size={24} />
+    <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
+      <Logo size={32} />
       <div className="grid gap-8">
+        <div className="grid gap-2">
+          <Text variant="accent">Sebastian Sebald</Text>
+          <Text variant="muted" size="caption">
+            Software Architect at Reservix, Freiburg
+          </Text>
+        </div>
         <Text>
-          Hi, my name is Sebastian. I am a software architect at Reservix in
-          Freiburg, Germany. I specialize in design engineering, working right
-          where code meets user experience.
-        </Text>
-        <Text>
-          My goal is to create digital products that are accessible, intuitive,
-          and delightful. Design systems are central to this approach. They are
-          the infrastructure that translates creative vision into reality at
-          scale.
+          I am a software architect at Reservix based in Freiburg, Germany. I
+          specialize in design engineering, working right where code meets user
+          experience.
         </Text>
       </div>
     </header>
