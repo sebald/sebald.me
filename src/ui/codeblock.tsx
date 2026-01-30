@@ -22,6 +22,7 @@ const style = {
     base: [
       'bg-(--shiki-dark-bg) border-[oklch(from_var(--shiki-dark-bg)_calc(l+0.1)_c_h)] rounded-xl border',
       'shadow-none mt-8 mb-0 mx-0', // override fumadocs-ui default
+      'in-[[role=tabpanel]]:mt-2', // reduced top margin inside tab panels
       '*:px-4 pb-6',
 
       // Title styles
@@ -30,7 +31,7 @@ const style = {
       '[&_svg]:size-4 [&_figcaption]:text-xs',
 
       // Code container
-      '**:[[role=region]]:pt-6',
+      '**:[[role=region]]:pt-3',
 
       // Focus styles - dim unfocused lines when .focused class is present
       '[&_code:has(.focused)_.line:not(.focused)]:opacity-30',
@@ -45,13 +46,13 @@ const style = {
   }),
   codeblockTabsList: cva({
     base: [
-      'px-0 pb-1 space-x-1',
+      'px-0 pb-0 space-x-1',
       // Add style to fumadocs tab buttons
-      '[&_button]:text-mist-400 [&_button]:text-sm',
-      '[&_button]:px-4 [&_button]:py-1.5 [&_button]:rounded-lg',
+      '[&_button]:text-muted-foreground [&_button]:text-sm',
+      '[&_button]:px-4 [&_button]:py-1 [&_button]:rounded-lg',
       '[&_button]:cursor-pointer',
-      '[&_button]:aria-selected:text-mist-100 [&_button]:aria-selected:bg-mist-800/30',
-      '[&_button]:hover:text-mist-200',
+      '[&_button]:aria-selected:text-mist-200 [&_button]:aria-selected:bg-mist-700/50',
+      '[&_button]:hover:text-mist-200 [&_button]:hover:bg-mist-800/40',
     ],
   }),
 };
