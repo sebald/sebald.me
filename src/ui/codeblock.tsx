@@ -31,7 +31,7 @@ const style = {
       '[&_svg]:size-4 [&_figcaption]:text-xs',
 
       // Code container
-      '**:[[role=region]]:pt-3',
+      '**:[[role=region]]:pt-6',
 
       // Focus styles - dim unfocused lines when .focused class is present
       '[&_code:has(.focused)_.line:not(.focused)]:opacity-30',
