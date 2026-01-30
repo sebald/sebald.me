@@ -24,18 +24,22 @@ export const LogoIcon = ({ className, size = 24, ...props }: LogoIconProps) => {
   );
 };
 
-export const Logo = ({ className, ...props }: LogoIconProps) => {
+export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
   return (
     <span
       className={cn(
         'flex items-center justify-center',
-        'aspect-square w-fit shrink-0',
-        'rounded-full p-4',
+        'size-(--logo-size) shrink-0 rounded-full',
         'bg-mist-800 text-mist-500',
         className,
       )}
+      style={
+        {
+          '--logo-size': `calc(${size}px + 2rem)`,
+        } as React.CSSProperties
+      }
     >
-      <LogoIcon {...props} />
+      <LogoIcon size={size} {...props} />
     </span>
   );
 };
