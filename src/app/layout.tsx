@@ -37,8 +37,8 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
   >
     <body className="relative isolate">
       <AnalyticsProvider>
-        <div className="px-8 md:px-4">
-          <main className="w-content mx-auto">{children}</main>
+        <div className="px-content-padding w-content mx-auto">
+          <main>{children}</main>
           <Footer />
         </div>
         <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />

@@ -35,5 +35,6 @@
 
   --color-link: var(--color-mist-50);
 
-  --spacing-content: min(75ch, 100%);
+  --spacing-content: min(calc(75ch+calc(theme(spacing.6) * 2)), 100%);
+  --spacing-content-padding: theme(spacing.6);
 }
