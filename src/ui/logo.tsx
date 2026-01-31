@@ -27,7 +27,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
       className={cn(
         'grid place-items-center',
         'size-(--logo-size) shrink-0 rounded-full',
-        'text-mist-300/70 overflow-hidden',
+        'text-mist-200/60 overflow-hidden',
         className,
       )}
       style={
@@ -37,9 +37,9 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
         } as CSSProperties
       }
     >
-      {/* Background with noise texture and gradient */}
+      {/* Background */}
       <svg
-        className="[grid-area:1/1] size-full"
+        className="size-full [grid-area:1/1]"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
@@ -47,7 +47,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
           <filter id="noise-filter">
             <feTurbulence
               type="fractalNoise"
-              baseFrequency="0.8"
+              baseFrequency="0.3"
               numOctaves="4"
             />
             <feColorMatrix type="saturate" values="0" />
@@ -79,7 +79,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
         />
       </svg>
 
-      {/* Logo icon on top */}
+      {/* Margin for optical alignment */}
       <LogoIcon size={size} className="mt-1" {...props} />
     </span>
   );
