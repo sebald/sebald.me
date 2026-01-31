@@ -25,9 +25,9 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
   return (
     <span
       className={cn(
-        'flex items-center justify-center',
+        'relative grid items-center justify-center',
         'size-(--logo-size) shrink-0 rounded-full',
-        'bg-mist-800 text-mist-400',
+        'text-mist-300/70 overflow-hidden',
         className,
       )}
       style={
@@ -37,8 +37,50 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
         } as CSSProperties
       }
     >
-      {/* Margin top for optical alignment */}
-      <LogoIcon size={size} className="mt-1" {...props} />
+      {/* Background with noise texture and gradient */}
+      <svg
+        className="absolute inset-0 size-full"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        <defs>
+          <filter id="noise-filter">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.8"
+              numOctaves="4"
+            />
+            <feColorMatrix type="saturate" values="0" />
+          </filter>
+          <linearGradient id="bg-gradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop
+              offset="0%"
+              style={{
+                stopColor: 'oklch(from var(--color-mist-900) l c h / 0.9',
+              }}
+            />
+            <stop
+              offset="100%"
+              style={{
+                stopColor: 'oklch(from var(--color-mist-700) l c h / 0.7',
+              }}
+            />
+          </linearGradient>
+        </defs>
+        <circle cx="50%" cy="50%" r="50%" fill="url(#bg-gradient)" />
+        <circle
+          cx="50%"
+          cy="50%"
+          r="50%"
+          fill="white"
+          filter="url(#noise-filter)"
+          style={{ mixBlendMode: 'overlay' }}
+          opacity="0.5"
+        />
+      </svg>
+
+      {/* Logo icon on top */}
+      <LogoIcon size={size} className="relative z-10 mt-1" {...props} />
     </span>
   );
 };
