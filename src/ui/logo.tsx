@@ -1,4 +1,4 @@
-import type { SVGProps } from 'react';
+import type { CSSProperties, SVGProps } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
@@ -35,8 +35,9 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
       )}
       style={
         {
-          '--logo-size': `calc(${size}px + 2rem)`,
-        } as React.CSSProperties
+          '--logo-padding': `calc(4 * var(--spacing))`,
+          '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
+        } as CSSProperties
       }
     >
       <LogoIcon size={size} {...props} />
