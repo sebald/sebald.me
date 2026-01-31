@@ -34,7 +34,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
       className={cn(
         'grid place-items-center',
         'size-(--logo-size) shrink-0 rounded-full',
-        'text-mist-50/70 overflow-hidden',
+        'text-mist-400 overflow-hidden',
         className,
       )}
       style={
@@ -87,6 +87,27 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
       </svg>
 
       {/* Margin for optical alignment */}
+      <LogoIcon size={size} className="mt-1" {...props} />
+    </span>
+  );
+};
+
+export const LogoAlt = ({ className, size = 24, ...props }: LogoIconProps) => {
+  return (
+    <span
+      className={cn(
+        'grid place-items-center',
+        'size-(--logo-size) shrink-0 rounded-full',
+        'text-mist-400 bg-mist-700 overflow-hidden',
+        className,
+      )}
+      style={
+        {
+          '--logo-padding': `calc(3 * var(--spacing))`,
+          '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
+        } as CSSProperties
+      }
+    >
       <LogoIcon size={size} className="mt-1" {...props} />
     </span>
   );
