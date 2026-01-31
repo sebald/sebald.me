@@ -25,7 +25,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
   return (
     <span
       className={cn(
-        'relative grid items-center justify-center',
+        'grid place-items-center',
         'size-(--logo-size) shrink-0 rounded-full',
         'text-mist-300/70 overflow-hidden',
         className,
@@ -39,7 +39,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
     >
       {/* Background with noise texture and gradient */}
       <svg
-        className="absolute inset-0 size-full"
+        className="[grid-area:1/1] size-full"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
@@ -80,7 +80,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
       </svg>
 
       {/* Logo icon on top */}
-      <LogoIcon size={size} className="relative z-10 mt-1" {...props} />
+      <LogoIcon size={size} className="mt-1" {...props} />
     </span>
   );
 };

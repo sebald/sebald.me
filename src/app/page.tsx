@@ -6,7 +6,7 @@ import { Text } from '@/ui/text';
 export const HomeHeader = () => {
   return (
     <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
-      <Logo size={60} />
+      <Logo size={52} />
       <div className="grid gap-8">
         <div className="grid gap-2">
           <Text variant="accent">Sebastian Sebald</Text>
