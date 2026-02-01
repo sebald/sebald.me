@@ -21,32 +21,11 @@ export const LogoIcon = ({ className, size = 24, ...props }: LogoIconProps) => {
   );
 };
 
-export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
-  return (
-    <span
-      className={cn(
-        'grid place-items-center',
-        'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
-        'text-mist-400 bg-mist-700 overflow-hidden',
-        className,
-      )}
-      style={
-        {
-          '--logo-padding': `calc(4 * var(--spacing))`,
-          '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
-        } as CSSProperties
-      }
-    >
-      <LogoIcon size={size} className="mt-0.5 [grid-area:1/1]" {...props} />
-    </span>
-  );
-};
-
-interface GlitchInvaderProps {
+interface LogoProps {
   size?: number;
 }
 
-export const GlitchInvader = ({ size = 32 }: GlitchInvaderProps) => {
+export const Logo = ({ size = 32 }: LogoProps) => {
   return (
     <span
       className={cn(
@@ -64,7 +43,7 @@ export const GlitchInvader = ({ size = 32 }: GlitchInvaderProps) => {
       <div className="relative">
         <LogoIcon
           size={size}
-          className="animate-glitch-flash relative z-10 text-mist-400"
+          className="animate-glitch-flash text-mist-400 relative z-10"
         />
 
         {/* Glitch layers */}
