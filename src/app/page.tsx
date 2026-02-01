@@ -33,7 +33,7 @@ const HomePage = () => {
     <div className="grid gap-16 pt-32">
       <HomeHeader />
       <GlitchLogo height={50} />
-      <GlitchInvader />
+      <GlitchInvader size={50} />
       <NotesList notes={notes} />
     </div>
   );
