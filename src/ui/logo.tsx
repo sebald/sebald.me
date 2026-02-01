@@ -25,39 +25,36 @@ interface LogoProps {
   size?: number;
 }
 
-export const Logo = ({ size = 32 }: LogoProps) => {
-  return (
-    <span
-      className={cn(
-        'grid place-items-center',
-        'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
-        'bg-mist-700 overflow-hidden',
-      )}
-      style={
-        {
-          '--logo-padding': `calc(4 * var(--spacing))`,
-          '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
-        } as CSSProperties
-      }
-    >
-      <div className="relative">
-        <LogoIcon
-          size={size}
-          className="animate-glitch-flash text-mist-400 relative z-10"
-        />
+export const Logo = ({ size = 32 }: LogoProps) => (
+  <span
+    className={cn(
+      'grid place-items-center',
+      'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
+      'bg-mist-700 overflow-hidden',
+    )}
+    style={
+      {
+        '--logo-padding': `calc(4 * var(--spacing))`,
+        '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
+      } as CSSProperties
+    }
+  >
+    {/* Glitch layers */}
+    <LogoIcon
+      size={size}
+      className="animate-glitch-shift-slow text-rose-500 opacity-60 mix-blend-screen [grid-area:1/1]"
+      style={{ clipPath: 'inset(10% 0 80% 0)' }}
+    />
+    <LogoIcon
+      size={size}
+      className="animate-glitch-shift-fast text-lime-400 opacity-60 mix-blend-screen [grid-area:1/1]"
+      style={{ clipPath: 'inset(80% 0 5% 0)' }}
+    />
 
-        {/* Glitch layers */}
-        <LogoIcon
-          size={size}
-          className="animate-glitch-shift-slow absolute top-0 left-0 text-rose-500 opacity-80 mix-blend-screen"
-          style={{ clipPath: 'inset(10% 0 80% 0)' }}
-        />
-        <LogoIcon
-          size={size}
-          className="animate-glitch-shift-fast absolute top-0 left-0 text-lime-400 opacity-80 mix-blend-screen"
-          style={{ clipPath: 'inset(80% 0 5% 0)' }}
-        />
-      </div>
-    </span>
-  );
-};
+    {/* Static icon */}
+    <LogoIcon
+      size={size}
+      className="animate-glitch-flash text-mist-400 [grid-area:1/1]"
+    />
+  </span>
+);
