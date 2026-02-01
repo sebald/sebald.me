@@ -37,6 +37,12 @@ export const Logo = ({ size = 32 }: LogoProps) => (
       'logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
     })}
   >
+    {/* Static icon */}
+    <LogoIcon
+      size={size}
+      className="group-hover:animate-glitch-flash text-mist-400 mt-0.5 [grid-area:1/1]"
+    />
+
     {/* Glitch layers */}
     <LogoIcon
       size={size}
@@ -47,12 +53,6 @@ export const Logo = ({ size = 32 }: LogoProps) => (
       size={size}
       className="group-hover:animate-glitch-shift-fast mt-0.5 hidden text-lime-400 opacity-50 mix-blend-screen [grid-area:1/1] group-hover:block"
       style={{ clipPath: 'inset(80% 0 5% 0)' }}
-    />
-
-    {/* Static icon */}
-    <LogoIcon
-      size={size}
-      className="group-hover:animate-glitch-flash text-mist-400 mt-0.5 [grid-area:1/1]"
     />
   </span>
 );
