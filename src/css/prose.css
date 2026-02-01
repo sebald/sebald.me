@@ -39,6 +39,7 @@
     /* Strong */
     & strong {
       color: var(--color-accent-foreground);
+      font-weight: 500;
     }
 
     /* Breakout elements */
