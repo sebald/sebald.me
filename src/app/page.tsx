@@ -1,4 +1,5 @@
 import { notesSource, sortByDate } from '@/lib/source';
+import { GlitchLogo } from '@/ui/glitch-logo';
 import { Logo } from '@/ui/logo';
 import { NotesList } from '@/ui/notes-list';
 import { Text } from '@/ui/text';
@@ -30,6 +31,7 @@ const HomePage = () => {
   return (
     <div className="grid gap-16 pt-32">
       <HomeHeader />
+      <GlitchLogo height={50} />
       <NotesList notes={notes} />
     </div>
   );
