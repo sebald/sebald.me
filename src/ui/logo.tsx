@@ -42,19 +42,19 @@ export const Logo = ({ size = 32 }: LogoProps) => (
     {/* Glitch layers */}
     <LogoIcon
       size={size}
-      className="animate-glitch-shift-slow text-rose-500 opacity-60 mix-blend-screen [grid-area:1/1]"
+      className="animate-glitch-shift-slow mt-0.5 text-rose-500 opacity-60 mix-blend-screen [grid-area:1/1]"
       style={{ clipPath: 'inset(10% 0 80% 0)' }}
     />
     <LogoIcon
       size={size}
-      className="animate-glitch-shift-fast text-lime-400 opacity-60 mix-blend-screen [grid-area:1/1]"
+      className="animate-glitch-shift-fast mt-0.5 text-lime-400 opacity-60 mix-blend-screen [grid-area:1/1]"
       style={{ clipPath: 'inset(80% 0 5% 0)' }}
     />
 
     {/* Static icon */}
     <LogoIcon
       size={size}
-      className="animate-glitch-flash text-mist-400 [grid-area:1/1]"
+      className="animate-glitch-flash text-mist-400 mt-0.5 [grid-area:1/1]"
     />
   </span>
 );
