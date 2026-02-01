@@ -28,6 +28,7 @@ interface LogoProps {
 export const Logo = ({ size = 32 }: LogoProps) => (
   <span
     className={cn(
+      'group',
       'grid place-items-center',
       'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
       'bg-mist-700 overflow-hidden',
