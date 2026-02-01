@@ -12,52 +12,20 @@ export const GlitchInvader = ({ size = 32 }: GlitchInvaderProps) => {
     <div className="relative">
       <LogoIcon
         size={size}
-        className="animate-glitch-base text-mist-400 relative z-10"
+        className="animate-glitch-flash relative z-10 text-mist-400"
       />
 
       {/* Glitch layers */}
       <LogoIcon
         size={size}
-        className="animate-glitch-1 absolute top-0 left-0 text-rose-500 opacity-80 mix-blend-screen"
+        className="animate-glitch-shift-1 absolute top-0 left-0 text-rose-500 opacity-80 mix-blend-screen"
         style={{ clipPath: 'inset(10% 0 80% 0)' }}
       />
       <LogoIcon
         size={size}
-        className="animate-glitch-2 absolute top-0 left-0 text-lime-400 opacity-80 mix-blend-screen"
+        className="animate-glitch-shift-2 absolute top-0 left-0 text-lime-400 opacity-80 mix-blend-screen"
         style={{ clipPath: 'inset(80% 0 5% 0)' }}
       />
-
-      <style>{`
-        @keyframes animate-glitch {
-          0% { clip-path: inset(20% 0 80% 0); transform: translate(-10px, 5px) skew(10deg); }
-          10% { clip-path: inset(10% 0 10% 0); transform: translate(10px, -5px) skew(-10deg); }
-          20% { clip-path: inset(80% 0 5% 0); transform: translate(-5px, 10px) skew(5deg); }
-          30% { clip-path: inset(5% 0 90% 0); transform: translate(5px, -10px) skew(-5deg); }
-          40% { clip-path: inset(40% 0 40% 0); transform: translate(-10px, 5px) skew(20deg); }
-          50% { clip-path: inset(70% 0 10% 0); transform: translate(10px, -5px) skew(-20deg); }
-          60% { clip-path: inset(10% 0 60% 0); transform: translate(-5px, 10px) skew(5deg); }
-          70% { clip-path: inset(50% 0 30% 0); transform: translate(5px, -10px) skew(-5deg); }
-          80% { clip-path: inset(30% 0 50% 0); transform: translate(-2px, 2px) skew(2deg); }
-          90% { clip-path: inset(10% 0 20% 0); transform: translate(2px, -2px) skew(-2deg); }
-          100% { clip-path: inset(20% 0 80% 0); transform: translate(0, 0) skew(0); }
-        }
-        @keyframes glitch-flash {
-          0%, 90%, 100% { opacity: 1; transform: scale(1); }
-          92% { opacity: 0.5; transform: scale(1.05); }
-          94% { opacity: 1; transform: scale(0.95); }
-          96% { opacity: 0.2; transform: scale(1.1); filter: invert(1); }
-          98% { opacity: 1; transform: scale(1); filter: invert(0); }
-        }
-        .animate-glitch-1 {
-          animation: animate-glitch 0.4s infinite linear alternate-reverse;
-        }
-        .animate-glitch-2 {
-          animation: animate-glitch 0.3s infinite linear alternate;
-        }
-        .animate-glitch-base {
-          animation: glitch-flash 2s infinite steps(1);
-        }
-      `}</style>
     </div>
   );
 };
