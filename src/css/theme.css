@@ -113,8 +113,8 @@
     }
   }
 
-  --animate-glitch-shift-1: glitch-shift 0.4s infinite linear
+  --animate-glitch-shift-slow: glitch-shift 0.4s infinite linear
     alternate-reverse;
-  --animate-glitch-shift-2: glitch-shift 0.3s infinite linear alternate;
+  --animate-glitch-shift-fast: glitch-shift 0.3s infinite linear alternate;
   --animate-glitch-flash: glitch-flash 2s infinite steps(1);
 }
