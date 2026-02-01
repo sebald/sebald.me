@@ -12,7 +12,7 @@ export const LogoIcon = ({ className, size = 24, ...props }: LogoIconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 156.8 206.1"
       height={size}
-      className={cn('[grid-area:1/1]', className)}
+      className={cn('shrink-0', className)}
       fill="currentColor"
       {...props}
     >
@@ -37,7 +37,7 @@ export const Logo = ({ className, size = 24, ...props }: LogoIconProps) => {
         } as CSSProperties
       }
     >
-      <LogoIcon size={size} className="mt-0.5" {...props} />
+      <LogoIcon size={size} className="mt-0.5 [grid-area:1/1]" {...props} />
     </span>
   );
 };
