@@ -1,6 +1,6 @@
-import type { CSSProperties, SVGProps } from 'react';
+import type { SVGProps } from 'react';
 
-import { cn } from '@/lib/styles.utils';
+import { cn, toCSSVars } from '@/lib/styles.utils';
 
 interface LogoIconProps extends SVGProps<SVGSVGElement> {
   size?: number;
@@ -32,12 +32,10 @@ export const Logo = ({ size = 32 }: LogoProps) => (
       'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
       'bg-mist-700 overflow-hidden',
     )}
-    style={
-      {
-        '--logo-padding': `calc(4 * var(--spacing))`,
-        '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
-      } as CSSProperties
-    }
+    style={toCSSVars({
+      'logo-padding': `calc(4 * var(--spacing))`,
+      'logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
+    })}
   >
     {/* Glitch layers */}
     <LogoIcon
