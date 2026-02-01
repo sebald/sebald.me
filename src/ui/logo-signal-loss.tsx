@@ -1,20 +1,18 @@
-import React from 'react';
-
 import { LogoIcon } from '@/ui/logo';
 
 // ----------------------------------------------------------------------
 // Simulates a corrupt data signal using clips and transforms.
 // ----------------------------------------------------------------------
-export const GlitchInvader: React.FC = () => {
+export const GlitchInvader = () => {
   return (
     <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-xl bg-neutral-900">
       <div className="relative p-16">
         {/* Base layer */}
-        <LogoIcon className="animate-glitch-base relative z-10 h-auto w-64 text-rose-500" />
+        <LogoIcon className="animate-glitch-base text-mist-400 relative z-10 h-auto w-64" />
 
         {/* Glitch layers (duplicates) */}
         <LogoIcon
-          className="animate-glitch-1 absolute top-16 left-16 h-auto w-64 text-blue-500 opacity-80 mix-blend-screen"
+          className="animate-glitch-1 absolute top-16 left-16 h-auto w-64 text-rose-500 opacity-80 mix-blend-screen"
           style={{ clipPath: 'inset(10% 0 80% 0)' }}
         />
         <LogoIcon
