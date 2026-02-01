@@ -48,23 +48,37 @@ interface GlitchInvaderProps {
 
 export const GlitchInvader = ({ size = 32 }: GlitchInvaderProps) => {
   return (
-    <div className="relative">
-      <LogoIcon
-        size={size}
-        className="animate-glitch-flash text-mist-400 relative z-10"
-      />
+    <span
+      className={cn(
+        'grid place-items-center',
+        'size-(--logo-size) shrink-0 rounded-full p-(--logo-padding)',
+        'bg-mist-700 overflow-hidden',
+      )}
+      style={
+        {
+          '--logo-padding': `calc(4 * var(--spacing))`,
+          '--logo-size': `calc(${size}px + var(--logo-padding) * 2)`,
+        } as CSSProperties
+      }
+    >
+      <div className="relative">
+        <LogoIcon
+          size={size}
+          className="animate-glitch-flash relative z-10 text-mist-400"
+        />
 
-      {/* Glitch layers */}
-      <LogoIcon
-        size={size}
-        className="animate-glitch-shift-slow absolute top-0 left-0 text-rose-500 opacity-80 mix-blend-screen"
-        style={{ clipPath: 'inset(10% 0 80% 0)' }}
-      />
-      <LogoIcon
-        size={size}
-        className="animate-glitch-shift-fast absolute top-0 left-0 text-lime-400 opacity-80 mix-blend-screen"
-        style={{ clipPath: 'inset(80% 0 5% 0)' }}
-      />
-    </div>
+        {/* Glitch layers */}
+        <LogoIcon
+          size={size}
+          className="animate-glitch-shift-slow absolute top-0 left-0 text-rose-500 opacity-80 mix-blend-screen"
+          style={{ clipPath: 'inset(10% 0 80% 0)' }}
+        />
+        <LogoIcon
+          size={size}
+          className="animate-glitch-shift-fast absolute top-0 left-0 text-lime-400 opacity-80 mix-blend-screen"
+          style={{ clipPath: 'inset(80% 0 5% 0)' }}
+        />
+      </div>
+    </span>
   );
 };
