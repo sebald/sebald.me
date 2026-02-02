@@ -86,35 +86,7 @@
     }
   }
 
-  @keyframes glitch-flash {
-    0%,
-    90%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    92% {
-      opacity: 0.5;
-      transform: scale(1.05);
-    }
-    94% {
-      opacity: 1;
-      transform: scale(0.95);
-    }
-    96% {
-      opacity: 0.2;
-      transform: scale(1.1);
-      filter: invert(1);
-    }
-    98% {
-      opacity: 1;
-      transform: scale(1);
-      filter: invert(0);
-    }
-  }
-
   --animate-glitch-shift-slow: glitch-shift 0.4s infinite linear
     alternate-reverse;
   --animate-glitch-shift-fast: glitch-shift 0.3s infinite linear alternate;
-  --animate-glitch-flash: glitch-flash 2s infinite steps(1);
 }
