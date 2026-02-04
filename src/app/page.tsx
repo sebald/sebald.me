@@ -1,4 +1,4 @@
-import { notesSource, sortByDate } from '@/lib/source';
+import { excerpt, notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Logo } from '@/ui/logo';
@@ -49,24 +49,8 @@ const NotesList = () => {
                   })}
                 </time>
               )}
-              {note.data.topics && note.data.topics.length > 0 && (
-                <span className="flex gap-2">
-                  {note.data.topics.map(topic => (
-                    <span
-                      key={topic}
-                      className="bg-mist-800/50 rounded-md px-2 py-0.5 text-xs"
-                    >
-                      {topic}
-                    </span>
-                  ))}
-                </span>
-              )}
             </div>
-            {note.data.description && (
-              <Text variant="muted" as="span">
-                {note.data.description}
-              </Text>
-            )}
+            <Text variant="muted">{excerpt(note)}</Text>
           </li>
         ))}
       </ul>
