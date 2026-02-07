@@ -1,0 +1,197 @@
+---
+title: Failing Forward at Design Systems
+description: Building a design system at a 15-year-old product company taught me that the real challenges are never technical. A story about legacy modernization, adoption traps, and why patterns matter more than components.
+topics: [design-systems]
+date: 2026-02-07
+draft: false
+---
+
+In 1931, the Polish philosopher Alfred Korzybski coined a phrase that has stuck with me ever since I first encountered it: "The map is not the territory." The idea is simple. A map is a useful representation of reality, but it is not reality itself. It is clean, organized, and theoretical. The territory is the mud, the unmarked trails, and the cliff that the cartographer never bothered to draw.
+
+Design systems have the same problem.
+
+Your Figma library, your Storybook, your beautifully written documentation — that is the map. It represents how the UI should look and behave in a perfect, vacuum-sealed environment. But the territory? The territory is messy CSS overrides, legacy code that predates half your team, browser-specific rendering quirks, network latency, and the developer who just discovered that your carefully designed spacing tokens don't survive a three-year-old grid layout.
+
+The most common failure mode in building design systems is spending too much time polishing the map while ignoring the territory. The map is your governance model, your contribution guidelines, and your adoption metrics. The territory is the political capital you don't have, the tight deadlines product teams are drowning in, and the actual habits of the people who are supposed to use your system.
+
+I learned this the hard way. Over roughly four years, my team and I built a design system at Reservix — a company with a 15-year-old product, deeply entrenched legacy code, and a workforce that had every reason to be skeptical of our shiny new toolbox. What follows is the story of how we failed, adapted, and failed again — and how each failure pushed us closer to something that actually worked.
+
+## The territory we inherited
+
+To understand the challenge, you need to understand the context.
+
+Reservix builds ticketing software. The product had been growing for over 15 years. Feature by feature, module by module, the system had evolved into a sprawling application that powered real businesses. It worked. The features were solid. The engineering behind it was genuinely impressive.
+
+But the interface told a different story.
+
+The UI felt dated. Interactions were clunky. Visual consistency was nonexistent. The software didn't reflect the quality of what was actually happening under the hood. If you judged the product by its interface alone — and users always do — you would severely underestimate what it could do.
+
+This wasn't a failure of effort. Teams were working hard. But they were spending most of their energy extinguishing fires caused by decisions made years earlier. Technical debt had compounded to the point where even small UI changes felt risky. "We can't build that" became a reflex — not because the developers lacked skill, but because the tooling and the codebase had made ambition expensive.
+
+Meanwhile, designers were creating polished prototypes full of elegant interactions. The gap between what was designed and what could actually be built was enormous. Designers dreamed big. Developers couldn't deliver. And the product stagnated somewhere in between.
+
+The plan was to split the monolithic software into multiple standalone products. The hope was that this would bring both technical and organizational benefits — smaller codebases, independent teams, modern stacks. A design system seemed like the natural foundation for this new world. Shared components, shared language, shared quality.
+
+Simple, right?
+
+## Building the map
+
+We started the way most design system teams start. We bootstrapped a component library. Buttons, input fields, select menus, typography — the usual suspects. The visual design was based on an earlier exploration by one of our designers, so we had a strong aesthetic foundation from day one.
+
+Then we found the perfect opportunity. A new project was spinning up that would essentially rebuild one of the products from scratch. Greenfield. Modern tech stack. No legacy baggage. It was the ideal proving ground.
+
+We went all in. React, a proper component architecture, dedicated tooling. The team building this new product became our first customer, and we worked alongside them every step of the way.
+
+And it worked.
+
+There were growing pains, obviously. APIs that didn't quite fit. Components that needed more flexibility than we had anticipated. Edge cases that forced us to rethink our abstractions. But that was expected. That was the process. We shipped the product, the design system held up, and we had a tangible success story to point to.
+
+We thought the hard part was over.
+
+We were wrong.
+
+## The sound of crickets
+
+Here is what they don't tell you in the "How to Build a Design System" blog posts: your first success means almost nothing if nobody else cares.
+
+We had a working component library. We had a shipped product that proved its value. We had documentation, examples, and a team ready to support anyone who wanted to adopt. We walked into the next all-hands meeting expecting curiosity, maybe even excitement.
+
+We got polite indifference.
+
+The rest of the company was still deeply invested in the legacy system. And why wouldn't they be? That's where the revenue came from. That's where the users were. That's where every deadline, every stakeholder request, and every performance review was anchored. Our shiny new component library solved a problem that most teams didn't think they had — or at least, didn't think they could afford to solve right now.
+
+The fear was real. These were people working on software that thousands of paying customers depended on every day. Introducing a new UI framework into that environment wasn't just a technical decision — it was an existential risk. What if something breaks? What if the migration takes longer than expected? What if the business can't wait?
+
+"We've always done it this way" isn't laziness. It's a survival strategy.
+
+I kept pushing the technical benefits. Better components. Better developer experience. Better UI. I genuinely believed that if I just explained it well enough, they would see the light.
+
+They didn't.
+
+> "Hard legacy modernization problems are people problems, not technical ones."
+> — Marianne Bellotti, _Kill It with Fire_
+
+When I read that line in Bellotti's book, it hit me like a freight train. I had been treating adoption as a technical challenge. Build it better, document it clearer, make the APIs nicer. But the real blockers were not technical. They were organizational. They were emotional. They were human.
+
+Modernization requires collaboration, decision-making alignment, and expectation management across organizational silos. You cannot solve these problems with a better `Button` component.
+
+For the teams working on the legacy system, the perceived cost of adoption was enormous. Learn a new stack. Rewrite existing UI. Risk breaking things. All while still delivering features on deadline. And the business seemed more invested in modernizing the legacy system incrementally than in building entirely new standalone products.
+
+We needed to pivot. And we needed to do it fast, because a design system without users is just a hobby project.
+
+## Meeting them where they were
+
+The turning point came when we stopped asking "How do we get teams to adopt our system?" and started asking "What do our colleagues actually need?"
+
+Different question. Completely different answers.
+
+The first thing we did was align ourselves with where the people and the business actually were. Not where we wished they were. Not where the architecture diagram said they should be. Where they actually were — knee-deep in legacy code, under pressure to deliver, and deeply skeptical of anything that added risk to their workflow.
+
+So we made the design system work inside the legacy system.
+
+This was not glamorous. We created a setup that let developers use our components within the existing codebase, styled to match the legacy UI. Components built with the design system were essentially invisible — visually indistinguishable from the surrounding interface. You couldn't tell where the old code ended and the new code began. That was the point.
+
+There was no big bang migration. No "rewrite everything" mandate. Just a quiet, incremental infiltration. A developer could replace a single form field with our component, and the user would never notice. But under the hood, the code was cleaner, more accessible, and easier to maintain. Every small replacement was a step forward that carried almost zero risk.
+
+Then we invested in onboarding. Not the "here's a link to the docs" kind. Real onboarding. We wrote internal articles explaining not just _how_ to use the system, but _why_ it existed. We prepared educational material. We gave training sessions. We wrote step-by-step guides for common migration patterns. We created dedicated support channels.
+
+And most importantly — we sat next to people and helped them. Pair programming, code reviews, answering questions at any hour. If a developer hit a wall, we were there. Supporting our colleagues was our number one priority. We basically became an internal sales and customer success team.
+
+We did small things that mattered more than we expected. Hot module reloading, for example. In the legacy system, developers had to manually refresh the browser every time they made a UI change. We gave them a dev environment where the UI updated instantly. It sounds trivial. It wasn't. It was the kind of quality-of-life improvement that makes people think "maybe these design system folks actually understand my day-to-day."
+
+Everything we did was designed to make our colleagues' lives easier, more convenient, and more fun. Not to make our adoption numbers go up. Not to validate our architecture decisions. To make their work better.
+
+Remember the map and territory metaphor? Think about it like this. You can pave beautiful sidewalks through a park and design the perfect pedestrian flow. But if people keep cutting across the grass because the diagonal path is shorter, you don't put up fences. You pave the desire paths. You go where the people already walk.
+
+That is what we did. We stopped building the perfect sidewalk and started paving the paths people were already taking.
+
+## The momentum shift
+
+The investment paid off slowly at first, then all at once.
+
+"We can't build that" became "We can build that... most likely." It was a subtle shift in language, but it meant everything. The reflexive "no" had been replaced by a cautious "yes." Teams were no longer afraid to try.
+
+Adoption grew through word of mouth. We never mandated it. We never had a top-down "everyone must use the design system" directive. Instead, one team would use it, see the benefits, and mention it to the team next to them. A developer would show something at the bi-weekly review and someone would ask "How did you build that so fast?"
+
+This showed up in the regular internal product demos. More and more features — and more impressively, more and more refactored legacy screens — were being built with the design system. Teams were voluntarily migrating their UI. Not because they were told to, but because they wanted to.
+
+The numbers looked great. Download trends were up. Adoption across teams was climbing. Quarterly demos showed that nearly all new features were using the system. We were on a trajectory toward near-universal adoption.
+
+So, high five, right? We did it?
+
+Actually, not really.
+
+> "Adoption is a lagging indicator of the goal, not the goal itself. Design system adoption doesn't indicate success."
+> — Dan Mall
+
+When I first read that quote, I didn't fully understand it. Our adoption was high. Our users were happy. What more could you want?
+
+Then I looked more carefully at what our users were actually building.
+
+## The bricks without blueprints
+
+Despite high adoption, teams were still building inconsistent user interfaces.
+
+Not because the components were bad. The components were fine. A `Button` looked like a `Button`. An `Input` behaved like an `Input`. The individual pieces were solid.
+
+The problem was how they were assembled.
+
+Different teams were building the same types of pages — search results, detail views, settings panels, data tables — but each one looked and behaved differently. The spacing was off. The layout patterns diverged. The information hierarchy varied wildly. Not because anyone was being sloppy, but because we had given them bricks without blueprints.
+
+Components are building blocks. They are supposed to be flexible. A button shouldn't dictate the layout of the page it lives on. An input field shouldn't have opinions about the form architecture around it. We had deliberately kept our components unopinionated, because we believed flexibility was a feature.
+
+And it was. But flexibility without guidance is chaos.
+
+We had given teams a box of LEGO bricks and said "build a house." And they did. But every house looked different, because nobody had agreed on what a house should look like. Should the door go on the left or the right? How many windows? Where does the chimney go?
+
+What we were missing was patterns.
+
+Patterns are not components. They are the layer above components. A pattern is the answer to "how do you build a search results page?" It is not a single component — it is the composition of multiple components with specific layout rules, interaction behaviors, and information hierarchy guidelines. If components are the bricks, patterns are the architecture.
+
+Or to put it differently: components are the instruments. Patterns are the sheet music.
+
+We had built a world-class orchestra with no conductor and no score. Every musician was excellent individually, but the symphony was dissonant.
+
+So we pivoted again. We shifted our documentation from "this is what the component can do" to "this is why this component exists and this is how it should be used." We invested heavily in pattern documentation. How to build a form. How to structure a search interface. How to lay out a settings page. How to combine navigation, content, and actions into a coherent screen.
+
+This wasn't about restricting creativity. It was about encoding the decisions that had already been made — by designers, by user research, by years of learning what works — so that teams didn't have to reinvent them from scratch every time.
+
+## What a design system actually is
+
+If you asked me four years ago what a design system is, I would have said "a component library with documentation and design tokens." That answer is not wrong. It is just incomplete. It is like saying a restaurant is "a kitchen with recipes."
+
+A design system is a service. It is the components, yes. But it is also the patterns, the documentation, the training, the support channels, the migration guides, the developer tooling, the internal marketing, the relationship building, and the feedback loops. It is the entire ecosystem of tools, processes, and human effort that helps an organization build better products.
+
+And it looks different at every company. Because every company has different problems, different legacy systems, different team structures, different cultures, and different business pressures. There is no universal design system playbook. There are principles, but the implementation is always local.
+
+The question is not "What components should our design system have?" The question is "What do our teams need to deliver better experiences faster and more consistently?" Sometimes the answer is a new component. Sometimes the answer is a pattern. Sometimes the answer is a training session. Sometimes the answer is sitting next to someone for an afternoon and helping them refactor a form.
+
+## Failing forward
+
+Every obstacle we encountered — the initial indifference, the legacy constraints, the adoption trap, the consistency gap — felt like a failure at the time. And in a narrow sense, they were. Our first approach didn't work. Our metrics were misleading. Our assumptions were wrong.
+
+But each failure forced a pivot that made the system more valuable.
+
+The indifference taught us that adoption is a people problem, not a technology problem. The legacy constraints forced us to build a system that worked in the real world, not just in greenfield projects. The adoption trap taught us that usage is not the same as success. The consistency gap taught us that components without patterns are instruments without sheet music.
+
+None of these lessons were available to us upfront. We could not have planned for them. We had to fail into them. The obstacle was, quite literally, the way.
+
+If I could distill four years of building a design system into a handful of principles, it would be these:
+
+**Understand your users.** Not "users" in the abstract sense. Your actual colleagues. Their daily frustrations, their fears, their tools, their deadlines. A design system is only as good as its understanding of the people it serves.
+
+**Align with the business.** Follow the value. If the business is invested in legacy modernization, your design system should enable legacy modernization. If the business is building new products, enable that. Don't fight the current. Swim with it.
+
+**Meet people where they are.** Not where you want them to be. Not where the architecture says they should be. Where they actually are. Make adoption effortless, invisible, and immediately rewarding.
+
+**Invest in patterns, not just components.** Components are the vocabulary. Patterns are the grammar. You need both to write a coherent sentence.
+
+**Communicate constantly.** A design system that nobody knows about is a design system that nobody uses. Write articles. Give demos. Show up at team meetings. Be visible. Be helpful. Be persistent.
+
+**Embrace the obstacles.** Every failure is information. Every setback reveals a gap in your understanding. The teams that build great design systems are not the ones that get everything right the first time. They are the ones that adapt fastest when things go wrong.
+
+Building a design system is not a linear process. It is not "build components, write docs, achieve adoption, declare victory." It is a continuous loop of building, observing, failing, learning, and rebuilding. The system is never done, because the territory is always shifting.
+
+The map is not the territory. But if you pay close attention to the territory — to the mud, the desire paths, the unmarked cliffs — you can build a map that actually helps people navigate it.
+
+Let's fail forward at design systems.
