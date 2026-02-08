@@ -1,3 +1,11 @@
+---
+title: outline
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+date: 2026-02-07
+draft: true
+---
+
 # Failing forward at Design Systems
 
 # Key talking points and  overall theme:
@@ -33,14 +41,13 @@ the solution:
 
 Even though we showed how our tools can help build a product, nobody was interested in what we had to offer. while we solve problem that ONE team can now implement the vision of a designer. the majority of our colleagues were still stuck with the legacy software and stack.
 
-They were not interested what we had to offer.  even though the whole software department has committed themself to move away from the legacy monolith into stand alone products, the reality was different. They were still invested in the legacy system. They were stuck in their way, how they always did it. One reason for that was the feature of failure. As with all products that have real use, there is a lot of pressure on the product teams. especially to get stuff done.
+They were not interested what we had to offer. even though the whole software department has committed themself to move away from the legacy monolith into stand alone products, the reality was different. They were still invested in the legacy system. They were stuck in their way, how they always did it. One reason for that was the feature of failure. As with all products that have real use, there is a lot of pressure on the product teams. especially to get stuff done.
 
 and even though we showed that we can help get stuff done faster and with a better more modern result. they were not interested.
 
 Turns out
 
 > "Hard legacy modernization problems are people problems, not technical ones." — Marianne Bellotti, Kill it with fire
-> 
 
 We needed to pivot. Modernization requires collaboration, decision-making alignment, and expectation management across organizational silos.
 
@@ -63,11 +70,10 @@ so, high five! right? we did it?
 
 actually, not really. we didn't really live up our original promise. while the adoption grew and was great, the teams still build inconsistent user interfaces. and building wasn’t as efficient as we hoped, because a lot of times the teams and the desigerns had to the bricks, but need to build the without a blueprint (pattern) and so they had to come up with UIs from the ground up.
 
-> ***"Adoption is a lagging indicator of the goal, not the goal itself. [...] Design system adoption doesn't indicate success."*
- ****- Dan Mall, In Search of a Better Design System Metric than Adoption
-> 
+> **_"Adoption is a lagging indicator of the goal, not the goal itself. [...] Design system adoption doesn't indicate success."_
+>  \*\***- Dan Mall, In Search of a Better Design System Metric than Adoption
 
-while Components work best when flexible, not overly opinionated. it turns out UI Patterns are the operating system of  your product and design systems. they are a very crucial part.
+while Components work best when flexible, not overly opinionated. it turns out UI Patterns are the operating system of your product and design systems. they are a very crucial part.
 
 Actually, while we usually hear the goal of a design system is to make product development more efficient, consistent, and scalable. the true goal should be to empower teams to deliver better experiences faster and more consistently.
 

@@ -1,3 +1,11 @@
+---
+title: Failing Forward at Design Systems version 4
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+date: 2026-02-07
+draft: true
+---
+
 # Failing Forward: Why Your Map Is Not the Territory
 
 We often convince ourselves that a design system is a collection of components. We think it is a tidy library of buttons and inputs and colors that sit nicely in a repository. It feels good to organize these things. It feels like control. But that feeling is an illusion.

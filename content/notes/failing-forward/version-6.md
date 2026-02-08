@@ -1,3 +1,11 @@
+---
+title: Failing Forward at Design Systems version 6
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+date: 2026-02-07
+draft: true
+---
+
 # **Failing Forward at Design Systems: Why the Map is Not the Territory**
 
 If you have ever tried to build a design system, you probably started with a feeling of immense optimism. You likely pictured a pristine library of components. You imagined a world where designers and developers held hands, skipping through fields of perfectly aligned pixels and reusable code. You visualized the "Map."
@@ -12,7 +20,7 @@ I want to take you through a journey of building a design system. It is a story 
 
 Let’s start with a concept that framed our entire experience. "The map is not the territory."
 
-In the context of a design system, the **Map** is your documentation. It is your UI kit in Figma. It is your component library running in a vacuum-sealed Storybook environment. It is clean. It is organized. It represents how the UI *should* look and behave in a perfect theoretical world.
+In the context of a design system, the **Map** is your documentation. It is your UI kit in Figma. It is your component library running in a vacuum-sealed Storybook environment. It is clean. It is organized. It represents how the UI _should_ look and behave in a perfect theoretical world.
 
 The **Territory** is reality.
 
@@ -40,13 +48,13 @@ It was a successful first attempt. We had some growing pains, but that was expec
 
 Even though we showed how our tools could help build a product, nobody was interested in what we had to offer.
 
-While we solved the problem for that *one* team, the majority of our colleagues were still stuck with the legacy software and the legacy stack. They were not interested. Even though the whole software department had committed themselves to moving away from the monolith, the reality was that they were still heavily invested in it.
+While we solved the problem for that _one_ team, the majority of our colleagues were still stuck with the legacy software and the legacy stack. They were not interested. Even though the whole software department had committed themselves to moving away from the monolith, the reality was that they were still heavily invested in it.
 
 They were stuck in their ways. Not because they were stubborn, but because they were afraid.
 
 As with all products that have real use, there is a lot of pressure on product teams to get stuff done. Even though we showed that we could help them move faster and achieve a more modern result, they viewed the cost of adoption as impossibly high.
 
-We realized something profound, echoed by Marianne Bellotti in her book *Kill It with Fire*:
+We realized something profound, echoed by Marianne Bellotti in her book _Kill It with Fire_:
 
 "Hard legacy modernization problems are people problems, not technical ones."
 
@@ -56,7 +64,7 @@ We had built a technical solution for a people problem. We needed to pivot.
 
 We stopped trying to force them to use our "perfect" new system and instead aligned ourselves with where the people and the business actually were. We looked for the value.
 
-We provided a modern and simple setup to use our design system *inside* the legacy system. We made sure it provided the same style as the legacy system so that anything built with the new components was visually indistinguishable from the rest.
+We provided a modern and simple setup to use our design system _inside_ the legacy system. We made sure it provided the same style as the legacy system so that anything built with the new components was visually indistinguishable from the rest.
 
 We shifted our focus entirely to onboarding. We wrote a ton of internal articles. We prepared educational material. We gave training sessions. We wrote guides.
 
@@ -96,7 +104,7 @@ We had provided components. We should have provided patterns.
 
 So we pivoted again. We started building the "next" generation of our design system.
 
-This time, we didn't touch the design or the components themselves. Instead, we enhanced our documentation. We moved from "this is *what* the component can do" to "this is *why* the component exists and this is *how* it should be used."
+This time, we didn't touch the design or the components themselves. Instead, we enhanced our documentation. We moved from "this is _what_ the component can do" to "this is _why_ the component exists and this is _how_ it should be used."
 
 We focused heavily on patterns. We documented how to best combine components to create a great user experience. We shifted from being librarians of assets to being architects of experience (in the software sense).
 
@@ -110,8 +118,8 @@ The obstacles were necessary for the growth of the system.
 
 If you are building a design system right now, remember these three things:
 
-1. **Understand your users.** Your users are your colleagues. Understand their fears, their deadlines, and their legacy constraints. Solve *their* problems, not just your own desire for clean code.  
-2. **Align with business value.** If the business is invested in the legacy system, find a way to bring value there. Don't fight the current; steer the boat.  
+1. **Understand your users.** Your users are your colleagues. Understand their fears, their deadlines, and their legacy constraints. Solve _their_ problems, not just your own desire for clean code.
+2. **Align with business value.** If the business is invested in the legacy system, find a way to bring value there. Don't fight the current; steer the boat.
 3. **Don't trust the map.** The map is just a drawing. The territory is where the work happens.
 
 Failing forward isn't just a catchy phrase. It is the only way to build a system that actually survives in the wild.

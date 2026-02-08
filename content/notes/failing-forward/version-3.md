@@ -1,3 +1,11 @@
+---
+title: Failing Forward at Design Systems version 3
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+date: 2026-02-07
+draft: true
+---
+
 # The Map is Not the Territory: Lessons from Building a Design System at Reservix
 
 We often fall into the trap of thinking a design system is a collection of artifacts. We look at the Figma files, the documentation site, and the clean code in our repository, and we think we have built a product. We have not. We have built a map.

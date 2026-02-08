@@ -20,10 +20,10 @@
 
     /* Headlines */
     & > * + h2 {
-      margin-top: theme(spacing.20);
+      margin-top: theme(spacing.16);
     }
     & > * + h3 {
-      margin-top: theme(spacing.20);
+      margin-top: theme(spacing.16);
     }
 
     & h2 + *,

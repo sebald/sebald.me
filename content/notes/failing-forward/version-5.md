@@ -1,3 +1,11 @@
+---
+title: Failing Forward at Design Systems version 5
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+date: 2026-02-07
+draft: true
+---
+
 # **Failing Forward at Design Systems: The Map is Not the Territory**
 
 This is a story about failure. Specifically, it is the story of how we failed to build a design system at Reservix.
@@ -34,20 +42,20 @@ We walked up to them with a shiny new toolset and said "Look how fast you can bu
 
 ## **The Pivot: It Is a People Problem**
 
-We realized that hard legacy modernization problems are people problems, not technical ones. This is a sentiment echoed by Marianne Bellotti in her book *Kill It With Fire*, and we were living it.
+We realized that hard legacy modernization problems are people problems, not technical ones. This is a sentiment echoed by Marianne Bellotti in her book _Kill It With Fire_, and we were living it.
 
 For the teams working on the legacy system, the cost of adoption seemed impossibly high. The business seemed more invested in keeping the legacy system alive than in creating the new standalone products we had built our system for. We had built a system for a future that hadn't arrived yet, while ignoring the present that everyone was living in.
 
 So we pivoted. We decided to align ourselves with where the people and the business actually were.
 
-We stopped trying to force them to come to our modern stack and instead brought the design system to them. We provided a modern and simple setup to use our design system *within* the legacy system. We even matched the styling of the legacy system so that components built using the new system were visually indistinguishable from the old code, although they offered a much better user experience and developer ergonomics.
+We stopped trying to force them to come to our modern stack and instead brought the design system to them. We provided a modern and simple setup to use our design system _within_ the legacy system. We even matched the styling of the legacy system so that components built using the new system were visually indistinguishable from the old code, although they offered a much better user experience and developer ergonomics.
 
 We shifted our focus entirely to onboarding and support. We basically became an internal sales and marketing team.
 
-* We wrote a ton of internal articles.  
-* We prepared educational material and gave training sessions.  
-* We wrote comprehensive guides.  
-* Most importantly, we sat with them. We were there on their side, helping them every step of the way.
+- We wrote a ton of internal articles.
+- We prepared educational material and gave training sessions.
+- We wrote comprehensive guides.
+- Most importantly, we sat with them. We were there on their side, helping them every step of the way.
 
 Everything we did was designed to make our colleagues' lives easier, more convenient, and more fun. We wanted to bring back the excitement of building user interfaces.
 
@@ -69,7 +77,7 @@ We realized that while we had given them the bricks, we hadn't given them the bl
 
 ## **The Second Pivot: Patterns over Components**
 
-We had provided unopinionated, flexible components. A button is just a button. It doesn't tell you *where* to put it or *when* to use it. Because the teams and designers had the bricks but no blueprints, they had to come up with UIs from the ground up every time. They were reinventing the wheel, just with nicer spokes.
+We had provided unopinionated, flexible components. A button is just a button. It doesn't tell you _where_ to put it or _when_ to use it. Because the teams and designers had the bricks but no blueprints, they had to come up with UIs from the ground up every time. They were reinventing the wheel, just with nicer spokes.
 
 The true goal of a design system is not just to be used. It is to empower teams to deliver better experiences faster and more consistently. If everyone uses your library but builds a different user flow for the same task, you have failed at consistency.
 
@@ -91,7 +99,7 @@ The most common failure mode in building design systems is spending too much tim
 
 When we built our first version, we were obsessed with the Map. We thought that if we made the documentation perfect and the code clean, people would use it. But the Territory—the reality of legacy deadlines and fear of failure—was impassable.
 
-The Map is how you *think* work gets done. The Territory is the path of least resistance that people *actually* take. If you force a process that ignores the reality of product deadlines and how teams actually work, the teams will simply walk across the grass and ignore your paved sidewalk.
+The Map is how you _think_ work gets done. The Territory is the path of least resistance that people _actually_ take. If you force a process that ignores the reality of product deadlines and how teams actually work, the teams will simply walk across the grass and ignore your paved sidewalk.
 
 ### **Failing Forward**
 
@@ -99,7 +107,7 @@ This brings us to the concept of "failing forward."
 
 Building a design system is not a linear path from A to B. It is an exploration of the Territory. Every time we failed—when teams ignored us, when adoption didn't lead to consistency—we weren't hitting a dead end. We were discovering the shape of the land.
 
-We learned that the obstacles *were* the way. The resistance from the legacy teams wasn't just stubbornness; it was a signal that our product didn't fit their needs. The inconsistency despite high adoption wasn't user error; it was a signal that our documentation lacked opinion.
+We learned that the obstacles _were_ the way. The resistance from the legacy teams wasn't just stubbornness; it was a signal that our product didn't fit their needs. The inconsistency despite high adoption wasn't user error; it was a signal that our documentation lacked opinion.
 
 If you are building a design system today, do not get lost in your Map. Do not confuse your Figma components with your product's reality.
 
