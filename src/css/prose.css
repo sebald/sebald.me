@@ -15,25 +15,25 @@
 
     /* Default spacing */
     & > * + * {
-      margin-top: theme(spacing.14);
+      margin-top: theme(spacing.12);
     }
 
     /* Headlines */
     & > * + h2 {
-      margin-top: theme(spacing.12);
+      margin-top: theme(spacing.20);
     }
     & > * + h3 {
-      margin-top: theme(spacing.10);
+      margin-top: theme(spacing.20);
     }
 
     & h2 + *,
     & h3 + * {
-      margin-top: theme(spacing.3);
+      margin-top: theme(spacing.6);
     }
 
     & h4 + *,
     & h5 + * {
-      margin-top: theme(spacing.2);
+      margin-top: theme(spacing.4);
     }
 
     /* Strong */
