@@ -15,7 +15,7 @@
 
     /* Default spacing */
     & > * + * {
-      margin-top: theme(spacing.8);
+      margin-top: theme(spacing.14);
     }
 
     /* Headlines */
