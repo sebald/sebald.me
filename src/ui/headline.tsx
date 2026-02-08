@@ -10,8 +10,8 @@ export const style = cva({
   ],
   variants: {
     level: {
-      '1': 'text-lg font-semibold',
-      '2': 'text-base font-semibold',
+      '1': 'text-xl font-semibold',
+      '2': 'text-lg font-semibold',
       '3': 'text-base font-semibold',
       '4': 'text-base font-medium',
       '5': 'text-base font-medium',
