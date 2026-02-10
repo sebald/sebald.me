@@ -55,22 +55,38 @@ Our colleagues knew how to use the components. They were productive. But knowing
 
 So we pivoted again. We overhauled the documentation. We shifted from describing what components can do to explaining how to combine them. We focused on patterns. Common use cases, recurring user flows, opinionated guidance about how the pieces fit together.
 
-## ???
+## The map is not the territory
 
-First we enabled teams to build modern UIs. Then we integrated into the legacy system and trained our colleagues how to use the new tools. Now we were teaching them how to combine components to build great user experiences. Each step only became visible after the previous one had run its course.
+First we enabled teams to build modern UIs. Then we brought a modern frontend environment into the legacy system and trained our colleagues to work with it. Now we were teaching them how to combine components to build great user experiences. Each step only became visible after the previous one had run its course.
 
----
+There is a concept that explains why this kept happening: the map is not the territory. The description of a thing is not the thing itself. A road map does not show you the traffic. It sounds obvious, but it is remarkably easy to spend all your energy perfecting the map while losing sight of the territory it is supposed to represent.
 
-1. Intro (done) → rug pull
-2. The territory we inherited — Reservix context, the mess, "we can't build that"
-3. Building the map — component library, greenfield win, we thought we nailed it
-4. Crickets — nobody cares, people problem not tech problem
-5. Meeting them where they were — the pivot, internal sales, paving desire paths
-6. The trap — adoption grows, numbers look great... but inconsistency remains
-7. Bricks without blueprints — components vs patterns, this is where "map is not the territory" hits
-8. What a design system actually is — the real definition, the service mindset
-9. Failing forward — the takeaways
+Your documentation, your Figma library, your component playground: that is the map. It represents how the UI should look and behave in a clean, theoretical environment. It is organized, it makes sense, it makes you feel like you've got things figured out.
 
-TODO:
+The territory is everything else. Messy CSS overrides in a codebase that has grown for over twenty years. Tight deadlines that force shortcuts. Habits your colleagues have built up over a decade of doing things a certain way. The political capital it costs to get a refactor approved.
 
-- do not mention territory and map in headlines?
+Every time we thought we had it figured out, we were looking at our map and mistaking it for the territory. We built a modern component library and assumed teams would adopt it. The map said they should. The territory said they couldn't. We integrated into the legacy system and watched the adoption numbers climb. The map said we were succeeding. The territory said the products still looked inconsistent.
+
+The map is how you think work gets done. The territory is the path people actually take.
+
+## What we were actually building
+
+Looking back, the most valuable thing we built was not the component library. It was not the documentation or the patterns either.
+
+It was trust.
+
+Every pivot forced us closer to the people using our system. First we built components and waited for teams to show up. Then we went to their codebases and integrated. Then we sat with them and trained them. Then we listened to what still wasn't working and changed our approach again.
+
+The intro to this article describes design systems as "a collection of well-organized artifacts." That is the map. The territory is that a design system is a service. It is the training session on a Tuesday afternoon. It is the message at 4pm when someone is stuck on a layout. It is the decision to match the legacy style instead of forcing something new. It is showing up, again and again.
+
+## Failing forward
+
+None of this was planned. We did not sit down at the start and sketch out three pivots. Each one happened because something broke. And each time something broke, it revealed what the system actually needed to become.
+
+If we hadn't been ignored by the legacy teams, we would never have invested so heavily in developer experience and support. If adoption hadn't produced inconsistent interfaces, we would never have discovered that patterns matter more than components.
+
+The obstacles were not in the way. They were the way.
+
+Building a design system is not a straight line from a Figma file to a component library to a dashboard full of adoption metrics. It is an ongoing conversation between what you think teams need and what they actually need. The only way to learn the difference is to get it wrong, listen, and adjust.
+
+We are still adjusting. The story doesn't have a tidy ending because the territory keeps changing. But we have stopped mistaking the map for the destination.
