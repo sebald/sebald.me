@@ -27,8 +27,8 @@ importers:
         specifier: 5.1.0
         version: 5.1.0
       focus-trap-react:
-        specifier: 11.0.5
-        version: 11.0.5(@types/react-dom@19.2.3(@types/react@19.2.13))(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+        specifier: 11.0.6
+        version: 11.0.6(@types/react-dom@19.2.3(@types/react@19.2.13))(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       fumadocs-core:
         specifier: 16.5.4
         version: 16.5.4(@mdx-js/mdx@3.1.1)(@types/estree-jsx@1.0.5)(@types/hast@3.0.4)(@types/mdast@4.0.4)(@types/react@19.2.13)(lucide-react@0.563.0(react@19.2.4))(next@16.1.1(@babel/core@7.28.5)(react-dom@19.2.4(react@19.2.4))(react@19.2.4))(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(zod@4.3.5)
@@ -2147,16 +2147,16 @@ packages:
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
-  focus-trap-react@11.0.5:
-    resolution: {integrity: sha512-HEOLlG9ji9xGv2GFBVVUqkLzDYNdI98s6qACkKOl0yxyJ9M31E4QnAMAfrSUaF7HldnbCDdbaBAsg9O/r93vHg==}
+  focus-trap-react@11.0.6:
+    resolution: {integrity: sha512-8YbWR8kDf2pQ8G9LT11p39VY4T7eWVrj00Fhp1HUSdv5uW9q6+WK8OMAdy9Ui7vGb1zNouFDzwBIqJwt82rIYQ==}
     peerDependencies:
       '@types/react': ^18.0.0 || ^19.0.0
       '@types/react-dom': ^18.0.0 || ^19.0.0
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
 
-  focus-trap@7.7.1:
-    resolution: {integrity: sha512-Pkp8m55GjxBLnhBoT6OXdMvfRr4TjMAKLvFM566zlIryq5plbhaTmLAJWTGR0EkRwLjEte1lCOG9MxF1ipJrOg==}
+  focus-trap@7.8.0:
+    resolution: {integrity: sha512-/yNdlIkpWbM0ptxno3ONTuf+2g318kh2ez3KSeZN5dZ8YC6AAmgeWz+GasYYiBJPFaYcSAPeu4GfhUaChzIJXA==}
 
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
@@ -5796,16 +5796,16 @@ snapshots:
 
   flatted@3.3.3: {}
 
-  focus-trap-react@11.0.5(@types/react-dom@19.2.3(@types/react@19.2.13))(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
+  focus-trap-react@11.0.6(@types/react-dom@19.2.3(@types/react@19.2.13))(@types/react@19.2.13)(react-dom@19.2.4(react@19.2.4))(react@19.2.4):
     dependencies:
       '@types/react': 19.2.13
       '@types/react-dom': 19.2.3(@types/react@19.2.13)
-      focus-trap: 7.7.1
+      focus-trap: 7.8.0
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
       tabbable: 6.4.0
 
-  focus-trap@7.7.1:
+  focus-trap@7.8.0:
     dependencies:
       tabbable: 6.4.0
 
