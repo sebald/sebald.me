@@ -7,7 +7,7 @@ export const revalidate = false;
 
 export const GET = async (
   _req: Request,
-  { params }: RouteContext<'/og/notes/[...slug]'>,
+  { params }: RouteContext<'/og/[...slug]'>,
 ) => {
   const { slug } = await params;
   const page = notesSource.getPage(slug.slice(0, -1));

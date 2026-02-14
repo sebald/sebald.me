@@ -50,6 +50,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
           {page.data.title}
         </Article.Title>
       </Article.Header>
+      {page.data.image && <Article.Image src={page.data.image} />}
       <Article.Content>
         <MDX components={getMDXComponents()} />
       </Article.Content>

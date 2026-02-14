@@ -3,6 +3,7 @@ import {
   HashStraightIcon,
   HouseSimpleIcon,
 } from '@phosphor-icons/react/ssr';
+import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
@@ -49,6 +50,12 @@ const styles = {
   }),
   excerpt: cva({
     base: 'text-pretty text-base',
+  }),
+  imageSection: cva({
+    base: ['flex gap-4 pb-8'],
+  }),
+  image: cva({
+    base: ['relative aspect-video w-full rounded-lg overflow-hidden'],
   }),
 };
 
@@ -151,6 +158,26 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
   </p>
 );
 
+// Article.Image
+// ---------------
+interface ImageSectionProps {
+  src: string | string[];
+}
+
+const ImageSection = ({ src }: ImageSectionProps) => {
+  const images = Array.isArray(src) ? src : [src];
+
+  return (
+    <div className={styles.imageSection()}>
+      {images.map(url => (
+        <div key={url} className={styles.image()}>
+          <NextImage src={url} alt="" fill className="object-cover" />
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // Article.Root
 // ---------------
 interface RootProps extends PropsWithChildren, AriaAttributes {
@@ -171,6 +198,7 @@ export const Article = Object.assign(Root, {
   Actions,
   ActionsItem: ActionMenuItem,
   ActionsSeparator: ActionMenuSeparator,
+  Image: ImageSection,
   Content,
   Footer,
   Time,
