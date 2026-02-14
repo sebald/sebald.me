@@ -168,7 +168,7 @@ const ImageSection = ({ src }: ImageSectionProps) => {
   const images = Array.isArray(src) ? src : [src];
 
   return (
-    <div className={styles.imageSection()}>
+    <div className={styles.imageSection()} aria-hidden="true">
       {images.map(url => (
         <div key={url} className={styles.image()}>
           <NextImage src={url} alt="" fill className="object-cover" />
