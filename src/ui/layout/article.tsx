@@ -1,7 +1,4 @@
-import {
-  CalendarBlankIcon,
-  HashStraightIcon,
-} from '@phosphor-icons/react/ssr';
+import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
@@ -35,7 +32,7 @@ const styles = {
     base: 'text-pretty text-base',
   }),
   image: cva({
-    base: ['pb-8'],
+    base: ['mb-14 rounded-2xl'],
   }),
 };
 
@@ -137,29 +134,27 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
 
   if (images.length > 1) {
     return (
-      <div className={styles.image()} aria-hidden="true">
-        <ParallaxImage
-          aspect={aspect}
-          className="rounded-2xl"
-          layers={images.map((url, i, arr) => ({
-            id: url,
-            src: url,
-            alt: '',
-            fill: true,
-            config: {
-              xMove: `${i === arr.length - 1 ? 4 : (i + 1) * 1}cqi`,
-              yMove: `${i === arr.length - 1 ? 2 : (i + 1) * 0.5}cqi`,
-            },
-          }))}
-        />
-      </div>
+      <ParallaxImage
+        aspect={aspect}
+        className={styles.image()}
+        layers={images.map((url, i, arr) => ({
+          id: url,
+          src: url,
+          alt: '',
+          fill: true,
+          config: {
+            xMove: `${i === arr.length - 1 ? 4 : (i + 1) * 1}cqi`,
+            yMove: `${i === arr.length - 1 ? 2 : (i + 1) * 0.5}cqi`,
+          },
+        }))}
+      />
     );
   }
 
   return (
     <div
       className={styles.image({
-        className: 'relative w-full rounded-2xl overflow-hidden',
+        className: 'relative w-full overflow-hidden rounded-2xl',
       })}
       style={{ aspectRatio: aspect }}
       aria-hidden="true"
