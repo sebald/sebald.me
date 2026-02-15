@@ -176,14 +176,14 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
           width="100%"
           aspect={aspect}
           className="rounded-2xl"
-          layers={images.map((url, i) => ({
+          layers={images.map((url, i, arr) => ({
             id: url,
             src: url,
             alt: '',
             fill: true,
             config: {
-              xMove: `${(i + 1) * 10}px`,
-              yMove: `${(i + 1) * 5}px`,
+              xMove: `${i === arr.length - 1 ? 40 : (i + 1) * 10}px`,
+              yMove: `${i === arr.length - 1 ? 20 : (i + 1) * 5}px`,
             },
           }))}
         />
