@@ -13,6 +13,7 @@ export interface ParallaxLayer extends Omit<ImageProps, 'alt'> {
   alt?: string;
   config: {
     width?: string;
+    height?: string;
     xOrigin?: string;
     yOrigin?: string;
     xMove?: string;
@@ -97,26 +98,33 @@ export const ParallaxImage = ({
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      {layers.map(({ alt, className, config, fill, ...rest }) => (
-        <Image
-          width={0}
-          height={0}
-          sizes="100vw"
-          placeholder={rest.blurDataURL || typeof rest.src !== 'string' ? 'blur' : 'empty'}
-          {...rest}
-          key={rest.id}
-          alt={alt || ''}
-          className={cn(
-            'pointer-events-none absolute object-cover select-none',
-            'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
-            'transition-[object-position,translate] duration-400 ease-out will-change-transform',
-            'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
-            'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0cqi)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0cqi)))]',
-            className,
-          )}
-          style={toCSSVars(config)}
-        />
-      ))}
+      {layers.map(({ alt, className, config, fill, ...rest }) => {
+        const widthPct = parseFloat(config.width || scale || '115');
+        const heightPct = parseFloat(config.height || scale || '115');
+        const maxXMove = (widthPct - 100) / 2;
+        const maxYMove = (heightPct - 100) / 2;
+
+        return (
+          <Image
+            width={0}
+            height={0}
+            sizes="100vw"
+            placeholder={rest.blurDataURL || typeof rest.src !== 'string' ? 'blur' : 'empty'}
+            {...rest}
+            key={rest.id}
+            alt={alt || ''}
+            className={cn(
+              'pointer-events-none absolute object-cover select-none',
+              'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
+              'transition-[object-position,translate] duration-400 ease-out will-change-transform',
+              'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
+              'object-[calc(var(--x-origin,50%)+clamp(calc(-1cqi*var(--max-x-move,7.5)),calc(var(--x)*var(--x-move,0cqi)),calc(1cqi*var(--max-x-move,7.5))))_calc(var(--y-origin,50%)+clamp(calc(-1cqi*var(--max-y-move,7.5)),calc(var(--y)*var(--y-move,0cqi)),calc(1cqi*var(--max-y-move,7.5))))]',
+              className,
+            )}
+            style={toCSSVars({ ...config, maxXMove, maxYMove })}
+          />
+        );
+      })}
     </div>
   );
 };
