@@ -50,6 +50,7 @@ export const ParallaxImage = ({
 }: ParallaxImageProps) => {
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
+    delete container.dataset.leaving;
     const rect = container.getBoundingClientRect();
 
     const offsetX = e.clientX - rect.left;
@@ -78,14 +79,16 @@ export const ParallaxImage = ({
   };
 
   const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.style.setProperty('--x', '0');
-    e.currentTarget.style.setProperty('--y', '0');
+    const container = e.currentTarget;
+    container.dataset.leaving = '';
+    container.style.setProperty('--x', '0');
+    container.style.setProperty('--y', '0');
   };
 
   return (
     <div
       className={cn(
-        '@container relative touch-none overflow-hidden',
+        'group @container relative touch-none overflow-hidden',
         'aspect-(--container-aspect) w-full',
         className,
       )}
@@ -109,7 +112,11 @@ export const ParallaxImage = ({
             width={0}
             height={0}
             sizes="100vw"
-            placeholder={rest.blurDataURL || typeof rest.src !== 'string' ? 'blur' : 'empty'}
+            placeholder={
+              rest.blurDataURL || typeof rest.src !== 'string'
+                ? 'blur'
+                : 'empty'
+            }
             {...rest}
             key={rest.id}
             alt={alt || ''}
@@ -117,6 +124,7 @@ export const ParallaxImage = ({
               'pointer-events-none absolute object-cover select-none',
               'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
               'transition-[object-position,translate] duration-400 ease-out will-change-transform',
+              'group-data-leaving:duration-600 group-data-leaving:ease-[cubic-bezier(0.22,1,0.36,1)]',
               'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
               'object-[calc(var(--x-origin,50%)+clamp(calc(-1cqi*var(--max-x-move,7.5)),calc(var(--x)*var(--x-move,0cqi)),calc(1cqi*var(--max-x-move,7.5))))_calc(var(--y-origin,50%)+clamp(calc(-1cqi*var(--max-y-move,7.5)),calc(var(--y)*var(--y-move,0cqi)),calc(1cqi*var(--max-y-move,7.5))))]',
               className,
