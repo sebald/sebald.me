@@ -25,7 +25,7 @@ export const styles = cva({
       icon: [
         'justify-center no-underline',
         'size-12 rounded-full',
-        'bg-mist-800 text-mist-500',
+        'bg-mist-800 text-mist-400',
         'hover:bg-mist-500/50 hover:text-mist-50',
         '[&_svg]:size-5',
       ],
