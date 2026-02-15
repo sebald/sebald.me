@@ -52,11 +52,8 @@ const styles = {
   excerpt: cva({
     base: 'text-pretty text-base',
   }),
-  imageSection: cva({
-    base: ['flex gap-4 pb-8'],
-  }),
   image: cva({
-    base: ['relative w-full rounded-2xl overflow-hidden'],
+    base: ['pb-8'],
   }),
 };
 
@@ -171,7 +168,7 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
 
   if (images.length > 1) {
     return (
-      <div className={styles.imageSection()} aria-hidden="true">
+      <div className={styles.image()} aria-hidden="true">
         <ParallaxImage
           aspect={aspect}
           className="rounded-2xl"
@@ -191,10 +188,14 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
   }
 
   return (
-    <div className={styles.imageSection()} aria-hidden="true">
-      <div className={styles.image()} style={{ aspectRatio: aspect }}>
-        <NextImage src={images[0]} alt="" fill className="object-cover" />
-      </div>
+    <div
+      className={styles.image({
+        className: 'relative w-full rounded-2xl overflow-hidden',
+      })}
+      style={{ aspectRatio: aspect }}
+      aria-hidden="true"
+    >
+      <NextImage src={images[0]} alt="" fill className="object-cover" />
     </div>
   );
 };
