@@ -5,40 +5,21 @@ import { cva, type VariantProps } from 'cva';
 export const style = cva({
   base: [
     'flex items-center',
-    '[&_svg]:mr-2 [&_svg]:size-[1em]',
-    'in-[a:hover]:text-link',
+    'text-accent-foreground tracking-wide',
+    '[&_svg]:mr-[1ch] [&_svg]:size-[1.25em]',
   ],
   variants: {
     level: {
-      display: 'text-display leading-tight -tracking-wider font-bold',
-      '1': 'text-scale-5 leading-tight -tracking-wide font-semibold',
-      '2': 'text-scale-4 leading-tight -tracking-wide font-semibold',
-      '3': 'text-scale-3 leading-tight -tracking-wide font-semibold',
-      '4': 'text-scale-2 leading-snug -tracking-wide font-semibold',
-      '5': 'text-scale-1 leading-snug -tracking-wide font-semibold',
-      '6': 'text-scale-0 leading-relaxed -tracking-wide font-semibold',
-      overline: 'uppercase text-text text-scale--2 tracking-wide font-semibold',
-    },
-    variant: {
-      default: 'text-(--color-headline,var(--color-oatmeal-900))',
-      accent:
-        'text-transparent bg-clip-text bg-linear-to-br from-blueberry-700 to-blueberry-500',
-      muted: 'text-(--color-muted,var(--color-oatmeal-700))',
+      '1': 'text-2xl font-semibold',
+      '2': 'text-lg font-semibold',
+      '3': 'text-base font-semibold',
+      '4': 'text-base font-medium',
+      '5': 'text-base font-medium',
+      '6': 'text-sm font-semibold',
     },
   },
-  compoundVariants: [
-    {
-      level: 'display',
-      className: 'font-sans',
-    },
-    {
-      level: ['1', '2', '3', '4', '5', '6', 'overline'],
-      className: 'font-sans',
-    },
-  ],
   defaultVariants: {
     level: '2',
-    variant: 'default',
   },
 });
 
@@ -55,22 +36,15 @@ export interface HeadlineProps extends VariantProps<typeof style> {
 // ---------------
 export const Headline = ({
   level = '2',
-  variant = 'default',
   children,
   className,
   as,
   id,
 }: HeadlineProps) => {
-  const Component =
-    as ||
-    (level === 'display'
-      ? 'h1'
-      : level === 'overline'
-        ? 'h6'
-        : (`h${level}` as const));
+  const Component = as ?? `h${level}`;
 
   return (
-    <Component id={id} className={style({ level, variant, className })}>
+    <Component id={id} className={style({ level, className })}>
       {children}
     </Component>
   );

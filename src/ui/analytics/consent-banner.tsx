@@ -20,18 +20,18 @@ export const ConsentBanner = () => {
     <Dialog.Root open={true} modal={false} disablePointerDismissal>
       <Dialog position="bottom" size="full" layout="inline">
         <Dialog.Title>
-          <CookieIcon size={32} weight="duotone" />
-          I&apos;d like to learn from you
+          <CookieIcon weight="bold" />
+          About cookies on this site
         </Dialog.Title>
         <Dialog.Body>
-          I use minimal analytics to understand which articles and ideas
-          resonate with you most. It helps me write better content.
+          I use cookies to see how you use the site and what you enjoy reading.
+          This helps me understand what to write about.
         </Dialog.Body>
         <Dialog.Actions>
-          <Button onClick={accept}>Accept</Button>
-          <Button variant="ghost" onClick={decline}>
-            Decline
+          <Button variant="primary" onClick={accept}>
+            Accept
           </Button>
+          <Button onClick={decline}>Decline</Button>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>

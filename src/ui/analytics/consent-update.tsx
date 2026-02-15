@@ -1,6 +1,6 @@
 'use client';
 
-import { HandshakeIcon } from '@phosphor-icons/react/ssr';
+import { CookieIcon } from '@phosphor-icons/react/ssr';
 
 import type { DialogTriggerProps } from '@/ui/dialog';
 import { Dialog } from '@/ui/dialog';
@@ -18,7 +18,7 @@ const intl = {
   },
   en: {
     title: 'Manage Consent',
-    text: 'I use Google Analytics to better understand which content is relevant to you. This may involve transferring data to the USA. Do you consent to this?',
+    text: 'I use Google Analytics to better understand which content is relevant to you. This may involve transferring data to the USA. Do you agree?',
     accept: 'Yes, I agree',
     decline: 'No, essential only',
   },
@@ -35,7 +35,7 @@ export interface ConsentUpdateProps {
 // ---------------
 export const ConsentUpdate = ({
   locale = 'en',
-  triggerVariant = 'inherit',
+  triggerVariant = 'link',
 }: ConsentUpdateProps) => {
   const { accept, decline } = useAnalytics();
   const t = intl[locale];
@@ -45,17 +45,15 @@ export const ConsentUpdate = ({
       <Dialog.Trigger variant={triggerVariant}>{t.title}</Dialog.Trigger>
       <Dialog size="large" showCloseButton>
         <Dialog.Title>
-          <HandshakeIcon size={32} weight="duotone" />
+          <CookieIcon weight="bold" />
           {t.title}
         </Dialog.Title>
         <Dialog.Body>{t.text}</Dialog.Body>
         <Dialog.Actions>
-          <Dialog.Close variant="light" onClick={accept}>
+          <Dialog.Close variant="primary" onClick={accept}>
             {t.accept}
           </Dialog.Close>
-          <Dialog.Close variant="ghost" onClick={decline}>
-            {t.decline}
-          </Dialog.Close>
+          <Dialog.Close onClick={decline}>{t.decline}</Dialog.Close>
         </Dialog.Actions>
       </Dialog>
     </Dialog.Root>
