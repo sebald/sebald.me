@@ -166,7 +166,7 @@ interface ImageSectionProps {
   aspect?: string;
 }
 
-const ImageSection = ({ src, aspect = '16/9' }: ImageSectionProps) => {
+const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
   const images = Array.isArray(src) ? [...src].reverse() : [src];
 
   if (images.length > 1) {
