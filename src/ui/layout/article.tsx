@@ -6,6 +6,8 @@ import {
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
+import { ParallaxImage } from '@/ui/parallax-image';
+
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
@@ -55,7 +57,7 @@ const styles = {
     base: ['flex gap-4 pb-8'],
   }),
   image: cva({
-    base: ['relative aspect-video w-full rounded-lg overflow-hidden'],
+    base: ['relative w-full rounded-lg overflow-hidden'],
   }),
 };
 
@@ -162,18 +164,39 @@ const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
 // ---------------
 interface ImageSectionProps {
   src: string | string[];
+  aspect?: string;
 }
 
-const ImageSection = ({ src }: ImageSectionProps) => {
-  const images = Array.isArray(src) ? src : [src];
+const ImageSection = ({ src, aspect = '16/9' }: ImageSectionProps) => {
+  const images = Array.isArray(src) ? [...src].reverse() : [src];
+
+  if (images.length > 1) {
+    return (
+      <div className={styles.imageSection()} aria-hidden="true">
+        <ParallaxImage
+          width="100%"
+          aspect={aspect}
+          className="rounded-lg"
+          layers={images.map((url, i) => ({
+            id: url,
+            src: url,
+            alt: '',
+            fill: true,
+            config: {
+              xMove: `${(i + 1) * 10}px`,
+              yMove: `${(i + 1) * 5}px`,
+            },
+          }))}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className={styles.imageSection()} aria-hidden="true">
-      {images.map(url => (
-        <div key={url} className={styles.image()}>
-          <NextImage src={url} alt="" fill className="object-cover" />
-        </div>
-      ))}
+      <div className={styles.image()} style={{ aspectRatio: aspect }}>
+        <NextImage src={images[0]} alt="" fill className="object-cover" />
+      </div>
     </div>
   );
 };
