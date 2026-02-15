@@ -84,7 +84,7 @@ export const ParallaxImage = ({
   return (
     <div
       className={cn(
-        'relative touch-none overflow-hidden',
+        '@container relative touch-none overflow-hidden',
         'aspect-(--container-aspect) w-full',
         className,
       )}
@@ -111,7 +111,7 @@ export const ParallaxImage = ({
             'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
             'transition-[object-position,translate] duration-400 ease-out will-change-transform',
             'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
-            'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
+            'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0cqi)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0cqi)))]',
             className,
           )}
           style={toCSSVars(config)}

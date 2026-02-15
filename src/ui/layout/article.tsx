@@ -181,8 +181,8 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
             alt: '',
             fill: true,
             config: {
-              xMove: `${i === arr.length - 1 ? 40 : (i + 1) * 10}px`,
-              yMove: `${i === arr.length - 1 ? 20 : (i + 1) * 5}px`,
+              xMove: `${i === arr.length - 1 ? 4 : (i + 1) * 1}cqi`,
+              yMove: `${i === arr.length - 1 ? 2 : (i + 1) * 0.5}cqi`,
             },
           }))}
         />
