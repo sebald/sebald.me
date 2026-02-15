@@ -20,6 +20,22 @@ const styles = cva({
   },
 });
 
+const titleStyles = cva({
+  base: 'mb-6 block font-semibold',
+  variants: {
+    variant: {
+      note: 'text-indigo-200',
+      info: 'text-blue-200',
+      warning: 'text-yellow-200',
+      success: 'text-green-200',
+      danger: 'text-red-200',
+    },
+  },
+  defaultVariants: {
+    variant: 'note',
+  },
+});
+
 // Props
 // ---------------
 export interface CalloutProps
@@ -31,7 +47,7 @@ export interface CalloutProps
 // ---------------
 export const Callout = ({ children, variant, title }: CalloutProps) => (
   <aside className={styles({ variant })}>
-    {title && <strong className="mb-6 block font-semibold">{title}</strong>}
+    {title && <strong className={titleStyles({ variant })}>{title}</strong>}
     {children}
   </aside>
 );
