@@ -25,6 +25,7 @@ export type ParallaxImageProps = {
   layers: ParallaxLayer[];
   width: string | number;
   aspect: string;
+  scale?: string;
   className?: string;
 };
 
@@ -45,6 +46,7 @@ export const ParallaxImage = ({
   layers,
   width,
   aspect,
+  scale,
   className,
 }: ParallaxImageProps) => {
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
@@ -93,6 +95,7 @@ export const ParallaxImage = ({
         y: 0,
         containerWidth: width,
         containerAspect: aspect,
+        ...(scale && { scale }),
       })}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
@@ -110,7 +113,7 @@ export const ParallaxImage = ({
             'pointer-events-none absolute object-cover select-none',
             'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
             'transition-[object-position,translate] duration-400 ease-out will-change-transform',
-            'h-(--height,115%) w-(--width,115%)',
+            'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
             'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
             className,
           )}
