@@ -9,11 +9,6 @@ import type { AriaAttributes, PropsWithChildren } from 'react';
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
-import {
-  ActionMenu,
-  ActionMenuItem,
-  ActionMenuSeparator,
-} from '@/ui/layout/article-action-menu';
 import { Link } from '@/ui/link';
 import { ParallaxImage } from '@/ui/parallax-image';
 
@@ -118,12 +113,10 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
   );
 };
 
-// Article.Actions (wraps client ActionMenu with grid positioning)
+// Article.Actions (layout slot for grid positioning)
 // ---------------
 const Actions = ({ children }: PropsWithChildren) => (
-  <div className={styles.actions()}>
-    <ActionMenu>{children}</ActionMenu>
-  </div>
+  <div className={styles.actions()}>{children}</div>
 );
 
 // Article.Footer
@@ -218,8 +211,6 @@ export const Article = Object.assign(Root, {
   Header,
   Title,
   Actions,
-  ActionsItem: ActionMenuItem,
-  ActionsSeparator: ActionMenuSeparator,
   Image: ImageSection,
   Content,
   Footer,

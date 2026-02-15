@@ -12,11 +12,17 @@ import { Menu } from '@/ui/menu';
 
 // ActionMenu
 // ---------------
-interface ActionMenuProps extends PropsWithChildren, AriaAttributes {}
+interface ActionMenuProps extends PropsWithChildren, AriaAttributes {
+  label?: string;
+}
 
-export const ActionMenu = ({ children, ...ariaProps }: ActionMenuProps) => (
+export const ActionMenu = ({
+  children,
+  label = 'Actions',
+  ...ariaProps
+}: ActionMenuProps) => (
   <Menu.Root>
-    <Menu.Trigger variant="icon" aria-label="Article actions" {...ariaProps}>
+    <Menu.Trigger variant="icon" aria-label={label} {...ariaProps}>
       <DotsThreeVerticalIcon weight="bold" />
     </Menu.Trigger>
     <Menu align="end">{children}</Menu>

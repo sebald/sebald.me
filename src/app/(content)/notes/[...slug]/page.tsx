@@ -2,9 +2,9 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { notesSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
-import { CopyLinkItem } from '@/ui/layout/article-action-menu';
 import { getMDXComponents } from '@/ui/mdx';
 
 // Config
@@ -40,11 +40,13 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
     <Article aria-labelledby={titleId}>
       <Article.Header>
         <Article.Actions>
-          <CopyLinkItem />
-          <Article.ActionsItem href={`${page.url}.md`}>
-            <MarkdownLogoIcon weight="bold" />
-            View as markdown
-          </Article.ActionsItem>
+          <ActionMenu label="Article actions">
+            <CopyLinkItem />
+            <ActionMenuItem href={`${page.url}.md`}>
+              <MarkdownLogoIcon weight="bold" />
+              View as markdown
+            </ActionMenuItem>
+          </ActionMenu>
         </Article.Actions>
         <Article.Title id={titleId} level="1">
           {page.data.title}
