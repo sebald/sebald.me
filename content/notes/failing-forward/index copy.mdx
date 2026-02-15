@@ -1,0 +1,73 @@
+---
+title: Failing Forward at Design Systems
+description: Building a design system is not as straightforward as it seems. The obstacles along the way are chances to build something truly valuable.
+topics: [design-systems]
+image: [./1.webp, ./2.webp, ./3.webp]
+date: 2026-02-07
+---
+
+Listen to how people talk about design systems. You'd think they are just organized artifacts. Here's the Figma library. Here's the component repo. Here are the design tokens. Everything labeled, documented, in its place. Organizing feels good. Clean, structured, manageable. You feel in control.
+
+But it's an illusion.
+
+Building a design system has little to do with artifacts. The real work is navigating how teams actually build software.
+
+Over four years, my team and I built a design system for a product with 20 years of history. Most of our starting assumptions turned out wrong. Each time one broke, it pushed us somewhere better.
+
+## The territory we inherited
+
+The product was capable. Really capable. But the UI felt dated. If you judged it by its interface, you'd underestimate what it could do.
+
+Teams were working hard. But they spent most of their energy fighting fires from decisions made years ago. Technical debt had piled up so high that even small UI changes felt risky. "We can't build that" became a reflex. Not because developers lacked skill, but because the codebase made ambition expensive.
+
+Something had to give. We planned to split the monolith into standalone products. Smaller codebases, independent teams, modern stacks. A design system fit naturally here: shared components, shared language, shared standards.
+
+## Building the map
+
+We assembled a small team and bootstrapped a component library on a modern stack. We paired it with a visual redesign that had been approved years ago but never shipped.
+
+Around the same time, a product team was rebuilding from scratch. We jumped on the opportunity. No legacy constraints. No compromises. The perfect test case.
+
+It worked. The pilot team shipped something we were proud of. Components that took days to build from scratch now came out of the box. Growing pains, yes, but we proved the approach worked.
+
+## Crickets
+
+We had proof. A real product to point at. But the rest of the company didn't care. The plan to split the monolith never gained traction. Most teams stayed invested in the legacy system with no sign of that changing. We had built for a future that the organization wasn't moving toward.
+
+When we showed up with our new component library, colleagues looked at their workload and said "I don't have time to learn this." They weren't difficult. They were rational. Adopting something new costs too much when you're already struggling to keep up.
+
+## Meeting them where they were
+
+After a short existential crisis, we rethought everything. We had assumed teams were waiting for us to hand them something better. They weren't.
+
+So we did something counterintuitive: we disguised the new system as the old one. We brought the design system into the legacy codebase and matched the old visual style. New components looked identical to the old code. Developers worked with modern tools under the hood. On the surface, nothing changed.
+
+Then we removed every obstacle we could find. We wrote guides. We ran training sessions. We fixed dev environments. Teams in the legacy codebase were still manually refreshing the browser after every UI change. Yes, really.
+
+Most importantly, we showed up. We sat with colleagues during their first component, first page, first bug. We weren't a library to install. We were a team to call.
+
+## The trap
+
+It worked. Teams shifted from "we can't build that" to "we can build that... most likely." One team after another adopted the design system. It spread on its own. The numbers looked great.
+
+So we did it! ...right?
+
+Not quite. Teams were building inconsistent interfaces. Same buttons, same inputs, same building blocks. Pages looked consistent at a glance, but they worked and felt different.
+
+Colleagues knew how to use individual components. But using a component is not the same as combining them well. The system had no opinion on how pieces fit together. Teams built the same user flows differently. Results looked close enough to seem right, but different enough for users to notice.
+
+So we rewrote the documentation. Instead of describing what components do, we explained how to combine them. Patterns for common cases. Opinionated guidance for recurring flows. Less "here's a button" and more "here's how to load data and keep users informed."
+
+## Failing forward
+
+None of this felt like progress at the time. It felt like we kept getting it wrong. But every pivot forced us closer to the most valuable thing we built. It wasn't the component library, the documentation, or the patterns.
+
+It was trust.
+
+We didn't plan any of this. Each change in direction happened because we got stuck. Each time we got stuck, we got closer to the people using our system. That's where trust came from. Not from a rollout plan, but from showing up, listening, and adjusting.
+
+We kept hitting walls because we confused the map for the territory. Our documentation and component library were the map: organized, sensible, controlled. The territory is reality. Messy CSS overrides in a codebase that has grown for 20 years. Tight deadlines that force shortcuts. Habits built over a decade. When teams ignored us, we invested in developer experience. When adoption produced inconsistent interfaces, we learned to be opinionated.
+
+The obstacles were never in the way. They were showing us the way.
+
+Building a design system is not a straight line from Figma to components to adoption metrics. It is an ongoing conversation between what you think teams need and what they actually need. The only way to learn the difference: get it wrong, listen, and adjust. We are still adjusting. The territory keeps changing.
