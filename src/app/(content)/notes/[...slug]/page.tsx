@@ -6,6 +6,7 @@ import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { notesSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
+import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config
 // ---------------
@@ -37,26 +38,28 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const MDX = page.data.body;
 
   return (
-    <Article aria-labelledby={titleId}>
-      <Article.Header>
-        <Article.Actions>
-          <ActionMenu label="Article actions">
-            <CopyLinkItem />
-            <ActionMenuItem href={`${page.url}.md`}>
-              <MarkdownLogoIcon weight="bold" />
-              View as markdown
-            </ActionMenuItem>
-          </ActionMenu>
-        </Article.Actions>
-        <Article.Title id={titleId} level="1">
-          {page.data.title}
-        </Article.Title>
-      </Article.Header>
-      {page.data.image && <Article.Image src={page.data.image} />}
-      <Article.Content>
-        <MDX components={getMDXComponents()} />
-      </Article.Content>
-    </Article>
+    <>
+      <PageToolbar>
+        <ActionMenu label="Article actions">
+          <CopyLinkItem />
+          <ActionMenuItem href={`${page.url}.md`}>
+            <MarkdownLogoIcon weight="bold" />
+            View as markdown
+          </ActionMenuItem>
+        </ActionMenu>
+      </PageToolbar>
+      <Article aria-labelledby={titleId}>
+        <Article.Header>
+          <Article.Title id={titleId} level="1">
+            {page.data.title}
+          </Article.Title>
+        </Article.Header>
+        {page.data.image && <Article.Image src={page.data.image} />}
+        <Article.Content>
+          <MDX components={getMDXComponents()} />
+        </Article.Content>
+      </Article>
+    </>
   );
 };
 

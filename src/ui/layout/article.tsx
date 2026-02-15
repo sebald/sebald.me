@@ -1,7 +1,6 @@
 import {
   CalendarBlankIcon,
   HashStraightIcon,
-  HouseSimpleIcon,
 } from '@phosphor-icons/react/ssr';
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
@@ -9,31 +8,19 @@ import type { AriaAttributes, PropsWithChildren } from 'react';
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
-import { Link } from '@/ui/link';
 import { ParallaxImage } from '@/ui/parallax-image';
 
 // Styles
 // ---------------
 const styles = {
   root: cva({
-    base: ['flex flex-col', 'pt-32'],
+    base: ['flex flex-col'],
   }),
   header: cva({
-    base: [
-      'grid items-center pb-8 w-full',
-      'grid-cols-[auto_1fr]',
-      '[grid-template-areas:"back_actions"_"title_title"]',
-      'gap-y-20',
-    ],
-  }),
-  back: cva({
-    base: ['[grid-area:back]'],
-  }),
-  actions: cva({
-    base: ['[grid-area:actions]', 'justify-self-end'],
+    base: ['flex flex-col pb-8'],
   }),
   title: cva({
-    base: ['[grid-area:title]', 'flex flex-col'],
+    base: ['flex flex-col'],
   }),
   caption: cva({
     base: ['text-muted-foreground flex items-center gap-0.5 text-xs'],
@@ -60,11 +47,6 @@ interface HeaderProps extends PropsWithChildren, AriaAttributes {
 
 const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
   <header className={styles.header({ className })} {...ariaProps}>
-    <div className={styles.back()}>
-      <Link href="/" variant="icon" aria-label="Back to home">
-        <HouseSimpleIcon weight="bold" />
-      </Link>
-    </div>
     {children}
   </header>
 );
@@ -112,12 +94,6 @@ const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
     </div>
   );
 };
-
-// Article.Actions (layout slot for grid positioning)
-// ---------------
-const Actions = ({ children }: PropsWithChildren) => (
-  <div className={styles.actions()}>{children}</div>
-);
 
 // Article.Footer
 // ---------------
@@ -210,7 +186,6 @@ const Root = ({ children, className, ...ariaProps }: RootProps) => (
 export const Article = Object.assign(Root, {
   Header,
   Title,
-  Actions,
   Image: ImageSection,
   Content,
   Footer,

@@ -9,6 +9,7 @@ import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
+import { PageToolbar } from '@/ui/page-toolbar';
 import { Text } from '@/ui/text';
 
 import { CodeExamples } from './code-examples';
@@ -28,10 +29,12 @@ export const metadata: Metadata = {
 // Page
 // ---------------
 const InventoryPage = () => (
-  <Article>
-    <Article.Header>
-      <Article.Title level="1">Inventory</Article.Title>
-    </Article.Header>
+  <>
+    <PageToolbar />
+    <Article>
+      <Article.Header>
+        <Article.Title level="1">Inventory</Article.Title>
+      </Article.Header>
     <Article.Content>
       <div className="grid gap-24">
         <div className="grid gap-4">
@@ -238,7 +241,8 @@ const InventoryPage = () => (
         </div>
       </div>
     </Article.Content>
-  </Article>
+    </Article>
+  </>
 );
 
 export default InventoryPage;

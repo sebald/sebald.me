@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
+import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config
 // ---------------
@@ -35,16 +36,19 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const MDX = page.data.body;
 
   return (
-    <Article aria-labelledby={titleId}>
-      <Article.Header>
-        <Article.Title id={titleId} level="1">
-          {page.data.title}
-        </Article.Title>
-      </Article.Header>
-      <Article.Content>
-        <MDX components={getMDXComponents()} />
-      </Article.Content>
-    </Article>
+    <>
+      <PageToolbar />
+      <Article aria-labelledby={titleId}>
+        <Article.Header>
+          <Article.Title id={titleId} level="1">
+            {page.data.title}
+          </Article.Title>
+        </Article.Header>
+        <Article.Content>
+          <MDX components={getMDXComponents()} />
+        </Article.Content>
+      </Article>
+    </>
   );
 };
 
