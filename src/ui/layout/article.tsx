@@ -6,8 +6,6 @@ import {
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
-import { ParallaxImage } from '@/ui/parallax-image';
-
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
@@ -17,6 +15,7 @@ import {
   ActionMenuSeparator,
 } from '@/ui/layout/article-action-menu';
 import { Link } from '@/ui/link';
+import { ParallaxImage } from '@/ui/parallax-image';
 
 // Styles
 // ---------------
@@ -57,7 +56,7 @@ const styles = {
     base: ['flex gap-4 pb-8'],
   }),
   image: cva({
-    base: ['relative w-full rounded-lg overflow-hidden'],
+    base: ['relative w-full rounded-2xl overflow-hidden'],
   }),
 };
 
@@ -176,7 +175,7 @@ const ImageSection = ({ src, aspect = '16/9' }: ImageSectionProps) => {
         <ParallaxImage
           width="100%"
           aspect={aspect}
-          className="rounded-lg"
+          className="rounded-2xl"
           layers={images.map((url, i) => ({
             id: url,
             src: url,
