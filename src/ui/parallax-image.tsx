@@ -23,7 +23,6 @@ export interface ParallaxLayer extends Omit<ImageProps, 'alt'> {
 
 export type ParallaxImageProps = {
   layers: ParallaxLayer[];
-  width: string | number;
   aspect: string;
   scale?: string;
   className?: string;
@@ -44,7 +43,6 @@ const mapRange = (
 
 export const ParallaxImage = ({
   layers,
-  width,
   aspect,
   scale,
   className,
@@ -87,13 +85,12 @@ export const ParallaxImage = ({
     <div
       className={cn(
         'relative touch-none overflow-hidden',
-        'aspect-(--container-aspect) w-full max-w-(--container-width)',
+        'aspect-(--container-aspect) w-full',
         className,
       )}
       style={toCSSVars({
         x: 0,
         y: 0,
-        containerWidth: width,
         containerAspect: aspect,
         ...(scale && { scale }),
       })}

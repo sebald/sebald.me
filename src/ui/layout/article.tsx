@@ -173,7 +173,6 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
     return (
       <div className={styles.imageSection()} aria-hidden="true">
         <ParallaxImage
-          width="100%"
           aspect={aspect}
           className="rounded-2xl"
           layers={images.map((url, i, arr) => ({
