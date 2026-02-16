@@ -1,10 +1,9 @@
-import { dirname, isAbsolute, join, normalize, relative } from 'node:path';
-
 import {
   defineCollections,
   defineConfig,
   frontmatterSchema,
 } from 'fumadocs-mdx/config';
+import { dirname, isAbsolute, join, normalize, relative } from 'node:path';
 import { z } from 'zod';
 
 import rehypeUnwrapContent from '@/lib/rehype/rehypeUnwrapContent';

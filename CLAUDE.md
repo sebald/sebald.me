@@ -22,12 +22,14 @@ pnpm test:lib:watch   # Watch mode for tests
 ## Architecture
 
 ### Content System
+
 - MDX content lives in `content/notes/` (blog posts) and `content/misc/` (pages)
 - Notes use date-prefix naming: `2026-01-14-slug-title.mdx` (date stripped from URL)
 - Fumadocs compiles MDX on install → generates `.source/` directory
 - Content loaders in `src/lib/source.ts` expose `notesSource` and `miscSource`
 
 ### Key Directories
+
 - `src/app/` - Next.js app router pages
 - `src/lib/` - Utilities, content loaders, rehype plugins
 - `src/ui/` - React components using CVA for variants
@@ -35,6 +37,7 @@ pnpm test:lib:watch   # Watch mode for tests
 - `content/` - MDX content files
 
 ### Content Frontmatter (notes)
+
 ```yaml
 title: Required
 description: Required
@@ -44,16 +47,19 @@ topics: string[] (optional)
 ```
 
 ### Styling
+
 - Tailwind v4 with `@theme` directive in `theme.css`
 - Colors use OKLCH model (mist-50 to mist-950, black-50 to black-950)
 - CVA for component variants (see `src/ui/button.tsx`)
 - `cn()` utility from `src/lib/styles.utils.ts` for class merging
 
 ### Path Aliases
+
 - `@/*` → `./src/*`
 - `fumadocs-mdx:collections/*` → `.source/*`
 
 ## Auto-generated Files (do not edit)
+
 - `.source/` - Fumadocs compiled collections
 - `next-env.d.ts` - Next.js types
 - `.next/` - Build output

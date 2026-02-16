@@ -1,7 +1,6 @@
+import { notFound } from 'next/navigation';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize, resolve } from 'node:path';
-
-import { notFound } from 'next/navigation';
 
 const ROOT = process.cwd();
 const CONTENT_DIR = resolve(ROOT, 'content');

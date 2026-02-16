@@ -2,8 +2,8 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { notesSource, pageImage } from '@/lib/source';
+import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { PageToolbar } from '@/ui/page-toolbar';
