@@ -35,18 +35,10 @@ const NotesList = () => {
 
   return (
     <section className="grid gap-6">
-      <Headline level="3" as="h3">
-        Notes
-      </Headline>
+      <Headline level="3">Notes</Headline>
       <ul className="grid gap-10">
         {notes.map(note => (
           <li key={note.url} className="grid gap-2">
-            <Link href={note.url} variant="inherit">
-              <Headline level="2" as="h2">
-                {note.data.title}
-              </Headline>
-            </Link>
-            <Text>{excerpt(note)}</Text>
             {note.data.date && (
               <Text variant="muted" size="caption" as="span">
                 <time dateTime={String(note.data.date)}>
@@ -54,6 +46,12 @@ const NotesList = () => {
                 </time>
               </Text>
             )}
+            <Link href={note.url} variant="inherit">
+              <Headline level="2" as="h2">
+                {note.data.title}
+              </Headline>
+            </Link>
+            <Text>{excerpt(note)}</Text>
           </li>
         ))}
       </ul>
