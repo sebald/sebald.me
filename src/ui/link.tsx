@@ -9,16 +9,18 @@ export const styles = cva({
   base: [
     'inline-flex items-center gap-1.5',
     'transition-all duration-150',
-    'focus-visible:focus-ring focus-visible:outline-none',
+    'px-1 -mx-1 outline-none focus-visible:ui-focus',
   ],
   variants: {
     variant: {
       default: [
+        'rounded-lg',
         'text-link font-medium',
         'underline decoration-link/15 underline-offset-3',
         'hover:decoration-link/75',
       ],
       inherit: [
+        'rounded-lg',
         'text-inherit decoration-inherit',
         'hover:text-link hover:decoration-link',
       ],

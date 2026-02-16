@@ -17,7 +17,7 @@ export const styles = cva({
     'transition-all duration-150',
 
     /* States */
-    'focus-visible:focus-ring outline-none',
+    'outline-none focus-visible:ui-focus',
     'active:scale-[0.97]',
     'disabled:cursor-default disabled:opacity-40',
   ],

@@ -1,3 +1,7 @@
+@utility ui-focus {
+  @apply outline-2 outline-solid outline-mist-300/80 outline-offset-2;
+}
+
 @utility ui-panel {
   @apply relative overflow-hidden;
   @apply rounded-2xl border border-transparent;
