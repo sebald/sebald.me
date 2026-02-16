@@ -1,7 +1,7 @@
 import type { InferPageType } from 'fumadocs-core/source';
 import { getSlugs, loader } from 'fumadocs-core/source';
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
-import { lab, misc, notes } from 'fumadocs-mdx:collections/server';
+import { misc, notes } from 'fumadocs-mdx:collections/server';
 
 import { truncateAtWord } from './string.utils';
 
@@ -14,39 +14,15 @@ export const notesSource = loader({
   slugs: file => getSlugs(file.path.replace(/(\/)?\d{4}-\d{2}-\d{2}-/, '$1')),
 });
 
-export const labSource = loader({
-  baseUrl: '/lab',
-  source: toFumadocsSource(lab, []),
-});
-
 export const miscSource = loader({
   baseUrl: '/misc',
   source: toFumadocsSource(misc, []),
 });
 
-export type ContentPage =
-  | InferPageType<typeof notesSource>
-  | InferPageType<typeof labSource>;
+export type ContentPage = InferPageType<typeof notesSource>;
 
 // Getters
 // ---------------
-export const getPageBySlug = (slug: string[]): ContentPage | undefined => {
-  if (slug.length === 0) return undefined;
-
-  // First element indicates the source (notes or lab)
-  const source = slug[0];
-  const pageSlugs = slug.slice(1);
-
-  switch (source) {
-    case 'notes':
-      return notesSource.getPage(pageSlugs);
-    case 'lab':
-      return labSource.getPage(pageSlugs);
-    default:
-      return undefined;
-  }
-};
-
 export const formatPageForLLM = async (page: ContentPage) => {
   const processed = (await page.data.getText('processed')).trim();
   const date = page.data.date
@@ -78,13 +54,12 @@ ${content}
 
 // Utilities
 // ---------------
-export const pageImage = (page: ContentPage) => {
-  const segments = [...page.slugs, 'image.png'];
-  const type = page.url.includes('/lab') ? 'lab' : 'notes';
+export const pageImage = (page: { slugs: string[]; url: string }) => {
+  const segments = [...page.slugs.slice(0, -1), `${page.slugs.at(-1)}.png`];
 
   return {
     segments,
-    url: `/og/${type}/${segments.join('/')}`,
+    url: `/og/${segments.join('/')}`,
   };
 };
 

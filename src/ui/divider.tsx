@@ -7,10 +7,7 @@ const style = cva({
   base: ['rounded-[1px]'],
   variants: {
     variant: {
-      light:
-        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
-      default:
-        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.2)]',
+      default: 'bg-mist-700',
     },
     orientation: {
       horizontal: 'h-px w-[calc(100%-var(--inset)*2)] mx-auto',

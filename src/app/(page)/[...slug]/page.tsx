@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
+import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config
 // ---------------
@@ -21,6 +22,14 @@ export const generateMetadata = async (
   return {
     title: page.data.title,
     description: page.data.description,
+    openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
   };
 };
 
@@ -31,22 +40,23 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const page = miscSource.getPage(params.slug);
   if (!page) notFound();
 
+  const titleId = page.url;
   const MDX = page.data.body;
-  const titleId = `misc-${page.slugs.join('-')}`;
 
   return (
-    <Article
-      aria-labelledby={titleId}
-      stretch="prose"
-      className="gap-12 md:gap-16"
-    >
-      <Article.Header>
-        <Article.Title id={titleId}>{page.data.title}</Article.Title>
-      </Article.Header>
-      <Article.Content>
-        <MDX components={getMDXComponents()} />
-      </Article.Content>
-    </Article>
+    <>
+      <PageToolbar />
+      <Article aria-labelledby={titleId}>
+        <Article.Header>
+          <Article.Title id={titleId} level="1">
+            {page.data.title}
+          </Article.Title>
+        </Article.Header>
+        <Article.Content>
+          <MDX components={getMDXComponents()} />
+        </Article.Content>
+      </Article>
+    </>
   );
 };
 

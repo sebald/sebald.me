@@ -1,0 +1,71 @@
+---
+title: Failing Forward at Design Systems
+description: The hardest part of building a design system was never the components, the tokens, or the docs. We built for a future nobody was moving toward, then learned to meet people where they were.
+topics: [design-systems]
+image: [./1.avif, ./2.avif, ./3.avif]
+date: 2026-02-16
+---
+
+When you set out to build a design system, your head is full of components, tokens, and documentation. That's what a design system is, right? It's tangible work. You can shape it exactly how you want, and it feels like real progress. Then you meet the reality of how your colleagues actually work, and you find out the hard part was never the building.
+
+We learned that the hard way. My team spent four years building a design system for a product with over 20 years of history and all the legacy baggage that comes with it. Most of our assumptions turned out to be wrong, but each time one broke, it pushed us somewhere better.
+
+## The territory we inherited
+
+The product was capable. Really capable. But you wouldn't know it by looking at it. The UI felt dated. If you judged the product by its interface, as most people do, you would severely underestimate what it could do.
+
+This wasn't a failure of effort. Teams were working hard. But they were spending most of their energy extinguishing fires caused by decisions made years earlier. Technical debt had compounded to the point where even small UI changes felt risky. "We can't build that" became a reflex. Not because the developers lacked skill, but because the tooling and the codebase had made ambition expensive. It was holding everyone back.
+
+So the plan became to split the monolithic software into multiple standalone products. The hope was that this would bring both technical and organizational benefits. Smaller codebases, independent teams, modern stacks. A design system seemed like the natural fit for this new world. Shared components, shared language, shared standards.
+
+## Building the map
+
+This was our chance to start fresh. We put together a small team, bootstrapped a component library with a modern tech stack, and paired it with an updated visual design that had long been approved but never shipped.
+
+Around the same time, one of the product teams was about to rebuild their product from the ground up. We jumped on the opportunity. A greenfield environment. No legacy constraints. No compromises. The perfect test case.
+
+It actually worked. The pilot team delivered something we were proud of. Components that used to take days to build from scratch were now available out of the box. Of course there were growing pains, but the proof was there.
+
+## Crickets
+
+We had a real product to point at. Turns out, nobody was looking. The rest of the company was still fully invested in the legacy system, and the plan to split the monolith into standalone products never gained traction. We had built for a future that the organization wasn't moving toward.
+
+When we showed up with our shiny new tools, our colleagues looked at their workload and said "I don't have time to learn this." That caught us off guard. They weren't being difficult. They were being rational. The cost of adopting something new felt too much when you're already struggling to keep up.
+
+## Meeting them where they were
+
+After a short existential crisis, we rethought our approach. We had assumed teams were just waiting for us to hand them something better. They weren't. So we went to them.
+
+We did something a bit counterintuitive: we disguised the new system as the old one. We brought the design system into the legacy codebase and matched the visual style so that anything built with new components was indistinguishable from the old code. Under the hood, developers were working with modern tools. On the surface, nothing had changed.
+
+Then we focused on making the transition as painless as possible for our colleagues. We wrote guides. We gave training sessions. We improved their dev environments. Teams working in the legacy codebase were still manually refreshing the browser after every UI change. Yes, really.
+
+But most importantly, we showed up. We sat with colleagues during their first steps with the design system. We were there for the first component, the first page, the first bug. We weren't a library they could install. We were a team they could call.
+
+## The trap
+
+Slowly, it started working. The narrative shifted from "we can't build that" to "we can build that... most likely." One team after another started using the design system without us having to ask. In product demos, more and more features were being built with our tools. The numbers looked great.
+
+So yay! We did it! ...right?
+
+Not quite. The adoption numbers looked great, but teams were still building inconsistent interfaces. Same buttons, same inputs, same building blocks. The pages looked consistent at a glance, but the way they worked and felt told a different story.
+
+Our colleagues knew how to use the components. They were productive. But knowing how to use a component is not the same as knowing how to combine them. The system itself had little opinion about how things should come together. Teams approached the same user flows differently. They all used the same components and arrived at results that were close enough to look right, but different enough for users to notice.
+
+So we pivoted again. We overhauled the documentation. Instead of describing what components can do, we explained how to combine them. Patterns for common use cases, opinionated guidance for recurring user flows. Less "here's a button" and more "here's how to load data and keep people in the loop."
+
+## Failing forward
+
+For most of the journey, it felt like we kept getting it wrong. But looking back, the pattern is clear: we kept confusing the map for the territory.
+
+Our documentation, our component library, our adoption metrics: that was the map. Organized, sensible, controlled. The territory is what we kept crashing into. Layers of workarounds in a codebase that never stopped growing. Tight deadlines that force teams to take shortcuts. Habits your colleagues have built up over a decade of doing things a certain way.
+
+Every time we treated the map as truth, the territory corrected us. Not gently, but clearly. Being ignored pushed us to invest in developer experience and support. Inconsistent interfaces showed us how much teams needed clear recommendations.
+
+Each obstacle forced us closer to the people using our system, and that is where the design system actually took shape. We are still failing forward. The territory keeps changing, but we've stopped treating the obstacles as setbacks, because what carried us wasn't the plan, it was the willingness to drop it and adapt. The resistance, the inconsistencies, the workarounds: they point us where to go next.
+
+<Callout variant="info" title="This started as a talk">
+  I gave this talk in December 2024. If you prefer slides (or Friends
+  references), check out the [original
+  presentation](https://sebald.github.io/failing-forward-at-design-systems/).
+</Callout>
