@@ -55,7 +55,7 @@ ${content}
 // Utilities
 // ---------------
 export const pageImage = (page: { slugs: string[]; url: string }) => {
-  const segments = [...page.slugs, 'image.png'];
+  const segments = [...page.slugs.slice(0, -1), `${page.slugs.at(-1)}.png`];
 
   return {
     segments,

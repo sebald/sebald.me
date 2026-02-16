@@ -23,6 +23,7 @@ export const metadata: Metadata = {
     siteName: 'Sebastian Sebald',
     locale: 'en_US',
     type: 'website',
+    images: ['/og.png'],
   },
   twitter: {
     card: 'summary_large_image',
