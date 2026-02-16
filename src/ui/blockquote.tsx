@@ -2,17 +2,14 @@ import { cva } from 'cva';
 
 // Styles
 // ---------------
-const style = cva({
-  base: [
-    'border-l-4 border-oatmeal-300',
-    'pl-4 py-2 my-6',
-    'text-oatmeal-700 italic',
-  ],
-});
-
-const citationStyle = cva({
-  base: ['block mt-2', 'text-sm text-oatmeal-600', 'not-italic'],
-});
+const style = {
+  quote: cva({
+    base: ['border-l-4 border-mist-600', 'pl-4 py-3', 'text-mist-400 italic'],
+  }),
+  cite: cva({
+    base: ['block mt-3', 'text-sm not-italic text-mist-500'],
+  }),
+};
 
 // Props
 // ---------------
@@ -30,9 +27,9 @@ export const Blockquote = ({
   attribution,
 }: BlockquoteProps) => {
   return (
-    <blockquote className={style()} cite={cite}>
+    <blockquote className={style.quote()} cite={cite}>
       <div>{children}</div>
-      {attribution && <cite className={citationStyle()}>— {attribution}</cite>}
+      {attribution && <cite className={style.cite()}>— {attribution}</cite>}
     </blockquote>
   );
 };

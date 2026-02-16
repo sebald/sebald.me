@@ -7,47 +7,40 @@ import NextLink from 'next/link';
 // ---------------
 export const styles = cva({
   base: [
-    'group/link ensure-hitbox',
     'inline-flex items-center gap-1.5',
-    'transition-colors focus-visible:focus-ring focus-visible:outline-none',
+    'transition-all duration-150',
+    'px-1 -mx-1 outline-none focus-visible:ui-focus',
   ],
   variants: {
     variant: {
       default: [
-        'text-link decoration-link/40',
-        'hover:text-link-hover hover:decoration-link-hover',
-      ],
-      muted: [
-        'text-muted decoration-muted/40',
-        'hover:text-oatmeal-900 hover:decoration-oatmeal-900',
+        'rounded-lg',
+        'text-link font-medium',
+        'underline decoration-link/15 underline-offset-3',
+        'hover:decoration-link/75',
       ],
       inherit: [
+        'rounded-lg',
         'text-inherit decoration-inherit',
-        'hover:text-link-hover hover:decoration-link-hover',
+        'hover:text-link hover:decoration-link',
       ],
-      ghost: [
-        'text-current text-sm',
-        'h-11 px-8 rounded-full',
-        'bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.15)]',
-        'hover:bg-[oklch(from_var(--color-text,var(--color-oatmeal-500))_l_c_h/0.1)]',
-        'active:scale-[0.97] transition-all duration-200',
+      icon: [
+        'justify-center no-underline',
+        'size-11 rounded-full',
+        'bg-mist-800 text-mist-400',
+        'hover:bg-mist-500/50 hover:text-mist-50',
+        '[&_svg]:size-4.5',
       ],
     },
-    noUnderline: {
-      false: ['underline underline-offset-4 decoration-1'],
-      true: ['no-underline'],
-    },
   },
-  defaultVariants: {
-    variant: 'default',
-    noUnderline: false,
-  },
+  defaultVariants: { variant: 'default' },
 });
 
 // Props
 // ---------------
 export interface LinkProps
-  extends VariantProps<typeof styles>,
+  extends
+    VariantProps<typeof styles>,
     Omit<NextLinkProps<'a'>, 'style' | 'href'> {
   href: NextLinkProps<'a'>['href'] | string;
 }
@@ -56,7 +49,6 @@ export interface LinkProps
 // ---------------
 export const Link = ({
   variant,
-  noUnderline,
   children,
   href,
   target,
@@ -74,7 +66,7 @@ export const Link = ({
   return (
     <Component
       href={href as Route}
-      className={styles({ variant, noUnderline })}
+      className={styles({ variant })}
       {...props}
       {...externalProps}
     >

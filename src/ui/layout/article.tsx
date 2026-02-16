@@ -1,66 +1,34 @@
-import {
-  CalendarBlankIcon,
-  HashStraightIcon,
-  MarkdownLogoIcon,
-} from '@phosphor-icons/react/ssr';
-import type { Route } from 'next';
-import Link from 'next/link';
+import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
-import type { VariantProps } from '@/lib/styles.utils';
-import type { HeadlineProps } from '@/ui/headline';
 import { Headline } from '@/ui/headline';
+import type { HeadlineProps } from '@/ui/headline';
+import { ParallaxImage } from '@/ui/parallax-image';
 
 // Styles
 // ---------------
 const styles = {
   root: cva({
-    base: ['flex flex-col items-start'],
-    variants: {
-      stretch: {
-        full: '',
-        prose: 'fit-prose',
-      },
-    },
+    base: ['flex flex-col'],
   }),
   header: cva({
-    base: [
-      'grid',
-      'grid-cols-2',
-      'gap-x-4',
-      'items-start',
-      '[grid-template-areas:"meta_meta""actions_actions""title_title"] min-[480px]:[grid-template-areas:"meta_actions""title_title"]',
-    ],
+    base: ['flex flex-col pb-8'],
   }),
-  meta: cva({
-    base: ['flex [grid-area:meta]', 'list-separator'],
-  }),
-  caption: cva({
-    base: ['text-muted flex items-center gap-0.5 text-xs'],
-  }),
-  action: cva({
-    base: [
-      'text-muted flex items-center gap-0.5 text-xs',
-      'ensure-hitbox',
-      'hover:text-link-hover',
-    ],
+  title: cva({
+    base: ['flex flex-col'],
   }),
   content: cva({
     base: ['prose'],
   }),
-  excerpt: cva({
-    base: 'text-pretty text-base',
+  image: cva({
+    base: ['mb-14 rounded-2xl'],
   }),
 };
 
 // Article.Header
 // ---------------
-interface HeaderProps
-  extends
-    PropsWithChildren,
-    AriaAttributes,
-    VariantProps<typeof styles.header> {
+interface HeaderProps extends PropsWithChildren, AriaAttributes {
   className?: string;
 }
 
@@ -72,104 +40,11 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
 
 // Article.Title
 // ---------------
-interface TitleProps extends PropsWithChildren {
-  id?: string;
-  /**
-   * Display style for the title
-   * - 'page': Large display heading with accent variant (for full article pages)
-   * - 'list': Smaller heading level 3 (for article lists/indexes)
-   */
-  variant?: 'page' | 'list';
-}
+interface TitleProps extends HeadlineProps {}
 
-const Title = ({ children, id, variant = 'page' }: TitleProps) => {
-  let headlineProps: Omit<HeadlineProps, 'children'>;
-
-  switch (variant) {
-    case 'list':
-      headlineProps = { level: '3', as: 'h2' };
-      break;
-    case 'page':
-    default:
-      headlineProps = { level: 'display', variant: 'accent' };
-      break;
-  }
-
-  return (
-    <Headline id={id} {...headlineProps} className="[grid-area:title]">
-      {children}
-    </Headline>
-  );
-};
-
-// Article.Time
-// ---------------
-interface TimeProps extends AriaAttributes {
-  date: Date | string;
-}
-
-const Time = ({ date, ...ariaProps }: TimeProps) => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  const isoDate = dateObj.toISOString().split('T')[0];
-
-  return (
-    <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
-      <CalendarBlankIcon size={14} />
-      {isoDate}
-    </time>
-  );
-};
-
-// Article.Topics
-// ---------------
-interface TopicsProps extends AriaAttributes {
-  topics: string[];
-}
-
-const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
-  return (
-    <div className={styles.caption()} {...ariaProps}>
-      {/* Optical correction for the hash icon */}
-      <HashStraightIcon size={14} className="-mr-px" />
-      {topics.join(', ')}
-    </div>
-  );
-};
-
-// Article.MarkdownLink
-// ---------------
-interface MarkdownLinkProps extends AriaAttributes {
-  href: string;
-}
-
-const MarkdownLink = ({ href, ...props }: MarkdownLinkProps) => (
-  <Link {...props} href={href as Route} className={styles.action()}>
-    <MarkdownLogoIcon size={16} />
-    View as Markdown
-  </Link>
-);
-
-// Article.Actions
-// ---------------
-interface ActionsProps extends PropsWithChildren, AriaAttributes {}
-
-const Actions = ({ children, ...ariaProps }: ActionsProps) => (
-  <div className="justify-self-end [grid-area:actions]" {...ariaProps}>
-    {children}
-  </div>
-);
-
-// Article.Meta
-// ---------------
-interface MetaProps extends AriaAttributes {
-  date?: Date | string;
-  topics?: string[];
-}
-
-const Meta = ({ date, topics, ...ariaProps }: MetaProps) => (
-  <div className={styles.meta()} {...ariaProps}>
-    {date && <Time date={date} />}
-    {topics && topics.length > 0 && <Topics topics={topics} />}
+const Title = ({ children, ...props }: TitleProps) => (
+  <div className={styles.title()}>
+    <Headline {...props}>{children}</Headline>
   </div>
 );
 
@@ -183,39 +58,75 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
   </div>
 );
 
-// Article.Excerpt
+// Article.Image
 // ---------------
-interface ExcerptProps extends PropsWithChildren, AriaAttributes {}
+interface ImageSectionProps {
+  src: string | string[];
+  aspect?: string;
+}
 
-const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
-  <p className={styles.excerpt()} {...ariaProps}>
-    {children}
-  </p>
-);
+const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
+  const images = Array.isArray(src) ? [...src].reverse() : [src];
+
+  if (images.length > 1) {
+    return (
+      <ParallaxImage
+        aspect={aspect}
+        className={styles.image()}
+        layers={images.map((url, i, arr) => {
+          const depth = arr.length > 1 ? i / (arr.length - 1) : 1;
+          return {
+            id: url,
+            src: url,
+            alt: '',
+            fill: true,
+            priority: true,
+            config: {
+              xMove: `${(0.5 + depth ** 1.5 * 3.5).toFixed(1)}cqi`,
+              yMove: `${(0.25 + depth ** 1.5 * 1.75).toFixed(1)}cqi`,
+            },
+          };
+        })}
+      />
+    );
+  }
+
+  return (
+    <div
+      className={styles.image({
+        className: 'relative w-full overflow-hidden rounded-2xl',
+      })}
+      style={{ aspectRatio: aspect }}
+      aria-hidden="true"
+    >
+      <NextImage
+        src={images[0]}
+        alt=""
+        fill
+        priority
+        className="object-cover"
+      />
+    </div>
+  );
+};
 
 // Article.Root
 // ---------------
-interface RootProps
-  extends PropsWithChildren, AriaAttributes, VariantProps<typeof styles.root> {
+interface RootProps extends PropsWithChildren, AriaAttributes {
   className?: string;
 }
 
-const Root = ({ children, className, stretch, ...ariaProps }: RootProps) => (
-  <article className={styles.root({ className, stretch })} {...ariaProps}>
+const Root = ({ children, className, ...ariaProps }: RootProps) => (
+  <article className={styles.root({ className })} {...ariaProps}>
     {children}
   </article>
 );
 
-// Note API
+// Article API
 // ---------------
 export const Article = Object.assign(Root, {
   Header,
   Title,
-  Time,
-  Topics,
-  Meta,
-  Actions,
-  Excerpt,
+  Image: ImageSection,
   Content,
-  MarkdownLink,
 });

@@ -13,6 +13,7 @@ export interface ParallaxLayer extends Omit<ImageProps, 'alt'> {
   alt?: string;
   config: {
     width?: string;
+    height?: string;
     xOrigin?: string;
     yOrigin?: string;
     xMove?: string;
@@ -23,8 +24,8 @@ export interface ParallaxLayer extends Omit<ImageProps, 'alt'> {
 
 export type ParallaxImageProps = {
   layers: ParallaxLayer[];
-  width: string | number;
   aspect: string;
+  scale?: string;
   className?: string;
 };
 
@@ -43,12 +44,13 @@ const mapRange = (
 
 export const ParallaxImage = ({
   layers,
-  width,
   aspect,
+  scale,
   className,
 }: ParallaxImageProps) => {
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
+    delete container.dataset.leaving;
     const rect = container.getBoundingClientRect();
 
     const offsetX = e.clientX - rect.left;
@@ -77,38 +79,48 @@ export const ParallaxImage = ({
   };
 
   const handlePointerLeave = (e: PointerEvent<HTMLDivElement>) => {
-    e.currentTarget.style.setProperty('--x', '0');
-    e.currentTarget.style.setProperty('--y', '0');
+    const container = e.currentTarget;
+    container.dataset.leaving = '';
+    container.style.setProperty('--x', '0');
+    container.style.setProperty('--y', '0');
   };
 
   return (
     <div
       className={cn(
-        'relative touch-none overflow-hidden',
-        'max-w-(--container-width) aspect-(--container-aspect) w-full',
+        'group @container relative touch-none overflow-hidden',
+        'aspect-(--container-aspect) w-full',
+        'animate-fade-in',
         className,
       )}
       style={toCSSVars({
         x: 0,
         y: 0,
-        containerWidth: width,
         containerAspect: aspect,
+        ...(scale && { scale }),
       })}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      {layers.map(({ alt, className, config, ...rest }) => (
+      {layers.map(({ alt, className, config, fill, ...rest }) => (
         <Image
+          width={0}
+          height={0}
+          sizes="100vw"
           {...rest}
           key={rest.id}
           alt={alt || ''}
-          placeholder="blur"
           className={cn(
-            'pointer-events-none absolute select-none object-cover',
-            'left-1/2 top-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
-            'duration-400 transition-[object-position,translate] ease-out will-change-transform',
-            'w-(--width,auto) h-(--height,auto)',
-            'object-[calc(var(--x-origin,50%)+calc(var(--x)*var(--x-move,0px)))_calc(var(--y-origin,50%)+calc(var(--y)*var(--y-move,0px)))]',
+            'pointer-events-none absolute object-cover select-none',
+            'top-1/2 left-1/2 max-w-none -translate-x-1/2 -translate-y-1/2',
+            // Smooth transition for parallax movement
+            'transition-[object-position,translate] duration-400 ease-out will-change-transform',
+            // Slower ease-out when pointer leaves
+            'group-data-leaving:duration-600 group-data-leaving:ease-[cubic-bezier(0.22,1,0.36,1)]',
+            // Oversized to allow parallax shift without revealing edges
+            'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
+            // Shift object-position based on pointer (--x, --y), clamped to max travel distance
+            'object-[calc(var(--x-origin,50%)+clamp(calc(-1cqi*(var(--width,var(--scale,115))-100)/2),calc(var(--x)*var(--x-move,0cqi)),calc(1cqi*(var(--width,var(--scale,115))-100)/2)))_calc(var(--y-origin,50%)+clamp(calc(-1cqi*(var(--height,var(--scale,115))-100)/2),calc(var(--y)*var(--y-move,0cqi)),calc(1cqi*(var(--height,var(--scale,115))-100)/2)))]',
             className,
           )}
           style={toCSSVars(config)}

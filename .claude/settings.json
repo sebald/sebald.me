@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "afterToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm prettier --write $CLAUDE_FILE_PATHS"
+          }
+        ]
+      }
+    ]
+  }
+}

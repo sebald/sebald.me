@@ -1,5 +1,5 @@
 import { createRSSFeed } from '@/lib/rss';
-import { labSource, notesSource } from '@/lib/source';
+import { notesSource } from '@/lib/source';
 
 // Config
 // ---------------
@@ -8,10 +8,7 @@ export const revalidate = false;
 // Route
 // ---------------
 export const GET = () => {
-  const feed = createRSSFeed([
-    ...notesSource.getPages(),
-    ...labSource.getPages(),
-  ]);
+  const feed = createRSSFeed([...notesSource.getPages()]);
 
   return new Response(feed, {
     headers: {

@@ -2,18 +2,68 @@
 @plugin 'tailwind-scrollbar';
 
 @import './theme.css';
-@import './utils.css';
-
 @import './prose.css';
-@import './panel.css';
 
-/* For <CodeBlock> customization. */
-@import './shiki.css';
-@source '../../node_modules/fumadocs-ui/dist/components/codeblock.js';
+::selection {
+  background-color: oklch(0.74 0.1 65 / 0.5);
+  color: var(--color-mist-50);
+}
 
-::selection,
-::-moz-selection {
-  background-color: oklch(0.9 0.1 90 / 0.5);
+/*------------------*/
+/*    Mini Reset    */
+/*------------------*/
+
+* {
+  min-width: 0;
+  text-box: trim-both cap alphabetic;
+}
+
+:root {
+  interpolate-size: allow-keywords;
+}
+
+html {
+  text-size-adjust: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/*------------------*/
+/*      Shiki       */
+/*------------------*/
+
+code[data-theme],
+code span {
+  color: var(--shiki-dark) !important;
+}
+
+/*------------------*/
+/*    Animations    */
+/*------------------*/
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@utility animate-fade-in {
+  animation: fade-in 500ms ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
