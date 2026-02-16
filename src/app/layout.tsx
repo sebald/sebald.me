@@ -15,6 +15,19 @@ export const metadata: Metadata = {
     default: 'Welcome',
     template: '%s | Sebastian Sebald',
   },
+  description:
+    'Personal blog by Sebastian Sebald. Notes on web development, design systems, and creative coding.',
+  authors: [{ name: 'Sebastian Sebald', url: siteUrl }],
+  creator: 'Sebastian Sebald',
+  openGraph: {
+    siteName: 'Sebastian Sebald',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    creator: '@sebastiansebald',
+  },
   alternates: {
     types: {
       'application/rss+xml': [

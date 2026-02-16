@@ -20,43 +20,43 @@ export const GET = async (
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-        padding: '60px',
-        fontFamily: 'system-ui',
+        justifyContent: 'space-between',
+        backgroundColor: '#10141d',
+        padding: '60px 80px',
+        fontFamily: 'monospace',
       }}
     >
-      <h1
-        style={{
-          fontSize: '60px',
-          fontWeight: 'bold',
-          color: '#000',
-          marginBottom: '20px',
-          textAlign: 'center',
-          maxWidth: '100%',
-        }}
-      >
-        {page.data.title}
-      </h1>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <h1
+          style={{
+            fontSize: '56px',
+            fontWeight: 'bold',
+            color: '#e5ecf1',
+            lineHeight: 1.2,
+            margin: 0,
+          }}
+        >
+          {page.data.title}
+        </h1>
+        <p
+          style={{
+            fontSize: '28px',
+            color: '#4d5e7a',
+            lineHeight: 1.5,
+            marginTop: '24px',
+          }}
+        >
+          {page.data.description}
+        </p>
+      </div>
       <p
         style={{
-          fontSize: '32px',
-          color: '#666',
-          textAlign: 'center',
-          maxWidth: '90%',
+          fontSize: '22px',
+          color: '#4d5e7a',
+          margin: 0,
         }}
       >
-        {page.data.description}
-      </p>
-      <p
-        style={{
-          fontSize: '20px',
-          color: '#999',
-          marginTop: '40px',
-        }}
-      >
-        My Blog
+        sebald.me
       </p>
     </div>,
     {

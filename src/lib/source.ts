@@ -54,13 +54,12 @@ ${content}
 
 // Utilities
 // ---------------
-export const pageImage = (page: ContentPage) => {
+export const pageImage = (page: { slugs: string[]; url: string }) => {
   const segments = [...page.slugs, 'image.png'];
-  const type = page.url.includes('/lab') ? 'lab' : 'notes';
 
   return {
     segments,
-    url: `/og/${type}/${segments.join('/')}`,
+    url: `/og/${segments.join('/')}`,
   };
 };
 

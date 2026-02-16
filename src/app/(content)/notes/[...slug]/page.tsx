@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
-import { notesSource } from '@/lib/source';
+import { notesSource, pageImage } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { PageToolbar } from '@/ui/page-toolbar';
@@ -21,9 +21,24 @@ export const generateMetadata = async (
   const page = notesSource.getPage(params.slug);
   if (!page) notFound();
 
+  const image = pageImage(page);
+
   return {
     title: page.data.title,
     description: page.data.description,
+    openGraph: {
+      title: page.data.title,
+      description: page.data.description,
+      type: 'article',
+      publishedTime: page.data.date
+        ? new Date(page.data.date).toISOString()
+        : undefined,
+      images: [image.url],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      images: [image.url],
+    },
   };
 };
 
