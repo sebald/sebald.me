@@ -8,7 +8,7 @@ export const Intro = () => (
   <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
     <Logo size={50} />
     <div className="grid gap-8">
-      <div className="grid gap-2">
+      <div className="grid gap-2.5">
         <Text variant="accent">Sebastian Sebald</Text>
         <Text variant="muted" size="caption">
           Software Architect at Reservix, Freiburg
@@ -46,7 +46,7 @@ const NotesList = () => {
                 {note.data.title}
               </Headline>
             </Link>
-            <Text variant="muted">{excerpt(note)}</Text>
+            <Text>{excerpt(note)}</Text>
             {note.data.date && (
               <Text variant="muted" size="caption" as="span">
                 <time dateTime={String(note.data.date)}>
@@ -62,7 +62,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-16 pt-32">
+  <div className="grid gap-28 pt-32">
     <Intro />
     <NotesList />
   </div>
