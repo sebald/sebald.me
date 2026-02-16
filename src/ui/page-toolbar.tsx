@@ -9,7 +9,7 @@ import { Link } from '@/ui/link';
 const styles = {
   root: cva({
     base: [
-      'grid items-center pt-32 pb-20 w-full',
+      'grid items-center pt-20 pb-20 w-full sm:pt-32',
       'grid-cols-[auto_1fr]',
       '[grid-template-areas:"back_actions"]',
     ],
