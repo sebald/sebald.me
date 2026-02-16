@@ -12,10 +12,6 @@ const config = {
   async rewrites() {
     return [
       {
-        source: '/og.png',
-        destination: '/og/default.png',
-      },
-      {
         source: '/:section/:path*.md',
         destination: '/api/md/:section/:path*',
       },
