@@ -1,7 +1,6 @@
+import { ImageResponse } from 'next/og';
 import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-
-import { ImageResponse } from 'next/og';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
@@ -46,8 +45,7 @@ export const createDefaultOgImage = () =>
         fontFamily: 'monospace',
       }}
     >
-      <Logo size={120} />
+      <Logo size={280} />
     </div>,
     size,
   );
-
