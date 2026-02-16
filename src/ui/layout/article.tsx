@@ -160,7 +160,13 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
       style={{ aspectRatio: aspect }}
       aria-hidden="true"
     >
-      <NextImage src={images[0]} alt="" fill priority className="object-cover" />
+      <NextImage
+        src={images[0]}
+        alt=""
+        fill
+        priority
+        className="object-cover"
+      />
     </div>
   );
 };
