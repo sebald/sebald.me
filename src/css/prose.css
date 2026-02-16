@@ -61,7 +61,7 @@
         padding-left: 0.5em;
 
         &::marker {
-          color: var(--color-black-400);
+          color: var(--color-mist-400);
         }
       }
 

@@ -84,54 +84,6 @@ const InventoryPage = () => (
               />
             </div>
 
-            <Headline level="2">Black Palette</Headline>
-
-            <div className="flex flex-wrap gap-1">
-              <div
-                className="bg-black-50 size-12 rounded-lg"
-                title="black-50"
-              />
-              <div
-                className="bg-black-100 size-12 rounded-lg"
-                title="black-100"
-              />
-              <div
-                className="bg-black-200 size-12 rounded-lg"
-                title="black-200"
-              />
-              <div
-                className="bg-black-300 size-12 rounded-lg"
-                title="black-300"
-              />
-              <div
-                className="bg-black-400 size-12 rounded-lg"
-                title="black-400"
-              />
-              <div
-                className="bg-black-500 size-12 rounded-lg"
-                title="black-500"
-              />
-              <div
-                className="bg-black-600 size-12 rounded-lg"
-                title="black-600"
-              />
-              <div
-                className="bg-black-700 size-12 rounded-lg"
-                title="black-700"
-              />
-              <div
-                className="bg-black-800 size-12 rounded-lg"
-                title="black-800"
-              />
-              <div
-                className="bg-black-900 size-12 rounded-lg"
-                title="black-900"
-              />
-              <div
-                className="bg-black-950 size-12 rounded-lg"
-                title="black-950"
-              />
-            </div>
           </div>
 
           <div className="grid gap-4">

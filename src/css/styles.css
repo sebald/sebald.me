@@ -4,10 +4,10 @@
 @import './theme.css';
 @import './prose.css';
 
-/* ::selection,
-::-moz-selection {
-  background-color: oklch(0.9 0.1 90 / 0.5);
-} */
+::selection {
+  background-color: oklch(0.74 0.1 65 / 0.5);
+  color: var(--color-mist-50);
+}
 
 /*------------------*/
 /*    Mini Reset    */

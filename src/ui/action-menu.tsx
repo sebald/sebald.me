@@ -57,10 +57,6 @@ export const ActionMenuItem = ({
   );
 };
 
-// ActionMenuSeparator
-// ---------------
-export const ActionMenuSeparator = () => <Menu.Separator />;
-
 // CopyLinkItem
 // ---------------
 export const CopyLinkItem = () => {
