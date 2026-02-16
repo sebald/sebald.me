@@ -29,7 +29,7 @@ export const styles = {
   popup: cva({
     base: [
       'z-100',
-      'fixed max-w-5xl px-4',
+      'fixed max-w-[calc(100vw-2rem)] px-4',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
     variants: {

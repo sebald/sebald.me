@@ -142,6 +142,7 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
           src: url,
           alt: '',
           fill: true,
+          priority: true,
           config: {
             xMove: `${i === arr.length - 1 ? 4 : (i + 1) * 1}cqi`,
             yMove: `${i === arr.length - 1 ? 2 : (i + 1) * 0.5}cqi`,
@@ -159,7 +160,7 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
       style={{ aspectRatio: aspect }}
       aria-hidden="true"
     >
-      <NextImage src={images[0]} alt="" fill className="object-cover" />
+      <NextImage src={images[0]} alt="" fill priority className="object-cover" />
     </div>
   );
 };

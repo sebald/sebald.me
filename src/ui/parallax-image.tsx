@@ -106,17 +106,11 @@ export const ParallaxImage = ({
         const heightPct = parseFloat(config.height || scale || '115');
         const maxXMove = (widthPct - 100) / 2;
         const maxYMove = (heightPct - 100) / 2;
-
         return (
           <Image
             width={0}
             height={0}
             sizes="100vw"
-            placeholder={
-              rest.blurDataURL || typeof rest.src !== 'string'
-                ? 'blur'
-                : 'empty'
-            }
             {...rest}
             key={rest.id}
             alt={alt || ''}
