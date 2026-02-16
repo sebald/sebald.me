@@ -1,13 +1,13 @@
-import { notFound } from 'next/navigation';
 import { resolve } from 'node:path';
 
-import { createOgImage, getCustomOgImage } from '@/lib/og';
-import { miscSource, notesSource } from '@/lib/source';
+import { notFound } from 'next/navigation';
 
-// Helper
-// ---------------
+import { createDefaultOgImage, getCustomOgImage } from '@/lib/og';
+import { notesSource } from '@/lib/source';
+
+export const revalidate = false;
+
 const NOTES_DIR = resolve(process.cwd(), 'content/notes');
-const MISC_DIR = resolve(process.cwd(), 'content/misc');
 
 /** Strip `.png` from the last segment to get page slugs */
 const toPageSlugs = (slug: string[]) => [
@@ -20,40 +20,15 @@ const toOgSlug = (slugs: string[]) => [
   `${slugs.at(-1)}.png`,
 ];
 
-// Config
-// ---------------
-export const revalidate = false;
-
-export const generateStaticParams = () => {
-  const noteParams = notesSource.getPages().map(page => ({
-    slug: toOgSlug(page.slugs),
-  }));
-  const miscParams = miscSource.getPages().map(page => ({
-    slug: toOgSlug(page.slugs),
-  }));
-
-  return [...noteParams, ...miscParams];
-};
-
-// Handler
-// ---------------
 export const GET = async (
   _req: Request,
   { params }: RouteContext<'/og/[...slug]'>,
 ) => {
   const { slug } = await params;
-  const pageSlugs = toPageSlugs(slug);
-
-  const notePage = notesSource.getPage(pageSlugs);
-  const page = notePage ?? miscSource.getPage(pageSlugs);
-
+  const page = notesSource.getPage(toPageSlugs(slug));
   if (!page) notFound();
 
-  const customImage = await getCustomOgImage(
-    page.path,
-    notePage ? NOTES_DIR : MISC_DIR,
-  );
-
+  const customImage = await getCustomOgImage(page.path, NOTES_DIR);
   if (customImage) {
     return new Response(customImage, {
       headers: {
@@ -63,5 +38,10 @@ export const GET = async (
     });
   }
 
-  return createOgImage(page.data.title, page.data.description);
+  return createDefaultOgImage();
 };
+
+export const generateStaticParams = () =>
+  notesSource.getPages().map(page => ({
+    slug: toOgSlug(page.slugs),
+  }));

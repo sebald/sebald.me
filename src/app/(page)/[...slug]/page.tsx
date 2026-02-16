@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { miscSource, pageImage } from '@/lib/source';
+import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { PageToolbar } from '@/ui/page-toolbar';
@@ -19,8 +19,6 @@ export const generateMetadata = async (
   const page = miscSource.getPage(params.slug);
   if (!page) notFound();
 
-  const image = pageImage(page);
-
   return {
     title: page.data.title,
     description: page.data.description,
@@ -28,11 +26,9 @@ export const generateMetadata = async (
       title: page.data.title,
       description: page.data.description,
       type: 'website',
-      images: [image.url],
     },
     twitter: {
       card: 'summary_large_image',
-      images: [image.url],
     },
   };
 };
