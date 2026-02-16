@@ -137,17 +137,20 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
       <ParallaxImage
         aspect={aspect}
         className={styles.image()}
-        layers={images.map((url, i, arr) => ({
-          id: url,
-          src: url,
-          alt: '',
-          fill: true,
-          priority: true,
-          config: {
-            xMove: `${i === arr.length - 1 ? 4 : (i + 1) * 1}cqi`,
-            yMove: `${i === arr.length - 1 ? 2 : (i + 1) * 0.5}cqi`,
-          },
-        }))}
+        layers={images.map((url, i, arr) => {
+          const depth = arr.length > 1 ? i / (arr.length - 1) : 1;
+          return {
+            id: url,
+            src: url,
+            alt: '',
+            fill: true,
+            priority: true,
+            config: {
+              xMove: `${(0.5 + depth ** 1.5 * 3.5).toFixed(1)}cqi`,
+              yMove: `${(0.25 + depth ** 1.5 * 1.75).toFixed(1)}cqi`,
+            },
+          };
+        })}
       />
     );
   }
