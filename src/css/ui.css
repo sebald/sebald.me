@@ -1,5 +1,5 @@
 @utility ui-focus {
-  @apply outline-2 outline-solid outline-mist-300/80 outline-offset-2;
+  @apply outline-2 outline-solid outline-ring/80 outline-offset-2;
 }
 
 @utility ui-panel {
