@@ -15,9 +15,9 @@ export const Intro = () => (
         </Text>
       </div>
       <Text>
-        I work right where code meets user experience. At the core of this work
-        sit design systems. They are the infrastructure that translates creative
-        vision into reality at scale.
+        I work at the intersection of code and user experience. Design systems
+        are central to that work. They're the infrastructure that turns creative
+        vision into something real, at scale.
       </Text>
     </div>
   </header>
