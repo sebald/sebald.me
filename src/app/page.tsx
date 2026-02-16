@@ -1,4 +1,4 @@
-import { excerpt, notesSource, sortByDate } from '@/lib/source';
+import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { Logo } from '@/ui/logo';
@@ -16,8 +16,8 @@ export const Intro = () => (
       </div>
       <Text>
         I work at the intersection of code and user experience. Design systems
-        are central to that work. They're the infrastructure that turns creative
-        vision into something real, at scale.
+        are central to that work. They&apos;re the infrastructure that turns
+        creative vision into something real, at scale.
       </Text>
     </div>
   </header>
@@ -34,7 +34,7 @@ const NotesList = () => {
   const notes = sortByDate(notesSource.getPages());
 
   return (
-    <section className="grid gap-6">
+    <section className="grid gap-10">
       <Headline level="3">Notes</Headline>
       <ul className="grid gap-10">
         {notes.map(note => (
@@ -51,7 +51,7 @@ const NotesList = () => {
                 {note.data.title}
               </Headline>
             </Link>
-            <Text>{excerpt(note)}</Text>
+            <Text>{note.data.description}</Text>
           </li>
         ))}
       </ul>

@@ -1,4 +1,3 @@
-import { CalendarBlankIcon, HashStraightIcon } from '@phosphor-icons/react/ssr';
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
@@ -19,17 +18,8 @@ const styles = {
   title: cva({
     base: ['flex flex-col'],
   }),
-  caption: cva({
-    base: ['text-muted-foreground flex items-center gap-0.5 text-xs'],
-  }),
   content: cva({
     base: ['prose'],
-  }),
-  footer: cva({
-    base: ['flex', 'list-separator'],
-  }),
-  excerpt: cva({
-    base: 'text-pretty text-base',
   }),
   image: cva({
     base: ['mb-14 rounded-2xl'],
@@ -58,50 +48,6 @@ const Title = ({ children, ...props }: TitleProps) => (
   </div>
 );
 
-// Article.Time
-// ---------------
-interface TimeProps extends AriaAttributes {
-  date: Date | string;
-}
-
-const Time = ({ date, ...ariaProps }: TimeProps) => {
-  const dateObj = typeof date === 'string' ? new Date(date) : date;
-  const isoDate = dateObj.toISOString().split('T')[0];
-
-  return (
-    <time dateTime={isoDate} className={styles.caption()} {...ariaProps}>
-      <CalendarBlankIcon size={14} />
-      {isoDate}
-    </time>
-  );
-};
-
-// Article.Topics
-// ---------------
-interface TopicsProps extends AriaAttributes {
-  topics: string[];
-}
-
-const Topics = ({ topics, ...ariaProps }: TopicsProps) => {
-  return (
-    <div className={styles.caption()} {...ariaProps}>
-      {/* Optical correction for the hash icon */}
-      <HashStraightIcon size={14} className="-mr-px" />
-      {topics.join(', ')}
-    </div>
-  );
-};
-
-// Article.Footer
-// ---------------
-interface FooterProps extends PropsWithChildren, AriaAttributes {}
-
-const Footer = ({ children, ...ariaProps }: FooterProps) => (
-  <footer className={styles.footer()} {...ariaProps}>
-    {children}
-  </footer>
-);
-
 // Article
 // ---------------
 interface ContentProps extends PropsWithChildren, AriaAttributes {}
@@ -110,16 +56,6 @@ const Content = ({ children, ...ariaProps }: ContentProps) => (
   <div className={styles.content()} {...ariaProps}>
     {children}
   </div>
-);
-
-// Article.Excerpt
-// ---------------
-interface ExcerptProps extends PropsWithChildren, AriaAttributes {}
-
-const Excerpt = ({ children, ...ariaProps }: ExcerptProps) => (
-  <p className={styles.excerpt()} {...ariaProps}>
-    {children}
-  </p>
 );
 
 // Article.Image
@@ -193,8 +129,4 @@ export const Article = Object.assign(Root, {
   Title,
   Image: ImageSection,
   Content,
-  Footer,
-  Time,
-  Topics,
-  Excerpt,
 });
