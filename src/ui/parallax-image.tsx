@@ -90,6 +90,7 @@ export const ParallaxImage = ({
       className={cn(
         'group @container relative touch-none overflow-hidden',
         'aspect-(--container-aspect) w-full',
+        'animate-fade-in',
         className,
       )}
       style={toCSSVars({
