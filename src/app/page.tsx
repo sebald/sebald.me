@@ -23,34 +23,37 @@ export const Intro = () => (
   </header>
 );
 
+const formatDate = (date: Date | string) =>
+  new Date(date).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
 const NotesList = () => {
   const notes = sortByDate(notesSource.getPages());
 
   return (
     <section className="grid gap-6">
-      <Headline level="2" as="h2">
+      <Headline level="3" as="h3">
         Notes
       </Headline>
-      <ul className="grid gap-6">
+      <ul className="grid gap-10">
         {notes.map(note => (
-          <li key={note.url} className="grid gap-1">
-            <Link href={note.url} className="group">
-              <Headline level="2" as="h3">
+          <li key={note.url} className="grid gap-2">
+            <Link href={note.url} variant="inherit">
+              <Headline level="2" as="h2">
                 {note.data.title}
               </Headline>
             </Link>
-            <div className="text-muted-foreground flex items-center gap-4 text-sm">
-              {note.data.date && (
-                <time dateTime={String(note.data.date)}>
-                  {new Date(note.data.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-              )}
-            </div>
             <Text variant="muted">{excerpt(note)}</Text>
+            {note.data.date && (
+              <Text variant="muted" size="caption" as="span">
+                <time dateTime={String(note.data.date)}>
+                  {formatDate(note.data.date)}
+                </time>
+              </Text>
+            )}
           </li>
         ))}
       </ul>
