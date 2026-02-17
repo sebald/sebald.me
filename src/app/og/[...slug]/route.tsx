@@ -9,15 +9,15 @@ export const revalidate = false;
 
 const NOTES_DIR = resolve(process.cwd(), 'content/notes');
 
-/** Strip `.png` from the last segment to get page slugs */
+/** Strip `.webp` from the last segment to get page slugs */
 const toPageSlugs = (slug: string[]) => [
   ...slug.slice(0, -1),
-  slug.at(-1)!.replace(/\.png$/, ''),
+  slug.at(-1)!.replace(/\.webp$/, ''),
 ];
 
 const toOgSlug = (slugs: string[]) => [
   ...slugs.slice(0, -1),
-  `${slugs.at(-1)}.png`,
+  `${slugs.at(-1)}.webp`,
 ];
 
 export const GET = async (
@@ -32,7 +32,7 @@ export const GET = async (
   if (customImage) {
     return new Response(customImage, {
       headers: {
-        'Content-Type': 'image/png',
+        'Content-Type': 'image/webp',
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
     });
