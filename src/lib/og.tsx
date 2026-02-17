@@ -21,9 +21,9 @@ export const Logo = ({ size = 40 }: { size?: number }) => (
   </svg>
 );
 
-/** Try to read a custom og.png from the page's content directory */
+/** Try to read a custom og.webp from the page's content directory */
 export const getCustomOgImage = async (pagePath: string, baseDir: string) => {
-  const ogPath = join(baseDir, dirname(pagePath), 'og.png');
+  const ogPath = join(baseDir, dirname(pagePath), 'og.webp');
   try {
     return await readFile(ogPath);
   } catch {
