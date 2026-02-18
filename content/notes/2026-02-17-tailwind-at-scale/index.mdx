@@ -1,17 +1,19 @@
 ---
-title: 'Atomic Abstractions: Combining @apply and @utility in Tailwind v4'
-description: Reusability in utility-first CSS usually means copy-pasting the same classes over and over. Tailwind v4 gives you a way out by combining @utility and @apply into something I like to call Atomic Abstractions.
+title: 'Tailwind at Scale: Reusable Utilities with @utility and @apply'
+description: As your project grows, utility-first CSS runs into a repetition problem. Tailwind v4 gives you a clean way out by combining @utility and @apply into custom utilities that behave just like built-in ones.
 topics: [css, tailwind, design-systems]
 date: 2026-02-17
 ---
 
-If you've worked with Tailwind long enough, you've run into the reusability problem. You know the one. You need a focus ring on buttons, inputs, selects, textareas, and a handful of custom components. So you copy-paste `outline-2 outline-offset-2 outline-blue-600` into each of them. Then the design changes and you hunt down every instance.
+Keeping CSS maintainable is one of those problems that never fully goes away, and everyone seems to have a different idea about how to solve it. Some swear by strict naming conventions like BEM. Others go all in on encapsulation with CSS Modules or CSS-in-JS. And then there's the utility-first camp, which says: stop naming things, just apply small, single-purpose classes directly in your markup.
 
-Components help, but not every shared pattern is a component. A focus state isn't a component. A disabled appearance isn't a component. The base look of an input isn't a component. These are cross-cutting concerns, and utility-first CSS has historically had a blind spot for them.
+At this point, utility-first CSS has won. Tailwind is everywhere.
 
-Tailwind v4 fixes this. By combining two features, `@utility` and `@apply`, you can create what I've started calling **Atomic Abstractions**: utilities that are semantic in name but atomic in definition. They live inside Tailwind's system, they tree-shake, they autocomplete, and they compose with every modifier Tailwind offers.
+If you ask critics of utility-first CSS what bothers them most, the answer is almost always the same: repetition. It's not a problem you notice on day one. But as your project grows, certain visual patterns start repeating across your codebase. The same cluster of utility classes, copy-pasted into a dozen places. Then the design changes and you're hunting down every instance.
 
-Let me show you what I mean.
+Components help, but not every shared pattern is a component. A focus state isn't a component. A disabled appearance isn't a component. The base look of an input isn't a component. These are cross-cutting concerns, and utility-first CSS has historically had no good answer for them.
+
+Tailwind v4 changes that. By combining two features, `@utility` and `@apply`, you can extract visual patterns into custom utilities that behave just like Tailwind's built-in ones.
 
 ## A quick recap
 
