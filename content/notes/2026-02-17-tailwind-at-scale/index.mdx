@@ -5,13 +5,11 @@ topics: [css, tailwind, design-systems]
 date: 2026-02-17
 ---
 
-One common critique of Tailwind is that it doesn't scale well. It's not a problem you notice on day one. But as your project grows, you start copy-pasting the same cluster of utility classes into a dozen places. Then the design changes and you're hunting down every instance.
+Tailwind works great until your project hits a certain size. You don't notice it at first. But one day you realize you've copy-pasted the same string of utility classes into a dozen places, and when the design changes, you have to hunt down every last instance.
 
-Components are one way to deal with this. If you keep repeating the same classes, wrap them in a component and reuse that instead. But not every shared pattern is a component. A focus state isn't a component. A disabled appearance isn't a component. The base look of an input isn't a component.
+The obvious solution is components. But not every string of classes you're repeating maps to one. A focus state isn't a component. A disabled appearance isn't a component. And the base look of a form element is shared across inputs, selects, and textareas. With [BEM](https://getbem.com/introduction/) or [OOCSS](https://www.smashingmagazine.com/2011/12/an-introduction-to-object-oriented-css-oocss/), this is a solved problem. You write a class, reuse it everywhere.
 
-These are cross-cutting concerns, and the usual answer is to reach for something like BEM or CSS Modules to bring back structure.
-
-But you don't have to leave Tailwind's system to solve this. With Tailwind 4, you can combine two features, `@utility{:css}` and `@apply{:css}`, to bring structure to your styles without giving up anything Tailwind offers.
+Tailwind 4 lets you achieve the same reusability without stepping outside its system. The key is combining two features: `@utility{:css}` and `@apply{:css}`. You get to name your patterns, compose them from existing utilities, and Tailwind treats them as first-class citizens.
 
 ## A quick recap
 
@@ -19,7 +17,7 @@ If you're already familiar with Tailwind 4, feel free to skip ahead. But for the
 
 ### @utility
 
-The `@utility` directive lets you register a custom utility class that Tailwind treats as a first-class citizen. It shows up in autocomplete, it participates in Tailwind's sort order, and it only ships in your CSS if you actually use it.
+The `@utility{:css}` directive lets you register a custom utility class that works just like a built-in utility. It shows up in autocomplete, it participates in Tailwind's sort order, and it only ships in your CSS if you actually use it.
 
 ```css
 @utility scrollbar-hidden {
