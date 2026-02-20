@@ -19,32 +19,41 @@ If you're already familiar with Tailwind 4, feel free to skip ahead. But for the
 
 The `@utility{:css}` directive lets you register a custom utility class that works just like a built-in utility. It shows up in autocomplete, it participates in Tailwind's sort order, and it only ships in your CSS if you actually use it.
 
+Say you want to hide an element visually but keep it accessible to screen readers. The following utility adds a `content-hidden` class to your project. It autocompletes, it tree-shakes, it sorts correctly.
+
 ```css
-@utility scrollbar-hidden {
-  scrollbar-width: none;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+@utility content-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
 }
 ```
-
-Now you can use `scrollbar-hidden` anywhere, just like `hidden` or `overflow-auto`. Tailwind knows about it.
 
 ### @apply
 
-The `@apply` directive lets you use existing Tailwind utilities inside CSS rules. It resolves at build time, so the output is plain CSS.
+The `@apply{:css}` directive lets you use existing Tailwind utilities inside CSS rules. It resolves at build time, so the output is plain CSS.
 
 ```css
-.my-thing {
-  @apply rounded-lg border border-gray-300 px-3 py-2;
+.card {
+  @apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm;
 }
 ```
 
-On its own, `@apply` in a regular CSS class is fine for small cases, but it has downsides: the resulting class doesn't participate in Tailwind's utility layer, it's not tree-shakable, and it won't sort correctly against other utilities.
+On its own, `@apply{:css}` in a regular CSS class is fine for small cases, but it has downsides: the resulting class doesn't participate in Tailwind's utility layer, it's not tree-shakable, and it won't sort correctly against other utilities.
+
+<Callout title="Read the complete docs">
+  Check out Tailwind's docs on [custom
+  utilities](https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities)
+  and the [`@apply`
+  directive](https://tailwindcss.com/docs/functions-and-directives#apply-directive)
+  for the complete reference.
+</Callout>
 
 ## The combination
 
-Here's where it gets interesting. Put `@apply` inside `@utility` and you get the best of both:
+Here's where it gets interesting. Put `@apply{:css}` inside `@utility{:css}` and you get the best of both:
 
 ```css
 @utility input-base {
@@ -81,7 +90,7 @@ Take a look at what the `shadow` class actually generates:
 
 That's not exactly "one utility, one property." It's a carefully orchestrated set of custom properties and fallbacks that work together with `inset-shadow`, `ring`, and `ring-offset`. The class _looks_ atomic, but it's really an abstraction over a complex system.
 
-Tailwind's built-in utilities already embrace this pattern. `@utility` + `@apply` just lets you do the same thing.
+Tailwind's built-in utilities already embrace this pattern. `@utility{:css}` + `@apply{:css}` just lets you do the same thing.
 
 ## The killer use case: shared states
 
@@ -198,11 +207,11 @@ Let me collect the benefits, because they add up quickly.
 
 **Autocomplete.** Your custom utility shows up in VS Code (or whatever you use) alongside Tailwind's built-in utilities. Your teammates don't need to memorize class strings. They type `focus-` and see what's available.
 
-**Tree-shakable.** Unlike a plain CSS class in your stylesheet, `@utility` only ships in the final CSS if it's actually used somewhere in your markup. Remove the last usage and it vanishes from the bundle. This is a meaningful difference from just writing a `.focus-ring` class in your CSS.
+**Tree-shakable.** Unlike a plain CSS class in your stylesheet, `@utility{:css}` only ships in the final CSS if it's actually used somewhere in your markup. Remove the last usage and it vanishes from the bundle. This is a meaningful difference from just writing a `.focus-ring` class in your CSS.
 
 **Overridable.** Tailwind's sort order ensures that single-property utilities always beat multi-property custom utilities. So `py-4` correctly overrides the `py-2` inside `input-base`. You don't have to fight specificity.
 
-**Build-time safety.** If you `@apply` a utility that doesn't exist, Tailwind will fail the build. This might seem annoying at first, but compare it to the alternative: writing `var(--color-doesnt-exist)` inside a hand-written `@utility` block silently does nothing. You ship broken styles. With `@apply`, the mistake is caught before it reaches production.
+**Build-time safety.** If you `@apply{:css}` a utility that doesn't exist, Tailwind will fail the build. This might seem annoying at first, but compare it to the alternative: writing `var(--color-doesnt-exist)` inside a hand-written `@utility{:css}` block silently does nothing. You ship broken styles. With `@apply{:css}`, the mistake is caught before it reaches production.
 
 ## The bigger picture
 
@@ -210,7 +219,7 @@ There's a long-standing tension in CSS between utility-first and semantic approa
 
 You don't.
 
-`@utility` + `@apply` sits right at the intersection. You're not abandoning utility-first CSS. You're still composing from Tailwind's atomic building blocks. But you're wrapping them in semantic names where it makes sense, specifically for cross-cutting patterns that don't map cleanly to components.
+`@utility{:css}` + `@apply{:css}` sits right at the intersection. You're not abandoning utility-first CSS. You're still composing from Tailwind's atomic building blocks. But you're wrapping them in semantic names where it makes sense, specifically for cross-cutting patterns that don't map cleanly to components.
 
 The abstractions you create this way aren't fighting Tailwind. They _are_ Tailwind. They sort like utilities, tree-shake like utilities, compose with modifiers like utilities. They just have names that describe what they do rather than how they look.
 
