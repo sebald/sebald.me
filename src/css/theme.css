@@ -1,4 +1,5 @@
 @import './ui.css';
+@import './variants.css';
 
 @theme {
   --color-mist-50: oklch(0.975 0.005 233);
