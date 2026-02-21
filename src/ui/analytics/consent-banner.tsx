@@ -18,7 +18,7 @@ export const ConsentBanner = () => {
 
   return (
     <Dialog.Root open={true} modal={false} disablePointerDismissal>
-      <Dialog position="bottom" size="full" layout="inline">
+      <Dialog position="bottom" size="xlarge" layout="inline">
         <Dialog.Title>
           <CookieIcon weight="bold" />
           About cookies on this site

@@ -51,6 +51,7 @@ export const styles = {
         small: 'w-sm',
         medium: 'w-md',
         large: 'w-2xl',
+        xlarge: 'w-4xl',
         full: 'w-full',
       },
     },

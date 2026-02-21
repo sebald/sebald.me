@@ -30,6 +30,7 @@ export const styles = {
   item: cva({
     base: [
       'flex items-center gap-2 px-3 py-2 rounded-lg',
+      'touch:min-h-11',
       'text-mist-200 text-sm',
       'cursor-pointer outline-none',
       'transition-colors duration-100',
