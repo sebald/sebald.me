@@ -51,29 +51,11 @@ On its own, `@apply{:css}` in a regular CSS class is fine for small cases, but i
   for the complete reference.
 </Callout>
 
-## The combination
+## Naming patterns
 
-Here's where it gets interesting. Put `@apply{:css}` inside `@utility{:css}` and you get the best of both:
+Put `@apply{:css}` inside `@utility{:css}` and you can name a pattern built from existing utilities, and have it behave exactly like any built-in Tailwind class.
 
-```css
-@utility input-base {
-  @apply rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm;
-}
-```
-
-This creates a utility called `input-base` that:
-
-- Resolves to multiple CSS properties at build time
-- Lives in Tailwind's utility layer (so it sorts correctly)
-- Only ships if you actually use it (tree-shaking)
-- Shows up in your editor's autocomplete
-- Can be combined with any Tailwind modifier (`hover:`, `focus:`, `md:`, etc.)
-
-I call this an **Atomic Abstraction** because that's exactly what it is. The name is semantic, it tells you what it's for. But the definition is atomic, it's built entirely from existing utilities. It's not a new concept. Tailwind itself does this internally.
-
-## Tailwind already does this
-
-Take a look at what the `shadow` class actually generates:
+Tailwind has been doing this all along. `text-sm` sets both `font-size` and `line-height`. `shadow` goes even further:
 
 ```css
 .shadow {
@@ -88,9 +70,15 @@ Take a look at what the `shadow` class actually generates:
 }
 ```
 
-That's not exactly "one utility, one property." It's a carefully orchestrated set of custom properties and fallbacks that work together with `inset-shadow`, `ring`, and `ring-offset`. The class _looks_ atomic, but it's really an abstraction over a complex system.
+Not one property, but a whole set of custom properties coordinating with `inset-shadow`, `ring`, and `ring-offset`. The class looks simple, but it's really a name for a system. `@utility{:css}` + `@apply{:css}` lets you build the same kind of thing.
 
-Tailwind's built-in utilities already embrace this pattern. `@utility{:css}` + `@apply{:css}` just lets you do the same thing.
+```css
+@utility input-base {
+  @apply rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm;
+}
+```
+
+`input-base` is a single class that expands to a full set of styles, behaves like any built-in utility, and composes with any modifier. The patterns where this pays off are what comes next.
 
 ## The killer use case: shared states
 
