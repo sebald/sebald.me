@@ -1,0 +1,214 @@
+---
+title: 'Tailwind at Scale: Reusable Utilities with @utility and @apply'
+description: Tailwind works great until your project reaches a certain size. With 4, @utility and @apply offer a way out.
+topics: [css, tailwind, design-systems]
+date: 2026-02-17
+---
+
+Tailwind works great until your project hits a certain size. You don't notice it at first. But one day you realize you've copy-pasted the same string of utility classes into a dozen places, and when the design changes, you have to hunt down every last instance.
+
+The obvious solution is components. But not every string of classes you're repeating maps to one. A focus state isn't a component. A disabled appearance isn't a component. And the base look of a form element is shared across inputs, selects, and textareas. With [BEM](https://getbem.com/introduction/) or [OOCSS](https://www.smashingmagazine.com/2011/12/an-introduction-to-object-oriented-css-oocss/), this is a solved problem. You write a class, reuse it everywhere.
+
+Tailwind 4 lets you achieve the same reusability without stepping outside its system. The key is combining two features: `@utility{:css}` and `@apply{:css}`. You get to name your patterns, compose them from existing utilities, and Tailwind treats them as first-class citizens.
+
+## A quick recap
+
+If you're already familiar with Tailwind 4, feel free to skip ahead. But for the sake of having a shared vocabulary, let's quickly cover the two building blocks.
+
+### @utility
+
+The `@utility{:css}` directive lets you register a custom utility class that works just like a built-in utility. It shows up in autocomplete, it participates in Tailwind's sort order, and it only ships in your CSS if you actually use it.
+
+Say you want to hide an element visually but keep it accessible to screen readers. The following utility adds a `content-hidden` class to your project. It autocompletes, it tree-shakes, it sorts correctly.
+
+```css
+@utility content-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+```
+
+### @apply
+
+The `@apply{:css}` directive lets you use existing Tailwind utilities inside CSS rules. It resolves at build time, so the output is plain CSS.
+
+```css
+.card {
+  @apply rounded-lg border border-gray-200 bg-white p-6 shadow-sm;
+}
+```
+
+On its own, `@apply{:css}` in a regular CSS class is fine for small cases, but it has downsides: the resulting class doesn't participate in Tailwind's utility layer, it's not tree-shakable, and it won't sort correctly against other utilities.
+
+<Callout title="Read the complete docs">
+  Check out Tailwind's docs on [custom
+  utilities](https://tailwindcss.com/docs/adding-custom-styles#adding-custom-utilities)
+  and the [`@apply`
+  directive](https://tailwindcss.com/docs/functions-and-directives#apply-directive)
+  for the complete reference.
+</Callout>
+
+## Utilities from utilities
+
+On their own, each directive only goes so far. The criticisms of `@apply{:css}` are specific: plain CSS classes don't tree-shake and end up in the wrong layer. Both are fair — and both disappear the moment you nest `@apply{:css}` inside `@utility{:css}`. Take any set of utilities you keep repeating, give it a name, and it behaves exactly like a built-in class.
+
+Tailwind has been doing this all along. `text-sm` sets both `font-size` and `line-height`. `shadow` goes even further:
+
+```css
+.shadow {
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored:
+    0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow:
+    var(--tw-inset-shadow),
+    var(--tw-inset-shadow-colored, var(--tw-inset-shadow)),
+    var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow),
+    var(--tw-shadow-colored, var(--tw-shadow));
+}
+```
+
+Not one property, but a whole set of custom properties coordinating with `inset-shadow`, `ring`, and `ring-offset`. The class looks simple, but it's really a name for a system. `@utility{:css}` + `@apply{:css}` lets you build the same kind of thing.
+
+```css
+@utility input-base {
+  @apply rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm;
+}
+```
+
+`input-base` is a single class that expands to a full set of styles, behaves like any built-in utility, and composes with any modifier. The patterns where this pays off are what comes next.
+
+## The killer use case: shared states
+
+This is where the pattern really shines, and where I've gotten the most value from it in practice while working on a design system.
+
+### Focus
+
+Every interactive element in your UI needs a focus indicator. But not every element uses the same pseudo-class. Buttons should use `focus-visible:` (so the ring only appears on keyboard navigation), while inputs should use `focus:` (because they always receive focus explicitly).
+
+The visual treatment, though? That should be the same.
+
+```css
+@utility focus-ring {
+  @apply outline-2 outline-offset-2 outline-blue-600;
+}
+```
+
+Now in your HTML or components:
+
+```html
+<!-- Button: only shows ring on keyboard focus -->
+<button class="focus-visible:focus-ring">Save</button>
+
+<!-- Input: always shows ring when focused -->
+<input class="focus:focus-ring" type="text" />
+
+<!-- Select: same as input -->
+<select class="focus:focus-ring">
+  ...
+</select>
+```
+
+One definition, different triggers. If the design team changes the focus ring from blue to indigo, or from `outline` to `ring`, you change it in one place.
+
+### Disabled
+
+Disabled states are another classic example of scattered repetition. You want the same muted, non-interactive look across buttons, inputs, selects, and whatever else.
+
+```css
+@utility disabled {
+  @apply pointer-events-none opacity-50;
+}
+```
+
+```html
+<button class="disabled:disabled" disabled>Can't touch this</button>
+<input class="disabled:disabled" disabled type="text" />
+```
+
+Yes, `disabled:disabled` reads a bit funny. You could name it `disabled-state` or `state-disabled` if that bothers you. The point is that the visual treatment is defined once and applied through Tailwind's modifier system.
+
+### Loading
+
+Visual states work just as well. Say you have a data attribute `[data-loading]` that you set from JavaScript:
+
+```css
+@utility loading {
+  @apply pointer-events-none animate-pulse opacity-70;
+}
+```
+
+```html
+<div class="data-[loading]:loading" data-loading>Loading content...</div>
+```
+
+The pattern is always the same: define the visual treatment as a utility, apply it through the appropriate modifier.
+
+## Beyond states: shared appearance
+
+States are the most obvious use case, but the pattern works for any cross-cutting visual concern. One that comes up constantly in design systems is the base appearance of form elements.
+
+An `input[type="text"]`, a `select`, and a `textarea` should look like they belong together. Same border, same padding, same border radius, same font size. But they're different HTML elements with different default styles.
+
+```css
+@utility input-base {
+  @apply rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm;
+}
+
+@utility input-hover {
+  @apply border-gray-400;
+}
+
+@utility input-focus {
+  @apply border-blue-500 outline-2 outline-blue-600/50;
+}
+```
+
+```html
+<input type="text" class="input-base hover:input-hover focus:input-focus" />
+
+<select class="input-base hover:input-hover focus:input-focus">
+  <option>Pick one</option>
+</select>
+
+<textarea class="input-base hover:input-hover focus:input-focus"></textarea>
+```
+
+All three look like they belong together. And because these are proper Tailwind utilities, you can still override individual properties on any of them:
+
+```html
+<!-- A textarea that's a bit taller -->
+<textarea
+  class="input-base hover:input-hover focus:input-focus py-4"
+></textarea>
+```
+
+That `py-4` overrides the `py-2` from `input-base` because Tailwind sorts single-property utilities after multi-property ones. This is exactly how built-in utilities like `shadow` and `shadow-lg` work: the more specific one wins.
+
+## Why this works so well
+
+Let me collect the benefits, because they add up quickly.
+
+**No more copy-pasting.** The whole reason we're here. Change the focus ring, the disabled appearance, or the input base style in one place and it propagates everywhere.
+
+**Autocomplete.** Your custom utility shows up in VS Code (or whatever you use) alongside Tailwind's built-in utilities. Your teammates don't need to memorize class strings. They type `focus-` and see what's available.
+
+**Tree-shakable.** Unlike a plain CSS class in your stylesheet, `@utility{:css}` only ships in the final CSS if it's actually used somewhere in your markup. Remove the last usage and it vanishes from the bundle. This is a meaningful difference from just writing a `.focus-ring` class in your CSS.
+
+**Overridable.** Tailwind's sort order ensures that single-property utilities always beat multi-property custom utilities. So `py-4` correctly overrides the `py-2` inside `input-base`. You don't have to fight specificity.
+
+**Build-time safety.** If you `@apply{:css}` a utility that doesn't exist, Tailwind will fail the build. This might seem annoying at first, but compare it to the alternative: writing `var(--color-doesnt-exist)` inside a hand-written `@utility{:css}` block silently does nothing. You ship broken styles. With `@apply{:css}`, the mistake is caught before it reaches production.
+
+## The bigger picture
+
+There's a long-standing tension in CSS between utility-first and semantic approaches. BEM, OOCSS, SMACSS on one side. Tailwind, Tachyons, Atomizer on the other. The discourse loves to frame this as a binary choice, as if you must fully commit to one philosophy.
+
+You don't.
+
+`@utility{:css}` + `@apply{:css}` sits right at the intersection. You're not abandoning utility-first CSS. You're still composing from Tailwind's atomic building blocks. But you're wrapping them in semantic names where it makes sense, specifically for cross-cutting patterns that don't map cleanly to components.
+
+The abstractions you create this way aren't fighting Tailwind. They _are_ Tailwind. They sort like utilities, tree-shake like utilities, compose with modifiers like utilities. They just have names that describe what they do rather than how they look.
+
+That's what I mean by Atomic Abstractions. Semantic on the outside, atomic on the inside. And for teams working at scale, especially those maintaining design systems, this is the pattern that finally makes utility-first CSS feel complete.
