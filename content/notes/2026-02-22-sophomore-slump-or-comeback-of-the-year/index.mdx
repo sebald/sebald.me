@@ -1,0 +1,76 @@
+---
+title: The Sophomore Slump or Comeback of the Year
+description: We spent four years building a modern layer underneath the old UI where nobody could see it. Then came the part we weren't ready for - making it visible.
+topics: [design-systems]
+date: 2026-02-22
+---
+
+We spent four years establishing a design system that had to serve two very different things: a product with over two decades of history, and the new applications being built to replace it. The approach was deliberate: we brought the new system into the legacy codebase and matched the visual style so precisely that anything built with new components was indistinguishable from the old code. Modern stack underneath, same surface on top. Adoption grew quietly. Teams started using our components without us having to ask. Then we ran into the part we had not planned for. The invisible layer had to become visible.
+
+## The moment it had to become visible
+
+Building a modern foundation in secret only gets you so far. At some point the changes have to surface. The visual updates have to ship. The old interfaces have to go. Otherwise the whole project is just an expensive internal refactor that users never benefit from.
+
+We had the technical layer ready. Now we had to flip the switch, and we knew the moment we did, people would notice. That is a completely different problem from the one we had been solving.
+
+The previous four years were about making adoption easy for developers. Reduce friction. Meet people where they are. Don't ask anyone to do too much at once. It worked. But the next phase was about asking users, sales teams, and executives to accept visible changes to a product they had been using for years. The goodwill we had built in the engineering department did not automatically transfer.
+
+## The migration trap
+
+Here is something I found consistently true and consistently counterintuitive: giving people a long runway to migrate does not make it easier. It makes it worse.
+
+When you tell a team they have six months to switch to the new system, they will spend five months and three weeks on everything else. The deadline creates the urgency. The extended timeline creates the procrastination. You end up with a last-minute scramble that is harder to manage than if you had just forced the change on day one.
+
+We had lived the slow version in the first phase and we were not going to repeat it. When the visual layer was ready to ship, we moved fast. Not recklessly, but without dragging it out.
+
+The logic was simple: the invisible technical foundation was solid. The risk of the visible changes was not technical, it was cultural. And cultural resistance does not shrink with time. It grows. Every week you wait gives people more time to build a case against the change.
+
+## Pragmatism over perfection
+
+I want to be honest about something. When we were pitching this project to management, we talked a lot about polish and consistency. Beautiful interfaces. A cohesive visual language. Modern. Delightful. We meant those things, eventually. But in the short term, they were also a way to get buy-in without friction.
+
+The actual goal for the first round of visible changes was much more modest: good enough for the people who needed to use it. Our users were B2B enterprise customers. They needed the product to work reliably and clearly. They did not need it to win design awards.
+
+Shipping something that was visibly better but not visibly perfect was faster, and speed mattered more than we were willing to admit in presentations. Visible progress creates momentum. Momentum is what keeps projects alive. The big rewrite approach, where you hold everything back until it is perfect and then release it all at once, almost never works. You run out of time, or budget, or goodwill, before you get to ship.
+
+We deferred the beautiful parts. We had a plan to come back to them. Whether or not we did is a different story.
+
+## What we actually did
+
+The technical decision that made everything else possible was keeping the footprint small.
+
+Instead of requiring teams to use React components for every new interface, we let developers write raw HTML with TailwindCSS 4 utility classes. This sounds like a step backward but it was not. The design system's visual language lived in the CSS layer. Whether you built with components or utility classes, the output looked the same. Teams could adopt the new visual style without touching the underlying business logic.
+
+This mattered because the legacy codebase had years of deeply intertwined code. Business logic was tangled up with UI code in ways that made changes feel risky even when they should not have been. By decoupling the visual layer from the component layer, we could run tests that were genuinely revertible. If something looked wrong or broke, you could change a CSS class and roll back in an hour.
+
+We also broke production a few times. Not badly, but clearly. Styles affecting unexpected parts of the product. Edge cases we had not found in testing. The first time it happened we treated it like a failure. After the third time we started treating it as a sign that we were moving at the right pace. If nothing is breaking, you are probably not moving fast enough to overcome the inertia.
+
+## What we did not expect
+
+When the visual changes started shipping, the feedback came from somewhere we had not planned for: sales.
+
+The sales team had been demoing the product for years. They knew every screen, every flow, every odd quirk of the old interface. They had built their pitches around it. When we changed the UI, we changed their pitches too, and nobody had warned them.
+
+This was our fault. We had been so focused on the engineering side of the migration that we had not thought hard enough about the people whose work depended on the product looking a certain way. The resistance we got was not irrational. It was entirely predictable once we were standing in their shoes.
+
+So we started running visual changes by sales before they shipped. This slowed us down slightly, but the feedback was genuinely useful. They caught things we had missed. Features that were technically still there but had become harder to find. Workflows that made sense when you knew the product but were confusing to someone seeing it for the first time.
+
+We also went back to the original maintainers, the people who had built the legacy parts we were replacing. Some had left the company. The ones still around remembered things that were not in any documentation. Edge cases added years ago to solve a specific customer problem. Small behaviors that looked like bugs but were actually decisions. This knowledge would have disappeared if we had treated the migration as a pure rewrite.
+
+## The new normal
+
+By the end of it, two things had shifted.
+
+The codebase was in a better state than when we started. Teams working in it were faster. Features that used to take weeks were taking days. The "we can't build that" reflex had mostly gone quiet.
+
+But the more interesting change was harder to measure. A technical team that had spent most of its existence building tools for other engineers had taken ownership of something larger: the process of change itself. We were not just handing off components and waiting to see what happened. We were in the room when sales teams found out their demos were changing. We were on calls when executives needed to understand why the product looked different.
+
+I am not sure that was what we signed up for. I am also not sure there was another way. A technical team can build the perfect tools, but tools alone do not change how an organization works. Someone has to be willing to sit in the uncomfortable meetings, take the feedback, and stay in the room long enough for the change to actually land.
+
+That turned out to be us.
+
+<Callout variant="info" title="This is part two of a series">
+  This post continues from [Failing Forward at Design
+  Systems](/notes/failing-forward-at-design-systems), where I covered the first
+  phase of the journey: building adoption from scratch.
+</Callout>
