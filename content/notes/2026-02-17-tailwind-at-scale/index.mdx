@@ -51,9 +51,9 @@ On its own, `@apply{:css}` in a regular CSS class is fine for small cases, but i
   for the complete reference.
 </Callout>
 
-## Naming patterns
+## Utilities from utilities
 
-Put `@apply{:css}` inside `@utility{:css}` and you can name a pattern built from existing utilities, and have it behave exactly like any built-in Tailwind class.
+On their own, each directive only goes so far. The criticisms of `@apply{:css}` are specific: plain CSS classes don't tree-shake and end up in the wrong layer. Both are fair — and both disappear the moment you nest `@apply{:css}` inside `@utility{:css}`. Take any set of utilities you keep repeating, give it a name, and it behaves exactly like a built-in class.
 
 Tailwind has been doing this all along. `text-sm` sets both `font-size` and `line-height`. `shadow` goes even further:
 
