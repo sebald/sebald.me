@@ -6,13 +6,13 @@ image: [./1.avif, ./2.avif]
 date: 2026-02-22
 ---
 
-It took us a while to [find our footing with our design system](/notes/failing-forward-at-design-systems). What eventually worked was integrating it deeply with our legacy codebase. We set up a modern frontend environment where product teams could grab design system components and use them without wrestling with the previous infrastructure.
+It took us a while to [find our footing with our design system](/notes/failing-forward-at-design-systems). What eventually worked was embedding it deep inside the legacy codebase. We built a modern frontend layer where product teams could use design system components without having to fight the old infrastructure. They could ship more ambitious features and better user experiences than the old setup would have allowed.
 
-To make adoption seamless, we consciously disguised the design system to look exactly like what was already there. Same visual language, same interface. For the developers, it was easier to ship better features. For the customers, absolutely nothing had changed.
+We deliberately styled the design system to look identical to the existing product. Same colors, same spacing, same components. Nobody could tell the difference. We had enough to get right with the technical foundation without also asking people to get used to a new look. Product teams could use it wherever they wanted. Customers never noticed.
 
-But maintaining that illusion was never the end goal. Eventually the disguise had to come off, and that meant facing something we weren't ready for: getting an entire organization to accept visible change to a product people had been using for years.
+That got us adoption, but it also boxed us in. We could only go as far as the old interface allowed, and the limits showed up mostly around user experience. At some point the disguise had to come off. And that meant getting an entire organization to accept visible changes to a product people had been using for years.
 
-The goodwill we had built over the last years lived entirely inside the engineering department. Users, sales teams, and executives had no reason to trust that the change was worth it. We had to earn that from scratch.
+The trust we had built over the previous years lived entirely inside engineering. Sales teams, executives, users had no reason to believe the change was worth it. We had to earn that from scratch.
 
 ## The migration trap
 
