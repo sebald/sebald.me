@@ -16,13 +16,11 @@ The trust we had earned over the previous years only reached as far as the softw
 
 ## The migration trap
 
-Here is something I found consistently true and consistently counterintuitive: giving people a long runway to migrate does not make it easier. It makes it worse.
+There's no shortage of opinions on how to modernize a legacy system. Most of the popular literature says to [avoid the big bang rewrite](https://nostarch.com/kill-it-fire) and instead wrap the old system and [let it shrink over time](https://martinfowler.com/bliki/StranglerFigApplication.html). In our case that was probably the only option anyway. The codebase was wildly fragmented. Inline CSS next to string concatenated templates next to JavaScript that had fused with business logic to the point where nobody could tell where one ended and the other began. There was no single thing to rewrite. There were dozens of things, each built differently. You can't rewrite all of that at once, not without stopping everything else for a years.
 
-When you tell a team they have six months to switch to the new system, they will spend five months and three weeks on everything else. The deadline creates the urgency. The extended timeline creates the procrastination. You end up with a last-minute scramble that is harder to manage than if you had just forced the change on day one.
+So we introduced the design system and its modern frontend environment as yet another layer in the stack. On paper, more fragmentation. In practice, it gave us a foothold. Early experiments showed that once teams had a clean foundation to build on, separating it from the legacy code was surprisingly manageable.
 
-We had lived the slow version in the first phase and we were not going to repeat it. When the visual layer was ready to ship, we moved fast. Not recklessly, but without dragging it out.
-
-The logic was simple: the invisible technical foundation was solid. The risk of the visible changes was not technical, it was cultural. And cultural resistance does not shrink with time. It grows. Every week you wait gives people more time to build a case against the change.
+At this point the invisible technical foundation was solid. The remaining problem was not technical. It was cultural. And cultural resistance does not fade if you give it time. It hardens. Every week you wait, people find new reasons to keep things the way they are.
 
 ## Pragmatism over perfection
 
@@ -67,9 +65,3 @@ But the more interesting change was harder to measure. A technical team that had
 I am not sure that was what we signed up for. I am also not sure there was another way. A technical team can build the perfect tools, but tools alone do not change how an organization works. Someone has to be willing to sit in the uncomfortable meetings, take the feedback, and stay in the room long enough for the change to actually land.
 
 That turned out to be us.
-
-<Callout variant="info" title="This is part two of a series">
-  This post continues from [Failing Forward at Design
-  Systems](/notes/failing-forward-at-design-systems), where I covered the first
-  phase of the journey: building adoption from scratch.
-</Callout>
