@@ -38,9 +38,11 @@ When we showed up with our shiny new tools, our colleagues looked at their workl
 
 ## Meeting them where they were
 
-We needed to pivot. We had assumed teams were just waiting for us to hand them something better. They weren't. We met with them to understand their perspective.
+The approach wasn't working. Our assumption had been that teams were just waiting for us to hand them something better. They weren't. We met with them to understand their perspective.
 
-The result was counterintuitive: we disguised our new design system to look exactly like the legacy app. We brought it into the legacy codebase and matched the visual style so that anything built with the new components was indistinguishable from the old code. Under the hood, developers were working with modern tools. On the surface, nothing changed.
+The answer might seem counterintuitive: we disguised our new design system to look exactly like the legacy app. We matched every visual detail so that anything built with the new components was indistinguishable from the old code. Under the hood, developers were working with modern tools. On the surface, nothing changed.
+
+Pulling this off was possible because we'd made a bet early on and kept the visual layer of our components separate so they could adapt to different brands across the company. We didn't expect that to matter so soon. The old codebase had no tokens, no shared variables, just scattered CSS files that styled raw `input` and `table` elements directly. So we rebuilt the whole look from scratch with our own tokens and ended up normalizing a lot of the visual inconsistencies along the way.
 
 Then we focused on making the transition painless. We wrote guides. We gave training sessions. We improved the dev environment.
 
