@@ -35,13 +35,11 @@ What we didn't have was a final answer for what the product would look like at t
 
 We started with things that were easy to reverse.
 
-Change the background color. Update the font from Arial to something that didn't feel like a Windows 98 default. Small, visible, low-risk. Not because we lacked ambition but because we were operating in a system we didn't fully know, with users we couldn't fully survey, and a sales team we had no established way to communicate with. We had a foundation. We did not have a safety net.
+Change the background color. Update the font from Arial to Inter. We were deliberate about starting small. Not because we lacked ambition, but because we knew that every change was a test we hadn't fully written yet. The codebase had its own logic. Over a decade of features had been added without anyone stepping back to look at the whole. Workflows that made sense if you had used the product for years were invisible traps to anyone new. Some things that looked like bugs were actually decisions. Edge cases someone had handled years ago for a specific customer, never documented, never explained. You don't learn that from reading code. You learn it from breaking things and then calling the person who wrote it.
 
-The legacy codebase had its own logic. Over a decade of features had been added without anyone stepping back to look at the whole. Workflows that made sense if you had used the product for years were invisible traps to anyone new. Some things that looked like bugs were actually decisions — edge cases someone had handled years ago for a specific customer, never documented, never explained. You don't learn that from reading code. You learn it from breaking things and then calling the person who wrote it.
+So we kept each change small enough that if something went wrong, we could pull it back within hours. This wasn't timidity. It was the only responsible way to move inside a system this size without a complete map of what everything touched.
 
-So we broke things carefully. Each change was scoped small enough that if something went wrong, we could pull it back within hours. This wasn't timidity. It was the only responsible way to move inside a system this size without a complete map of what everything touched.
-
-What we didn't expect was how much we would learn from the breakage. Not just technical breakage — styles bleeding into unexpected corners of the product — but social breakage too. Every change that shipped was a test of how much the organization could absorb without losing confidence in us. We were learning the tolerance of the system, not just the code.
+What we didn't expect was how much we would learn from the breakage. Some of it was technical: styles bleeding into unexpected corners of the product. But some of it was human. Every change that shipped was a test of how much the organization could absorb without losing confidence in us. We were learning the tolerance of the system, not just the code.
 
 ## The problems that don't close
 
