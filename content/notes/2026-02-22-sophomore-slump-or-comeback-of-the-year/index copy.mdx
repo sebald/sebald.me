@@ -1,0 +1,67 @@
+---
+title: Sophomore Slump or Comeback of the Year
+description: We spent four years building a modern layer underneath the old UI where nobody could see it. Then came the part we weren't ready for - making it visible.
+topics: [design-systems]
+image: [./1.avif, ./2.avif]
+date: 2026-02-22
+---
+
+It took us a while to [find our footing with our design system](/notes/failing-forward-at-design-systems). What eventually worked was embedding it deep inside the legacy codebase. We built a modern frontend layer where product teams could use design system components without having to fight the old infrastructure. They could ship more ambitious features and better user experiences than the old setup would have allowed.
+
+We deliberately styled the design system to look identical to the existing product. Same colors, same spacing, same components. Nobody could tell the difference. We had enough to get right with the technical foundation without also asking people to get used to a new look. Product teams could use it wherever they wanted. Customers never noticed.
+
+We started running into the limits of our own disguise. The design system could do more than the old interface allowed, but nobody could see that because we had made it invisible on purpose. The gap between what we could build and what we were showing kept growing, especially around user experience. At some point the disguise had to come off. And that meant getting an entire organization to accept visible changes to a product people had been using for years.
+
+The trust we had earned over the previous years only reached as far as the software department. That was the trade off of working under the radar. Nobody outside engineering had paid attention to us, which had been convenient. Changing the design of the product meant that was over. Customers would see something different. Sales would want to know why. Departments that had never thought about us would suddenly care a lot.
+
+## The migration trap
+
+There's no shortage of opinions on how to modernize a legacy system. Most of the popular literature says to [avoid the big bang rewrite](https://nostarch.com/kill-it-fire) and instead wrap the old system and [let it shrink over time](https://martinfowler.com/bliki/StranglerFigApplication.html). In our case that was probably the only option anyway. The codebase was wildly fragmented. Inline CSS next to string concatenated templates next to JavaScript that had fused with business logic to the point where nobody could tell where one ended and the other began. There was no single thing to rewrite. There were dozens of things, each built differently. You can't rewrite all of that at once, not without stopping everything else for a years.
+
+So we introduced the design system and its modern frontend environment as yet another layer in the stack. On paper, more fragmentation. In practice, it gave us a foothold. Early experiments showed that once teams had a clean foundation to build on, separating it from the legacy code was surprisingly manageable.
+
+At this point the invisible technical foundation was solid. The remaining problem was not technical. It was cultural. And cultural resistance does not fade if you give it time. It hardens. Every week you wait, people find new reasons to keep things the way they are.
+
+## Pragmatism over perfection
+
+I want to be honest about something. When we were pitching this project to management, we talked a lot about polish and consistency. Beautiful interfaces. A cohesive visual language. Modern. Delightful. We meant those things, eventually. But in the short term, they were also a way to get buy-in without friction.
+
+The actual goal for the first round of visible changes was much more modest: good enough for the people who needed to use it. Our users were B2B enterprise customers. They needed the product to work reliably and clearly. They did not need it to win design awards.
+
+Shipping something that was visibly better but not visibly perfect was faster, and speed mattered more than we were willing to admit in presentations. Visible progress creates momentum. Momentum is what keeps projects alive. The big rewrite approach, where you hold everything back until it is perfect and then release it all at once, almost never works. You run out of time, or budget, or goodwill, before you get to ship.
+
+We deferred the beautiful parts. We had a plan to come back to them. Whether or not we did is a different story.
+
+## What we actually did
+
+The technical decision that made everything else possible was keeping the footprint small.
+
+Instead of requiring teams to use React components for every new interface, we let developers write raw HTML with TailwindCSS 4 utility classes. This sounds like a step backward but it was not. The design system's visual language lived in the CSS layer. Whether you built with components or utility classes, the output looked the same. Teams could adopt the new visual style without touching the underlying business logic.
+
+This mattered because the legacy codebase had years of deeply intertwined code. Business logic was tangled up with UI code in ways that made changes feel risky even when they should not have been. By decoupling the visual layer from the component layer, we could run tests that were genuinely revertible. If something looked wrong or broke, you could change a CSS class and roll back in an hour.
+
+We also broke production a few times. Not badly, but clearly. Styles affecting unexpected parts of the product. Edge cases we had not found in testing. The first time it happened we treated it like a failure. After the third time we started treating it as a sign that we were moving at the right pace. If nothing is breaking, you are probably not moving fast enough to overcome the inertia.
+
+## What we did not expect
+
+When the visual changes started shipping, the feedback came from somewhere we had not planned for: sales.
+
+The sales team had been demoing the product for years. They knew every screen, every flow, every odd quirk of the old interface. They had built their pitches around it. When we changed the UI, we changed their pitches too, and nobody had warned them.
+
+This was our fault. We had been so focused on the engineering side of the migration that we had not thought hard enough about the people whose work depended on the product looking a certain way. The resistance we got was not irrational. It was entirely predictable once we were standing in their shoes.
+
+So we started running visual changes by sales before they shipped. This slowed us down slightly, but the feedback was genuinely useful. They caught things we had missed. Features that were technically still there but had become harder to find. Workflows that made sense when you knew the product but were confusing to someone seeing it for the first time.
+
+We also went back to the original maintainers, the people who had built the legacy parts we were replacing. Some had left the company. The ones still around remembered things that were not in any documentation. Edge cases added years ago to solve a specific customer problem. Small behaviors that looked like bugs but were actually decisions. This knowledge would have disappeared if we had treated the migration as a pure rewrite.
+
+## The new normal
+
+By the end of it, two things had shifted.
+
+The codebase was in a better state than when we started. Teams working in it were faster. Features that used to take weeks were taking days. The "we can't build that" reflex had mostly gone quiet.
+
+But the more interesting change was harder to measure. A technical team that had spent most of its existence building tools for other engineers had taken ownership of something larger: the process of change itself. We were not just handing off components and waiting to see what happened. We were in the room when sales teams found out their demos were changing. We were on calls when executives needed to understand why the product looked different.
+
+I am not sure that was what we signed up for. I am also not sure there was another way. A technical team can build the perfect tools, but tools alone do not change how an organization works. Someone has to be willing to sit in the uncomfortable meetings, take the feedback, and stay in the room long enough for the change to actually land.
+
+That turned out to be us.
