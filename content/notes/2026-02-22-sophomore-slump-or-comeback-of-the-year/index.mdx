@@ -58,13 +58,11 @@ Or we would ship a change that worked well for the majority of users, only to fi
 
 Learning to live with that, to keep moving anyway, takes a certain kind of stubbornness. At some point the discomfort stops feeling like something to fix and starts feeling like the work. The alternative was to wait for certainty that was never coming.
 
-The responsive layout was the moment trust nearly broke.
+Nothing made that clearer than what happened with the responsive layout. By that point we had developed a feel for which changes would cause friction and which wouldn't. The responsive layout felt safe. It wasn't fixing anything visible. It was just bringing the product in line with how people used devices. We didn't expect a reaction.
 
-We made the product responsive. Modern devices, modern standards. It felt like an unambiguous improvement. Nobody had flagged it as risky. We shipped it.
+We shipped it.
 
-Then the tickets came in.
-
-What we hadn't fully understood was how people were actually using the product day to day. The interface had never been built for mobile. On phones and tablets it was technically broken: tables overflowing, elements colliding. But users had found a way. They zoomed and panned. They had been doing it for years. It was awkward and nobody had ever called it a feature, but it worked and they relied on it. When we made the layout responsive, we took that away. The zooming behavior changed. The tables that people had been navigating by pinching and scrolling were now locked inside a responsive container that clipped exactly the data they needed to see.
+The response came faster than we expected. Which was jarring, because the change had a legitimate purpose. Large tables had been breaking the layout for years. The product had never been truly usable on mobile, and making it responsive was supposed to be the first step toward changing that. What we hadn't accounted for was how people were actually navigating around that brokenness. The interface had never been built for mobile. On phones and tablets it was technically broken: tables overflowing, elements colliding. But users had found a way. They zoomed and panned. They had been doing it for years. It was awkward and nobody had ever called it a feature, but it worked and they relied on it. When we made the layout responsive, we took that away. The zooming behavior changed. The tables that people had been navigating by pinching and scrolling were now locked inside a responsive container that clipped exactly the data they needed to see.
 
 We reverted the change immediately.
 
