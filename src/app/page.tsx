@@ -1,12 +1,12 @@
 import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
-import { Logo } from '@/ui/logo';
+import { TimeLogo } from '@/ui/logo-time';
 import { Text } from '@/ui/text';
 
 export const Intro = () => (
   <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
-    <Logo size={50} />
+    <TimeLogo size={82} />
     <div className="grid gap-8">
       <div className="grid gap-2.5">
         <Text variant="accent">Sebastian Sebald</Text>
