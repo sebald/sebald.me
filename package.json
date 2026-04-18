@@ -5,7 +5,7 @@
   "packageManager": "pnpm@10.33.0",
   "dependencies": {
     "@base-ui/react": "1.2.0",
-    "@next/third-parties": "16.1.6",
+    "@next/third-parties": "16.2.3",
     "@phosphor-icons/react": "2.1.10",
     "cookies-next": "6.1.1",
     "cva": "1.0.0-beta.4",
@@ -13,7 +13,7 @@
     "fumadocs-core": "16.7.15",
     "fumadocs-mdx": "14.2.14",
     "fumadocs-ui": "16.7.15",
-    "next": "16.1.6",
+    "next": "16.2.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "shiki": "3.23.0",
