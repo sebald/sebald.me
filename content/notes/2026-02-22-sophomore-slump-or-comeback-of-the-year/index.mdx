@@ -50,19 +50,21 @@ The clearest example was sales. We had been communicating changes, but not every
 
 We knew that the people who pushed back hardest were also the people who cared most. Sales had been demoing the same screens for years. They knew every flow, every quirk, every odd corner of the old interface. When we changed things, we changed their pitches. Their resistance wasn't irrational. It was information. These were exactly the people we needed to be talking to.
 
-So we brought them in earlier. Not early enough to hand them a veto, but early enough that they felt heard. It slowed us down slightly. In return, they caught things we would have missed entirely. Features that were technically still present but harder to find. Flows that made sense when you knew the product but were disorienting to someone seeing it fresh. Their feedback was occasionally delivered with more heat than was strictly necessary. We answered every question anyway. That's where the trust came from: not from having the right answers, but from never walking away from an uncomfortable question.
+So we brought them in earlier. Not early enough to hand them a veto, but early enough that they felt heard. This slowed us down slightly. It also made the work better. They caught things we had missed. Features that were technically still present but harder to find. Flows that made sense when you knew the product but were disorienting to someone encountering it fresh. Their feedback was occasionally delivered with more heat than was strictly necessary. We answered every question anyway. That's where the trust came from: not from having the right answers, but from not flinching when the questions were hard.
 
-But bringing people in earlier didn't close the problem. It changed it. People would scratch the surface during testing and sign off, then come back with serious objections after something went live. We had moved the friction forward in time. We hadn't eliminated it.
+That seemed to close the problem. It didn't. People would scratch the surface during testing and sign off, then come back with serious objections after something went live, objections that a thorough test would have surfaced weeks earlier. We had solved the communication problem and inherited a new one: how do you get people to actually engage with something they don't feel urgent yet?
 
 Or we would ship a change that worked well for the majority of users, only to find out that a small group, often top-tier customers with the most at stake and the least patience, used the product in a way nobody had accounted for. We had improved things for most people and made them worse for exactly the people we couldn't afford to disappoint.
 
-Learning to live with that, to keep moving anyway, takes a certain kind of stubbornness. At some point the discomfort stops feeling like something to fix and starts feeling like the work. The alternative was to wait for certainty that was never coming.
+Learning to live with that, to keep moving anyway, takes a certain kind of stubbornness. At some point the discomfort stops feeling like something to fix and starts feeling like the work. The alternative is to wait for certainty that was never coming.
 
 Nothing made that clearer than what happened with the responsive layout. By that point we had developed a feel for which changes would cause friction and which wouldn't. The responsive layout felt safe. It wasn't fixing anything visible. It was just bringing the product in line with how people used devices. We didn't expect a reaction.
 
 We shipped it.
 
-The response came faster than we expected. Which was jarring, because the change had a legitimate purpose. Large tables had been breaking the layout for years. The product had never been truly usable on mobile, and making it responsive was supposed to be the first step toward changing that. What we hadn't accounted for was how people were actually navigating around that brokenness. The interface had never been built for mobile. On phones and tablets it was technically broken: tables overflowing, elements colliding. But users had found a way. They zoomed and panned. They had been doing it for years. It was awkward and nobody had ever called it a feature, but it worked and they relied on it. When we made the layout responsive, we took that away. The zooming behavior changed. The tables that people had been navigating by pinching and scrolling were now locked inside a responsive container that clipped exactly the data they needed to see.
+The response came faster than we expected. Which was jarring, because the change had a legitimate purpose. Large tables had been breaking the layout for years. The product had never been truly usable on mobile, and making it responsive was supposed to be the first step toward changing that. What we hadn't accounted for was how people were actually navigating around that brokenness. They had turned a limitation into a feature, and in doing so, made it theirs.
+
+Nobody knew, including the users themselves, how much the product's daily use had been shaped by its own limitations. The interface had never been built for mobile. On phones and tablets it was technically broken: tables overflowing, elements colliding. But users had found a way. They zoomed and panned. They had been doing it for years. It was awkward and nobody had ever called it a feature, but it worked and they relied on it. When we made the layout responsive, we took that away. The zooming behavior changed. The tables that people had been navigating by pinching and scrolling were now locked inside a responsive container that clipped exactly the data they needed to see.
 
 We reverted the change immediately.
 
@@ -70,15 +72,15 @@ This was the sharpest lesson of the whole year. The broken thing was load-bearin
 
 ## The new normal
 
-By the end of the year, two things were true.
+By the end of the year, two things were true. Not because the path had been clean. Because we hadn't stopped.
 
 The codebase was in better shape than when we started. Teams working in it were faster. Features that used to take weeks were taking days. The "we can't build that" reflex had mostly gone quiet. That part felt good in a way that was easy to measure.
 
 The other thing was harder to put a number on. A team that had spent years building tools for other engineers had become something different. Not by design. By necessity. We were in the room when sales teams found out their demos were changing. We were on calls when executives needed to understand why the product looked different. We went back to the original maintainers, the people who had built the parts we were replacing, and asked them what we couldn't find in the documentation. Some had left the company. The ones still around remembered things nobody else knew. Edge cases added years ago to solve a specific customer problem. Behaviors that looked like bugs but were actually decisions. We would have lost all of that if we had treated this as a pure technical migration.
 
-None of this was in the job description. I'm not sure it matters. The goal was never to ship components. It was to enable colleagues and the company to build better products. That goal turned out to be larger than we had planned for, and it kept expanding to fill whoever was willing to hold it.
+None of this was in the job description. I'm not sure it matters. The goal was never to ship components. It was to enable colleagues and the company to build better products. That goal turned out to be larger than we had planned for. Not because it grew on its own, but because we kept reaching for the parts nobody else had picked up yet.
 
-What I know now is that the hard problems in this kind of work are rarely technical. The technical problems are the ones you trained for, the ones with documentation and Stack Overflow threads and a clear definition of done. The social and political problems don't have any of that. They just show up, and you deal with them, and sometimes you get it wrong, and you keep going anyway.
+What I know now is that the hard problems in this kind of work are rarely technical. The technical problems are the ones you trained for, the ones with documentation and a clear definition of done. The social and political problems don't have any of that. They just show up, and you deal with them, and sometimes you get it wrong, and you keep going anyway.
 
 The cultural shift we had privately hoped for: teams deeply caring about UI quality, putting genuine thought into every element and every user flow. That's still in progress. The tools are there. The path is clearer. But taste takes time to develop, especially in an organization that didn't have space for it before. That story is still being written.
 
