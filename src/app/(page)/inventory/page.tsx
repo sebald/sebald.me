@@ -13,6 +13,7 @@ import { PageToolbar } from '@/ui/page-toolbar';
 import { Text } from '@/ui/text';
 
 import { CodeExamples } from './code-examples';
+import { TimeLogoExamples } from './logo-time-examples';
 import { OverlayExamples } from './overlay-examples';
 
 // Config
@@ -83,7 +84,6 @@ const InventoryPage = () => (
                 title="mist-950"
               />
             </div>
-
           </div>
 
           <div className="grid gap-4">
@@ -223,6 +223,11 @@ const InventoryPage = () => (
           <div className="grid gap-4">
             <Headline level="2">Code</Headline>
             <CodeExamples />
+          </div>
+
+          <div className="grid gap-4">
+            <Headline level="2">Time Logo</Headline>
+            <TimeLogoExamples />
           </div>
         </div>
       </Article.Content>
