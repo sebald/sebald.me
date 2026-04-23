@@ -66,7 +66,7 @@
       }
 
       & li + li {
-        margin-top: theme(spacing.8);
+        margin-top: theme(spacing.6);
       }
 
       /* Nested lists */

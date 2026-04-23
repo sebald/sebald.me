@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "pnpm prettier --write $CLAUDE_FILE_PATHS"
+            "command": "jq -r '.tool_input.file_path' | xargs pnpm prettier --write"
           }
         ]
       }
