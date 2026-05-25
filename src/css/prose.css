@@ -15,25 +15,25 @@
 
     /* Default spacing */
     & > * + * {
-      margin-top: theme(spacing.14);
+      margin-top: calc(var(--spacing) * 14);
     }
 
     /* Headlines */
     & > * + h2 {
-      margin-top: theme(spacing.16);
+      margin-top: calc(var(--spacing) * 16);
     }
     & > * + h3 {
-      margin-top: theme(spacing.16);
+      margin-top: calc(var(--spacing) * 16);
     }
 
     & h2 + *,
     & h3 + * {
-      margin-top: theme(spacing.4);
+      margin-top: calc(var(--spacing) * 4);
     }
 
     & h4 + *,
     & h5 + * {
-      margin-top: theme(spacing.4);
+      margin-top: calc(var(--spacing) * 4);
     }
 
     /* Strong */
@@ -66,12 +66,12 @@
       }
 
       & li + li {
-        margin-top: theme(spacing.8);
+        margin-top: calc(var(--spacing) * 8);
       }
 
       /* Nested lists */
       & :is(ul, ol) {
-        margin-top: theme(spacing.4);
+        margin-top: calc(var(--spacing) * 4);
       }
     }
 
