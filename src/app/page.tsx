@@ -4,7 +4,7 @@ import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
 import { Text } from '@/ui/text';
 
-export const Intro = () => (
+const Intro = () => (
   <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
     <TimeLogo size={82} />
     <div className="grid gap-8">
@@ -14,10 +14,10 @@ export const Intro = () => (
           Software Architect at Reservix, Freiburg
         </Text>
       </div>
-      <Text>
-        I work at the intersection of code and user experience. Design systems
-        are central to that work. They&apos;re the infrastructure that turns
-        creative vision into something real, at scale.
+      <Text wrap="balance">
+        I work at the intersection of code and user experience. Lately that
+        means building a design system for a product that&apos;s two decades
+        old, and for everything that comes next.
       </Text>
     </div>
   </header>

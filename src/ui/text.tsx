@@ -14,10 +14,15 @@ export const style = cva({
       default: '',
       caption: 'text-xs -tracking-wide',
     },
+    wrap: {
+      default: '',
+      balance: 'text-balance',
+    },
   },
   defaultVariants: {
     variant: 'default',
     size: 'default',
+    wrap: 'default',
   },
 });
 
@@ -30,7 +35,15 @@ interface TextProps extends VariantProps<typeof style> {
 
 // Component
 // ---------------
-export const Text = ({ variant, size, children, as = 'p' }: TextProps) => {
+export const Text = ({
+  variant,
+  size,
+  wrap,
+  children,
+  as = 'p',
+}: TextProps) => {
   const Component = as;
-  return <Component className={style({ variant, size })}>{children}</Component>;
+  return (
+    <Component className={style({ variant, size, wrap })}>{children}</Component>
+  );
 };
