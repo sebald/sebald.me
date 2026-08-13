@@ -26,16 +26,20 @@ html {
   text-size-adjust: 100%;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  overflow-wrap: break-word;
-  text-wrap: balance;
-}
+/* In `base` so utilities (e.g. `text-balance`) can override them. Unlayered
+   rules would win over Tailwind's layered utilities regardless of specificity. */
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    overflow-wrap: break-word;
+    text-wrap: balance;
+  }
 
-p {
-  text-wrap: pretty;
+  p {
+    text-wrap: pretty;
+  }
 }
 
 /*------------------*/
