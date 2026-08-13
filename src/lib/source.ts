@@ -11,7 +11,10 @@ export const notesSource = loader({
   baseUrl: '/notes',
   source: toFumadocsSource(notes, []),
   // Remove date prefixes from slugs (only use this for ordering in the actual folder)
-  slugs: file => getSlugs(file.path.replace(/(\/)?\d{4}-\d{2}-\d{2}-/, '$1')),
+  slugs: file =>
+    getSlugs(
+      (file as { path: string }).path.replace(/(\/)?\d{4}-\d{2}-\d{2}-/, '$1'),
+    ),
 });
 
 export const miscSource = loader({

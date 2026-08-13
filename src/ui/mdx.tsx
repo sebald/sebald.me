@@ -6,6 +6,7 @@ import { Blockquote } from '@/ui/blockquote';
 import { Callout } from '@/ui/callout';
 import { CodeBlock, CodeBlockTabs, CodeBlockTabsList } from '@/ui/codeblock';
 import { Headline } from '@/ui/headline';
+import type { ImageProps } from '@/ui/image';
 import { Image } from '@/ui/image';
 import { Link } from '@/ui/link';
 
@@ -13,7 +14,7 @@ export const getMDXComponents = (
   components?: MDXComponents,
 ): MDXComponents => ({
   ...defaultComponents,
-  a: ({ children, href }) => <Link href={href}>{children}</Link>,
+  a: ({ children, href }) => <Link href={href ?? '#'}>{children}</Link>,
   blockquote: ({ children, cite, ...props }) => (
     <Blockquote cite={cite} {...props}>
       {children}
@@ -51,7 +52,9 @@ export const getMDXComponents = (
   ),
 
   // Support captions
-  img: Image,
+  img: ({ alt, ...props }) => (
+    <Image alt={alt ?? ''} {...(props as Omit<ImageProps, 'alt'>)} />
+  ),
 
   // Override to adjust styling
   pre: ({ children, ...props }) => <CodeBlock {...props}>{children}</CodeBlock>,
