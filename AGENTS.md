@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents working with code in this repository.
 
 ## Project Overview
 
@@ -20,12 +20,14 @@ pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
 ```
 
+CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings don't fail CI; errors do.
+
 ## Architecture
 
 ### Content System
 
 - MDX content lives in `content/notes/` (blog posts) and `content/misc/` (pages)
-- Notes use date-prefix naming: `2026-01-14-slug-title.mdx` (date stripped from URL)
+- Each note is a date-prefixed folder: `content/notes/2026-01-14-slug-title/index.mdx` (date stripped from URL); images live next to `index.mdx`
 - Fumadocs compiles MDX on install → generates `.source/` directory
 - Content loaders in `src/lib/source.ts` expose `notesSource` and `miscSource`
 
@@ -50,7 +52,7 @@ topics: string[] (optional)
 ### Styling
 
 - Tailwind v4 with `@theme` directive in `theme.css`
-- Colors use OKLCH model (mist-50 to mist-950, black-50 to black-950)
+- Colors use OKLCH model (mist-50 to mist-950)
 - CVA for component variants (see `src/ui/button.tsx`)
 - `cn()` utility from `src/lib/styles.utils.ts` for class merging
 
@@ -64,3 +66,4 @@ topics: string[] (optional)
 - `.source/` - Fumadocs compiled collections
 - `next-env.d.ts` - Next.js types
 - `.next/` - Build output
+- `src/ui/logo-dither.ts` - Generated logo paths (excluded from formatting)
