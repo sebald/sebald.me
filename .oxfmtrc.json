@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "printWidth": 80,
+  "arrowParens": "avoid",
+  "sortImports": {
+    "groups": [
+      ["type-builtin", "type-external", "builtin", "external"],
+      ["type-internal", "internal"],
+      [
+        "type-parent",
+        "type-sibling",
+        "type-index",
+        "parent",
+        "sibling",
+        "index"
+      ],
+      "unknown"
+    ],
+    "internalPattern": ["@/"],
+    "ignoreCase": true,
+    "newlinesBetween": true
+  },
+  "sortPackageJson": false,
+  "sortTailwindcss": {
+    "stylesheet": "./src/css/styles.css"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    ".source/",
+    "dist/",
+    "build/",
+    ".git/",
+    ".DS_Store",
+    "*.log",
+    "src/ui/logo-dither.ts"
+  ]
+}

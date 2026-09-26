@@ -42,45 +42,45 @@ const InventoryPage = () => (
             <Headline level="2">Mist Palette</Headline>
 
             <div className="flex flex-wrap gap-1">
-              <div className="bg-mist-50 size-12 rounded-lg" title="mist-50" />
+              <div className="size-12 rounded-lg bg-mist-50" title="mist-50" />
               <div
-                className="bg-mist-100 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-100"
                 title="mist-100"
               />
               <div
-                className="bg-mist-200 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-200"
                 title="mist-200"
               />
               <div
-                className="bg-mist-300 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-300"
                 title="mist-300"
               />
               <div
-                className="bg-mist-400 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-400"
                 title="mist-400"
               />
               <div
-                className="bg-mist-500 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-500"
                 title="mist-500"
               />
               <div
-                className="bg-mist-600 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-600"
                 title="mist-600"
               />
               <div
-                className="bg-mist-700 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-700"
                 title="mist-700"
               />
               <div
-                className="bg-mist-800 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-800"
                 title="mist-800"
               />
               <div
-                className="bg-mist-900 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-900"
                 title="mist-900"
               />
               <div
-                className="bg-mist-950 size-12 rounded-lg"
+                className="size-12 rounded-lg bg-mist-950"
                 title="mist-950"
               />
             </div>

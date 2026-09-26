@@ -23,7 +23,7 @@
   --color-muted-foreground: var(--color-mist-400);
 
   --color-link: var(--color-mist-50);
-  --color-ring: oklch(0.74 0.10 65);
+  --color-ring: oklch(0.74 0.1 65);
 
   --spacing-content: min(calc(75ch + calc(var(--spacing) * 6 * 2)), 100%);
   --spacing-content-padding: calc(var(--spacing) * 6);

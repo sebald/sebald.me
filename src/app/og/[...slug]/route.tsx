@@ -1,6 +1,5 @@
-import { resolve } from 'node:path';
-
 import { notFound } from 'next/navigation';
+import { resolve } from 'node:path';
 
 import { createDefaultOgImage, getCustomOgImage } from '@/lib/og';
 import { notesSource } from '@/lib/source';

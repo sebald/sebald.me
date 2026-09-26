@@ -45,12 +45,12 @@ export const metadata: Metadata = {
 const Layout = async ({ children }: LayoutProps<'/'>) => (
   <html
     lang="en"
-    className={`bg-background text-foreground font-mono ${fontMono.variable}`}
+    className={`bg-background font-mono text-foreground ${fontMono.variable}`}
     suppressHydrationWarning
   >
     <body className="relative isolate">
       <AnalyticsProvider>
-        <div className="px-content-padding w-content mx-auto">
+        <div className="mx-auto w-content px-content-padding">
           <main>{children}</main>
           <Footer />
         </div>

@@ -16,7 +16,7 @@ import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="text-mist-300 hidden font-sans text-xs font-bold uppercase md:block">
+  <h6 className="hidden font-sans text-xs font-bold text-mist-300 uppercase md:block">
     {children}
   </h6>
 );
@@ -90,7 +90,7 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="w-content text-mist-400 mx-auto pt-36 pb-8">
+  <div className="mx-auto w-content pt-36 pb-8 text-mist-400">
     <Divider />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
