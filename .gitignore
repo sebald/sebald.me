@@ -24,3 +24,6 @@ yarn-error.log*
 .env*.local
 .vercel
 next-env.d.ts
+# playwright
+/playwright-report/
+/test-results/

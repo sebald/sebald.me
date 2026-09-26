@@ -18,9 +18,20 @@ pnpm types:check      # Full type check (fumadocs + next + tsc)
 pnpm typecheck        # Quick tsc --noEmit
 pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
+pnpm vrt              # Visual regression tests (Docker)
+pnpm vrt:update       # Regenerate screenshot baselines (Docker)
 ```
 
-CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings don't fail CI; errors do.
+CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+
+### Visual Regression Tests
+
+- Playwright screenshot tests in `tests/visual/`, baselines committed in `tests/visual/__screenshots__/` (desktop + mobile)
+- Covers `/inventory` (full page plus opened dialog/menu states) and the two published notes
+- Always run through `pnpm vrt` / `pnpm vrt:update`, which use the `mcr.microsoft.com/playwright` Docker image. Baselines are Linux-only; running Playwright directly on macOS produces false diffs
+- Intended style changes: run `pnpm vrt:update` and commit the updated PNGs
+- The Docker image tag in `.github/workflows/visual.yml` must match the `@playwright/test` version (Renovate groups them); a Playwright bump may need `pnpm vrt:update`
+- On CI failure, download the `playwright-report` artifact and open `index.html` for the diff viewer
 
 ## Architecture
 
