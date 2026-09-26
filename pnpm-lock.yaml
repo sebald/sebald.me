@@ -21,8 +21,8 @@ importers:
         specifier: 6.1.1
         version: 6.1.1(next@16.3.6(@types/node@26.6.2)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(react@19.3.0)
       cva:
-        specifier: 1.0.0-beta.4
-        version: 1.0.0-beta.4(typescript@7.0.2)
+        specifier: 1.0.0-beta.12
+        version: 1.0.0-beta.12(typescript@7.0.2)
       feed:
         specifier: 6.0.0
         version: 6.0.0
@@ -1634,10 +1634,10 @@ packages:
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
 
-  cva@1.0.0-beta.4:
-    resolution: {integrity: sha512-F/JS9hScapq4DBVQXcK85l9U91M6ePeXoBMSp7vypzShoefUBxjQTo3g3935PUHgQd+IW77DjbPRIxugy4/GCQ==}
+  cva@1.0.0-beta.12:
+    resolution: {integrity: sha512-Xn85p3Jyr4oVh5t69/9uOyKlEazrYdolpXXPB1bpr5apy1MS76lde5ET/WLRk3TZNldsXnj/e4Dpyh1NXFSgUg==}
     peerDependencies:
-      typescript: '>= 4.5.5'
+      typescript: '>= 6.0.0'
     peerDependenciesMeta:
       typescript:
         optional: true
@@ -3709,7 +3709,7 @@ snapshots:
 
   csstype@3.2.3: {}
 
-  cva@1.0.0-beta.4(typescript@7.0.2):
+  cva@1.0.0-beta.12(typescript@7.0.2):
     dependencies:
       clsx: 2.1.1
     optionalDependencies:
