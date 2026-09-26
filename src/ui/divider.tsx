@@ -4,7 +4,7 @@ import type { CSSProperties } from 'react';
 // Styles
 // ---------------
 const style = cva({
-  base: ['rounded-[1px]'],
+  base: ['rounded-[1px] border-0'],
   variants: {
     variant: {
       default: 'bg-mist-700',
@@ -29,8 +29,7 @@ interface DividerProps extends VariantProps<typeof style> {
 // Component
 // ---------------
 export const Divider = ({ variant, orientation, inset = 0 }: DividerProps) => (
-  <div
-    role="separator"
+  <hr
     aria-orientation={orientation}
     className={style({ variant, orientation })}
     style={{ '--inset': `calc(var(--spacing) * ${inset})` } as CSSProperties}
