@@ -39,30 +39,25 @@ test.describe('inventory', () => {
     await expect(page).toHaveScreenshot('inventory.png', { fullPage: true });
   });
 
-  test('dialog', async ({ page }) => {
-    await visit(page, '/inventory');
-    await page
-      .getByRole('button', { name: 'Open Dialog', exact: true })
-      .click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page).toHaveScreenshot('inventory-dialog.png');
-  });
+  // Overlays aren't part of the full-page screenshot, so open each one
+  const OVERLAYS = [
+    { trigger: 'Open Dialog', role: 'dialog', name: 'inventory-dialog' },
+    {
+      trigger: 'Open Non-modal Dialog (bottom)',
+      role: 'dialog',
+      name: 'inventory-dialog-bottom',
+    },
+    { trigger: 'Open Menu', role: 'menu', name: 'inventory-menu' },
+  ] as const;
 
-  test('non-modal dialog', async ({ page }) => {
-    await visit(page, '/inventory');
-    await page
-      .getByRole('button', { name: 'Open Non-modal Dialog (bottom)' })
-      .click();
-    await expect(page.getByRole('dialog')).toBeVisible();
-    await expect(page).toHaveScreenshot('inventory-dialog-bottom.png');
-  });
-
-  test('menu', async ({ page }) => {
-    await visit(page, '/inventory');
-    await page.getByRole('button', { name: 'Open Menu' }).click();
-    await expect(page.getByRole('menu')).toBeVisible();
-    await expect(page).toHaveScreenshot('inventory-menu.png');
-  });
+  for (const { trigger, role, name } of OVERLAYS) {
+    test(name, async ({ page }) => {
+      await visit(page, '/inventory');
+      await page.getByRole('button', { name: trigger, exact: true }).click();
+      await expect(page.getByRole(role)).toBeVisible();
+      await expect(page).toHaveScreenshot(`${name}.png`);
+    });
+  }
 });
 
 // Notes

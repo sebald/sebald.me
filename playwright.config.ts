@@ -14,9 +14,10 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI
-    ? [['github'], ['html', { open: 'never' }]]
-    : [['list'], ['html', { open: 'never' }]],
+  reporter: [
+    process.env.CI ? ['github'] : ['list'],
+    ['html', { open: 'never' }],
+  ],
   expect: {
     toHaveScreenshot: {
       animations: 'disabled',
@@ -28,6 +29,8 @@ export default defineConfig({
   },
   use: {
     baseURL: `http://localhost:${PORT}`,
+    // The site's CSS turns off all transitions under reduced motion, so
+    // overlays open instantly (`animations: 'disabled'` only acts at capture)
     reducedMotion: 'reduce',
     trace: 'retain-on-failure',
   },
@@ -49,7 +52,5 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,
-    // Keep analytics out of the screenshots
-    env: { NEXT_PUBLIC_GA_ID: '' },
   },
 });
