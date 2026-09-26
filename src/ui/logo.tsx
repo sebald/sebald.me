@@ -58,12 +58,12 @@ export const Logo = ({ size = 32 }: LogoProps) => (
     <LogoIcon size={size} className="[grid-area:1/1] group-hover:opacity-0" />
     <LogoIcon
       size={size}
-      className="group-hover:animate-glitch-shift-slow [grid-area:1/1] opacity-0 group-hover:opacity-80"
+      className="opacity-0 [grid-area:1/1] group-hover:animate-glitch-shift-slow group-hover:opacity-80"
       style={{ clipPath: 'inset(10% 0 80% 0)' }}
     />
     <LogoIcon
       size={size}
-      className="group-hover:animate-glitch-shift-fast [grid-area:1/1] opacity-0 group-hover:opacity-80"
+      className="opacity-0 [grid-area:1/1] group-hover:animate-glitch-shift-fast group-hover:opacity-80"
       style={{ clipPath: 'inset(80% 0 5% 0)' }}
     />
   </span>

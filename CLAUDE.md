@@ -11,8 +11,9 @@ Personal blog and portfolio built with Next.js 16, React 19, TypeScript, and Fum
 ```bash
 pnpm dev              # Start dev server (port 3000)
 pnpm build            # Production build
-pnpm lint             # ESLint
-pnpm format           # Prettier formatting
+pnpm lint             # oxlint
+pnpm format           # oxfmt formatting
+pnpm format:check     # oxfmt check (no writes)
 pnpm types:check      # Full type check (fumadocs + next + tsc)
 pnpm typecheck        # Quick tsc --noEmit
 pnpm test             # Run tests (Node test runner)

@@ -18,8 +18,8 @@
       "matchPackageNames": ["/^next$/", "/^@next//", "/^nextjs/"]
     },
     {
-      "groupName": "ESLint",
-      "matchPackageNames": ["/^eslint/", "/^@eslint/"]
+      "groupName": "Oxc",
+      "matchPackageNames": ["/^oxlint/", "/^oxfmt/"]
     },
     {
       "groupName": "Tailwind CSS",

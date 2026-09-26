@@ -39,7 +39,7 @@ export const TimeLogoExamples = () => {
               step={0.1}
               value={scrubHour}
               onChange={e => setScrubHour(Number(e.target.value))}
-              className="accent-mist-400 w-full"
+              className="w-full accent-mist-400"
               aria-label="Hour"
             />
             <Text variant="muted" size="caption">
