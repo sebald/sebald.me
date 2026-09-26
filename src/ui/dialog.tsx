@@ -4,7 +4,7 @@ import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
 import { XIcon } from '@phosphor-icons/react/ssr';
 import type { VariantProps } from 'cva';
-import { compose, cva } from 'cva';
+import { cva } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
 
@@ -60,28 +60,26 @@ export const styles = {
       size: 'medium',
     },
   }),
-  content: compose(
-    cardStyles,
-    cva({
-      base: ['grid'],
-      variants: {
-        layout: {
-          stack: [
-            'grid-cols-1',
-            '[grid-template-areas:"title""description""body""actions"]',
-          ],
-          inline: [
-            'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-12',
-            '[grid-template-areas:"title""description""body""actions"]',
-            'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
-          ],
-        },
+  content: cva({
+    composes: cardStyles,
+    base: ['grid'],
+    variants: {
+      layout: {
+        stack: [
+          'grid-cols-1',
+          '[grid-template-areas:"title""description""body""actions"]',
+        ],
+        inline: [
+          'grid-cols-1 md:grid-cols-[1fr_auto] md:gap-x-12',
+          '[grid-template-areas:"title""description""body""actions"]',
+          'md:[grid-template-areas:"title_actions""description_actions""body_actions"]',
+        ],
       },
-      defaultVariants: {
-        layout: 'stack',
-      },
-    }),
-  ),
+    },
+    defaultVariants: {
+      layout: 'stack',
+    },
+  }),
   title: cva({
     base: `${headlineStyle({ level: '1' })} [grid-area:title]`,
   }),

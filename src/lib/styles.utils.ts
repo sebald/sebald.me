@@ -1,5 +1,6 @@
-import type { ClassValue, CVA } from 'cva';
-import { cva as _cva, cx } from 'cva';
+import type { ClassValue } from 'cva';
+import { cx } from 'cva';
+import { defineConfig } from 'cva/config';
 import type { CSSProperties } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -15,10 +16,7 @@ export type { VariantProps } from 'cva';
 /**
  * Enhanced cva with Tailwind CSS merge support.
  */
-export const cva: CVA = options => {
-  const cvaClassName = _cva(options);
-  return props => twMerge(cvaClassName(props));
-};
+export const { cva } = defineConfig({ cx: cn });
 
 /**
  * Transform a plain object into CSS variables.
