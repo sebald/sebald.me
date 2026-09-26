@@ -32,6 +32,10 @@
     {
       "groupName": "Fumadocs",
       "matchPackageNames": ["/^fumadocs-/"]
+    },
+    {
+      "groupName": "Playwright",
+      "matchPackageNames": ["/^@playwright\\//", "mcr.microsoft.com/playwright"]
     }
   ]
 }
