@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { siteUrl } from '@/app.config';
+import { gaId, siteUrl } from '@/app.config';
 import { fontMono } from '@/css/fonts';
 import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
@@ -54,7 +54,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
           <main>{children}</main>
           <Footer />
         </div>
-        <Analytics gaId={process.env.NEXT_PUBLIC_GA_ID ?? ''} />
+        {gaId && <Analytics gaId={gaId} />}
       </AnalyticsProvider>
     </body>
   </html>
