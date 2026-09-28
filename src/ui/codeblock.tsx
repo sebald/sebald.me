@@ -14,6 +14,7 @@ import { type PropsWithChildren, type RefObject, useRef } from 'react';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { Button } from './button';
+import { toast } from './toast';
 
 // Styles
 // ---------------
@@ -73,19 +74,23 @@ const CopyButton = ({ containerRef }: CopyButtonProps) => {
       node.replaceWith('\n');
     });
 
-    navigator.clipboard.writeText(clone.textContent ?? '');
+    navigator.clipboard.writeText(clone.textContent ?? '').then(
+      () => toast.add({ title: 'Code copied' }),
+      () => toast.add({ title: 'Could not copy the code', type: 'error' }),
+    );
   });
 
   return (
     <Button
       variant="link"
-      aria-label={checked ? 'Copied Text' : 'Copy Text'}
+      // Static label; the result is announced by the toast
+      aria-label="Copy code"
       onClick={onClick}
     >
       {checked ? (
-        <CheckIcon size={20} weight="bold" />
+        <CheckIcon size={20} weight="bold" aria-hidden />
       ) : (
-        <CopyIcon size={20} weight="bold" />
+        <CopyIcon size={20} weight="bold" aria-hidden />
       )}
     </Button>
   );
