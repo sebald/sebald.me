@@ -55,4 +55,3 @@ jobs:
           git add tests/visual/__screenshots__
           git commit -m 'test: update VRT baselines'
           git push
-
