@@ -40,6 +40,7 @@ CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings d
 
 - MDX content lives in `content/notes/` (blog posts) and `content/misc/` (pages)
 - Each note is a date-prefixed folder: `content/notes/2026-01-14-slug-title/index.mdx` (date stripped from URL); images live next to `index.mdx`
+- Use PNG or WebP for note images, not AVIF: Vercel's image optimizer serves AVIF sources at full size instead of resizing them
 - Fumadocs compiles MDX on install → generates `.source/` directory
 - Content loaders in `src/lib/source.ts` expose `notesSource` and `miscSource`
 
