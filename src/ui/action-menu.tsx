@@ -8,6 +8,8 @@ import type { Route } from 'next';
 import NextLink from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
+import type { SimpleAnalyticsEventName } from '@/lib/analytics';
+import { trackEvent } from '@/lib/analytics';
 import { Menu } from '@/ui/menu';
 import { toast } from '@/ui/toast';
 
@@ -35,14 +37,25 @@ export const ActionMenu = ({
 interface ActionMenuItemProps extends PropsWithChildren, AriaAttributes {
   href?: string;
   onClick?: () => void;
+  /**
+   * Analytics event to track on click, a name so it can be set from
+   * server components
+   */
+  event?: SimpleAnalyticsEventName;
 }
 
 export const ActionMenuItem = ({
   children,
   href,
   onClick,
+  event,
   ...ariaProps
 }: ActionMenuItemProps) => {
+  const handleClick = () => {
+    if (event) trackEvent(event);
+    onClick?.();
+  };
+
   if (href) {
     return (
       // Close on click, the menu would otherwise stay open after a
@@ -50,6 +63,7 @@ export const ActionMenuItem = ({
       <Menu.LinkItem
         render={<NextLink href={href as Route} />}
         closeOnClick
+        onClick={handleClick}
         {...ariaProps}
       >
         {children}
@@ -58,7 +72,7 @@ export const ActionMenuItem = ({
   }
 
   return (
-    <Menu.Item onClick={onClick} {...ariaProps}>
+    <Menu.Item onClick={handleClick} {...ariaProps}>
       {children}
     </Menu.Item>
   );
@@ -71,6 +85,7 @@ export const CopyLinkItem = () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
       toast.add({ title: 'Link copied' });
+      trackEvent('Copy', { target: 'url' });
     } catch {
       toast.add({ title: 'Could not copy the link', type: 'error' });
     }

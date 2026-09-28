@@ -57,7 +57,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
       <PageToolbar>
         <ActionMenu label="Article actions">
           <CopyLinkItem />
-          <ActionMenuItem href={`${page.url}.md`}>
+          <ActionMenuItem href={`${page.url}.md`} event="View Markdown">
             <MarkdownLogoIcon weight="bold" aria-hidden />
             View as markdown
           </ActionMenuItem>

@@ -1,0 +1,87 @@
+---
+title: Modernize the Product, Not the UI
+description: On fear, feature parity and the politics of changing software people depend on.
+topics: [design-systems]
+date: 2026-09-23
+draft: true
+---
+
+Most software does not survive ten years, let alone fifteen or twenty. But the software that does has earned it. It was chosen on ordinary working days by people who could have picked something else, and they kept choosing it. That kind of success has a price. A product that works usually stops changing shape. The effort goes into keeping it running and into new features for the customers who ask loudest, which most other customers never use. Both add to the interface. Neither changes it. The people who use it all day are rarely the ones who decide to buy it, so what bothers them never reaches the vendor. Customers cannot see activity. They can only see change. When the interface stops changing, it looks like nobody is working on it, whether or not anyone is.
+
+Not every customer reads that stillness the same way. It depends on how long they have been there. The ones who are new, or about to decide, see a warning. Next to a competitor whose product looks like it was built this year, the old one looks less capable. What looks newer is seen as working better.
+
+The ones who have used the product for a decade see the opposite. They have watched things get added for years and nothing rethought, and they have built their routine around every addition. The training they paid for, the colleague who knows the workaround, the sequence of clicks their hands perform without thinking. To this group an unchanged interface is not a warning. It is the one thing at work they can rely on.
+
+Inside the company the two complaints get translated separately, and both translations are wrong. "It looks abandoned" becomes a redesign, because a redesign has a picture and a budget line, and because it is the one change a buyer can see without using the product. "Don't change anything" becomes a constraint on that redesign.
+
+Put the two together and the only project that satisfies both is a redesign that is not allowed to change anything. Rebuild what exists so that it does exactly what it does today, and make it look new while you are at it. Same features, fresh coat, nothing to retrain. That is the project that gets funded almost every time. [Thoughtworks](https://www.martinfowler.com/articles/patterns-legacy-displacement/feature-parity.html) calls it feature parity, and the people who have tried it call it a trap.
+
+Businesses reach for it because earlier projects went badly and parity feels like the low-risk option. The opposite is true. Parity costs the most for the least change. The safe-looking choice is the expensive one.
+
+What did the two groups actually ask for? One wondered whether the product has a future. The other wanted to keep the way they are used to working. Both are questions about the product, not about how it looks. To answer them you need to ask different questions. What would make this product easy to learn for someone who starts tomorrow? And what needs to improve for someone who has used it for ten years? Feature parity answers neither. It is a compromise. It gives the redesign its new coat and the users their old workflow, and nobody gets what they came for. What is needed instead is a modernization, not a redesign with a different name. It is a decision, workflow by workflow, about what earns its place and what does not. Every screen you carry forward unchanged is such a decision. Most teams make it by default.
+
+## The safe choice is the expensive one
+
+In 2022 [Wakefield Research](https://vfunction.com/resources/report-wakefield-why-app-modernization-projects-fail/) asked 250 technology leaders at large US companies, from architects up to executives, about their modernization projects. 97 percent expected resistance from inside their own company the moment they proposed one. Executives blamed risk, cost, and a return nobody could show. Architects pointed to risk as well, but they were more specific. Stakeholders, they said, are afraid of losing their role and of change at that scale. A modernization does not stop at the software. It reaches teams and processes. Executives put that worry in numbers. Architects put it in people. Neither asked the customer's staff, whose working day is the one the change will actually reach.
+
+The fear is not irrational. [Bent Flyvbjerg](https://sites.prh.com/how-big-things-get-done-book) has built the largest database of big projects that exists, more than sixteen thousand of them across twenty fields, and software is among the worst. 91.5 percent go over budget, over schedule, or both. 0.5 percent deliver on budget, on time and with the benefits they promised. Projects do not fail at that rate because the work is hard. They fail before the work even starts. One reason is that people are optimistic about their own plans and convinced that their system is special, so the statistics do not apply to them. The other is that people who want a project approved understate the cost and overstate the benefit, because that is what gets a yes. Then they start, and soon the hole they have dug is too deep to climb out of.
+
+When most projects go this badly, feature parity looks like the responsible choice. It is easy to explain, and nobody gets fired for it. A second reason is how companies understand design. In 2019 [InVision](https://stephaniekabi.com/wp-content/uploads/2024/08/InVision-The-New-Design-Frontier.pdf) published a survey of more than two thousand organizations on how mature their design practice is, and 41 percent came out at the lowest of five levels, where design means the visible layer and nothing else. In four out of ten companies a redesign is not one option among several. It is the only design project the company knows how to fund. And when parity goes badly, the effort to understand every existing feature balloons, corners get cut, and the vital features go out with the useless ones because nobody could tell them apart in time.
+
+"Redesign" is a solution. So is "parity". Neither is a goal. The goal remains to make the product easy to learn and to remove the workarounds for the people who already know it. Flyvbjerg calls this the commitment fallacy. You lock on to a solution before you have said what the goal is, and from then on every decision serves the solution. Start with the goal and work backwards. What would this redesign make possible that the current product cannot? If the honest answer is that it looks old, you have heard the signal and missed the question behind it. What the customer wanted to know is whether someone is still working on the thing they run their business on. A redesign answers that once. A year later it is the interface that has not moved in a year.
+
+A modernization answers the customer's question every time something ships, because it changes the product in steps, and each step is something the customer can recognize. That is the case to make inside the company, and the people there have good reasons to doubt it. Every modernization they have seen turned into a redesign, took two years, ate a budget, and either changed nothing or broke something at the moment it mattered most.
+
+Those objections need to be named before anyone can use them as ammunition, so they become the agenda instead. How would we know, six weeks in, that we are moving in the right direction? The Head of Product will name something the customer should notice by then. Sales will name the things that must still work exactly as they do now. Both can be checked six weeks later. The doubt has not gone away, but now it can be tested.
+
+## Parity is a compromise
+
+Feature parity sounds like a neutral scope. Rebuild what exists, nothing more, nothing less. But it is not neutral. Rebuilding what exists means rebuilding everything that was ever added, whether or not anyone still uses it. It also means keeping every workflow the way it was designed years ago, whether or not that is still the right way to do the job.
+
+According to the [Standish Group](https://www.thoughtworks.com/radar/techniques/legacy-migration-feature-parity), about half of the features in a typical system are never used. Of the features people insist on keeping, many are not features. They are workarounds for bugs that were never fixed, and after enough years a workaround becomes the way things are done. Rebuild all of it and you have paid to preserve the limitations of the old system inside the new one.
+
+The lightest form of parity is the visual refresh. The screens stay, the workflow stays, and everything on them moves a little. Buttons change place, menus regroup, a dense table becomes a row of cards. It looks like the cheapest option. For a long-time user it is the most disruptive one, because [experienced users](https://www.csse.canterbury.ac.nz/andrew.cockburn/papers/commandMap-finalCamera.pdf) find controls by where they are, not by what they look like. Move things and novices barely notice, while experts lose the speed they had and get nothing back. The workarounds are still there, they just look different. Inside the company, the refresh looks like the modernization. Once the surface is new, the work counts as done. That is a wrong expectation, and wrong expectations were the most common reason modernization projects failed in the Wakefield survey. Whoever asks for the next budget has to start by explaining why the last one changed nothing.
+
+Incremental change beats [radical change](https://www.nngroup.com/articles/radical-incremental-redesign/) in most cases, and the radical redesigns that fail are the ones that changed the look and left the structure and the workflows alone. Changing a workflow starts with the people who use it. What does this screen do for you that nothing else does? How does your day go when this step is slow? What do you do when it does not work? The answers are not feature requests but the reasons the screen exists. Those reasons are what gets carried forward, and the screen that delivers them does not have to be the old one. Sometimes it should be. A screen that is fast because it is well designed stays. A screen that is fast because people have memorized its faults is a different case, and changing it is only justified if it makes working without looking unnecessary instead of impossible.
+
+## The fear is information
+
+Legacy software often runs behind a counter or on a phone line, with a queue and no time to spare. The person operating it barely looks at the screen anymore, because their hands know where everything is. Change the workflow and what they learned no longer applies, and there is no time to relearn it. When they say do not touch it, this is what they are protecting.
+
+Google ran into this with its own redesigns often enough to build a checklist before replacing the Docs List with [Drive](https://research.google/pubs/pub41221/) in 2012. Earlier launches that skipped those steps drew sustained complaints. Google called it change aversion. [Jared Spool](https://archive.uie.com/brainsparks/2012/07/16/googles-take-on-change-aversion-misses-the-point/) argued that nobody is really averse to change, only to change that costs more than it gives back. The complaints will not fade if you wait. They are telling you the change was not worth it, and nobody inside the company can tell you that.
+
+The people using the software are also afraid of the project as a whole, and not without reason. They have seen one of these before. It was late, it cost more than anyone said, and something they relied on stopped working. They do not need a failure rate to know how these projects usually go. Telling them this time is different will not reassure them, because they were told that last time too.
+
+Putting their fear into your own words changes that. A fear that has been named by the person proposing the change does not have to be defended. Someone who is done defending will tell you what they actually need from the software, which is what you needed to know before deciding anything. Chris Voss calls this labeling. It is how you get someone to stop defending a position long enough to say what is behind it.
+
+Being heard is not enough, though. They also need to know it is safe to refuse. People who can safely say no will agree to things they would otherwise fight. The most reliable way to give the people using the software that freedom is to put it in the product. When Google replaced the Docs List with Drive, letting people move between the new version and the old one was one of ten deliberate measures, and that launch drew markedly less resistance than the redesigns that skipped them.
+
+A way back is not a retreat, and it does not mean running two products forever. The old version stays available and stops improving. Everything new happens in the new one, and the date the old one goes away is set and announced long before it arrives. Until then, the number of people who have not switched is the most honest measure you have of whether the new version is ready.
+
+Standing still has a cost too. People weigh what they might lose far more heavily than what they might gain, so the workflow they know always beats the one they have not tried yet. The answer to that is not to promise more gains. It is to name the losses they are already taking. The new colleague who needs three weeks before they are useful. The step everyone does twice because the system forgets it once. They know all of it. A cost people have carried for ten years stops looking like a cost, which is why you have to name it.
+
+## Short windows, small modules
+
+The usual plan has one fixed delivery date, and it is somewhere around next summer. A replacement gets built alongside the product people are using, and then it goes live, all at once. Until then nothing changes for anyone, and after that there is no going back.
+
+The longer that window stays open, the more has to go right. A budget freeze. The two people who knew the old billing logic leaving in the same quarter. A new priority that outranks yours. Nobody can plan for these. Any of them can end a project that still has six months to run. That is why the software projects that fail badly fail by multiples rather than by margins.
+
+You cannot prevent these, but you can shorten the time you are exposed to them. Each step has to be short enough to finish before anything important changes, and it has to ship something a customer can use.
+
+Short steps only work if the parts they need already exist. This is what a design system is for. Not only the components, but the decisions behind them. The questions that come up in every workflow have been answered once, somewhere else, outside any deadline. A team that inherits those answers is assembling instead of inventing. Without them every step starts from nothing, and none of them are short.
+
+None of this is new. Replacing a legacy system piece by piece while it keeps running has a name and a track record, the [strangler fig](https://martinfowler.com/bliki/StranglerFigApplication.html). It grows around the old system until there is nothing left to hold up. Put a way back next to it and both sides have what they asked for. Something visible arrives within weeks, and nothing anyone depends on moves without a way out.
+
+## Where to start
+
+Which workflow goes first should not be a matter of opinion. Usage data says what runs a hundred times a day, what ran twice last year, and where people start over. The support queue says where there is trouble. A screen used two hundred times a day that nobody struggles with is nobody's problem, and a badly broken one that runs twice a year can wait. Start where heavy use meets trouble.
+
+From that list, pick one you could still get wrong. The worst candidate is the one everyone is watching, connected to everything else, and impossible to have broken for a week. The first one is not there to fix the biggest problem. It is there to show you how long this kind of change takes and what gets in the way.
+
+Cut it into steps, and nobody has to cross from old to new in the middle of a job. What decides where a cut goes is not how much is on the screen but where the person already stops. A submit, a page change, a handover to a colleague, the moment they pick up the phone. Everything between two stops can change at once.
+
+## This is not a project
+
+The product got old because people kept choosing it, and hopefully that will happen again. A product people rely on shapes how they work, and their processes get built around what it can do. Then a regulation arrives, or a customer does ten times the volume they did at launch, or new staff turn up who learned on something else. This changes what people need from the product, and the product has to change with them.
+
+Otherwise the gap opens again, quietly, while everyone is busy keeping it running. Nothing in a working product forces the question of what still earns its place. Make it part of the routine, and the gap never gets wide enough to need a leap.

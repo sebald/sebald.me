@@ -11,7 +11,6 @@ import {
 import type { PropsWithChildren } from 'react';
 
 import { socialLinks } from '@/app.config';
-import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
@@ -84,13 +83,6 @@ const Legal = () => (
     <Link variant="inherit" href="/privacy">
       Privacy Policy
     </Link>
-    <SquareIcon
-      size={5}
-      weight="fill"
-      className="text-mist-600 md:hidden"
-      aria-hidden
-    />
-    <ConsentUpdate />
   </div>
 );
 

@@ -11,6 +11,7 @@ import {
 import { useCopyButton } from 'fumadocs-ui/utils/use-copy-button';
 import { type PropsWithChildren, type RefObject, useRef } from 'react';
 
+import { trackEvent } from '@/lib/analytics';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { Button } from './button';
@@ -75,7 +76,10 @@ const CopyButton = ({ containerRef }: CopyButtonProps) => {
     });
 
     navigator.clipboard.writeText(clone.textContent ?? '').then(
-      () => toast.add({ title: 'Code copied' }),
+      () => {
+        toast.add({ title: 'Code copied' });
+        trackEvent('Copy', { target: 'code' });
+      },
       () => toast.add({ title: 'Could not copy the code', type: 'error' }),
     );
   });
