@@ -1,9 +1,16 @@
 'use client';
 
+import {
+  BookmarkSimpleIcon,
+  CopyIcon,
+  ShareNetworkIcon,
+} from '@phosphor-icons/react';
+
 import { Button } from '@/ui/button';
 import { Dialog } from '@/ui/dialog';
 import { Menu } from '@/ui/menu';
 import { toast } from '@/ui/toast';
+import { Tooltip } from '@/ui/tooltip';
 
 export const OverlayExamples = () => (
   <>
@@ -67,5 +74,30 @@ export const OverlayExamples = () => (
     >
       Show Error Toast
     </Button>
+
+    <Tooltip.Root>
+      <Tooltip.Trigger render={<Button />}>Show Tooltip</Tooltip.Trigger>
+      <Tooltip>A short hint for a control</Tooltip>
+    </Tooltip.Root>
+
+    {/* Grouped: once one tooltip is open, its neighbours open instantly */}
+    <Tooltip.Provider>
+      <div className="flex items-center gap-4">
+        {[
+          { label: 'Copy', Icon: CopyIcon },
+          { label: 'Share', Icon: ShareNetworkIcon },
+          { label: 'Bookmark', Icon: BookmarkSimpleIcon },
+        ].map(({ label, Icon }) => (
+          <Tooltip.Root key={label}>
+            <Tooltip.Trigger
+              render={<Button variant="icon" aria-label={label} />}
+            >
+              <Icon weight="bold" aria-hidden />
+            </Tooltip.Trigger>
+            <Tooltip side="bottom">{label}</Tooltip>
+          </Tooltip.Root>
+        ))}
+      </div>
+    </Tooltip.Provider>
   </>
 );
