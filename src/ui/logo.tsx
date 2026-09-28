@@ -46,8 +46,10 @@ interface LogoProps {
   size?: number;
 }
 
+// Decorative, hidden from assistive technology
 export const Logo = ({ size = 32 }: LogoProps) => (
   <span
+    aria-hidden
     className={cn(
       'group',
       'grid place-items-center',

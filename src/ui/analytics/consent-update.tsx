@@ -47,7 +47,7 @@ export const ConsentUpdate = ({
       <Dialog.Trigger variant={triggerVariant}>{t.title}</Dialog.Trigger>
       <Dialog size="large" showCloseButton closeLabel={t.close}>
         <Dialog.Title>
-          <CookieIcon weight="bold" />
+          <CookieIcon weight="bold" aria-hidden />
           {t.title}
         </Dialog.Title>
         <Dialog.Description>{t.text}</Dialog.Description>

@@ -58,7 +58,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
         <ActionMenu label="Article actions">
           <CopyLinkItem />
           <ActionMenuItem href={`${page.url}.md`}>
-            <MarkdownLogoIcon weight="bold" />
+            <MarkdownLogoIcon weight="bold" aria-hidden />
             View as markdown
           </ActionMenuItem>
         </ActionMenu>

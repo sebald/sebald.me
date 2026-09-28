@@ -109,7 +109,9 @@ export const TimeLogo = ({
   const center = DITHER_GRID / 2;
 
   return (
+    // Decorative, hidden from assistive technology
     <svg
+      aria-hidden
       xmlns="http://www.w3.org/2000/svg"
       viewBox={`0 0 ${DITHER_GRID} ${DITHER_GRID}`}
       width={size}
