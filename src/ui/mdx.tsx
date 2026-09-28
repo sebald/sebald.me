@@ -1,7 +1,6 @@
 import defaultComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
 
-import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Blockquote } from '@/ui/blockquote';
 import { Callout } from '@/ui/callout';
 import { CodeBlock, CodeBlockTabs, CodeBlockTabsList } from '@/ui/codeblock';
@@ -62,7 +61,6 @@ export const getMDXComponents = (
   CodeBlockTabsList,
 
   Callout,
-  ConsentUpdate,
 
   ...components,
 });

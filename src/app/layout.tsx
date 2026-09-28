@@ -1,11 +1,11 @@
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 
-import { gaId, siteUrl } from '@/app.config';
+import { siteUrl } from '@/app.config';
 import { fontMono } from '@/css/fonts';
 import '@/css/styles.css';
-import { Analytics } from '@/ui/analytics/analytics';
-import { AnalyticsProvider } from '@/ui/analytics/analytics-context';
 import { Footer } from '@/ui/layout/footer';
+import { OutboundLinkTracking } from '@/ui/outbound-link-tracking';
 import { Toaster } from '@/ui/toast';
 
 // Meta
@@ -50,15 +50,14 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
     suppressHydrationWarning
   >
     <body className="relative isolate">
-      <AnalyticsProvider>
-        <Toaster>
-          <div className="mx-auto w-content px-content-padding">
-            <main>{children}</main>
-            <Footer />
-          </div>
-          {gaId && <Analytics gaId={gaId} />}
-        </Toaster>
-      </AnalyticsProvider>
+      <Toaster>
+        <div className="mx-auto w-content px-content-padding">
+          <main>{children}</main>
+          <Footer />
+        </div>
+      </Toaster>
+      <Analytics />
+      <OutboundLinkTracking />
     </body>
   </html>
 );

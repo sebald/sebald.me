@@ -3,17 +3,11 @@ import { expect, test, type Page } from '@playwright/test';
 // Setup
 // ---------------
 // Pin everything that would otherwise change between runs: the live
-// Berlin-time logo, the consent banner and third-party scripts.
+// Berlin-time logo.
 const FIXED_TIME = new Date('2026-01-01T11:00:00Z'); // 12:00 in Berlin
 
-test.beforeEach(async ({ page, context, baseURL }) => {
+test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(FIXED_TIME);
-  await context.addCookies([
-    { name: 'cookie_consent', value: 'denied', url: baseURL! },
-  ]);
-  await context.route(/googletagmanager\.com|google-analytics\.com/, route =>
-    route.abort(),
-  );
 });
 
 /**
