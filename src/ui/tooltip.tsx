@@ -18,7 +18,7 @@ export const styles = {
   popup: cva({
     base: [
       'ui-panel-light rounded-lg',
-      'max-w-64 px-2.5 py-1.5',
+      'max-w-64 px-3.5 py-2.5',
       'text-mist-800 text-xs',
       'origin-(--transform-origin)',
       'transition-all duration-150',
