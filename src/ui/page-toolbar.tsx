@@ -28,7 +28,7 @@ export const PageToolbar = ({ children }: PropsWithChildren) => (
   <nav aria-label="Article navigation" className={styles.root()}>
     <div className={styles.back()}>
       <Link href="/" variant="icon" aria-label="Back to home">
-        <HouseSimpleIcon weight="bold" />
+        <HouseSimpleIcon weight="bold" aria-hidden />
       </Link>
     </div>
     {children && <div className={styles.actions()}>{children}</div>}

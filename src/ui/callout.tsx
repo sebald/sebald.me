@@ -45,6 +45,14 @@ export interface CalloutProps
   className?: string;
 }
 
+// The variant is otherwise only conveyed by color
+const VARIANT_LABEL = {
+  info: 'Info',
+  warning: 'Warning',
+  success: 'Success',
+  danger: 'Danger',
+} as const;
+
 // Component
 // ---------------
 export const Callout = ({
@@ -52,9 +60,24 @@ export const Callout = ({
   variant,
   title,
   className,
-}: CalloutProps) => (
-  <aside className={styles({ variant, className })}>
-    {title && <strong className={titleStyles({ variant })}>{title}</strong>}
-    {children}
-  </aside>
-);
+}: CalloutProps) => {
+  const label = variant && variant !== 'note' ? VARIANT_LABEL[variant] : null;
+  // Skip the prefix when the title already says it
+  const prefix = label && title !== label && (
+    <span className="sr-only">{label}: </span>
+  );
+
+  return (
+    <div role="note" className={styles({ variant, className })}>
+      {title ? (
+        <strong className={titleStyles({ variant })}>
+          {prefix}
+          {title}
+        </strong>
+      ) : (
+        prefix
+      )}
+      {children}
+    </div>
+  );
+};

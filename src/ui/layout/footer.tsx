@@ -15,10 +15,11 @@ import { ConsentUpdate } from '@/ui/analytics/consent-update';
 import { Divider } from '@/ui/divider';
 import { Link } from '@/ui/link';
 
+// Visually hidden on mobile, but kept for assistive technology
 const Headline = ({ children }: PropsWithChildren) => (
-  <h6 className="hidden font-sans text-xs font-bold text-mist-300 uppercase md:block">
+  <h2 className="sr-only font-sans text-xs font-bold text-mist-300 uppercase md:not-sr-only">
     {children}
-  </h6>
+  </h2>
 );
 
 const Social = () => (
@@ -29,7 +30,7 @@ const Social = () => (
       href={socialLinks.github}
       target="_blank"
     >
-      <GithubLogoIcon size={28} />
+      <GithubLogoIcon size={28} aria-hidden />
     </Link>
     <Link
       aria-label="Sebastian's LinkedIn Profile"
@@ -37,7 +38,7 @@ const Social = () => (
       href={socialLinks.linkedin}
       target="_blank"
     >
-      <LinkedinLogoIcon size={28} />
+      <LinkedinLogoIcon size={28} aria-hidden />
     </Link>
     <Link
       aria-label="Sebastian's X Profile"
@@ -45,7 +46,7 @@ const Social = () => (
       href={socialLinks.x}
       target="_blank"
     >
-      <XLogoIcon size={28} />
+      <XLogoIcon size={28} aria-hidden />
     </Link>
   </div>
 );
@@ -54,15 +55,15 @@ const Links = () => (
   <div className="flex flex-col gap-2.5">
     <Headline>Links</Headline>
     <Link variant="inherit" href="/llms.txt">
-      <FileTextIcon size={16} />
+      <FileTextIcon size={16} aria-hidden />
       llms.txt
     </Link>
     <Link variant="inherit" href="/rss.xml">
-      <RssIcon size={16} />
+      <RssIcon size={16} aria-hidden />
       RSS Feed
     </Link>
     <Link variant="inherit" href="/inventory">
-      <CubeIcon size={16} />
+      <CubeIcon size={16} aria-hidden />
       Inventory
     </Link>
   </div>
@@ -74,11 +75,21 @@ const Legal = () => (
     <Link variant="inherit" href="/imprint">
       Imprint
     </Link>
-    <SquareIcon size={5} weight="fill" className="text-mist-600 md:hidden" />
+    <SquareIcon
+      size={5}
+      weight="fill"
+      className="text-mist-600 md:hidden"
+      aria-hidden
+    />
     <Link variant="inherit" href="/privacy">
       Privacy Policy
     </Link>
-    <SquareIcon size={5} weight="fill" className="text-mist-600 md:hidden" />
+    <SquareIcon
+      size={5}
+      weight="fill"
+      className="text-mist-600 md:hidden"
+      aria-hidden
+    />
     <ConsentUpdate />
   </div>
 );
@@ -86,7 +97,7 @@ const Legal = () => (
 // Component
 // ---------------
 export const Footer = () => (
-  <div className="mx-auto w-content pt-36 pb-8 text-mist-400">
+  <footer className="mx-auto w-content pt-36 pb-8 text-mist-400">
     <Divider />
     <div className="grid grid-cols-[1fr_max-content] gap-y-12 pt-10 text-sm md:grid-cols-[max-content_1fr_max-content] md:gap-x-24">
       <Links />
@@ -94,8 +105,8 @@ export const Footer = () => (
       <Social />
     </div>
     <div className="flex items-center justify-center gap-1 pt-4 text-sm md:justify-start md:pt-8">
-      <CopyrightIcon size={14} />
+      <CopyrightIcon size={14} aria-hidden />
       {new Date().getFullYear()} Sebastian Sebald
     </div>
-  </div>
+  </footer>
 );

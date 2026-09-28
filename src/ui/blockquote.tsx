@@ -28,10 +28,23 @@ export const Blockquote = ({
   attribution,
   className,
 }: BlockquoteProps) => {
-  return (
-    <blockquote className={style.quote({ className })} cite={cite}>
+  const quote = (
+    <blockquote
+      className={attribution ? undefined : style.quote({ className })}
+      cite={cite}
+    >
       <div>{children}</div>
-      {attribution && <cite className={style.cite()}>— {attribution}</cite>}
     </blockquote>
+  );
+
+  if (!attribution) return quote;
+
+  // The attribution isn't part of the quote, so it belongs outside of
+  // <blockquote>. The figure carries the quote styles to keep one border.
+  return (
+    <figure className={style.quote({ className })}>
+      {quote}
+      <figcaption className={style.cite()}>— {attribution}</figcaption>
+    </figure>
   );
 };

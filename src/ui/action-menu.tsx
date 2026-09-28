@@ -24,7 +24,7 @@ export const ActionMenu = ({
 }: ActionMenuProps) => (
   <Menu.Root>
     <Menu.Trigger variant="icon" aria-label={label} {...ariaProps}>
-      <DotsThreeVerticalIcon weight="bold" />
+      <DotsThreeVerticalIcon weight="bold" aria-hidden />
     </Menu.Trigger>
     <Menu align="end">{children}</Menu>
   </Menu.Root>
@@ -78,7 +78,7 @@ export const CopyLinkItem = () => {
 
   return (
     <ActionMenuItem onClick={copyLink}>
-      <LinkSimpleIcon weight="bold" />
+      <LinkSimpleIcon weight="bold" aria-hidden />
       Copy URL
     </ActionMenuItem>
   );

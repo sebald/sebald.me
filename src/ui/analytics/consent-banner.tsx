@@ -26,7 +26,7 @@ export const ConsentBanner = () => {
         initialFocus={false}
       >
         <Dialog.Title>
-          <CookieIcon weight="bold" />
+          <CookieIcon weight="bold" aria-hidden />
           About cookies on this site
         </Dialog.Title>
         <Dialog.Description>
