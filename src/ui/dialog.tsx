@@ -26,24 +26,45 @@ export const styles = {
       'supports-[-webkit-touch-callout:none]:absolute',
     ],
   }),
-  popup: cva({
+  viewport: cva({
     base: [
       'z-100',
-      'fixed max-w-[calc(100vw-2rem)] px-4',
+      // Scroll container for dialogs taller than the viewport
+      'fixed inset-0 flex items-start justify-center overflow-y-auto py-4',
+      // Let clicks pass through to the page (non-modal dialogs)
+      'pointer-events-none',
+    ],
+    variants: {
+      position: {
+        // Extra bottom space lifts centered dialogs slightly above the middle
+        center: 'pb-20',
+        top: '',
+        bottom: '',
+      },
+    },
+    defaultVariants: {
+      position: 'center',
+    },
+  }),
+  popup: cva({
+    base: [
+      'pointer-events-auto',
+      'relative max-w-[calc(100vw-2rem)] px-4',
       'transition-all duration-150 data-starting-style:opacity-0 data-ending-style:opacity-0',
     ],
     variants: {
       position: {
+        // Auto margins (not `items-center`) so a popup taller than the
+        // viewport is not clipped at the top and stays scrollable
         center: [
-          'top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -mt-8',
-          'transition-all duration-150 data-starting-style:scale-90 data-ending-style:scale-90',
+          'my-auto',
+          'data-starting-style:scale-90 data-ending-style:scale-90',
         ],
         top: [
-          'top-0 left-1/2 -translate-x-1/2 mt-4',
           'data-starting-style:-translate-y-full data-ending-style:-translate-y-full',
         ],
         bottom: [
-          'bottom-0 left-1/2 -translate-x-1/2 mb-4',
+          'mt-auto',
           'data-starting-style:translate-y-full data-ending-style:translate-y-full',
         ],
       },
@@ -84,7 +105,7 @@ export const styles = {
     base: `${headlineStyle({ level: '1' })} [grid-area:title]`,
   }),
   description: cva({
-    base: `${textStyle({ size: 'caption' })} [grid-area:description]`,
+    base: `${textStyle()} [grid-area:description] mt-6`,
   }),
   body: cva({
     base: `${textStyle()} [grid-area:body] mt-6 grid gap-4`,
@@ -130,6 +151,10 @@ export interface DialogContentProps
     VariantProps<typeof styles.popup>,
     VariantProps<typeof styles.content> {
   showCloseButton?: boolean;
+  /**
+   * Accessible name of the close button (it only shows an icon)
+   */
+  closeLabel?: string;
 }
 
 const DialogContent = ({
@@ -138,6 +163,7 @@ const DialogContent = ({
   size,
   layout,
   showCloseButton,
+  closeLabel = 'Close',
   ...props
 }: DialogContentProps) => {
   const { modal } = useDialogContext();
@@ -148,24 +174,27 @@ const DialogContent = ({
         {modal === true || modal === undefined ? (
           <Primitive.Backdrop className={styles.backdrop()} />
         ) : null}
-        <Primitive.Popup
-          {...props}
-          className={styles.popup({ position, size })}
-        >
-          <div className={`relative ${styles.content({ layout })}`}>
-            {showCloseButton && (
-              <Primitive.Close
-                className={buttonStyles({
-                  variant: 'icon',
-                  className: 'absolute top-3 right-3',
-                })}
-              >
-                <XIcon size={20} weight="regular" />
-              </Primitive.Close>
-            )}
-            {children}
-          </div>
-        </Primitive.Popup>
+        <Primitive.Viewport className={styles.viewport({ position })}>
+          <Primitive.Popup
+            {...props}
+            className={styles.popup({ position, size })}
+          >
+            <div className={`relative ${styles.content({ layout })}`}>
+              {showCloseButton && (
+                <Primitive.Close
+                  aria-label={closeLabel}
+                  className={buttonStyles({
+                    variant: 'icon',
+                    className: 'absolute top-3 right-3',
+                  })}
+                >
+                  <XIcon size={20} weight="regular" aria-hidden />
+                </Primitive.Close>
+              )}
+              {children}
+            </div>
+          </Primitive.Popup>
+        </Primitive.Viewport>
       </Primitive.Portal>
     </DialogContext.Provider>
   );

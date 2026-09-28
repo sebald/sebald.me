@@ -88,7 +88,8 @@ export const ParallaxImage = ({
   return (
     <div
       className={cn(
-        'group @container relative touch-none overflow-hidden',
+        // Allow vertical page scrolling when a touch starts on the image
+        'group @container relative touch-pan-y overflow-hidden',
         'aspect-(--container-aspect) w-full',
         'animate-fade-in',
         className,
@@ -117,6 +118,8 @@ export const ParallaxImage = ({
             'transition-[object-position,translate] duration-400 ease-out will-change-transform',
             // Slower ease-out when pointer leaves
             'group-data-leaving:duration-600 group-data-leaving:ease-[cubic-bezier(0.22,1,0.36,1)]',
+            // No pointer-driven movement for reduced motion
+            'motion-reduce:[--x:0] motion-reduce:[--y:0]',
             // Oversized to allow parallax shift without revealing edges
             'h-(--height,var(--scale,115%)) w-(--width,var(--scale,115%))',
             // Shift object-position based on pointer (--x, --y), clamped to max travel distance
