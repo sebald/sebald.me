@@ -3,13 +3,18 @@ import { getSlugs, loader } from 'fumadocs-core/source';
 import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 import { misc, notes } from 'fumadocs-mdx:collections/server';
 
+import { isVisible } from './draft.utils';
 import { truncateAtWord } from './string.utils';
 
 // Loaders
 // ---------------
 export const notesSource = loader({
   baseUrl: '/notes',
-  source: toFumadocsSource(notes, []),
+  // Filter drafts here, so no page, list, feed or route can ever include them
+  source: toFumadocsSource(
+    notes.filter(note => isVisible(note)),
+    [],
+  ),
   // Remove date prefixes from slugs (only use this for ordering in the actual folder)
   slugs: file =>
     getSlugs(
