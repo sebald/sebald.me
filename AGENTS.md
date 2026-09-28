@@ -30,7 +30,7 @@ CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings d
 - Playwright screenshot tests in `tests/visual/`, baselines committed in `tests/visual/__screenshots__/` (desktop + mobile)
 - Covers `/inventory` (full page plus opened dialog/menu states) and the two published notes
 - Always run through `pnpm vrt` / `pnpm vrt:update`, which use the `mcr.microsoft.com/playwright` Docker image. Baselines are Linux-only; running Playwright directly on macOS produces false diffs
-- Intended style changes: run `pnpm vrt:update` and commit the updated PNGs, or, without Docker, push the branch and run `pnpm vrt:update:ci`. The "Update Visual Baselines" workflow regenerates them in the same image, commits them to the branch and re-runs the checks; pull afterwards
+- Intended style changes: run `pnpm vrt:update` and commit the updated PNGs, or, without Docker, push the branch and run `pnpm vrt:update:ci`. The script starts the "Update Visual Baselines" workflow (regenerates them in the same image and commits them to the branch), pulls the commit and approves the pull request checks GitHub holds for it
 - The Docker image tag in `.github/workflows/visual.yml` and `visual-update.yml` must match the `@playwright/test` version (Renovate groups them); a Playwright bump may need `pnpm vrt:update`
 - On CI failure, download the `playwright-report` artifact and open `index.html` for the diff viewer
 
