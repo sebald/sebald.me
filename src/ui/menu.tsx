@@ -2,11 +2,10 @@
 
 import { Menu as Primitive } from '@base-ui/react/menu';
 import type { MenuRootProps as PrimitiveRootProps } from '@base-ui/react/menu';
-import type { VariantProps } from 'cva';
-import { cva } from 'cva';
 import type { ComponentProps } from 'react';
 
-import { cn } from '@/lib/styles.utils';
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva, mergeClassName } from '@/lib/styles.utils';
 
 import { styles as buttonStyles } from './button';
 
@@ -65,7 +64,7 @@ const MenuTrigger = ({
 }: MenuTriggerProps) => (
   <Primitive.Trigger
     {...props}
-    className={cn(styles.trigger({ variant }), className)}
+    className={mergeClassName(styles.trigger({ variant }), className)}
   >
     {children}
   </Primitive.Trigger>
@@ -84,6 +83,7 @@ const MenuPopup = ({
   side = 'bottom',
   align = 'start',
   sideOffset = 4,
+  className,
   ...props
 }: MenuPopupProps) => (
   <Primitive.Portal>
@@ -93,7 +93,10 @@ const MenuPopup = ({
       align={align}
       sideOffset={sideOffset}
     >
-      <Primitive.Popup {...props} className={styles.popup()}>
+      <Primitive.Popup
+        {...props}
+        className={mergeClassName(styles.popup(), className)}
+      >
         {children}
       </Primitive.Popup>
     </Primitive.Positioner>
@@ -104,8 +107,11 @@ const MenuPopup = ({
 // ---------------
 export interface MenuItemProps extends ComponentProps<typeof Primitive.Item> {}
 
-const MenuItem = ({ children, ...props }: MenuItemProps) => (
-  <Primitive.Item {...props} className={styles.item()}>
+const MenuItem = ({ children, className, ...props }: MenuItemProps) => (
+  <Primitive.Item
+    {...props}
+    className={mergeClassName(styles.item(), className)}
+  >
     {children}
   </Primitive.Item>
 );
@@ -116,8 +122,11 @@ export interface MenuSeparatorProps extends ComponentProps<
   typeof Primitive.Separator
 > {}
 
-const MenuSeparator = (props: MenuSeparatorProps) => (
-  <Primitive.Separator {...props} className={styles.separator()} />
+const MenuSeparator = ({ className, ...props }: MenuSeparatorProps) => (
+  <Primitive.Separator
+    {...props}
+    className={mergeClassName(styles.separator(), className)}
+  />
 );
 
 // Menu API

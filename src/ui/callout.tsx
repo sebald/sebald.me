@@ -1,6 +1,7 @@
-import type { VariantProps } from 'cva';
-import { cva } from 'cva';
 import type { PropsWithChildren } from 'react';
+
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -41,12 +42,18 @@ const titleStyles = cva({
 export interface CalloutProps
   extends PropsWithChildren, VariantProps<typeof styles> {
   title?: React.ReactNode;
+  className?: string;
 }
 
 // Component
 // ---------------
-export const Callout = ({ children, variant, title }: CalloutProps) => (
-  <aside className={styles({ variant })}>
+export const Callout = ({
+  children,
+  variant,
+  title,
+  className,
+}: CalloutProps) => (
+  <aside className={styles({ variant, className })}>
     {title && <strong className={titleStyles({ variant })}>{title}</strong>}
     {children}
   </aside>

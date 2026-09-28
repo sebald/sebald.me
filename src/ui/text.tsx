@@ -1,4 +1,5 @@
-import { cva, type VariantProps } from 'cva';
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -12,7 +13,8 @@ export const style = cva({
     },
     size: {
       default: '',
-      caption: 'text-xs -tracking-wide',
+      // Repeat `leading-*`: tailwind-merge drops it when `text-xs` follows
+      caption: 'text-xs leading-relaxed -tracking-wide',
     },
     wrap: {
       default: '',
@@ -31,6 +33,7 @@ export const style = cva({
 interface TextProps extends VariantProps<typeof style> {
   children: React.ReactNode;
   as?: 'p' | 'span' | 'div';
+  className?: string;
 }
 
 // Component
@@ -41,9 +44,12 @@ export const Text = ({
   wrap,
   children,
   as = 'p',
+  className,
 }: TextProps) => {
   const Component = as;
   return (
-    <Component className={style({ variant, size, wrap })}>{children}</Component>
+    <Component className={style({ variant, size, wrap, className })}>
+      {children}
+    </Component>
   );
 };

@@ -50,8 +50,8 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "pnpm test:lib",
-    "test:lib": "node --import tsx --test src/**/*.test.ts",
-    "test:lib:watch": "node --import tsx --test --watch src/**/*.test.ts",
+    "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
+    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots"

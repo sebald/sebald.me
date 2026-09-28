@@ -3,10 +3,11 @@
 import { Dialog as Primitive } from '@base-ui/react/dialog';
 import type { DialogRootProps as PrimitiveRootProps } from '@base-ui/react/dialog';
 import { XIcon } from '@phosphor-icons/react/ssr';
-import type { VariantProps } from 'cva';
-import { cva } from 'cva';
 import { createContext, use } from 'react';
 import type { ComponentProps } from 'react';
+
+import type { VariantProps } from '@/lib/styles.utils';
+import { cn, cva, mergeClassName } from '@/lib/styles.utils';
 
 import { styles as buttonStyles } from './button';
 import { styles as cardStyles } from './card';
@@ -164,6 +165,7 @@ const DialogContent = ({
   layout,
   showCloseButton,
   closeLabel = 'Close',
+  className,
   ...props
 }: DialogContentProps) => {
   const { modal } = useDialogContext();
@@ -177,9 +179,12 @@ const DialogContent = ({
         <Primitive.Viewport className={styles.viewport({ position })}>
           <Primitive.Popup
             {...props}
-            className={styles.popup({ position, size })}
+            className={mergeClassName(
+              styles.popup({ position, size }),
+              className,
+            )}
           >
-            <div className={`relative ${styles.content({ layout })}`}>
+            <div className={cn('relative', styles.content({ layout }))}>
               {showCloseButton && (
                 <Primitive.Close
                   aria-label={closeLabel}
@@ -204,9 +209,13 @@ const DialogContent = ({
 // ---------------
 const DialogTitle = ({
   children,
+  className,
   ...props
 }: ComponentProps<typeof Primitive.Title>) => (
-  <Primitive.Title {...props} className={styles.title()}>
+  <Primitive.Title
+    {...props}
+    className={mergeClassName(styles.title(), className)}
+  >
     {children}
   </Primitive.Title>
 );
@@ -215,9 +224,13 @@ const DialogTitle = ({
 // ---------------
 const DialogDescription = ({
   children,
+  className,
   ...props
 }: ComponentProps<typeof Primitive.Description>) => (
-  <Primitive.Description {...props} className={styles.description()}>
+  <Primitive.Description
+    {...props}
+    className={mergeClassName(styles.description(), className)}
+  >
     {children}
   </Primitive.Description>
 );
@@ -226,9 +239,10 @@ const DialogDescription = ({
 // ---------------
 const DialogBody = ({
   children,
+  className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} className={styles.body()}>
+  <div {...props} className={styles.body({ className })}>
     {children}
   </div>
 );
@@ -237,9 +251,10 @@ const DialogBody = ({
 // ---------------
 const DialogActions = ({
   children,
+  className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div {...props} className={styles.actions()}>
+  <div {...props} className={styles.actions({ className })}>
     {children}
   </div>
 );
@@ -251,8 +266,16 @@ export interface DialogTriggerProps
     ComponentProps<typeof Primitive.Trigger>,
     VariantProps<typeof styles.trigger> {}
 
-const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
-  <Primitive.Trigger {...props} className={styles.trigger({ variant })}>
+const DialogTrigger = ({
+  children,
+  variant,
+  className,
+  ...props
+}: DialogTriggerProps) => (
+  <Primitive.Trigger
+    {...props}
+    className={mergeClassName(styles.trigger({ variant }), className)}
+  >
     {children}
   </Primitive.Trigger>
 );
@@ -261,15 +284,19 @@ const DialogTrigger = ({ children, variant, ...props }: DialogTriggerProps) => (
 // ---------------
 export interface DialogCloseProps
   extends
-    Omit<ComponentProps<typeof Primitive.Close>, 'className' | 'style'>,
+    ComponentProps<typeof Primitive.Close>,
     VariantProps<typeof buttonStyles> {}
 
 const DialogClose = ({
   children,
   variant = 'secondary',
+  className,
   ...props
 }: DialogCloseProps) => (
-  <Primitive.Close {...props} className={buttonStyles({ variant })}>
+  <Primitive.Close
+    {...props}
+    className={mergeClassName(buttonStyles({ variant }), className)}
+  >
     {children}
   </Primitive.Close>
 );

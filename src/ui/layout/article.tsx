@@ -42,6 +42,7 @@ const Header = ({ children, className, ...ariaProps }: HeaderProps) => (
 // ---------------
 interface TitleProps extends HeadlineProps {}
 
+// `className` goes to the headline, the wrapper only handles layout
 const Title = ({ children, ...props }: TitleProps) => (
   <div className={styles.title()}>
     <Headline {...props}>{children}</Headline>
@@ -50,10 +51,12 @@ const Title = ({ children, ...props }: TitleProps) => (
 
 // Article
 // ---------------
-interface ContentProps extends PropsWithChildren, AriaAttributes {}
+interface ContentProps extends PropsWithChildren, AriaAttributes {
+  className?: string;
+}
 
-const Content = ({ children, ...ariaProps }: ContentProps) => (
-  <div className={styles.content()} {...ariaProps}>
+const Content = ({ children, className, ...ariaProps }: ContentProps) => (
+  <div className={styles.content({ className })} {...ariaProps}>
     {children}
   </div>
 );

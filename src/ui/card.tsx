@@ -1,6 +1,7 @@
-import type { VariantProps } from 'cva';
-import { cva } from 'cva';
 import type { PropsWithChildren } from 'react';
+
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -23,10 +24,12 @@ export const styles = cva({
 // Props
 // ---------------
 export interface CardProps
-  extends PropsWithChildren, VariantProps<typeof styles> {}
+  extends PropsWithChildren, VariantProps<typeof styles> {
+  className?: string;
+}
 
 // Component
 // ---------------
-export const Card = ({ children, inset }: CardProps) => (
-  <div className={styles({ inset })}>{children}</div>
+export const Card = ({ children, inset, className }: CardProps) => (
+  <div className={styles({ inset, className })}>{children}</div>
 );
