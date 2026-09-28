@@ -17,9 +17,9 @@ export const styles = {
   }),
   popup: cva({
     base: [
-      'max-w-64 px-2.5 py-1.5 rounded-lg',
-      'bg-mist-800 border border-mist-500/25 shadow-lg',
-      'text-mist-200 text-xs',
+      'ui-panel-light rounded-lg',
+      'max-w-64 px-2.5 py-1.5',
+      'text-mist-800 text-xs',
       'origin-(--transform-origin)',
       'transition-all duration-150',
       'data-starting-style:opacity-0 data-starting-style:scale-95',
