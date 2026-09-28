@@ -45,9 +45,15 @@ export const ActionMenuItem = ({
 }: ActionMenuItemProps) => {
   if (href) {
     return (
-      <Menu.Item render={<NextLink href={href as Route} />} {...ariaProps}>
+      // Close on click, the menu would otherwise stay open after a
+      // client-side navigation
+      <Menu.LinkItem
+        render={<NextLink href={href as Route} />}
+        closeOnClick
+        {...ariaProps}
+      >
         {children}
-      </Menu.Item>
+      </Menu.LinkItem>
     );
   }
 

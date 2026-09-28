@@ -122,26 +122,22 @@ export const styles = {
 
 // Context
 // ---------------
-interface DialogContextType {
-  modal: PrimitiveRootProps['modal'];
-}
-
-const DialogContext = createContext<DialogContextType | null>(null);
-
-export const useDialogContext = () => {
-  const context = use(DialogContext);
-  if (!context) {
-    throw new Error('Dialog components must be used within Dialog.Root');
-  }
-  return context;
-};
+// Base UI renders the backdrop regardless of `modal`, so the popup needs to
+// know whether to render one. Defaults to `true`, same as Base UI.
+const ModalContext = createContext<PrimitiveRootProps['modal']>(true);
 
 // Dialog.Root
 // ---------------
-const DialogRoot = ({ children, ...props }: PrimitiveRootProps) => (
-  <DialogContext.Provider value={{ modal: props.modal }}>
-    <Primitive.Root {...props}>{children}</Primitive.Root>
-  </DialogContext.Provider>
+const DialogRoot = ({
+  children,
+  modal = true,
+  ...props
+}: PrimitiveRootProps) => (
+  <ModalContext.Provider value={modal}>
+    <Primitive.Root {...props} modal={modal}>
+      {children}
+    </Primitive.Root>
+  </ModalContext.Provider>
 );
 
 // Dialog
@@ -168,40 +164,36 @@ const DialogContent = ({
   className,
   ...props
 }: DialogContentProps) => {
-  const { modal } = useDialogContext();
+  const modal = use(ModalContext);
 
   return (
-    <DialogContext.Provider value={{ modal }}>
-      <Primitive.Portal>
-        {modal === true || modal === undefined ? (
-          <Primitive.Backdrop className={styles.backdrop()} />
-        ) : null}
-        <Primitive.Viewport className={styles.viewport({ position })}>
-          <Primitive.Popup
-            {...props}
-            className={mergeClassName(
-              styles.popup({ position, size }),
-              className,
+    <Primitive.Portal>
+      {modal === true && <Primitive.Backdrop className={styles.backdrop()} />}
+      <Primitive.Viewport className={styles.viewport({ position })}>
+        <Primitive.Popup
+          {...props}
+          className={mergeClassName(
+            styles.popup({ position, size }),
+            className,
+          )}
+        >
+          <div className={cn('relative', styles.content({ layout }))}>
+            {showCloseButton && (
+              <Primitive.Close
+                aria-label={closeLabel}
+                className={buttonStyles({
+                  variant: 'icon',
+                  className: 'absolute top-3 right-3',
+                })}
+              >
+                <XIcon size={20} weight="regular" aria-hidden />
+              </Primitive.Close>
             )}
-          >
-            <div className={cn('relative', styles.content({ layout }))}>
-              {showCloseButton && (
-                <Primitive.Close
-                  aria-label={closeLabel}
-                  className={buttonStyles({
-                    variant: 'icon',
-                    className: 'absolute top-3 right-3',
-                  })}
-                >
-                  <XIcon size={20} weight="regular" aria-hidden />
-                </Primitive.Close>
-              )}
-              {children}
-            </div>
-          </Primitive.Popup>
-        </Primitive.Viewport>
-      </Primitive.Portal>
-    </DialogContext.Provider>
+            {children}
+          </div>
+        </Primitive.Popup>
+      </Primitive.Viewport>
+    </Primitive.Portal>
   );
 };
 

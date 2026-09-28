@@ -116,6 +116,21 @@ const MenuItem = ({ children, className, ...props }: MenuItemProps) => (
   </Primitive.Item>
 );
 
+// Menu.LinkItem
+// ---------------
+export interface MenuLinkItemProps extends ComponentProps<
+  typeof Primitive.LinkItem
+> {}
+
+const MenuLinkItem = ({ children, className, ...props }: MenuLinkItemProps) => (
+  <Primitive.LinkItem
+    {...props}
+    className={mergeClassName(styles.item(), className)}
+  >
+    {children}
+  </Primitive.LinkItem>
+);
+
 // Menu.Separator
 // ---------------
 export interface MenuSeparatorProps extends ComponentProps<
@@ -135,8 +150,16 @@ export const Menu = Object.assign(MenuPopup, {
   Root: MenuRoot,
   Trigger: MenuTrigger,
   Item: MenuItem,
+  LinkItem: MenuLinkItem,
   Separator: MenuSeparator,
 });
 
 // Individual exports for server component compatibility
-export { MenuRoot, MenuTrigger, MenuPopup, MenuItem, MenuSeparator };
+export {
+  MenuRoot,
+  MenuTrigger,
+  MenuPopup,
+  MenuItem,
+  MenuLinkItem,
+  MenuSeparator,
+};
