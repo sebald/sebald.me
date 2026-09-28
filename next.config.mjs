@@ -6,6 +6,10 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   typedRoutes: true,
+  images: {
+    // Without `image/avif`, AVIF sources are served at full size
+    formats: ['image/avif', 'image/webp'],
+  },
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react'],
   },

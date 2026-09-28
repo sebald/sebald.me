@@ -75,19 +75,15 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
     return (
       <ParallaxImage
         aspect={aspect}
+        // Layers are 115% of the content column (max 720px)
+        sizes="(min-width: 768px) 828px, 115vw"
         className={styles.image()}
-        layers={images.map((url, i, arr) => {
-          const depth = arr.length > 1 ? i / (arr.length - 1) : 1;
+        layers={images.map((src, i, arr) => {
+          const depth = i / (arr.length - 1);
           return {
-            id: url,
-            src: url,
-            alt: '',
-            fill: true,
-            priority: true,
-            config: {
-              xMove: `${(0.5 + depth ** 1.5 * 3.5).toFixed(1)}cqi`,
-              yMove: `${(0.25 + depth ** 1.5 * 1.75).toFixed(1)}cqi`,
-            },
+            src,
+            xMove: `${(0.5 + depth ** 1.5 * 3.5).toFixed(1)}cqi`,
+            yMove: `${(0.25 + depth ** 1.5 * 1.75).toFixed(1)}cqi`,
           };
         })}
       />
@@ -106,7 +102,9 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
         src={images[0]}
         alt=""
         fill
-        priority
+        preload
+        // Content column, max 720px
+        sizes="(min-width: 768px) 720px, 100vw"
         className="object-cover"
       />
     </div>
