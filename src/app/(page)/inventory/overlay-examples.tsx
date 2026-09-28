@@ -1,7 +1,9 @@
 'use client';
 
+import { Button } from '@/ui/button';
 import { Dialog } from '@/ui/dialog';
 import { Menu } from '@/ui/menu';
+import { toast } from '@/ui/toast';
 
 export const OverlayExamples = () => (
   <>
@@ -54,5 +56,16 @@ export const OverlayExamples = () => (
         <Menu.Item>Export</Menu.Item>
       </Menu>
     </Menu.Root>
+
+    <Button onClick={() => toast.add({ title: 'Changes saved' })}>
+      Show Toast
+    </Button>
+    <Button
+      onClick={() =>
+        toast.add({ title: 'Something went wrong', type: 'error' })
+      }
+    >
+      Show Error Toast
+    </Button>
   </>
 );

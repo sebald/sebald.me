@@ -53,19 +53,15 @@ const Social = () => (
 const Links = () => (
   <div className="flex flex-col gap-2.5">
     <Headline>Links</Headline>
-    <Link
-      aria-label="View site content formatted for LLMs"
-      variant="inherit"
-      href="/llms.txt"
-    >
+    <Link variant="inherit" href="/llms.txt">
       <FileTextIcon size={16} />
       llms.txt
     </Link>
-    <Link aria-label="View RSS feed" variant="inherit" href="/rss.xml">
+    <Link variant="inherit" href="/rss.xml">
       <RssIcon size={16} />
       RSS Feed
     </Link>
-    <Link aria-label="View inventory" variant="inherit" href="/inventory">
+    <Link variant="inherit" href="/inventory">
       <CubeIcon size={16} />
       Inventory
     </Link>

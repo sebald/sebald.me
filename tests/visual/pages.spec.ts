@@ -48,6 +48,8 @@ test.describe('inventory', () => {
       name: 'inventory-dialog-bottom',
     },
     { trigger: 'Open Menu', role: 'menu', name: 'inventory-menu' },
+    // Toasts render as non-modal dialogs inside the "Notifications" region
+    { trigger: 'Show Toast', role: 'dialog', name: 'inventory-toast' },
   ] as const;
 
   for (const { trigger, role, name } of OVERLAYS) {

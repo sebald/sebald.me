@@ -6,6 +6,7 @@ import '@/css/styles.css';
 import { Analytics } from '@/ui/analytics/analytics';
 import { AnalyticsProvider } from '@/ui/analytics/analytics-context';
 import { Footer } from '@/ui/layout/footer';
+import { Toaster } from '@/ui/toast';
 
 // Meta
 // ---------------
@@ -50,11 +51,13 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
   >
     <body className="relative isolate">
       <AnalyticsProvider>
-        <div className="mx-auto w-content px-content-padding">
-          <main>{children}</main>
-          <Footer />
-        </div>
-        {gaId && <Analytics gaId={gaId} />}
+        <Toaster>
+          <div className="mx-auto w-content px-content-padding">
+            <main>{children}</main>
+            <Footer />
+          </div>
+          {gaId && <Analytics gaId={gaId} />}
+        </Toaster>
       </AnalyticsProvider>
     </body>
   </html>

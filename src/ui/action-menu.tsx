@@ -9,6 +9,7 @@ import NextLink from 'next/link';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
 import { Menu } from '@/ui/menu';
+import { toast } from '@/ui/toast';
 
 // ActionMenu
 // ---------------
@@ -60,8 +61,13 @@ export const ActionMenuItem = ({
 // CopyLinkItem
 // ---------------
 export const CopyLinkItem = () => {
-  const copyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.add({ title: 'Link copied' });
+    } catch {
+      toast.add({ title: 'Could not copy the link', type: 'error' });
+    }
   };
 
   return (

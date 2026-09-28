@@ -18,15 +18,21 @@ export const ConsentBanner = () => {
 
   return (
     <Dialog.Root open={true} modal={false} disablePointerDismissal>
-      <Dialog position="bottom" size="xlarge" layout="inline">
+      {/* Don't pull focus into the banner on page load (non-modal) */}
+      <Dialog
+        position="bottom"
+        size="xlarge"
+        layout="inline"
+        initialFocus={false}
+      >
         <Dialog.Title>
           <CookieIcon weight="bold" />
           About cookies on this site
         </Dialog.Title>
-        <Dialog.Body>
+        <Dialog.Description>
           I use cookies to see how you use the site and what you enjoy reading.
           This helps me understand what to write about.
-        </Dialog.Body>
+        </Dialog.Description>
         <Dialog.Actions>
           <Button variant="primary" onClick={accept}>
             Accept
