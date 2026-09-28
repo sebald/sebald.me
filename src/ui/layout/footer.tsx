@@ -81,7 +81,7 @@ const Legal = () => (
       aria-hidden
     />
     <Link variant="inherit" href="/privacy">
-      Privacy Policy
+      Privacy
     </Link>
   </div>
 );
