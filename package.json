@@ -54,6 +54,6 @@
     "typecheck": "tsc --noEmit",
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots",
-    "vrt:update:ci": "gh workflow run visual-update.yml --ref \"$(git branch --show-current)\""
+    "vrt:update:ci": "./scripts/vrt-update-ci.sh"
   }
 }

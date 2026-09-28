@@ -2,7 +2,9 @@ name: Update Visual Baselines
 
 # Regenerates the screenshot baselines in the same image the visual
 # regression tests run in and commits them to the branch. Alternative to
-# `pnpm vrt:update` without Docker: `pnpm vrt:update:ci`.
+# `pnpm vrt:update` without Docker: `pnpm vrt:update:ci` starts it and
+# approves the pull request checks for the bot commit (GitHub holds runs
+# triggered by GITHUB_TOKEN pushes for approval).
 on:
   workflow_dispatch:
 
@@ -17,7 +19,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      actions: write
     # Must match the @playwright/test version in package.json
     container:
       image: mcr.microsoft.com/playwright:v1.63.0-noble
@@ -42,7 +43,6 @@ jobs:
         run: pnpm exec playwright test --update-snapshots
 
       - name: Commit and push
-        id: commit
         run: |
           # The checkout is owned by a different user than the container's
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -55,19 +55,4 @@ jobs:
           git add tests/visual/__screenshots__
           git commit -m 'test: update VRT baselines'
           git push
-          echo "pushed=true" >> "$GITHUB_OUTPUT"
 
-      # Pushes with GITHUB_TOKEN don't trigger `pull_request` workflows, so
-      # run the checks for the new commit explicitly (the image has no `gh`)
-      - name: Run checks
-        if: steps.commit.outputs.pushed == 'true'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          for workflow in test.yml visual.yml; do
-            curl --fail --silent --show-error -X POST \
-              -H "Authorization: Bearer $GH_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/dispatches" \
-              -d "{\"ref\":\"$GITHUB_REF_NAME\"}"
-          done
