@@ -3,6 +3,8 @@ name: Visual Regression
 on:
   pull_request:
     branches: [main]
+  # Dispatched by visual-update.yml after it pushes new baselines
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
