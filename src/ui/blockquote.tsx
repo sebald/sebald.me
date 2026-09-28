@@ -1,4 +1,4 @@
-import { cva } from 'cva';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -17,6 +17,7 @@ interface BlockquoteProps {
   children: React.ReactNode;
   cite?: string;
   attribution?: React.ReactNode;
+  className?: string;
 }
 
 // Component
@@ -25,9 +26,10 @@ export const Blockquote = ({
   children,
   cite,
   attribution,
+  className,
 }: BlockquoteProps) => {
   return (
-    <blockquote className={style.quote()} cite={cite}>
+    <blockquote className={style.quote({ className })} cite={cite}>
       <div>{children}</div>
       {attribution && <cite className={style.cite()}>— {attribution}</cite>}
     </blockquote>

@@ -1,5 +1,7 @@
-import { cva, type VariantProps } from 'cva';
 import type { CSSProperties } from 'react';
+
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -24,14 +26,20 @@ const style = cva({
 // ---------------
 interface DividerProps extends VariantProps<typeof style> {
   inset?: string | number;
+  className?: string;
 }
 
 // Component
 // ---------------
-export const Divider = ({ variant, orientation, inset = 0 }: DividerProps) => (
+export const Divider = ({
+  variant,
+  orientation,
+  inset = 0,
+  className,
+}: DividerProps) => (
   <hr
     aria-orientation={orientation}
-    className={style({ variant, orientation })}
+    className={style({ variant, orientation, className })}
     style={{ '--inset': `calc(var(--spacing) * ${inset})` } as CSSProperties}
   />
 );

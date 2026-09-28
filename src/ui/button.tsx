@@ -4,7 +4,7 @@ import { Button as Primitive } from '@base-ui/react/button';
 import type { ButtonProps as PrimitiveProps } from '@base-ui/react/button';
 
 import type { VariantProps } from '@/lib/styles.utils';
-import { cva } from '@/lib/styles.utils';
+import { cva, mergeClassName } from '@/lib/styles.utils';
 
 import { styles as linkStyles } from './link';
 
@@ -49,6 +49,9 @@ export type ButtonProps = PrimitiveProps & VariantProps<typeof styles>;
 
 // Component
 // ---------------
-export const Button = ({ variant, ...props }: ButtonProps) => (
-  <Primitive {...props} className={styles({ variant })} />
+export const Button = ({ variant, className, ...props }: ButtonProps) => (
+  <Primitive
+    {...props}
+    className={mergeClassName(styles({ variant }), className)}
+  />
 );

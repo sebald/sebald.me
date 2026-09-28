@@ -1,4 +1,5 @@
-import { cva, type VariantProps } from 'cva';
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------

@@ -1,7 +1,9 @@
-import { cva, type VariantProps } from 'cva';
 import type { Route } from 'next';
 import type { LinkProps as NextLinkProps } from 'next/link';
 import NextLink from 'next/link';
+
+import type { VariantProps } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 // Styles
 // ---------------
@@ -53,6 +55,7 @@ export const Link = ({
   href,
   target,
   rel,
+  className,
   ...props
 }: LinkProps) => {
   const Component =
@@ -65,10 +68,10 @@ export const Link = ({
 
   return (
     <Component
-      href={href as Route}
-      className={styles({ variant })}
       {...props}
       {...externalProps}
+      href={href as Route}
+      className={styles({ variant, className })}
     >
       {children}
     </Component>

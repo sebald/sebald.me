@@ -66,6 +66,10 @@ topics: string[] (optional)
 - Colors use OKLCH model (mist-50 to mist-950)
 - CVA for component variants (see `src/ui/button.tsx`)
 - `cn()` utility from `src/lib/styles.utils.ts` for class merging
+- Import `cva` from `@/lib/styles.utils` (not `'cva'`), it merges classes with tailwind-merge
+- Every `src/ui` component that renders a styled element accepts `className` and merges it last:
+  - Plain elements: pass it to the cva call, `styles({ variant, className })`
+  - Base UI parts: `mergeClassName(styles(...), className)`, which also handles Base UI's `className={state => ...}` form
 
 ### Path Aliases
 

@@ -28,11 +28,7 @@ export interface ImageProps extends ComponentProps<typeof FumaImage> {
 // ---------------
 export const Image = ({ title, alt, className, ...props }: ImageProps) => {
   const img = (
-    <FumaImage
-      {...props}
-      alt={alt}
-      className={`${style.image()} ${className ?? ''}`}
-    />
+    <FumaImage {...props} alt={alt} className={style.image({ className })} />
   );
 
   return title ? (
