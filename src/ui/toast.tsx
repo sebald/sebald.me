@@ -14,9 +14,8 @@ const styles = {
   viewport: cva({
     base: [
       'z-110',
-      'fixed bottom-4 left-1/2 -translate-x-1/2',
-      'flex flex-col-reverse items-center gap-2',
-      'w-max max-w-[calc(100vw-2rem)]',
+      // Anchor strip, the toasts are positioned absolutely above it
+      'fixed inset-x-4 bottom-4',
     ],
   }),
   root: cva({
@@ -24,9 +23,16 @@ const styles = {
       'ui-panel-light',
       'flex items-center gap-3 py-2 pr-2 pl-4',
       'text-sm text-mist-800',
-      'transition-all duration-150',
-      'data-starting-style:opacity-0 data-starting-style:translate-y-4',
-      'data-ending-style:opacity-0 data-ending-style:translate-y-4',
+      // Stack upwards with transforms instead of layout, so the older
+      // toasts glide up when a new one arrives instead of jumping
+      'absolute bottom-0 left-1/2 w-max max-w-full [--gap:0.5rem]',
+      'z-[calc(1000-var(--toast-index))]',
+      '[translate:-50%_calc(-1*(var(--toast-offset-y)+var(--toast-index)*var(--gap)))]',
+      'transition-[translate,opacity,scale] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+      // New toasts slide in from below, leaving ones fade out in place
+      'data-starting-style:[translate:-50%_150%] data-starting-style:opacity-0',
+      'data-ending-style:opacity-0 data-ending-style:scale-95',
+      'data-limited:opacity-0',
       '[&_svg]:size-4 [&_svg]:shrink-0',
     ],
   }),
