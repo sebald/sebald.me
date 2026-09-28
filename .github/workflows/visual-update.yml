@@ -1,0 +1,73 @@
+name: Update Visual Baselines
+
+# Regenerates the screenshot baselines in the same image the visual
+# regression tests run in and commits them to the branch. Alternative to
+# `pnpm vrt:update` without Docker: `pnpm vrt:update:ci`.
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  update:
+    # Baselines change through pull requests, never directly on main
+    if: github.ref != 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    # Must match the @playwright/test version in package.json
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Update baselines
+        run: pnpm exec playwright test --update-snapshots
+
+      - name: Commit and push
+        id: commit
+        run: |
+          # The checkout is owned by a different user than the container's
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          if git diff --quiet -- tests/visual/__screenshots__; then
+            echo "Baselines are up to date"
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898810+github-actions[bot]@users.noreply.github.com'
+          git add tests/visual/__screenshots__
+          git commit -m 'test: update VRT baselines'
+          git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # Pushes with GITHUB_TOKEN don't trigger `pull_request` workflows, so
+      # run the checks for the new commit explicitly (the image has no `gh`)
+      - name: Run checks
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for workflow in test.yml visual.yml; do
+            curl --fail --silent --show-error -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Accept: application/vnd.github+json" \
+              "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/$workflow/dispatches" \
+              -d "{\"ref\":\"$GITHUB_REF_NAME\"}"
+          done
