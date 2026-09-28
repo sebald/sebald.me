@@ -7,7 +7,8 @@ const config = {
   reactStrictMode: true,
   typedRoutes: true,
   images: {
-    // Without `image/avif`, AVIF sources are served at full size
+    // Prefer AVIF output. Keep sources PNG or WebP, Vercel passes AVIF sources
+    // through at full size
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
