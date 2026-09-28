@@ -54,6 +54,16 @@ test.describe('inventory', () => {
       await expect(page).toHaveScreenshot(`${name}.png`);
     });
   }
+
+  // Tooltips open on hover (after a delay) instead of on click
+  test('inventory-tooltip', async ({ page }) => {
+    await visit(page, '/inventory');
+    await page
+      .getByRole('button', { name: 'Show Tooltip', exact: true })
+      .hover();
+    await expect(page.getByText('A short hint for a control')).toBeVisible();
+    await expect(page).toHaveScreenshot('inventory-tooltip.png');
+  });
 });
 
 // Notes

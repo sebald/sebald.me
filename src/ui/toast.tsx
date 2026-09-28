@@ -21,9 +21,9 @@ const styles = {
   }),
   root: cva({
     base: [
-      'ui-panel',
+      'ui-panel-light',
       'flex items-center gap-3 py-2 pr-2 pl-4',
-      'text-sm text-mist-200',
+      'text-sm text-mist-800',
       'transition-all duration-150',
       'data-starting-style:opacity-0 data-starting-style:translate-y-4',
       'data-ending-style:opacity-0 data-ending-style:translate-y-4',
@@ -31,7 +31,11 @@ const styles = {
     ],
   }),
   close: cva({
-    base: [buttonStyles({ variant: 'icon' }), 'size-8 bg-transparent'],
+    base: [
+      buttonStyles({ variant: 'icon' }),
+      'size-8 bg-transparent text-mist-500',
+      'hover:bg-mist-800/10 hover:text-mist-900',
+    ],
   }),
 };
 

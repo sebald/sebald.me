@@ -19,3 +19,34 @@
     ),
     linear-gradient(135deg, oklch(1 0 0 / 0.15), oklch(1 0 0 / 0.05));
 }
+
+/* Light version of `ui-panel` for small floating surfaces (toast, tooltip)
+   that have to stand out against the dark page. Pair with dark text. */
+@utility ui-panel-light {
+  @apply relative overflow-hidden;
+  @apply rounded-2xl border border-transparent;
+  @apply backdrop-blur-2xl backdrop-saturate-150;
+
+  /* Same light source as `ui-panel` (from above): lit top edge, shaded
+     bottom edge and a shadow cast below, not around, the panel */
+  box-shadow:
+    inset 0 1px 0 0 oklch(1 0 0),
+    inset 0 -1px 0 0 oklch(from var(--color-mist-400) l c h / 0.35),
+    0 1px 2px 0 oklch(from var(--color-mist-950) l c h / 0.4),
+    0 6px 12px -4px oklch(from var(--color-mist-950) l c h / 0.5);
+
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+
+  background-image:
+    linear-gradient(
+      135deg,
+      oklch(from var(--color-mist-100) l c h / 0.9),
+      oklch(from var(--color-mist-200) l c h / 0.8)
+    ),
+    linear-gradient(
+      135deg,
+      oklch(1 0 0 / 0.9),
+      oklch(from var(--color-mist-300) l c h / 0.5)
+    );
+}
