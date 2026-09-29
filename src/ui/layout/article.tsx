@@ -5,6 +5,7 @@ import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
 import { ParallaxImage } from '@/ui/parallax-image';
+import { PixelImage } from '@/ui/pixel-image';
 
 // Styles
 // ---------------
@@ -64,11 +65,22 @@ const Content = ({ children, className, ...ariaProps }: ContentProps) => (
 // Article.Image
 // ---------------
 interface ImageSectionProps {
-  src: string | string[];
+  src: string | string[] | { src: string; poster: string };
   aspect?: string;
 }
 
 const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
+  if (typeof src === 'object' && !Array.isArray(src)) {
+    return (
+      <PixelImage
+        src={src.src}
+        poster={src.poster}
+        aspect={aspect}
+        className={styles.image()}
+      />
+    );
+  }
+
   const images = Array.isArray(src) ? [...src].reverse() : [src];
 
   if (images.length > 1) {
