@@ -58,6 +58,7 @@ CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings d
 title: Required
 description: Required
 date: YYYY-MM-DD (optional, extracted from filename if omitted)
+image: ./hero.webp | [./1.png, ./2.png] (parallax layers, back to front) | { src: ./scene.webp, poster: ./poster.png } (pixel art pre-scaled 3x with hard edges, usually animated; the poster replaces it for reduced motion, see `.claude/skills/pixel-header`) (optional)
 draft: boolean (optional)
 topics: string[] (optional)
 ```

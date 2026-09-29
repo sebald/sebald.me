@@ -27,6 +27,8 @@ next-env.d.ts
 # playwright
 /playwright-report/
 /test-results/
+# playwright mcp output
+/.playwright-mcp/
 
 # claude code
 /.claude/worktrees/

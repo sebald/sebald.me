@@ -38,13 +38,26 @@ const notesSchema = (ctx: { path: string }) =>
       .optional(),
     draft: z.boolean().default(false),
     topics: z.array(z.string()).optional(),
+    /**
+     * One image, parallax layers (back to front), or pixel art (pre-scaled,
+     * usually animated) with a still `poster` for reduced motion
+     */
     image: z
-      .union([z.string(), z.array(z.string())])
+      .union([
+        z.string(),
+        z.array(z.string()),
+        z.object({ src: z.string(), poster: z.string() }),
+      ])
       .optional()
       .transform(val => {
         if (!val) return val;
         if (Array.isArray(val))
           return val.map(s => resolveImagePath(s, ctx.path));
+        if (typeof val === 'object')
+          return {
+            src: resolveImagePath(val.src, ctx.path),
+            poster: resolveImagePath(val.poster, ctx.path),
+          };
         return resolveImagePath(val, ctx.path);
       }),
   });

@@ -2,9 +2,9 @@
 
 import Image from 'next/image';
 import type { PointerEvent } from 'react';
-import { useEffect, useState } from 'react';
 
 import { cn, toCSSVars } from '@/lib/styles.utils';
+import { useImagesSettled } from '@/ui/use-images-settled';
 
 // Types
 // ---------------
@@ -28,9 +28,6 @@ export type ParallaxImageProps = {
   className?: string;
 };
 
-// Show the layers even if a load event goes missing
-const REVEAL_TIMEOUT = 3000;
-
 // Component
 // ---------------
 export const ParallaxImage = ({
@@ -39,13 +36,7 @@ export const ParallaxImage = ({
   sizes,
   className,
 }: ParallaxImageProps) => {
-  const [pending, setPending] = useState(layers.length);
-  const handleSettled = () => setPending(n => n - 1);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setPending(0), REVEAL_TIMEOUT);
-    return () => clearTimeout(timeout);
-  }, []);
+  const [loaded, handleSettled] = useImagesSettled(layers.length);
 
   const handlePointerMove = (e: PointerEvent<HTMLDivElement>) => {
     const container = e.currentTarget;
@@ -71,7 +62,7 @@ export const ParallaxImage = ({
   return (
     <div
       aria-hidden="true"
-      data-loaded={pending <= 0 || undefined}
+      data-loaded={loaded || undefined}
       className={cn(
         // Allow vertical page scrolling when a touch starts on the image
         'group @container relative touch-pan-y overflow-hidden',
