@@ -5,6 +5,7 @@ import {
   GithubLogoIcon,
   LinkedinLogoIcon,
   RssIcon,
+  SparkleIcon,
   SquareIcon,
   XLogoIcon,
 } from '@phosphor-icons/react/ssr';
@@ -53,10 +54,6 @@ const Social = () => (
 const Links = () => (
   <div className="flex flex-col gap-2.5">
     <Headline>Links</Headline>
-    <Link variant="inherit" href="/llms.txt">
-      <FileTextIcon size={16} aria-hidden />
-      llms.txt
-    </Link>
     <Link variant="inherit" href="/rss.xml">
       <RssIcon size={16} aria-hidden />
       RSS Feed
@@ -64,6 +61,14 @@ const Links = () => (
     <Link variant="inherit" href="/inventory">
       <CubeIcon size={16} aria-hidden />
       Inventory
+    </Link>
+    <Link variant="inherit" href="/ai">
+      <SparkleIcon size={16} aria-hidden />
+      How I use AI
+    </Link>
+    <Link variant="inherit" href="/llms.txt">
+      <FileTextIcon size={16} aria-hidden />
+      llms.txt
     </Link>
   </div>
 );
@@ -96,8 +101,8 @@ export const Footer = () => (
       <Legal />
       <Social />
     </div>
-    <div className="flex items-center justify-center gap-1 pt-4 text-sm md:justify-start md:pt-8">
-      <CopyrightIcon size={14} aria-hidden />
+    <div className="flex items-center justify-center gap-1 pt-4 text-xs md:justify-start md:pt-8">
+      <CopyrightIcon size={12} aria-hidden />
       {new Date().getFullYear()} Sebastian Sebald
     </div>
   </footer>

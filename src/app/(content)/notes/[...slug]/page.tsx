@@ -4,9 +4,11 @@ import { notFound } from 'next/navigation';
 
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { notesSource, pageImage } from '@/lib/source';
+import { readingTime } from '@/lib/string.utils';
 import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
+import { NoteMeta } from '@/ui/note-meta';
 import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config
@@ -53,6 +55,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
 
   const titleId = page.url;
   const MDX = page.data.body;
+  const minutes = readingTime(await page.data.getText('processed'));
 
   return (
     <>
@@ -70,6 +73,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
           <Article.Title id={titleId} level="1">
             {page.data.title}
           </Article.Title>
+          <NoteMeta date={page.data.date} minutes={minutes} />
         </Article.Header>
         {page.data.image && <Article.Image src={page.data.image} />}
         <Article.Content>

@@ -130,6 +130,13 @@ const InventoryPage = () => (
                 </Link>{' '}
                 with proper attributes.
               </Text>
+              <Text variant="muted" size="caption">
+                A{' '}
+                <Link href="#" variant="subtle">
+                  subtle link
+                </Link>{' '}
+                for secondary text like captions and footnotes.
+              </Text>
             </div>
           </div>
 

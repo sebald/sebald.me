@@ -21,6 +21,13 @@ export const styles = cva({
         'underline decoration-link/15 underline-offset-3',
         'hover:decoration-link/75',
       ],
+      // For links in secondary text (captions, footnotes), no extra emphasis
+      subtle: [
+        'rounded-lg',
+        'text-inherit',
+        'underline decoration-current/30 underline-offset-3',
+        'hover:text-link hover:decoration-link/75',
+      ],
       inherit: [
         'rounded-lg',
         'text-inherit decoration-inherit',
