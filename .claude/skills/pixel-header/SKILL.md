@@ -16,8 +16,7 @@ The target look is the two published headers,
 real pixels wide (a clean 10px grid at 3264): chunky pixels, big simple shapes,
 detail suggested with a few pixels, 3 to 4 shades per material, muted colours.
 Gemini tends to drift towards finer, modern "hi-bit" pixel art with lots of
-small detail, which does not match. `pixel-art/` holds more Gemini outputs of
-mixed fidelity; #13 and #15 are closest to the target.
+small detail, which does not match.
 
 ## 1. Read the note
 
@@ -125,7 +124,7 @@ the mug." Gemini edits can shift other pixels, so compare before using it.
 
 ## 4. Snap to the pixel grid
 
-Once the user drops the generated image into the note folder (or `pixel-art/`):
+Once the user drops the generated image into the note folder:
 
 ```bash
 node .claude/skills/pixel-header/scripts/snap.mjs <image> <out-dir> --aspect 5/2
