@@ -64,7 +64,7 @@ const Links = () => (
     </Link>
     <Link variant="inherit" href="/ai">
       <SparkleIcon size={16} aria-hidden />
-      How I use AI
+      How I Work with AI
     </Link>
     <Link variant="inherit" href="/llms.txt">
       <FileTextIcon size={16} aria-hidden />
