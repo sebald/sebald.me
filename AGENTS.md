@@ -41,6 +41,7 @@ CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings d
 - MDX content lives in `content/notes/` (blog posts) and `content/misc/` (pages)
 - Each note is a date-prefixed folder: `content/notes/2026-01-14-slug-title/index.mdx` (date stripped from URL); images live next to `index.mdx`
 - Use PNG or WebP for note images, not AVIF: Vercel's image optimizer serves AVIF sources at full size instead of resizing them
+- A note's link preview is `og.webp` (1200x630) in its folder, served at `/og/<slug>.webp`; without one the route falls back to a generated logo card, so add one for every note with a header image
 - Frontmatter images are served by `/api/content-image` with their content hash as `?v=` (added at build time), so a regenerated image keeps its file name and still gets a new URL; the route caches versioned URLs for a year in the browser and on the CDN
 - Fumadocs compiles MDX on install → generates `.source/` directory
 - Content loaders in `src/lib/source.ts` expose `notesSource` and `miscSource`
