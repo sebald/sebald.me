@@ -1,6 +1,6 @@
 ---
 title: Modernize the Product, Not the UI
-description: Legacy software that people rely on starts to look abandoned. The usual fix is a redesign that is not allowed to change anything, and it rarely ends well.
+description: Legacy software looks abandoned to new customers, while long-time users ask for nothing to change. The usual answer is a redesign that tries to satisfy both, and it rarely ends well.
 topics: [legacy, modernization]
 image:
   src: ./scene.webp
@@ -18,9 +18,9 @@ Not everyone reads an unchanged interface the same way. New customers, and those
 
 The long-time users, who have worked with the product every day for a decade, see the opposite. They have watched every feature arrive and built their routine around each one. That routine includes the training they went through, the colleague who knows the workaround and the sequence of clicks their hands perform without thinking. To this group an unchanged interface is not a warning. It is the one thing at work they can rely on. What reaches you from them, usually the moment a change is announced, is "Don't change anything."
 
-Every product that lasts long enough ends up between these two groups. It needs new customers to grow and long-time users to stay in business, and the two seem to want opposite things. It is tempting to let that tension drive the plan and look for a compromise between them. That is where most teams go wrong.
+Every product that lasts long enough ends up between these two groups. It needs new customers to grow and long-time users to survive, and the two seem to want opposite things. It is tempting to let that tension drive the plan and look for a compromise between them.
 
-The two messages then get translated separately, and neither translation is what they asked for. "It looks abandoned" becomes a redesign, because a redesign has a picture and a budget line, and because it is the one change a buyer can see without using the product. "Don't change anything" becomes a constraint on that redesign.
+The compromise starts with translating the two messages separately. "It looks abandoned" becomes a redesign, because a redesign has a picture and a budget line, and because it is the one change a buyer can see without using the product. "Don't change anything" becomes a constraint on that redesign.
 
 The result is a redesign that is not allowed to change anything. Rebuild everything as it is, but make it look new. Same features, a fresh coat of paint, nothing to retrain. That is the project that gets funded almost every time, and it has a name: [feature parity](https://www.martinfowler.com/articles/patterns-legacy-displacement/feature-parity.html). It gets picked because earlier projects went badly and parity looks like the safe option.
 
@@ -90,7 +90,7 @@ According to Flyvbjerg's data, the projects that rarely blow up share one trait.
 
 Steps only stay short if the parts they need already exist. Providing those parts is what a design system is for. Not only the components, but the decisions behind them. The questions that come up in every workflow, like how a form shows errors or what a table does on a small screen, have been answered once, outside any deadline. A team that starts with those answers is assembling instead of inventing. Without them, every step starts from nothing and stops being short.
 
-Replacing a legacy system piece by piece while it keeps running is not new. The approach has a name and a track record, the [strangler fig pattern](https://martinfowler.com/bliki/StranglerFigApplication.html). Like the plant it is named after, the new system grows around the old one until it can be switched off. Add a way back, and you no longer have to choose between the two groups. The new customers see the product change within weeks, and every step answers their question of whether it has a future. The long-time users keep working the way they do until the new version does what they need. Neither group gets a compromise. Each gets what it actually asked for.
+Replacing a legacy system piece by piece while it keeps running is not new. The approach has a name and a track record, the [strangler fig pattern](https://martinfowler.com/bliki/StranglerFigApplication.html). Like the plant it is named after, the new system grows around the old one until it can be switched off. Add a way back, and you no longer have to choose between the two groups. The new customers see the product change within weeks. The long-time users can stay on the old version until the new one does what they need. Neither group has to give something up for the other.
 
 ## Where to start
 
@@ -106,4 +106,4 @@ The product got old because people kept choosing it. The goal is to keep it that
 
 That gap is also what sets the two groups against each other. The wider it gets, the older the product looks to new customers, and the more any change costs the long-time users. Their disagreement is a symptom, so it should never be what drives the work. Closing the gap is.
 
-It has opened once already, quietly, while everyone was busy keeping the product running. As long as a product works, nothing forces anyone to ask what still earns its place. Make that question part of the routine, and the gap never gets wide enough to need a leap.
+The gap has opened once already, quietly, while everyone was busy keeping the product running. As long as a product works, nothing forces anyone to ask what still earns its place. Make that question part of the routine, and the gap never gets wide enough to need a leap.
