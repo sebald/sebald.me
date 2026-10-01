@@ -187,7 +187,8 @@ The script writes `scene.webp` (lossless animated WebP, pre-scaled 3x with
 nearest-neighbour, around 200 KB) and `poster.png` (frame 0, for reduced
 motion). Show the user the poster and a few zoomed frames; they check the
 motion itself in a browser. The script is a tool, not part of the note: keep
-only `native.png`, `scene.webp` and `poster.png` in the note folder.
+only `native.png`, `scene.webp`, `poster.png` and `og.webp` (step 6) in the
+note folder.
 
 ## 6. Wire it into the note
 
@@ -202,6 +203,18 @@ note folder before committing, it is only the input for the snap.
 image:
   src: ./scene.webp
   poster: ./poster.png
+```
+
+The header image is not used for link previews. `/og/<slug>.webp` serves the
+note folder's `og.webp` and falls back to the logo card without one, so export
+it from `native.png`: a centred 1.91:1 crop, 4x nearest-neighbour, then scaled
+smoothly to 1200x630. The crop width is the native height times 1.905 (349 for
+a 183px high image); move the crop with its x offset if the focal point sits
+off-centre. Delete `og.png` afterwards.
+
+```bash
+ffmpeg -i native.png -vf "crop=349:183:(iw-349)/2:0,scale=iw*4:ih*4:flags=neighbor,scale=1200:630:flags=bilinear" og.png
+cwebp -q 90 -m 6 og.png -o og.webp
 ```
 
 ## Constraints
