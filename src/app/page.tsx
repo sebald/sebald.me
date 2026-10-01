@@ -36,7 +36,7 @@ const NotesList = () => {
   return (
     <section className="grid gap-10">
       <Headline level="3">Notes</Headline>
-      <ul className="grid gap-10">
+      <ul className="grid gap-14 sm:gap-20">
         {notes.map(note => (
           <li key={note.url} className="grid gap-2">
             {note.data.date && (
@@ -60,7 +60,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-28 pt-32">
+  <div className="grid gap-20 pt-16 sm:gap-40 sm:pt-32">
     <Intro />
     <NotesList />
   </div>
