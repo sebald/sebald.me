@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 
 import { siteUrl } from '@/app.config';
 import { fontMono } from '@/css/fonts';
+import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import '@/css/styles.css';
 import { Footer } from '@/ui/layout/footer';
 import { OutboundLinkTracking } from '@/ui/outbound-link-tracking';
@@ -21,14 +22,10 @@ export const metadata: Metadata = {
   authors: [{ name: 'Sebastian Sebald', url: siteUrl }],
   creator: 'Sebastian Sebald',
   openGraph: {
-    siteName: 'Sebastian Sebald',
-    locale: 'en_US',
+    ...openGraphDefaults,
     type: 'website',
   },
-  twitter: {
-    card: 'summary_large_image',
-    creator: '@sebastiansebald',
-  },
+  twitter: twitterDefaults,
   alternates: {
     types: {
       'application/rss+xml': [

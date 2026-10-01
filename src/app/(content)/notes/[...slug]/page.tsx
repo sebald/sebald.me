@@ -2,6 +2,7 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { notesSource, pageImage } from '@/lib/source';
 import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { Article } from '@/ui/layout/article';
@@ -27,6 +28,7 @@ export const generateMetadata = async (
     title: page.data.title,
     description: page.data.description,
     openGraph: {
+      ...openGraphDefaults,
       title: page.data.title,
       description: page.data.description,
       type: 'article',
@@ -36,7 +38,7 @@ export const generateMetadata = async (
       images: [image.url],
     },
     twitter: {
-      card: 'summary_large_image',
+      ...twitterDefaults,
       images: [image.url],
     },
   };

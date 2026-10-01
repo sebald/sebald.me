@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
@@ -23,13 +24,12 @@ export const generateMetadata = async (
     title: page.data.title,
     description: page.data.description,
     openGraph: {
+      ...openGraphDefaults,
       title: page.data.title,
       description: page.data.description,
       type: 'website',
     },
-    twitter: {
-      card: 'summary_large_image',
-    },
+    twitter: twitterDefaults,
   };
 };
 

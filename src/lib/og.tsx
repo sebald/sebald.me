@@ -3,6 +3,21 @@ import { readFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 
 export const size = { width: 1200, height: 630 };
+
+/**
+ * Shared Open Graph and Twitter fields. Next.js replaces a parent's
+ * `openGraph`/`twitter` object instead of merging it, so every page that
+ * sets its own has to spread these in.
+ */
+export const openGraphDefaults = {
+  siteName: 'Sebastian Sebald',
+  locale: 'en_US',
+} as const;
+
+export const twitterDefaults = {
+  card: 'summary_large_image',
+  creator: '@sebastiansebald',
+} as const;
 export const contentType = 'image/png';
 
 export const Logo = ({ size = 40 }: { size?: number }) => (
