@@ -7,8 +7,8 @@
 // for a new image.
 //
 //   node .claude/skills/pixel-header/examples/model-room.mjs \
-//     content/notes/2026-09-23-modernize-the-product-not-the-ui/native.png \
-//     content/notes/2026-09-23-modernize-the-product-not-the-ui
+//     content/notes/2026-10-01-modernize-the-product-not-the-ui/native.png \
+//     content/notes/2026-10-01-modernize-the-product-not-the-ui
 
 import {
   hash,
