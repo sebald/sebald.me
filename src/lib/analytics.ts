@@ -11,6 +11,14 @@ export interface AnalyticsEvents {
   Copy: { target: 'url' | 'code' };
   'View Markdown': undefined;
   'Outbound Link': { url: string };
+  /**
+   * `note` repeats the page URL on purpose: it lets the dashboard break
+   * the event down across all notes in one list. Uses both property slots.
+   */
+  'Read Progress': {
+    milestone: '25%' | '50%' | '75%' | '100%' | 'read';
+    note: string;
+  };
 }
 
 export type AnalyticsEventName = keyof AnalyticsEvents;
@@ -41,3 +49,24 @@ export const trackEvent = <Name extends AnalyticsEventName>(
 export const isOutboundUrl = (url: URL, origin: string) =>
   (url.protocol === 'https:' || url.protocol === 'http:') &&
   url.origin !== origin;
+
+/**
+ * Stopwatch that only runs while the page is visible. Time is passed in,
+ * so it works with `performance.now()` and in tests.
+ */
+export const createVisibleClock = (now: number, visible: boolean) => {
+  let total = 0;
+  let since: number | undefined = visible ? now : undefined;
+
+  return {
+    setVisible: (visible: boolean, now: number) => {
+      if (visible) {
+        since ??= now;
+      } else if (since !== undefined) {
+        total += now - since;
+        since = undefined;
+      }
+    },
+    elapsed: (now: number) => total + (since === undefined ? 0 : now - since),
+  };
+};

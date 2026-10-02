@@ -10,6 +10,7 @@ import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { NoteMeta } from '@/ui/note-meta';
 import { PageToolbar } from '@/ui/page-toolbar';
+import { ReadingProgressTracking } from '@/ui/tracking/reading-progress-tracking';
 
 // Config
 // ---------------
@@ -76,9 +77,15 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
           <NoteMeta date={page.data.date} minutes={minutes} />
         </Article.Header>
         {page.data.image && <Article.Image src={page.data.image} />}
-        <Article.Content>
-          <MDX components={getMDXComponents()} />
-        </Article.Content>
+        <ReadingProgressTracking
+          key={page.url}
+          note={page.url}
+          minutes={minutes}
+        >
+          <Article.Content>
+            <MDX components={getMDXComponents()} />
+          </Article.Content>
+        </ReadingProgressTracking>
       </Article>
     </>
   );
