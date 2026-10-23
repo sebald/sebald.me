@@ -429,7 +429,7 @@ const rowY = (i: number) => GRID.rowTop + i * GRID.rowHeight;
 
 export const TaskTableFigure = () => (
   <Figure>
-    <div className="mx-auto max-w-lg">
+    <div className="mx-auto max-w-sm">
       <Panel
         label="Which tables a task touches"
         width={GRID.right}
