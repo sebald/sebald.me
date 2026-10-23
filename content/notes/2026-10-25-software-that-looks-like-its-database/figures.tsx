@@ -109,48 +109,31 @@ const Field = ({ label, x, y, ...input }: FieldProps) => (
   </g>
 );
 
-// The three fields both forms share
-const BeanFields = () => (
-  <>
-    <Field x={24} y={52} width={292} label="Name" value="Guji Highland" />
-    <Field x={24} y={92} width={292} label="Origin" value="Ethiopia" />
-    <Field
-      x={24}
-      y={132}
-      width={292}
-      label="Tasting notes"
-      value="Blueberry, jasmine"
-    />
-  </>
-);
-
 const SIZES = ['250 g', '500 g', '1 kg'];
+const STANDARD = ['9.50', '17.00', '30.00'];
 
 // New bean form
 // ---------------
+// Only the field above the prices is kept, the comparison is in the part below
 export const PriceListFormFigure = () => (
   <Figure caption="The form she expected and the one she got. Products and prices are two tables, so the prices live on another page and the form only knows the lists by name.">
     <Panels>
       <Panel
         label="What she wanted"
         width={340}
-        height={300}
-        alt="A new bean form with name, origin and tasting notes, and three price fields for 250 g, 500 g and 1 kg right below."
+        height={196}
+        alt="A new bean form with a name field and three price fields for 250 g, 500 g and 1 kg right below."
       >
-        <Card x={8} y={8} width={324} height={284} title="New bean">
-          <BeanFields />
-          <text x={24} y={172} fontSize={10} className="fill-mist-400">
+        <Card x={8} y={8} width={324} height={180} title="New bean">
+          <Field x={24} y={52} width={292} label="Name" value="Guji Highland" />
+          <text x={24} y={92} fontSize={10} className="fill-mist-400">
             Prices
           </text>
-          {[
-            ['250 g', '9.50'],
-            ['500 g', '17.00'],
-            ['1 kg', '30.00'],
-          ].map(([size, price], i) => (
+          {SIZES.map((size, i) => (
             <g key={size}>
               <text
                 x={24}
-                y={193 + i * 28}
+                y={113 + i * 28}
                 fontSize={11}
                 className="fill-mist-300"
               >
@@ -158,9 +141,9 @@ export const PriceListFormFigure = () => (
               </text>
               <Input
                 x={90}
-                y={178 + i * 28}
+                y={98 + i * 28}
                 width={80}
-                value={price}
+                value={STANDARD[i]}
                 highlight
               />
             </g>
@@ -171,23 +154,23 @@ export const PriceListFormFigure = () => (
       <Panel
         label="What she got"
         width={340}
-        height={430}
-        alt="The same form, but instead of prices a dropdown of price list names: Standard, Standard (old) and 2025 list. An arrow leads to a separate price lists page, where the prices behind each name are listed."
+        height={304}
+        alt="The same form, but instead of prices a dropdown of price list names: Standard, Standard (old) and 2025 list. An arrow leads to a separate price lists page, where the Standard list holds the prices."
       >
-        <Card x={8} y={8} width={324} height={284} title="New bean">
-          <BeanFields />
+        <Card x={8} y={8} width={324} height={196} title="New bean">
+          <Field x={24} y={52} width={292} label="Name" value="Guji Highland" />
           <Field
             x={24}
-            y={172}
+            y={92}
             width={160}
             label="Price list"
             value="Standard"
           />
-          <path d="M166 187 h8 l-4 5 z" className="fill-mist-400" />
+          <path d="M166 107 h8 l-4 5 z" className="fill-mist-400" />
           {/* The open dropdown */}
           <rect
             x={24}
-            y={204}
+            y={124}
             width={160}
             height={66}
             rx={4}
@@ -197,7 +180,7 @@ export const PriceListFormFigure = () => (
             <text
               key={name}
               x={32}
-              y={220 + i * 18}
+              y={140 + i * 18}
               fontSize={11}
               className="fill-mist-200"
             >
@@ -208,18 +191,18 @@ export const PriceListFormFigure = () => (
 
         {/* The side quest */}
         <path
-          d="M104 270 V 306"
+          d="M104 190 V 226"
           strokeDasharray="3 3"
           className="stroke-mist-500"
         />
-        <path d="M99 306 H 109 L 104 314 Z" className="fill-mist-500" />
+        <path d="M99 226 H 109 L 104 234 Z" className="fill-mist-500" />
 
-        <Card x={8} y={318} width={324} height={104} title="Price lists">
+        <Card x={8} y={238} width={324} height={60} title="Price lists">
           {SIZES.map((size, i) => (
             <text
               key={size}
               x={190 + i * 60}
-              y={354}
+              y={262}
               fontSize={10}
               textAnchor="middle"
               className="fill-mist-400"
@@ -227,33 +210,20 @@ export const PriceListFormFigure = () => (
               {size}
             </text>
           ))}
-          {[
-            ['Standard', ['9.50', '17.00', '30.00'], true],
-            ['Standard (old)', ['9.00', '16.00', '28.00'], false],
-            ['2025 list', ['8.50', '15.00', '26.00'], false],
-          ].map(([name, prices, highlight], row) => (
-            <g key={name as string}>
-              <text
-                x={24}
-                y={374 + row * 18}
-                fontSize={11}
-                className="fill-mist-300"
-              >
-                {name as string}
-              </text>
-              {(prices as string[]).map((price, i) => (
-                <text
-                  key={i}
-                  x={190 + i * 60}
-                  y={374 + row * 18}
-                  fontSize={11}
-                  textAnchor="middle"
-                  className={highlight ? 'fill-highlight' : 'fill-mist-200'}
-                >
-                  {price}
-                </text>
-              ))}
-            </g>
+          <text x={24} y={282} fontSize={11} className="fill-mist-300">
+            Standard
+          </text>
+          {STANDARD.map((price, i) => (
+            <text
+              key={i}
+              x={190 + i * 60}
+              y={282}
+              fontSize={11}
+              textAnchor="middle"
+              className="fill-highlight"
+            >
+              {price}
+            </text>
           ))}
         </Card>
       </Panel>
@@ -399,7 +369,6 @@ const PriceList = ({ x, name, prices, highlight }: PriceListProps) => (
 const ALL_MONTHS = MONTHS.map((_, i) => i);
 // This month's bean, the one that goes on its own list
 const OCTOBER = 9;
-const STANDARD = ['9.50', '17.00', '30.00'];
 
 export const PriceListLinksFigure = () => (
   <Figure caption="Every bean links to the same price list, so editing it reprices all twelve. One bean at its own price needs a list of its own.">
