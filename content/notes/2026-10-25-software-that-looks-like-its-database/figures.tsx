@@ -116,7 +116,7 @@ const STANDARD = ['9.50', '17.00', '30.00'];
 // ---------------
 // Only the field above the prices is kept, the comparison is in the part below
 export const PriceListFormFigure = () => (
-  <Figure caption="The form she expected and the one she got. Products and prices are two tables, so the prices live on another page and the form only knows the lists by name.">
+  <Figure caption="The form she expected and the one she got.">
     <Panels>
       <Panel
         label="What she wanted"
@@ -233,20 +233,8 @@ export const PriceListFormFigure = () => (
 
 // Beans and price lists
 // ---------------
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+// One bean a month, a bag in a cubby each, like the header
+const BEANS = Array.from({ length: 12 }, (_, i) => i);
 const BEAN = { width: 24, height: 26, gap: 4, y: 8 };
 const beanX = (i: number) => 4 + i * (BEAN.width + BEAN.gap);
 const beanCenter = (i: number) => beanX(i) + BEAN.width / 2;
@@ -255,19 +243,21 @@ const LIST = { width: 120, height: 68, y: 112 };
 
 interface BeansProps {
   /**
-   * Index of the month drawn in the highlight colour
+   * Index of the bean drawn in the highlight colour
    */
   highlight?: number;
 }
 
 const Beans = ({ highlight }: BeansProps) =>
-  MONTHS.map((month, i) => {
+  BEANS.map(i => {
     const active = i === highlight;
+    const x = beanX(i);
+    const y = BEAN.y;
     return (
-      <g key={month}>
+      <g key={i}>
         <rect
-          x={beanX(i)}
-          y={BEAN.y}
+          x={x}
+          y={y}
           width={BEAN.width}
           height={BEAN.height}
           rx={4}
@@ -277,30 +267,34 @@ const Beans = ({ highlight }: BeansProps) =>
               : 'fill-mist-800 stroke-mist-600'
           }
         />
-        <text
-          x={beanCenter(i)}
-          y={BEAN.y + 17}
-          fontSize={9}
-          textAnchor="middle"
-          className={active ? 'fill-highlight' : 'fill-mist-300'}
-        >
-          {month}
-        </text>
+        {/* The bag: a folded top over a rounded body */}
+        <rect
+          x={x + 9}
+          y={y + 5}
+          width={6}
+          height={4}
+          rx={1}
+          className={active ? 'fill-highlight' : 'fill-mist-500'}
+        />
+        <path
+          d={`M${x + 6} ${y + 11} q0 -2 2 -2 h8 q2 0 2 2 v9 q0 2 -2 2 h-8 q-2 0 -2 -2 z`}
+          className={active ? 'fill-highlight' : 'fill-mist-500'}
+        />
       </g>
     );
   });
 
 interface LinksProps {
   /**
-   * Months linked to the list at `to`
+   * Beans linked to the list at `to`
    */
-  months: number[];
+  beans: number[];
   to: number;
   highlight?: boolean;
 }
 
-const Links = ({ months, to, highlight }: LinksProps) =>
-  months.map(i => (
+const Links = ({ beans, to, highlight }: LinksProps) =>
+  beans.map(i => (
     <line
       key={i}
       x1={beanCenter(i)}
@@ -366,20 +360,19 @@ const PriceList = ({ x, name, prices, highlight }: PriceListProps) => (
   </g>
 );
 
-const ALL_MONTHS = MONTHS.map((_, i) => i);
 // This month's bean, the one that goes on its own list
-const OCTOBER = 9;
+const THIS_MONTH = 9;
 
 export const PriceListLinksFigure = () => (
-  <Figure caption="Every bean links to the same price list, so editing it reprices all twelve. One bean at its own price needs a list of its own.">
+  <Figure caption="The price list behind the beans.">
     <Panels>
       <Panel
         label="One price list for every bean"
         width={340}
         height={190}
-        alt="Twelve bean cards, January to December, each with a line to the same price list called Standard."
+        alt="Twelve bags of beans in a row, each with a line to the same price list called Standard."
       >
-        <Links months={ALL_MONTHS} to={170} />
+        <Links beans={BEANS} to={170} />
         <Beans />
         <PriceList x={110} name="Standard" prices={STANDARD} />
       </Panel>
@@ -388,11 +381,11 @@ export const PriceListLinksFigure = () => (
         label="One bean at its own price"
         width={340}
         height={190}
-        alt="The same twelve beans. Eleven still link to Standard, October links to a second list, Standard (air), with higher prices."
+        alt="The same twelve bags. Eleven still link to Standard, one links to a second list, Standard (air), with higher prices."
       >
-        <Links months={ALL_MONTHS.filter(i => i !== OCTOBER)} to={96} />
-        <Links months={[OCTOBER]} to={250} highlight />
-        <Beans highlight={OCTOBER} />
+        <Links beans={BEANS.filter(i => i !== THIS_MONTH)} to={96} />
+        <Links beans={[THIS_MONTH]} to={250} highlight />
+        <Beans highlight={THIS_MONTH} />
         <PriceList x={36} name="Standard" prices={STANDARD} />
         <PriceList
           x={190}
