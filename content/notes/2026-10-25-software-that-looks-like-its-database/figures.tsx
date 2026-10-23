@@ -423,13 +423,13 @@ const TASKS = [
   { task: 'Raise the price of one bean', tables: [0, 1] },
   { task: 'See how a bean sold', tables: [0, 2] },
 ];
-const GRID = { x: 220, columnGap: 60, rowTop: 28, rowHeight: 32, right: 364 };
+const GRID = { x: 236, columnGap: 80, rowTop: 28, rowHeight: 32, right: 424 };
 const columnX = (i: number) => GRID.x + i * GRID.columnGap;
 const rowY = (i: number) => GRID.rowTop + i * GRID.rowHeight;
 
 export const TaskTableFigure = () => (
   <Figure>
-    <div className="mx-auto max-w-sm">
+    <div className="mx-auto max-w-md">
       <Panel
         label="Which tables a task touches"
         width={GRID.right}
