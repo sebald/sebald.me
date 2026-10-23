@@ -22,12 +22,13 @@ const Headline = ({ children }: PropsWithChildren) => (
 );
 
 const Social = () => (
-  <div className="col-start-2 row-start-1 flex items-start gap-8 md:col-auto md:row-auto md:gap-10">
+  <div className="col-start-2 row-start-1 -mt-2 flex items-start gap-6 md:col-auto md:row-auto md:mt-0 md:gap-10">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
       href={socialLinks.github}
       target="_blank"
+      className="size-11 justify-center"
     >
       <GithubLogoIcon size={28} aria-hidden />
     </Link>
@@ -36,6 +37,7 @@ const Social = () => (
       variant="inherit"
       href={socialLinks.linkedin}
       target="_blank"
+      className="size-11 justify-center"
     >
       <LinkedinLogoIcon size={28} aria-hidden />
     </Link>
@@ -44,6 +46,7 @@ const Social = () => (
       variant="inherit"
       href={socialLinks.x}
       target="_blank"
+      className="size-11 justify-center"
     >
       <XLogoIcon size={28} aria-hidden />
     </Link>
@@ -51,17 +54,17 @@ const Social = () => (
 );
 
 const Links = () => (
-  <div className="flex flex-col gap-2.5">
+  <div className="flex flex-col gap-1 md:gap-2.5">
     <Headline>Links</Headline>
-    <Link variant="inherit" href="/llms.txt">
+    <Link variant="inherit" className="py-2 md:py-0" href="/llms.txt">
       <FileTextIcon size={16} aria-hidden />
       llms.txt
     </Link>
-    <Link variant="inherit" href="/rss.xml">
+    <Link variant="inherit" className="py-2 md:py-0" href="/rss.xml">
       <RssIcon size={16} aria-hidden />
       RSS Feed
     </Link>
-    <Link variant="inherit" href="/inventory">
+    <Link variant="inherit" className="py-2 md:py-0" href="/inventory">
       <CubeIcon size={16} aria-hidden />
       Inventory
     </Link>
@@ -71,7 +74,7 @@ const Links = () => (
 const Legal = () => (
   <div className="col-span-2 flex items-center justify-center gap-2 md:col-span-1 md:flex-col md:items-start md:justify-start md:gap-2.5">
     <Headline>Legal</Headline>
-    <Link variant="inherit" href="/imprint">
+    <Link variant="inherit" className="py-2 md:py-0" href="/imprint">
       Imprint
     </Link>
     <SquareIcon
@@ -80,7 +83,7 @@ const Legal = () => (
       className="text-mist-600 md:hidden"
       aria-hidden
     />
-    <Link variant="inherit" href="/privacy">
+    <Link variant="inherit" className="py-2 md:py-0" href="/privacy">
       Privacy Policy
     </Link>
   </div>

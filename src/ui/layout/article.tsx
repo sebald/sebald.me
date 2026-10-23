@@ -23,7 +23,13 @@ const styles = {
     base: ['prose'],
   }),
   image: cva({
-    base: ['mb-14 rounded-2xl'],
+    base: [
+      // Edge to edge on phones with the same gap above and below (40px),
+      // rounded inside the column from `md` up
+      'mt-2 mb-10 md:mt-0 md:mb-14',
+      '-mx-content-padding w-[calc(100%+var(--spacing-content-padding)*2)] rounded-none',
+      'md:mx-0 md:w-full md:rounded-2xl',
+    ],
   }),
 };
 
@@ -105,7 +111,7 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
   return (
     <div
       className={styles.image({
-        className: 'relative w-full overflow-hidden rounded-2xl',
+        className: 'relative overflow-hidden',
       })}
       style={{ aspectRatio: aspect }}
       aria-hidden="true"

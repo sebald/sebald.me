@@ -60,7 +60,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-20 pt-16 sm:gap-40 sm:pt-32">
+  <div className="grid gap-20 pt-10 sm:gap-40 md:pt-32">
     <Intro />
     <NotesList />
   </div>
