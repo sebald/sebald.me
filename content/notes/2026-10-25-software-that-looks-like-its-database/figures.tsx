@@ -397,6 +397,8 @@ const PriceList = ({ x, name, prices, highlight }: PriceListProps) => (
 );
 
 const ALL_MONTHS = MONTHS.map((_, i) => i);
+// This month's bean, the one that goes on its own list
+const OCTOBER = 9;
 const STANDARD = ['9.50', '17.00', '30.00'];
 
 export const PriceListLinksFigure = () => (
@@ -417,11 +419,11 @@ export const PriceListLinksFigure = () => (
         label="One bean at its own price"
         width={340}
         height={190}
-        alt="The same twelve beans. Eleven still link to Standard, December links to a second list, Standard (air), with higher prices."
+        alt="The same twelve beans. Eleven still link to Standard, October links to a second list, Standard (air), with higher prices."
       >
-        <Links months={ALL_MONTHS.slice(0, -1)} to={96} />
-        <Links months={[11]} to={250} highlight />
-        <Beans highlight={11} />
+        <Links months={ALL_MONTHS.filter(i => i !== OCTOBER)} to={96} />
+        <Links months={[OCTOBER]} to={250} highlight />
+        <Beans highlight={OCTOBER} />
         <PriceList x={36} name="Standard" prices={STANDARD} />
         <PriceList
           x={190}
