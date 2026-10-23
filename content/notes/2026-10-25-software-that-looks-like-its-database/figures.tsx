@@ -31,7 +31,8 @@ const Panel = ({ label, width, height, alt, children }: PanelProps) => (
       aria-label={alt}
       className="h-auto w-full"
     >
-      {children}
+      {/* The label stands in for the drawing, its parts are not read out */}
+      <g aria-hidden="true">{children}</g>
     </svg>
     {/* oxlint-enable jsx-a11y/prefer-tag-over-role */}
   </div>
@@ -111,12 +112,17 @@ const Field = ({ label, x, y, ...input }: FieldProps) => (
 
 const SIZES = ['250 g', '500 g', '1 kg'];
 const STANDARD = ['9.50', '17.00', '30.00'];
+const PRICE_LISTS = [
+  { name: 'Standard', prices: STANDARD, highlight: true },
+  { name: 'Standard (old)', prices: ['9.00', '16.00', '28.00'] },
+  { name: '2025 list', prices: ['8.50', '15.00', '26.00'] },
+];
 
 // New bean form
 // ---------------
 // Only the field above the prices is kept, the comparison is in the part below
 export const PriceListFormFigure = () => (
-  <Figure caption="The form she expected and the one she got.">
+  <Figure>
     <Panels>
       <Panel
         label="What she wanted"
@@ -154,8 +160,8 @@ export const PriceListFormFigure = () => (
       <Panel
         label="What she got"
         width={340}
-        height={304}
-        alt="The same form, but instead of prices a dropdown of price list names: Standard, Standard (old) and 2025 list. An arrow leads to a separate price lists page, where the Standard list holds the prices."
+        height={340}
+        alt="The same form, but instead of prices a dropdown of price list names: Standard, Standard (old) and 2025 list. An arrow leads to a separate price lists page, where each name has slightly different prices."
       >
         <Card x={8} y={8} width={324} height={196} title="New bean">
           <Field x={24} y={52} width={292} label="Name" value="Guji Highland" />
@@ -197,7 +203,8 @@ export const PriceListFormFigure = () => (
         />
         <path d="M99 226 H 109 L 104 234 Z" className="fill-mist-500" />
 
-        <Card x={8} y={238} width={324} height={60} title="Price lists">
+        {/* The names alone don't say which list holds her prices */}
+        <Card x={8} y={238} width={324} height={96} title="Price lists">
           {SIZES.map((size, i) => (
             <text
               key={size}
@@ -210,20 +217,29 @@ export const PriceListFormFigure = () => (
               {size}
             </text>
           ))}
-          <text x={24} y={282} fontSize={11} className="fill-mist-300">
-            Standard
-          </text>
-          {STANDARD.map((price, i) => (
-            <text
-              key={i}
-              x={190 + i * 60}
-              y={282}
-              fontSize={11}
-              textAnchor="middle"
-              className="fill-highlight"
-            >
-              {price}
-            </text>
+          {PRICE_LISTS.map(({ name, prices, highlight }, row) => (
+            <g key={name}>
+              <text
+                x={24}
+                y={282 + row * 18}
+                fontSize={11}
+                className="fill-mist-300"
+              >
+                {name}
+              </text>
+              {prices.map((price, i) => (
+                <text
+                  key={i}
+                  x={190 + i * 60}
+                  y={282 + row * 18}
+                  fontSize={11}
+                  textAnchor="middle"
+                  className={highlight ? 'fill-highlight' : 'fill-mist-200'}
+                >
+                  {price}
+                </text>
+              ))}
+            </g>
           ))}
         </Card>
       </Panel>
