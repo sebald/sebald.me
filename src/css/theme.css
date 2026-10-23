@@ -24,6 +24,8 @@
 
   --color-link: var(--color-mist-100);
   --color-ring: oklch(0.74 0.1 65);
+  /* Warm emphasis in figures, the lamplight of the pixel headers */
+  --color-highlight: oklch(0.8 0.12 70);
 
   --spacing-content: min(calc(75ch + calc(var(--spacing) * 6 * 2)), 100%);
   --spacing-content-padding: calc(var(--spacing) * 6);
