@@ -145,8 +145,11 @@ the preview crop of an outline-heavy area either way.
 ## 5. Animate
 
 Write a small script for the scene. Start from `examples/model-room.mjs` (the
-header of "Modernize the Product, Not the UI"): copy it to your scratchpad and
-replace the regions and effects. `scripts/loop.mjs` does the rest: it loads
+header of "Modernize the Product, Not the UI") or the simpler
+`examples/roastery.mjs` (the header of "On Software That Looks Like Its
+Database", no moving layer): copy it to your scratchpad and replace the regions
+and effects. Keep the finished script there too, as the next example and so the
+loop can be regenerated. `scripts/loop.mjs` does the rest: it loads
 `native.png`, has the pixel and colour helpers, and exports the loop. The
 example shows the patterns:
 
