@@ -364,7 +364,7 @@ const PriceList = ({ x, name, prices, highlight }: PriceListProps) => (
 const THIS_MONTH = 9;
 
 export const PriceListLinksFigure = () => (
-  <Figure caption="The price list behind the beans.">
+  <Figure>
     <Panels>
       <Panel
         label="One price list for every bean"
