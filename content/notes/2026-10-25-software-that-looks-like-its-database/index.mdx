@@ -1,0 +1,50 @@
+---
+title: On Software That Looks Like Its Database
+description: Software can look good, run fast and still send you from screen to screen to finish one task. Often the screens simply follow the data model. A product is organized around what the user is trying to finish.
+topics: [product, ux]
+date: 2026-10-25
+---
+
+Software can look good, run fast and still feel off somehow. You want to finish one task, and the software sends you from screen to screen. One reason for this is the order in which it gets built. The data model is defined before the first screen exists. Every table gets a list, a detail view and a form, and every button is a database operation. None of this is bad engineering. The experience suffers because what makes sense for storing data is not what makes sense for finishing the task.
+
+Take a small coffee roaster with an online shop. Every month she sells a new single-origin bean, in the same bag sizes and at the same prices. In her shop backend, a product and its prices are stored in two separate tables, so they also get two separate pages. To put the new bean on sale, she opens the product form, fills in the name, the origin and the tasting notes, and reaches the price. She wants to type in the prices, or at least see them. What she gets is a dropdown of price list names. To find out which name holds her prices, she leaves the half-finished form, opens the price list page, reads the prices there, and comes back to pick the right name. She wanted to do one thing. The software sent her on a side quest.
+
+Product lists and price lists are how the system thinks about its data. When the screens follow them, the software turns a coffee roaster into a database admin. For me, that is the difference between software and a product. Software is organized around what the system stores. A product is organized around what the user is trying to finish.
+
+## The database is on the screen
+
+Look at how the shop stores her beans. The bean itself (its name, origin and tasting notes) is one record. Its prices live somewhere else, in a price list that says what each bag size costs. One price list serves many beans, so a new bean doesn't get prices of its own. It gets linked to the price list that already exists. In the database, this is good design. Each price exists once, and nothing gets out of sync. The reuse is a virtue in the database and a chore for the user.
+
+It gets worse when a price changes. Say a container with this month's bean goes missing at sea and the replacement comes by air, so this one bean has to cost more for a while. In her head, every bean has its own price. The prices happen to be the same, but they are not connected. In the database they are one record, the price list that every bean links to. Editing that record reprices every bean, silently. Giving one bean a higher price means creating a second price list and relinking the bean to it. For her, it is either a surprise or another side quest.
+
+The database shows in smaller places too. One tell I see in a lot of software is the first column of a list. It is the record's ID, the number the database uses to tell one row from another. She knows her beans by name and origin, so the column that leads every row is the one she never reads.
+
+Justin Duke, who runs the newsletter platform Buttondown, looked at his own product and called what he saw [shipping your database](https://buttondown.com/changelog/2025-08-20). Every screen reflects the schema, until the app looks like a spreadsheet with twenty tabs.
+
+## The navigation is a history of the roadmap
+
+The navigation shows the other half of the build order. The main navigation could list the things she comes to do. Instead, it lists what shipped, one unconnected entry at a time. Every feature got its own entry. Reports. Bulk export. The new dashboard. The other new dashboard. Nobody asked where it belongs in the user's work. It was added wherever there was room.
+
+The two feed each other. When a new feature brings a new entity, the entity gets a page, and the page gets an entry in the navigation. Nobody goes back to fold it into the tasks that already exist, so the product grows by addition and never by integration.
+
+The integration is left to the user. She copies a product number from one page into the search of another, and keeps a spreadsheet next to the shop backend to hold it all together. Our software has to be better than that spreadsheet, not Excel with a slightly better UI. All the features are there. The product isn't.
+
+## Start from the task, not from the table
+
+The data model doesn't need to change. The screens do. The question for each screen is not which table it shows but which task it finishes.
+
+For the roaster, the tasks are easy to list. Put this month's bean on sale. Raise the price of one bean. Raise all of them in January. Each one touches two or three tables, so each one gets a screen that touches two or three tables. The new bean form asks for the prices right there and writes the link to the price list behind the scenes. [Stripe](https://docs.stripe.com/products-prices/manage-prices) keeps products and prices apart in the same way. In its API, you create the product first and the price second. In its dashboard, the form for a new product asks for the price right there, and you can't save without one. The data stays in two places, and the screen brings it together.
+
+Where a change touches shared data, the screen shows what will change before it does. "This changes the price of every bean" is one sentence, and it turns the surprise into a decision. And when she raises the price of one bean, the screen does the splitting for her (a second price list behind the scenes) instead of asking her to do it.
+
+For new features, the question comes before the entry in the navigation. Which task does this belong to? A bulk export belongs on the list people export from. A dashboard belongs where the numbers it shows come from. If a feature fits none of the tasks the user comes for, that is worth knowing before it ships, because it will end up as one more unconnected entry. And when the choice is between one more feature and a better workflow, lean toward the workflow. [Mike Swieton](https://spin.atomicobject.com/ui-database-design/) of Atomic Object gave that advice back in 2013, and it still holds.
+
+If you want a test for all of this, look at what your users keep next to your software. The spreadsheet beside the shop backend is a list of the tasks the product doesn't finish. It is a good product spec, and you don't have to write it. The user already did.
+
+## When the table is the right screen
+
+Not every screen needs this. Some people share the system's model, and for them the database is the right interface. An internal tool for an analytics team can show tables, because tables are what that team works in. A support agent who spends the day answering "which order?" finds an order by its number, so for her the ID is the right first column.
+
+The argument also stops at the data model. Nothing here asks for a less tidy database. Stability, speed and correctness are still essential, and the roaster notices when they fail just as much as when a bean takes three screens. Getting them right is where the work starts.
+
+We take pride in good engineering, and we should. But while we are busy getting the engineering right, the people who have to use the result are easy to lose sight of. The data model gets the care, the screens get whatever time is left, and so the screens end up showing the data model. Take the tasks the user comes for, and build the screens for those. The database won't notice the difference, but the roaster will.
