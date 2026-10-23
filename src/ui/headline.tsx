@@ -6,14 +6,16 @@ import { cva } from '@/lib/styles.utils';
 export const style = cva({
   base: [
     'flex items-center',
-    'text-accent-foreground tracking-wide',
+    'text-accent-foreground',
     '[&_svg]:mr-[1ch] [&_svg]:size-[1.25em]',
   ],
+  // Fira Code is wide, so no positive tracking. Three steps above the 16px
+  // body (20, 24 and 28/32px), one size smaller on phones for the top two.
   variants: {
     level: {
-      '1': 'text-2xl font-semibold',
-      '2': 'text-lg font-semibold',
-      '3': 'text-base font-semibold',
+      '1': 'text-[1.75rem] leading-[1.2] font-semibold tracking-[-0.01em] md:text-[2rem]',
+      '2': 'text-xl leading-[1.3] font-semibold md:text-2xl',
+      '3': 'text-lg leading-[1.35] font-semibold md:text-xl',
       '4': 'text-base font-medium',
       '5': 'text-base font-medium',
       '6': 'text-sm font-semibold',

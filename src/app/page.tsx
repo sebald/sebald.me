@@ -9,7 +9,9 @@ const Intro = () => (
     <TimeLogo size={82} />
     <div className="grid gap-8">
       <div className="grid gap-2.5">
-        <Text variant="accent">Sebastian Sebald</Text>
+        <Headline level="2" as="h1">
+          Sebastian Sebald
+        </Headline>
         <Text variant="muted" size="caption">
           Software Architect at Reservix, Freiburg
         </Text>
@@ -35,7 +37,13 @@ const NotesList = () => {
 
   return (
     <section className="grid gap-10">
-      <Headline level="3">Notes</Headline>
+      {/* A label, not a competitor to the note titles below it */}
+      <Headline
+        level="3"
+        className="text-[0.8125rem] font-medium tracking-[0.08em] text-muted-foreground uppercase md:text-xs"
+      >
+        Notes
+      </Headline>
       <ul className="grid gap-14 sm:gap-20">
         {notes.map(note => (
           <li key={note.url} className="grid gap-2">
