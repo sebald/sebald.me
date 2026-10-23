@@ -8,7 +8,11 @@ image:
 date: 2026-10-25
 ---
 
-import { PriceListFormFigure, PriceListLinksFigure } from './figures';
+import {
+  PriceListFormFigure,
+  PriceListLinksFigure,
+  TaskTableFigure,
+} from './figures';
 
 Software can look good, run fast and still feel off somehow. You want to finish one task, and the software sends you from screen to screen. One reason for this is the order in which it gets built. The data model is defined before the first screen exists. Every table gets a list, a detail view and a form, and every button is a database operation. None of this is bad engineering. The experience suffers because what makes sense for storing data is not what makes sense for finishing the task.
 
@@ -43,6 +47,8 @@ The integration is left to the user. She copies a product number from one page i
 The data model doesn't need to change. The screens do. The question for each screen is not which table it shows but which task it finishes.
 
 For the roaster, the tasks are easy to list. Put this month's bean on sale. Raise the price of one bean. Raise all of them in January. Each one touches two or three tables, so each one gets a screen that touches two or three tables. The new bean form asks for the prices right there and writes the link to the price list behind the scenes. [Stripe](https://docs.stripe.com/products-prices/manage-prices) keeps products and prices apart too. In its API they are two objects, and a price points at the product it belongs to. In its dashboard, the form for a new product asks for the price on the spot, and you can't save without one. The data stays in two places, and the screen brings it together.
+
+<TaskTableFigure />
 
 Where a change touches shared data, the screen shows what will change before it does. "This changes the price of every bean" is one sentence, and it turns the surprise into a decision. And when she raises the price of one bean, the screen does the splitting for her (a second price list behind the scenes) instead of asking her to do it.
 

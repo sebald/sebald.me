@@ -413,3 +413,85 @@ export const PriceListLinksFigure = () => (
     </Panels>
   </Figure>
 );
+
+// Tasks and tables
+// ---------------
+// One panel, a grid: a dot wherever a task touches a table
+const TABLES = ['Products', 'Price lists', 'Stock', 'Orders'];
+const TASKS = [
+  { task: "Put this month's bean on sale", tables: [0, 1, 2] },
+  { task: 'Raise the price of one bean', tables: [0, 1] },
+  { task: 'See how a bean sold', tables: [0, 3] },
+];
+const GRID = { x: 220, columnGap: 60, rowTop: 28, rowHeight: 32, right: 424 };
+const columnX = (i: number) => GRID.x + i * GRID.columnGap;
+const rowY = (i: number) => GRID.rowTop + i * GRID.rowHeight;
+
+export const TaskTableFigure = () => (
+  <Figure>
+    <div className="mx-auto max-w-lg">
+      <Panel
+        label="Which tables a task touches"
+        width={GRID.right}
+        height={rowY(TASKS.length) + 8}
+        alt="A grid of three tasks against four tables. Putting this month's bean on sale touches Products, Price lists and Stock. Raising the price of one bean touches Products and Price lists. Seeing how a bean sold touches Products and Orders."
+      >
+        {TABLES.map((table, i) => (
+          <text
+            key={table}
+            x={columnX(i)}
+            y={16}
+            fontSize={10}
+            textAnchor="middle"
+            className="fill-mist-400"
+          >
+            {table}
+          </text>
+        ))}
+        {TASKS.map(({ task, tables }, row) => {
+          const cy = rowY(row) + GRID.rowHeight / 2;
+          return (
+            <g key={task}>
+              <line
+                x1={8}
+                x2={GRID.right}
+                y1={rowY(row)}
+                y2={rowY(row)}
+                className="stroke-mist-800"
+              />
+              <text x={8} y={cy + 4} fontSize={11} className="fill-mist-200">
+                {task}
+              </text>
+              {TABLES.map((table, column) =>
+                tables.includes(column) ? (
+                  <circle
+                    key={table}
+                    cx={columnX(column)}
+                    cy={cy}
+                    r={5}
+                    className="fill-highlight"
+                  />
+                ) : (
+                  <circle
+                    key={table}
+                    cx={columnX(column)}
+                    cy={cy}
+                    r={1.5}
+                    className="fill-mist-700"
+                  />
+                ),
+              )}
+            </g>
+          );
+        })}
+        <line
+          x1={8}
+          x2={GRID.right}
+          y1={rowY(TASKS.length)}
+          y2={rowY(TASKS.length)}
+          className="stroke-mist-800"
+        />
+      </Panel>
+    </div>
+  </Figure>
+);
