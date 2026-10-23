@@ -65,7 +65,7 @@ export const styles = {
           'data-starting-style:-translate-y-full data-ending-style:-translate-y-full',
         ],
         bottom: [
-          'mt-auto',
+          'mt-auto max-w-full px-content-padding',
           'data-starting-style:translate-y-full data-ending-style:translate-y-full',
         ],
       },

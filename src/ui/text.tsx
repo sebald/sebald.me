@@ -14,7 +14,7 @@ export const style = cva({
     size: {
       default: '',
       // Repeat `leading-*`: tailwind-merge drops it when `text-xs` follows
-      caption: 'text-xs leading-relaxed -tracking-wide',
+      caption: 'text-[0.8125rem] md:text-xs leading-relaxed -tracking-wide',
     },
     wrap: {
       default: '',

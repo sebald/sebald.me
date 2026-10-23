@@ -33,7 +33,9 @@ const style = {
       '[&_svg]:size-4 [&_figcaption]:text-xs',
 
       // Code container
-      '**:[[role=region]]:pt-6',
+      // Tailwind never sees fumadocs' own `overflow-auto`, so set it here
+      '**:[[role=region]]:pt-6 **:[[role=region]]:overflow-x-auto',
+      '**:[[role=region]]:scrollbar-thin **:[[role=region]]:scrollbar-thumb-mist-700 **:[[role=region]]:scrollbar-track-transparent',
 
       // Focus styles - dim unfocused lines when .focused class is present
       '[&_code:has(.focused)_.line:not(.focused)]:opacity-30',
@@ -42,6 +44,15 @@ const style = {
       'hover:[&_code:has(.focused)_.line:not(.focused)]:opacity-100',
       '[&_code_.line.focused]:opacity-100',
     ],
+    variants: {
+      // Without a title the copy button floats over the code. Keep the end of
+      // every line clear of it, so only lines that overflow (and scroll) run
+      // beneath its fade
+      titled: {
+        true: '',
+        false: '[&_pre]:pr-20',
+      },
+    },
   }),
   codeblockTabs: cva({
     base: ['border-none'],
@@ -52,7 +63,7 @@ const style = {
       // Add style to fumadocs tab buttons
       '[&_button]:text-muted-foreground [&_button]:text-sm',
       '[&_button]:px-4 [&_button]:py-1 [&_button]:rounded-lg',
-      '[&_button]:cursor-pointer',
+      '[&_button]:cursor-pointer touch:[&_button]:min-h-11',
       '[&_button]:aria-selected:text-mist-200 [&_button]:aria-selected:bg-mist-700/50',
       '[&_button]:hover:text-mist-200 [&_button]:hover:bg-mist-800/40',
     ],
@@ -89,6 +100,7 @@ const CopyButton = ({ containerRef }: CopyButtonProps) => {
       variant="link"
       // Static label; the result is announced by the toast
       aria-label="Copy code"
+      className="mr-1.5 size-11 justify-center"
       onClick={onClick}
     >
       {checked ? (
@@ -109,13 +121,17 @@ export const CodeBlock = ({ children, ...props }: CodeBlockProps) => {
     <FumaCodeBlock
       {...props}
       ref={areaRef}
-      className={style.codeblock()}
+      className={style.codeblock({ titled: !!props.title })}
       allowCopy={false}
       Actions={() => (
         <div
           className={cn(
-            'absolute top-6 z-2',
-            props.title ? 'right-4' : 'right-0',
+            // 44px hit area; the icon stays where it was. Without a title the
+            // button floats over the code, so fade the code out beneath it
+            'absolute top-1.5 z-2 flex',
+            props.title
+              ? 'right-4'
+              : 'right-0 pl-8 bg-linear-to-l from-(--shiki-dark-bg) from-55% to-transparent',
           )}
         >
           <CopyButton containerRef={areaRef} />
