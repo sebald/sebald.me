@@ -417,13 +417,13 @@ export const PriceListLinksFigure = () => (
 // Tasks and tables
 // ---------------
 // One panel, a grid: a dot wherever a task touches a table
-const TABLES = ['Products', 'Price lists', 'Stock', 'Orders'];
+const TABLES = ['Products', 'Price lists', 'Orders'];
 const TASKS = [
-  { task: "Put this month's bean on sale", tables: [0, 1, 2] },
+  { task: "Put this month's bean on sale", tables: [0, 1] },
   { task: 'Raise the price of one bean', tables: [0, 1] },
-  { task: 'See how a bean sold', tables: [0, 3] },
+  { task: 'See how a bean sold', tables: [0, 2] },
 ];
-const GRID = { x: 220, columnGap: 60, rowTop: 28, rowHeight: 32, right: 424 };
+const GRID = { x: 220, columnGap: 60, rowTop: 28, rowHeight: 32, right: 364 };
 const columnX = (i: number) => GRID.x + i * GRID.columnGap;
 const rowY = (i: number) => GRID.rowTop + i * GRID.rowHeight;
 
@@ -434,7 +434,7 @@ export const TaskTableFigure = () => (
         label="Which tables a task touches"
         width={GRID.right}
         height={rowY(TASKS.length) + 8}
-        alt="A grid of three tasks against four tables. Putting this month's bean on sale touches Products, Price lists and Stock. Raising the price of one bean touches Products and Price lists. Seeing how a bean sold touches Products and Orders."
+        alt="A grid of three tasks against three tables. Putting this month's bean on sale touches Products and Price lists. Raising the price of one bean touches Products and Price lists. Seeing how a bean sold touches Products and Orders."
       >
         {TABLES.map((table, i) => (
           <text
