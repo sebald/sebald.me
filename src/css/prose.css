@@ -1,6 +1,8 @@
 @layer components {
   .prose {
-    line-height: 1.75;
+    /* Phones show about 34 characters per line. The short measure wants
+       tighter leading and one line between paragraphs. */
+    line-height: 1.65;
     text-box-trim: trim-both;
 
     display: grid;
@@ -13,22 +15,40 @@
       grid-column: 2;
     }
 
-    /* Default spacing */
+    /* Default spacing: one line between paragraphs, twice that before a
+       section heading, so sections separate more than paragraphs do */
     & > * + * {
-      margin-top: calc(var(--spacing) * 14);
+      margin-top: calc(var(--spacing) * 8);
     }
 
     /* Headlines */
-    & > * + h2 {
-      margin-top: calc(var(--spacing) * 16);
-    }
+    & > * + h2,
     & > * + h3 {
       margin-top: calc(var(--spacing) * 16);
     }
 
     & h2 + *,
     & h3 + * {
-      margin-top: calc(var(--spacing) * 4);
+      margin-top: calc(var(--spacing) * 3.5);
+    }
+
+    /* From md up the desktop rhythm stays as it was */
+    @media (width >= 48rem) {
+      line-height: 1.75;
+
+      & > * + * {
+        margin-top: calc(var(--spacing) * 14);
+      }
+
+      & > * + h2,
+      & > * + h3 {
+        margin-top: calc(var(--spacing) * 16);
+      }
+
+      & h2 + *,
+      & h3 + * {
+        margin-top: calc(var(--spacing) * 4);
+      }
     }
 
     & h4 + *,
@@ -66,7 +86,11 @@
       }
 
       & li + li {
-        margin-top: calc(var(--spacing) * 8);
+        margin-top: calc(var(--spacing) * 4);
+
+        @media (width >= 48rem) {
+          margin-top: calc(var(--spacing) * 8);
+        }
       }
 
       /* Nested lists */
