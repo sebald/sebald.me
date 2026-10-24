@@ -2,15 +2,13 @@ import { Image as FumaImage } from 'fumadocs-core/framework';
 import type { ComponentProps } from 'react';
 
 import { cva } from '@/lib/styles.utils';
+import { Figure } from '@/ui/figure';
 
 // Styles
 // ---------------
 const style = {
   image: cva({
     base: ['rounded-lg'],
-  }),
-  caption: cva({
-    base: ['pt-3 text-center', 'text-sm text-muted-foreground', 'italic'],
   }),
 };
 
@@ -31,12 +29,5 @@ export const Image = ({ title, alt, className, ...props }: ImageProps) => {
     <FumaImage {...props} alt={alt} className={style.image({ className })} />
   );
 
-  return title ? (
-    <figure>
-      {img}
-      <figcaption className={style.caption()}>{title}</figcaption>
-    </figure>
-  ) : (
-    img
-  );
+  return title ? <Figure caption={title}>{img}</Figure> : img;
 };
