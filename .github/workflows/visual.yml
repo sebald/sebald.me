@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     # Must match the @playwright/test version in package.json
     container:
-      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
       options: --ipc=host
 
     steps:
