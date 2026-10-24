@@ -89,6 +89,9 @@ const Legal = () => (
   </div>
 );
 
+// Pages are prerendered, so this is the build year
+const year = new Date().getFullYear();
+
 // Component
 // ---------------
 export const Footer = () => (
@@ -101,7 +104,7 @@ export const Footer = () => (
     </div>
     <div className="flex items-center justify-center gap-1 pt-4 text-sm md:justify-start md:pt-8">
       <CopyrightIcon size={14} aria-hidden />
-      {new Date().getFullYear()} Sebastian Sebald
+      {year} Sebastian Sebald
     </div>
   </footer>
 );
