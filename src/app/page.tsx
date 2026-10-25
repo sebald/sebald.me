@@ -4,24 +4,30 @@ import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
 import { Text } from '@/ui/text';
 
+// Set apart from the notes by size and brightness alone: the name outranks
+// every note title, the intro reads as a lede above the note descriptions
 const Intro = () => (
-  <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
-    <TimeLogo size={82} />
-    <div className="grid gap-8">
-      <div className="grid gap-2.5">
-        <Headline level="2" as="h1">
+  <header className="grid gap-8">
+    {/* Beside the name from tablet up; above it on phones, where the name
+        would otherwise wrap next to the logo */}
+    <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-5">
+      <TimeLogo size={56} />
+      <div className="grid gap-2 sm:gap-1">
+        <Headline
+          level="1"
+          as="h1"
+          className="text-3xl tracking-tight text-mist-50 sm:text-4xl"
+        >
           Sebastian Sebald
         </Headline>
-        <Text variant="muted" size="caption">
-          Software Architect at Reservix, Freiburg
-        </Text>
+        <Text variant="muted">Software Architect at Reservix, Freiburg</Text>
       </div>
-      <Text wrap="balance">
-        I work at the intersection of code and user experience. Lately that
-        means building a design system for a product that&apos;s two decades
-        old, and for everything that comes next.
-      </Text>
     </div>
+    <Text className="text-lg text-accent-foreground">
+      I work on software that has grown for over two decades, and lead the
+      effort to reshape it around the people who use it every day. Most days
+      that means bringing people together, the other days code or design.
+    </Text>
   </header>
 );
 
@@ -68,7 +74,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-20 pt-10 sm:gap-40 md:pt-32">
+  <div className="grid gap-16 pt-10 sm:gap-24 md:pt-32">
     <Intro />
     <NotesList />
   </div>
