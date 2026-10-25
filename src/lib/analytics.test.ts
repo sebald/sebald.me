@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { createVisibleClock, isOutboundUrl } from './analytics';
+import { createVisibleClock, isOutboundUrl, playedSeconds } from './analytics';
 
 const ORIGIN = 'https://sebald.me';
 
@@ -65,5 +65,21 @@ describe('createVisibleClock', () => {
     clock.setVisible(false, 1000);
     clock.setVisible(false, 2000);
     assert.equal(clock.elapsed(3000), 1000);
+  });
+});
+
+describe('playedSeconds', () => {
+  const ranges = (...list: [number, number][]) => ({
+    length: list.length,
+    start: (i: number) => list[i][0],
+    end: (i: number) => list[i][1],
+  });
+
+  it('is 0 before anything played', () => {
+    assert.equal(playedSeconds(ranges()), 0);
+  });
+
+  it('adds up the played ranges', () => {
+    assert.equal(playedSeconds(ranges([0, 30], [120, 150.5])), 60.5);
   });
 });

@@ -10,7 +10,8 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { trackEvent } from '@/lib/analytics';
+import type { AnalyticsEvents } from '@/lib/analytics';
+import { playedSeconds, trackEvent } from '@/lib/analytics';
 import { formatDuration } from '@/lib/string.utils';
 import { cva } from '@/lib/styles.utils';
 import { Button } from '@/ui/button';
@@ -19,6 +20,14 @@ import { Button } from '@/ui/button';
 // ---------------
 const RATES = [1, 1.25, 1.5, 0.75] as const;
 const SKIP_SECONDS = 15;
+const MILESTONES = [25, 50, 75, 100] as const;
+/**
+ * Share of the narration that may be missing for a milestone to count, the
+ * played ranges can stop a fraction short of the end.
+ */
+const MILESTONE_TOLERANCE = 0.01;
+
+type Milestone = AnalyticsEvents['Listen Progress']['milestone'];
 
 // Styles
 // ---------------
@@ -118,6 +127,11 @@ export interface NarrationPlayerProps {
   src: string;
   /** Note title, shown in the bar and on the lock screen. */
   title: string;
+  /**
+   * Sent with the `Listen` and `Listen Progress` events, usually the page
+   * URL. Without it nothing is tracked (e.g. the inventory's example).
+   */
+  note?: string;
 }
 
 // Component
@@ -129,10 +143,14 @@ export interface NarrationPlayerProps {
  * The `<audio>` element uses `preload="none"`, so nothing is downloaded
  * until someone presses play. `play()` runs inside the click handler,
  * Safari refuses to start audio outside of one.
+ *
+ * Each event is sent once per mount, so give it a `key` to reset it
+ * between notes.
  */
-export const NarrationPlayer = ({ src, title }: NarrationPlayerProps) => {
+export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
   const audio = useRef<HTMLAudioElement>(null);
   const tracked = useRef(false);
+  const sent = useRef(new Set<Milestone>());
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -144,9 +162,22 @@ export const NarrationPlayer = ({ src, title }: NarrationPlayerProps) => {
     if (!el) return;
     setOpen(true);
     el.play().catch(() => setPlaying(false));
-    if (!tracked.current) {
+    if (note && !tracked.current) {
       tracked.current = true;
-      trackEvent('Listen');
+      trackEvent('Listen', { note });
+    }
+  };
+
+  // Based on what was played, not on the position, so seeking doesn't count
+  const trackProgress = (el: HTMLAudioElement) => {
+    if (!note || !el.duration) return;
+    const share = playedSeconds(el.played) / el.duration;
+    for (const pct of MILESTONES) {
+      const milestone: Milestone = `${pct}%`;
+      if (share < pct / 100 - MILESTONE_TOLERANCE) break;
+      if (sent.current.has(milestone)) continue;
+      sent.current.add(milestone);
+      trackEvent('Listen Progress', { milestone, note });
     }
   };
 
@@ -236,8 +267,14 @@ export const NarrationPlayer = ({ src, title }: NarrationPlayerProps) => {
         preload="none"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        onEnded={() => setPlaying(false)}
-        onTimeUpdate={e => setTime(e.currentTarget.currentTime)}
+        onEnded={e => {
+          setPlaying(false);
+          trackProgress(e.currentTarget);
+        }}
+        onTimeUpdate={e => {
+          setTime(e.currentTarget.currentTime);
+          trackProgress(e.currentTarget);
+        }}
         onLoadedMetadata={e => setDuration(e.currentTarget.duration)}
       />
 

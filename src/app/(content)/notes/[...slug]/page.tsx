@@ -65,7 +65,12 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
     <>
       <PageToolbar>
         {narration && (
-          <NarrationPlayer src={narration} title={page.data.title} />
+          <NarrationPlayer
+            key={page.url}
+            src={narration}
+            title={page.data.title}
+            note={page.url}
+          />
         )}
         <ActionMenu label="Article actions">
           <CopyLinkItem />
