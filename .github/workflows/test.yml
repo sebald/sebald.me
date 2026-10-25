@@ -35,3 +35,10 @@ jobs:
 
       - name: Run tests
         run: pnpm test
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v10.3.2
+
+      # Every published note needs a narration that matches its current text
+      - name: Check narrations
+        run: pnpm narrate:check
