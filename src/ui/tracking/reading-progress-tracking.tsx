@@ -3,12 +3,14 @@
 import { type PropsWithChildren, useEffect, useRef } from 'react';
 
 import type { AnalyticsEvents } from '@/lib/analytics';
-import { createVisibleClock, trackEvent } from '@/lib/analytics';
+import {
+  createVisibleClock,
+  PROGRESS_MILESTONES,
+  trackEvent,
+} from '@/lib/analytics';
 
 // Config
 // ---------------
-const MILESTONES = [25, 50, 75, 100] as const;
-
 /**
  * Share of the estimated reading time that has to pass (with the tab
  * visible) before reaching the end counts as "read".
@@ -105,7 +107,7 @@ export const ReadingProgressTracking = ({
   return (
     <div ref={ref} className="relative">
       {children}
-      {MILESTONES.map(pct => (
+      {PROGRESS_MILESTONES.map(pct => (
         <span
           key={pct}
           data-milestone={pct}

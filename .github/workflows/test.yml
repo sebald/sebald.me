@@ -36,9 +36,18 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+  # Every published note needs a narration that matches its current text.
+  # Only needs Python, so it runs next to the tests without `pnpm install`
+  narrations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
       - name: Setup uv
         uses: astral-sh/setup-uv@v10.3.2
 
-      # Every published note needs a narration that matches its current text
+      # Same as `pnpm narrate:check`, pnpm would install the Node
+      # dependencies before running it
       - name: Check narrations
-        run: pnpm narrate:check
+        run: uv run --no-project --python 3.12 --with pyyaml python scripts/narrate/narrate.py --check

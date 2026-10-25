@@ -25,7 +25,7 @@ pnpm vrt:update       # Regenerate screenshot baselines (Docker)
 pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker)
 ```
 
-CI runs `lint`, `format:check`, `test` and `narrate:check` on every pull request. Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
 
 ### Visual Regression Tests
 

@@ -2,6 +2,10 @@ import { track } from '@vercel/analytics';
 
 // Events
 // ---------------
+/** Progress points of `Read Progress` and `Listen Progress`. */
+export const PROGRESS_MILESTONES = [25, 50, 75, 100] as const;
+export type ProgressMilestone = `${(typeof PROGRESS_MILESTONES)[number]}%`;
+
 /**
  * Custom events sent to Vercel Web Analytics. Every event is recorded
  * together with the page it happened on, so properties only carry what
@@ -17,7 +21,7 @@ export interface AnalyticsEvents {
    * don't count, so seeking to the end doesn't send `100%`.
    */
   'Listen Progress': {
-    milestone: '25%' | '50%' | '75%' | '100%';
+    milestone: ProgressMilestone;
     note: string;
   };
   'Outbound Link': { url: string };
@@ -26,7 +30,7 @@ export interface AnalyticsEvents {
    * the event down across all notes in one list. Uses both property slots.
    */
   'Read Progress': {
-    milestone: '25%' | '50%' | '75%' | '100%' | 'read';
+    milestone: ProgressMilestone | 'read';
     note: string;
   };
 }

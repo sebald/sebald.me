@@ -10,8 +10,12 @@ import {
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import type { AnalyticsEvents } from '@/lib/analytics';
-import { playedSeconds, trackEvent } from '@/lib/analytics';
+import type { ProgressMilestone } from '@/lib/analytics';
+import {
+  playedSeconds,
+  PROGRESS_MILESTONES,
+  trackEvent,
+} from '@/lib/analytics';
 import { formatDuration } from '@/lib/string.utils';
 import { cva } from '@/lib/styles.utils';
 import { Button } from '@/ui/button';
@@ -20,14 +24,18 @@ import { Button } from '@/ui/button';
 // ---------------
 const RATES = [1, 1.25, 1.5, 0.75] as const;
 const SKIP_SECONDS = 15;
-const MILESTONES = [25, 50, 75, 100] as const;
 /**
  * Share of the narration that may be missing for a milestone to count, the
  * played ranges can stop a fraction short of the end.
  */
 const MILESTONE_TOLERANCE = 0.01;
 
-type Milestone = AnalyticsEvents['Listen Progress']['milestone'];
+// Helpers
+// ---------------
+/** Jumps to a position, clamped to the narration. */
+const seekTo = (el: HTMLAudioElement, seconds: number) => {
+  el.currentTime = Math.min(Math.max(seconds, 0), el.duration || seconds);
+};
 
 // Styles
 // ---------------
@@ -36,8 +44,6 @@ const styles = {
     base: [
       // Same width for Listen, Pause and Resume, so the toolbar doesn't shift
       'h-11 w-auto min-w-28 gap-2 px-4.5',
-      // Only the outer buttons hang into the margin
-      'mx-0',
       'text-sm font-medium',
     ],
   }),
@@ -46,7 +52,7 @@ const styles = {
       'ui-panel z-100',
       'fixed inset-x-4 bottom-4 mx-auto max-w-2xl',
       'grid grid-cols-[auto_1fr_auto] items-center gap-x-4 gap-y-2',
-      'py-3 pr-3 pl-4 md:gap-x-5 md:pl-5',
+      'py-3 pr-3 pl-3 md:gap-x-5 md:pl-4',
       // Close alone in the corner, speed next to the time it changes, so
       // close isn't hit by accident
       '[grid-template-areas:"play_title_close"_"play_progress_rate"]',
@@ -57,12 +63,7 @@ const styles = {
     ],
   }),
   play: cva({
-    base: [
-      '[grid-area:play]',
-      'size-11 rounded-full bg-mist-100 text-mist-900',
-      'hover:bg-mist-50 hover:text-mist-900',
-      '[&_svg]:size-4.5',
-    ],
+    base: ['[grid-area:play]', 'size-11 rounded-full px-0', '[&_svg]:size-4.5'],
   }),
   title: cva({
     base: [
@@ -105,18 +106,12 @@ const styles = {
   rate: cva({
     base: [
       '[grid-area:rate] justify-self-end',
-      'mx-0 h-8 w-12 rounded-full',
+      'h-8 w-12',
       'text-xs font-medium tabular-nums text-mist-300',
-      'hover:bg-mist-500/30 hover:text-mist-50',
     ],
   }),
   close: cva({
-    base: [
-      '[grid-area:close] justify-self-end',
-      'mx-0 size-9 rounded-full text-mist-400',
-      'hover:bg-mist-500/30 hover:text-mist-50',
-      '[&_svg]:size-4',
-    ],
+    base: ['[grid-area:close] justify-self-end', 'size-9'],
   }),
 };
 
@@ -149,8 +144,8 @@ export interface NarrationPlayerProps {
  */
 export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
   const audio = useRef<HTMLAudioElement>(null);
-  const tracked = useRef(false);
-  const sent = useRef(new Set<Milestone>());
+  // Events already sent, each one goes out once per mount
+  const sent = useRef(new Set<'listen' | ProgressMilestone>());
   const [open, setOpen] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -162,18 +157,18 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
     if (!el) return;
     setOpen(true);
     el.play().catch(() => setPlaying(false));
-    if (note && !tracked.current) {
-      tracked.current = true;
+    if (note && !sent.current.has('listen')) {
+      sent.current.add('listen');
       trackEvent('Listen', { note });
     }
   };
 
   // Based on what was played, not on the position, so seeking doesn't count
   const trackProgress = (el: HTMLAudioElement) => {
-    if (!note || !el.duration) return;
+    if (!note || !el.duration || sent.current.has('100%')) return;
     const share = playedSeconds(el.played) / el.duration;
-    for (const pct of MILESTONES) {
-      const milestone: Milestone = `${pct}%`;
+    for (const pct of PROGRESS_MILESTONES) {
+      const milestone: ProgressMilestone = `${pct}%`;
       if (share < pct / 100 - MILESTONE_TOLERANCE) break;
       if (sent.current.has(milestone)) continue;
       sent.current.add(milestone);
@@ -186,7 +181,7 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
   const seek = (seconds: number) => {
     const el = audio.current;
     if (!el) return;
-    el.currentTime = Math.min(Math.max(seconds, 0), el.duration || seconds);
+    seekTo(el, seconds);
     setTime(el.currentTime);
   };
 
@@ -201,15 +196,6 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
     setRate(next);
   };
 
-  // Keep the end of the note readable above the docked bar
-  useEffect(() => {
-    if (!open) return;
-    document.body.style.paddingBottom = '7rem';
-    return () => {
-      document.body.style.paddingBottom = '';
-    };
-  }, [open]);
-
   // Lock screen, media keys and headphone buttons
   useEffect(() => {
     if (!open || !('mediaSession' in navigator)) return;
@@ -221,7 +207,8 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
     });
     // `timeupdate` keeps the displayed time in sync after these
     const skip = (seconds: number) => () => {
-      if (audio.current) audio.current.currentTime += seconds;
+      if (audio.current)
+        seekTo(audio.current, audio.current.currentTime + seconds);
     };
     const handlers: [MediaSessionAction, MediaSessionActionHandler][] = [
       ['play', () => audio.current?.play()],
@@ -232,7 +219,7 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
         'seekto',
         ({ seekTime }) => {
           if (audio.current && seekTime !== undefined)
-            audio.current.currentTime = seekTime;
+            seekTo(audio.current, seekTime);
         },
       ],
     ];
@@ -245,14 +232,14 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
     };
   }, [open, title]);
 
+  const ToggleIcon = playing ? PauseIcon : PlayIcon;
+
   return (
     <>
       {/* Labelled, an icon alone doesn't say what will happen */}
       <Button variant="icon" onClick={toggle} className={styles.listen()}>
-        {playing ? (
-          <PauseIcon weight="bold" aria-hidden />
-        ) : open ? (
-          <PlayIcon weight="bold" aria-hidden />
+        {open ? (
+          <ToggleIcon weight="bold" aria-hidden />
         ) : (
           <HeadphonesIcon weight="bold" aria-hidden />
         )}
@@ -281,18 +268,19 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
       {open &&
         // Outside the toolbar, the bar is not part of its navigation
         createPortal(
-          <section aria-label="Narration" className={styles.bar()}>
+          <section
+            aria-label="Narration"
+            // The layout reserves space for it at the end of the page
+            data-narration-bar
+            className={styles.bar()}
+          >
             <Button
-              variant="icon"
+              variant="primary"
               aria-label={playing ? 'Pause' : 'Play'}
               onClick={toggle}
               className={styles.play()}
             >
-              {playing ? (
-                <PauseIcon weight="fill" aria-hidden />
-              ) : (
-                <PlayIcon weight="fill" aria-hidden />
-              )}
+              <ToggleIcon weight="fill" aria-hidden />
             </Button>
 
             <p className={styles.title()}>
@@ -329,7 +317,7 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
             </div>
 
             <Button
-              variant="link"
+              variant="ghost"
               aria-label={`Playback speed ${rate}×`}
               onClick={cycleRate}
               className={styles.rate()}
@@ -337,7 +325,7 @@ export const NarrationPlayer = ({ src, title, note }: NarrationPlayerProps) => {
               {rate}×
             </Button>
             <Button
-              variant="link"
+              variant="ghost"
               aria-label="Close player"
               onClick={close}
               className={styles.close()}

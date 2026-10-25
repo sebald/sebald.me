@@ -26,6 +26,13 @@ export const styles = cva({
       primary: ['bg-mist-100 text-mist-800 font-medium', 'hover:bg-mist-50'],
       secondary: ['bg-mist-500/25 text-mist-200', 'hover:bg-mist-500/50'],
       icon: linkStyles({ variant: 'icon' }),
+      // Icon or short label without a background until hovered, for
+      // controls that sit on a panel
+      ghost: [
+        'rounded-full text-mist-400',
+        'hover:bg-mist-500/30 hover:text-mist-50',
+        '[&_svg]:size-4',
+      ],
       link: linkStyles({
         variant: 'inherit',
         className: 'appearance-none w-fit',

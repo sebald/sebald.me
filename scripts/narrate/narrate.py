@@ -20,8 +20,8 @@ Needs ffmpeg and espeak-ng (`brew install ffmpeg espeak-ng`) and uv.
 import argparse
 import hashlib
 import json
-import re
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -66,6 +66,10 @@ ABBREVIATIONS = {
 
 # Text
 # ---------------
+def slug_of(note_dir: Path) -> str:
+    return re.sub(r"^\d{4}-\d{2}-\d{2}-", "", note_dir.name)
+
+
 def read_note(note_dir: Path):
     raw = (note_dir / "index.mdx").read_text()
     _, fm, body = raw.split("---", 2)
@@ -163,19 +167,21 @@ def encode(audio, mp3: Path, title: str):
 
     wav = mp3.with_suffix(".wav")
     sf.write(wav, audio, SR)
-    subprocess.run(
-        [
-            "ffmpeg", "-y", "-loglevel", "error", "-i", str(wav),
-            # Podcast loudness, mono 96 kbps is plenty for speech
-            "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-            "-ar", "44100", "-ac", "1", "-b:a", "96k",
-            "-metadata", f"title={title}",
-            "-metadata", "artist=Sebastian Sebald",
-            str(mp3),
-        ],
-        check=True,
-    )
-    wav.unlink()
+    try:
+        subprocess.run(
+            [
+                "ffmpeg", "-y", "-loglevel", "error", "-i", str(wav),
+                # Podcast loudness, mono 96 kbps is plenty for speech
+                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
+                "-ar", "44100", "-ac", "1", "-b:a", "96k",
+                "-metadata", f"title={title}",
+                "-metadata", "artist=Sebastian Sebald",
+                str(mp3),
+            ],
+            check=True,
+        )
+    finally:
+        wav.unlink(missing_ok=True)
 
 
 def read_manifest() -> dict:
@@ -218,7 +224,7 @@ def main():
     pipeline = None
 
     for note in sorted(p for p in NOTES.iterdir() if (p / "index.mdx").exists()):
-        slug = re.sub(r"^\d{4}-\d{2}-\d{2}-", "", note.name)
+        slug = slug_of(note)
         if args.filter and not any(f in slug for f in args.filter):
             continue
         fm, body = read_note(note)
@@ -258,7 +264,7 @@ def main():
         manifest[slug] = fp
         write_manifest(manifest)
 
-    slugs = {re.sub(r"^\d{4}-\d{2}-\d{2}-", "", p.name) for p in NOTES.iterdir()}
+    slugs = {slug_of(p) for p in NOTES.iterdir()}
     for orphan in sorted(p for p in OUT.glob("*.mp3") if p.stem not in slugs):
         print(f"orphan {orphan.relative_to(ROOT)} has no note, delete it if it was renamed", file=sys.stderr)
 
