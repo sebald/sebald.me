@@ -4,22 +4,27 @@ import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
 import { Text } from '@/ui/text';
 
+// Set apart from the notes by size and brightness alone: the name outranks
+// every note title, the intro is brighter than the note descriptions
 const Intro = () => (
-  <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
+  // The logo holds its own column from tablet up and sits above on phones
+  <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-8">
     <TimeLogo size={82} />
     <div className="grid gap-8">
-      <div className="grid gap-2.5">
-        <Headline level="2" as="h1">
+      <div className="grid gap-2">
+        <Headline
+          level="1"
+          as="h1"
+          className="text-3xl tracking-tight text-mist-50 sm:text-4xl"
+        >
           Sebastian Sebald
         </Headline>
-        <Text variant="muted" size="caption">
-          Software Architect at Reservix, Freiburg
-        </Text>
+        <Text variant="muted">Software Architect at Reservix, Freiburg</Text>
       </div>
-      <Text wrap="balance">
-        I work at the intersection of code and user experience. Lately that
-        means building a design system for a product that&apos;s two decades
-        old, and for everything that comes next.
+      <Text className="text-accent-foreground">
+        I work on software that has grown for over two decades, and lead the
+        effort to reshape it around the people who use it every day. Most days
+        that means bringing people together, the other days code or design.
       </Text>
     </div>
   </header>
@@ -68,7 +73,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-20 pt-10 sm:gap-40 md:pt-32">
+  <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
     <Intro />
     <NotesList />
   </div>
