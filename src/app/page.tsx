@@ -7,12 +7,11 @@ import { Text } from '@/ui/text';
 // Set apart from the notes by size and brightness alone: the name outranks
 // every note title, the intro reads as a lede above the note descriptions
 const Intro = () => (
-  <header className="grid gap-8">
-    {/* Beside the name from tablet up; above it on phones, where the name
-        would otherwise wrap next to the logo */}
-    <div className="flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-5">
-      <TimeLogo size={56} />
-      <div className="grid gap-2 sm:gap-1">
+  // The logo holds its own column from tablet up and sits above on phones
+  <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-8">
+    <TimeLogo size={56} />
+    <div className="grid gap-8">
+      <div className="grid gap-2">
         <Headline
           level="1"
           as="h1"
@@ -22,12 +21,12 @@ const Intro = () => (
         </Headline>
         <Text variant="muted">Software Architect at Reservix, Freiburg</Text>
       </div>
+      <Text className="text-lg text-accent-foreground">
+        I work on software that has grown for over two decades, and lead the
+        effort to reshape it around the people who use it every day. Most days
+        that means bringing people together, the other days code or design.
+      </Text>
     </div>
-    <Text className="text-lg text-accent-foreground">
-      I work on software that has grown for over two decades, and lead the
-      effort to reshape it around the people who use it every day. Most days
-      that means bringing people together, the other days code or design.
-    </Text>
   </header>
 );
 
