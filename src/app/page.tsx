@@ -5,11 +5,11 @@ import { TimeLogo } from '@/ui/logo-time';
 import { Text } from '@/ui/text';
 
 // Set apart from the notes by size and brightness alone: the name outranks
-// every note title, the intro reads as a lede above the note descriptions
+// every note title, the intro is brighter than the note descriptions
 const Intro = () => (
   // The logo holds its own column from tablet up and sits above on phones
   <header className="flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-8">
-    <TimeLogo size={56} />
+    <TimeLogo size={82} />
     <div className="grid gap-8">
       <div className="grid gap-2">
         <Headline
@@ -21,7 +21,7 @@ const Intro = () => (
         </Headline>
         <Text variant="muted">Software Architect at Reservix, Freiburg</Text>
       </div>
-      <Text className="text-lg text-accent-foreground">
+      <Text className="text-accent-foreground">
         I work on software that has grown for over two decades, and lead the
         effort to reshape it around the people who use it every day. Most days
         that means bringing people together, the other days code or design.
@@ -73,7 +73,7 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-16 pt-10 sm:gap-24 md:pt-32">
+  <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
     <Intro />
     <NotesList />
   </div>
