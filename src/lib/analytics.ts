@@ -10,6 +10,8 @@ import { track } from '@vercel/analytics';
 export interface AnalyticsEvents {
   Copy: { target: 'url' | 'code' };
   'View Markdown': undefined;
+  /** First play of a note's narration. */
+  Listen: undefined;
   'Outbound Link': { url: string };
   /**
    * `note` repeats the page URL on purpose: it lets the dashboard break

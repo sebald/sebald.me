@@ -2,12 +2,14 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { narrationUrl } from '@/lib/narration';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { notesSource, pageImage } from '@/lib/source';
 import { readingTime } from '@/lib/string.utils';
 import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
+import { NarrationPlayer } from '@/ui/narration-player';
 import { NoteMeta } from '@/ui/note-meta';
 import { PageToolbar } from '@/ui/page-toolbar';
 import { ReadingProgressTracking } from '@/ui/tracking/reading-progress-tracking';
@@ -57,10 +59,14 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const titleId = page.url;
   const MDX = page.data.body;
   const minutes = readingTime(await page.data.getText('processed'));
+  const narration = narrationUrl(page.slugs);
 
   return (
     <>
       <PageToolbar>
+        {narration && (
+          <NarrationPlayer src={narration} title={page.data.title} />
+        )}
         <ActionMenu label="Article actions">
           <CopyLinkItem />
           <ActionMenuItem href={`${page.url}.md`} event="View Markdown">
