@@ -1,0 +1,22 @@
+[project]
+name = "narrate"
+version = "0.1.0"
+description = "Renders the audio narration of each note with Kokoro"
+requires-python = "==3.12.*"
+dependencies = [
+  "kokoro==0.9.4",
+  "misaki[en]==0.9.4",
+  "en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl",
+  "pyyaml>=6",
+  "soundfile>=0.13",
+  # Newer releases break loading the spaCy model ("Python int too large to
+  # convert to C ssize_t" in the tokenizer)
+  "spacy==3.8.7",
+  "thinc==8.3.6",
+  "preshed==3.0.10",
+  "cymem==2.0.11",
+  "murmurhash==1.0.13",
+]
+
+[tool.uv]
+package = false

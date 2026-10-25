@@ -18,12 +18,14 @@ pnpm types:check      # Full type check (fumadocs + next + tsc)
 pnpm typecheck        # Quick tsc --noEmit
 pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
+pnpm narrate          # Render narrations of changed notes (Python, see Narration)
+pnpm narrate:check    # Fail if a note's narration is missing or outdated
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
 pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker)
 ```
 
-CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
 
 ### Visual Regression Tests
 
@@ -45,6 +47,17 @@ CI runs `lint`, `format:check` and `test` on every pull request. Lint warnings d
 - Frontmatter images are served by `/api/content-image` with their content hash as `?v=` (added at build time), so a regenerated image keeps its file name and still gets a new URL; the route caches versioned URLs for a year in the browser and on the CDN
 - Fumadocs compiles MDX on install → generates `.source/` directory
 - Content loaders in `src/lib/source.ts` expose `notesSource` and `miscSource`
+
+### Narration
+
+- Each note can have an audio narration at `public/audio/<slug>.mp3`; the note page shows a listen button in its toolbar only when the file exists (`narrationUrl` in `src/lib/narration.ts`)
+- Rendered locally with Kokoro (voice `af_heart`) by `scripts/narrate/narrate.py`, never in CI. Needs `uv`, `ffmpeg` and `espeak-ng` (`brew install uv ffmpeg espeak-ng`); `pnpm narrate` sets up the pinned Python environment on first run
+- Run `pnpm narrate` after a note's text is final and commit the MP3 together with `public/audio/narrations.json`, which records a fingerprint of each note's spoken text. Unchanged notes are skipped; `--dry-run` prints what will be read, `--force` re-renders
+- CI fails when a published note has no narration or its text (or `pronunciations.json`) changed since it was rendered, even for a typo fix: run `pnpm narrate` and commit the result
+- The inventory's example clip is `public/audio/examples/inventory.mp3`, rendered with `pnpm narrate --example`
+- Figures (self-closing components) and code blocks are left out of the narration on purpose
+- Words the voice gets wrong go into `scripts/narrate/pronunciations.json` (respelling or `[word](/phonemes/)`), then re-render
+- The player loads nothing until someone presses play (`preload="none"`), files are served statically so seeking uses range requests
 
 ### Key Directories
 

@@ -15,10 +15,10 @@ const styles = {
     ],
   }),
   back: cva({
-    base: ['[grid-area:back]'],
+    base: ['[grid-area:back]', 'flex'],
   }),
   actions: cva({
-    base: ['[grid-area:actions]', 'justify-self-end'],
+    base: ['[grid-area:actions]', 'justify-self-end', 'flex gap-4'],
   }),
 };
 

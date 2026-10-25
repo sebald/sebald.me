@@ -46,7 +46,8 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
     className={`bg-background font-mono text-foreground ${fontMono.variable}`}
     suppressHydrationWarning
   >
-    <body className="relative isolate">
+    {/* Room for the docked narration player, so it doesn't cover the footer */}
+    <body className="relative isolate has-[>[data-narration-bar]]:pb-28">
       <Toaster>
         <div className="mx-auto w-content px-content-padding">
           <main>{children}</main>

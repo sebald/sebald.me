@@ -9,6 +9,7 @@ import { Divider } from '@/ui/divider';
 import { Headline } from '@/ui/headline';
 import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
+import { NarrationPlayer } from '@/ui/narration-player';
 import { PageToolbar } from '@/ui/page-toolbar';
 import { Text } from '@/ui/text';
 
@@ -217,6 +218,17 @@ const InventoryPage = () => (
 
             <div className="flex flex-wrap gap-4">
               <OverlayExamples />
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <Headline level="2">Narration Player</Headline>
+
+            <div className="flex flex-wrap gap-4">
+              <NarrationPlayer
+                src="/audio/examples/inventory.mp3"
+                title="The quick brown fox"
+              />
             </div>
           </div>
 

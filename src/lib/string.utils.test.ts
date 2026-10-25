@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { readingTime } from './string.utils';
+import { formatDuration, readingTime } from './string.utils';
 
 const words = (count: number) => Array(count).fill('word').join(' ');
 
@@ -25,5 +25,23 @@ describe('readingTime', () => {
 
   it('ignores punctuation', () => {
     assert.equal(readingTime(`— — — ${words(230)}`), 1);
+  });
+});
+
+describe('formatDuration', () => {
+  it('formats minutes and seconds', () => {
+    assert.equal(formatDuration(0), '0:00');
+    assert.equal(formatDuration(448.6), '7:28');
+    assert.equal(formatDuration(1027), '17:07');
+  });
+
+  it('adds hours from one hour up', () => {
+    assert.equal(formatDuration(3600), '1:00:00');
+    assert.equal(formatDuration(3725), '1:02:05');
+  });
+
+  it('treats invalid values as zero', () => {
+    assert.equal(formatDuration(-5), '0:00');
+    assert.equal(formatDuration(Number.NaN), '0:00');
   });
 });
