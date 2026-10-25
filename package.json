@@ -46,6 +46,8 @@
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "lint": "oxlint",
+    "narrate": "uv run --project scripts/narrate python scripts/narrate/narrate.py",
+    "narrate:check": "uv run --no-project --python 3.12 --with pyyaml python scripts/narrate/narrate.py --check",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "pnpm test:lib",
