@@ -1,7 +1,7 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 
-import { siteUrl } from '@/app.config';
+import { siteDescription, siteUrl } from '@/app.config';
 import { fontMono } from '@/css/fonts';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import '@/css/styles.css';
@@ -14,11 +14,10 @@ import { OutboundLinkTracking } from '@/ui/tracking/outbound-link-tracking';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'Welcome',
+    default: 'Sebastian Sebald',
     template: '%s | Sebastian Sebald',
   },
-  description:
-    'Personal blog by Sebastian Sebald. Notes on web development, design systems, and creative coding.',
+  description: siteDescription,
   authors: [{ name: 'Sebastian Sebald', url: siteUrl }],
   creator: 'Sebastian Sebald',
   openGraph: {

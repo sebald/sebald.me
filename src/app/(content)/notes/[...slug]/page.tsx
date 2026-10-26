@@ -2,6 +2,7 @@ import { MarkdownLogoIcon } from '@phosphor-icons/react/ssr';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { articleJsonLd, serializeJsonLd } from '@/lib/json-ld';
 import { narrationUrl } from '@/lib/narration';
 import { neighbours } from '@/lib/notes.utils';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
@@ -66,9 +67,20 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
     sortByDate(notesSource.getPages()),
     page.url,
   );
+  const jsonLd = articleJsonLd({
+    title: page.data.title,
+    description: page.data.description ?? '',
+    url: page.url,
+    image: pageImage(page).url,
+    date: page.data.date,
+  });
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
+      />
       <PageToolbar>
         {narration && (
           <NarrationPlayer

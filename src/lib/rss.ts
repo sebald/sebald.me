@@ -1,6 +1,6 @@
 import { Feed } from 'feed';
 
-import { siteUrl } from '@/app.config';
+import { siteDescription, siteUrl } from '@/app.config';
 import { type ContentPage, excerpt, sortByDate } from '@/lib/source';
 
 interface CreateRSSFeedConfig {
@@ -14,8 +14,7 @@ export const createRSSFeed = (
 ) => {
   const feed = new Feed({
     title: config?.title ?? 'sebald.me',
-    description:
-      config?.description ?? 'Personal blog and portfolio of Sebastian Sebald',
+    description: config?.description ?? siteDescription,
     id: siteUrl,
     link: siteUrl,
     language: 'en',
