@@ -28,22 +28,12 @@ const hotspots = toHotspots(
     {
       name: 'signpost',
       remark: 'Blank. Whoever put it up was still deciding.',
-      at: [167, 32, 55, 101],
+      at: [167, 32, 55, 50],
     },
     {
       name: 'edge',
       remark: 'No. Not that way.',
       at: [243, 122, 45, 28],
-    },
-    {
-      name: 'rock',
-      remark: 'A rock. It doesn’t know the way either.',
-      at: [323, 110, 69, 47],
-    },
-    {
-      name: 'tree',
-      remark: 'It was here before this URL, and it will be here after.',
-      at: [0, 0, 85, 157],
     },
   ],
   native,

@@ -2,7 +2,7 @@
 
 import NextImage from 'next/image';
 import type { MouseEvent, PointerEvent } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { trackEvent } from '@/lib/analytics';
 import type { Hotspot } from '@/lib/hotspots';
@@ -35,12 +35,16 @@ const style = {
   image: cva({
     base: ['object-cover'],
   }),
-  // Takes the pointer over the whole scene, the hotspots are hit-tested
+  // Takes the pointer over the whole scene, the hotspots are hit-tested.
+  // Only for a mouse or trackpad: without hover there is nothing to
+  // discover, so touch screens just see the scene
   scene: cva({
-    base: ['group/scene absolute inset-0 cursor-crosshair'],
+    base: [
+      'group/scene absolute inset-0 hidden cursor-crosshair pointer-fine:block',
+    ],
   }),
   // Rises softly as soon as the pointer enters the scene, so the sentence
-  // line has something to sit on (on touch once something was tapped)
+  // line has something to sit on
   scrim: cva({
     base: [
       'pointer-events-none absolute inset-x-0 bottom-0 h-1/4 min-h-12 ui-scrim [--scrim-strength:75%]',
@@ -48,11 +52,6 @@ const style = {
       'transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
       'group-hover/scene:translate-y-0 group-hover/scene:opacity-100',
     ],
-    variants: {
-      pinned: {
-        true: 'translate-y-0 opacity-100',
-      },
-    },
   }),
   // The sentence line of the adventure games. It only fades in and out with
   // the pointer entering and leaving the scene (a beat after the scrim on
@@ -73,13 +72,15 @@ const style = {
         true: 'text-mist-50',
         false: 'text-mist-200',
       },
-      // A tapped remark stays, touch has no hover
-      pinned: {
-        true: 'opacity-100',
-      },
     },
   }),
 };
+
+// Config
+// ---------------
+// How long a remark stays, like speech in the adventure games: long enough
+// to read, then the sentence line comes back
+const readingTime = (text: string) => Math.max(2500, text.length * 60);
 
 // Props
 // ---------------
@@ -95,7 +96,10 @@ export interface PixelImageProps {
    */
   poster: string;
   aspect: string;
-  /** Hidden objects: hover names them, click remarks on them */
+  /**
+   * Hidden objects: hover names them, click remarks on them (mouse and
+   * trackpad only)
+   */
   hotspots?: Hotspot[];
   className?: string;
 }
@@ -112,9 +116,18 @@ export const PixelImage = ({
   const [loaded, handleSettled] = useImagesSettled(1);
   const [hovered, setHovered] = useState<Hotspot>();
   const [remarked, setRemarked] = useState<Hotspot>();
-  const [pinned, setPinned] = useState(false);
-  const pointer = useRef('mouse');
+  // Counts clicks, so clicking the same object again restarts its remark
+  const [said, setSaid] = useState(0);
   const looked = useRef(new Set<string>());
+
+  useEffect(() => {
+    if (!remarked) return;
+    const timeout = setTimeout(
+      () => setRemarked(undefined),
+      readingTime(remarked.remark),
+    );
+    return () => clearTimeout(timeout);
+  }, [remarked, said]);
 
   const spotAt = (e: MouseEvent<HTMLDivElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
@@ -125,8 +138,8 @@ export const PixelImage = ({
     );
   };
 
-  // A remark stays while the pointer wanders off its object, until it
-  // reaches another one
+  // A remark stays for its reading time while the pointer wanders off its
+  // object, and makes way as soon as the pointer reaches another one
   const handleMove = (e: PointerEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
     setHovered(spot);
@@ -135,22 +148,16 @@ export const PixelImage = ({
 
   // A fresh line for every visit. Leaving keeps the last words, so they fade
   // out as they were instead of flashing back to "Look at …"
-  const handleEnter = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType !== 'mouse') return;
+  const handleEnter = () => {
     setHovered(undefined);
     setRemarked(undefined);
-  };
-
-  // Touch has no hover, a tap goes straight to the remark and pins it
-  const handleDown = (e: PointerEvent<HTMLDivElement>) => {
-    pointer.current = e.pointerType;
   };
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
     setRemarked(spot);
-    setPinned(Boolean(spot) && pointer.current !== 'mouse');
     if (!spot) return;
+    setSaid(n => n + 1);
     playTap();
     if (looked.current.has(spot.name)) return;
     looked.current.add(spot.name);
@@ -190,11 +197,10 @@ export const PixelImage = ({
           className={style.scene()}
           onPointerEnter={handleEnter}
           onPointerMove={handleMove}
-          onPointerDown={handleDown}
           onClick={handleClick}
         >
-          <div className={style.scrim({ pinned })} />
-          <p className={style.line({ remark: Boolean(remarked), pinned })}>
+          <div className={style.scrim()} />
+          <p className={style.line({ remark: Boolean(remarked) })}>
             {remarked
               ? `“${remarked.remark}”`
               : `Look at ${hovered?.name ?? '…'}`}

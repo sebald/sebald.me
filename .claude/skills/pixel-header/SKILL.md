@@ -217,6 +217,12 @@ scene is hidden from assistive technology) and its box in native pixels of
 `native.png`, which has to stay in the folder. List small objects before the
 larger ones they sit on, the first match wins.
 
+Keep it to three or four objects, each box tight around the object, about
+10% of the scene in all: if most of the scene answers, the "Look at …" over
+empty scenery disappears and so does the curiosity. Pick what is funny or
+carries the note's idea, not every prop. Mouse and trackpad only; touch
+screens see the plain scene.
+
 ```yaml
 image:
   src: ./scene.webp

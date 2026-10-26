@@ -114,7 +114,7 @@ const drawFireflies = (b, t) => {
 // Eyes
 // ---------------
 // Something in the hollow between the roots on the right. The hollow is
-// darkened in the plate (a soft oval), the eyes are two yellow pixels that
+// darkened in the plate (a soft oval), the eyes are two yellow slits that
 // blink now and then, once twice in a row, and glance a pixel to the left,
 // towards the explorer, for a while.
 const HOLLOW = { cx: 306.5, cy: 90.5, rx: 6, ry: 3.5 };
@@ -133,9 +133,12 @@ for (let y = Math.floor(HOLLOW.cy - HOLLOW.ry); y <= HOLLOW.cy + HOLLOW.ry; y++)
   }
 
 const EYE = [248, 212, 76];
+// Two pixels wide each, one high
 const EYES = [
+  [304, 90],
   [305, 90],
   [308, 90],
+  [309, 90],
 ];
 const BLINKS = new Set([18, 50, 53, 82]);
 const GLANCE = { from: 26, to: 44 };
