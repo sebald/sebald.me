@@ -4,6 +4,7 @@ import {
   EnvelopeSimpleIcon,
   FileTextIcon,
   GithubLogoIcon,
+  HeadphonesIcon,
   LinkedinLogoIcon,
   RssIcon,
   SquareIcon,
@@ -72,6 +73,10 @@ const Links = () => (
     <Link variant="inherit" className="py-2 md:py-0" href="/rss.xml">
       <RssIcon size={16} aria-hidden />
       RSS Feed
+    </Link>
+    <Link variant="inherit" className="py-2 md:py-0" href="/audio.xml">
+      <HeadphonesIcon size={16} aria-hidden />
+      Audio Feed
     </Link>
     <Link variant="inherit" className="py-2 md:py-0" href="/inventory">
       <CubeIcon size={16} aria-hidden />
