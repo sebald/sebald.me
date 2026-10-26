@@ -198,8 +198,7 @@ note folder.
 
 Reference both files in the note's frontmatter. The object form renders
 through `src/ui/pixel-image.tsx`: unoptimized, scaled the last small step
-smoothly and only down (the large export keeps the edges hard), faded in once loaded like the
-parallax header, and replaced by the poster under `prefers-reduced-motion`
+smoothly and only down (the large export keeps the edges hard), faded in once loaded, and replaced by the poster under `prefers-reduced-motion`
 (the animation is then not downloaded). Delete the Gemini original from the
 note folder before committing, it is only the input for the snap.
 

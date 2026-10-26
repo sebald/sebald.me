@@ -1,10 +1,7 @@
 import type { ClassValue } from 'cva';
 import { cx } from 'cva';
 import { defineConfig } from 'cva/config';
-import type { CSSProperties } from 'react';
 import { twMerge } from 'tailwind-merge';
-
-import { toKebabCase } from '@/lib/string.utils';
 
 /**
  * Merge and deduplicate class names with Tailwind CSS support.
@@ -38,15 +35,3 @@ export function mergeClassName<State>(
     ? (state: State) => cn(base, className(state))
     : cn(base, className);
 }
-
-/**
- * Transform a plain object into CSS variables.
- * - Prefixes keys with `--`
- * - Converts camelCase keys to kebab-case
- */
-export const toCSSVars = (o: {
-  [key: string]: string | number;
-}): CSSProperties =>
-  Object.fromEntries(
-    Object.entries(o).map(([name, val]) => [`--${toKebabCase(name)}`, val]),
-  ) as CSSProperties;
