@@ -17,6 +17,11 @@ export interface AnalyticsEvents {
   /** First play of a note's narration, `note` as in `Read Progress`. */
   Listen: { note: string };
   /**
+   * Click on a hidden object in a pixel scene (see `src/lib/hotspots.ts`),
+   * once per object and page view.
+   */
+  'Look At': { object: string };
+  /**
    * Share of a note's narration that was actually played. Skipped parts
    * don't count, so seeking to the end doesn't send `100%`.
    */

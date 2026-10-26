@@ -8,6 +8,7 @@ import { dirname, isAbsolute, join, normalize, relative } from 'node:path';
 import { z } from 'zod';
 
 import { imageVersion } from '@/lib/content-image';
+import { pngSize, toHotspots } from '@/lib/hotspots';
 import rehypeUnwrapContent from '@/lib/rehype/rehypeUnwrapContent';
 
 /**
@@ -30,6 +31,12 @@ const resolveImagePath = (src: string, filePath: string): string => {
   return `/api/content-image/${rel}?v=${version}`;
 };
 
+const hotspotSchema = z.object({
+  name: z.string(),
+  remark: z.string(),
+  at: z.tuple([z.number(), z.number(), z.number(), z.number()]),
+});
+
 const notesSchema = (ctx: { path: string }) =>
   frontmatterSchema.extend({
     date: z
@@ -50,13 +57,18 @@ const notesSchema = (ctx: { path: string }) =>
     linkedin: z.url().optional(),
     /**
      * One image, parallax layers (back to front), or pixel art (pre-scaled,
-     * usually animated) with a still `poster` for reduced motion
+     * usually animated) with a still `poster` for reduced motion and
+     * optional hidden objects (`hotspots`, see `src/lib/hotspots.ts`)
      */
     image: z
       .union([
         z.string(),
         z.array(z.string()),
-        z.object({ src: z.string(), poster: z.string() }),
+        z.object({
+          src: z.string(),
+          poster: z.string(),
+          hotspots: z.array(hotspotSchema).optional(),
+        }),
       ])
       .optional()
       .transform(val => {
@@ -67,6 +79,21 @@ const notesSchema = (ctx: { path: string }) =>
           return {
             src: resolveImagePath(val.src, ctx.path),
             poster: resolveImagePath(val.poster, ctx.path),
+            hotspots: val.hotspots
+              ? toHotspots(
+                  val.hotspots,
+                  // The snapped scene the coordinates are read off
+                  pngSize(
+                    readFileSync(
+                      join(
+                        dirname(ctx.path),
+                        dirname(val.poster),
+                        'native.png',
+                      ),
+                    ),
+                  ),
+                )
+              : undefined,
           };
         return resolveImagePath(val, ctx.path);
       }),

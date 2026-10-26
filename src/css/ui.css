@@ -50,3 +50,10 @@
       oklch(from var(--color-mist-300) l c h / 0.5)
     );
 }
+
+/* Wider than the content column, up to 800px, centred on it. On short
+   screens it stays narrower, so a 5:2 image takes at most 44% of the height.
+   The parent has to keep its own width (a grid needs `grid-cols-1`) */
+@utility ui-bleed {
+  @apply relative left-1/2 w-[min(800px,calc(100vw-4rem),110svh)] -translate-x-1/2;
+}
