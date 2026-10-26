@@ -1,6 +1,7 @@
 import {
   CopyrightIcon,
   CubeIcon,
+  EnvelopeSimpleIcon,
   FileTextIcon,
   GithubLogoIcon,
   LinkedinLogoIcon,
@@ -22,7 +23,7 @@ const Headline = ({ children }: PropsWithChildren) => (
 );
 
 const Social = () => (
-  <div className="col-start-2 row-start-1 -mt-2 flex items-start gap-6 md:col-auto md:row-auto md:mt-0 md:gap-10">
+  <div className="col-start-2 row-start-1 -mt-2 flex items-start gap-3 md:col-auto md:row-auto md:mt-0 md:gap-10">
     <Link
       aria-label="Sebastian's GitHub Profile"
       variant="inherit"
@@ -49,6 +50,14 @@ const Social = () => (
       className="size-11 justify-center"
     >
       <XLogoIcon size={28} aria-hidden />
+    </Link>
+    <Link
+      aria-label="Email Sebastian"
+      variant="inherit"
+      href={socialLinks.email}
+      className="size-11 justify-center"
+    >
+      <EnvelopeSimpleIcon size={28} aria-hidden />
     </Link>
   </div>
 );

@@ -3,13 +3,15 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { narrationUrl } from '@/lib/narration';
+import { neighbours } from '@/lib/notes.utils';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
-import { notesSource, pageImage } from '@/lib/source';
+import { notesSource, pageImage, sortByDate } from '@/lib/source';
 import { readingTime } from '@/lib/string.utils';
 import { ActionMenu, ActionMenuItem, CopyLinkItem } from '@/ui/action-menu';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { NarrationPlayer } from '@/ui/narration-player';
+import { NoteEnd } from '@/ui/note-end';
 import { NoteMeta } from '@/ui/note-meta';
 import { PageToolbar } from '@/ui/page-toolbar';
 import { ReadingProgressTracking } from '@/ui/tracking/reading-progress-tracking';
@@ -60,6 +62,10 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const MDX = page.data.body;
   const minutes = readingTime(await page.data.getText('processed'));
   const narration = narrationUrl(page.slugs);
+  const { newer, older } = neighbours(
+    sortByDate(notesSource.getPages()),
+    page.url,
+  );
 
   return (
     <>
@@ -98,6 +104,11 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
           </Article.Content>
         </ReadingProgressTracking>
       </Article>
+      <NoteEnd
+        linkedin={page.data.linkedin}
+        newer={newer && { url: newer.url, title: newer.data.title }}
+        older={older && { url: older.url, title: older.data.title }}
+      />
     </>
   );
 };
