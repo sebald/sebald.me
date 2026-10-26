@@ -186,4 +186,5 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   return f;
 });
 
-await writeLoop({ scene, frames, delay: DELAY, outDir });
+// The 404 page shows the scene wider than a note header
+await writeLoop({ scene, frames, delay: DELAY, outDir, shownWidth: 1120 });

@@ -171,10 +171,10 @@ When something moves (the floating hologram in the example, a bobbing buoy):
   tears the object apart or hangs off it
 - fill the clean plate under the layer from the nearest pixel outside it in
   the same column; only the rim is ever uncovered
-- move it in **export pixels** (a third of an art pixel at the 3x export) by
-  returning the layer from `layersAt` with its `lift`. A few export pixels of
-  travel on a half-linear, half-cosine curve reads as a continuous glide;
-  whole art pixels read as steps
+- move it in **fractions of an art pixel** by returning the layer from
+  `layersAt` with its `lift` (in art pixels, rounded to export pixels). About
+  one art pixel of travel on a half-linear, half-cosine curve reads as a
+  continuous glide; whole art pixels read as steps
 - loose parts **trail by one or two frames**; drifting bits stay whole, rise
   1 px per step and fade through one fixed dim tone, not by scaling colours
 - check the per-frame changed-pixel counts (set `FRAMES_DIR` to get the
@@ -186,8 +186,9 @@ Find coordinates by rendering `native.png` at 2x with a grid overlay:
 ffmpeg -i native.png -vf "scale=iw*2:ih*2:flags=neighbor,drawgrid=w=100:h=100:c=red@0.6" grid.png
 ```
 
-The script writes `scene.webp` (lossless animated WebP, pre-scaled 3x with
-nearest-neighbour, around 200 KB) and `poster.png` (frame 0, for reduced
+The script writes `scene.webp` (lossless animated WebP, pre-scaled with
+nearest-neighbour by the smallest whole number that reaches 1440px, 4x to 5x
+for the scenes so far, around 70 to 300 KB) and `poster.png` (frame 0, for reduced
 motion). Show the user the poster and a few zoomed frames; they check the
 motion itself in a browser. The script is a tool, not part of the note: keep
 only `native.png`, `scene.webp`, `poster.png` and `og.webp` (step 6) in the
@@ -197,8 +198,7 @@ note folder.
 
 Reference both files in the note's frontmatter. The object form renders
 through `src/ui/pixel-image.tsx`: unoptimized, scaled the last small step
-smoothly (the 3x export keeps the edges hard), faded in once loaded like the
-parallax header, and replaced by the poster under `prefers-reduced-motion`
+smoothly and only down (the large export keeps the edges hard), faded in once loaded, and replaced by the poster under `prefers-reduced-motion`
 (the animation is then not downloaded). Delete the Gemini original from the
 note folder before committing, it is only the input for the snap.
 
@@ -207,6 +207,64 @@ image:
   src: ./scene.webp
   poster: ./poster.png
 ```
+
+Optionally hide a few objects in the scene, like the adventure games it is
+drawn after: hovering names the object ("Look at lantern"), clicking shows a
+remark about it that stays while the pointer rests on the object, and each
+click is tracked as `Look At`.
+Give each one a short lowercase name, a remark (see below; never content the
+note needs, the scene is hidden from assistive technology) and its box in
+native pixels of `native.png`, which has to stay in the folder. List small
+objects before the larger ones they sit on, the first match wins.
+
+Keep it to three or four objects, each box tight around the object, about
+10% of the scene in all: if most of the scene answers, the "Look at …" over
+empty scenery disappears and so does the curiosity. Pick what is funny or
+carries the note's idea, not every prop. Mouse and trackpad only; touch
+screens see the plain scene.
+
+```yaml
+image:
+  src: ./scene.webp
+  poster: ./poster.png
+  hotspots:
+    - name: lantern
+      remark: Burning for the next one. There’s always a next one.
+      at: [213, 55, 17, 30] # x, y, width, height
+```
+
+Check the boxes before writing remarks: draw them onto `poster.png` (scaled
+by the export scale) and look at the result, then hover and click each one in
+the running page.
+
+### The remarks
+
+The voice of the old point-and-click adventures' "look at" lines: dry,
+deadpan, a little absurd, and never explaining the joke.
+
+- **Literal first, then a turn.** Start by saying plainly what the thing is,
+  let the last clause tip it over: "A beetle. No map, no hat, and it’s still
+  doing better than me."
+- **Whoever is in the scene speaks.** If there is a character, the remark is
+  theirs, in the first person, slightly self-important and slightly
+  cowardly: "Two yellow eyes. I’m going to assume they’re friendly. From over
+  here." Without one, a flat statement of fact works just as well: "Older
+  than the internet. Never once returned a 404."
+- **Understatement over punchlines.** One dry word can carry the line:
+  "Refreshing.", "Show-offs.", "rudely".
+- **Specific absurdity.** An oddly exact detail beats a general joke:
+  "According to my map, I’m standing in a river. I’m fairly sure I’m not."
+- **The note's idea stays inside the scene.** No work words (stakeholder,
+  roadmap, sprint, estimate, legacy, company); the theme comes through the
+  objects themselves: the old bridge copied "every crack, faithfully
+  reproduced", the map that "just stops".
+- **Short.** One to three short sentences, at most about 100 characters; the line is
+  read in passing. Curly apostrophes (’), no quotes (the line adds them).
+- **Vary the jokes across a scene.** Two remarks that make the same point
+  cancel each other out.
+
+Write two or three options per object and let the author pick, with a
+recommendation; the remarks are their voice.
 
 The header image is not used for link previews. `/og/<slug>.webp` serves the
 note folder's `og.webp` and falls back to the logo card without one, so export
@@ -222,12 +280,13 @@ cwebp -q 90 -m 6 og.png -o og.webp
 
 ## Constraints
 
-- Export at 3x the native size with nearest-neighbour, never larger. At
-  native size the page would have to scale by about 1.6 with `pixelated`,
-  which rounds art pixels to uneven widths and makes moving parts shimmer;
-  from 3x the browser only scales a little and smoothly ("sharp bilinear").
-  Next's optimizer passes animated images through unresized, so a
-  full-size render would ship megabytes.
+- Export with nearest-neighbour at the scale `scaleFor` picks (`loop.mjs`):
+  the header is up to 720px wide, 1440 device pixels on a 2x screen, and the
+  browser should only ever scale down. A scene shown wider passes
+  `shownWidth` to `writeLoop` (the 404 page's is up to 1120px). Scaling up smoothly blurs the edges,
+  `pixelated` rounds art pixels to uneven widths and makes moving parts
+  shimmer. Lossless WebP compresses the repeated blocks, so a larger export
+  costs little; Next's optimizer passes animated images through unresized.
 - Movement is subtle, and there is none under `prefers-reduced-motion` (the
   poster is shown instead).
 - Visual regression tests cover the note headers; the animation needs a frozen

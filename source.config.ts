@@ -8,6 +8,7 @@ import { dirname, isAbsolute, join, normalize, relative } from 'node:path';
 import { z } from 'zod';
 
 import { imageVersion } from '@/lib/content-image';
+import { pngSize, toHotspots } from '@/lib/hotspots';
 import rehypeUnwrapContent from '@/lib/rehype/rehypeUnwrapContent';
 
 /**
@@ -30,6 +31,19 @@ const resolveImagePath = (src: string, filePath: string): string => {
   return `/api/content-image/${rel}?v=${version}`;
 };
 
+/**
+ * Size of the snapped scene hotspots are read off: the `native.png` next to
+ * the pixel art's poster
+ */
+const nativeSize = (poster: string, filePath: string) =>
+  pngSize(readFileSync(join(dirname(filePath), dirname(poster), 'native.png')));
+
+const hotspotSchema = z.object({
+  name: z.string(),
+  remark: z.string(),
+  at: z.tuple([z.number(), z.number(), z.number(), z.number()]),
+});
+
 const notesSchema = (ctx: { path: string }) =>
   frontmatterSchema.extend({
     date: z
@@ -49,24 +63,29 @@ const notesSchema = (ctx: { path: string }) =>
      */
     linkedin: z.url().optional(),
     /**
-     * One image, parallax layers (back to front), or pixel art (pre-scaled,
-     * usually animated) with a still `poster` for reduced motion
+     * One image, or pixel art (pre-scaled,
+     * usually animated) with a still `poster` for reduced motion and
+     * optional hidden objects (`hotspots`, see `src/lib/hotspots.ts`)
      */
     image: z
       .union([
         z.string(),
-        z.array(z.string()),
-        z.object({ src: z.string(), poster: z.string() }),
+        z.object({
+          src: z.string(),
+          poster: z.string(),
+          hotspots: z.array(hotspotSchema).optional(),
+        }),
       ])
       .optional()
       .transform(val => {
         if (!val) return val;
-        if (Array.isArray(val))
-          return val.map(s => resolveImagePath(s, ctx.path));
         if (typeof val === 'object')
           return {
             src: resolveImagePath(val.src, ctx.path),
             poster: resolveImagePath(val.poster, ctx.path),
+            hotspots:
+              val.hotspots &&
+              toHotspots(val.hotspots, nativeSize(val.poster, ctx.path)),
           };
         return resolveImagePath(val, ctx.path);
       }),

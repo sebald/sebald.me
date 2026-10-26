@@ -18,6 +18,7 @@ import {
   mix,
   sat,
   scale,
+  wrap,
   writeLoop,
 } from '../scripts/loop.mjs';
 
@@ -179,16 +180,16 @@ for (const k of layer) {
   setPx(floatPlate, x, y, behind(x, y));
 }
 
-// Bob over four export pixels, a bit more than one art pixel. Half linear,
-// half cosine: every step lasts three to five frames, so it keeps gliding and
-// only slows a little where it turns.
-const BOB = 4;
+// Bob a bit more than one art pixel, in export pixels (the lift is rounded
+// at the export scale). Half linear, half cosine: every step lasts a few
+// frames, so it keeps gliding and only slows a little where it turns.
+const BOB = 4 / 3;
 const BOB_PERIOD = FRAMES / 3; // 4s
 const bobAt = t => {
-  const phase = (((t % BOB_PERIOD) + BOB_PERIOD) % BOB_PERIOD) / BOB_PERIOD;
+  const phase = wrap(t, BOB_PERIOD) / BOB_PERIOD;
   const line = phase < 0.5 ? phase * 2 : 2 - phase * 2;
   const ease = (1 - Math.cos(phase * Math.PI * 2)) / 2;
-  return Math.round((BOB * (line + ease)) / 2);
+  return (BOB * (line + ease)) / 2;
 };
 // The bits follow the body two frames late
 const BIT_LAG = 2;

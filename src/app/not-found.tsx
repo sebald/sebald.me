@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 
+import native from '@/assets/not-found/native.png';
 import poster from '@/assets/not-found/poster.png';
 import scene from '@/assets/not-found/scene.webp';
+import { toHotspots } from '@/lib/hotspots';
 import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -14,6 +16,34 @@ import { Text } from '@/ui/text';
 export const metadata: Metadata = {
   title: 'Page not found',
 };
+
+// Hidden objects in the scene, in native pixels (see `native.png`)
+const hotspots = toHotspots(
+  [
+    {
+      name: 'lantern',
+      remark: 'Burning for the next one. There’s always a next one.',
+      at: [213, 55, 17, 30],
+    },
+    {
+      name: 'signpost',
+      remark:
+        'Blank. Someone put up the signs first and planned to decide later.',
+      at: [167, 32, 55, 50],
+    },
+    {
+      name: 'edge',
+      remark: 'I checked. There’s no page at the bottom either.',
+      at: [243, 122, 45, 28],
+    },
+    {
+      name: 'tree',
+      remark: 'Older than the internet. Never once returned a 404.',
+      at: [14, 40, 26, 96],
+    },
+  ],
+  native,
+);
 
 // Helpers
 // ---------------
@@ -41,6 +71,7 @@ const NotFound = () => {
         <PixelImage
           src={scene.src}
           poster={poster.src}
+          hotspots={hotspots}
           aspect="5/2"
           className="relative left-1/2 w-[min(1120px,100vw)] -translate-x-1/2 md:w-[min(1120px,calc(100vw-4rem))] md:rounded-2xl"
         />

@@ -9,10 +9,19 @@ export const sharp = createRequire(require.resolve('next/package.json'))(
   'sharp',
 );
 
-// The loop is exported at 3x with hard edges. The page then only scales it a
-// little and smoothly, so every art pixel keeps the same size on screen (at
-// native size, the browser has to round each pixel to 1 or 2 CSS pixels).
-export const SCALE = 3;
+// The loop is exported with hard edges, scaled by the smallest whole number
+// that covers the widest it is shown (a note header is up to 720 CSS pixels)
+// on a 2x screen. The page then only scales it down, smoothly, so every art
+// pixel keeps the same size on screen (scaling up, smooth blurs the edges and `pixelated` rounds each
+// pixel to uneven widths). Lossless WebP compresses the repeated blocks well,
+// so the larger export costs little.
+const HEADER_WIDTH = 720;
+export const scaleFor = (width, shownWidth = HEADER_WIDTH) =>
+  Math.max(3, Math.ceil((shownWidth * 2) / width));
+
+// Where `n` falls in a cycle of `m` frames, also for negative `n` (a detail
+// that starts later in the loop)
+export const wrap = (n, m) => ((n % m) + m) % m;
 
 // Colours
 // ---------------
@@ -106,10 +115,12 @@ export const loadScene = async src => {
 // Export
 // ---------------
 /**
- * Writes `scene.webp` (lossless, looping) and `poster.png` (frame 0) at 3x.
- * `frames` are native RGB buffers; `layersAt(t)` optionally returns RGBA
- * layers to lay over frame `t`, each moved up by `lift` export pixels. With
- * `FRAMES_DIR` set, the frames are also written there for review.
+ * Writes `scene.webp` (lossless, looping) and `poster.png` (frame 0), scaled
+ * by `scaleFor` for `shownWidth` (CSS pixels, defaults to a note header).
+ * `frames` are native RGB buffers; `layersAt(t)` optionally
+ * returns RGBA layers to lay over frame `t`, each moved up by `lift` art
+ * pixels (fractions move it by export pixels). With `FRAMES_DIR` set, the
+ * frames are also written there for review.
  */
 export const writeLoop = async ({
   scene: { W, H },
@@ -117,16 +128,20 @@ export const writeLoop = async ({
   delay,
   outDir,
   layersAt = () => [],
+  shownWidth,
 }) => {
+  const SCALE = scaleFor(W, shownWidth);
   const up = (buf, channels) =>
     sharp(buf, { raw: { width: W, height: H, channels } })
       .resize(W * SCALE, H * SCALE, { kernel: 'nearest' })
       .png()
       .toBuffer();
 
-  // Up by `lift` export pixels, cropped so it still fits the frame
-  const lifted = async (layer, lift) =>
-    lift === 0
+  // Up by `lift` art pixels, rounded to export pixels, cropped so it still
+  // fits the frame
+  const lifted = async (layer, artLift) => {
+    const lift = Math.round(artLift * SCALE);
+    return lift === 0
       ? layer
       : sharp(layer)
           .extract({
@@ -136,6 +151,7 @@ export const writeLoop = async ({
             height: H * SCALE - lift,
           })
           .toBuffer();
+  };
 
   const scaled = await Promise.all(
     frames.map(async (f, t) => {

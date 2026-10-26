@@ -4,8 +4,8 @@ import type { AriaAttributes, PropsWithChildren } from 'react';
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
-import { ParallaxImage } from '@/ui/parallax-image';
 import { PixelImage } from '@/ui/pixel-image';
+import type { PixelImageProps } from '@/ui/pixel-image';
 
 // Styles
 // ---------------
@@ -71,39 +71,19 @@ const Content = ({ children, className, ...ariaProps }: ContentProps) => (
 // Article.Image
 // ---------------
 interface ImageSectionProps {
-  src: string | string[] | { src: string; poster: string };
+  src: string | Pick<PixelImageProps, 'src' | 'poster' | 'hotspots'>;
   aspect?: string;
 }
 
 const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
-  if (typeof src === 'object' && !Array.isArray(src)) {
+  if (typeof src === 'object') {
     return (
       <PixelImage
         src={src.src}
         poster={src.poster}
+        hotspots={src.hotspots}
         aspect={aspect}
         className={styles.image()}
-      />
-    );
-  }
-
-  const images = Array.isArray(src) ? [...src].reverse() : [src];
-
-  if (images.length > 1) {
-    return (
-      <ParallaxImage
-        aspect={aspect}
-        // Layers are 115% of the content column (max 720px)
-        sizes="(min-width: 768px) 828px, 115vw"
-        className={styles.image()}
-        layers={images.map((src, i, arr) => {
-          const depth = i / (arr.length - 1);
-          return {
-            src,
-            xMove: `${(0.5 + depth ** 1.5 * 3.5).toFixed(1)}cqi`,
-            yMove: `${(0.25 + depth ** 1.5 * 1.75).toFixed(1)}cqi`,
-          };
-        })}
       />
     );
   }
@@ -117,7 +97,7 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
       aria-hidden="true"
     >
       <NextImage
-        src={images[0]}
+        src={src}
         alt=""
         fill
         preload
