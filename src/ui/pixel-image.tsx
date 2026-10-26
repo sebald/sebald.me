@@ -37,27 +37,42 @@ const style = {
   }),
   // Takes the pointer over the whole scene, the hotspots are hit-tested
   scene: cva({
-    base: ['absolute inset-0 cursor-crosshair'],
+    base: ['group/scene absolute inset-0 cursor-crosshair'],
   }),
-  // The sentence line of the adventure games: the object under the pointer,
-  // or what is said about it
-  line: cva({
+  // Rises softly as soon as the pointer enters the scene, so the sentence
+  // line has something to sit on (on touch only once something was tapped)
+  scrim: cva({
     base: [
-      'pointer-events-none absolute inset-x-0 bottom-0 px-4 pt-10 pb-3 md:pb-4',
-      'bg-linear-to-t from-mist-950/80 to-transparent',
-      'text-center font-mono text-xs text-balance md:text-sm',
-      '[text-shadow:0_1px_0_var(--color-mist-950)]',
-      'transition-opacity duration-150',
+      'pointer-events-none absolute inset-x-0 bottom-0 h-1/4 min-h-12 ui-scrim [--scrim-strength:75%]',
+      'opacity-0 motion-safe:translate-y-3',
+      'transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
+      'group-hover/scene:translate-y-0 group-hover/scene:opacity-100',
     ],
     variants: {
-      shown: {
-        true: 'opacity-100',
-        false: 'opacity-0',
+      active: {
+        true: 'translate-y-0 opacity-100',
       },
-      // The name is the game talking, the remark is someone in the scene
+    },
+  }),
+  // The sentence line of the adventure games. It only fades in and out with
+  // the pointer entering and leaving the scene (a beat after the scrim on
+  // the way in); inside, the words swap instantly, like in the games
+  line: cva({
+    base: [
+      'pointer-events-none absolute inset-x-0 bottom-0 px-4 pb-3 md:pb-4',
+      'text-center font-mono text-xs text-balance md:text-sm',
+      '[text-shadow:0_1px_0_var(--color-mist-950)]',
+      'transition-opacity duration-300',
+      'opacity-0 group-hover/scene:opacity-100 group-hover/scene:delay-100',
+    ],
+    variants: {
+      // One colour for the game's line, whether it says "Look at …" (there is
+      // something to look at, but not what) or names an object. A remark is
+      // someone in the scene speaking: brighter, and it stays after a tap,
+      // where there is no hover
       remark: {
-        true: 'text-mist-50',
-        false: 'text-mist-300',
+        true: 'text-mist-50 opacity-100',
+        false: 'text-mist-200',
       },
     },
   }),
@@ -130,12 +145,6 @@ export const PixelImage = ({
     trackEvent('Look At', { object: spot.name });
   };
 
-  const line = remarked
-    ? `“${remarked.remark}”`
-    : hovered
-      ? `Look at ${hovered.name}`
-      : undefined;
-
   return (
     <div
       aria-hidden="true"
@@ -171,13 +180,11 @@ export const PixelImage = ({
           onPointerLeave={handleLeave}
           onClick={handleClick}
         >
-          <p
-            className={style.line({
-              shown: Boolean(line),
-              remark: Boolean(remarked),
-            })}
-          >
-            {line}
+          <div className={style.scrim({ active: Boolean(remarked) })} />
+          <p className={style.line({ remark: Boolean(remarked) })}>
+            {remarked
+              ? `“${remarked.remark}”`
+              : `Look at ${hovered?.name ?? '…'}`}
           </p>
         </div>
       ) : null}

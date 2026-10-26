@@ -1,14 +1,22 @@
 // Header loop of "Failing Forward at Design Systems" (the explorer above a
 // jungle river valley). The river glints as it flows towards the viewer,
-// smoke rises from two of the huts, and fireflies blink in the dark
-// undergrowth. Coordinates are native pixels of that scene (grid 10, 5:2
+// smoke rises from two of the huts, fireflies blink in the dark undergrowth,
+// and a pair of yellow eyes watches from a hollow between the roots. Coordinates are native pixels of that scene (grid 10, 5:2
 // crop, 325x130).
 //
 //   node .claude/skills/pixel-header/examples/jungle.mjs \
 //     content/notes/2026-02-16-failing-forward-at-design-systems/native.png \
 //     content/notes/2026-02-16-failing-forward-at-design-systems
 
-import { hash, loadScene, lum, mix, sat, writeLoop } from '../scripts/loop.mjs';
+import {
+  hash,
+  loadScene,
+  lum,
+  mix,
+  sat,
+  scale,
+  writeLoop,
+} from '../scripts/loop.mjs';
 
 const [src, outDir] = process.argv.slice(2);
 
@@ -103,6 +111,41 @@ const drawFireflies = (b, t) => {
   });
 };
 
+// Eyes
+// ---------------
+// Something in the hollow between the roots on the right. The hollow is
+// darkened in the plate (a soft oval), the eyes are two yellow pixels that
+// blink now and then, once twice in a row, and glance a pixel to the left,
+// towards the explorer, for a while.
+const HOLLOW = { cx: 306.5, cy: 90.5, rx: 6, ry: 3.5 };
+for (let y = Math.floor(HOLLOW.cy - HOLLOW.ry); y <= HOLLOW.cy + HOLLOW.ry; y++)
+  for (
+    let x = Math.floor(HOLLOW.cx - HOLLOW.rx);
+    x <= HOLLOW.cx + HOLLOW.rx;
+    x++
+  ) {
+    const d = Math.hypot(
+      (x - HOLLOW.cx) / HOLLOW.rx,
+      (y - HOLLOW.cy) / HOLLOW.ry,
+    );
+    if (d > 1) continue;
+    setPx(plate, x, y, scale(rgb(base, x, y), d < 0.6 ? 0.35 : 0.6));
+  }
+
+const EYE = [248, 212, 76];
+const EYES = [
+  [305, 90],
+  [308, 90],
+];
+const BLINKS = new Set([18, 50, 53, 82]);
+const GLANCE = { from: 26, to: 44 };
+
+const drawEyes = (b, t) => {
+  if (BLINKS.has(t)) return;
+  const dx = t >= GLANCE.from && t < GLANCE.to ? -1 : 0;
+  for (const [x, y] of EYES) setPx(b, x + dx, y, EYE);
+};
+
 // Render
 // ---------------
 console.log(`water ${water.length}, flies ${FLIES.length}`);
@@ -112,6 +155,7 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   drawRiver(f, t);
   drawSmoke(f, t);
   drawFireflies(f, t);
+  drawEyes(f, t);
   return f;
 });
 

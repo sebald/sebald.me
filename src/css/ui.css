@@ -57,3 +57,88 @@
 @utility ui-bleed {
   @apply relative left-1/2 w-[min(800px,calc(100vw-4rem),110svh)] -translate-x-1/2;
 }
+
+/* Text protection that fades out like light instead of ending in an edge: a
+   bottom-up gradient whose transparency follows an ease-out curve (the scrim
+   from Andreas Larsen's easing gradients), not a straight line. Color and
+   strength through `--scrim` and `--scrim-strength` */
+@utility ui-scrim {
+  --scrim: var(--color-mist-950);
+  --scrim-strength: 85%;
+  background: linear-gradient(
+    to top,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 1),
+        transparent
+      )
+      0%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.738),
+        transparent
+      )
+      19%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.541),
+        transparent
+      )
+      34%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.382),
+        transparent
+      )
+      47%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.278),
+        transparent
+      )
+      56.5%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.194),
+        transparent
+      )
+      65%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.126),
+        transparent
+      )
+      73%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.075),
+        transparent
+      )
+      80.2%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.042),
+        transparent
+      )
+      86.1%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.021),
+        transparent
+      )
+      91%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.008),
+        transparent
+      )
+      95.2%,
+    color-mix(
+        in oklch,
+        var(--scrim) calc(var(--scrim-strength) * 0.002),
+        transparent
+      )
+      98.2%,
+    transparent 100%
+  );
+}

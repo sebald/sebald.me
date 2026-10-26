@@ -1,7 +1,8 @@
 // Header loop of "Where the Map Ends" (the explorer under a fallen stone
 // tablet at a cliff edge). Wind runs through the scene from the left: pale
 // streaks blow through the air in two gusts, the clouds around the mountain
-// sway, and a few grains of sand blow along the path. Coordinates are native pixels of
+// sway, and a few grains of sand blow along the path. Down on the left, a
+// beetle crosses a strip of sand and comes back. Coordinates are native pixels of
 // that scene (grid 10, 5:2 crop, 325x130).
 //
 //   node .claude/skills/pixel-header/examples/tablet.mjs \
@@ -16,7 +17,7 @@ const FRAMES = 96;
 const DELAY = 125; // ms, 8 fps, 12s loop
 
 const scene = await loadScene(src);
-const { base, W, rgb, setPx, collect } = scene;
+const { base, W, rgb, setPx } = scene;
 
 const plate = Buffer.from(base);
 
@@ -120,6 +121,52 @@ const drawSand = (b, t) => {
   }
 };
 
+// Beetle
+// ---------------
+// A beetle on the strip of sand above the first rock: walks right a pixel
+// every other frame, stops, turns, walks back and stops again, which closes
+// the loop. Dark against the sand so it reads as a bug: a rounded shell with
+// a warm highlight, a head with an antenna, and legs that alternate with
+// every step.
+const SHELL = [30, 24, 22];
+const SHELL_LIGHT = [104, 80, 56];
+const HEAD = [18, 14, 14];
+const LEG = [26, 20, 18];
+// Facing right, rows top to bottom; `.` is empty, legs are drawn separately
+const SPRITE = ['.sss.a', 'slssh.'];
+const COLOURS = { s: SHELL, l: SHELL_LIGHT, h: HEAD, a: HEAD };
+const SPRITE_W = SPRITE[0].length;
+const BEETLE = { x: 13, y: 104 }; // top left of the sprite at the start
+const WALK = 40; // frames per way, 20 pixels
+const PAUSE = 8; // frames
+
+const drawBeetle = (b, t) => {
+  let x;
+  let right;
+  let walking = true;
+  if (t < WALK) [x, right] = [BEETLE.x + Math.floor(t / 2), true];
+  else if (t < WALK + PAUSE)
+    [x, right, walking] = [BEETLE.x + WALK / 2, true, false];
+  else if (t < 2 * WALK + PAUSE)
+    [x, right] = [
+      BEETLE.x + WALK / 2 - Math.floor((t - WALK - PAUSE) / 2),
+      false,
+    ];
+  else [x, right, walking] = [BEETLE.x, false, false];
+
+  // Facing left, the sprite is mirrored
+  const at = i => (right ? x + i : x + SPRITE_W - 1 - i);
+  SPRITE.forEach((row, dy) =>
+    [...row].forEach((k, i) => {
+      if (k !== '.') setPx(b, at(i), BEETLE.y + dy, COLOURS[k]);
+    }),
+  );
+  // Legs under the body: three of six, swapping every step
+  const step = walking ? Math.floor(t / 2) % 2 : 0;
+  for (const i of step ? [1, 3, 5] : [0, 2, 4])
+    setPx(b, at(i), BEETLE.y + SPRITE.length, LEG);
+};
+
 // Render
 // ---------------
 console.log(`streaks ${STREAKS.length}, grains ${GRAINS.length}`);
@@ -129,6 +176,7 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   drawClouds(f, t);
   drawWind(f, t);
   drawSand(f, t);
+  drawBeetle(f, t);
   return f;
 });
 
