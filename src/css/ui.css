@@ -51,13 +51,6 @@
     );
 }
 
-/* Wider than the content column, up to 800px, centred on it. On short
-   screens it stays narrower, so a 5:2 image takes at most 44% of the height.
-   The parent has to keep its own width (a grid needs `grid-cols-1`) */
-@utility ui-bleed {
-  @apply relative left-1/2 w-[min(800px,calc(100vw-4rem),110svh)] -translate-x-1/2;
-}
-
 /* Text protection that fades out like light instead of ending in an edge: a
    bottom-up gradient whose transparency follows an ease-out curve (the scrim
    from Andreas Larsen's easing gradients), not a straight line. Color and

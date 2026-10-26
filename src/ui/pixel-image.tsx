@@ -40,7 +40,7 @@ const style = {
     base: ['group/scene absolute inset-0 cursor-crosshair'],
   }),
   // Rises softly as soon as the pointer enters the scene, so the sentence
-  // line has something to sit on (on touch only once something was tapped)
+  // line has something to sit on (on touch once something was tapped)
   scrim: cva({
     base: [
       'pointer-events-none absolute inset-x-0 bottom-0 h-1/4 min-h-12 ui-scrim [--scrim-strength:75%]',
@@ -49,7 +49,7 @@ const style = {
       'group-hover/scene:translate-y-0 group-hover/scene:opacity-100',
     ],
     variants: {
-      active: {
+      pinned: {
         true: 'translate-y-0 opacity-100',
       },
     },
@@ -68,11 +68,14 @@ const style = {
     variants: {
       // One colour for the game's line, whether it says "Look at …" (there is
       // something to look at, but not what) or names an object. A remark is
-      // someone in the scene speaking: brighter, and it stays after a tap,
-      // where there is no hover
+      // someone in the scene speaking, brighter
       remark: {
-        true: 'text-mist-50 opacity-100',
+        true: 'text-mist-50',
         false: 'text-mist-200',
+      },
+      // A tapped remark stays, touch has no hover
+      pinned: {
+        true: 'opacity-100',
       },
     },
   }),
@@ -83,7 +86,7 @@ const style = {
 export interface PixelImageProps {
   /**
    * Pixel art pre-scaled by a whole number with nearest-neighbour (to at
-   * least 1600px wide), usually an animated WebP
+   * least 1440px wide), usually an animated WebP
    */
   src: string;
   /**
@@ -109,6 +112,8 @@ export const PixelImage = ({
   const [loaded, handleSettled] = useImagesSettled(1);
   const [hovered, setHovered] = useState<Hotspot>();
   const [remarked, setRemarked] = useState<Hotspot>();
+  const [pinned, setPinned] = useState(false);
+  const pointer = useRef('mouse');
   const looked = useRef(new Set<string>());
 
   const spotAt = (e: MouseEvent<HTMLDivElement>) => {
@@ -128,16 +133,23 @@ export const PixelImage = ({
     if (spot && spot !== remarked) setRemarked(undefined);
   };
 
-  // Touch has no hover, a tap goes straight to the remark
-  const handleLeave = (e: PointerEvent<HTMLDivElement>) => {
+  // A fresh line for every visit. Leaving keeps the last words, so they fade
+  // out as they were instead of flashing back to "Look at …"
+  const handleEnter = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType !== 'mouse') return;
     setHovered(undefined);
     setRemarked(undefined);
   };
 
+  // Touch has no hover, a tap goes straight to the remark and pins it
+  const handleDown = (e: PointerEvent<HTMLDivElement>) => {
+    pointer.current = e.pointerType;
+  };
+
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
     setRemarked(spot);
+    setPinned(Boolean(spot) && pointer.current !== 'mouse');
     if (!spot) return;
     playTap();
     if (looked.current.has(spot.name)) return;
@@ -176,12 +188,13 @@ export const PixelImage = ({
         // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
         <div
           className={style.scene()}
+          onPointerEnter={handleEnter}
           onPointerMove={handleMove}
-          onPointerLeave={handleLeave}
+          onPointerDown={handleDown}
           onClick={handleClick}
         >
-          <div className={style.scrim({ active: Boolean(remarked) })} />
-          <p className={style.line({ remark: Boolean(remarked) })}>
+          <div className={style.scrim({ pinned })} />
+          <p className={style.line({ remark: Boolean(remarked), pinned })}>
             {remarked
               ? `“${remarked.remark}”`
               : `Look at ${hovered?.name ?? '…'}`}

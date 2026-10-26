@@ -187,7 +187,7 @@ ffmpeg -i native.png -vf "scale=iw*2:ih*2:flags=neighbor,drawgrid=w=100:h=100:c=
 ```
 
 The script writes `scene.webp` (lossless animated WebP, pre-scaled with
-nearest-neighbour by the smallest whole number that reaches 1600px, 4x to 6x
+nearest-neighbour by the smallest whole number that reaches 1440px, 4x to 5x
 for the scenes so far, around 70 to 300 KB) and `poster.png` (frame 0, for reduced
 motion). Show the user the poster and a few zoomed frames; they check the
 motion itself in a browser. The script is a tool, not part of the note: keep
@@ -242,7 +242,7 @@ cwebp -q 90 -m 6 og.png -o og.webp
 ## Constraints
 
 - Export with nearest-neighbour at the scale `scaleFor` picks (`loop.mjs`):
-  the header is up to 800px wide, 1600 device pixels on a 2x screen, and the
+  the header is up to 720px wide, 1440 device pixels on a 2x screen, and the
   browser should only ever scale down. A scene shown wider passes
   `shownWidth` to `writeLoop` (the 404 page's is up to 1120px). Scaling up smoothly blurs the edges,
   `pixelated` rounds art pixels to uneven widths and makes moving parts

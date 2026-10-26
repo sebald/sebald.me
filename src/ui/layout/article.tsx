@@ -26,10 +26,10 @@ const styles = {
   image: cva({
     base: [
       // Edge to edge on phones with the same gap above and below (40px),
-      // rounded inside the column from `md` and wider than it from `lg` up
+      // rounded inside the column from `md` up
       'mt-2 mb-10 md:mt-0 md:mb-14',
       '-mx-content-padding w-[calc(100%+var(--spacing-content-padding)*2)] rounded-none',
-      'md:mx-0 md:w-full md:rounded-2xl lg:ui-bleed',
+      'md:mx-0 md:w-full md:rounded-2xl',
     ],
   }),
 };
@@ -98,8 +98,8 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
     return (
       <ParallaxImage
         aspect={aspect}
-        // Layers are 115% of the image (720px, from `lg` up 800px)
-        sizes="(min-width: 1024px) 920px, (min-width: 768px) 828px, 115vw"
+        // Layers are 115% of the content column (max 720px)
+        sizes="(min-width: 768px) 828px, 115vw"
         className={styles.image()}
         layers={images.map((src, i, arr) => {
           const depth = i / (arr.length - 1);
@@ -126,8 +126,8 @@ const ImageSection = ({ src, aspect = '5/2' }: ImageSectionProps) => {
         alt=""
         fill
         preload
-        // Content column (max 720px), wider from `lg` up (max 800px)
-        sizes="(min-width: 1024px) 800px, (min-width: 768px) 720px, 100vw"
+        // Content column, max 720px
+        sizes="(min-width: 768px) 720px, 100vw"
         className="object-cover"
       />
     </div>
