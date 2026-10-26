@@ -18,6 +18,7 @@ import {
   mix,
   sat,
   scale,
+  wrap,
   writeLoop,
 } from '../scripts/loop.mjs';
 
@@ -185,7 +186,7 @@ for (const k of layer) {
 const BOB = 4 / 3;
 const BOB_PERIOD = FRAMES / 3; // 4s
 const bobAt = t => {
-  const phase = (((t % BOB_PERIOD) + BOB_PERIOD) % BOB_PERIOD) / BOB_PERIOD;
+  const phase = wrap(t, BOB_PERIOD) / BOB_PERIOD;
   const line = phase < 0.5 ? phase * 2 : 2 - phase * 2;
   const ease = (1 - Math.cos(phase * Math.PI * 2)) / 2;
   return (BOB * (line + ease)) / 2;

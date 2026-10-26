@@ -11,17 +11,16 @@ export interface HotspotInput {
 }
 
 /** A hotspot positioned in percent of the scene, ready to render */
-export interface Hotspot {
-  name: string;
-  remark: string;
+export type Hotspot = Omit<HotspotInput, 'at'> & {
   left: number;
   top: number;
   width: number;
   height: number;
-}
+};
 
+// Two decimals are plenty for a position in percent
 const percent = (value: number, total: number) =>
-  Math.round((value / total) * 100_00) / 100;
+  Math.round((value / total) * 10_000) / 100;
 
 /** Position hotspots in a scene of `width` x `height` native pixels */
 export const toHotspots = (

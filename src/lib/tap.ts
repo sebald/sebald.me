@@ -1,7 +1,7 @@
 // A short, soft tap, like a fingertip on a cushion: a burst of noise with the
-// highs filtered out, faded in so it has no hard edge. Synthesized with the Web Audio API, so there is no file to
-// load. Browsers only allow audio after a user gesture, so call it from a
-// click handler.
+// highs filtered out, faded in so it has no hard edge. Synthesized with the
+// Web Audio API, so there is no file to load. Browsers only allow audio after
+// a user gesture, so call it from a click handler.
 
 let context: AudioContext | undefined;
 let noise: AudioBuffer | undefined;

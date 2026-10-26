@@ -11,14 +11,17 @@ export const sharp = createRequire(require.resolve('next/package.json'))(
 
 // The loop is exported with hard edges, scaled by the smallest whole number
 // that covers the widest it is shown (a note header is up to 720 CSS pixels)
-// on a 2x screen. The page
-// then only scales it down, smoothly, so every art pixel keeps the same size
-// on screen (scaling up, smooth blurs the edges and `pixelated` rounds each
+// on a 2x screen. The page then only scales it down, smoothly, so every art
+// pixel keeps the same size on screen (scaling up, smooth blurs the edges and `pixelated` rounds each
 // pixel to uneven widths). Lossless WebP compresses the repeated blocks well,
 // so the larger export costs little.
 const HEADER_WIDTH = 720;
 export const scaleFor = (width, shownWidth = HEADER_WIDTH) =>
   Math.max(3, Math.ceil((shownWidth * 2) / width));
+
+// Where `n` falls in a cycle of `m` frames, also for negative `n` (a detail
+// that starts later in the loop)
+export const wrap = (n, m) => ((n % m) + m) % m;
 
 // Colours
 // ---------------

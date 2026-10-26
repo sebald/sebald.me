@@ -9,7 +9,15 @@
 //     content/notes/2026-05-17-where-the-map-ends/native.png \
 //     content/notes/2026-05-17-where-the-map-ends
 
-import { hash, loadScene, lum, mix, sat, writeLoop } from '../scripts/loop.mjs';
+import {
+  hash,
+  loadScene,
+  lum,
+  mix,
+  sat,
+  wrap,
+  writeLoop,
+} from '../scripts/loop.mjs';
 
 const [src, outDir] = process.argv.slice(2);
 
@@ -53,7 +61,7 @@ const drawStreak = (b, x0, y0, head, len, phase) => {
 
 const drawWind = (b, t) => {
   for (const w of STREAKS) {
-    const s = (((t - w.start) % FRAMES) + FRAMES) % FRAMES;
+    const s = wrap(t - w.start, FRAMES);
     if (s >= LIFE) continue;
     const len = Math.min(MAX_LEN, s * SPEED, (LIFE - s) * SPEED);
     const head = w.x + s * SPEED;
@@ -112,7 +120,7 @@ const FLIGHT = 28; // frames, 3.5s
 
 const drawSand = (b, t) => {
   for (const g of GRAINS) {
-    const s = (((t - g.start) % FRAMES) + FRAMES) % FRAMES;
+    const s = wrap(t - g.start, FRAMES);
     if (s >= FLIGHT) continue;
     const x = g.x + s;
     const y = g.y - Math.round(Math.sin((s / FLIGHT) * Math.PI) * 2);

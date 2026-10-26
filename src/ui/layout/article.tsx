@@ -1,11 +1,11 @@
 import NextImage from 'next/image';
 import type { AriaAttributes, PropsWithChildren } from 'react';
 
-import type { Hotspot } from '@/lib/hotspots';
 import { cva } from '@/lib/styles.utils';
 import { Headline } from '@/ui/headline';
 import type { HeadlineProps } from '@/ui/headline';
 import { PixelImage } from '@/ui/pixel-image';
+import type { PixelImageProps } from '@/ui/pixel-image';
 
 // Styles
 // ---------------
@@ -71,7 +71,7 @@ const Content = ({ children, className, ...ariaProps }: ContentProps) => (
 // Article.Image
 // ---------------
 interface ImageSectionProps {
-  src: string | { src: string; poster: string; hotspots?: Hotspot[] };
+  src: string | Pick<PixelImageProps, 'src' | 'poster' | 'hotspots'>;
   aspect?: string;
 }
 

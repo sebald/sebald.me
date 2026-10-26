@@ -15,6 +15,7 @@ import {
   mix,
   sat,
   scale,
+  wrap,
   writeLoop,
 } from '../scripts/loop.mjs';
 
@@ -45,7 +46,7 @@ const FLOW_STEP = FRAMES / FLOW_STEPS;
 const drawRiver = (b, t) => {
   const s = Math.floor(t / FLOW_STEP);
   for (const [x, y, c] of water) {
-    const row = (((y - s) % FLOW_STEPS) + FLOW_STEPS) % FLOW_STEPS;
+    const row = wrap(y - s, FLOW_STEPS);
     const n = hash(x, row, 3);
     if (n < 0.006) setPx(b, x, y, GLINT);
     else if (n < 0.022) setPx(b, x, y, mix(c, GLINT, 0.35));

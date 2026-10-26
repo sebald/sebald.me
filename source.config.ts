@@ -31,6 +31,13 @@ const resolveImagePath = (src: string, filePath: string): string => {
   return `/api/content-image/${rel}?v=${version}`;
 };
 
+/**
+ * Size of the snapped scene hotspots are read off: the `native.png` next to
+ * the pixel art's poster
+ */
+const nativeSize = (poster: string, filePath: string) =>
+  pngSize(readFileSync(join(dirname(filePath), dirname(poster), 'native.png')));
+
 const hotspotSchema = z.object({
   name: z.string(),
   remark: z.string(),
@@ -76,21 +83,9 @@ const notesSchema = (ctx: { path: string }) =>
           return {
             src: resolveImagePath(val.src, ctx.path),
             poster: resolveImagePath(val.poster, ctx.path),
-            hotspots: val.hotspots
-              ? toHotspots(
-                  val.hotspots,
-                  // The snapped scene the coordinates are read off
-                  pngSize(
-                    readFileSync(
-                      join(
-                        dirname(ctx.path),
-                        dirname(val.poster),
-                        'native.png',
-                      ),
-                    ),
-                  ),
-                )
-              : undefined,
+            hotspots:
+              val.hotspots &&
+              toHotspots(val.hotspots, nativeSize(val.poster, ctx.path)),
           };
         return resolveImagePath(val, ctx.path);
       }),

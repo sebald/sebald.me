@@ -47,7 +47,7 @@ const style = {
   // line has something to sit on
   scrim: cva({
     base: [
-      'pointer-events-none absolute inset-x-0 bottom-0 h-1/4 min-h-12 ui-scrim [--scrim-strength:75%]',
+      'pointer-events-none absolute inset-x-0 bottom-0 h-1/4 min-h-12 ui-scrim [--scrim-strength:0.75]',
       'opacity-0 motion-safe:translate-y-3',
       'transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]',
       'group-hover/scene:translate-y-0 group-hover/scene:opacity-100',
@@ -110,29 +110,23 @@ export const PixelImage = ({
   src,
   poster,
   aspect,
-  hotspots,
+  hotspots = [],
   className,
 }: PixelImageProps) => {
   const [loaded, handleSettled] = useImagesSettled(1);
-  const [hovered, setHovered] = useState<Hotspot>();
+  // Name of the object under the pointer
+  const [hovered, setHovered] = useState<string>();
   const [remarked, setRemarked] = useState<Hotspot>();
-  // Counts clicks, so clicking the same object again restarts its remark
-  const [said, setSaid] = useState(0);
+  // Ends the remark after its reading time, restarted by every click
+  const silence = useRef<ReturnType<typeof setTimeout>>(undefined);
   const looked = useRef(new Set<string>());
 
-  useEffect(() => {
-    if (!remarked) return;
-    const timeout = setTimeout(
-      () => setRemarked(undefined),
-      readingTime(remarked.remark),
-    );
-    return () => clearTimeout(timeout);
-  }, [remarked, said]);
+  useEffect(() => () => clearTimeout(silence.current), []);
 
   const spotAt = (e: MouseEvent<HTMLDivElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
     return hotspotAt(
-      hotspots ?? [],
+      hotspots,
       ((e.clientX - box.left) / box.width) * 100,
       ((e.clientY - box.top) / box.height) * 100,
     );
@@ -142,7 +136,7 @@ export const PixelImage = ({
   // object, and makes way as soon as the pointer reaches another one
   const handleMove = (e: PointerEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
-    setHovered(spot);
+    setHovered(spot?.name);
     if (spot && spot !== remarked) setRemarked(undefined);
   };
 
@@ -155,9 +149,13 @@ export const PixelImage = ({
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
+    clearTimeout(silence.current);
     setRemarked(spot);
     if (!spot) return;
-    setSaid(n => n + 1);
+    silence.current = setTimeout(
+      () => setRemarked(undefined),
+      readingTime(spot.remark),
+    );
     playTap();
     if (looked.current.has(spot.name)) return;
     looked.current.add(spot.name);
@@ -189,7 +187,7 @@ export const PixelImage = ({
           className={style.image()}
         />
       </picture>
-      {hotspots?.length ? (
+      {hotspots.length ? (
         // A pointer-only extra: the scene is hidden from assistive technology
         // and the remarks carry nothing the note doesn't
         // oxlint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -201,9 +199,7 @@ export const PixelImage = ({
         >
           <div className={style.scrim()} />
           <p className={style.line({ remark: Boolean(remarked) })}>
-            {remarked
-              ? `“${remarked.remark}”`
-              : `Look at ${hovered?.name ?? '…'}`}
+            {remarked ? `“${remarked.remark}”` : `Look at ${hovered ?? '…'}`}
           </p>
         </div>
       ) : null}
