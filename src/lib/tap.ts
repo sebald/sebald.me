@@ -1,14 +1,16 @@
-// A short, dull tap, like a finger on felt: a burst of noise with the highs
-// filtered out. Synthesized with the Web Audio API, so there is no file to
+// A short, soft tap, like a fingertip on a cushion: a burst of noise with the
+// highs filtered out, faded in so it has no hard edge. Synthesized with the Web Audio API, so there is no file to
 // load. Browsers only allow audio after a user gesture, so call it from a
 // click handler.
 
 let context: AudioContext | undefined;
 let noise: AudioBuffer | undefined;
 
-const LENGTH = 0.04; // seconds
-const CUTOFF = 500; // Hz, low-pass
-const VOLUME = 0.25;
+const LENGTH = 0.06; // seconds
+const ATTACK = 0.008; // seconds, an instant start sounds like a click
+const CUTOFF = 360; // Hz, low-pass
+const Q = 0.5;
+const VOLUME = 0.18;
 
 export const playTap = () => {
   if (typeof AudioContext === 'undefined') return;
@@ -36,7 +38,9 @@ export const playTap = () => {
   source.buffer = noise;
   filter.type = 'lowpass';
   filter.frequency.value = CUTOFF;
-  gain.gain.setValueAtTime(VOLUME, at);
+  filter.Q.value = Q;
+  gain.gain.setValueAtTime(0.0001, at);
+  gain.gain.exponentialRampToValueAtTime(VOLUME, at + ATTACK);
   gain.gain.exponentialRampToValueAtTime(0.0001, at + LENGTH);
 
   source.connect(filter).connect(gain).connect(ctx.destination);

@@ -211,11 +211,11 @@ image:
 
 Optionally hide a few objects in the scene, like the adventure games it is
 drawn after: hovering names the object ("Look at lantern"), clicking shows a
-remark about it, and each click is tracked as `Look At`. Give each one a name,
-a dry one-line remark in the note's voice (never content the note needs, the
-scene is hidden from assistive technology) and its box in native pixels of
-`native.png`, which has to stay in the folder. List small objects before the
-larger ones they sit on, the first match wins.
+remark about it for its reading time, and each click is tracked as `Look At`.
+Give each one a short lowercase name, a remark (see below; never content the
+note needs, the scene is hidden from assistive technology) and its box in
+native pixels of `native.png`, which has to stay in the folder. List small
+objects before the larger ones they sit on, the first match wins.
 
 Keep it to three or four objects, each box tight around the object, about
 10% of the scene in all: if most of the scene answers, the "Look at …" over
@@ -229,9 +229,42 @@ image:
   poster: ./poster.png
   hotspots:
     - name: lantern
-      remark: Someone left it on for you.
+      remark: Burning for the next one. There’s always a next one.
       at: [213, 55, 17, 30] # x, y, width, height
 ```
+
+Check the boxes before writing remarks: draw them onto `poster.png` (scaled
+by the export scale) and look at the result, then hover and click each one in
+the running page.
+
+### The remarks
+
+The voice of the old point-and-click adventures' "look at" lines: dry,
+deadpan, a little absurd, and never explaining the joke.
+
+- **Literal first, then a turn.** Start by saying plainly what the thing is,
+  let the last clause tip it over: "A beetle. No map, no hat, and it’s still
+  doing better than me."
+- **Whoever is in the scene speaks.** If there is a character, the remark is
+  theirs, in the first person, slightly self-important and slightly
+  cowardly: "Two yellow eyes. I’m going to assume they’re friendly. From over
+  here." Without one, a flat statement of fact works just as well: "Older
+  than the internet. Never once returned a 404."
+- **Understatement over punchlines.** One dry word can carry the line:
+  "Refreshing.", "Show-offs.", "rudely".
+- **Specific absurdity.** An oddly exact detail beats a general joke:
+  "According to my map, I’m standing in a river. I’m fairly sure I’m not."
+- **The note's idea stays inside the scene.** No work words (stakeholder,
+  roadmap, sprint, estimate, legacy, company); the theme comes through the
+  objects themselves: the old bridge copied "every crack, faithfully
+  reproduced", the map that "just stops".
+- **Short.** One to three short sentences, at most about 100 characters; the line is
+  read in passing. Curly apostrophes (’), no quotes (the line adds them).
+- **Vary the jokes across a scene.** Two remarks that make the same point
+  cancel each other out.
+
+Write two or three options per object and let the author pick, with a
+recommendation; the remarks are their voice.
 
 The header image is not used for link previews. `/og/<slug>.webp` serves the
 note folder's `og.webp` and falls back to the logo card without one, so export
