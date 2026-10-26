@@ -44,6 +44,11 @@ const notesSchema = (ctx: { path: string }) =>
     draft: z.boolean().default(false),
     topics: z.array(z.string()).optional(),
     /**
+     * The LinkedIn post that shares the note. Readers are sent there to
+     * reply, without it to the profile.
+     */
+    linkedin: z.url().optional(),
+    /**
      * One image, parallax layers (back to front), or pixel art (pre-scaled,
      * usually animated) with a still `poster` for reduced motion
      */

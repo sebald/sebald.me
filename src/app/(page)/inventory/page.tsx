@@ -210,6 +210,24 @@ const InventoryPage = () => (
                   </Text>
                 </div>
               </Card>
+              <Card variant="flat">
+                <div className="grid gap-8">
+                  <Headline level="2">Flat Card</Headline>
+                  <Text>
+                    A plain fill instead of glass, for quieter surfaces like the
+                    reply prompt at the end of a note.
+                  </Text>
+                </div>
+              </Card>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <Card href="/inventory" inset="snug">
+                <Text as="span">Panel card with a link</Text>
+              </Card>
+              <Card href="/inventory" variant="flat" inset="snug">
+                <Text as="span">Flat card with a link</Text>
+              </Card>
             </div>
           </div>
 

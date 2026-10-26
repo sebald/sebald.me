@@ -34,6 +34,8 @@ export const styles = cva({
         'hover:bg-mist-500/50 hover:text-mist-50',
         '[&_svg]:size-4.5',
       ],
+      // Only focus and transition, for links styled by what they wrap (cards)
+      plain: '',
     },
   },
   defaultVariants: { variant: 'default' },
@@ -60,7 +62,9 @@ export const Link = ({
   ...props
 }: LinkProps) => {
   const Component =
-    typeof href === 'string' && /^(https?:|\/\/)/.test(href) ? 'a' : NextLink;
+    typeof href === 'string' && /^(https?:|\/\/|mailto:)/.test(href)
+      ? 'a'
+      : NextLink;
 
   const externalProps =
     target === '_blank'
