@@ -22,18 +22,24 @@ const hotspots = toHotspots(
   [
     {
       name: 'lantern',
-      remark: 'Someone left it on for you.',
+      remark: 'Burning for the next one. There’s always a next one.',
       at: [213, 55, 17, 30],
     },
     {
       name: 'signpost',
-      remark: 'Blank. Whoever put it up was still deciding.',
+      remark:
+        'Blank. Someone put up the signs first and planned to decide later.',
       at: [167, 32, 55, 50],
     },
     {
       name: 'edge',
-      remark: 'No. Not that way.',
+      remark: 'I checked. There’s no page at the bottom either.',
       at: [243, 122, 45, 28],
+    },
+    {
+      name: 'tree',
+      remark: 'Older than the internet. Never once returned a 404.',
+      at: [14, 40, 26, 96],
     },
   ],
   native,
