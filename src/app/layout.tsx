@@ -32,6 +32,10 @@ export const metadata: Metadata = {
           title: 'Sebastian Sebald',
           url: 'https://sebald.me/rss.xml',
         },
+        {
+          title: 'Sebastian Sebald, read aloud',
+          url: 'https://sebald.me/audio.xml',
+        },
       ],
     },
   },
