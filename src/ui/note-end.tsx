@@ -15,8 +15,9 @@ import { Text } from '@/ui/text';
 // ---------------
 const styles = {
   root: cva({
-    // Reply and navigation are separate things, keep them apart
-    base: ['grid gap-16 pt-16 sm:gap-20'],
+    // Reply and navigation are separate things, keep them apart. The top gap
+    // is well above a paragraph break, so the card doesn't read as prose
+    base: ['grid gap-16 pt-24 sm:gap-20'],
   }),
   nav: cva({
     base: ['grid gap-6 sm:grid-cols-2'],
