@@ -46,7 +46,8 @@ jobs:
         run: |
           # The checkout is owned by a different user than the container's
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          if git diff --quiet -- tests/visual/__screenshots__; then
+          # `git status`, not `git diff`: a new test's baselines are untracked
+          if [ -z "$(git status --porcelain -- tests/visual/__screenshots__)" ]; then
             echo "Baselines are up to date"
             exit 0
           fi
