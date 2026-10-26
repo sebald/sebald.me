@@ -81,3 +81,11 @@ for (const path of NOTES) {
     });
   });
 }
+
+// Not found
+// ---------------
+// Reduced motion is on, so the scene shows its still poster
+test('not found', async ({ page }) => {
+  await visit(page, '/this-page-does-not-exist');
+  await expect(page).toHaveScreenshot('not-found.png', { fullPage: true });
+});
