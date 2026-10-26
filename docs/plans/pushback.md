@@ -58,7 +58,9 @@ The player starts a run knowing their own role's eight pairs, phrase and counter
 
 Collecting changes two things and nothing else: the hand (below) draws from collected phrases only, and the glossary on the roster screen fills up. The defence menus, the bars, the mic drop and the boss are the same whether a pair is collected or not. Knowledge is per run: a second run as another role starts from that role's pool, so different opponents are easy and hard, and the three roles are three different runs rather than three copies of one.
 
-Opponents help with the collecting without knowing it: every opponent throws from its whole pool, and prefers the pairs the player has not collected yet (see AI behaviour). A duel with three opponent attacks is three new pairs, so the four foreign duels of a run collect about twelve of the sixteen, and a replay is a guaranteed gain, never a lottery. A full glossary needs a replay or two; that is what the roster's replay is for, and after a lost boss fight the loss bark says which column to fill.
+Opponents help with the collecting without knowing it: every opponent throws from its whole pool, and on a first attempt prefers the pairs the player has not collected yet (see AI behaviour). A duel with three opponent attacks is three new pairs, so the four foreign duels of a run collect about twelve of the sixteen, and a replay of a beaten slot is a guaranteed gain, never a lottery. A full glossary needs a replay or two; that is what the roster's replay is for, and after a lost boss fight the loss bark says which column to fill.
+
+The retry is the exception, because "unheard first" alone would make every retry a fresh exam. After a lost duel the opponent alternates, heard first: the first exchange of a retry is one the player can win from memory, which hands them the initiative and a momentum step, and the next throw is new. So a retry is earned and still collects one or two pairs. What is collected from a role pays off later, not against that role: Devs answer Dev lines every time, but those lines are the attack for the next role and the defence for the boss.
 
 ### Throwing a phrase: the hand
 
@@ -161,7 +163,7 @@ No twist about who the Stakeholder is. "The stakeholder was the CEO" is what eve
 
 ### AI behaviour
 
-On attack: pick a random phrase from the opponent's pool, preferring the pairs the player has not collected, no repeats within a duel until all are used, then any. With full momentum, slots at tier 1 and 2 drop the mic at once, tier 3 holds it until the hit would end the duel. On defence: own pool always right; foreign pools right with the slot's accuracy, otherwise a random wrong counter from the phrase's pool. The Stakeholder never guesses and never attacks with a mic drop (every boss phrase is already worth a miss).
+On attack: pick a random phrase from the opponent's pool, no repeats within a duel until all are used, then any. The pick order depends on the attempt: on a first attempt at a slot, and on a replay of a beaten slot, uncollected pairs first (collecting); on a retry after a loss, alternate collected and uncollected, collected first (the earned retry). Within each group the pick is random. With full momentum, slots at tier 1 and 2 drop the mic at once, tier 3 holds it until the hit would end the duel. On defence: own pool always right; foreign pools right with the slot's accuracy, otherwise a random wrong counter from the phrase's pool. The Stakeholder never guesses and never attacks with a mic drop (every boss phrase is already worth a miss).
 
 ## Backgrounds
 
@@ -186,7 +188,7 @@ Output per scene: `native.png`, `scene.webp` (lossless, 8 fps, 12 s loop) and `p
 
 Three pools of eight phrase/counter pairs (one pool per role), six boss pairs that reuse regular counters, and the barks. 24 regular pairs (48 lines), 6 boss phrases, 22 barks and fallbacks: 76 lines in total, all first drafts to be edited in this table. Rules for every line: role-neutral (never names the target's role, so any player can be on the receiving end), under 70 characters so it fits two rows of the dialogue box, no names, and the counter must read as a reply even out of context (the decoy menus and the boss depend on that).
 
-Who throws what: every character throws from its whole pool, uncollected pairs first. The player's hand draws from what they have collected.
+Who throws what: every character throws from its whole pool, uncollected pairs first, except on a retry (see AI behaviour). The player's hand draws from what they have collected.
 
 **PM pool** (thrown by PM opponents)
 
@@ -410,7 +412,7 @@ type Save = {
 
 Duel state machine (one reducer, screens derived from `phase`):
 
-1. `intro`: opponent bark, then `attack` with the opponent holding the initiative (the challenger always opens).
+1. `intro`: opponent bark, then `attack` with the opponent holding the initiative (the challenger always opens). The duel starts with an `attempt` of `first`, `retry` (the slot was lost before and is not beaten) or `replay` (the slot is beaten), which sets the AI's pick order.
 2. `attack`: attacker's line types out. Player attacker picks from the hand of four and, with full momentum, toggles the mic drop first; AI picks per AI behaviour.
 3. `defend`: counter menu (player, with the silence bar sending `tick` actions and a `timeout` that plays the fallback) or AI pick. Resolves to `resolve`.
 4. `resolve`: taunt/flinch poses, buy-in segment fills, momentum updates; on a player miss the right counter is shown for one beat. A pair the player just defended against is added to `collected`. Initiative to the winner. Full buy-in → `end`, else `attack`.
@@ -424,7 +426,7 @@ Input: arrow keys or W/S to move in menus, Enter or Space to confirm and to skip
 
 Reduced motion: scenes show the poster, idle bob and talk cycle are off, typing is instant, the silence bar defaults to off. Same rule as the headers.
 
-Tests: `duel.ts` and `ai.ts` under the Node test runner (buy-in and initiative, momentum gains and resets, mic drop worth and cost, the hand draws from collected phrases only and never repeats one within a duel, a run starts with exactly the role's own pool collected and a defended pair is collected win or lose, the AI throws uncollected pairs first, a run draws two distinct characters per role in the role order and the slot table applies by position, decoy rules and menu size per slot, own-pool answers are always right, the silence timeout plays the fallback as a miss, the boss barrage ends on the sixth phrase under every outcome, the interrupt fires only at full momentum, boss mapping completeness: every boss phrase has exactly one answering pair that exists; every line under 70 characters; the result card text matches the stats). `sheets.test.ts` validates the committed sheets. One Playwright VRT screenshot of the title screen and one of a frozen duel frame, added to the existing visual suite (ask before running VRT, per `AGENTS.md`).
+Tests: `duel.ts` and `ai.ts` under the Node test runner (buy-in and initiative, momentum gains and resets, mic drop worth and cost, the hand draws from collected phrases only and never repeats one within a duel, a run starts with exactly the role's own pool collected and a defended pair is collected win or lose, the AI throws uncollected pairs first on a first attempt and a replay and alternates from a collected pair on a retry, a run draws two distinct characters per role in the role order and the slot table applies by position, decoy rules and menu size per slot, own-pool answers are always right, the silence timeout plays the fallback as a miss, the boss barrage ends on the sixth phrase under every outcome, the interrupt fires only at full momentum, boss mapping completeness: every boss phrase has exactly one answering pair that exists; every line under 70 characters; the result card text matches the stats). `sheets.test.ts` validates the committed sheets. One Playwright VRT screenshot of the title screen and one of a frozen duel frame, added to the existing visual suite (ask before running VRT, per `AGENTS.md`).
 
 ### Workbench
 
@@ -436,7 +438,7 @@ Three panels:
 - **Scene viewer.** Each scene with its loop and its poster, at the same scales, with the stand positions and the clear band drawn as outlines so a new render can be checked against the composition rule.
 - **Duel sandbox.** Pick character and slot, set a seed, jump to any phase, fill momentum, force the barrage, a slider for the silence seconds, a reduced-motion toggle. Because the reducer is pure, "jump to phase" is constructing a state and handing it to the same stage component the game uses, so the sandbox exercises the real thing, not a copy.
 
-One script beside it, `simulate.ts`, run with the same tsx loader as the tests: a modelled player (answers collected pairs with a given accuracy, guesses the rest at one over the menu size, respects the silence bar with a given speed) plays full runs against the slot table, a thousand seeded runs per setting, and prints win rate per slot, average duels to beat the boss, and glossary size when the boss is reached. That is how the 60/75/90, the silence seconds and the boss's four segments get set with numbers before anyone plays, and it is the check that the boss is a wall for a player who knows nothing and not for one who collected the room.
+One script beside it, `simulate.ts`, run with the same tsx loader as the tests: a modelled player (answers collected pairs with a given accuracy, guesses the rest at one over the menu size, respects the silence bar with a given speed) plays full runs against the slot table, a thousand seeded runs per setting, and prints win rate per slot on first attempts and on retries (a retry must win more often than a first attempt, or the loop is not earned), average duels to beat the boss, and glossary size when the boss is reached. That is how the 60/75/90, the silence seconds and the boss's four segments get set with numbers before anyone plays, and it is the check that the boss is a wall for a player who knows nothing and not for one who collected the room.
 
 The workbench grows with the packages: the simulation in package 1 (it only needs the rules), the sandbox with the grey box in package 3, the sprite and scene viewers as the assets land in 4 and 5.
 
