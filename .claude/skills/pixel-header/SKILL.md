@@ -210,7 +210,8 @@ image:
 
 Optionally hide a few objects in the scene, like the adventure games it is
 drawn after: hovering names the object ("Look at lantern"), clicking shows a
-remark about it for its reading time, and each click is tracked as `Look At`.
+remark about it that stays while the pointer rests on the object, and each
+click is tracked as `Look At`.
 Give each one a short lowercase name, a remark (see below; never content the
 note needs, the scene is hidden from assistive technology) and its box in
 native pixels of `native.png`, which has to stay in the folder. List small

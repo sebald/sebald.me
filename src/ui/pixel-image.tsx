@@ -78,9 +78,9 @@ const style = {
 
 // Config
 // ---------------
-// How long a remark stays, like speech in the adventure games: long enough
-// to read, then the sentence line comes back
-const readingTime = (text: string) => Math.max(2500, text.length * 60);
+// How long a remark lingers after the pointer leaves its object, so a small
+// slip of the hand doesn't cut it off (ms)
+const LINGER = 1000;
 
 // Props
 // ---------------
@@ -117,11 +117,16 @@ export const PixelImage = ({
   // Name of the object under the pointer
   const [hovered, setHovered] = useState<string>();
   const [remarked, setRemarked] = useState<Hotspot>();
-  // Ends the remark after its reading time, restarted by every click
+  // Ends the remark once the pointer has left its object
   const silence = useRef<ReturnType<typeof setTimeout>>(undefined);
   const looked = useRef(new Set<string>());
 
   useEffect(() => () => clearTimeout(silence.current), []);
+
+  const keepTalking = () => {
+    clearTimeout(silence.current);
+    silence.current = undefined;
+  };
 
   const spotAt = (e: MouseEvent<HTMLDivElement>) => {
     const box = e.currentTarget.getBoundingClientRect();
@@ -132,30 +137,37 @@ export const PixelImage = ({
     );
   };
 
-  // A remark stays for its reading time while the pointer wanders off its
-  // object, and makes way as soon as the pointer reaches another one
+  // A remark stays as long as the pointer rests on its object. Off it, the
+  // remark lingers a moment over empty scenery and makes way at once for
+  // another object
   const handleMove = (e: PointerEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
     setHovered(spot?.name);
-    if (spot && spot !== remarked) setRemarked(undefined);
+    if (!remarked) return;
+    if (spot === remarked) return keepTalking();
+    if (spot) {
+      keepTalking();
+      return setRemarked(undefined);
+    }
+    silence.current ??= setTimeout(() => {
+      silence.current = undefined;
+      setRemarked(undefined);
+    }, LINGER);
   };
 
   // A fresh line for every visit. Leaving keeps the last words, so they fade
   // out as they were instead of flashing back to "Look at …"
   const handleEnter = () => {
+    keepTalking();
     setHovered(undefined);
     setRemarked(undefined);
   };
 
   const handleClick = (e: MouseEvent<HTMLDivElement>) => {
     const spot = spotAt(e);
-    clearTimeout(silence.current);
+    keepTalking();
     setRemarked(spot);
     if (!spot) return;
-    silence.current = setTimeout(
-      () => setRemarked(undefined),
-      readingTime(spot.remark),
-    );
     playTap();
     if (looked.current.has(spot.name)) return;
     looked.current.add(spot.name);
