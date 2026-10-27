@@ -15,7 +15,7 @@ dependencies = [
   "thinc==8.3.6",
   "preshed==3.0.10",
   "cymem==2.0.11",
-  "murmurhash==1.0.13",
+  "murmurhash==1.0.16",
 ]
 
 [tool.uv]
