@@ -14,7 +14,7 @@ dependencies = [
   "spacy==3.8.7",
   "thinc==8.3.6",
   "preshed==3.0.10",
-  "cymem==2.0.11",
+  "cymem==2.0.16",
   "murmurhash==1.0.13",
 ]
 
