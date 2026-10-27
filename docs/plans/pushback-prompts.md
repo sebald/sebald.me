@@ -6,7 +6,7 @@ Every image the game needs, one prompt each, ready to paste. Nine generations be
 
 - Pick **16:9** in Gemini (1376 by 768). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
 - **Attach the references named under each prompt** to the same message. The reference is the strongest lever on pixel size and style; the words only back it up.
-  - `HEADER` = `content/notes/2026-05-17-where-the-map-ends/original.png` (style and pixel look).
+  - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
   - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpg` (the Dev model sheet; copy it there from Downloads first). Every character and prop sheet attaches it so scale and pixel size match across the cast.
 - Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
 - One chat per image. Fixes go into the same chat as follow-ups (last section), so Gemini keeps the character.

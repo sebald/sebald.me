@@ -11,8 +11,8 @@ native pixel grid, and a small per-scene script animates two or three details
 (steam, flicker, twinkle) into a looping animated WebP.
 
 The target look is the two published headers,
-`content/notes/2026-02-16-failing-forward-at-design-systems/original.png` and
-`content/notes/2026-05-17-where-the-map-ends/original.png`. Both are about 326
+`references/failing-forward.png` and
+`references/where-the-map-ends.png` next to this file (the Gemini originals, which are deleted from the note folders). Both are about 326
 real pixels wide (a clean 10px grid at 3264): chunky pixels, big simple shapes,
 detail suggested with a few pixels, 3 to 4 shades per material, muted colours.
 Gemini tends to drift towards finer, modern "hi-bit" pixel art with lots of
@@ -69,7 +69,7 @@ side the light comes. Name each living detail and where it sits. Avoid words
 that pull towards polished modern art: "cinematic", "detailed", "intricate",
 "4K", "high quality".
 
-The user attaches `content/notes/2026-05-17-where-the-map-ends/original.png`
+The user attaches `.claude/skills/pixel-header/references/where-the-map-ends.png`
 (and optionally the Failing Forward one) to the same Gemini message. The
 reference image is the strongest lever on pixel size; the words only back it up.
 
