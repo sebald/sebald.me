@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Twelve generations before rerolls: six model sheets, four scenes, one prop sheet, one head sheet. The Dev man's sheet already exists.
+Every image the game needs, one prompt each, ready to paste. Thirteen generations before rerolls: seven model sheets, four scenes, one prop sheet, one head sheet.
 
 ## Before you start
 
@@ -9,7 +9,7 @@ Every image the game needs, one prompt each, ready to paste. Twelve generations 
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
   - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpeg` (the Dev man's model sheet). Every character and prop sheet attaches it so scale and pixel size match across the cast.
 - Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
-- Gemini currently renders 16:9 at 2752 by 1536. Those sheets snap at an 11 px grid to figures about 82 px tall (Jo 83, Ravi 82), 8 percent taller than the Dev sheet's 76 from its 1376 px render, and inside the 70 to 85 range. Generate every remaining sheet at the same size so the rest of the cast matches Jo and Ravi; Sam stays the short one.
+- Gemini currently renders 16:9 at 2752 by 1536. Those sheets snap at an 11 px grid to figures about 82 px tall (Jo 83, Ravi 82), 8 percent taller than the Dev sheet's 76 from its 1376 px render, and inside the 70 to 85 range. Generate every remaining sheet at the same size so the rest of the cast matches Jo and Ravi, Sam included (his prompt redraws him at that size).
 - Gemini draws a soft shadow under the feet whatever the prompt says; `sheet.mjs` keys it out with the background, nothing to reroll for.
 - One chat per image. Fixes go into the same chat as follow-ups (last section), so Gemini keeps the character.
 - The sheets all face **right**. The right-hand duellist is the sheet mirrored in code, so props carry no writing and no asymmetry that would look wrong flipped.
@@ -23,7 +23,7 @@ What to check before saving, in order of how expensive a miss is:
 
 ## Model sheets
 
-Seven sheets: two looks per role, so the player can pick, and the Stakeholder. The Dev man's sheet exists (`dev-sheet.jpeg`, the hoodie character), so six are left to generate. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
+Seven sheets: two looks per role, so the player can pick, and the Stakeholder. The Dev man's sheet exists (`dev-sheet.jpeg`, the hoodie character) but at the old render size, so he is redrawn too; seven to generate, Jo and Ravi are done. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
 
 Gemini copies the attached figure when it can: the first PM roll came back with the Dev's face and hair. The prompts therefore put the new character first, in detail, and say three times that the attached sheet is a reference for size and style only. If a roll still looks like the hoodie character, use the "looks like the reference" follow-up at the end of this file rather than rerolling blind. Faces, skin tones, hair, builds and ages are spread across the six on purpose: a cast, not one person in six outfits.
 
@@ -128,7 +128,56 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 
 Reroll on: hair appearing on the head in some cells, the beard changing length, the glasses missing, a figure taller than the attached sheet.
 
-### Dev, look two: Lena (the Dev man is the existing sheet) (`dev-lena-sheet.jpg`)
+### Dev, look one: Sam (`dev-sam-sheet.jpg`)
+
+Sam exists as `dev-sheet.jpeg`, but that render is 1376 px and snaps to a 76 px figure, 8 percent shorter than the sheets Gemini renders now. This prompt redraws the same character at the current size, so the whole cast shares one grid; the old sheet stays as the style reference for everyone else.
+
+Attach: `DEV` (the character), `src/assets/lab/pushback/sources/pm-jo-sheet.jpeg` (the size).
+
+```text
+Redraw the character from the first attached sheet (the hoodie
+character) as a new six-pose model sheet, at exactly the size and pixel
+size of the figures in the second attached sheet (the striped-shirt
+character): the same figure height, the same pixel size, the same
+drawing style and outline weight. Keep the character exactly as he is:
+the same face, hair, skin tone, build, hoodie, headphones, trousers and
+shoes. Do not take anything from the second sheet except the size and
+the style.
+
+Character: a software developer, a young man in his mid twenties, East
+Asian, short black hair, a round friendly face. A steel-blue zip hoodie
+with the drawstrings hanging, black headphones around the neck, dark
+navy trousers, grey sneakers. In one hand a laptop with three small
+plain colour stickers on the lid, no logo.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible. Big
+simple shapes, detail suggested with a few pixels. Three or four shades
+per material, a dark outline only on the silhouette, a limited palette.
+Plain flat dark background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, front three-quarter view
+facing to the right, clear gaps between the figures, nothing touching
+the edge of the image. Left to right:
+1. idle: standing, weight on one leg, the laptop closed under one arm,
+   looking right.
+2. talking: mouth open, the free hand turned palm up as if the answer is
+   obvious.
+3. taunt: leaning forward, the laptop opened and turned towards the right
+   as if showing the screen, the other hand pointing at it.
+4. flinch: leaning back, eyes shut, the laptop clutched to the chest.
+5. win: the laptop held up high in one hand, the other fist raised.
+6. lose: shoulders dropped, head down, the laptop hanging open from one
+   hand.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: a figure still shorter than Jo's, a logo on the laptop (the old sheet has one), the hoodie changing colour, the face drifting towards the striped-shirt character.
+
+### Dev, look two: Lena (`dev-lena-sheet.jpg`)
 
 Attach: `HEADER`, `DEV`.
 
