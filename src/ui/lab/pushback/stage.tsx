@@ -265,7 +265,7 @@ export const Menu = ({
             <span
               aria-hidden
               className={cn(
-                'h-[calc(var(--px)*7)] w-[calc(var(--px)*4)] shrink-0 bg-current',
+                'h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] shrink-0 bg-current',
                 '[clip-path:polygon(0_0,100%_50%,0_100%)]',
                 i === current ? 'opacity-100' : 'opacity-0',
               )}

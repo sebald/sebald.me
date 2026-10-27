@@ -145,9 +145,9 @@ export const crisp = (scale: number, dpr: number): boolean => {
 export const backingFor = (scale: number, dpr: number): number =>
   crisp(scale, dpr) ? Math.round(scale * dpr) : BACKING;
 
-/** The overlay's font size at a scale: 14 px at 3x, never below 12 px */
+/** The overlay's font size at a scale: 16 px at 3x, never below 14 px */
 export const fontSizeFor = (scale: number): number =>
-  Math.max(12, Math.round((14 * scale) / 3));
+  Math.max(14, Math.round((16 * scale) / 3));
 
 export interface Rect {
   x: number;

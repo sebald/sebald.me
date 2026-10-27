@@ -619,10 +619,16 @@ export const DuelScreen = ({
         <p
           className={styles.bubble()}
           style={{
-            // Over the ghost's head, which is just under the bars
-            left: px(ghost.x + 4),
-            bottom: px(
-              STAGE.height - LAYOUT.feet + ghost.dy + LAYOUT.cell.height - 26,
+            // Over the ghost's head, kept inside the stage: never past the
+            // left edge (the ghost can stand off it), wrapped before the
+            // right one, and under the bars when the ceiling is cropped
+            left: px(Math.max(2, ghost.x + 4)),
+            maxWidth: `calc(100% - ${px(Math.max(2, ghost.x + 4) + 2)})`,
+            top: px(
+              Math.max(
+                crop + 14,
+                LAYOUT.feet - LAYOUT.cell.height + 2 + ghost.dy,
+              ),
             ),
           }}
         >
@@ -693,7 +699,7 @@ export const DuelScreen = ({
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
               active={!paused}
-              className="gap-0 text-[1.15em]"
+              className="gap-0"
             />
             {silenceWidth !== null && (
               <div className={styles.silence()} aria-hidden>

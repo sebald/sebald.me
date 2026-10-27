@@ -86,10 +86,10 @@ describe('scaleFor', () => {
 });
 
 describe('fontSizeFor', () => {
-  it('is 14 px at 3x with a 12 px floor', () => {
-    assert.equal(fontSizeFor(1), 12);
-    assert.equal(fontSizeFor(3), 14);
-    assert.equal(fontSizeFor(4.5), 21);
+  it('is 16 px at 3x with a 14 px floor', () => {
+    assert.equal(fontSizeFor(1), 14);
+    assert.equal(fontSizeFor(3), 16);
+    assert.equal(fontSizeFor(4.5), 24);
   });
 });
 
