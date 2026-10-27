@@ -64,10 +64,20 @@ export interface BarsModel {
   blinkOn: boolean;
 }
 
+/** The onboarding buddy's ghost, while it shows */
+export interface GhostModel {
+  /** Left edge of its cell */
+  x: number;
+  dy: number;
+  /** 0 to 1, fading in */
+  opacity: number;
+}
+
 export interface FrameModel {
   scene: SceneId;
   sprites: Record<Side, SpriteModel>;
   bars: Record<Side, BarsModel>;
+  ghost?: GhostModel;
 }
 
 // Drawing
@@ -205,6 +215,28 @@ const drawBars = (
   }
 };
 
+/**
+ * The ghost in the grey box: a pale, translucent figure with no legs,
+ * floating; the sheet replaces it when the sprites land.
+ */
+const drawGhost = (ctx: CanvasRenderingContext2D, ghost: GhostModel) => {
+  const cx = ghost.x + LAYOUT.cell.width / 2;
+  const bottom = LAYOUT.feet - ghost.dy;
+  const pale = '#bfe8ea';
+  const paler = '#e8fbfb';
+  ctx.globalAlpha = 0.6 * ghost.opacity;
+  // A tapered body that frays into three tails
+  rect(ctx, cx - 10, bottom - 40, 20, 30, pale);
+  rect(ctx, cx - 10, bottom - 10, 5, 8, pale);
+  rect(ctx, cx - 2, bottom - 10, 5, 6, pale);
+  rect(ctx, cx + 6, bottom - 10, 4, 9, pale);
+  // Head, a little lighter, facing the player to the right
+  rect(ctx, cx - 9, bottom - 58, 18, 18, paler);
+  rect(ctx, cx + 9, bottom - 50, 3, 4, paler);
+  rect(ctx, cx + 3, bottom - 53, 2, 2, CHROME.outer);
+  ctx.globalAlpha = 1;
+};
+
 /** The dialogue box: a 9-slice with a 2 px frame, over the floor strip */
 const drawBox = (ctx: CanvasRenderingContext2D) => {
   const x = 4;
@@ -241,6 +273,7 @@ export const drawFrame = (
   ctx.imageSmoothingEnabled = false;
   if (background) drawScene(ctx, model.scene);
   else ctx.clearRect(0, 0, STAGE.width, STAGE.height);
+  if (model.ghost) drawGhost(ctx, model.ghost);
   drawSprite(ctx, 'player', model.sprites.player);
   drawSprite(ctx, 'opponent', model.sprites.opponent);
   drawBars(

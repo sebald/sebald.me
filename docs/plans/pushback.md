@@ -82,7 +82,17 @@ The bar is off in the two tier 1 duels, off by default under `prefers-reduced-mo
 
 ### The onboarding buddy
 
-A switch on the title screen next to the silence bar, off by default: `Onboarding buddy`. With it on, a colleague whispers the reply, slowly. While the player hesitates on defence, the wrong counters dim in three steps and the right one stays bright; by the third step the answer is plain. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
+A switch on the title screen next to the silence bar, off by default: `Onboarding buddy`. With it on, the ghost of the player's predecessor in the role whispers the reply, slowly. While the player hesitates on defence, the wrong counters dim in three steps and the right one stays bright; by the third step the answer is plain. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
+
+The ghost is a character, not a setting. It is off stage until the first step, then fades in behind the player's shoulder at head height, floating, and says one line in its own pale bubble; it stays until the player answers or the fallback fires. It speaks once per appearance, not on every step, so a slow player is not nagged three times an exchange. The lines are helpful and rude, in turn from a start set by the duel's seed so a duel never repeats one before it has used them all:
+
+- `Let me help you, new hire.`
+- `I had this one on my second day.`
+- `Read it again. Slowly. I have time. I have nothing but time.`
+- `I'm not haunting you. I'm onboarding you.`
+- after a miss despite the whisper, during the resolve: `I dimmed them. I literally dimmed them.`
+
+It never shows at the start of a duel or on attack turns: the dig lands on hesitation, not on playing. The sprite is one more Gemini sheet (see Art and animation), drawn translucent by the canvas; until it lands the grey box draws a pale placeholder.
 
 The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card says `with a buddy` when any duel of the run used it. Everything else (collecting, buy-in, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
 
@@ -306,7 +316,7 @@ Nothing is drawn by hand. Gemini generates every image (free tier), `snap.mjs` p
 
 Why Gemini and not a sprite tool: the AI sprite services (PixelLab and similar) are paid, and the Claude Code pixel plugins only script Aseprite, which is paid or a self-compile; neither draws a better figure than a reference-steered Gemini prompt. Gemini holds a character steady inside one image, so every character is generated as a single model sheet, not frame by frame.
 
-The prompts for every image are in `docs/plans/pushback-prompts.md`: twelve generations before rerolls (six model sheets, four scenes, one prop sheet, one head sheet; the Dev man's sheet exists), each with the references to attach, the file name under `sources/` and what to reroll on.
+The prompts for every image are in `docs/plans/pushback-prompts.md`: fourteen generations before rerolls (seven model sheets, the ghost, four scenes, one prop sheet, one head sheet), each with the references to attach, the file name under `sources/` and what to reroll on.
 
 Pipeline per character:
 
@@ -315,7 +325,7 @@ Pipeline per character:
 3. `sheet.mjs` cuts the strip into 72 by 112 cells by detecting the gaps, aligns each pose on its feet line, checks the figure height, keys out the background, locks the palette to the scene's 32 colours and writes the sheet plus a 4x contact print.
 4. Claude Code reviews the contact print (it can view the PNG) against the checklist in the `pixel-sprite` skill: same height across poses, no stray single pixels, mouth and prop readable, palette within the scene. It fixes small faults in code (`sheet.mjs` has `setPx`-style helpers as in `loop.mjs`) and sends larger faults back to step 1 with a follow-up prompt in the same Gemini chat (`Keep this exactly, but …`).
 
-Opponents are palette and prop swaps done in code, not new drawings: two model sheets per role (the two looks the player can pick) plus one for the Stakeholder, so seven Gemini sheets in total, and each colleague is a swap of one of its role's two bases. A swap is a colour lookup table in the character data plus an optional prop cell pasted at a fixed anchor; the eight props come from one Gemini item sheet cut on its gaps by `sheet.mjs`, like the model sheets. Where a swap needs a head change (hood up, beard), the head comes from one head sheet generated with the Dev sheet attached as reference, cut the same way. The Gemini originals are kept in the repo as `src/assets/lab/pushback/sources/<id>.jpg`; files under `src/assets` only ship when imported, so nothing excludes them from the build, they are simply never imported. They are the reference image for every later prompt, and a snapped PNG works worse as one.
+Opponents are palette and prop swaps done in code, not new drawings: two model sheets per role (the two looks the player can pick) plus one for the Stakeholder, so seven Gemini sheets in total, and each colleague is a swap of one of its role's two bases. A swap is a colour lookup table in the character data plus an optional prop cell pasted at a fixed anchor; the eight props come from one Gemini item sheet cut on its gaps by `sheet.mjs`, like the model sheets. Where a swap needs a head change (hood up, beard), the head comes from one head sheet generated with the Dev sheet attached as reference, cut the same way. The onboarding buddy's ghost is an eighth, smaller sheet: three cells (hover, hover, point), no legs, keyed like the others and drawn by the canvas at reduced opacity with a cool tint, since Gemini cannot render transparency. The Gemini originals are kept in the repo as `src/assets/lab/pushback/sources/<id>.jpg`; files under `src/assets` only ship when imported, so nothing excludes them from the build, they are simply never imported. They are the reference image for every later prompt, and a snapped PNG works worse as one.
 
 Animation is code, not frames:
 
@@ -483,13 +493,13 @@ Seven work packages, each a mergeable PR with its own tests, ordered so the game
 - [ ] **2. Save and routes** (`save.ts`, `/lab/pushback` page and client wrapper, title with the silence switch, role-select, roster and glossary screens as DOM, result card text). Done when a role can be picked, a run persists across reloads and the roster reflects `beaten`, the stars and the glossary count.
 - [ ] **3. Playable grey box** (canvas stage, dialogue box, hand and counter menus, the two bars and the silence bar as flat rectangles, typing, keyboard and touch input, placeholder rectangles for sprites and a flat background, the workbench route with the duel sandbox). Done when all seven slots can be played start to finish, including the boss gate and the interrupt, and the silence seconds have been tuned in the sandbox and checked against the simulation.
 - [ ] **4. Backgrounds** (four Gemini scenes through `snap.mjs`, four loop scripts, `scene-1x.webp` export added to `loop.mjs`, the scene viewer on the workbench). Done when the scenes animate in the stage at integer scale with no shimmer and the poster shows under reduced motion.
-- [ ] **5. Sprites** (`pixel-sprite` skill with `sheet.mjs` and the review checklist, seven Gemini model sheets, the prop sheet and the head sheet through it, swap tables for nine characters (each on one of its role's two bases), the chrome drawn in code, `sheets.test.ts`, the sprite viewer on the workbench). Done when every character renders from data with the right swaps, the validator runs in `pnpm test` and every pose has been checked in the viewer at 2x.
+- [ ] **5. Sprites** (`pixel-sprite` skill with `sheet.mjs` and the review checklist, seven Gemini model sheets, the ghost sheet, the prop sheet and the head sheet through it, swap tables for nine characters (each on one of its role's two bases), the chrome drawn in code, `sheets.test.ts`, the sprite viewer on the workbench). Done when every character renders from data with the right swaps, the validator runs in `pnpm test` and every pose has been checked in the viewer at 2x.
 - [ ] **6. Polish** (reduced motion, live region and focus order, pause, result card screen with copy, credits line per role, the phone gag if it reads at native size, rotate hint on portrait phones, OG image for `/lab/pushback`). Done when the route passes the existing lint, format, type and test commands and a VRT baseline exists.
 - [ ] **7. Lines pass** (read every line aloud in a duel, cut what does not land, check the 70-character limit, confirm each counter reads as a reply next to five decoys, fix boss-3). Done when the tables in this spec and `lines.ts` match.
 
 Open questions to settle before package 4:
 
-- Does the Gemini free tier's daily image cap fit the twelve generations plus rerolls in one sitting, or does the art spread over a few days? The prompt pack is ordered so the model sheets go first.
+- Does the Gemini free tier's daily image cap fit the fourteen generations plus rerolls in one sitting, or does the art spread over a few days? The prompt pack is ordered so the model sheets go first.
 - Keep character names (Jo, Sam, Ines) or drop them entirely? They only exist on the select screen and the result card.
 - Does `/lab/pushback` get a note on the blog announcing it (which then needs a narration, or `narrate:check` fails CI), and a header image via the usual pipeline, or is it a quiet link in the footer?
 - Silence seconds (8/6/5) are a guess until the grey box exists; the mic drop halving might be too brutal at 1x on a phone.

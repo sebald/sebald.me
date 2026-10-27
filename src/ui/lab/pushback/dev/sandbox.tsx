@@ -39,6 +39,7 @@ interface Options {
   attempt: DuelSetup['attempt'];
   seed: number;
   silence: boolean;
+  buddy: boolean;
   seconds: number | null;
   collected: 'own' | 'all' | 'none';
   jump: Jump;
@@ -54,6 +55,7 @@ const DEFAULTS: Options = {
   attempt: 'first',
   seed: 1,
   silence: true,
+  buddy: false,
   seconds: null,
   collected: 'own',
   jump: 'intro',
@@ -128,6 +130,7 @@ export const sandboxState = (options: Options): DuelState => {
     collected,
     seed: options.seed,
     silence: options.silence,
+    buddy: options.buddy,
     tutorial: options.slot === 0 && options.attempt === 'first',
   });
   state = play(state, options.jump);
@@ -255,6 +258,14 @@ export const Sandbox = () => {
             type="checkbox"
             checked={options.silence}
             onChange={e => set('silence', e.target.checked)}
+          />
+        </label>
+        <label className={field}>
+          Onboarding buddy
+          <input
+            type="checkbox"
+            checked={options.buddy}
+            onChange={e => set('buddy', e.target.checked)}
           />
         </label>
         <label className={field}>

@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Thirteen generations before rerolls: seven model sheets, four scenes, one prop sheet, one head sheet.
+Every image the game needs, one prompt each, ready to paste. Fourteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet.
 
 ## Before you start
 
@@ -431,6 +431,49 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
 Reroll on: the eyes visible in any cell but the last, the phone missing in a cell, the suit changing colour, a figure taller than the attached sheet (suits tempt Gemini into drawing bigger).
+
+### The onboarding buddy's ghost (`ghost-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+The ghost of the player's predecessor, who appears behind the player's shoulder when they hesitate on defence (see the spec, The onboarding buddy). Three cells, not six: it only hovers and points. Gemini cannot render transparency, so the sheet is opaque and the canvas draws it at reduced opacity with a cool tint; the colours below are the opaque base. It has no legs, so its cell is shorter than the others; `sheet.mjs` aligns it on the head, not on a feet line.
+
+```text
+Draw a pixel-art model sheet of a NEW character for the same game as the
+attached sheet. The attached sheet is only the reference for pixel size,
+drawing style and outline weight. The new character is a ghost and must
+not look like the attached person.
+
+Character: the friendly ghost of a former office worker, a little
+shorter than the attached figures, head and shoulders and a tapered
+body that frays into three wisps where the legs would be, hovering. No
+legs, no feet. Pale, cold colours only: three shades of pale cyan and
+white for the whole figure, a darker teal outline. A faint lanyard with
+a blank badge around the neck, the one thing from its old life. A
+small, kind, slightly smug face: two dot eyes, a thin smile. Everything
+else is simple.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Plain flat dark background, no floor, no
+shadow, no glow, no frame.
+
+Layout: the same ghost three times side by side in a single row,
+identical in size and colours, front three-quarter view facing to the
+right, clear gaps between the figures, nothing touching the edge of the
+image. Left to right:
+1. hover: arms folded, body straight.
+2. hover, second frame: the same pose with the wisps swung a little to
+   the other side and the body one notch higher, for a two-frame float.
+3. point: one arm out to the right, finger extended, the smile a touch
+   wider.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: legs or feet, a glow or halo (the canvas adds the translucency), a figure as tall as the attached ones or taller, warm colours anywhere but the badge.
 
 ## Scenes
 

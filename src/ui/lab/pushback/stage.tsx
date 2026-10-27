@@ -143,6 +143,8 @@ export interface MenuItem {
   id: string;
   label: React.ReactNode;
   disabled?: boolean;
+  /** Opacity of the label, 1 by default (the buddy dims wrong counters) */
+  dim?: number;
   onSelect: () => void;
 }
 
@@ -231,7 +233,12 @@ export const Menu = ({
             <span aria-hidden className="w-3 shrink-0">
               {i === current ? '›' : ''}
             </span>
-            <span className="min-w-0 flex-1">{item.label}</span>
+            <span
+              className="min-w-0 flex-1 transition-opacity duration-500"
+              style={item.dim === undefined ? undefined : { opacity: item.dim }}
+            >
+              {item.label}
+            </span>
           </button>
         </li>
       ))}

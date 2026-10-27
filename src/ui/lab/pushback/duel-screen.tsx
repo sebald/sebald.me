@@ -9,6 +9,12 @@ import {
   useState,
 } from 'react';
 
+import {
+  GHOST,
+  buddyLine,
+  buddyOpacity,
+  buddyStep,
+} from '@/lib/lab/pushback/buddy';
 import { SCENE_OF, STANDS } from '@/lib/lab/pushback/characters';
 import {
   type DuelAction,
@@ -18,9 +24,11 @@ import {
   showsHint,
   toWin,
 } from '@/lib/lab/pushback/duel';
-import { HINT, pairById } from '@/lib/lab/pushback/lines';
+import { BUDDY_MISS_BARK, HINT, pairById } from '@/lib/lab/pushback/lines';
 import {
   type Step,
+  LAYOUT,
+  STAGE,
   barsLabel,
   bob,
   counterText,
@@ -73,6 +81,14 @@ const styles = {
     ],
   }),
   hint: cva({ base: 'text-mist-400' }),
+  // The ghost's speech bubble, over its head, in its own pale colour
+  bubble: cva({
+    base: [
+      'absolute max-w-[24em] rounded-lg px-[0.6em] py-[0.3em]',
+      'bg-[#0b1516]/90 text-[0.85em] text-[#bfe8ea] ring-1 ring-[#2f5e60]',
+      'transition-opacity duration-300',
+    ],
+  }),
   silence: cva({
     base: 'mt-[calc(var(--px)*2)] h-[var(--px)] w-full bg-mist-700',
   }),
@@ -162,6 +178,8 @@ export const DuelScreen = ({
   const [paused, setPaused] = useState(false);
   const [micDrop, setMicDrop] = useState(false);
   const [clock, setClock] = useState(0);
+  // The exchange the buddy's whisper started on, for the miss line
+  const [whisperedOn, setWhisperedOn] = useState<number | null>(null);
   const reduced = reducedMotion ?? prefersReducedMotion();
 
   const stateRef = useRef(state);
@@ -217,6 +235,16 @@ export const DuelScreen = ({
         case 'menu': {
           const s = stateRef.current;
           if (s.phase === 'defend' && s.silence) act({ type: 'tick', ms });
+          // The buddy's whisper has started on this exchange (the frame
+          // loop is the event, so the resolve can look it up)
+          if (
+            s.phase === 'defend' &&
+            s.setup.buddy === true &&
+            buddyStep(s.silence?.elapsed ?? elapsed, s.silence?.limit ?? null) >
+              0
+          ) {
+            setWhisperedOn(s.exchanges);
+          }
           setCursor({ ...cursor, elapsed });
           break;
         }
@@ -260,12 +288,47 @@ export const DuelScreen = ({
     ),
   );
 
+  // The onboarding buddy
+  // ---------------
+  // How far the whisper has got on this defence: paced by the silence bar
+  // when there is one, by its own clock otherwise
+  const buddy = state.setup.buddy === true;
+  const defending = state.phase === 'defend' && step?.kind === 'menu';
+  const whisper =
+    buddy && defending
+      ? buddyStep(
+          state.silence?.elapsed ?? cursor.elapsed,
+          state.silence?.limit ?? null,
+        )
+      : 0;
+  // A miss after the whisper gets the ghost's own line during the resolve
+  const missedAfterWhisper =
+    buddy &&
+    state.phase === 'resolve' &&
+    whisperedOn === state.exchanges - 1 &&
+    state.exchange?.by === 'opponent' &&
+    state.outcome?.winner === 'opponent';
+  const ghostLine: string | null = defending
+    ? whisper > 0
+      ? buddyLine(state.exchanges, state.setup.seed)
+      : null
+    : missedAfterWhisper
+      ? BUDDY_MISS_BARK
+      : null;
+
   // Frame model
   // ---------------
   const { character } = state.setup;
   const scene = SCENE_OF[character.role];
   const stands = STANDS[scene];
   const poses = posesFor(state, step);
+  const ghost: FrameModel['ghost'] = ghostLine
+    ? {
+        x: stands.left - GHOST.behind,
+        dy: GHOST.lift + (reduced ? 0 : bob(clock, 1200)),
+        opacity: 1,
+      }
+    : undefined;
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
   const bars = (side: Side) => ({
@@ -301,6 +364,7 @@ export const DuelScreen = ({
     scene,
     sprites: { player: sprite('player'), opponent: sprite('opponent') },
     bars: { player: bars('player'), opponent: bars('opponent') },
+    ghost,
   };
 
   // Overlay
@@ -333,14 +397,16 @@ export const DuelScreen = ({
       return items;
     }
     if (state.phase === 'defend') {
+      const answer = state.exchange?.answer;
       return state.menu.map(id => ({
         id,
         label: pairById(id).counter,
+        dim: whisper > 0 && id !== answer ? buddyOpacity(whisper) : undefined,
         onSelect: () => act({ type: 'counter', phrase: id }),
       }));
     }
     return [];
-  }, [step?.kind, state, micDrop, act, toggleMicDrop, canMicDrop]);
+  }, [step?.kind, state, micDrop, act, toggleMicDrop, canMicDrop, whisper]);
 
   const micDropLabel =
     state.exchange?.micDrop === true &&
@@ -387,6 +453,18 @@ export const DuelScreen = ({
         <div className={styles.badge()} aria-hidden>
           Mic drop!
         </div>
+      )}
+
+      {ghost && ghostLine && (
+        <p
+          className={styles.bubble()}
+          style={{
+            left: `calc(var(--px) * ${ghost.x - 8})`,
+            bottom: `calc(var(--px) * ${STAGE.height - LAYOUT.feet + ghost.dy + 62})`,
+          }}
+        >
+          {ghostLine}
+        </p>
       )}
 
       {/* Tap the stage to skip typing or move on; the box is for the menus */}

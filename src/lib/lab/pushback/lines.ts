@@ -222,6 +222,22 @@ export const HINT = 'Pick the reply that answers it';
 /** The Stakeholder's line when the player interrupts with a mic drop */
 export const OFFLINE = "Let's take this offline.";
 
+/**
+ * The onboarding buddy: the ghost of the player's predecessor in the
+ * role. It appears when the player hesitates on defence and whispers
+ * the reply by dimming the wrong counters; the line is the dig that comes
+ * with the help. One per appearance, in turn.
+ */
+export const BUDDY_BARKS: readonly string[] = [
+  'Let me help you, new hire.',
+  'I had this one on my second day.',
+  'Read it again. Slowly. I have time. I have nothing but time.',
+  "I'm not haunting you. I'm onboarding you.",
+];
+
+/** The buddy, when the player misses after the whisper */
+export const BUDDY_MISS_BARK = 'I dimmed them. I literally dimmed them.';
+
 export const PLAYER_BARKS: Record<Role, { win: string; lose: string }> = {
   pm: {
     win: "I'll add that to the release notes.",

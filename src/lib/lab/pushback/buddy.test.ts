@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { BUDDY_STEPS, BUDDY_WINDOW_MS, buddyOpacity, buddyStep } from './buddy';
+import {
+  BUDDY_STEPS,
+  BUDDY_WINDOW_MS,
+  buddyLine,
+  buddyOpacity,
+  buddyStep,
+} from './buddy';
+import { BUDDY_BARKS } from './lines';
 
 describe('buddyStep', () => {
   it('dims in three steps across the silence limit', () => {
@@ -35,5 +42,14 @@ describe('buddyOpacity', () => {
     assert.equal(buddyOpacity(BUDDY_STEPS), 0.25);
     assert.equal(buddyOpacity(99), 0.25);
     assert.equal(buddyOpacity(-1), 1);
+  });
+});
+
+describe('buddyLine', () => {
+  it('uses every line before repeating one, from a seed-set start', () => {
+    const lines = BUDDY_BARKS.map((_, i) => buddyLine(i, 7));
+    assert.equal(new Set(lines).size, BUDDY_BARKS.length);
+    assert.equal(buddyLine(BUDDY_BARKS.length, 7), buddyLine(0, 7));
+    assert.notEqual(buddyLine(0, 0), buddyLine(0, 1));
   });
 });

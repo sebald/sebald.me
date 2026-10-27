@@ -45,7 +45,7 @@ export const TitleScreen = ({
       />
       <Stage.Muted className="text-[0.85em] text-balance">
         {buddy
-          ? 'The buddy whispers the reply. Slowly. No stars with a buddy.'
+          ? 'The ghost of your predecessor whispers the reply. Slowly. No stars with a buddy.'
           : 'Arrows or W/S to move, Enter to confirm, Escape to go back.'}
       </Stage.Muted>
     </Stage.Center>
