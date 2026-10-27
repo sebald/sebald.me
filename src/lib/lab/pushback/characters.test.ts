@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import {
-  BOSS_SLOT_INDEX,
+  bossIndex,
   CHARACTERS,
   SLOTS,
   characterById,
@@ -21,12 +21,11 @@ describe('roleOrder', () => {
 });
 
 describe('drawRun', () => {
-  it('draws two distinct characters per role in the role order', () => {
-    const run = drawRun('pm', 7);
-    assert.equal(run.slots.length, 7);
+  it('draws up to two characters per role in the role order, no face twice', () => {
+    const run = drawRun('pm', 'a', 7);
     const roles = run.slots.map(s => characterById(s.character).role);
+    // Jo is a PM look and a colleague's sheet: one PM colleague is left
     assert.deepEqual(roles, [
-      'pm',
       'pm',
       'dev',
       'dev',
@@ -36,24 +35,31 @@ describe('drawRun', () => {
     ]);
     const ids = run.slots.map(s => s.character);
     assert.equal(new Set(ids).size, ids.length);
-    assert.equal(run.outOfOffice.length, 3);
+    const sheets = run.slots.map(s => characterById(s.character).sheet);
+    assert.equal(new Set(sheets).size, sheets.length);
+    assert.ok(!sheets.includes('pm-jo'));
+    assert.equal(run.outOfOffice.length, 4);
     assert.ok(run.outOfOffice.every(id => !ids.includes(id)));
   });
 
-  it('applies the slot table by position', () => {
-    const run = drawRun('dev', 1);
+  it('applies the slot table by role, the first slot of a role first', () => {
+    const run = drawRun('dev', 'b', 1);
     assert.deepEqual(
       run.slots.map(s => s.slot),
-      [...SLOTS],
+      [SLOTS[0], SLOTS[2], SLOTS[3], SLOTS[4], SLOTS[5], SLOTS[6]],
     );
-    assert.equal(run.slots[BOSS_SLOT_INDEX]?.character, 'stakeholder');
+    assert.equal(run.slots[bossIndex(run)]?.character, 'stakeholder');
+    assert.equal(bossIndex(run), run.slots.length - 1);
   });
 
   it('is deterministic under a seed and varies across seeds', () => {
-    assert.deepEqual(drawRun('designer', 42), drawRun('designer', 42));
+    assert.deepEqual(
+      drawRun('designer', 'a', 42),
+      drawRun('designer', 'a', 42),
+    );
     const casts = new Set(
       Array.from({ length: 20 }, (_, seed) =>
-        drawRun('designer', seed)
+        drawRun('designer', 'b', seed)
           .slots.map(s => s.character)
           .join(','),
       ),

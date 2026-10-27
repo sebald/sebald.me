@@ -5,12 +5,9 @@ import { CHARACTERS } from './characters';
 import {
   GHOST_CELLS,
   POSE_CELL,
-  PROPS,
   SHEET_IDS,
   cellFor,
   ghostCell,
-  handAnchor,
-  swapKey,
 } from './sprites';
 import { FRAME_MS } from './stage';
 
@@ -38,30 +35,10 @@ describe('ghostCell', () => {
   });
 });
 
-describe('swaps', () => {
-  it('every character uses a sheet and a prop that exist', () => {
+describe('sheets', () => {
+  it('every character is drawn from a sheet that exists', () => {
     for (const character of CHARACTERS) {
-      assert.ok(SHEET_IDS.includes(character.swap.base), character.id);
-      if (character.swap.prop) {
-        assert.ok(PROPS.includes(character.swap.prop), character.id);
-      }
+      assert.ok(SHEET_IDS.includes(character.sheet), character.id);
     }
-  });
-
-  it('every prop is carried by exactly one character', () => {
-    const carried = CHARACTERS.flatMap(c => (c.swap.prop ? [c.swap.prop] : []));
-    assert.deepEqual([...carried].sort(), [...PROPS].sort());
-  });
-
-  it('the two colleagues on one base differ in their prop', () => {
-    const keys = CHARACTERS.map(c => swapKey(c.swap));
-    assert.equal(new Set(keys).size, keys.length);
-  });
-
-  it('puts the prop at the forward hand of the figure', () => {
-    assert.deepEqual(handAnchor({ x: 20, y: 32, width: 30, height: 80 }), {
-      x: 44,
-      y: 80,
-    });
   });
 });

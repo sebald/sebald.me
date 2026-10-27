@@ -4,13 +4,7 @@ import { useState } from 'react';
 
 import { CHARACTERS, LOOKS } from '@/lib/lab/pushback/characters';
 import { ROLES } from '@/lib/lab/pushback/lines';
-import {
-  PLAYER_SHEETS,
-  PROPS,
-  type PropId,
-  type Swap,
-  swapKey,
-} from '@/lib/lab/pushback/sprites';
+import { PLAYER_SHEETS, type SheetId } from '@/lib/lab/pushback/sprites';
 import { type Pose } from '@/lib/lab/pushback/stage';
 
 import { Character } from '../character';
@@ -22,23 +16,25 @@ const POSES: Pose[] = ['idle', 'talk', 'taunt', 'flinch', 'win', 'lose'];
 interface Entry {
   /** The name, which is unique; two entries can share a sheet */
   label: string;
-  swap: Swap;
+  sheet: SheetId;
 }
 
 /** The six looks, the nine colleagues and the boss */
 export const CAST: Entry[] = [
   ...ROLES.flatMap(role =>
     (['a', 'b'] as const).map(look => {
-      const swap: Swap = { base: PLAYER_SHEETS[role][look] };
-      return { label: LOOKS[role][look].name, swap };
+      return {
+        label: LOOKS[role][look].name,
+        sheet: PLAYER_SHEETS[role][look],
+      };
     }),
   ),
-  ...CHARACTERS.map(c => ({ label: c.name, swap: c.swap })),
+  ...CHARACTERS.map(c => ({ label: c.name, sheet: c.sheet })),
 ];
 
 /**
- * One character at a time: who, the pose, mirrored, a prop in the hand,
- * the scale, talking or not; idle by default, so the breathing shows.
+ * One character at a time: who, the pose, mirrored, the scale, talking
+ * or not; idle by default, so the breathing shows.
  */
 export const CharacterPlayground = () => {
   const [who, setWho] = useState(CAST[0]!.label);
@@ -47,15 +43,8 @@ export const CharacterPlayground = () => {
   const [typing, setTyping] = useState(true);
   const [micDrop, setMicDrop] = useState(false);
   const [still, setStill] = useState(false);
-  const [prop, setProp] = useState<PropId | 'as-is' | 'none'>('as-is');
   const [scale, setScale] = useState(3);
   const entry = CAST.find(e => e.label === who) ?? CAST[0]!;
-  const swap: Swap =
-    prop === 'as-is'
-      ? entry.swap
-      : prop === 'none'
-        ? { base: entry.swap.base }
-        : { base: entry.swap.base, prop };
 
   return (
     <div className="grid gap-4">
@@ -80,21 +69,6 @@ export const CharacterPlayground = () => {
             onChange={e => setPose(e.target.value as Pose)}
           >
             {POSES.map(p => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Prop">
-          <select
-            className={field.input}
-            value={prop}
-            onChange={e => setProp(e.target.value as PropId | 'as-is' | 'none')}
-          >
-            <option value="as-is">as drawn</option>
-            <option value="none">none</option>
-            {PROPS.map(p => (
               <option key={p} value={p}>
                 {p}
               </option>
@@ -146,8 +120,8 @@ export const CharacterPlayground = () => {
       <Pixels scale={scale}>
         <Floor>
           <Character
-            key={`${swapKey(swap)}|${pose}`}
-            swap={swap}
+            key={`${entry.sheet}|${pose}`}
+            sheet={entry.sheet}
             pose={pose}
             mirrored={mirrored}
             typing={typing}
@@ -166,7 +140,7 @@ export const Cast = () => (
     <Floor className="flex flex-wrap gap-x-2 gap-y-4">
       {CAST.map(e => (
         <figure key={e.label} className="grid justify-items-center gap-1">
-          <Character swap={e.swap} />
+          <Character sheet={e.sheet} />
           <figcaption className="text-[0.75em] text-[#8a92b8]">
             {e.label}
           </figcaption>

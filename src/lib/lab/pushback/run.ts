@@ -4,10 +4,11 @@
  */
 import type { Attempt } from './ai';
 import {
-  BOSS_SLOT_INDEX,
+  type Look,
   type Rules,
   type Run,
   type RunSlot,
+  bossIndex,
   characterById,
   drawRun,
 } from './characters';
@@ -38,9 +39,13 @@ export interface RunState {
   stats: DuelStats;
 }
 
-export const createRunState = (role: Role, seed: number): RunState => ({
+export const createRunState = (
+  role: Role,
+  look: Look,
+  seed: number,
+): RunState => ({
   role,
-  run: drawRun(role, seed),
+  run: drawRun(role, look, seed),
   beaten: {},
   lost: [],
   collected: poolOf(role).map(p => p.id),
@@ -54,16 +59,16 @@ export const createRunState = (role: Role, seed: number): RunState => ({
 export const nextSlot = (state: RunState): number =>
   state.run.slots.findIndex((_, index) => !state.beaten[index]);
 
-/** The Stakeholder is reachable once all six colleagues are beaten */
+/** The Stakeholder is reachable once every colleague is beaten */
 export const bossUnlocked = (state: RunState): boolean =>
   state.run.slots
-    .slice(0, BOSS_SLOT_INDEX)
+    .slice(0, bossIndex(state.run))
     .every((_, index) => state.beaten[index]);
 
 export const canPlay = (state: RunState, index: number): boolean =>
   index >= 0 &&
   index < state.run.slots.length &&
-  (index !== BOSS_SLOT_INDEX || bossUnlocked(state));
+  (index !== bossIndex(state.run) || bossUnlocked(state));
 
 /** How a duel at this slot starts, which sets the opponent's pick order */
 export const attemptFor = (state: RunState, index: number): Attempt => {
@@ -127,7 +132,7 @@ export const recordDuel = (
     beaten,
     lost,
     collected: duel.collected,
-    finished: state.finished || (won && index === BOSS_SLOT_INDEX),
+    finished: state.finished || (won && index === bossIndex(state.run)),
     attempts: state.attempts + 1,
     buddy: state.buddy || duel.setup.buddy === true,
     stats: addStats(state.stats, duel.stats),

@@ -1,12 +1,14 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import { FRAME_MS } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { drawCell } from './draw';
 import { BURST_KEY, SHEETS, useSprites } from './sheets';
+
+const BURST_KEYS = [BURST_KEY] as const;
 import { useStage } from './stage';
 import { useClock } from './use-clock';
 
@@ -36,10 +38,9 @@ export const Burst = ({
   pulse = false,
   className,
 }: BurstProps) => {
+  // (the list is a constant, so the sprites hook sees the same keys)
   const { backing } = useStage();
-  const sprite = useSprites(useMemo(() => ({ [BURST_KEY]: BURST_KEY }), []))[
-    BURST_KEY
-  ];
+  const sprite = useSprites(BURST_KEYS)[BURST_KEY];
   const clock = useClock(pulse);
   const shown = pulse
     ? Math.floor(clock / FRAME_MS) % 2 === 0

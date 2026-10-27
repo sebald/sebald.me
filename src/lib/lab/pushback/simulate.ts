@@ -10,7 +10,7 @@
  * attack it prefers a foreign phrase and drops the mic when it can.
  */
 import {
-  BOSS_SLOT_INDEX,
+  bossIndex,
   MODES,
   type Rules,
   SLOTS,
@@ -170,14 +170,15 @@ export const simulate = (
   let duels = 0;
   for (let seed = 1; seed <= runs; seed++) {
     const rng = new Rng(seedRng(seed * 7919));
-    let run = createRunState(role, seed);
+    let run = createRunState(role, 'a', seed);
     let stuck = false;
-    for (let index = 0; index < SLOTS.length && !stuck; index++) {
-      if (index === BOSS_SLOT_INDEX) {
+    for (let index = 0; index < run.run.slots.length && !stuck; index++) {
+      if (index === bossIndex(run.run)) {
         bossReached++;
         glossary += run.collected.length;
       }
-      const report = slots[index]!;
+      // Reported by the slot table, since a run can skip a slot
+      const report = slots[SLOTS.indexOf(run.run.slots[index]!.slot)]!;
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         duels++;
         report.attempts++;
@@ -198,7 +199,7 @@ export const simulate = (
         if (attempt === 0) {
           report.firstPlays++;
           if (won) report.firstWins++;
-          if (won && index === BOSS_SLOT_INDEX) bossWinsFirst++;
+          if (won && index === bossIndex(run.run)) bossWinsFirst++;
         } else {
           report.retryPlays++;
           if (won) report.retryWins++;

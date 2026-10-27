@@ -38,11 +38,6 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   src/assets/lab/pushback/sources/originals/micdrop-sheet.jpeg micdrop \
   --cells 3 --cell 96x96 --anchor centre --specks 0
 
-# The item sheet: eight props in 48 by 48 cells, centred, with the blurred
-# figures Gemini put under the items keyed away by the wider soft key
-node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/props-sheet.jpg props \
-  --cells 8 --cell 48x48 --anchor centre --soft 90 --soft-from 0.6 --colours 48
 ```
 
 What it does, in order:
@@ -79,34 +74,35 @@ palette.
 
 Open `sources/contact/<id>.png` and `<id>-keyed.png` and check:
 
-- Six cells, the same person in all of them: face, hair, clothes, prop.
+- Six cells, the same person in all of them: face, hair, clothes.
   A cell that drifted goes back to Gemini ("One cell drifted" follow-up).
 - Height: the idle figure between 76 and 85 px; the others may differ by
-  a raised prop or a bowed head, not by scale. A sheet outside the range
+  a raised hand or a bowed head, not by scale. A sheet outside the range
   is rerolled, not scaled (the ghost is the one exception, see above).
 - The key: no magenta inside a figure (dark hair, black shoes), no
   leftover shadow or dust around it. Fix with `--tolerance` (lower keeps
   more), `--soft` (higher takes more shadow), `--soft-from` (where the
   soft key may start), `--specks`.
-- Nothing clipped: a prop thrust past the 72 px cell is a reroll.
-- Mouth and prop readable at 2x, no stray single pixels, no letters or
+- Nothing clipped: a hand thrust past the 72 px cell is a reroll.
+- Mouth and hands readable at 2x, no stray single pixels, no letters or
   brand marks (a three-pixel laptop logo is fine, a readable claw is not).
 - Palette: 32 colours, the outline still one dark colour, no banding on
   the skin.
 
-Then check the sprite in motion on the workbench (`/lab/pushback/inventory`,
-"Sprite viewer"): every pose, mirrored, the talk cells alternating, the
-swapped colleagues with their props in the hand.
+Then check the sprite in motion in the inventory (`/lab/pushback/inventory`,
+"Character"): every pose, mirrored, the mouth while a line types.
 
-## Swaps
+## The cast and the sheets
 
-The nine colleagues are not drawn: `src/lib/lab/pushback/characters.ts`
-gives each a `swap` (a base sheet and a prop) and the browser builds the
-sprite (`src/ui/lab/pushback/sheets.ts`). Sprites keep the colours Gemini
-drew; never recolour a sheet in code. Hue-based tints caught skin and
-hair next to the garment and left pixels see-through, so they were taken
-out. A colleague that needs its own look gets its own sheet. The prop is
-pasted at the forward hand (`handAnchor` in `sprites.ts`).
+The nine colleagues are not drawn one by one: `src/lib/lab/pushback/
+characters.ts` gives each a `sheet` (one of its role's two looks) and the
+browser builds the sprite from it as it is (`src/ui/lab/pushback/sheets.ts`).
+Sprites keep the colours Gemini drew; never recolour a sheet in code.
+Hue-based tints caught skin and hair next to the garment and left pixels
+see-through, so they were taken out; pasting an item into the hand looked
+wrong too, so nothing is pasted on either. A colleague that needs its own
+look gets its own sheet; the run draw never shows two colleagues on one
+sheet together.
 
 ## Scenes
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useMemo, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 
 import { GHOST } from '@/lib/lab/pushback/buddy';
 import { ghostCell } from '@/lib/lab/pushback/sprites';
@@ -9,6 +9,8 @@ import { cn } from '@/lib/styles.utils';
 
 import { GHOST_ALPHA, drawCell } from './draw';
 import { GHOST_KEY, useSprites } from './sheets';
+
+const GHOST_KEYS = [GHOST_KEY] as const;
 import { useStage } from './stage';
 import { useClock } from './use-clock';
 
@@ -36,9 +38,7 @@ export const Ghost = ({
   className,
 }: GhostProps) => {
   const { backing } = useStage();
-  const sprite = useSprites(useMemo(() => ({ [GHOST_KEY]: GHOST_KEY }), []))[
-    GHOST_KEY
-  ];
+  const sprite = useSprites(GHOST_KEYS)[GHOST_KEY];
   const clock = useClock(!still);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

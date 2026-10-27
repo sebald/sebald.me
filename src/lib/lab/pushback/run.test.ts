@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { BOSS_SLOT_INDEX, RULES } from './characters';
+import { RULES, bossIndex } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { poolOf } from './lines';
 import {
@@ -42,20 +42,20 @@ const playSlot = (
 
 describe('a run', () => {
   it('starts with exactly the own pool collected and the first slot up', () => {
-    const run = createRunState('dev', 3);
+    const run = createRunState('dev', 'a', 3);
     assert.deepEqual(
       run.collected,
       poolOf('dev').map(p => p.id),
     );
     assert.equal(nextSlot(run), 0);
     assert.ok(!bossUnlocked(run));
-    assert.ok(!canPlay(run, BOSS_SLOT_INDEX));
+    assert.ok(!canPlay(run, bossIndex(run.run)));
     assert.equal(attemptFor(run, 0), 'first');
     assert.ok(duelSetupFor(run, 0, { seed: 1, silence: true }).tutorial);
   });
 
   it('marks a lost slot for a retry and a beaten one for a replay', () => {
-    let run = createRunState('pm', 5);
+    let run = createRunState('pm', 'a', 5);
     run = playSlot(run, 0, false);
     assert.equal(attemptFor(run, 0), 'retry');
     assert.ok(!duelSetupFor(run, 0, { seed: 1, silence: true }).tutorial);
@@ -67,7 +67,7 @@ describe('a run', () => {
   });
 
   it('keeps what the duel collected and adds up the stats', () => {
-    let run = createRunState('designer', 8);
+    let run = createRunState('designer', 'a', 8);
     // The first slot is the own role: nothing new to collect, and the
     // colleague counters the own pool until fatigue sets in
     run = playSlot(run, 0, true);
@@ -82,15 +82,15 @@ describe('a run', () => {
   });
 
   it('unlocks the boss after six ticks and finishes on a boss win', () => {
-    let run = createRunState('pm', 2);
-    for (let index = 0; index < BOSS_SLOT_INDEX; index++) {
+    let run = createRunState('pm', 'a', 2);
+    for (let index = 0; index < bossIndex(run.run); index++) {
       run = playSlot(run, index, true);
     }
     assert.ok(bossUnlocked(run));
-    assert.ok(canPlay(run, BOSS_SLOT_INDEX));
+    assert.ok(canPlay(run, bossIndex(run.run)));
     assert.ok(!run.finished);
-    run = playSlot(run, BOSS_SLOT_INDEX, true);
+    run = playSlot(run, bossIndex(run.run), true);
     assert.ok(run.finished);
-    assert.equal(run.beaten[BOSS_SLOT_INDEX]?.flawless, true);
+    assert.equal(run.beaten[bossIndex(run.run)]?.flawless, true);
   });
 });

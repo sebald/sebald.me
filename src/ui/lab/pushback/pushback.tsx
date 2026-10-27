@@ -2,11 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import {
-  BOSS_SLOT_INDEX,
-  type Look,
-  MODES,
-} from '@/lib/lab/pushback/characters';
+import { type Look, MODES } from '@/lib/lab/pushback/characters';
 import { type DuelState, createDuel } from '@/lib/lab/pushback/duel';
 import type { Role } from '@/lib/lab/pushback/lines';
 import { duelSetupFor } from '@/lib/lab/pushback/run';
@@ -66,7 +62,7 @@ export const Pushback = () => {
   const endDuel = useCallback((role: Role, index: number, duel: DuelState) => {
     setSave(previous => finishDuel(previous, role, index, duel));
     setScreen(
-      index === BOSS_SLOT_INDEX
+      duel.setup.character.role === 'boss'
         ? { name: 'result', role }
         : { name: 'roster', role },
     );

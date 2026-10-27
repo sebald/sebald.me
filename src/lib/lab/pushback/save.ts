@@ -117,7 +117,10 @@ export const startRun = (
   seed: number = Date.now(),
 ): Save => ({
   ...save,
-  runs: { ...save.runs, [role]: { ...createRunState(role, seed), look } },
+  runs: {
+    ...save.runs,
+    [role]: { ...createRunState(role, look, seed), look },
+  },
 });
 
 /** Fold a finished duel of a role's run into the save */

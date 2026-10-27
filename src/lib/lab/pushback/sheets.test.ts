@@ -9,7 +9,7 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { describe, it } from 'node:test';
 
-import { PROPS, SHEET_IDS, type SheetMeta } from './sprites';
+import { SHEET_IDS, type SheetMeta } from './sprites';
 import { LAYOUT } from './stage';
 
 const require = createRequire(import.meta.url);
@@ -94,19 +94,5 @@ describe('the ghost sheet', () => {
     }
     const { width } = await pixels('ghost');
     assert.equal(width, LAYOUT.cell.width * 3);
-  });
-});
-
-describe('the prop sheet', () => {
-  it('has one cell per prop, none clipped, none bigger than half a figure', () => {
-    const m = meta('props');
-    assert.equal(m.count, PROPS.length);
-    for (const { box, clipped } of m.cells) {
-      assert.equal(clipped, false);
-      assert.ok(
-        box.height <= 42 && box.width <= 44,
-        `${box.width}x${box.height}`,
-      );
-    }
   });
 });

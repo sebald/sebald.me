@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
-import { BOSS_SLOT_INDEX, characterById } from '@/lib/lab/pushback/characters';
+import { bossIndex, characterById } from '@/lib/lab/pushback/characters';
 import {
   PAIRS,
   ROLE_LABELS,
@@ -16,12 +16,10 @@ import {
   canPlay,
   nextSlot,
 } from '@/lib/lab/pushback/run';
-import { PROPS, type PropId } from '@/lib/lab/pushback/sprites';
 import { cn } from '@/lib/styles.utils';
 
 import { Picker, type PickerItem } from './picker';
 import { SCENE_ASSETS } from './scenes';
-import { SHEETS } from './sheets';
 import { Stage } from './stage';
 import { useKeys } from './use-keys';
 
@@ -34,31 +32,6 @@ interface RosterScreenProps {
 
 const tierLabel = (tier: 1 | 2 | 3 | 'boss') =>
   tier === 'boss' ? 'Boss' : `Tier ${tier}`;
-
-/**
- * A colleague's prop from the item sheet, as a CSS sprite at a third of
- * the stage's pixels (the sheet's own pixels at 3x): the props are not
- * on the figures any more, so the roster shows what each one carries.
- */
-const PropIcon = ({ prop }: { prop: PropId }) => {
-  const sheet = SHEETS.props;
-  const { width, height } = sheet.meta.cell;
-  const px = (n: number) => `calc(var(--px) * ${n / 3})`;
-  return (
-    <span
-      aria-hidden
-      className="inline-block shrink-0 [image-rendering:pixelated]"
-      style={{
-        width: px(width),
-        height: px(height),
-        backgroundImage: `url(${sheet.image.src})`,
-        backgroundSize: `${px(width * sheet.meta.count)} ${px(height)}`,
-        backgroundPosition: `${px(-PROPS.indexOf(prop) * width)} 0`,
-        backgroundRepeat: 'no-repeat',
-      }}
-    />
-  );
-};
 
 /**
  * The seven slots in run order with ticks and stars, the out-of-office
@@ -101,9 +74,8 @@ export const RosterScreen = ({
             {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
           </span>
           <span className="flex-1">{character.name}</span>
-          {character.swap.prop && <PropIcon prop={character.swap.prop} />}
           <span className="text-[0.85em] opacity-70">
-            {index === BOSS_SLOT_INDEX && !bossUnlocked(run)
+            {index === bossIndex(run.run) && !bossUnlocked(run)
               ? 'locked'
               : tierLabel(slot.slot.tier)}
           </span>

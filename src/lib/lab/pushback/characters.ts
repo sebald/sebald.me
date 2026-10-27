@@ -1,12 +1,12 @@
 /**
  * The cast, the slot table and the run draw. A character is a face, a
- * name, an intro bark and a swap; it throws from its whole pool.
+ * name, an intro bark and a sheet; it throws from its whole pool.
  * Difficulty is not on the character but on the slot in the run (see
  * `docs/plans/pushback.md`, "The run").
  */
 import { type PairId, type Role, ROLES, poolOf } from './lines';
 import { Rng, seedRng } from './random';
-import type { Swap } from './sprites';
+import { PLAYER_SHEETS, type SheetId } from './sprites';
 
 export type CharacterId =
   | 'intern'
@@ -29,12 +29,13 @@ export interface Character {
   /** The intro bark */
   intro: string;
   /**
-   * How the character is drawn: one of its role's two base sheets in the
-   * colours Gemini drew, and a prop from the item sheet. The Stakeholder
-   * has a sheet of their own. Nothing is recoloured: a tint broke the
-   * figure too easily (skin and hair caught, pixels gone see-through).
+   * The sheet the character is drawn from, as Gemini drew it: one of its
+   * role's looks, or the Stakeholder's own. Nothing is recoloured (a
+   * tint broke the figure too easily) and nothing is pasted on (the
+   * hand-held items looked wrong), so two colleagues on one sheet are
+   * twins, which the run draw keeps apart.
    */
-  swap: Swap;
+  sheet: SheetId;
   /**
    * One or two pairs from other pools this character has picked up: it
    * throws them too and answers them every time. They make the own-role
@@ -49,7 +50,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Intern',
     role: 'pm',
     intro: "Hi! Is this the meeting? I was told there'd be a meeting.",
-    swap: { base: 'pm-jo', prop: 'coffee' },
+    sheet: 'pm-jo',
     knows: ['dev-1'],
   },
   {
@@ -57,7 +58,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Roadmap Owner',
     role: 'pm',
     intro: "I have a slot for you. It's now. Make it count.",
-    swap: { base: 'pm-piet', prop: 'gantt' },
+    sheet: 'pm-piet',
     knows: ['des-5', 'dev-3'],
   },
   {
@@ -65,7 +66,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Head of Product',
     role: 'pm',
     intro: "I've heard about you. None of it was in the OKRs.",
-    swap: { base: 'pm-jo' },
+    sheet: 'pm-jo',
     knows: ['dev-8', 'des-1'],
   },
   {
@@ -73,7 +74,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Junior',
     role: 'dev',
     intro: "Give me a sec, the build's almost green.",
-    swap: { base: 'dev-sam', prop: 'energy-drink' },
+    sheet: 'dev-sam',
     knows: ['des-2'],
   },
   {
@@ -81,7 +82,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Senior',
     role: 'dev',
     intro: "I've seen this pattern before. It didn't end well then either.",
-    swap: { base: 'dev-lena', prop: 'keyboard' },
+    sheet: 'dev-lena',
     knows: ['pm-3', 'des-7'],
   },
   {
@@ -89,7 +90,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Architect',
     role: 'dev',
     intro: 'Before we start: is this scalable?',
-    swap: { base: 'dev-sam', prop: 'marker' },
+    sheet: 'dev-sam',
     knows: ['pm-5', 'des-8'],
   },
   {
@@ -97,7 +98,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Freelancer',
     role: 'designer',
     intro: "I'm only here until Thursday, so let's be quick.",
-    swap: { base: 'designer-theo', prop: 'tote' },
+    sheet: 'designer-theo',
     knows: ['pm-4'],
   },
   {
@@ -105,7 +106,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Brand Designer',
     role: 'designer',
     intro: "That's not our blue.",
-    swap: { base: 'designer-ines', prop: 'swatches' },
+    sheet: 'designer-ines',
     knows: ['pm-6', 'dev-6'],
   },
   {
@@ -113,7 +114,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Design Lead',
     role: 'designer',
     intro: 'Let me stop you right there.',
-    swap: { base: 'designer-theo', prop: 'tiny-laptop' },
+    sheet: 'designer-theo',
     knows: ['dev-7', 'pm-7'],
   },
   {
@@ -121,7 +122,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Stakeholder',
     role: 'boss',
     intro: "Keep it short, I've got a call in five.",
-    swap: { base: 'boss' },
+    sheet: 'boss',
     knows: [],
   },
 ];
@@ -223,7 +224,8 @@ export const SLOTS: readonly Slot[] = [
   BOSS_SLOT,
 ];
 
-export const BOSS_SLOT_INDEX = SLOTS.length - 1;
+/** The most colleagues a run has: two per role, then the boss */
+export const MAX_COLLEAGUES = SLOTS.length - 1;
 
 // Rules
 // ---------------
@@ -322,25 +324,43 @@ export interface RunSlot {
 
 export interface Run {
   seed: number;
-  /** Six colleagues and the boss */
+  /** The colleagues, then the boss last */
   slots: RunSlot[];
-  /** The characters out of office this run, one per role */
+  /** The characters out of office this run */
   outOfOffice: CharacterId[];
 }
 
-/** Draw a run: two of the three characters per role, in the role order */
-export const drawRun = (role: Role, seed: number): Run => {
+/** The boss is the last slot */
+export const bossIndex = (run: Run): number => run.slots.length - 1;
+
+/**
+ * Draw a run: up to two characters per role, in the role order, so that
+ * no face shows twice. Two colleagues share a sheet until each has one
+ * of its own, and the player's own look is a colleague's sheet too, so
+ * the draw skips any character on the player's sheet or on a sheet the
+ * run already has. A role with fewer than two left gives the run fewer
+ * duels; the slot table still applies by role, its first slot first.
+ */
+export const drawRun = (role: Role, look: Look, seed: number): Run => {
   const rng = new Rng(seedRng(seed));
   const slots: RunSlot[] = [];
   const outOfOffice: CharacterId[] = [];
+  const taken = new Set<SheetId>([PLAYER_SHEETS[role][look]]);
   roleOrder(role).forEach((opponentRole, roleIndex) => {
-    const cast = CHARACTERS.filter(c => c.role === opponentRole).map(c => c.id);
-    const [a, b, out] = rng.shuffle(cast);
-    slots.push(
-      { character: a!, slot: SLOTS[roleIndex * 2]! },
-      { character: b!, slot: SLOTS[roleIndex * 2 + 1]! },
-    );
-    outOfOffice.push(out!);
+    const cast = rng.shuffle(CHARACTERS.filter(c => c.role === opponentRole));
+    let drawn = 0;
+    for (const character of cast) {
+      if (drawn < 2 && !taken.has(character.sheet)) {
+        taken.add(character.sheet);
+        slots.push({
+          character: character.id,
+          slot: SLOTS[roleIndex * 2 + drawn]!,
+        });
+        drawn++;
+      } else {
+        outOfOffice.push(character.id);
+      }
+    }
   });
   slots.push({ character: 'stakeholder', slot: BOSS_SLOT });
   return { seed, slots, outOfOffice };

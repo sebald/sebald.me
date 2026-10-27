@@ -3,7 +3,7 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { Side } from '@/lib/lab/pushback/duel';
-import { type Swap, cellFor, swapKey } from '@/lib/lab/pushback/sprites';
+import { type SheetId, cellFor } from '@/lib/lab/pushback/sprites';
 import {
   LAYOUT,
   type Pose,
@@ -25,8 +25,8 @@ const PLACEHOLDER: Record<Side, { body: string; head: string; light: string }> =
   };
 
 export interface CharacterProps {
-  /** The sheet (a look, or a colleague's base) and an optional prop */
-  swap: Swap;
+  /** The sheet: a look's, or a colleague's */
+  sheet: SheetId;
   pose?: Pose;
   /** Faces left: the right-hand duellist */
   mirrored?: boolean;
@@ -55,7 +55,7 @@ export interface CharacterProps {
  * and the pose; the duel just tells it which.
  */
 export const Character = ({
-  swap,
+  sheet,
   pose = 'idle',
   mirrored = false,
   typing = false,
@@ -66,8 +66,7 @@ export const Character = ({
   className,
 }: CharacterProps) => {
   const { backing } = useStage();
-  const key = swapKey(swap);
-  const sprite = useSprites(useMemo(() => ({ [key]: swap }), [key, swap]))[key];
+  const sprite = useSprites(useMemo(() => [sheet], [sheet]))[sheet];
   const clock = useClock(!still);
   // When the pose changed, so its animation starts from its first frame
   const [since, setSince] = useState({ pose, at: clock });

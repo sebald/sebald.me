@@ -37,7 +37,7 @@ import {
   pairById,
 } from '@/lib/lab/pushback/lines';
 import { playerName } from '@/lib/lab/pushback/save';
-import { PLAYER_SHEETS, type Swap } from '@/lib/lab/pushback/sprites';
+import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
 import {
   type Step,
   LAYOUT,
@@ -428,16 +428,7 @@ export const DuelScreen = ({
   };
   const poses = posesFor(state, step);
   const ghostX = standX.player - GHOST.behind;
-  const playerSwap: Swap = useMemo(
-    () => ({ base: PLAYER_SHEETS[state.setup.role][look] }),
-    [state.setup.role, look],
-  );
-  // The colleagues are drawn without their props: pasted at the hand they
-  // dangled, so the prop is shown on the roster instead
-  const opponentSwap: Swap = useMemo(
-    () => ({ base: character.swap.base }),
-    [character.swap.base],
-  );
+  const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
   const hud: FrameModel['hud'] = {
@@ -470,7 +461,7 @@ export const DuelScreen = ({
         <Ghost x={ghostX} step={whisper} enter={enter} still={reduced} />
       )}
       <Character
-        swap={playerSwap}
+        sheet={playerSheet}
         pose={poses.player}
         typing={!typingDone}
         micDrop={micDropBy('player')}
@@ -479,7 +470,7 @@ export const DuelScreen = ({
         side="player"
       />
       <Character
-        swap={opponentSwap}
+        sheet={character.sheet}
         pose={poses.opponent}
         typing={!typingDone}
         micDrop={micDropBy('opponent')}
