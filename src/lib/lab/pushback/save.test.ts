@@ -8,9 +8,11 @@ import {
   type SaveStorage,
   emptySave,
   finishDuel,
+  hasRuns,
   loadSave,
   parseSave,
   playerName,
+  resetSave,
   resultCardText,
   setMode,
   startRun,
@@ -31,6 +33,13 @@ describe('save', () => {
     const save = startRun(setMode(emptySave(), 'hard'), 'dev', 'b', 42);
     writeSave(save, storage);
     assert.deepEqual(loadSave(storage), save);
+  });
+
+  it('resets to an empty save and keeps the mode', () => {
+    const save = startRun(setMode(emptySave(), 'hard'), 'pm', 'b', 1);
+    assert.equal(hasRuns(save), true);
+    assert.deepEqual(resetSave(save), emptySave('hard'));
+    assert.equal(hasRuns(resetSave(save)), false);
   });
 
   it('returns null without a save, on corrupt data and on another version', () => {

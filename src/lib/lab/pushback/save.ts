@@ -143,6 +143,13 @@ export const setMode = (save: Save, mode: Mode): Save => ({
   mode,
 });
 
+/** Whether there is anything a reset would throw away */
+export const hasRuns = (save: Save): boolean =>
+  Object.keys(save.runs).length > 0;
+
+/** Drop every run; the mode switch stays as it was */
+export const resetSave = (save: Save): Save => emptySave(save.mode);
+
 /** The player's name on the select screen and the result card */
 export const playerName = (role: Role, look: Look): string =>
   LOOKS[role][look].name;

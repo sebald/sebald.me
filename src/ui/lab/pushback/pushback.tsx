@@ -14,7 +14,9 @@ import {
   type Save,
   emptySave,
   finishDuel,
+  hasRuns,
   loadSave,
+  resetSave,
   setMode,
   startRun,
   writeSave,
@@ -77,6 +79,7 @@ export const Pushback = () => {
           mode={save.mode}
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
+          onReset={hasRuns(save) ? () => setSave(resetSave) : undefined}
         />
       );
     case 'select':
