@@ -29,6 +29,7 @@ import {
   fitFor,
   scaleTicks,
   ROOM,
+  STAGE,
   viewFor,
 } from './stage';
 
