@@ -32,7 +32,7 @@ export const SceneViewer = () => {
   const [guides, setGuides] = useState(true);
 
   const assets = SCENE_ASSETS[scene];
-  const image = still ? assets.poster : loopFor(assets, scale);
+  const image = still ? assets.poster : loopFor(assets, true);
   const stands = STANDS[scene];
   const view = viewFor(stands);
   const width = SCENE.width * scale;
@@ -120,8 +120,7 @@ export const SceneViewer = () => {
           Guides
         </label>
         <span className="text-mist-500">
-          {usedBy} ·{' '}
-          {still ? 'poster.png' : scale <= 1 ? 'scene-1x.webp' : 'scene.webp'}
+          {usedBy} · {still ? 'poster.png' : 'scene-1x.webp'}
         </span>
       </form>
 
@@ -137,7 +136,7 @@ export const SceneViewer = () => {
           unoptimized
           className={cn(
             'absolute inset-0 h-full w-full',
-            scale <= 1 && '[image-rendering:pixelated]',
+            '[image-rendering:pixelated]',
           )}
           style={{ width, height }}
         />

@@ -499,15 +499,17 @@ export interface DrawOptions {
   background?: boolean;
   /** The sprites that are built; a missing one draws as a placeholder */
   sprites?: Sprites;
+  /** Canvas pixels per stage pixel (`backingFor`) */
+  backing?: number;
 }
 
 export const drawFrame = (
   ctx: CanvasRenderingContext2D,
   model: FrameModel,
-  { background = true, sprites = {} }: DrawOptions = {},
+  { background = true, sprites = {}, backing = BACKING }: DrawOptions = {},
 ) => {
-  // Stage coordinates on a canvas `BACKING` times the stage
-  ctx.setTransform(BACKING, 0, 0, BACKING, 0, 0);
+  // Stage coordinates on a canvas `backing` times the stage
+  ctx.setTransform(backing, 0, 0, backing, 0, 0);
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, STAGE.width, STAGE.height);
   if (background) drawBand(ctx, model.scene);

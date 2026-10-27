@@ -4,13 +4,7 @@ import NextImage from 'next/image';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import {
-  BACKING,
-  FRAME_MS,
-  LAYOUT,
-  SCENE,
-  STAGE,
-} from '@/lib/lab/pushback/stage';
+import { FRAME_MS, LAYOUT, SCENE, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
@@ -22,7 +16,9 @@ import { useScale } from './use-scale';
 /**
  * The duel's frame: the scene loop in the room band (a window of the
  * 480 by 270 render, at the stage's pixels) under a canvas the size of
- * the stage, drawn at `BACKING` and scaled with hard edges, plus a DOM
+ * the stage, drawn at the screen's device pixels where a stage pixel is a
+ * whole number of them (`backingFor`) and at 3x scaled down smoothly
+ * otherwise, plus a DOM
  * overlay in the same frame for everything that is text. Sits in the
  * same `Stage` as the menu screens, so nothing changes size.
  */
@@ -53,7 +49,7 @@ export const Frame = ({
   // the flat placeholder band itself
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
-  const { scale, crop } = useScale(fixedScale);
+  const { crop, crisp, backing } = useScale(fixedScale);
   // The sprites this frame draws, built in the background; placeholders
   // until then
   const sprites = useSprites(
@@ -72,8 +68,9 @@ export const Frame = ({
     ),
   );
   const spritesRef = useRef<Sprites>(sprites);
+  const backingRef = useRef(backing);
   const assets = SCENE_ASSETS[model.scene];
-  const loop = loopFor(assets, scale);
+  const loop = loopFor(assets, crisp);
   const sceneKey = `${model.scene}:${loop.src}`;
   const sceneLoaded = loadedScene === sceneKey;
   useLayoutEffect(() => {
@@ -81,6 +78,7 @@ export const Frame = ({
     stepRef.current = onStep;
     loadedRef.current = sceneLoaded;
     spritesRef.current = sprites;
+    backingRef.current = backing;
   });
 
   // One loop at 8 fps steps: redraw, and tell the screen a step passed
@@ -95,6 +93,7 @@ export const Frame = ({
         drawFrame(ctx, modelRef.current, {
           background: !loadedRef.current,
           sprites: spritesRef.current,
+          backing: backingRef.current,
         });
       }
     };
@@ -114,23 +113,22 @@ export const Frame = ({
     return () => cancelAnimationFrame(frame);
   }, [paused]);
 
-  // Redraw on model changes between steps, so input feels immediate, and
-  // when a sprite lands
+  // Redraw on model changes between steps, so input feels immediate, when
+  // a sprite lands and when the canvas is resized
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded, sprites });
-  }, [model, sceneLoaded, sprites]);
-
-  const whole = Number.isInteger(scale);
+    if (ctx)
+      drawFrame(ctx, model, { background: !sceneLoaded, sprites, backing });
+  }, [model, sceneLoaded, sprites, backing]);
 
   return (
     <Stage label={label} scale={fixedScale} crop={crop} className={className}>
       {/*
-        The room band: a window of the scene loop. At a whole scale the
-        8x export is sampled with hard edges, which lands exactly on the
-        art's pixels; at a fraction it is scaled down smoothly, so every
-        art pixel keeps the same width (`pixelated` would round them to
-        uneven widths). The poster replaces it under reduced motion.
+        The room band: a window of the scene loop. On whole device pixels
+        the 1x frames are blown up with hard edges, which lands exactly on
+        the art's pixels; otherwise the 8x export is scaled down smoothly,
+        so every art pixel keeps the same width (`pixelated` would round
+        them to uneven widths). The poster replaces it under reduced motion.
       */}
       <div
         className="absolute inset-x-0 top-0 overflow-hidden"
@@ -165,21 +163,22 @@ export const Frame = ({
             onLoad={() => setLoadedScene(sceneKey)}
             className={cn(
               'absolute inset-0 h-full w-full',
-              whole && '[image-rendering:pixelated]',
+              crisp && '[image-rendering:pixelated]',
             )}
           />
         </picture>
       </div>
       {/*
-        Drawn at 3x and scaled down by CSS: exact at 3x, and a fraction
-        below stays sharp where `pixelated` would round the art's pixels
-        to uneven widths
+        Drawn at the device pixels per stage pixel when that is whole, so
+        the canvas is shown at its own size; else at 3x and scaled down
+        smoothly by CSS, which keeps the art's pixels even where
+        `pixelated` would round them
       */}
       <canvas
         ref={canvasRef}
         aria-hidden
-        width={STAGE.width * BACKING}
-        height={STAGE.height * BACKING}
+        width={STAGE.width * backing}
+        height={STAGE.height * backing}
         className="absolute inset-0 h-full w-full"
       />
       <div className="absolute inset-0">{children}</div>

@@ -74,8 +74,8 @@ export const viewFor = (stands: { left: number; right: number }) => {
  * The scale at which the stage fits a viewport: 3 (960 by 642) wherever
  * there is room, so the game looks the same on every screen wide enough,
  * and below that whatever fraction the width (or height) allows, so it
- * shrinks with the window instead of jumping. The canvas is drawn at
- * `BACKING` and only ever scaled down, so a fraction stays sharp.
+ * shrinks with the window instead of jumping (`crispScale` then snaps
+ * it to the screen's device pixels).
  */
 export const scaleFor = (width: number, height: number, max = 3): number =>
   Math.min(max, width / STAGE.width, height / STAGE.height);
@@ -100,20 +100,50 @@ export const fitFor = (
   width: number,
   height: number,
   max = 3,
+  dpr = 1,
 ): { scale: number; crop: number } => {
-  const byWidth = scaleFor(width, Infinity, max);
+  const byWidth = crispScale(scaleFor(width, Infinity, max), dpr);
   const deficit = STAGE.height * byWidth - height;
   if (deficit <= 0) return { scale: byWidth, crop: 0 };
   const crop = Math.min(MAX_CROP, Math.ceil(deficit / byWidth));
   if (crop < MAX_CROP) return { scale: byWidth, crop };
   return {
-    scale: Math.min(byWidth, height / (STAGE.height - MAX_CROP)),
+    scale: crispScale(
+      Math.min(byWidth, height / (STAGE.height - MAX_CROP)),
+      dpr,
+    ),
     crop: MAX_CROP,
   };
 };
 
-/** The canvas is drawn at this whole-number scale and scaled down by CSS */
+/**
+ * The scale snapped down so that a stage pixel is a whole number of
+ * device pixels: in halves on a 2x screen, in thirds on a 3x one. Then
+ * nothing is ever resampled, whatever the window. A 1x screen keeps the
+ * fraction (snapping there would only shrink the game), and so does a
+ * scale that would fall under `MIN_SCALE`.
+ */
+export const crispScale = (scale: number, dpr: number): number => {
+  if (dpr <= 1) return scale;
+  const snapped = Math.floor(scale * dpr + 1e-6) / dpr;
+  return snapped >= MIN_SCALE ? snapped : scale;
+};
+
+/**
+ * The canvas is drawn at a whole-number scale. When the device pixels per
+ * stage pixel are whole (`crisp`) that is the number, and the canvas is
+ * shown at exactly its own size; else `BACKING`, scaled down smoothly by
+ * CSS, which is the best a fraction can do.
+ */
 export const BACKING = 3;
+
+export const crisp = (scale: number, dpr: number): boolean => {
+  const k = scale * dpr;
+  return Math.abs(k - Math.round(k)) < 1e-6;
+};
+
+export const backingFor = (scale: number, dpr: number): number =>
+  crisp(scale, dpr) ? Math.round(scale * dpr) : BACKING;
 
 /** The overlay's font size at a scale: 14 px at 3x, never below 12 px */
 export const fontSizeFor = (scale: number): number =>

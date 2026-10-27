@@ -1,9 +1,8 @@
 /**
  * The four scene loops, built by `.claude/skills/pixel-sprite/scenes/*.mjs`
- * from the snapped renders. `loop` is the big export (8x, for a stage
- * shown at 2x and up, the browser only ever scales it down), `loop1x` the
- * same frames unscaled for a stage at 1x, `poster` frame 0 for reduced
- * motion.
+ * from the snapped renders. `loop1x` is the frames unscaled, for a stage
+ * on whole device pixels; `loop` the big export (8x) for a fraction, which
+ * the browser only ever scales down; `poster` frame 0 for reduced motion.
  */
 import type { StaticImageData } from 'next/image';
 
@@ -34,6 +33,12 @@ export const SCENE_ASSETS: Record<SceneId, SceneAssets> = {
   office: { loop: officeLoop, loop1x: officeLoop1x, poster: officePoster },
 };
 
-/** The loop to show at a scale: the unscaled frames at 1x, the big export above */
-export const loopFor = (assets: SceneAssets, scale: number): StaticImageData =>
-  scale <= 1 ? assets.loop1x : assets.loop;
+/**
+ * The loop to show: when a stage pixel is a whole number of device pixels
+ * the unscaled frames, which the browser blows up with hard edges and
+ * lands exactly on its pixels; else the big export, scaled down smoothly.
+ */
+export const loopFor = (
+  assets: SceneAssets,
+  crisp: boolean,
+): StaticImageData => (crisp ? assets.loop1x : assets.loop);

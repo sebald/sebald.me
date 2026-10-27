@@ -10,7 +10,11 @@ import {
   barWidth,
   barsLabel,
   bob,
+  BACKING,
   MIN_SCALE,
+  backingFor,
+  crisp,
+  crispScale,
   fontSizeFor,
   PACE,
   holdFor,
@@ -55,6 +59,29 @@ describe('scaleFor', () => {
 
   it('never goes above the maximum', () => {
     assert.equal(scaleFor(10_000, 10_000, 5), 5);
+  });
+
+  it('snaps to the device pixels on a dense screen, not on a 1x one', () => {
+    assert.equal(crispScale(2.9, 2), 2.5);
+    assert.equal(crispScale(2.9, 3), 2 + 2 / 3);
+    assert.equal(crispScale(2.9, 1), 2.9);
+    assert.equal(crispScale(3, 2), 3);
+    // Never under the minimum: the fraction stays
+    assert.equal(crispScale(1.4, 2), 1.4);
+    assert.equal(crispScale(1.6, 2), 1.5);
+    assert.deepEqual(fitFor(900, 1000, 3, 2), { scale: 2.5, crop: 0 });
+    const short = fitFor(1200, 400, 3, 2);
+    assert.equal(short.scale, 2.5);
+    assert.equal(short.crop, 60);
+  });
+
+  it('draws the canvas at the device pixels when they are whole', () => {
+    assert.equal(crisp(2.5, 2), true);
+    assert.equal(crisp(2.5, 1), false);
+    assert.equal(backingFor(2.5, 2), 5);
+    assert.equal(backingFor(3, 3), 9);
+    assert.equal(backingFor(2, 1), 2);
+    assert.equal(backingFor(2.7, 1), BACKING);
   });
 });
 
