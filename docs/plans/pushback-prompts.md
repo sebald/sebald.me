@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Sixteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet, the logo, the mic-drop burst.
+Every image the game needs, one prompt each, ready to paste. Fourteen generations before rerolls: seven model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used.
 
 ## Before you start
 
@@ -477,132 +477,73 @@ Reroll on: legs or feet, a glow or halo (the canvas adds the translucency), a fi
 
 ## Scenes
 
-Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach `HEADER` for the style; do not attach the Dev sheet, it pulls the pixel size towards the figures.
+Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach two images to every scene prompt, in this order: `HEADER` for the style, and `SCALE` = `src/assets/lab/pushback/sources/scale-reference.png` for the size of the people. `SCALE` is a plain two-tone room at the render's 16:9 with two idle figures standing on the game's floor line (row 230 of 270) at the size the game draws them, blown up to Gemini's render size with hard edges; the prompts say the second image is the yardstick and nothing else. Do not attach a model sheet: its figures fill more than half the image and Gemini draws the furniture for giants.
 
-Composition rule for all four, written into every prompt: nothing but plain floor and wall where the two duellists will stand, left-centre and right-centre, from a fifth of the height down to the floor. The focal furniture sits between them or behind them as a plain dark shape. The top strip is plain ceiling or sky (the bars go there), the bottom strip plain floor (the dialogue box goes there). The outer edges stay plain and simple, because `sheet.mjs` pads the snapped image out to 480 by repeating the edge columns.
+Why: the first four renders were drawn for people twice the game's size. With the figures on the stands the inventory's scene viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated rather than resampled. The old renders stay in `originals/` for reference.
 
-Each scene has two or three living details, staged in front of plain dark areas so the loop script can draw them cleanly.
+Three rules, written into every prompt:
 
-Scale rule, written into every prompt and checked in the inventory's scene viewer with the figures on the stands: a person standing in this room is 78 pixels tall, a tenth short of a third of the image's height. So a desk top is 40 pixels above the floor line (hip height), a chair seat 28, a monitor 24 tall, a door 120, a ceiling light fitting well above head height. The first four renders were drawn for people twice that size: with the figures in them the viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated with the rule rather than resampled. Attach the model sheet as well as `HEADER` this time, with the sentence `The people in the second image stand in this room at exactly this size`; the earlier advice not to attach it was about the pixel pitch, which `snap.mjs` now fits on its own.
+- Composition: nothing but plain floor and wall where the two duellists will stand, left-centre and right-centre, from a fifth of the height down to the floor. The focal furniture sits between them or behind them as a plain dark shape. The top strip is plain ceiling or sky (the bars go there), the bottom strip plain floor (the dialogue box goes there). The outer edges stay plain and simple, because `scene.mjs` pads the snapped image out to 480 by 270 by repeating the edge columns and rows.
+- Scale: a standing person is a bit under a third of the image's height (78 of 270 pixels), head at 56 percent of the height, feet on the floor line at 85 percent. A desk or table top reaches a hip (40 pixels above the floor line, 15 percent of the height), a chair seat a knee (28), a monitor is a head and a bit (24), a door a person and a half (120), a ceiling light well above a head.
+- Foreground: the strip from the floor line down to the bottom edge is plain floor. No table, desk or chair between the camera and the people; the furniture stands behind them or against the side walls. The meeting room's first render had the table in front, and the figures stood on it.
 
-Foreground rule, also in every prompt: the strip in front of the people, from the floor line (row 230) down to the bottom edge, is plain floor. No table, desk or chair between the camera and the people; the furniture stands behind them or against the side walls. The meeting room's first render had the table in front, which the figures stood on.
+Each scene has two or three living details, staged in front of plain dark areas so the loop script can draw them cleanly. After the download: `scene.mjs` (it must say a grid of about 5.7 px and 478 wide), then the figures on the stands in the inventory's scene viewer with the room slider at 1.0: a desk at a hip, a door a head and a half above a head.
 
 ### Open-plan floor, for the Dev duels (`scene-floor.jpg`)
 
-Attach: `HEADER`.
+The floor took three rolls the first time: the first two came back at a coarser pixel size with the desk islands a third of the way into the frame, and Gemini anchors to its own previous image inside a chat, so the third was a fresh chat with the camera pulled far back (kept as `originals/scene-floor.jpeg`; the first two rolls are gone). This prompt is that third one with the scale and foreground rules; a fresh chat again.
+
+Attach: `HEADER`, `SCALE`.
 
 ```text
-Create a new pixel-art scene in exactly the same visual style as the attached
-image: the same chunky low-resolution look, the same simple shapes, shading
-and muted colours. Do not copy its content or its layout.
-
-Style: a 16-bit pixel-art background from a 1990s point-and-click adventure
-game, as it looked on screen. Not modern high-resolution pixel art. The
-whole image is about 480 pixels wide, so every pixel is clearly visible.
-Big simple shapes; detail suggested with a few pixels, not drawn out. Three
-or four shades per material, dark outlines only where needed, a limited
-palette of about 32 colours, ordered dithering in shadows. No people.
-
-Scene: an open-plan software office floor, late afternoon, seen straight on
-from the middle of the aisle. Two desk islands, one on the far left and one
-on the far right, each with two monitors seen from behind as plain dark
-rectangles, a tangle of cables hanging off the back, a chair pushed out. The
-back wall is a row of tall windows with the blinds half down and a
-blue-grey sky behind. On a shelf against the back wall, in the centre, a
-small tower lamp with a red and a green bulb, the kind that shows whether
-the build passed. Next to it a rubber duck. A potted plant on the right
-desk that has clearly given up, two leaves left, one bending down. On the
-left desk a closed pizza box. A whiteboard on the back wall covered only in
-boxes and arrows, no letters. The middle of the aisle is wide, empty, plain
-carpet with nothing on it.
-
-Composition: 16:9 frame. The top 15 percent is plain ceiling with a strip of
-long fluorescent lights, the bottom 17 percent is plain carpet with nothing
-on it. The left-centre and the right-centre of the frame, from a fifth of
-the height down to the floor, are empty: plain carpet and plain back wall,
-because two figures will stand there later. The desk islands stay in the
-outer fifth on each side as dark framing shapes; the shelf with the lamp and
-the whiteboard sit in the middle between the two empty areas. The outer edge
-columns of the image are plain and simple.
-
-Light and colour: cool blue-grey daylight from the windows behind, with warm
-orange light spilling from the monitors onto the desks and the carpet. Deep
-blue shadows under the desks.
-
-Small details that will be animated later, keep them small and set against
-plain dark areas: the glow of the left monitors on the desk surface, the red
-and green bulbs of the tower lamp against the plain back wall, the two
-leaves of the dying plant against the dark window blind.
-
-No text, letters, numbers, signs with writing, UI, window chrome, borders,
-frames or signatures.
-```
-
-Reroll on: a person at a desk, letters on the whiteboard or screens, desks reaching into the middle of the frame, a pixel size clearly finer than the header, desks higher than a standing person's hip (the first render's were chest high: 0.65 in the viewer).
-
-#### Open-plan floor, second roll
-
-The first roll (`scene-floor.jpg`) failed on two counts: Gemini drew it at a coarser pixel size than the other three scenes (it snaps to 305 pixels wide instead of about 458), and both desk islands reach a third of the way into the frame, straight through the areas where the duellists stand. Same chat, paste this as the follow-up, and attach `scene-meeting.jpg` as a second reference for the pixel size:
-
-```text
-Redraw this scene with two changes. First, the pixel size: use exactly
-the pixel size of the second attached image (the meeting room), finer
-than this one, so the scene is about 480 pixels wide. Second, the
-composition: both desk islands move out to the edges and get narrower,
-each one inside the outer eighth of the frame, seen more from the side,
-so that the aisle of plain carpet takes the middle three quarters of
-the width. The shelf with the tower lamp and the duck, the whiteboard
-with boxes and arrows, the windows, the dying plant and the pizza box
-stay. Nothing stands on the carpet between the two islands. Same
-style, same colours, same lighting.
-```
-
-Reroll on: desks still past the outer eighth, a pixel size that still snaps coarser than the meeting room.
-
-#### Open-plan floor, third roll: new chat
-
-The second roll (kept as `originals/scene-floor-v2.jpeg`) came back at the same coarse pixel size with the desks still at 40 percent of the width: Gemini anchors to its own previous image inside a chat. So the third roll is a fresh chat, with `scene-meeting.jpg` attached as the one reference (it carries the right pixel size and the house style) and the camera pulled back, which shrinks the furniture without arguing about percentages.
-
-Attach: `scene-meeting.jpg` only.
-
-```text
-Create a new pixel-art scene in exactly the same visual style and at
-exactly the same pixel size as the attached image: the same chunky
-low-resolution look, the same size of pixel, the same simple shapes,
-shading and muted colours. Do not copy its content or its layout.
+Create a new pixel-art scene in exactly the same visual style as the
+first attached image: the same chunky low-resolution look, the same
+simple shapes, shading and muted colours. Do not copy its content or
+its layout. The second attached image is only a scale reference: the
+two people in it stand on the floor of the room you draw, at exactly
+that size and in exactly those places. Do not draw them; draw the room
+around them, with everything in it sized for people that tall.
 
 Style: a 16-bit pixel-art background from a 1990s point-and-click
 adventure game, as it looked on screen. Not modern high-resolution pixel
-art. The whole image is about 480 pixels wide, the same as the attached
-image, so every pixel is clearly visible. Big simple shapes; detail
-suggested with a few pixels, not drawn out. Three or four shades per
-material, dark outlines only where needed, a limited palette of about
-32 colours, ordered dithering in shadows. No people.
+art. The whole image is about 480 pixels wide, so every pixel is clearly
+visible. Big simple shapes; detail suggested with a few pixels, not
+drawn out. Three or four shades per material, dark outlines only where
+needed, a limited palette of about 32 colours, ordered dithering in
+shadows. No people.
+
+Scale: a standing person is a bit under a third of the image's height,
+head at 56 percent of the height, feet on the floor line at 85 percent.
+A desk top reaches a person's hip, a chair seat a knee, a monitor is
+a head and a bit tall, a door a person and a half, the ceiling lights
+hang well above a head.
 
 Scene: a wide, mostly empty open-plan software office floor, late
 afternoon, seen straight on from far back in the aisle so that the room
 looks spacious. The back wall is a row of tall windows with the blinds
 half down and a blue-grey sky behind. On the back wall in the centre, a
-small shelf with a tower lamp with a red and a green bulb, the kind that
-shows whether the build passed, and a rubber duck next to it, and above
-the shelf a small whiteboard with only boxes and arrows on it. The
-desks are far away at the sides: one small desk island at the far left
-edge and one at the far right edge, each seen from the side, each
-taking up only a narrow strip at the edge of the frame, with a monitor
-seen from behind as a plain dark rectangle and a chair pushed in. A
-potted plant that has given up on the right desk, a closed pizza box on
-the left one. Between the two desks, the whole middle of the floor is
-wide, empty, plain grey-brown carpet with nothing on it.
+small shelf at chest height with a tower lamp with a red and a green
+bulb, the kind that shows whether the build passed, and a rubber duck
+next to it, and above the shelf a small whiteboard with only boxes and
+arrows on it. The desks are far away at the sides: one small hip-high
+desk island at the far left edge and one at the far right edge, each
+seen from the side, each taking up only a narrow strip at the edge of
+the frame, with a monitor seen from behind as a plain dark rectangle
+and a chair pushed in. A potted plant that has given up on the right
+desk, a closed pizza box on the left one. Between the two desks, the
+whole middle of the floor is wide, empty, plain grey-brown carpet with
+nothing on it.
 
 Composition: 16:9 frame. The top 15 percent is plain ceiling with a
-strip of long fluorescent lights, the bottom 17 percent is plain carpet
-with nothing on it. The left-centre and the right-centre of the frame,
-from a fifth of the height down to the floor, show only plain carpet
-and the plain back wall with its windows, because two figures will
-stand there later. The two desk islands stay inside the outer eighth
-of the frame on each side as dark framing shapes and reach no further
-in. The shelf and the whiteboard sit in the middle between the two
-empty areas. The outer edge columns of the image are plain and simple.
+strip of long fluorescent lights, the bottom 15 percent, below the
+floor line, is plain carpet with nothing on it and nothing in front of
+the people. The left-centre and the right-centre of the frame, from a
+fifth of the height down to the floor, show only plain carpet and the
+plain back wall with its windows, because the two figures stand there.
+The two desk islands stay inside the outer eighth of the frame on each
+side as dark framing shapes and reach no further in. The shelf and the
+whiteboard sit in the middle between the two empty areas. The outer
+edge columns of the image are plain and simple.
 
 Light and colour: cool blue-grey daylight from the windows behind, with
 warm orange light spilling from the two monitors onto the two desks.
@@ -617,169 +558,207 @@ No text, letters, numbers, signs with writing, UI, window chrome,
 borders, frames or signatures.
 ```
 
-Reroll on: desks past the outer eighth, a pixel size that snaps coarser than the meeting room (check with the snap script: it must say a 6 px grid and about 458 wide).
+Reroll on: a person at a desk, letters on the whiteboard or screens, desks past the outer eighth, desks higher than a hip, a pixel size that snaps coarser than about 5.7 px.
 
 ### Meeting room, for the PM duels (`scene-meeting.jpg`)
 
-Attach: `HEADER`.
+Attach: `HEADER`, `SCALE`.
 
 ```text
-Create a new pixel-art scene in exactly the same visual style as the attached
-image: the same chunky low-resolution look, the same simple shapes, shading
-and muted colours. Do not copy its content or its layout.
+Create a new pixel-art scene in exactly the same visual style as the
+first attached image: the same chunky low-resolution look, the same
+simple shapes, shading and muted colours. Do not copy its content or
+its layout. The second attached image is only a scale reference: the
+two people in it stand on the floor of the room you draw, at exactly
+that size and in exactly those places. Do not draw them; draw the room
+around them, with everything in it sized for people that tall.
 
-Style: a 16-bit pixel-art background from a 1990s point-and-click adventure
-game, as it looked on screen. Not modern high-resolution pixel art. The
-whole image is about 480 pixels wide, so every pixel is clearly visible.
-Big simple shapes; detail suggested with a few pixels, not drawn out. Three
-or four shades per material, dark outlines only where needed, a limited
-palette of about 32 colours, ordered dithering in shadows. No people.
+Style: a 16-bit pixel-art background from a 1990s point-and-click
+adventure game, as it looked on screen. Not modern high-resolution pixel
+art. The whole image is about 480 pixels wide, so every pixel is clearly
+visible. Big simple shapes; detail suggested with a few pixels, not
+drawn out. Three or four shades per material, dark outlines only where
+needed, a limited palette of about 32 colours, ordered dithering in
+shadows. No people.
 
-Scene: a glass-walled meeting room, mid-morning, seen from the door. The
-back wall is one big whiteboard, mostly empty, with a single large diagram
-of boxes and arrows in blue and red marker, no letters, and a cloud of
-coloured sticky notes in the top right corner. A long pale table runs along
-the very bottom of the frame as a foreground shape, with a steaming mug
-and a plate holding exactly one leftover croissant on the left end, and a
-jar of markers on the right end. A ceiling projector throws a faint beam
-of light across the room towards the whiteboard, and a dust haze hangs in
-the beam. A wall clock without numbers on the left wall, a glass wall on
-the right with the blinds half closed, a sad fern in the back left corner.
-The floor between the table and the whiteboard is plain grey carpet.
+Scale: a standing person is a bit under a third of the image's height,
+head at 56 percent of the height, feet on the floor line at 85 percent.
+A table top reaches a person's hip, a chair seat a knee, a door is a
+person and a half, the projector hangs well above a head.
+
+Scene: a glass-walled meeting room, mid-morning, seen from the door.
+The back wall is one big whiteboard, mostly empty, with a single large
+diagram of boxes and arrows in blue and red marker, no letters, and a
+cloud of coloured sticky notes in the top right corner. A long pale
+hip-high table stands against the back wall under the whiteboard,
+between where the two people stand, seen from the front, with a
+steaming mug and a plate holding exactly one leftover croissant on its
+left end and a jar of markers on its right end; no chairs around it. A
+ceiling projector throws a faint beam of light across the room towards
+the whiteboard, and a dust haze hangs in the beam. A wall clock without
+numbers on the left wall, a glass wall on the right with the blinds
+half closed, a sad fern in the back left corner. The floor is plain
+grey carpet, with nothing on it in front of the table.
 
 Composition: 16:9 frame. The top 15 percent is plain ceiling with the
-projector hanging from it, the bottom 17 percent is the plain pale table
-surface as a foreground shape with nothing in its middle. The left-centre
-and the right-centre of the frame, from a fifth of the height down to the
-table, are empty: plain carpet and plain whiteboard, because two figures
-will stand there later. The diagram and the sticky notes sit in the middle
-of the whiteboard between the two empty areas, the clock, fern and glass
-wall stay in the outer fifth on each side. The outer edge columns of the
-image are plain and simple.
+projector hanging from it, the bottom 15 percent, below the floor line,
+is plain grey carpet with nothing on it and nothing in front of the
+people. The left-centre and the right-centre of the frame, from a fifth
+of the height down to the floor, are empty: plain carpet and plain
+whiteboard, because the two figures stand there. The table, the
+diagram and the sticky notes sit in the middle between the two empty
+areas; the clock, fern and glass wall stay in the outer fifth on each
+side. The outer edge columns of the image are plain and simple.
 
-Light and colour: flat bright daylight from the glass wall on the right,
-beige walls, whiteboard white, grey carpet, the projector beam a faint
-warm band across the room. Soft shadows.
+Light and colour: flat bright daylight from the glass wall on the
+right, beige walls, whiteboard white, grey carpet, the projector beam a
+faint warm band across the room. Soft shadows.
 
-Small details that will be animated later, keep them small and set against
-plain dark areas: the steam above the mug against the plain whiteboard,
-the dust in the projector beam against the dark upper wall, a small red
-light on the projector.
+Small details that will be animated later, keep them small and set
+against plain dark areas: the steam above the mug against the plain
+whiteboard, the dust in the projector beam against the dark upper wall,
+a small red light on the projector.
 
-No text, letters, numbers, signs with writing, UI, window chrome, borders,
-frames or signatures.
+No text, letters, numbers, signs with writing, UI, window chrome,
+borders, frames or signatures.
 ```
 
-Reroll on: writing on the whiteboard (Gemini loves to letter a whiteboard), a table that blocks the middle of the frame above the bottom strip or sits in front of the people, chairs in the standing areas, a table higher than a hip (the first render: 0.65 in the viewer, and the table in front).
+Reroll on: writing on the whiteboard (Gemini loves to letter a whiteboard), a table in front of the people or reaching into the standing areas, chairs in the standing areas, a table higher than a hip.
 
 ### Studio corner, for the Designer duels (`scene-studio.jpg`)
 
-Attach: `HEADER`.
+Attach: `HEADER`, `SCALE`.
 
 ```text
-Create a new pixel-art scene in exactly the same visual style as the attached
-image: the same chunky low-resolution look, the same simple shapes, shading
-and muted colours. Do not copy its content or its layout.
+Create a new pixel-art scene in exactly the same visual style as the
+first attached image: the same chunky low-resolution look, the same
+simple shapes, shading and muted colours. Do not copy its content or
+its layout. The second attached image is only a scale reference: the
+two people in it stand on the floor of the room you draw, at exactly
+that size and in exactly those places. Do not draw them; draw the room
+around them, with everything in it sized for people that tall.
 
-Style: a 16-bit pixel-art background from a 1990s point-and-click adventure
-game, as it looked on screen. Not modern high-resolution pixel art. The
-whole image is about 480 pixels wide, so every pixel is clearly visible.
-Big simple shapes; detail suggested with a few pixels, not drawn out. Three
-or four shades per material, dark outlines only where needed, a limited
-palette of about 32 colours, ordered dithering in shadows. No people.
+Style: a 16-bit pixel-art background from a 1990s point-and-click
+adventure game, as it looked on screen. Not modern high-resolution pixel
+art. The whole image is about 480 pixels wide, so every pixel is clearly
+visible. Big simple shapes; detail suggested with a few pixels, not
+drawn out. Three or four shades per material, dark outlines only where
+needed, a limited palette of about 32 colours, ordered dithering in
+shadows. No people.
 
-Scene: the corner of a design studio in the evening, warm wood floor and a
-brick wall painted white. The back wall is a moodboard: a big cork board
-with pinned colour swatches, torn paper, a few small abstract sketches and
-one photo of a chair, all as plain colour shapes, no letters. On the left a
-big beige laser printer as a dark boxy shape with its lid open and a jam of
-paper spilling out of it. On the right a tall wooden desk with a single
-articulated desk lamp giving cool white light, a drawing tablet lying on
-the desk with its screen glowing faintly, and a shelf above it holding a
-row of identical black notebooks and one very healthy plant. A tiny
-mannequin hand on the desk holding a pencil. A roll of masking tape on the
-floor. The middle of the floor is plain warm wood with nothing on it.
+Scale: a standing person is a bit under a third of the image's height,
+head at 56 percent of the height, feet on the floor line at 85 percent.
+A desk top reaches a person's hip, a printer a person's waist, the
+shelf is above a head, the track lights well above it.
 
-Composition: 16:9 frame. The top 15 percent is plain white brick wall and a
-strip of ceiling with a track light rail, the bottom 17 percent is plain
-wooden floor with nothing on it. The left-centre and the right-centre of
-the frame, from a fifth of the height down to the floor, are empty: plain
-floor and plain wall, because two figures will stand there later. The
-moodboard sits in the middle of the back wall between the two empty areas;
-the printer stays in the outer fifth on the left, the desk, lamp and shelf
-in the outer fifth on the right, as framing shapes. The outer edge columns
-of the image are plain and simple.
+Scene: the corner of a design studio in the evening, warm wood floor
+and a brick wall painted white. The back wall is a moodboard: a big
+cork board at head height with pinned colour swatches, torn paper, a
+few small abstract sketches and one photo of a chair, all as plain
+colour shapes, no letters. On the left, against the side wall, a
+waist-high beige laser printer as a dark boxy shape with its lid open
+and a jam of paper spilling out of it. On the right, against the side
+wall, a hip-high wooden desk with a single articulated desk lamp giving
+cool white light, a drawing tablet lying on the desk with its screen
+glowing faintly, and a shelf above it holding a row of identical black
+notebooks and one very healthy plant. A tiny mannequin hand on the desk
+holding a pencil. A roll of masking tape on the floor by the desk. The
+middle of the floor is plain warm wood with nothing on it.
+
+Composition: 16:9 frame. The top 15 percent is plain white brick wall
+and a strip of ceiling with a track light rail, the bottom 15 percent,
+below the floor line, is plain wooden floor with nothing on it and
+nothing in front of the people. The left-centre and the right-centre of
+the frame, from a fifth of the height down to the floor, are empty:
+plain floor and plain wall, because the two figures stand there. The
+moodboard sits in the middle of the back wall between the two empty
+areas; the printer stays in the outer fifth on the left, the desk, lamp
+and shelf in the outer fifth on the right, as framing shapes. The outer
+edge columns of the image are plain and simple.
 
 Light and colour: warm amber evening light from an unseen window on the
-left, one pool of cool white light from the desk lamp on the right, warm
-wood, cream, white brick, and the swatches on the moodboard as the only
-saturated colours. Long warm shadows.
+left, one pool of cool white light from the desk lamp on the right,
+warm wood, cream, white brick, and the swatches on the moodboard as the
+only saturated colours. Long warm shadows.
 
-Small details that will be animated later, keep them small and set against
-plain dark areas: the desk lamp's light on the desk surface, one sticky
-note on the moodboard lifting at a corner against the dark cork, the
-tablet screen glowing on the dark desk.
+Small details that will be animated later, keep them small and set
+against plain dark areas: the desk lamp's light on the desk surface,
+one sticky note on the moodboard lifting at a corner against the dark
+cork, the tablet screen glowing on the dark desk.
 
-No text, letters, numbers, signs with writing, UI, window chrome, borders,
-frames or signatures.
+No text, letters, numbers, signs with writing, UI, window chrome,
+borders, frames or signatures.
 ```
 
-Reroll on: letters or a logo on the moodboard, the desk pushed into the right standing area, a window with a view that pulls the eye away from the middle, furniture drawn for people twice the size (the first render: 0.5 in the viewer).
+Reroll on: letters or a logo on the moodboard, the desk pushed into the right standing area, a window with a view that pulls the eye away from the middle, a desk or printer higher than a hip or a waist.
 
 ### Corner office, for the Stakeholder, the title screen and the roster (`scene-office.jpg`)
 
-Attach: `HEADER`.
+Attach: `HEADER`, `SCALE`.
 
 ```text
-Create a new pixel-art scene in exactly the same visual style as the attached
-image: the same chunky low-resolution look, the same simple shapes, shading
-and muted colours. Do not copy its content or its layout.
+Create a new pixel-art scene in exactly the same visual style as the
+first attached image: the same chunky low-resolution look, the same
+simple shapes, shading and muted colours. Do not copy its content or
+its layout. The second attached image is only a scale reference: the
+two people in it stand on the floor of the room you draw, at exactly
+that size and in exactly those places. Do not draw them; draw the room
+around them, with everything in it sized for people that tall.
 
-Style: a 16-bit pixel-art background from a 1990s point-and-click adventure
-game, as it looked on screen. Not modern high-resolution pixel art. The
-whole image is about 480 pixels wide, so every pixel is clearly visible.
-Big simple shapes; detail suggested with a few pixels, not drawn out. Three
-or four shades per material, dark outlines only where needed, a limited
-palette of about 32 colours, ordered dithering in skies and shadows. No
-people.
+Style: a 16-bit pixel-art background from a 1990s point-and-click
+adventure game, as it looked on screen. Not modern high-resolution pixel
+art. The whole image is about 480 pixels wide, so every pixel is clearly
+visible. Big simple shapes; detail suggested with a few pixels, not
+drawn out. Three or four shades per material, dark outlines only where
+needed, a limited palette of about 32 colours, ordered dithering in
+skies and shadows. No people.
+
+Scale: a standing person is a bit under a third of the image's height,
+head at 56 percent of the height, feet on the floor line at 85 percent.
+The desk top reaches a person's hip, the chair's back a person's
+shoulder, the cabinet a hip, the spotlights are well above a head.
 
 Scene: a corner office at night, high up, seen from the door. The whole
-back wall is glass, with a dark navy city skyline behind it, scattered lit
-windows in the towers, and rain streaks on the glass. In the centre, a
-heavy dark wooden desk seen from the front, low enough that the glass wall
-shows above it. On the desk: a phone lying face up with its screen glowing,
-a tall untouched stack of printed reports, a small bonsai, and a chrome
-desk toy. Behind the desk a tall leather chair turned slightly away. A golf
-putter leaning in the right corner with a single ball on the carpet next to
-it. On the left wall a framed picture of a yacht, as plain shapes, and a
-low cabinet with a crystal decanter and two glasses. Dark carpet with a
-faint pattern. The areas of carpet to the left and right of the desk are
+back wall is glass, with a dark navy city skyline behind it, scattered
+lit windows in the towers, and rain streaks on the glass. In the
+centre, against the glass wall and behind where the two people stand,
+a heavy dark wooden hip-high desk seen from the front, low enough that
+the glass wall shows above it. On the desk: a phone lying face up with
+its screen glowing, a tall untouched stack of printed reports, a small
+bonsai, and a chrome desk toy. Behind the desk a tall leather chair
+turned slightly away. A golf putter leaning in the right corner with a
+single ball on the carpet next to it. On the left wall a framed picture
+of a yacht, as plain shapes, and a low cabinet with a crystal decanter
+and two glasses. Dark carpet with a faint pattern. The carpet to the
+left and right of the desk, and all of it in front of the desk, is
 plain and empty.
 
 Composition: 16:9 frame. The top 15 percent is plain dark ceiling with
-three recessed spotlights, the bottom 17 percent is plain dark carpet
-with nothing on it. The left-centre and the right-centre of the frame,
-from a fifth of the height down to the floor, are empty: plain carpet and
-plain glass with the skyline far behind, because two figures will stand
-there later. The desk and the chair sit in the exact middle between the two
-empty areas and do not reach into them. The yacht picture, the cabinet and
-the putter stay in the outer fifth on each side. The outer edge columns of
-the image are plain and simple.
+three recessed spotlights, the bottom 15 percent, below the floor line,
+is plain dark carpet with nothing on it and nothing in front of the
+people. The left-centre and the right-centre of the frame, from a fifth
+of the height down to the floor, are empty: plain carpet and plain
+glass with the skyline far behind, because the two figures stand there.
+The desk and the chair sit in the exact middle between the two empty
+areas and do not reach into them. The yacht picture, the cabinet and
+the putter stay in the outer fifth on each side. The outer edge
+columns of the image are plain and simple.
 
-Light and colour: dark navy and black, amber light from the spotlights on
-the desk and the carpet, pale blue from the phone screen, the city lights
-behind the glass in warm yellow and white single pixels. Deep shadows.
+Light and colour: dark navy and black, amber light from the spotlights
+on the desk and the carpet, pale blue from the phone screen, the city
+lights behind the glass in warm yellow and white single pixels. Deep
+shadows.
 
-Small details that will be animated later, keep them small and set against
-plain dark areas: the lit windows of the towers against the dark sky, the
-phone screen glowing on the dark desk, the rain streaks on the glass in
-front of the plain sky.
+Small details that will be animated later, keep them small and set
+against plain dark areas: the lit windows of the towers against the
+dark sky, the phone screen glowing on the dark desk, the rain streaks
+on the glass in front of the plain sky.
 
-No text, letters, numbers, signs with writing, UI, window chrome, borders,
-frames or signatures.
+No text, letters, numbers, signs with writing, UI, window chrome,
+borders, frames or signatures.
 ```
 
-Reroll on: a person in the chair, a skyline so busy the standing areas are full of lit windows (they must be plain enough to put a figure in front of), the desk reaching into the standing areas, a lit screen on a monitor with writing, a desk and chair drawn for a giant (the first render: 0.5 in the viewer).
+Reroll on: a person in the chair, a skyline so busy the standing areas are full of lit windows (they must be plain enough to put a figure in front of), the desk reaching into the standing areas or standing in front of the people, a lit screen on a monitor with writing, a desk higher than a hip.
 
 ## Prop sheet (`props-sheet.jpg`)
 
