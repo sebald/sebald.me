@@ -219,6 +219,12 @@ export const FALLBACK = "Uh… that's a good point.";
 /** Shown on the first exchange of a run */
 export const HINT = 'Pick the reply that answers it';
 
+/** Above the options, what the menu is for */
+export const MENU_PROMPTS = {
+  attack: 'Your turn. Pick a phrase to throw.',
+  defend: 'Pick your counter.',
+} as const;
+
 /** Shown on the second exchange of a run: the strip under the opponent's name */
 export const COMPOSURE_HINT =
   'The strip under their name is their composure. Every exchange wears it down, and a tired colleague fumbles their lines.';

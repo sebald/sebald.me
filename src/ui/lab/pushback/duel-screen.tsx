@@ -33,6 +33,7 @@ import {
   BUDDY_MISS_BARK,
   COMPOSURE_HINT,
   HINT,
+  MENU_PROMPTS,
   pairById,
 } from '@/lib/lab/pushback/lines';
 import { playerName } from '@/lib/lab/pushback/save';
@@ -552,9 +553,9 @@ export const DuelScreen = ({
     }
     if (step.kind === 'reveal') return `The reply was: ${step.text}`;
     if (step.kind === 'menu') {
-      return state.phase === 'attack'
-        ? 'Your turn: pick a phrase.'
-        : 'Pick the counter.';
+      return showsHint(state)
+        ? HINT
+        : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend'];
     }
     if (step.kind === 'wait') {
       return `${state.winner === 'player' ? 'You won' : 'You lost'}. ${barsLabel(state, 'player')}. Press Enter to continue.`;
@@ -670,7 +671,6 @@ export const DuelScreen = ({
         )}
         {step?.kind === 'menu' && (
           <>
-            {showsHint(state) && <p className={styles.hint()}>{HINT}</p>}
             {showsComposureHint(state) && (
               <p className={styles.hint()}>{COMPOSURE_HINT}</p>
             )}
@@ -683,11 +683,17 @@ export const DuelScreen = ({
                 <span>{phraseText(state.exchange.phrase)}</span>
               </p>
             )}
+            {/* The prompt sits right above the options, after a gap */}
+            <p className={cn(styles.hint(), 'mt-[calc(var(--px)*4)]')}>
+              {showsHint(state)
+                ? HINT
+                : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend']}
+            </p>
             <Menu
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
               active={!paused}
-              className="gap-0"
+              className="gap-0 text-[1.15em]"
             />
             {silenceWidth !== null && (
               <div className={styles.silence()} aria-hidden>

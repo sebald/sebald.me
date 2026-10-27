@@ -130,7 +130,9 @@ Once the user drops the generated image into the note folder:
 node .claude/skills/pixel-header/scripts/snap.mjs <image> <out-dir> --aspect 5/2
 ```
 
-It detects the grid size and phase, samples the dominant colour per cell and
+It detects the grid pitch (fractional, to a two-hundredth of a pixel: a
+2752 px render drawn as 240 columns is 11.465 px per cell, and a whole-pixel
+grid drifts a cell every few cells) and phase, samples the dominant colour per cell and
 writes `native.png` (one cell per pixel, cropped to 5:2) plus a 2x
 `preview.png`. Move the crop with `--offset=N` (native pixels, negative is up)
 if the horizon or focal point sits off-centre.

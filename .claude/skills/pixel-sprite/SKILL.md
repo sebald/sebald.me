@@ -41,8 +41,11 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
 
 What it does, in order:
 
-1. `snap.mjs` finds the grid (11 px on a 2752 by 1536 render) and writes
-   the native image.
+1. `snap.mjs` finds the grid and writes the native image. The pitch is
+   fractional: a 2752 by 1536 render is 240 columns of 11.465 px, and a
+   whole-pixel grid drifts a cell every two cells and smears every face
+   right of the first. Cut from the Gemini original in `sources/originals/`
+   when it is on disk; the recompressed copy adds noise to the sampling.
 2. The flat background is keyed by flooding from the border within
    `--tolerance` (10) of the border colour, so dark hair and outlines
    inside a figure are safe. The soft shadow under the feet is then taken

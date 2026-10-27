@@ -8,55 +8,55 @@
   "cells": [
     {
       "box": {
+        "x": 18,
+        "y": 34,
+        "width": 36,
+        "height": 78
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 16,
+        "y": 34,
+        "width": 39,
+        "height": 78
+      },
+      "clipped": false
+    },
+    {
+      "box": {
         "x": 17,
-        "y": 31,
+        "y": 36,
         "width": 38,
-        "height": 81
+        "height": 76
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 16,
-        "y": 31,
-        "width": 40,
-        "height": 81
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 16,
-        "y": 33,
-        "width": 40,
-        "height": 79
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 22,
-        "y": 32,
-        "width": 27,
-        "height": 80
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 14,
-        "y": 24,
-        "width": 44,
-        "height": 88
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 20,
+        "x": 23,
         "y": 35,
-        "width": 31,
+        "width": 26,
         "height": 77
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 15,
+        "y": 28,
+        "width": 42,
+        "height": 84
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 21,
+        "y": 38,
+        "width": 29,
+        "height": 74
       },
       "clipped": false
     }

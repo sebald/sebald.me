@@ -4,32 +4,32 @@
     "height": 112
   },
   "count": 3,
-  "background": "32353e",
+  "background": "30343d",
   "cells": [
     {
       "box": {
         "x": 21,
-        "y": 59,
+        "y": 57,
         "width": 30,
-        "height": 53
+        "height": 55
       },
       "clipped": false
     },
     {
       "box": {
         "x": 21,
-        "y": 58,
+        "y": 56,
         "width": 29,
-        "height": 54
+        "height": 56
       },
       "clipped": false
     },
     {
       "box": {
         "x": 17,
-        "y": 59,
+        "y": 57,
         "width": 38,
-        "height": 53
+        "height": 55
       },
       "clipped": false
     }

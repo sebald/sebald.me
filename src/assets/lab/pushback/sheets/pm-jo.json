@@ -4,59 +4,59 @@
     "height": 112
   },
   "count": 6,
-  "background": "2b2e35",
+  "background": "2c3035",
   "cells": [
     {
       "box": {
         "x": 21,
-        "y": 31,
-        "width": 30,
-        "height": 81
+        "y": 34,
+        "width": 29,
+        "height": 78
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 17,
-        "y": 31,
-        "width": 37,
-        "height": 81
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 14,
-        "y": 33,
-        "width": 43,
-        "height": 79
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 16,
-        "y": 33,
-        "width": 39,
-        "height": 79
+        "x": 18,
+        "y": 34,
+        "width": 35,
+        "height": 78
       },
       "clipped": false
     },
     {
       "box": {
         "x": 15,
-        "y": 26,
-        "width": 42,
-        "height": 86
+        "y": 36,
+        "width": 41,
+        "height": 76
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 21,
+        "x": 17,
         "y": 36,
-        "width": 29,
+        "width": 38,
         "height": 76
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 16,
+        "y": 29,
+        "width": 40,
+        "height": 83
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 22,
+        "y": 39,
+        "width": 28,
+        "height": 73
       },
       "clipped": false
     }
