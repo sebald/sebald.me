@@ -35,7 +35,7 @@ const plate = Buffer.from(base);
 // A red and a green bulb on the tower lamp; both are drawn lit. The lamp
 // runs a cycle: green steady, then "building" (both off, the red blinks),
 // then red steady for a moment, then green again.
-const LAMP = { x0: 222, x1: 234, y0: 114, y1: 130 };
+const LAMP = { x0: 221, x1: 234, y0: 114, y1: 130 };
 const isRed = c => c[0] > 150 && c[1] < 110 && c[2] < 110;
 const isGreen = c => c[1] > 130 && c[0] < 130 && c[2] < 130;
 const red = collect(LAMP, isRed);
@@ -44,7 +44,7 @@ const offRed = red.map(([x, y, c]) => [x, y, mix(c, [60, 40, 44], 0.75)]);
 const offGreen = green.map(([x, y, c]) => [x, y, mix(c, [40, 60, 48], 0.75)]);
 // The glow the bulbs cast on the wall behind them: warm/green tinted wall
 // pixels next to the lamp
-const GLOW = { x0: 214, x1: 244, y0: 110, y1: 134 };
+const GLOW = { x0: 213, x1: 244, y0: 109, y1: 134 };
 const glow = collect(
   GLOW,
   c => !isRed(c) && !isGreen(c) && sat(c) > 0.12 && lum(c) > 60,
@@ -70,10 +70,10 @@ const drawLamp = (b, t) => {
 // ---------------
 // The warm light the left monitor throws on the desk and the blind behind
 // it, breathing slowly as if the screen scrolled
-const DESK = { x0: 40, x1: 112, y0: 98, y1: 160 };
+const DESK = { x0: 31, x1: 106, y0: 97, y1: 162 };
 const isWarm = c => c[0] > c[2] + 40 && c[0] > 120 && sat(c) > 0.3;
 const warm = collect(DESK, isWarm);
-const RIGHT_DESK = { x0: 365, x1: 445, y0: 100, y1: 160 };
+const RIGHT_DESK = { x0: 371, x1: 455, y0: 99, y1: 162 };
 const warmRight = collect(RIGHT_DESK, isWarm);
 
 const drawGlow = (b, t) => {
@@ -92,12 +92,12 @@ const drawGlow = (b, t) => {
 // greenish pixels of its half of the plant above the pot.
 // The leaves are the olive pixels over the window and the desk; the pot
 // below them is brown
-const PLANT = { x0: 380, x1: 408, y0: 120, y1: 138 };
+const PLANT = { x0: 387, x1: 416, y0: 120, y1: 139 };
 const isLeaf = c =>
   c[1] > c[2] + 15 && c[1] >= c[0] - 6 && lum(c) < 140 && lum(c) > 50;
 const leaves = collect(PLANT, isLeaf);
-const POT_TOP = 139;
-const stemX = 394;
+const POT_TOP = 140;
+const stemX = 401;
 const leftLeaf = leaves.filter(([x, y]) => x < stemX && y < POT_TOP);
 const rightLeaf = leaves.filter(([x, y]) => x >= stemX && y < POT_TOP);
 

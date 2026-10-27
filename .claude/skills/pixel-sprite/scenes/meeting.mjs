@@ -31,8 +31,8 @@ const plate = Buffer.from(base);
 
 // The static steam above the mug: pale, desaturated pixels over the beige
 // wall; the wall a few columns to the left shows the same rows without it
-const STEAM = { x0: 46, x1: 64, y0: 170, y1: 214 };
-const wallAt = y => rgb(base, 40, y);
+const STEAM = { x0: 37, x1: 56, y0: 172, y1: 218 };
+const wallAt = y => rgb(base, 31, y);
 const isSteam = (c, x, y) => {
   const wall = wallAt(y);
   return lum(c) > lum(wall) + 12 && sat(c) < 0.25;
@@ -41,13 +41,13 @@ for (const [x, y] of collect(STEAM, isSteam)) setPx(plate, x, y, wallAt(y));
 
 // Steam
 // ---------------
-const RIM_Y = 214;
+const RIM_Y = 218;
 const STEAM_CORE = [236, 229, 218];
 const STEAM_MID = [214, 203, 188];
 const STEAM_FAINT = [190, 178, 162];
 const WISPS = [
-  { x: 54, len: 26, amp: 1.4, freq: 0.5, off: 0 },
-  { x: 58, len: 18, amp: 1.0, freq: 0.6, off: 2.4 },
+  { x: 46, len: 26, amp: 1.4, freq: 0.5, off: 0 },
+  { x: 50, len: 18, amp: 1.0, freq: 0.6, off: 2.4 },
 ];
 const STEAM_FRAMES = 32; // 4s, three times per loop
 
@@ -74,27 +74,27 @@ const drawSteam = (b, t) => {
 // Single pale pixels drifting down through the beam where it crosses the
 // dark wall above the whiteboard and beside it. They sink a pixel every
 // 1.5 s, sway, and fade through a dim tone at both ends.
-const BEAM_TOP = 48;
-const BOARD_TOP = 62;
-const apex = { x: 240, y: 46 };
-const halfWidthAt = y => ((y - apex.y) / (147 - apex.y)) * 127;
+const BEAM_TOP = 45;
+const BOARD_TOP = 59;
+const apex = { x: 240, y: 42 };
+const halfWidthAt = y => ((y - apex.y) / (148 - apex.y)) * 133;
 const inBeam = (x, y) =>
   y >= BEAM_TOP &&
   Math.abs(x - apex.x) < halfWidthAt(y) - 2 &&
   // Only over the dark wall: above the board, or beside it below the beam's
   // reach on the board edges
-  (y < BOARD_TOP || x < 118 || x > 362);
+  (y < BOARD_TOP || x < 113 || x > 368);
 const DUST_LIGHT = [236, 224, 200];
 const MOTES = [
-  { x: 232, y: 49 },
-  { x: 248, y: 51 },
-  { x: 240, y: 54 },
-  { x: 226, y: 52 },
-  { x: 254, y: 55 },
-  { x: 112, y: 90 },
-  { x: 114, y: 120 },
-  { x: 366, y: 96 },
-  { x: 368, y: 126 },
+  { x: 232, y: 46 },
+  { x: 249, y: 48 },
+  { x: 240, y: 51 },
+  { x: 226, y: 49 },
+  { x: 255, y: 52 },
+  { x: 106, y: 88 },
+  { x: 108, y: 120 },
+  { x: 372, y: 95 },
+  { x: 374, y: 126 },
 ];
 const MOTE_STEPS = 8;
 const MOTE_STEP = FRAMES / MOTE_STEPS;
@@ -122,7 +122,7 @@ const drawDust = (b, t) => {
 // ---------------
 // The small red standby light on the projector body blinks every two
 // seconds, like they do
-const PROJECTOR = { x0: 216, x1: 264, y0: 26, y1: 48 };
+const PROJECTOR = { x0: 215, x1: 265, y0: 22, y1: 45 };
 const isRedLed = c => c[0] > 150 && c[0] > c[1] + 60 && c[2] < 150;
 const led = collect(PROJECTOR, isRedLed);
 const ledOff = led.map(([x, y, c]) => [x, y, mix(c, [90, 86, 84], 0.7)]);

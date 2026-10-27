@@ -277,7 +277,7 @@ describe('barsLabel', () => {
 
 describe('viewFor', () => {
   it('centres the window on the duellists and puts the floor on the feet line', () => {
-    assert.deepEqual(viewFor({ left: 124, right: 284 }), { x: 80, y: 97 });
+    assert.deepEqual(viewFor({ left: 124, right: 284 }), { x: 80, y: 102 });
     // Clamped to the render
     assert.equal(viewFor({ left: 0, right: 60 }).x, 0);
     assert.equal(viewFor({ left: 400, right: 408 }).x, 160);

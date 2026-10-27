@@ -30,7 +30,7 @@ import {
 export const STAGE = { width: 320, height: 214 } as const;
 
 /** The scene renders, and where their floor meets the feet */
-export const SCENE = { width: 480, height: 270, feet: 225 } as const;
+export const SCENE = { width: 480, height: 270, feet: 230 } as const;
 
 /** Where everything goes, in stage pixels */
 export const LAYOUT = {

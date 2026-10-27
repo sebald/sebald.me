@@ -33,7 +33,7 @@ const plate = Buffer.from(base);
 // ---------------
 // Lit windows are warm single pixels in the towers, muted in the snapped
 // palette. A few of them go dark or come on every second; the rest stay.
-const CITY = { x0: 78, x1: 440, y0: 80, y1: 170 };
+const CITY = { x0: 71, x1: 449, y0: 78, y1: 172 };
 const isLit = c => c[0] > 90 && c[0] > c[2] + 25;
 const lit = collect(CITY, isLit);
 const litOff = lit.map(([x, y, c]) => [x, y, mix(c, [28, 32, 52], 0.8)]);
@@ -60,7 +60,7 @@ const drawCity = (b, t) => {
 // ---------------
 // The glowing phone on the desk and its cyan halo: a notification lights
 // it fully for a moment, then it settles back to a dimmer glow
-const PHONE = { x0: 166, x1: 222, y0: 150, y1: 186 };
+const PHONE = { x0: 163, x1: 221, y0: 151, y1: 189 };
 const isCyan = c => c[2] > c[0] + 30 && c[1] > c[0] + 20 && lum(c) > 60;
 const cyan = collect(PHONE, isCyan);
 
@@ -77,11 +77,11 @@ const drawPhone = (b, t) => {
 // skyline, between the window mullions. Drawn, never scaled: a streak is
 // three pixels of a slightly lighter navy, stepping one down and one right
 // per frame, wrapping within its pane.
-const SKY = { y0: 62, y1: 112 };
+const SKY = { y0: 59, y1: 111 };
 const PANES = [
-  { x0: 78, x1: 236 },
-  { x0: 246, x1: 338 },
-  { x0: 348, x1: 440 },
+  { x0: 71, x1: 236 },
+  { x0: 246, x1: 343 },
+  { x0: 353, x1: 449 },
 ];
 const STREAK = [74, 86, 120];
 const STREAKS = Array.from({ length: 14 }, (_, i) => {

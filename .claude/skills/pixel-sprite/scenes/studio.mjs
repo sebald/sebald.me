@@ -32,7 +32,7 @@ const plate = Buffer.from(base);
 // ---------------
 // The pale cone of light under the lamp head, on the wall, the desk and
 // the tablet: the brightest, least saturated pixels in that box
-const LAMP_LIGHT = { x0: 392, x1: 452, y0: 112, y1: 160 };
+const LAMP_LIGHT = { x0: 399, x1: 462, y0: 111, y1: 162 };
 const isLight = c => lum(c) > 205 && sat(c) < 0.2;
 const light = collect(LAMP_LIGHT, isLight);
 
@@ -49,7 +49,7 @@ const drawLamp = (b, t) => {
 // ---------------
 // The pale greenish screen on the desk pulses slowly, like a device on
 // standby: dims to 80 percent and back over four seconds
-const TABLET = { x0: 398, x1: 442, y0: 142, y1: 170 };
+const TABLET = { x0: 406, x1: 452, y0: 143, y1: 172 };
 const isScreen = c => c[1] > 180 && c[2] > 170 && c[0] < c[1] && lum(c) > 170;
 const screen = collect(TABLET, isScreen).filter(([, , c]) => !isLight(c));
 
@@ -62,7 +62,7 @@ const drawTablet = (b, t) => {
 // ---------------
 // The note pinned at the right edge of the cork board: its free corner
 // (the top-right few pixels) lifts by a pixel for a moment, twice per loop.
-const NOTE = { x0: 300, x1: 318, y0: 90, y1: 110 };
+const NOTE = { x0: 303, x1: 322, y0: 88, y1: 109 };
 const isNote = c => lum(c) > 200 && sat(c) < 0.35;
 const note = collect(NOTE, isNote);
 const noteRight = Math.max(...note.map(([x]) => x));

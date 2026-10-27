@@ -111,8 +111,10 @@ node .claude/skills/pixel-sprite/scenes/floor.mjs \
   src/assets/lab/pushback/scenes/floor/native.png src/assets/lab/pushback/scenes/floor
 ```
 
-`scene.mjs` snaps the render and pads or crops it to 480 by 270 by
-repeating the plain edge rows (`pad.mjs`). Each `scenes/<slug>.mjs` then
+`scene.mjs` snaps the render (480 columns of 5.735 px on a 2752 px render,
+so 478 by 266, from the original in `sources/originals/`) and pads or crops
+it to 480 by 270 by repeating the plain edge rows (`pad.mjs`). The loop
+scripts' coordinates are native pixels of that padded image. Each `scenes/<slug>.mjs` then
 animates two or three living details into `scene.webp` (8x, for the stage
 at 1.1x and up, shown through a 320 by 134 window), `scene-1x.webp` and `poster.png`, the way the note headers
 are built (pixel-header skill, steps 4 and 5). Check the result in the

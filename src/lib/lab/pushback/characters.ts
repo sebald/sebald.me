@@ -157,15 +157,15 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
  * move the stands a little once they exist.
  */
 export const STANDS: Record<SceneId, { left: number; right: number }> = {
-  // The desk islands reach in to x 117 and from x 363; the shelf with the
+  // The desk islands reach in to x 112 and from x 369; the shelf with the
   // build light sits between the duellists
-  floor: { left: 124, right: 284 },
-  // The fern stands at x 70 to 120 against the wall, the glass wall from 390
-  meeting: { left: 100, right: 320 },
-  // The printer ends at x 100, the desk starts at 365
-  studio: { left: 110, right: 280 },
-  // The cabinet ends at x 75, the desk spans 160 to 320, the putter is at 425
-  office: { left: 82, right: 328 },
+  floor: { left: 119, right: 286 },
+  // The fern stands at x 62 to 115 against the wall, the glass wall from 397
+  meeting: { left: 94, right: 324 },
+  // The printer ends at x 94, the desk starts at 371
+  studio: { left: 104, right: 282 },
+  // The cabinet ends at x 68, the desk spans 157 to 324, the putter is at 434
+  office: { left: 75, right: 332 },
 };
 
 // Player looks
