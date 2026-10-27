@@ -846,55 +846,61 @@ Reroll on: heads at different sizes, a hood that changes the face shape so much 
 
 ## Logo (`logo.jpg`)
 
-The wordmark for the start screen, the lab index and the link preview. One render, two prompts to choose from: the shoved letters (A) and the speech bubble (B). Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. It is generated on a plain dark background like a sheet and keyed the same way; it is not a scene, so it carries no room.
+The wordmark for the start screen, the lab index and the link preview. The first render (plain shoved letters, kept in `sources/originals/logo.jpeg`) read fine but said nothing about the game. The logo should carry the page: the two duellists, the lines they throw, the office. Two prompts on that brief; A is the one to try first. Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. Generated on a plain dark background like a sheet and keyed the same way.
 
-Size: the render snaps to a 250 by 139 grid; the word should fill about four fifths of the width, so around 200 by 60 art pixels. On the stage (320 wide) that is two thirds of the band, which is the Street Fighter title proportion. Nothing else in the frame: no tagline, no characters, no bubble but the one the prompt asks for.
+Size: the render snaps to a 240 by 133 grid; the mark should fill about four fifths of the width, so around 190 by 70 art pixels with the tails. On the stage (320 wide) that is two thirds of the band. Nothing else in the frame.
 
-Attach: `HEADER`.
+Attach: `HEADER`, and a model sheet for the colours of the people.
 
-### A: the shoved letters
+### A: two bubbles, one shove
 
-```text
-Draw a pixel-art video game logo in the style of the attached image: the
-same pixel size, the same hard-edged outlines, the same limited palette.
-Plain, flat, very dark background, nothing else in the frame.
-
-The logo is the single word PUSHBACK in heavy pixel capitals, built from
-thick blocky strokes like a 1990s adventure game title, two rows at most
-of pixel height difference between letters. The word fills about four
-fifths of the frame's width and sits centred. The letters are warm cream
-with a one-pixel black outline and a hard two-pixel drop shadow down and
-to the right in a burnt orange. The letters P U S H stand straight and
-level; the letters B A C K are being shoved: each one leans a little
-further to the right than the one before and sits one pixel lower, as if
-the word were being pushed off its line from the left. A small speech
-bubble tail, three or four pixels, hangs off the bottom right of the
-final K, as if the word were being said. No gradients, no glow, no
-bevels, no blur, no texture: flat colours, one outline, one shadow. No
-other words, no tagline, no characters, no icons.
-```
-
-### B: the speech bubble
+The game in one picture: two speech bubbles slam into each other. PUSH comes from the left in the window's cream, BACK from the right in the opponent's ember, and where they meet both are dented in, with a small pixel impact star at the join (the mic-drop burst's little cousin). Each bubble's tail points down and outward, to where the two duellists stand on the start screen, so the logo sits over the people like their lines do in the duel.
 
 ```text
 Draw a pixel-art video game logo in the style of the attached image: the
 same pixel size, the same hard-edged outlines, the same limited palette.
 Plain, flat, very dark background, nothing else in the frame.
 
-The logo is the single word PUSHBACK in heavy pixel capitals, built from
-thick blocky strokes like a 1990s adventure game title, inside a rounded
-rectangular speech bubble with a short tail at the bottom left. The
-bubble is warm cream with a one-pixel black outline and a hard two-pixel
-drop shadow down and to the right; the letters are a deep navy on the
-cream, with the letters B A C K in burnt orange instead. The bubble is
-being pushed from the right: its right edge is dented in by a few pixels
-and the whole bubble tilts slightly to the left, the tail pointing down
-left. The word fills about four fifths of the frame's width, centred. No
-gradients, no glow, no bevels, no blur: flat colours, one outline, one
-shadow. No other words, no tagline, no characters, no icons.
+The logo is two comic speech bubbles colliding head-on in the middle of
+the frame, the pair together filling about four fifths of the width.
+The left bubble is warm cream with a one-pixel black outline and holds
+the word PUSH in heavy dark navy pixel capitals; its tail points down
+and to the left. The right bubble is burnt orange with the same outline
+and holds the word BACK in heavy cream pixel capitals; its tail points
+down and to the right. Where the two bubbles meet, both edges are dented
+and crumpled into each other by a few pixels, the orange bubble pushed
+slightly back and tilted, and a small jagged pixel impact star in pale
+yellow sits at the point of contact, overlapping both outlines. Both
+bubbles cast a hard two-pixel drop shadow down and to the right. The
+letters are big, blocky, 1990s adventure-game title lettering, and fill
+their bubbles. No gradients, no glow, no bevels, no blur, no texture:
+flat colours, one outline, one shadow. No other words, no tagline, no
+characters, no icons beyond the one impact star.
 ```
 
-What to check: the word reads at a quarter size; the pixel size matches the header (if the letters look finer, use the half-resolution follow-up); the outline is one colour and closed; the shadow is hard, not blurred; nothing touches the frame edge. The orange should be the ember of the HUD (around #f0a36f) and the cream its frame (#f3eedc); a different warm pair is fine, the stage takes the logo's colours, not the other way round. Cut it with `sheet.mjs` once it keeps every letter: the letters are separate groups and the cutter joins the largest ones, so a `--cells 1 --specks 0` run with the shadow connecting the letters is the first thing to try, and a `logo.mjs` that keys the background and keeps everything is the fallback.
+### B: on the whiteboard
+
+The meeting room's whiteboard with the title written on it in marker, the way a sprint name ends up on a board, and the scale drawn under it as a tug-of-war arrow. On the start screen the logo sits on the meeting scene's actual whiteboard. Quieter; reads smaller in a thumbnail.
+
+```text
+Draw a pixel-art video game logo in the style of the attached image: the
+same pixel size, the same hard-edged outlines, the same limited palette.
+Plain, flat, very dark background, nothing else in the frame.
+
+The logo is the word PUSHBACK hand-lettered in thick dark blue
+whiteboard-marker capitals, slightly uneven like real marker writing,
+with a red marker underline that is a double-headed arrow with a small
+pointer mark pushed to the right of its middle, like a scale tipped to
+one side. Over the top-right corner of the word, a small yellow sticky
+note is stuck at a slight angle, blank. The word fills about four fifths
+of the frame's width. The marker strokes have a one-pixel darker edge
+so they read as drawn on a surface. No board, no frame, no wall: just
+the lettering, the arrow and the note on the plain dark background. No
+gradients, no glow, no blur: flat colours. No other words, no tagline,
+no characters.
+```
+
+What to check: the word reads at a quarter size; the pixel size matches the header (if the letters look finer, use the half-resolution follow-up); the outline is one colour and closed; the shadow is hard, not blurred; nothing touches the frame edge; in A, both words are legible and the dent is at the join, not somewhere else. The orange should be the ember of the HUD (around #f0a36f) and the cream its frame (#f3eedc); a different warm pair is fine, the stage takes the logo's colours, not the other way round. Cut it with `sheet.mjs` once it keeps every letter: the letters are separate groups and the cutter joins the largest ones, so a `--cells 1 --specks 0` run with the shadow connecting the letters is the first thing to try, and a `logo.mjs` that keys the background and keeps everything is the fallback.
 
 ## Mic drop burst (`micdrop-sheet.jpg`)
 
