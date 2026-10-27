@@ -32,12 +32,12 @@ Each duellist has two bars above their head, drawn as native-size chrome:
 - **Buy-in**, three segments (four against the boss). One segment per won exchange, two for a landed mic drop. Full bar wins. It only fills; nothing drains. This is the score, not health: both players build towards something.
 - **Momentum**, three steps. Playing well fills it, losing an exchange empties it. Full momentum unlocks the mic drop.
 
-| Event                                                   | Momentum   |
-| ------------------------------------------------------- | ---------- |
-| Counter before the silence bar is half full             | +1         |
+| Event                                                         | Momentum                            |
+| ------------------------------------------------------------- | ----------------------------------- |
+| Counter before the silence bar is half full                   | +1                                  |
 | Counter after that (or with the silence bar off: any counter) | +1 only when the bar is off, else 0 |
-| Landed phrase (the opponent missed)                     | +1         |
-| Lost exchange (missed counter or a countered phrase)    | reset to 0 |
+| Landed phrase (the opponent missed)                           | +1                                  |
+| Lost exchange (missed counter or a countered phrase)          | reset to 0                          |
 
 ### The mic drop
 
@@ -90,11 +90,11 @@ All in data: the slot table (menu size, decoy source, silence seconds and foreig
 
 The player picks one of three roles on the title screen. The pick changes the sprite, the order of opponents and the boss's framing; the mechanic and the lines are the same for all three.
 
-| Role     | Working name | Look                                           | Prop               | Opponent order                              |
-| -------- | ------------ | ---------------------------------------------- | ------------------ | ------------------------------------------- |
-| PM       | Jo           | Lanyard, rolled sleeves, notebook under the arm | Sticky-note stack  | Dev team, then Designers, then PMs, then boss |
-| Dev      | Sam          | Hoodie, headphones around the neck             | Laptop with stickers | Designers, then PMs, then Devs, then boss  |
-| Designer | Ines         | Turtleneck, round glasses                      | Tablet with stylus | PMs, then Devs, then Designers, then boss   |
+| Role     | Working name | Look                                            | Prop                 | Opponent order                                |
+| -------- | ------------ | ----------------------------------------------- | -------------------- | --------------------------------------------- |
+| PM       | Jo           | Lanyard, rolled sleeves, notebook under the arm | Sticky-note stack    | Dev team, then Designers, then PMs, then boss |
+| Dev      | Sam          | Hoodie, headphones around the neck              | Laptop with stickers | Designers, then PMs, then Devs, then boss     |
+| Designer | Ines         | Turtleneck, round glasses                       | Tablet with stylus   | PMs, then Devs, then Designers, then boss     |
 
 Rules behind the table:
 
@@ -126,15 +126,15 @@ A cast of nine colleagues, three per role, each a palette and prop swap of that 
 
 A run is seven slots: six colleagues and the Stakeholder. Each run draws two of the three characters per role at random, seeded per run, and puts them in the player's role order (see Player characters): two of the first foreign role, two of the second, two of their own. The third character of each role is out of office this run and rotates in on the next one. The slot sets everything the old tier did:
 
-| Slot | Role in the run      | Tier | Menu | Decoys from | Silence | Foreign pools |
-| ---- | -------------------- | ---- | ---- | ----------- | ------- | ------------- |
-| 1    | First foreign role   | 1    | 4    | any pool    | off     | 60 %          |
-| 2    | First foreign role   | 1    | 4    | any pool    | off     | 60 %          |
-| 3    | Second foreign role  | 2    | 5    | two pools   | 8 s     | 75 %          |
-| 4    | Second foreign role  | 2    | 5    | two pools   | 8 s     | 75 %          |
-| 5    | Own role             | 3    | 6    | same pool   | 6 s     | 90 %          |
-| 6    | Own role             | 3    | 6    | same pool   | 6 s     | 90 %          |
-| 7    | The Stakeholder      | Boss | 6    | all pools   | 5 s     | 100 %         |
+| Slot | Role in the run     | Tier | Menu | Decoys from | Silence | Foreign pools |
+| ---- | ------------------- | ---- | ---- | ----------- | ------- | ------------- |
+| 1    | First foreign role  | 1    | 4    | any pool    | off     | 60 %          |
+| 2    | First foreign role  | 1    | 4    | any pool    | off     | 60 %          |
+| 3    | Second foreign role | 2    | 5    | two pools   | 8 s     | 75 %          |
+| 4    | Second foreign role | 2    | 5    | two pools   | 8 s     | 75 %          |
+| 5    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %          |
+| 6    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %          |
+| 7    | The Stakeholder     | Boss | 6    | all pools   | 5 s     | 100 %         |
 
 "Decoys from" is where the wrong counters in the player's defence menu are drawn from: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. "Two pools" is the phrase's own pool plus one other, picked per exchange. A mic drop sets the menu to eight whatever the slot. "Foreign pools" is the AI's accuracy on phrases outside its own role; its own pool it answers every time.
 
@@ -169,12 +169,12 @@ On attack: pick a random phrase from the opponent's pool, no repeats within a du
 
 Four scenes, one per opponent role and one for the boss, all made with the `pixel-header` pipeline: Gemini prompt with a header as style reference, `snap.mjs` to the native grid, a per-scene loop script for two or three living details. Target 480 by 270 native pixels (16:9, no 5:2 crop this time; a 1376 px Gemini render snaps at its native 3 px grid to about 458 wide, and `sheet.mjs` pads it to 480 by 270 by repeating the plain edge columns and rows, which is why the edges must stay plain), the same 32-colour, 3 to 4 shades per material look as the headers. Scenes carry no people; the sprites are the people.
 
-| Scene           | Used for           | Time and palette                                | Where the duellists stand                                              | Living details (looped)                                                                  |
-| --------------- | ------------------ | ----------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Open-plan floor | Dev opponents      | Late afternoon, blue-grey with warm monitor light | Between two desk islands, monitors behind them as plain dark areas     | A monitor flicker, a CI light blinking green then red, a plant leaf in the AC draft      |
-| Meeting room    | PM opponents       | Mid-morning, beige and whiteboard white         | In front of the whiteboard, table in the foreground framing the bottom | Projector fan dust in the beam, a coffee mug steaming, the whiteboard marker light       |
-| Studio corner   | Designer opponents | Evening, warm wood and one cool desk lamp       | Beside a moodboard wall, printer on the left as a dark frame           | Lamp flicker, a sticky note lifting in a draft, a tablet screen pulsing on standby       |
-| Corner office   | The Stakeholder    | Night, city lights behind glass, dark navy and amber | Desk between the duellists, window behind                          | City windows twinkling, phone screen glowing on the desk, rain streaks on the glass      |
+| Scene           | Used for           | Time and palette                                     | Where the duellists stand                                              | Living details (looped)                                                             |
+| --------------- | ------------------ | ---------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Open-plan floor | Dev opponents      | Late afternoon, blue-grey with warm monitor light    | Between two desk islands, monitors behind them as plain dark areas     | A monitor flicker, a CI light blinking green then red, a plant leaf in the AC draft |
+| Meeting room    | PM opponents       | Mid-morning, beige and whiteboard white              | In front of the whiteboard, table in the foreground framing the bottom | Projector fan dust in the beam, a coffee mug steaming, the whiteboard marker light  |
+| Studio corner   | Designer opponents | Evening, warm wood and one cool desk lamp            | Beside a moodboard wall, printer on the left as a dark frame           | Lamp flicker, a sticky note lifting in a draft, a tablet screen pulsing on standby  |
+| Corner office   | The Stakeholder    | Night, city lights behind glass, dark navy and amber | Desk between the duellists, window behind                              | City windows twinkling, phone screen glowing on the desk, rain streaks on the glass |
 
 Composition rule for all four: the middle band from y=60 to y=225 stays uncluttered where the sprites stand (x=60 to 170 for the left duellist, x=310 to 420 for the right). The top 40 px is a plain ceiling or sky and holds the two bars per duellist; the bottom 45 px a plain floor; the dialogue box overlays the floor. Dark framing shapes on the left and right edges, as in the headers.
 
@@ -205,71 +205,71 @@ Who throws what: every character throws from its whole pool, uncollected pairs f
 
 **Dev pool** (thrown by Dev opponents)
 
-| ID    | Phrase                                            | Counter                                              |
-| ----- | ------------------------------------------------- | ---------------------------------------------------- |
-| dev-1 | Works on my machine.                              | Then we'll ship your machine.                        |
-| dev-2 | That's not a bug, that's undocumented behaviour.  | Then document it. In the changelog. Under "bugs".    |
-| dev-3 | That would take three sprints and a rewrite.      | Funny, the prototype took an afternoon.              |
-| dev-4 | Have you tried turning it off and on again?       | Yes. The feature stayed off. Users noticed.          |
-| dev-5 | The legacy code is the problem, not me.           | You wrote the legacy code. In March.                 |
-| dev-6 | We'd need a migration for that.                   | You need a migration for a button label.             |
-| dev-7 | It's technically correct.                         | Technically correct and nobody can use it. Well done. |
-| dev-8 | I'll fix it in a follow-up PR.                    | That follow-up has been open since the last reorg.   |
+| ID    | Phrase                                           | Counter                                               |
+| ----- | ------------------------------------------------ | ----------------------------------------------------- |
+| dev-1 | Works on my machine.                             | Then we'll ship your machine.                         |
+| dev-2 | That's not a bug, that's undocumented behaviour. | Then document it. In the changelog. Under "bugs".     |
+| dev-3 | That would take three sprints and a rewrite.     | Funny, the prototype took an afternoon.               |
+| dev-4 | Have you tried turning it off and on again?      | Yes. The feature stayed off. Users noticed.           |
+| dev-5 | The legacy code is the problem, not me.          | You wrote the legacy code. In March.                  |
+| dev-6 | We'd need a migration for that.                  | You need a migration for a button label.              |
+| dev-7 | It's technically correct.                        | Technically correct and nobody can use it. Well done. |
+| dev-8 | I'll fix it in a follow-up PR.                   | That follow-up has been open since the last reorg.    |
 
 **Designer pool** (thrown by Designer opponents)
 
-| ID    | Phrase                                       | Counter                                                     |
-| ----- | -------------------------------------------- | ----------------------------------------------------------- |
-| des-1 | This is off-brand.                           | The brand changed twice while you were saying that.         |
-| des-2 | That's not how it looks in Figma.            | Figma doesn't have to load on a train.                      |
-| des-3 | Did you even open the design file?           | I did. Which of the forty pages is the real one?            |
-| des-4 | It's one pixel off.                          | And the deadline is one week off. Pick one.                 |
-| des-5 | Users will never understand that.            | They understood the old version. You redesigned it.         |
-| des-6 | We should test this with real users first.   | The last test loved it. You redesigned it anyway.           |
-| des-7 | The spacing is inconsistent.                 | So is the design system. I'm matching it.                   |
-| des-8 | This needs more whitespace.                  | The sidebar is ninety percent whitespace. It's called empty. |
+| ID    | Phrase                                     | Counter                                                      |
+| ----- | ------------------------------------------ | ------------------------------------------------------------ |
+| des-1 | This is off-brand.                         | The brand changed twice while you were saying that.          |
+| des-2 | That's not how it looks in Figma.          | Figma doesn't have to load on a train.                       |
+| des-3 | Did you even open the design file?         | I did. Which of the forty pages is the real one?             |
+| des-4 | It's one pixel off.                        | And the deadline is one week off. Pick one.                  |
+| des-5 | Users will never understand that.          | They understood the old version. You redesigned it.          |
+| des-6 | We should test this with real users first. | The last test loved it. You redesigned it anyway.            |
+| des-7 | The spacing is inconsistent.               | So is the design system. I'm matching it.                    |
+| des-8 | This needs more whitespace.                | The sidebar is ninety percent whitespace. It's called empty. |
 
 **Boss phrases** (the Stakeholder attacks only with these; the counter is an existing regular one)
 
-| ID     | Boss phrase                                        | Answered by                                               |
-| ------ | -------------------------------------------------- | --------------------------------------------------------- |
-| boss-1 | I don't see why this can't be done by Friday.      | pm-3: We'll have time to do it twice, then.               |
-| boss-2 | The competitor's demo looked much slicker.         | pm-6: And their users are already complaining about it.   |
-| boss-3 | I never approved any of this.                      | dev-2: Then document it. In the changelog. Under "bugs".  |
-| boss-4 | Just switch it off until the investors have left.  | dev-4: Yes. The feature stayed off. Users noticed.        |
-| boss-5 | We'll revisit the budget for that next quarter.    | dev-8: That follow-up has been open since the last reorg. |
-| boss-6 | My nephew says the whole app looks dated.          | des-1: The brand changed twice while you were saying that. |
+| ID     | Boss phrase                                       | Answered by                                                |
+| ------ | ------------------------------------------------- | ---------------------------------------------------------- |
+| boss-1 | I don't see why this can't be done by Friday.     | pm-3: We'll have time to do it twice, then.                |
+| boss-2 | The competitor's demo looked much slicker.        | pm-6: And their users are already complaining about it.    |
+| boss-3 | I never approved any of this.                     | dev-2: Then document it. In the changelog. Under "bugs".   |
+| boss-4 | Just switch it off until the investors have left. | dev-4: Yes. The feature stayed off. Users noticed.         |
+| boss-5 | We'll revisit the budget for that next quarter.   | dev-8: That follow-up has been open since the last reorg.  |
+| boss-6 | My nephew says the whole app looks dated.         | des-1: The brand changed twice while you were saying that. |
 
 boss-3 is the weakest fit (dev-2 answers "undocumented behaviour", not "never approved"); check it in the lines pass.
 
 **Barks and fallbacks**
 
-| When                                         | Line                                                             |
-| -------------------------------------------- | ---------------------------------------------------------------- |
-| Intro, The Intern                            | Hi! Is this the meeting? I was told there'd be a meeting.        |
-| Intro, The Roadmap Owner                     | I have a slot for you. It's now. Make it count.                  |
-| Intro, The Head of Product                   | I've heard about you. None of it was in the OKRs.                |
-| Intro, The Junior                            | Give me a sec, the build's almost green.                         |
-| Intro, The Senior                            | I've seen this pattern before. It didn't end well then either.   |
-| Intro, The Architect                         | Before we start: is this scalable?                               |
-| Intro, The Freelancer                        | I'm only here until Thursday, so let's be quick.                 |
-| Intro, The Brand Designer                    | That's not our blue.                                             |
-| Intro, The Design Lead                       | Let me stop you right there.                                     |
-| Intro, The Stakeholder                       | Keep it short, I've got a call in five.                          |
-| Player wins (PM)                             | I'll add that to the release notes.                              |
-| Player loses (PM)                            | Noted. Parking it for now.                                       |
-| Player wins (Dev)                            | Closed as fixed.                                                 |
-| Player loses (Dev)                           | Fine. I'll open a ticket.                                        |
-| Player wins (Designer)                       | Shipped. Pixel-perfect.                                          |
-| Player loses (Designer)                      | I'll take it back to the moodboard.                              |
-| Boss loses the game, player is a PM          | Fine. Put it in the next steering deck. I used to write those.   |
-| Boss loses the game, player is a Dev         | Fine. Put it in the next steering deck. I used to review those.  |
-| Boss loses the game, player is a Designer    | Fine. Put it in the next steering deck. I used to draw those.    |
-| Boss wins, last missed counter was a PM line | Have you aligned this with product?                              |
-| Boss wins, last missed counter was a Dev line | Have you talked to engineering about this?                      |
-| Boss wins, last missed counter was a Designer line | Has design seen this?                                       |
-| Player interrupts the boss with a mic drop   | Let's take this offline.                                         |
-| Silence bar runs out (spoken by the defender) | Uh… that's a good point.                                        |
+| When                                               | Line                                                            |
+| -------------------------------------------------- | --------------------------------------------------------------- |
+| Intro, The Intern                                  | Hi! Is this the meeting? I was told there'd be a meeting.       |
+| Intro, The Roadmap Owner                           | I have a slot for you. It's now. Make it count.                 |
+| Intro, The Head of Product                         | I've heard about you. None of it was in the OKRs.               |
+| Intro, The Junior                                  | Give me a sec, the build's almost green.                        |
+| Intro, The Senior                                  | I've seen this pattern before. It didn't end well then either.  |
+| Intro, The Architect                               | Before we start: is this scalable?                              |
+| Intro, The Freelancer                              | I'm only here until Thursday, so let's be quick.                |
+| Intro, The Brand Designer                          | That's not our blue.                                            |
+| Intro, The Design Lead                             | Let me stop you right there.                                    |
+| Intro, The Stakeholder                             | Keep it short, I've got a call in five.                         |
+| Player wins (PM)                                   | I'll add that to the release notes.                             |
+| Player loses (PM)                                  | Noted. Parking it for now.                                      |
+| Player wins (Dev)                                  | Closed as fixed.                                                |
+| Player loses (Dev)                                 | Fine. I'll open a ticket.                                       |
+| Player wins (Designer)                             | Shipped. Pixel-perfect.                                         |
+| Player loses (Designer)                            | I'll take it back to the moodboard.                             |
+| Boss loses the game, player is a PM                | Fine. Put it in the next steering deck. I used to write those.  |
+| Boss loses the game, player is a Dev               | Fine. Put it in the next steering deck. I used to review those. |
+| Boss loses the game, player is a Designer          | Fine. Put it in the next steering deck. I used to draw those.   |
+| Boss wins, last missed counter was a PM line       | Have you aligned this with product?                             |
+| Boss wins, last missed counter was a Dev line      | Have you talked to engineering about this?                      |
+| Boss wins, last missed counter was a Designer line | Has design seen this?                                           |
+| Player interrupts the boss with a mic drop         | Let's take this offline.                                        |
+| Silence bar runs out (spoken by the defender)      | Uh… that's a good point.                                        |
 
 ## Result card
 
@@ -304,14 +304,14 @@ Opponents are palette and prop swaps done in code, not new drawings: one model s
 
 Animation is code, not frames:
 
-| Pose   | Source            | How it moves                                                                                      |
-| ------ | ----------------- | ------------------------------------------------------------------------------------------------- |
-| Idle   | Model sheet cell 1 | 1 px vertical bob every 600 ms, seeded like the header loops                                     |
-| Talk   | Cells 1 and 2     | Alternate at 120 ms while the line types; a third mouth state is cell 1 with the mouth rows darkened by one shade |
-| Taunt  | Cell 3            | Hold, plus 2 px step toward the opponent over 2 frames; on a mic drop the step is 4 px and the `Mic drop!` label appears |
-| Flinch | Cell 4            | Hold 400 ms, 2 px step back, one frame of a one-shade-lighter overlay                             |
-| Win    | Cell 5            | Hold, 1 px bob at double speed                                                                    |
-| Lose   | Cell 6            | Hold, no bob                                                                                      |
+| Pose   | Source             | How it moves                                                                                                             |
+| ------ | ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Idle   | Model sheet cell 1 | 1 px vertical bob every 600 ms, seeded like the header loops                                                             |
+| Talk   | Cells 1 and 2      | Alternate at 120 ms while the line types; a third mouth state is cell 1 with the mouth rows darkened by one shade        |
+| Taunt  | Cell 3             | Hold, plus 2 px step toward the opponent over 2 frames; on a mic drop the step is 4 px and the `Mic drop!` label appears |
+| Flinch | Cell 4             | Hold 400 ms, 2 px step back, one frame of a one-shade-lighter overlay                                                    |
+| Win    | Cell 5             | Hold, 1 px bob at double speed                                                                                           |
+| Lose   | Cell 6             | Hold, no bob                                                                                                             |
 
 If a sheet comes back with only four usable poses, the fallback is flinch for lose and taunt for win; the spec allows it and the data marks which cells exist. The right-hand duellist is the sheet mirrored; props with text are avoided in the prompts for that reason. The Stakeholder never leaves idle or talk during the barrage; the interrupt is the one time they flinch, and the lose pose is the one time they look up.
 
@@ -327,33 +327,33 @@ The game is a client component on a new route in the existing Next.js app; no ne
 
 Pushback is the first entry of `/lab`, the section for things that are more code than prose: games, demos and interactive examples that a note can point to when it needs more than text. The section mirrors how notes are organised, one folder per entry everywhere:
 
-| Path                                   | Holds                                                                                                       |
-| -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `src/app/(page)/lab/page.tsx`          | Index: every entry with its blurb and, where there is one, the note it belongs to                           |
-| `src/app/(page)/lab/<slug>/page.tsx`   | The entry's route                                                                                           |
-| `src/ui/lab/<slug>/`                   | Its components                                                                                              |
-| `src/lib/lab/<slug>/`                  | Its logic and data                                                                                          |
-| `src/assets/lab/<slug>/`               | Its art                                                                                                     |
-| `src/lib/lab.ts`                       | Registry of entries (`slug`, `title`, `blurb`, optional `note` slug) read by the index and by notes linking into the lab |
+| Path                                 | Holds                                                                                                                    |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `src/app/(page)/lab/page.tsx`        | Index: every entry with its blurb and, where there is one, the note it belongs to                                        |
+| `src/app/(page)/lab/<slug>/page.tsx` | The entry's route                                                                                                        |
+| `src/ui/lab/<slug>/`                 | Its components                                                                                                           |
+| `src/lib/lab/<slug>/`                | Its logic and data                                                                                                       |
+| `src/assets/lab/<slug>/`             | Its art                                                                                                                  |
+| `src/lib/lab.ts`                     | Registry of entries (`slug`, `title`, `blurb`, optional `note` slug) read by the index and by notes linking into the lab |
 
 Layout in the repo for this entry:
 
-| Path                                         | Holds                                                                                                                         |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/(page)/lab/pushback/page.tsx`               | Route and metadata (a Server Component); renders the client wrapper                                                           |
-| `src/ui/lab/pushback/game.tsx`                       | `'use client'` wrapper that imports the stage with `next/dynamic` and `ssr: false` (not allowed in the page itself)           |
-| `src/ui/lab/pushback/*.tsx`                          | Canvas stage, dialogue box, hand and counter menus, bars, title, select, roster and result screens                            |
-| `src/lib/lab/pushback/lines.ts`                      | The Lines section as typed data: pools, boss pairs, barks, fallback                                                           |
-| `src/lib/lab/pushback/characters.ts`                 | Roles, the cast, the slot table, the run draw, sheet references, palette swaps                                              |
-| `src/lib/lab/pushback/duel.ts`                       | Pure state machine: `reduce(state, action) → state`, no DOM, no timers (the silence bar sends `tick` actions)                 |
-| `src/lib/lab/pushback/ai.ts`                         | Opponent choices, hands and decoy menus, seeded RNG so tests are deterministic                                                 |
-| `src/lib/lab/pushback/save.ts`                       | Save shape, `localStorage` read/write, versioned; result card text                                                            |
-| `src/lib/lab/pushback/sheets.test.ts`                | Sheet validator (cell size, pose count, palette against the scene); a test file so `pnpm test` picks it up                    |
-| `src/lib/lab/pushback/simulate.ts`                   | Balance script: a modelled player against every slot over many seeded runs (see Workbench)                                   |
-| `src/app/(page)/lab/pushback/dev/page.tsx`           | The workbench, dev only (`notFound()` in production)                                                                          |
-| `src/ui/lab/pushback/dev/*.tsx`                      | Its panels: sprite viewer, scene viewer, duel sandbox                                                                         |
-| `src/assets/lab/pushback/`                           | Sprite sheets and scene loops; `sources/` holds the Gemini originals, which nothing imports                                   |
-| `.claude/skills/pixel-sprite/`               | `SKILL.md` with the prompt template and the review checklist, `scripts/sheet.mjs` next to it (it imports the pixel-header `loop.mjs` helpers) |
+| Path                                       | Holds                                                                                                                                         |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/(page)/lab/pushback/page.tsx`     | Route and metadata (a Server Component); renders the client wrapper                                                                           |
+| `src/ui/lab/pushback/game.tsx`             | `'use client'` wrapper that imports the stage with `next/dynamic` and `ssr: false` (not allowed in the page itself)                           |
+| `src/ui/lab/pushback/*.tsx`                | Canvas stage, dialogue box, hand and counter menus, bars, title, select, roster and result screens                                            |
+| `src/lib/lab/pushback/lines.ts`            | The Lines section as typed data: pools, boss pairs, barks, fallback                                                                           |
+| `src/lib/lab/pushback/characters.ts`       | Roles, the cast, the slot table, the run draw, sheet references, palette swaps                                                                |
+| `src/lib/lab/pushback/duel.ts`             | Pure state machine: `reduce(state, action) → state`, no DOM, no timers (the silence bar sends `tick` actions)                                 |
+| `src/lib/lab/pushback/ai.ts`               | Opponent choices, hands and decoy menus, seeded RNG so tests are deterministic                                                                |
+| `src/lib/lab/pushback/save.ts`             | Save shape, `localStorage` read/write, versioned; result card text                                                                            |
+| `src/lib/lab/pushback/sheets.test.ts`      | Sheet validator (cell size, pose count, palette against the scene); a test file so `pnpm test` picks it up                                    |
+| `src/lib/lab/pushback/simulate.ts`         | Balance script: a modelled player against every slot over many seeded runs (see Workbench)                                                    |
+| `src/app/(page)/lab/pushback/dev/page.tsx` | The workbench, dev only (`notFound()` in production)                                                                                          |
+| `src/ui/lab/pushback/dev/*.tsx`            | Its panels: sprite viewer, scene viewer, duel sandbox                                                                                         |
+| `src/assets/lab/pushback/`                 | Sprite sheets and scene loops; `sources/` holds the Gemini originals, which nothing imports                                                   |
+| `.claude/skills/pixel-sprite/`             | `SKILL.md` with the prompt template and the review checklist, `scripts/sheet.mjs` next to it (it imports the pixel-header `loop.mjs` helpers) |
 
 `(page)` has no layout of its own, so `/lab/pushback` gets the site header and footer from the root layout. Keep them: the game sits inside the blog, it is not a separate app.
 
@@ -368,47 +368,63 @@ type BossPair = { id: string; phrase: string; answeredBy: Pair['id'] };
 type Tier = 1 | 2 | 3 | 'boss';
 
 type Character = {
-  id: string; name: string; role: Role | 'boss';
-  sheet: { base: Role | 'boss'; head?: string; prop?: string; accessory?: string };
-  palette?: Record<string, string>; scene: 'floor' | 'meeting' | 'studio' | 'office';
+  id: string;
+  name: string;
+  role: Role | 'boss';
+  sheet: {
+    base: Role | 'boss';
+    head?: string;
+    prop?: string;
+    accessory?: string;
+  };
+  palette?: Record<string, string>;
+  scene: 'floor' | 'meeting' | 'studio' | 'office';
   intro: string;
 };
 
 type Slot = {
   tier: Tier;
-  accuracy: number;                 // on foreign pools; own pool is always 1
-  menu: number;                     // counter options on defence
+  accuracy: number; // on foreign pools; own pool is always 1
+  menu: number; // counter options on defence
   decoys: 'any' | 'two' | 'same' | 'all';
-  silence: number | null;           // seconds, null = off
+  silence: number | null; // seconds, null = off
 };
 
 type Run = {
   seed: number;
-  slots: { character: Character['id']; slot: Slot }[];  // 6 colleagues + the boss
+  slots: { character: Character['id']; slot: Slot }[]; // 6 colleagues + the boss
 };
 
 type Rules = {
-  buyIn: number;                    // 3, boss duel 4
-  momentum: number;                 // 3
-  micDrop: { worth: number; menu: number; silence: number };  // 2, 8, 0.5
-  hand: number;                     // 4
-  bossMisses: number;               // 3
+  buyIn: number; // 3, boss duel 4
+  momentum: number; // 3
+  micDrop: { worth: number; menu: number; silence: number }; // 2, 8, 0.5
+  hand: number; // 4
+  bossMisses: number; // 3
 };
 
 type RunStats = {
-  exchangesWon: number; exchangesLost: number; micDrops: number;
+  exchangesWon: number;
+  exchangesLost: number;
+  micDrops: number;
   missesByPool: Record<Role, number>;
 };
 
 type Save = {
   version: 1;
-  silence: boolean;                 // the silence bar switch on the title screen
-  runs: Partial<Record<Role, {
-    run: Run;                       // the draw, so a reload keeps the same cast
-    beaten: Record<number, { flawless: boolean }>;  // by slot index
-    collected: Pair['id'][];        // starts as the role's own pool
-    finished: boolean; stats: RunStats;
-  }>>;
+  silence: boolean; // the silence bar switch on the title screen
+  runs: Partial<
+    Record<
+      Role,
+      {
+        run: Run; // the draw, so a reload keeps the same cast
+        beaten: Record<number, { flawless: boolean }>; // by slot index
+        collected: Pair['id'][]; // starts as the role's own pool
+        finished: boolean;
+        stats: RunStats;
+      }
+    >
+  >;
 };
 ```
 
