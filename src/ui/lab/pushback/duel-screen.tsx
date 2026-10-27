@@ -29,14 +29,12 @@ import {
   type DuelState,
   type Side,
   reduce,
-  showsComposureHint,
   showsHint,
   toLose,
   toWin,
 } from '@/lib/lab/pushback/duel';
 import {
   BUDDY_MISS_BARK,
-  COMPOSURE_HINT,
   HINT,
   MENU_PROMPTS,
   pairById,
@@ -630,7 +628,6 @@ export const DuelScreen = ({
         toLose={toLose(state)}
         momentum={shown.momentum}
         momentumTotal={state.rules.momentum}
-        composure={1 - state.rules.fatigue * shown.exchanges}
         names={{
           player: playerName(state.setup.role, look),
           opponent: character.name,
@@ -695,9 +692,6 @@ export const DuelScreen = ({
         )}
         {step?.kind === 'menu' && (
           <>
-            {showsComposureHint(state) && (
-              <p className={styles.hint()}>{COMPOSURE_HINT}</p>
-            )}
             {/* The phrase being answered, at full strength: it is what
                 the player reads to pick */}
             {state.phase === 'defend' && state.exchange && (

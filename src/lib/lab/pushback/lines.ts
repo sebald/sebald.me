@@ -225,10 +225,6 @@ export const MENU_PROMPTS = {
   defend: 'Pick your counter.',
 } as const;
 
-/** Shown on the second exchange of a run: the strip under the opponent's name */
-export const COMPOSURE_HINT =
-  'The strip under their name is their composure. Every exchange wears it down, and a tired colleague fumbles their lines.';
-
 /** The Stakeholder's line when the player interrupts with a mic drop */
 export const OFFLINE = "Let's take this offline.";
 

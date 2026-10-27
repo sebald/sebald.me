@@ -13,7 +13,6 @@ export const HudDemo = () => {
   const [scale, setScale] = useState(1);
   const [player, setPlayer] = useState(1);
   const [opponent, setOpponent] = useState(2);
-  const [composure, setComposure] = useState(0.7);
   const [crop, setCrop] = useState(0);
   const [boss, setBoss] = useState(false);
   const [still, setStill] = useState(false);
@@ -47,16 +46,6 @@ export const HudDemo = () => {
             max={2}
             value={opponent}
             onChange={e => setOpponent(Number(e.target.value))}
-          />
-        </Field>
-        <Field label={`Composure ${composure.toFixed(2)}`}>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={composure}
-            onChange={e => setComposure(Number(e.target.value))}
           />
         </Field>
         <Field label={`Crop ${crop}`}>
@@ -98,7 +87,6 @@ export const HudDemo = () => {
             toLose={toLose}
             momentum={{ player, opponent }}
             momentumTotal={2}
-            composure={composure}
             names={{ player: 'Jo', opponent: 'The Junior' }}
             crop={crop}
             still={still}

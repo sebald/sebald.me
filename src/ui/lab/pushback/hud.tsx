@@ -103,8 +103,6 @@ export interface HudProps {
   toLose: number;
   momentum: Record<Side, number>;
   momentumTotal: number;
-  /** The opponent's composure, 0 to 1: fatigue drains it */
-  composure: number;
   names: Record<Side, string>;
   /** Rows cropped off the top in a short window: the HUD moves down by this */
   crop?: number;
@@ -116,8 +114,7 @@ export interface HudProps {
 /**
  * The bars along the top of the band, on the stage's pixel grid like
  * the room: the names in the corners, the momentum pips under them
- * filling from the outside in, the opponent's composure strip, and the
- * shared scale across the centre with its marker. A full momentum bar
+ * filling from the outside in, and the shared scale across the centre with its marker. A full momentum bar
  * blinks at the idle rhythm.
  */
 export const Hud = ({
@@ -126,7 +123,6 @@ export const Hud = ({
   toLose,
   momentum,
   momentumTotal,
-  composure,
   names,
   crop = 0,
   still = false,
@@ -165,9 +161,6 @@ export const Hud = ({
       />
     ));
   };
-  const strip = LAYOUT.composure;
-  const stripX = STAGE.width - LAYOUT.pips.x - strip.width;
-  const left = Math.round(strip.width * Math.max(0, Math.min(1, composure)));
 
   return (
     <div
@@ -190,29 +183,6 @@ export const Hud = ({
 
       {pips('player')}
       {pips('opponent')}
-
-      {/* The composure strip drains from its inner end */}
-      <span
-        className="absolute"
-        style={{
-          left: px(stripX),
-          top: px(strip.y),
-          width: px(strip.width),
-          height: px(strip.height),
-          background: CHROME.empty,
-          boxShadow: `0 0 0 var(--px) ${CHROME.ink}`,
-        }}
-      >
-        {left > 0 && (
-          <span
-            className="absolute inset-y-0 right-0"
-            style={{
-              width: px(left),
-              background: `linear-gradient(to bottom, ${CHROME.emberLight} 0 var(--px), ${CHROME.ember} var(--px) 100%)`,
-            }}
-          />
-        )}
-      </span>
 
       {ticks.map(tick => (
         <Box

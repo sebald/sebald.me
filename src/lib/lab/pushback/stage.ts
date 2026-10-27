@@ -48,8 +48,6 @@ export const LAYOUT = {
   ticks: { y: 5, width: 10, height: 6, gap: 2 },
   /** Momentum pips in the corners, under the names */
   pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
-  /** The opponent's composure strip, under its pips */
-  composure: { y: 23, width: 40, height: 3 },
   /** The names, in the corners */
   names: { x: 6, y: 3 },
   /** Rows the bars take at the top: a window never grows over them */
