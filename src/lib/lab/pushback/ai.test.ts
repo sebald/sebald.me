@@ -9,27 +9,28 @@ import {
   buildMenu,
   drawHand,
 } from './ai';
-import { type PairId, pairById, poolOf } from './lines';
+import { PAIRS, type PairId, pairById, poolOf } from './lines';
 import { Rng, seedRng } from './random';
 
 const rng = (seed = 1) => new Rng(seedRng(seed));
 const pool = poolOf('dev').map(p => p.id);
+const deck = PAIRS.map(p => p.id);
 
 describe('buildMenu', () => {
   it('contains the right counter once and has the asked size', () => {
-    const menu = buildMenu('pm-2', 'any', 4, rng());
+    const menu = buildMenu('pm-2', 'any', 4, rng(), deck);
     assert.equal(menu.length, 4);
     assert.equal(menu.filter(id => id === 'pm-2').length, 1);
     assert.equal(new Set(menu).size, 4);
   });
 
   it('draws same-pool decoys from the phrase pool only', () => {
-    const menu = buildMenu('des-3', 'same', 6, rng(3));
+    const menu = buildMenu('des-3', 'same', 6, rng(3), deck);
     assert.ok(menu.every(id => pairById(id).role === 'designer'));
   });
 
   it('draws two-pool decoys from the own pool and one other', () => {
-    const menu = buildMenu('dev-1', 'two', 8, rng(5));
+    const menu = buildMenu('dev-1', 'two', 8, rng(5), deck);
     const roles = new Set(menu.map(id => pairById(id).role));
     assert.ok(roles.has('dev'));
     assert.equal(roles.size, 2);
@@ -37,14 +38,14 @@ describe('buildMenu', () => {
 
   it('answers a boss phrase with its mapped counter', () => {
     assert.equal(answerTo('boss-4'), 'dev-4');
-    const menu = buildMenu('boss-4', 'all', 6, rng());
+    const menu = buildMenu('boss-4', 'all', 6, rng(), deck);
     assert.ok(menu.includes('dev-4'));
   });
 
   it('is deterministic under a seed', () => {
     assert.deepEqual(
-      buildMenu('pm-1', 'any', 6, rng(9)),
-      buildMenu('pm-1', 'any', 6, rng(9)),
+      buildMenu('pm-1', 'any', 6, rng(9), deck),
+      buildMenu('pm-1', 'any', 6, rng(9), deck),
     );
   });
 });

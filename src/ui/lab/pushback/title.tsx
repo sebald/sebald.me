@@ -21,6 +21,10 @@ interface TitleScreenProps {
   onAttract?: () => void;
 }
 
+/** The usual line, because the cast is nine office archetypes and nobody in particular */
+const FICTION =
+  'All characters are fictional. Any resemblance to actual persons or teams is coincidental.';
+
 const MODE_BLURBS: Record<Mode, string> = {
   normal:
     'The ghost of your predecessor whispers along. Slowly. No stars with a ghost.',
@@ -117,11 +121,16 @@ export const TitleScreen = ({
           className="w-full max-w-[18em]"
           items={items}
         />
-        <Stage.Muted className="text-[0.85em] text-balance">
-          {armed
-            ? 'This forgets every run and every collected phrase.'
-            : MODE_BLURBS[mode]}
-        </Stage.Muted>
+        <div className="grid gap-2">
+          <Stage.Muted className="text-[0.85em] text-balance">
+            {armed
+              ? 'This forgets every run and every collected phrase.'
+              : MODE_BLURBS[mode]}
+          </Stage.Muted>
+          <Stage.Muted className="text-[0.7em] text-balance opacity-70">
+            {FICTION}
+          </Stage.Muted>
+        </div>
       </Stage.Center>
     </Stage>
   );

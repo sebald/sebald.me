@@ -10,9 +10,11 @@ import {
   type Look,
   RULES,
   SLOTS,
+  drawDeck,
+  repertoireFor,
 } from './characters';
 import type { DuelSetup } from './duel';
-import { ROLES, type Role, poolOf } from './lines';
+import { ROLES, type Role, deckPool } from './lines';
 import { Rng, seedRng } from './random';
 import { PLAYER_SHEETS } from './sprites';
 
@@ -48,16 +50,19 @@ export const demoFor = (seed: number): Demo => {
     c => c.role !== role && c.role !== 'boss' && c.sheet !== sheet,
   );
   const character = rng.shuffle(cast)[0]!;
+  const deck = drawDeck(rng);
   return {
     look,
     setup: {
       role,
       character,
-      slot: { ...SLOTS[2]!, silence: false },
+      slot: { ...SLOTS[1]!, silence: false },
       attempt: 'first',
+      deck,
+      repertoire: repertoireFor(character, deck, seed),
       collected: [
-        ...poolOf(role).map(p => p.id),
-        ...poolOf(character.role as Role).map(p => p.id),
+        ...deckPool(deck, role),
+        ...deckPool(deck, character.role as Role),
       ],
       seed,
       silence: false,

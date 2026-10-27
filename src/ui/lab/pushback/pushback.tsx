@@ -95,6 +95,7 @@ export const Pushback = () => {
           auto
           onEnd={toTitle}
           onBack={toTitle}
+          onPlay={toSelect}
         />
       );
     }
@@ -119,6 +120,7 @@ export const Pushback = () => {
       return (
         <RosterScreen
           run={run}
+          glossary={save.glossary}
           onPlay={index =>
             setScreen({
               name: 'duel',
@@ -169,7 +171,13 @@ export const Pushback = () => {
             onBack={toTitle}
           />
         );
-      return <ResultScreen run={run} onBack={() => toRoster(screen.role)} />;
+      return (
+        <ResultScreen
+          run={run}
+          glossary={save.glossary}
+          onBack={() => toRoster(screen.role)}
+        />
+      );
     }
   }
 };

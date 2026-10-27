@@ -11,6 +11,7 @@ import {
   bossIndex,
   characterById,
   drawRun,
+  repertoireFor,
 } from './characters';
 import {
   type DuelSetup,
@@ -19,7 +20,7 @@ import {
   emptyStats,
   isFlawless,
 } from './duel';
-import { type PairId, type Role, poolOf } from './lines';
+import { type PairId, type Role, deckPool } from './lines';
 
 export interface RunState {
   role: Role;
@@ -28,7 +29,7 @@ export interface RunState {
   beaten: Record<number, { flawless: boolean }>;
   /** Slots lost at least once, by index (a retry is earned) */
   lost: number[];
-  /** Starts as the role's own pool */
+  /** Starts as the role's own pool of the deck; every run starts cold */
   collected: PairId[];
   /** The boss is beaten */
   finished: boolean;
@@ -43,17 +44,20 @@ export const createRunState = (
   role: Role,
   look: Look,
   seed: number,
-): RunState => ({
-  role,
-  run: drawRun(role, look, seed),
-  beaten: {},
-  lost: [],
-  collected: poolOf(role).map(p => p.id),
-  finished: false,
-  attempts: 0,
-  buddy: false,
-  stats: emptyStats(),
-});
+): RunState => {
+  const run = drawRun(role, look, seed);
+  return {
+    role,
+    run,
+    beaten: {},
+    lost: [],
+    collected: deckPool(run.deck, role),
+    finished: false,
+    attempts: 0,
+    buddy: false,
+    stats: emptyStats(),
+  };
+};
 
 /** The slot the roster selects: the first unbeaten one */
 export const nextSlot = (state: RunState): number =>
@@ -85,11 +89,14 @@ export const duelSetupFor = (
 ): DuelSetup => {
   const slot: RunSlot | undefined = state.run.slots[index];
   if (!slot) throw new Error(`No slot ${index}`);
+  const character = characterById(slot.character);
   return {
     role: state.role,
-    character: characterById(slot.character),
+    character,
     slot: slot.slot,
     attempt: attemptFor(state, index),
+    deck: state.run.deck,
+    repertoire: repertoireFor(character, state.run.deck, state.run.seed),
     collected: state.collected,
     seed: options.seed,
     silence: options.silence,

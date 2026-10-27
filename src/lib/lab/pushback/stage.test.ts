@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import { RULES, STAKEHOLDER, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
-import { OFFLINE, PLAYER_BARKS, poolOf } from './lines';
+import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
   LAYOUT,
   barRects,
@@ -198,6 +198,7 @@ describe('poses', () => {
 });
 
 const pmPool = poolOf('pm').map(p => p.id);
+const deck = PAIRS.map(p => p.id);
 
 const start = (boss = false): DuelState =>
   createDuel({
@@ -207,6 +208,8 @@ const start = (boss = false): DuelState =>
       ? { tier: 'boss', accuracy: 1, menu: 6, decoys: 'all', silence: false }
       : { tier: 1, accuracy: 0, menu: 4, decoys: 'any', silence: false },
     attempt: 'first',
+    deck,
+    repertoire: deck,
     collected: pmPool,
     seed: 3,
     silence: false,

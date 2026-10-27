@@ -5,11 +5,10 @@
 import type { Slot, Tier } from './characters';
 import {
   type BossPairId,
-  type Pair,
   type PairId,
-  PAIRS,
   ROLES,
   bossPairById,
+  deckPool,
   isBossPairId,
   pairById,
   poolOf,
@@ -25,31 +24,32 @@ export const answerTo = (phrase: PairId | BossPairId): PairId =>
 
 /**
  * The defender's menu: the right counter plus decoys, shuffled. Decoys
- * come from the pools the slot allows; "two" is the phrase's own pool
- * plus one other, picked per exchange.
+ * come from the deck's pools the slot allows; "two" is the phrase's own
+ * pool plus one other, picked per exchange.
  */
 export const buildMenu = (
   phrase: PairId | BossPairId,
   decoys: Slot['decoys'],
   size: number,
   rng: Rng,
+  deck: readonly PairId[],
 ): PairId[] => {
   const answer = answerTo(phrase);
   const own = pairById(answer).role;
-  let candidates: Pair[];
+  let candidates: PairId[];
   switch (decoys) {
     case 'same':
-      candidates = poolOf(own);
+      candidates = deckPool(deck, own);
       break;
     case 'two': {
       const other = rng.pick(ROLES.filter(role => role !== own))!;
-      candidates = [...poolOf(own), ...poolOf(other)];
+      candidates = [...deckPool(deck, own), ...deckPool(deck, other)];
       break;
     }
     default:
-      candidates = [...PAIRS];
+      candidates = [...deck];
   }
-  const wrong = candidates.filter(pair => pair.id !== answer).map(p => p.id);
+  const wrong = candidates.filter(id => id !== answer);
   return rng.shuffle([answer, ...rng.sample(wrong, size - 1)]);
 };
 
@@ -70,9 +70,17 @@ export const aiAnswers = (
   return rng.chance((known ? 1 : accuracy) - fatigue);
 };
 
-/** A wrong counter from the phrase's pool, for the opponent's miss */
-export const aiWrongCounter = (phrase: PairId, rng: Rng): PairId =>
-  rng.pick(poolOf(pairById(phrase).role).filter(p => p.id !== phrase))!.id;
+/** A wrong counter from the phrase's pool in the deck, for the opponent's miss */
+export const aiWrongCounter = (
+  phrase: PairId,
+  rng: Rng,
+  deck: readonly PairId[],
+): PairId => {
+  const role = pairById(phrase).role;
+  const inDeck = deckPool(deck, role).filter(id => id !== phrase);
+  const pool = inDeck.length > 0 ? inDeck : poolOf(role).map(p => p.id);
+  return rng.pick(pool.filter(id => id !== phrase))!;
+};
 
 /**
  * The opponent's next phrase. On a first attempt and a replay, pairs the

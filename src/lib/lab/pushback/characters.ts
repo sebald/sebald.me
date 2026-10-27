@@ -4,7 +4,14 @@
  * Difficulty is not on the character but on the slot in the run (see
  * `docs/plans/pushback.md`, "The run").
  */
-import { type PairId, type Role, ROLES, poolOf } from './lines';
+import {
+  BOSS_ANSWERS,
+  type PairId,
+  type Role,
+  ROLES,
+  deckPool,
+  poolOf,
+} from './lines';
 import { Rng, seedRng } from './random';
 import { PLAYER_SHEETS, type SheetId } from './sprites';
 
@@ -37,11 +44,13 @@ export interface Character {
    */
   sheet: SheetId;
   /**
-   * One or two pairs from other pools this character has picked up: it
-   * throws them too and answers them every time. They make the own-role
-   * duels less of a pure memory test and seed the glossary across pools.
+   * How many pairs from other pools this character has picked up (one
+   * or two): it throws them too and answers them every time. Which ones
+   * follows from the run's deck and seed (`repertoireFor`). They make
+   * the own-role duels less of a pure memory test and seed the glossary
+   * across pools.
    */
-  knows: PairId[];
+  knows: number;
 }
 
 export const CHARACTERS: readonly Character[] = [
@@ -51,7 +60,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "Hi! Is this the meeting? I was told there'd be a meeting.",
     sheet: 'pm-jo',
-    knows: ['dev-1'],
+    knows: 1,
   },
   {
     id: 'roadmap-owner',
@@ -59,7 +68,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "I have a slot for you. It's now. Make it count.",
     sheet: 'pm-piet',
-    knows: ['des-5', 'dev-3'],
+    knows: 2,
   },
   {
     id: 'head-of-product',
@@ -67,7 +76,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "I've heard about you. None of it was in the OKRs.",
     sheet: 'pm-jo',
-    knows: ['dev-8', 'des-1'],
+    knows: 2,
   },
   {
     id: 'junior',
@@ -75,7 +84,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: "Give me a sec, the build's almost green.",
     sheet: 'dev-sam',
-    knows: ['des-2'],
+    knows: 1,
   },
   {
     id: 'senior',
@@ -83,7 +92,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: "I've seen this pattern before. It didn't end well then either.",
     sheet: 'dev-lena',
-    knows: ['pm-3', 'des-7'],
+    knows: 2,
   },
   {
     id: 'architect',
@@ -91,7 +100,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: 'Before we start: is this scalable?',
     sheet: 'dev-sam',
-    knows: ['pm-5', 'des-8'],
+    knows: 2,
   },
   {
     id: 'freelancer',
@@ -99,7 +108,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: "I'm only here until Thursday, so let's be quick.",
     sheet: 'designer-theo',
-    knows: ['pm-4'],
+    knows: 1,
   },
   {
     id: 'brand-designer',
@@ -107,7 +116,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: "That's not our blue.",
     sheet: 'designer-ines',
-    knows: ['pm-6', 'dev-6'],
+    knows: 2,
   },
   {
     id: 'design-lead',
@@ -115,7 +124,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: 'Let me stop you right there.',
     sheet: 'designer-theo',
-    knows: ['dev-7', 'pm-7'],
+    knows: 2,
   },
   {
     id: 'stakeholder',
@@ -123,7 +132,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'boss',
     intro: "Keep it short, I've got a call in five.",
     sheet: 'boss',
-    knows: [],
+    knows: 0,
   },
 ];
 
@@ -137,11 +146,27 @@ export const characterById = (id: CharacterId): Character => {
 
 export const STAKEHOLDER = characterById('stakeholder');
 
-/** Everything a character throws and answers: its own pool plus what it knows */
-export const repertoire = (character: Character): PairId[] =>
-  character.role === 'boss'
-    ? []
-    : [...poolOf(character.role).map(p => p.id), ...character.knows];
+/** A small stable number per character, to salt the run seed with */
+const characterSalt = (id: CharacterId): number =>
+  [...id].reduce((n, c) => (n * 31 + c.charCodeAt(0)) >>> 0, 7);
+
+/**
+ * Everything a character throws and answers in a run: its own pool of
+ * the deck plus the `knows` foreign pairs of the deck, picked by the
+ * run's seed so a retry meets the same colleague.
+ */
+export const repertoireFor = (
+  character: Character,
+  deck: readonly PairId[],
+  seed: number,
+): PairId[] => {
+  const { role } = character;
+  if (role === 'boss') return [];
+  const rng = new Rng(seedRng(seed + characterSalt(character.id)));
+  const own = deckPool(deck, role);
+  const foreign = deck.filter(id => !own.includes(id));
+  return [...own, ...rng.sample(foreign, character.knows)];
+};
 
 /** The scene a role's duels play in */
 export const SCENE_OF: Record<Role | 'boss', SceneId> = {
@@ -216,16 +241,40 @@ export const BOSS_SLOT: Slot = {
  */
 export const SLOTS: readonly Slot[] = [
   { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: false },
-  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: false },
   { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: true },
-  { tier: 2, accuracy: 0.75, menu: 5, decoys: 'any', silence: true },
-  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'any', silence: true },
-  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: true },
+  { tier: 3, accuracy: 0.85, menu: 6, decoys: 'any', silence: true },
   BOSS_SLOT,
 ];
 
-/** The most colleagues a run has: two per role, then the boss */
+/** The colleagues of a run: one per role, then the boss */
 export const MAX_COLLEAGUES = SLOTS.length - 1;
+
+// The deck
+// ---------------
+
+/** Pairs of each pool in a run's deck */
+export const DECK_PER_POOL = 8;
+
+/** Of those, pairs whose counter answers a boss phrase, so the boss has lines */
+export const DECK_BOSS_ANSWERS = 2;
+
+/**
+ * The lines in play this run: of each pool, a few pairs the Stakeholder
+ * can throw and the rest at random, so every run reads differently and
+ * the glossary fills over several of them. In pool order, each pool in
+ * id order.
+ */
+export const drawDeck = (rng: Rng): PairId[] =>
+  ROLES.flatMap(role => {
+    const pool = poolOf(role).map(p => p.id);
+    const answers = pool.filter(id => BOSS_ANSWERS.has(id));
+    const rest = pool.filter(id => !BOSS_ANSWERS.has(id));
+    const drawn = new Set([
+      ...rng.sample(answers, DECK_BOSS_ANSWERS),
+      ...rng.sample(rest, DECK_PER_POOL - DECK_BOSS_ANSWERS),
+    ]);
+    return pool.filter(id => drawn.has(id));
+  });
 
 // Rules
 // ---------------
@@ -333,6 +382,8 @@ export interface RunSlot {
 
 export interface Run {
   seed: number;
+  /** The lines in play: `DECK_PER_POOL` pairs of each pool */
+  deck: PairId[];
   /** The colleagues, then the boss last */
   slots: RunSlot[];
   /** The characters out of office this run */
@@ -343,34 +394,34 @@ export interface Run {
 export const bossIndex = (run: Run): number => run.slots.length - 1;
 
 /**
- * Draw a run: up to two characters per role, in the role order, so that
- * no face shows twice. Two colleagues share a sheet until each has one
- * of its own, and the player's own look is a colleague's sheet too, so
- * the draw skips any character on the player's sheet or on a sheet the
- * run already has. A role with fewer than two left gives the run fewer
- * duels; the slot table still applies by role, its first slot first.
+ * Draw a run: the deck, then one colleague per role, the own role first
+ * and the two foreign ones in random order, so that no face shows
+ * twice. Two colleagues share a sheet until each has one of its own,
+ * and the player's own look is a colleague's sheet too, so the draw
+ * skips any character on the player's sheet or on a sheet the run
+ * already has. A role with nobody left gives the run one duel fewer;
+ * the slot table applies by position.
  */
 export const drawRun = (role: Role, look: Look, seed: number): Run => {
   const rng = new Rng(seedRng(seed));
+  const deck = drawDeck(rng);
   const slots: RunSlot[] = [];
   const outOfOffice: CharacterId[] = [];
   const taken = new Set<SheetId>([PLAYER_SHEETS[role][look]]);
-  roleOrder(role).forEach((opponentRole, roleIndex) => {
+  const [own, ...foreign] = roleOrder(role);
+  for (const opponentRole of [own!, ...rng.shuffle(foreign)]) {
     const cast = rng.shuffle(CHARACTERS.filter(c => c.role === opponentRole));
-    let drawn = 0;
+    let drawn = false;
     for (const character of cast) {
-      if (drawn < 2 && !taken.has(character.sheet)) {
+      if (!drawn && !taken.has(character.sheet)) {
         taken.add(character.sheet);
-        slots.push({
-          character: character.id,
-          slot: SLOTS[roleIndex * 2 + drawn]!,
-        });
-        drawn++;
+        slots.push({ character: character.id, slot: SLOTS[slots.length]! });
+        drawn = true;
       } else {
         outOfOffice.push(character.id);
       }
     }
-  });
+  }
   slots.push({ character: 'stakeholder', slot: BOSS_SLOT });
-  return { seed, slots, outOfOffice };
+  return { seed, deck, slots, outOfOffice };
 };

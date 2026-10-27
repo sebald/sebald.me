@@ -11,11 +11,11 @@
  */
 import {
   bossIndex,
+  DECK_PER_POOL,
   MODES,
   type Rules,
   SLOTS,
   type Slot,
-  repertoire,
 } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { ROLES, type Role } from './lines';
@@ -86,7 +86,7 @@ export const playDuel = (
     duelSetupFor(run, index, { seed, silence: true, rules: SIM_RULES }),
   );
   s = reduce(s, { type: 'begin' });
-  const known = new Set(repertoire(s.setup.character));
+  const known = new Set(s.setup.repertoire);
   for (let guard = 0; guard < 200 && s.phase !== 'end'; guard++) {
     if (s.phase === 'defend') {
       const { answer } = s.exchange!;
@@ -228,7 +228,7 @@ const pct = (n: number, d: number) =>
 
 export const formatReport = (report: Report): string => {
   const lines = [
-    `${report.role.padEnd(8)} ${report.runs} runs · ${report.duelsPerRun.toFixed(1)} duels per run · ${pct(report.finished, report.runs)} finished · glossary at boss ${report.glossaryAtBoss.toFixed(1)}/24`,
+    `${report.role.padEnd(8)} ${report.runs} runs · ${report.duelsPerRun.toFixed(1)} duels per run · ${pct(report.finished, report.runs)} finished · glossary at boss ${report.glossaryAtBoss.toFixed(1)}/${DECK_PER_POOL * ROLES.length}`,
     '  slot  tier   first   retry  attempts  exchanges  longest  mic drops (you / them, per duel)',
   ];
   report.slots.forEach((slot, index) => {

@@ -64,6 +64,7 @@ import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
+import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
@@ -117,6 +118,8 @@ export interface DuelScreenProps {
   look: Look;
   onEnd: (duel: DuelState) => void;
   onBack: () => void;
+  /** Attract mode: Enter or Space go straight to playing instead of back */
+  onPlay?: () => void;
   /** Force reduced motion (the workbench); otherwise the media query */
   reducedMotion?: boolean;
   /** Fix the scale (the workbench) */
@@ -180,6 +183,7 @@ export const DuelScreen = ({
   look,
   onEnd,
   onBack,
+  onPlay,
   reducedMotion,
   scale,
   auto = false,
@@ -320,17 +324,25 @@ export const DuelScreen = ({
     [steps, cursor, reduced, advance, act, auto, onEnd],
   );
 
-  // Attract mode: any key or tap leaves the demo
+  // Attract mode: any key or tap leaves the demo; Enter and Space play
   useEffect(() => {
     if (!auto) return;
-    const leave = () => onBack();
+    const leave = (event: KeyboardEvent | PointerEvent) => {
+      const play =
+        'key' in event && (event.key === 'Enter' || event.key === ' ');
+      if (play && onPlay) onPlay();
+      else onBack();
+    };
     window.addEventListener('keydown', leave);
     window.addEventListener('pointerdown', leave);
     return () => {
       window.removeEventListener('keydown', leave);
       window.removeEventListener('pointerdown', leave);
     };
-  }, [auto, onBack]);
+  }, [auto, onBack, onPlay]);
+  // The demo's label blinks at the title's rhythm
+  const demoClock = useClock(auto && !reduced);
+  const demoLit = reduced || Math.floor(demoClock / 500) % 2 === 0;
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -625,6 +637,19 @@ export const DuelScreen = ({
         crop={crop}
         still={reduced}
       />
+
+      {auto && (
+        <p
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 m-0 text-center text-[0.8em] font-semibold tracking-[0.08em] text-[#f3eedc] uppercase"
+          style={{
+            top: px(crop + LAYOUT.pips.y - 2),
+            opacity: demoLit ? 1 : 0,
+          }}
+        >
+          Demo · Press Enter to play
+        </p>
+      )}
 
       {ghostShown && ghostLine && enter >= 1 && (
         <p

@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { bossIndex, characterById } from '@/lib/lab/pushback/characters';
 import {
   PAIRS,
+  type PairId,
   ROLE_LABELS,
   ROLES,
   pairById,
@@ -26,6 +27,8 @@ import { Legend, Window } from './window';
 
 interface RosterScreenProps {
   run: RunState;
+  /** The save's glossary, across runs */
+  glossary: readonly PairId[];
   onPlay: (index: number) => void;
   onResult: () => void;
   onBack: () => void;
@@ -76,12 +79,13 @@ const Title = ({
  */
 export const RosterScreen = ({
   run,
+  glossary,
   onPlay,
   onResult,
   onBack,
 }: RosterScreenProps) => {
   const [tab, setTab] = useState<'roster' | 'glossary'>('roster');
-  const collected = useMemo(() => new Set(run.collected), [run.collected]);
+  const collected = useMemo(() => new Set(glossary), [glossary]);
   const next = nextSlot(run);
   const toggle = () => setTab(t => (t === 'roster' ? 'glossary' : 'roster'));
 
@@ -126,7 +130,7 @@ export const RosterScreen = ({
   }
 
   const role = ROLE_LABELS[run.role];
-  const glossaryCount = `${run.collected.length}/${PAIRS.length}`;
+  const glossaryCount = `${glossary.length}/${PAIRS.length}`;
 
   return (
     <Stage label="Pushback, roster">
@@ -186,7 +190,7 @@ export const RosterScreen = ({
         <>
           <Title
             heading={`Glossary ${glossaryCount}`}
-            blurb="Every pair you know: your own pool from the start, the others collected on defence."
+            blurb="Every pair you have met, across your runs: the ones in play you know from the start, the rest are collected on defence."
             tab={tab}
             onTab={toggle}
           />

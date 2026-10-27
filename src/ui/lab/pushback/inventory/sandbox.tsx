@@ -12,6 +12,8 @@ import {
   SLOTS,
   type Slot,
   characterById,
+  drawDeck,
+  repertoireFor,
 } from '@/lib/lab/pushback/characters';
 import {
   type DuelSetup,
@@ -19,7 +21,8 @@ import {
   createDuel,
   reduce,
 } from '@/lib/lab/pushback/duel';
-import { PAIRS, type Role, ROLES, poolOf } from '@/lib/lab/pushback/lines';
+import { type Role, ROLES, deckPool } from '@/lib/lab/pushback/lines';
+import { Rng, seedRng } from '@/lib/lab/pushback/random';
 
 import { DuelScreen } from '../duel-screen';
 
@@ -124,17 +127,20 @@ export const sandboxState = (options: Options): DuelState => {
     character.role === 'boss' ? BOSS_SLOT : (SLOTS[options.slot] ?? SLOTS[0]!);
   const slot: Slot = base;
   const rules = options.hard ? MODES.hard.rules : RULES;
+  const deck = drawDeck(new Rng(seedRng(options.seed)));
   const collected =
     options.collected === 'all'
-      ? PAIRS.map(p => p.id)
+      ? deck
       : options.collected === 'none'
         ? []
-        : poolOf(options.role).map(p => p.id);
+        : deckPool(deck, options.role);
   let state = createDuel({
     role: options.role,
     character,
     slot,
     attempt: options.attempt,
+    deck,
+    repertoire: repertoireFor(character, deck, options.seed),
     collected,
     seed: options.seed,
     silence: options.silence,

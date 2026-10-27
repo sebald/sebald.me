@@ -7,7 +7,7 @@ import {
   STAKEHOLDER,
   type Slot,
   characterById,
-  repertoire,
+  repertoireFor,
 } from './characters';
 import {
   type DuelSetup,
@@ -21,10 +21,12 @@ import {
   toWin,
   wordCount,
 } from './duel';
-import { type PairId, pairById, poolOf } from './lines';
+import { PAIRS, type PairId, pairById, poolOf } from './lines';
 
 const devPool = poolOf('dev').map(p => p.id);
 const pmPool = poolOf('pm').map(p => p.id);
+/** The tests play with every pair in the deck */
+const deck = PAIRS.map(p => p.id);
 
 /** A slot where the opponent never answers a foreign phrase */
 const weak: Slot = {
@@ -42,16 +44,23 @@ const timed: Slot = {
   silence: true,
 };
 
-const setup = (overrides: Partial<DuelSetup> = {}): DuelSetup => ({
-  role: 'pm',
-  character: characterById('junior'),
-  slot: weak,
-  attempt: 'first',
-  collected: pmPool,
-  seed: 1,
-  silence: false,
-  ...overrides,
-});
+const setup = (overrides: Partial<DuelSetup> = {}): DuelSetup => {
+  const base = {
+    role: 'pm' as const,
+    character: characterById('junior'),
+    slot: weak,
+    attempt: 'first' as const,
+    deck,
+    collected: pmPool,
+    seed: 1,
+    silence: false,
+    ...overrides,
+  };
+  return {
+    repertoire: repertoireFor(base.character, base.deck, base.seed),
+    ...base,
+  };
+};
 
 const begin = (overrides?: Partial<DuelSetup>) =>
   reduce(createDuel(setup(overrides)), { type: 'begin' });
@@ -92,9 +101,7 @@ describe('a regular duel', () => {
     const s = begin();
     assert.equal(s.phase, 'defend');
     assert.equal(s.exchange?.by, 'opponent');
-    assert.ok(
-      repertoire(s.setup.character).includes(s.exchange!.phrase as PairId),
-    );
+    assert.ok(s.setup.repertoire.includes(s.exchange!.phrase as PairId));
     assert.equal(s.menu.length, 4);
     assert.ok(s.menu.includes(s.exchange!.answer));
   });

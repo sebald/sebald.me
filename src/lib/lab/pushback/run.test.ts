@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import { RULES, bossIndex } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
-import { poolOf } from './lines';
+import { deckPool } from './lines';
 import {
   attemptFor,
   bossUnlocked,
@@ -43,10 +43,8 @@ const playSlot = (
 describe('a run', () => {
   it('starts with exactly the own pool collected and the first slot up', () => {
     const run = createRunState('dev', 'a', 3);
-    assert.deepEqual(
-      run.collected,
-      poolOf('dev').map(p => p.id),
-    );
+    assert.deepEqual(run.collected, deckPool(run.run.deck, 'dev'));
+    assert.equal(run.collected.length, 8);
     assert.equal(nextSlot(run), 0);
     assert.ok(!bossUnlocked(run));
     assert.ok(!canPlay(run, bossIndex(run.run)));
@@ -81,7 +79,7 @@ describe('a run', () => {
     assert.ok(run.stats.exchangesLost >= exchangesLost + RULES.reach);
   });
 
-  it('unlocks the boss after six ticks and finishes on a boss win', () => {
+  it('unlocks the boss after three ticks and finishes on a boss win', () => {
     let run = createRunState('pm', 'a', 2);
     for (let index = 0; index < bossIndex(run.run); index++) {
       run = playSlot(run, index, true);

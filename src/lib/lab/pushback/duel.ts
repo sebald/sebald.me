@@ -18,13 +18,7 @@ import {
   buildMenu,
   drawHand,
 } from './ai';
-import {
-  type Character,
-  RULES,
-  type Rules,
-  type Slot,
-  repertoire,
-} from './characters';
+import { type Character, RULES, type Rules, type Slot } from './characters';
 import {
   BOSS_PAIRS,
   type BossPairId,
@@ -45,6 +39,10 @@ export interface DuelSetup {
   character: Character;
   slot: Slot;
   attempt: Attempt;
+  /** The lines in play this run; menus, decoys and the boss draw from it */
+  deck: readonly PairId[];
+  /** What the opponent throws and always answers (`repertoireFor`) */
+  repertoire: readonly PairId[];
   /** Pairs the player knows at the start */
   collected: readonly PairId[];
   seed: number;
@@ -147,7 +145,7 @@ export const createDuel = (setup: DuelSetup): DuelState => {
   const rules = setup.rules ?? RULES;
   const boss = setup.character.role === 'boss';
   const rng = new Rng(seedRng(setup.seed));
-  const bossQueue = boss ? rng.shuffle(BOSS_PAIRS.map(p => p.id)) : [];
+  const bossQueue = boss ? rng.shuffle(bossPhrasesIn(setup.deck)) : [];
   return {
     setup,
     rules,
@@ -174,6 +172,12 @@ export const createDuel = (setup: DuelSetup): DuelState => {
     stats: emptyStats(),
     rng: rng.state,
   };
+};
+
+/** The boss phrases whose counter is in the deck (all of them for an odd deck) */
+export const bossPhrasesIn = (deck: readonly PairId[]): BossPairId[] => {
+  const inDeck = BOSS_PAIRS.filter(p => deck.includes(p.answeredBy));
+  return (inDeck.length > 0 ? inDeck : BOSS_PAIRS).map(p => p.id);
 };
 
 /** Steps the player must push the scale to win */
@@ -227,7 +231,7 @@ const silenceFor = (
 /** The opponent throws; the player gets a menu */
 const opponentThrows = (state: DuelState): DuelState => {
   const rng = new Rng(state.rng);
-  const { slot, character } = state.setup;
+  const { slot } = state.setup;
   let phrase: PairId | BossPairId;
   let micDrop = false;
   let bossQueue = state.bossQueue;
@@ -236,13 +240,13 @@ const opponentThrows = (state: DuelState): DuelState => {
     if (bossQueue.length === 0) {
       const last = state.exchange?.phrase;
       bossQueue = rng.shuffle(
-        BOSS_PAIRS.map(p => p.id).filter(id => id !== last),
+        bossPhrasesIn(state.setup.deck).filter(id => id !== last),
       );
     }
     [phrase, ...bossQueue] = bossQueue as [BossPairId, ...BossPairId[]];
   } else {
     phrase = aiPick(
-      repertoire(character),
+      state.setup.repertoire,
       {
         collected: state.collected,
         thrown: state.thrown,
@@ -259,7 +263,7 @@ const opponentThrows = (state: DuelState): DuelState => {
   }
   const size =
     (micDrop ? state.rules.micDrop.menu : slot.menu) + state.rules.menuExtra;
-  const menu = buildMenu(phrase, slot.decoys, size, rng);
+  const menu = buildMenu(phrase, slot.decoys, size, rng, state.setup.deck);
   return {
     ...state,
     phase: 'defend',
@@ -432,15 +436,15 @@ const playerThrows = (
       rng: rng.state,
     };
   }
-  const { slot, character } = state.setup;
+  const { slot, repertoire, deck } = state.setup;
   const answered = aiAnswers(
     phrase,
-    state.boss ? 'all' : repertoire(character),
+    repertoire,
     slot.accuracy,
     rng,
     state.rules.fatigue * state.exchanges,
   );
-  const picked = answered ? phrase : aiWrongCounter(phrase, rng);
+  const picked = answered ? phrase : aiWrongCounter(phrase, rng, deck);
   return {
     ...resolve(thrown, {
       winner: answered ? 'opponent' : 'player',

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import type { PairId } from '@/lib/lab/pushback/lines';
 import { type RunState } from '@/lib/lab/pushback/run';
 import { resultCardText } from '@/lib/lab/pushback/save';
 
@@ -11,11 +12,13 @@ import { useKeys } from './use-keys';
 
 interface ResultScreenProps {
   run: RunState;
+  /** The save's glossary, across runs */
+  glossary: readonly PairId[];
   onBack: () => void;
 }
 
-export const ResultScreen = ({ run, onBack }: ResultScreenProps) => {
-  const text = useMemo(() => resultCardText(run), [run]);
+export const ResultScreen = ({ run, glossary, onBack }: ResultScreenProps) => {
+  const text = useMemo(() => resultCardText(run, glossary), [run, glossary]);
   const [copied, setCopied] = useState(false);
 
   const copy = async () => {

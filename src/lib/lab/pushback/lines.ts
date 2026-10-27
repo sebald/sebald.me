@@ -28,7 +28,10 @@ export interface Pair {
 /** Prefix of a pool's pair ids (`pm-1`, `dev-1`, `des-1`) */
 export const POOL_PREFIX = { pm: 'pm', dev: 'dev', designer: 'des' } as const;
 export type PairId =
-  `${(typeof POOL_PREFIX)[Role]}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8}`;
+  `${(typeof POOL_PREFIX)[Role]}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16}`;
+
+/** Pairs per pool */
+export const POOL_SIZE = 16;
 
 /** A boss phrase, answered by a regular counter */
 export interface BossPair {
@@ -37,7 +40,8 @@ export interface BossPair {
   answeredBy: PairId;
 }
 
-export type BossPairId = `boss-${1 | 2 | 3 | 4 | 5 | 6}`;
+export type BossPairId =
+  `boss-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12}`;
 
 /** Longest line that fits two rows of the dialogue box */
 export const MAX_LINE_LENGTH = 70;
@@ -84,6 +88,38 @@ export const PAIRS: readonly Pair[] = [
       'Have you even read the PRD?',
       'Have you? It contradicts itself on page two.',
     ],
+    [
+      "Let's park that in the backlog.",
+      'The backlog is where ideas go to be forgotten politely.',
+    ],
+    [
+      'Can you give me a rough estimate? No commitment.',
+      "Sure. And you'll quote it as a deadline by lunch.",
+    ],
+    [
+      "Stakeholders are asking why it's not live yet.",
+      "Tell them it's live. They haven't opened the app since May.",
+    ],
+    [
+      'This is a must-have for the launch.',
+      'So were the last nine. The launch moved. Twice.',
+    ],
+    [
+      "Let's align on this in a quick sync.",
+      'We aligned yesterday. Then you changed the goal.',
+    ],
+    [
+      "I'm just the messenger here.",
+      "Messengers don't rewrite the message on the way.",
+    ],
+    [
+      "We'll validate it after launch.",
+      'Launch is the expensive way to validate.',
+    ],
+    [
+      "It's a small change, how hard can it be?",
+      'Small on the slide. Big in the code. Ask anyone.',
+    ],
   ]),
   ...pool('dev', [
     ['Works on my machine.', "Then we'll ship your machine."],
@@ -115,6 +151,29 @@ export const PAIRS: readonly Pair[] = [
       "I'll fix it in a follow-up PR.",
       'That follow-up has been open since the last reorg.',
     ],
+    ["Can't reproduce.", 'Then come to my desk. It reproduces fine there.'],
+    [
+      "That's a config issue, not a code issue.",
+      "You wrote the config. It's checked into the code.",
+    ],
+    [
+      "We'll need to refactor first.",
+      'You said that before the last two features. They shipped.',
+    ],
+    ['The tests pass.', 'The tests test that the tests pass.'],
+    ["It's a known issue.", "Known since when? It's new to the users."],
+    [
+      "The framework doesn't support that.",
+      "The framework's docs do. Page one.",
+    ],
+    [
+      "That's out of scope for this ticket.",
+      'Then the ticket is out of scope for the feature.',
+    ],
+    [
+      "I didn't touch that part of the code.",
+      'Git says otherwise. Tuesday, 11:40.',
+    ],
   ]),
   ...pool('designer', [
     [
@@ -145,6 +204,38 @@ export const PAIRS: readonly Pair[] = [
     [
       'This needs more whitespace.',
       "The sidebar is ninety percent whitespace. It's called empty.",
+    ],
+    [
+      "It doesn't feel right.",
+      "Feelings aren't specs. Tell me what to change.",
+    ],
+    [
+      'Can we make it pop more?',
+      "It pops. It's the only thing on the page that does.",
+    ],
+    [
+      'I need the real content before I can design it.',
+      'You designed the last three with lorem ipsum.',
+    ],
+    [
+      "That interaction isn't in the prototype.",
+      "The prototype also doesn't have an error state.",
+    ],
+    [
+      "We can't ship it without the animation.",
+      "The animation is why it can't ship on a phone.",
+    ],
+    [
+      'The user flow is broken.',
+      'The flow has one step. Which part is broken?',
+    ],
+    [
+      'Nobody reads the text anyway.',
+      "They read it when it says 'Delete account'.",
+    ],
+    [
+      "Let's go back to the original concept.",
+      'Which one? There were five original concepts.',
     ],
   ]),
 ];
@@ -180,7 +271,42 @@ export const BOSS_PAIRS: readonly BossPair[] = [
     phrase: 'My nephew says the whole app looks dated.',
     answeredBy: 'des-1',
   },
+  {
+    id: 'boss-7',
+    phrase: 'I was told this was a small change.',
+    answeredBy: 'pm-16',
+  },
+  {
+    id: 'boss-8',
+    phrase: 'This is non-negotiable for the launch.',
+    answeredBy: 'pm-12',
+  },
+  {
+    id: 'boss-9',
+    phrase: 'I was told all the tests pass.',
+    answeredBy: 'dev-12',
+  },
+  {
+    id: 'boss-10',
+    phrase: 'Make the logo bigger.',
+    answeredBy: 'des-10',
+  },
+  {
+    id: 'boss-11',
+    phrase: "I showed it to my wife and she didn't get it.",
+    answeredBy: 'des-9',
+  },
+  {
+    id: 'boss-12',
+    phrase: 'Can we lose all that text?',
+    answeredBy: 'des-15',
+  },
 ];
+
+/** The pairs whose counters answer a boss phrase; a run's deck keeps some of each pool */
+export const BOSS_ANSWERS: ReadonlySet<PairId> = new Set(
+  BOSS_PAIRS.map(pair => pair.answeredBy),
+);
 
 const pairIndex = new Map(PAIRS.map(pair => [pair.id, pair]));
 const bossIndex = new Map(BOSS_PAIRS.map(pair => [pair.id, pair]));
@@ -200,9 +326,16 @@ export const bossPairById = (id: BossPairId): BossPair => {
 export const isBossPairId = (id: string): id is BossPairId =>
   bossIndex.has(id as BossPairId);
 
+export const isPairId = (id: unknown): id is PairId =>
+  typeof id === 'string' && pairIndex.has(id as PairId);
+
 /** The pairs of one pool */
 export const poolOf = (role: Role): Pair[] =>
   PAIRS.filter(pair => pair.role === role);
+
+/** The ids of one pool within a run's deck, in the deck's order */
+export const deckPool = (deck: readonly PairId[], role: Role): PairId[] =>
+  deck.filter(id => pairById(id).role === role);
 
 /** The pool a phrase belongs to; a boss phrase counts as its counter's */
 export const poolOfPhrase = (id: PairId | BossPairId): Role =>

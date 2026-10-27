@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import {
+  BOSS_ANSWERS,
   BOSS_PAIRS,
   MAX_LINE_LENGTH,
   PAIRS,
@@ -13,9 +14,9 @@ import {
 } from './lines';
 
 describe('pairs', () => {
-  it('has eight pairs per pool with unique ids', () => {
+  it('has sixteen pairs per pool with unique ids', () => {
     for (const role of ROLES) {
-      assert.equal(poolOf(role).length, 8, role);
+      assert.equal(poolOf(role).length, 16, role);
     }
     assert.equal(new Set(PAIRS.map(p => p.id)).size, PAIRS.length);
   });
@@ -23,7 +24,7 @@ describe('pairs', () => {
   it('numbers the ids per pool', () => {
     assert.deepEqual(
       poolOf('designer').map(p => p.id),
-      [1, 2, 3, 4, 5, 6, 7, 8].map(n => `des-${n}`),
+      Array.from({ length: 16 }, (_, n) => `des-${n + 1}`),
     );
   });
 });
@@ -34,6 +35,17 @@ describe('boss pairs', () => {
       assert.ok(pairById(boss.answeredBy), boss.id);
     }
     assert.equal(new Set(BOSS_PAIRS.map(b => b.id)).size, BOSS_PAIRS.length);
+  });
+
+  it('answers four boss phrases from each pool, each with its own counter', () => {
+    assert.equal(BOSS_ANSWERS.size, BOSS_PAIRS.length);
+    for (const role of ROLES) {
+      assert.equal(
+        poolOf(role).filter(p => BOSS_ANSWERS.has(p.id)).length,
+        4,
+        role,
+      );
+    }
   });
 
   it('counts a boss phrase as the pool of its counter', () => {

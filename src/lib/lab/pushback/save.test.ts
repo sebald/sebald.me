@@ -46,26 +46,30 @@ describe('save', () => {
     assert.equal(loadSave(fakeStorage()), null);
     assert.equal(loadSave(fakeStorage({ [SAVE_KEY]: '{not json' })), null);
     assert.equal(
-      parseSave(JSON.stringify({ version: 2, silence: true, runs: {} })),
+      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: {} })),
       null,
     );
     assert.equal(
-      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: [] })),
+      parseSave(JSON.stringify({ version: 2, mode: 'hard', runs: [] })),
       null,
     );
   });
 
-  it('plays normal for a save from before the mode switch or with an odd one', () => {
-    const old = { version: 1, silence: true, buddy: false, runs: {} };
-    assert.equal(parseSave(JSON.stringify(old))?.mode, 'normal');
+  it('plays normal with an odd mode and keeps only real pairs in the glossary', () => {
     assert.equal(
-      parseSave(JSON.stringify({ version: 1, mode: 'brutal', runs: {} }))?.mode,
+      parseSave(JSON.stringify({ version: 2, mode: 'brutal', runs: {} }))?.mode,
       'normal',
     );
-    assert.equal(
-      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: {} }))?.mode,
-      'hard',
+    const parsed = parseSave(
+      JSON.stringify({
+        version: 2,
+        mode: 'hard',
+        runs: {},
+        glossary: ['pm-1', 'nope', 3],
+      }),
     );
+    assert.equal(parsed?.mode, 'hard');
+    assert.deepEqual(parsed?.glossary, ['pm-1']);
   });
 
   it('drops a run that does not look like one and keeps the rest', () => {
@@ -108,6 +112,9 @@ describe('save', () => {
     }
     save = finishDuel(save, 'pm', 0, duel);
     assert.ok(save.runs.pm?.beaten[0]);
+    // The glossary records what the duel collected, once each
+    assert.deepEqual(save.glossary, duel.collected);
+    assert.deepEqual(finishDuel(save, 'pm', 0, duel).glossary, duel.collected);
     assert.equal(save.runs.pm?.attempts, 1);
     assert.equal(save.runs.pm?.look, 'a');
     assert.equal(finishDuel(save, 'dev', 0, duel), save);
@@ -146,7 +153,7 @@ describe('resultCardText', () => {
       [
         'Pushback · Dev',
         'Stakeholder beaten · 10 duels · 5 flawless · hard mode',
-        'Exchanges 31–9 · Mic drops 6 · Glossary 24/24',
+        'Exchanges 31–9 · Mic drops 6 · Glossary 24/48',
         'Missed counters: PM 3 · Dev 1 · Designer 5',
         'sebald.me/lab/pushback',
       ].join('\n'),

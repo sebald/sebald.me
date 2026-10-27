@@ -385,6 +385,8 @@ With props gone, two colleagues per role share a player's sheet (the Head of Pro
 
 #### PM, look three: Nadia, the Head of Product (`pm-nadia-sheet.jpg`)
 
+First roll: all six cells right, but at the finer pixel pitch (90 px tall); the "figures snap taller" follow-up.
+
 Attach: `HEADER`, `DEV`.
 
 ```text
@@ -437,6 +439,8 @@ Reroll on: any resemblance to the attached hoodie character, the bob changing le
 
 #### Dev, look three: Bo, the Architect (`dev-bo-sheet.jpg`)
 
+First roll: the finer pitch (93 px), and the win and lose figures touch, so the cut merged them; both follow-ups, the size one first. The blue box he draws in the air in the talk cell is a small separate shape that joins his cell; it stays.
+
 Attach: `HEADER`, `DEV`.
 
 ```text
@@ -486,6 +490,8 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 Reroll on: a hoodie or any resemblance to the attached character, the beard changing length, the mug or the marker missing in a cell, a figure taller than the attached sheet (broad is not tall), writing on the mug or the marker.
 
 #### Designer, look three: Kim, the Design Lead (`designer-kim-sheet.jpg`)
+
+First roll: the finer pitch (95 px); the charcoal trousers were eaten by the default shadow key and came back with `--soft 12 --soft-from 0.9`. The size follow-up.
 
 Attach: `HEADER`, `DEV`.
 
@@ -1100,6 +1106,12 @@ Gemini edits can shift other pixels, so compare the follow-up against the first 
   `This is too close to the reference character. Keep the pixel size, the style and the six poses exactly, but redraw the person as described: <paste the Character paragraph>. Different face, different hair, different skin tone, different clothes.`
 - Too fine, too smooth, too much detail:
   `Redraw this at half the resolution: pixels twice as big, fewer details, simpler shapes, exactly like the attached reference.`
+- The figures snap taller than the cast (about 90 px instead of 78 to 83) because the pixels came out a little finer (a 10.75 px pitch instead of 11.5 on the 2752 px render), the fault of the three third-look sheets' first roll; attach `DEV` again:
+  `Keep this image exactly as it is: the same person, the same six poses, the same colours. Only the pixels are slightly too small: redraw it with pixels exactly the size of the pixels in the attached reference sheet, so that the figures end up exactly as tall as the figures in the reference, about a tenth shorter than they are now.`
+- Two figures touch (the cut merges them into one cell):
+  `Keep this image exactly the same, pixel for pixel, but move the sixth figure to the right so there is a clear gap of plain background between the fifth and the sixth figure.`
+- Dark clothes vanish into the dark background (the key eats them): the cut's `--soft 12 --soft-from 0.9` usually saves them; if not:
+  `Keep this image exactly the same, pixel for pixel, but change the plain background to a flat light grey-blue, so that the dark clothes stand off it.`
 - One cell drifted:
   `Keep this image exactly the same, pixel for pixel, but redraw the fourth figure so it is the same person as the others: same height, same hair, same clothes, same colours.`
 - Letters appeared:
