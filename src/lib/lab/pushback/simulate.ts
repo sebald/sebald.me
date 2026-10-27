@@ -8,9 +8,9 @@
  * against obvious decoys (any pool) and a blind guess otherwise. On
  * attack it prefers a foreign phrase and drops the mic when it can.
  */
-import { BOSS_SLOT_INDEX, SLOTS, type Slot } from './characters';
+import { BOSS_SLOT_INDEX, SLOTS, type Slot, repertoire } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
-import { pairById, ROLES, type Role } from './lines';
+import { ROLES, type Role } from './lines';
 import { Rng, seedRng } from './random';
 import { type RunState, createRunState, duelSetupFor, recordDuel } from './run';
 
@@ -56,7 +56,7 @@ export const playDuel = (
 ): DuelState => {
   let s = createDuel(duelSetupFor(run, index, { seed, silence: true }));
   s = reduce(s, { type: 'begin' });
-  const opponentRole = s.setup.character.role;
+  const known = new Set(repertoire(s.setup.character));
   for (let guard = 0; guard < 200 && s.phase !== 'end'; guard++) {
     if (s.phase === 'defend') {
       const { answer } = s.exchange!;
@@ -79,7 +79,7 @@ export const playDuel = (
         phrase: correct ? answer : s.menu.find(id => id !== answer)!,
       });
     } else if (s.phase === 'attack') {
-      const foreign = s.hand.filter(id => pairById(id).role !== opponentRole);
+      const foreign = s.hand.filter(id => !known.has(id));
       const phrase = rng.pick(foreign.length > 0 ? foreign : s.hand)!;
       s = reduce(s, { type: 'throw', phrase, micDrop: s.micDropAvailable });
     } else {

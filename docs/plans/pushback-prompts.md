@@ -1,65 +1,72 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Nine generations before rerolls: three model sheets, four scenes, one prop sheet, one head sheet. The Dev sheet already exists.
+Every image the game needs, one prompt each, ready to paste. Twelve generations before rerolls: six model sheets, four scenes, one prop sheet, one head sheet. The Dev man's sheet already exists.
 
 ## Before you start
 
 - Pick **16:9** in Gemini (1376 by 768). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
 - **Attach the references named under each prompt** to the same message. The reference is the strongest lever on pixel size and style; the words only back it up.
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
-  - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpg` (the Dev model sheet; copy it there from Downloads first). Every character and prop sheet attaches it so scale and pixel size match across the cast.
+  - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpeg` (the Dev man's model sheet). Every character and prop sheet attaches it so scale and pixel size match across the cast.
 - Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
 - One chat per image. Fixes go into the same chat as follow-ups (last section), so Gemini keeps the character.
 - The sheets all face **right**. The right-hand duellist is the sheet mirrored in code, so props carry no writing and no asymmetry that would look wrong flipped.
 
 What to check before saving, in order of how expensive a miss is:
 
-1. Same person in all six cells: height, colours, hair, prop. One odd cell is a reroll, not a fix.
+1. A different person from the Dev sheet, and the same person in all six cells: height, colours, hair, prop. One odd cell is a reroll, not a fix.
 2. Pixel size matches the attached sheet. If the figures look finer or smoother than the Dev sheet, use the half-resolution follow-up.
 3. Clear gaps between the cells, plain dark background, nothing touching the frame edge (`sheet.mjs` cuts on the gaps).
 4. No letters anywhere: badges, stickers, screens, whiteboards, mugs.
 
 ## Model sheets
 
-Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each character does them their own way; that is where the personality lives. Figures stand on a shared floor line, feet at the same height, each cell the same width.
+Seven sheets: two looks per role, so the player can pick, and the Stakeholder. The Dev man's sheet exists (`dev-sheet.jpeg`, the hoodie character), so six are left to generate. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
 
-### PM model sheet (`pm-sheet.jpg`)
+Gemini copies the attached figure when it can: the first PM roll came back with the Dev's face and hair. The prompts therefore put the new character first, in detail, and say three times that the attached sheet is a reference for size and style only. If a roll still looks like the hoodie character, use the "looks like the reference" follow-up at the end of this file rather than rerolling blind. Faces, skin tones, hair, builds and ages are spread across the six on purpose: a cast, not one person in six outfits.
+
+### PM, look one: Jo (`pm-jo-sheet.jpg`)
 
 Attach: `HEADER`, `DEV`.
 
 ```text
-Create a pixel-art character model sheet in exactly the same visual style and
-pixel size as the attached sheet of the hoodie character: the same chunky
-low-resolution look, the same figure height, the same simple shapes, shading
-and muted colours. Do not copy that character; this is a different person
-from the same game.
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
 
-Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click adventure
-game, as it looked on screen at 320x200. Not modern high-resolution pixel
-art. Every pixel is big and clearly visible. Big simple shapes, detail
+Character: a product manager, a woman in her late thirties, tall
+and lean, dark brown skin, hair in short natural coils cropped close
+with a sharp side part, large hoop earrings, always slightly leaning
+forward as if the meeting started without her. A striped shirt in teal
+and white with the sleeves rolled to the elbow, an orange lanyard with
+a blank badge swinging on it, a pen behind one ear, dark trousers,
+white sneakers. A small notebook is clamped under the left arm the
+whole time. In the right hand, a thick stack of sticky notes in yellow
+and pink, held like a weapon.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
 suggested with a few pixels. Three or four shades per material, a dark
 outline only on the silhouette, a limited palette. Plain flat dark
 background, no floor, no shadow, no frame.
 
-Character: a product manager, mid thirties, lean and brisk, always slightly
-leaning forward as if the meeting started without them. Short dark curly
-hair, a striped shirt with the sleeves rolled up to the elbow, a lanyard
-with a blank badge swinging on it, a pen behind one ear, dark trousers,
-white sneakers. A small notebook is clamped under the left arm the whole
-time. In the right hand, a thick stack of sticky notes in three colours,
-held like a weapon. Warm palette: teal shirt stripes, orange lanyard,
-yellow and pink sticky notes.
-
-Layout: the same character six times side by side in a single row, identical
-in size, colours and clothing, front three-quarter view facing to the right,
-clear gaps between the figures, nothing touching the edge of the image. Left
-to right:
-1. idle: standing, weight on one leg, notebook under the arm, sticky notes
-   held at the hip, looking right.
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing, weight on one leg, notebook under the arm, sticky
+   notes held at the hip, looking right.
 2. talking: mouth open, the free hand chopping the air mid-sentence.
 3. taunt: leaning forward, the sticky-note stack thrust towards the right
    like a pointed finger, eyebrows up.
-4. flinch: leaning back, eyes shut, a few sticky notes flying off the stack.
+4. flinch: leaning back, eyes shut, a few sticky notes flying off the
+   stack.
 5. win: both arms up, one sticky note stuck to the forehead on purpose.
 6. lose: shoulders dropped, head down, peeling a sticky note off the
    notebook very slowly.
@@ -67,103 +74,258 @@ to right:
 No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
-Reroll on: a different hairstyle or shirt between cells, a figure clearly taller or shorter than the Dev sheet, a notebook that disappears in some cells.
+Reroll on: any resemblance to the attached hoodie character in face or hair, a figure clearly taller or shorter than the attached sheet, a notebook that disappears in some cells, a badge with writing.
 
-### Designer model sheet (`designer-sheet.jpg`)
+### PM, look two: Ravi (`pm-ravi-sheet.jpg`)
 
 Attach: `HEADER`, `DEV`.
 
 ```text
-Create a pixel-art character model sheet in exactly the same visual style and
-pixel size as the attached sheet of the hoodie character: the same chunky
-low-resolution look, the same figure height, the same simple shapes, shading
-and muted colours. Do not copy that character; this is a different person
-from the same game.
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
 
-Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click adventure
-game, as it looked on screen at 320x200. Not modern high-resolution pixel
-art. Every pixel is big and clearly visible. Big simple shapes, detail
+Character: a product manager, a man in his mid forties, stocky and
+broad-shouldered, medium brown skin, completely bald with a neat short
+black beard, rectangular dark-framed glasses, a calm face that has sat
+through a thousand steering meetings. A navy quarter-zip pullover over a
+pale collared shirt, an orange lanyard with a blank badge, beige chinos,
+brown shoes, a smartwatch. A small notebook is clamped under the left
+arm the whole time. In the right hand, a thick stack of sticky notes in
+yellow and pink, held like a weapon.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
 suggested with a few pixels. Three or four shades per material, a dark
 outline only on the silhouette, a limited palette. Plain flat dark
 background, no floor, no shadow, no frame.
 
-Character: a product designer, late twenties, very upright, composed, the
-posture of someone who has already noticed what is wrong with your font.
-Hair in a tight high bun, large round glasses, a black turtleneck, wide
-cream trousers cropped above the ankle, bright yellow socks, flat black
-shoes, one thin gold earring. In the left hand a drawing tablet held like a
-tray, in the right hand a stylus held like a cigarette holder. The tablet
-screen is a plain pale rectangle. Palette: black, cream, warm grey, one
-accent of yellow, skin tone, dark hair.
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing, weight on one leg, notebook under the arm, sticky
+   notes held at the hip, looking right.
+2. talking: mouth open, the free hand chopping the air mid-sentence.
+3. taunt: leaning forward, the sticky-note stack thrust towards the right
+   like a pointed finger, eyebrows up.
+4. flinch: leaning back, eyes shut, a few sticky notes flying off the
+   stack.
+5. win: both arms up, one sticky note stuck to the forehead on purpose.
+6. lose: shoulders dropped, head down, peeling a sticky note off the
+   notebook very slowly.
 
-Layout: the same character six times side by side in a single row, identical
-in size, colours and clothing, front three-quarter view facing to the right,
-clear gaps between the figures, nothing touching the edge of the image. Left
-to right:
-1. idle: standing very straight, tablet level, stylus held up, looking right.
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: hair appearing on the head in some cells, the beard changing length, the glasses missing, a figure taller than the attached sheet.
+
+### Dev, look two: Lena (the Dev man is the existing sheet) (`dev-lena-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: a software developer, a woman in her mid twenties, pale
+freckled skin, long red hair in a messy high ponytail with strands
+loose at the sides, a slightly tired half-smile. An olive-green zip
+hoodie worn open over a black band t-shirt with a single abstract
+white shape on it, black headphones around the neck, dark grey cargo
+trousers, chunky black boots. In one hand a laptop with three small
+plain colour stickers on the lid.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing, weight on one leg, the laptop closed under one arm,
+   looking right.
+2. talking: mouth open, the free hand turned palm up as if the answer is
+   obvious.
+3. taunt: leaning forward, the laptop opened and turned towards the right
+   as if showing the screen, the other hand pointing at it.
+4. flinch: leaning back, eyes shut, the laptop clutched to the chest.
+5. win: the laptop held up high in one hand, the other fist raised.
+6. lose: shoulders dropped, head down, the laptop hanging open from one
+   hand.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: a blue hoodie or any resemblance to the attached character, the ponytail changing length, letters on the t-shirt or stickers, a laptop with a logo.
+
+### Designer, look one: Ines (`designer-ines-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: a product designer, a woman in her late twenties, light
+olive skin, very upright and composed, the posture of someone who has
+already noticed what is wrong with your font. Dark hair in a tight high
+bun, large round glasses, one thin gold earring, a black turtleneck,
+wide cream trousers cropped above the ankle, bright yellow socks, flat
+black shoes. In the left hand a drawing tablet held like a tray, in the
+right hand a stylus held like a cigarette holder. The tablet screen is
+a plain pale rectangle.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing very straight, tablet level, stylus held up, looking
+   right.
 2. talking: mouth open, the stylus drawing a small circle in the air.
-3. taunt: leaning in, the stylus pointed at the viewer's eye level, glasses
-   pushed up with one finger.
+3. taunt: leaning in, the stylus pointed at eye level, glasses pushed up
+   with one finger.
 4. flinch: leaning back, eyes shut, tablet hugged to the chest.
 5. win: chin up, eyes closed, the stylus raised like a conductor's baton,
    one foot slightly forward.
-6. lose: head down, glasses taken off and held at the side, tablet hanging
-   from the other hand.
+6. lose: head down, glasses taken off and held at the side, tablet
+   hanging from the other hand.
 
 No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
 Reroll on: glasses missing in a cell, the bun changing shape, trousers changing length, a tablet that becomes a laptop.
 
-### Stakeholder model sheet (`boss-sheet.jpg`)
+### Designer, look two: Theo (`designer-theo-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: a product designer, a man in his early thirties, very
+tall and thin, dark skin, a precise flat-top haircut, thin gold-rimmed
+round glasses, a small silver ring, an expression of polite doubt. A
+camel-coloured overshirt worn open over a plain white t-shirt, slim
+black trousers, white sneakers. In the left hand a drawing tablet held
+like a tray, in the right hand a stylus held like a cigarette holder.
+The tablet screen is a plain pale rectangle.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing very straight, tablet level, stylus held up, looking
+   right.
+2. talking: mouth open, the stylus drawing a small circle in the air.
+3. taunt: leaning in, the stylus pointed at eye level, glasses pushed up
+   with one finger.
+4. flinch: leaning back, eyes shut, tablet hugged to the chest.
+5. win: chin up, eyes closed, the stylus raised like a conductor's baton,
+   one foot slightly forward.
+6. lose: head down, glasses taken off and held at the side, tablet
+   hanging from the other hand.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: the flat-top turning into ordinary short hair, the overshirt closing or changing colour, a figure drawn taller than the attached sheet to match the description.
+
+### The Stakeholder (`boss-sheet.jpg`)
 
 Attach: `HEADER`, `DEV`.
 
 The Stakeholder never looks up. Five of the six cells are played to the phone; the lose cell is the one time the face is fully visible, and it has to read as a surprise.
 
 ```text
-Create a pixel-art character model sheet in exactly the same visual style and
-pixel size as the attached sheet of the hoodie character: the same chunky
-low-resolution look, the same figure height, the same simple shapes, shading
-and muted colours. Do not copy that character; this is a different person
-from the same game.
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
 
-Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click adventure
-game, as it looked on screen at 320x200. Not modern high-resolution pixel
-art. Every pixel is big and clearly visible. Big simple shapes, detail
+Character: a senior stakeholder, a man in his fifties, broad and heavy,
+pink-pale skin, grey hair combed back with a widow's peak, in a grey
+suit that is a size too generous, white shirt, a dark tie loosened one
+notch, shiny black shoes, a heavy watch. A phone is glued to the right
+hand and held up at chest height in every pose; the head is tilted down
+towards it so the eyes are hidden under the brow, except in the last
+pose. The phone screen is a plain glowing pale blue rectangle.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
 suggested with a few pixels. Three or four shades per material, a dark
 outline only on the silhouette, a limited palette. Plain flat dark
 background, no floor, no shadow, no frame.
 
-Character: a senior stakeholder, fifties, broad, in a grey suit that is a
-size too generous, white shirt, a dark tie loosened one notch, shiny black
-shoes, a heavy watch, grey hair combed back with a widow's peak. A phone is
-glued to the right hand and held up at chest height in every pose; the head
-is tilted down towards it so the eyes are hidden under the brow, except in
-the last pose. The phone screen is a plain glowing pale blue rectangle.
-Palette: grey suit in three shades, white, dark navy tie, skin tone, grey
-hair, pale blue phone glow.
-
-Layout: the same character six times side by side in a single row, identical
-in size, colours and clothing, front three-quarter view facing to the right,
-clear gaps between the figures, nothing touching the edge of the image. Left
-to right:
-1. idle: standing square, reading the phone, free hand in the trouser pocket.
-2. talking: mouth open but still looking at the phone, the free hand making
-   a vague circular "go on" gesture.
-3. taunt: the phone raised a little higher as if showing the screen, free
-   hand palm up, a half smile, still not looking up.
-4. flinch: a small jolt, the phone nearly dropped and caught, the free hand
-   out for balance, eyes still down.
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing square, reading the phone, free hand in the trouser
+   pocket.
+2. talking: mouth open but still looking at the phone, the free hand
+   making a vague circular "go on" gesture.
+3. taunt: the phone raised a little higher as if showing the screen,
+   free hand palm up, a half smile, still not looking up.
+4. flinch: a small jolt, the phone nearly dropped and caught, the free
+   hand out for balance, eyes still down.
 5. win: a thumbs up with the free hand without looking up, phone back at
    the chest.
-6. lose: the head lifted for the first time, eyes wide and fully visible,
-   mouth slightly open, the phone lowered to the hip.
+6. lose: the head lifted for the first time, eyes wide and fully
+   visible, mouth slightly open, the phone lowered to the hip.
 
 No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
-Reroll on: the eyes visible in any cell but the last, the phone missing in a cell, the suit changing colour, a figure taller than the Dev sheet (suits tempt Gemini into drawing bigger).
+Reroll on: the eyes visible in any cell but the last, the phone missing in a cell, the suit changing colour, a figure taller than the attached sheet (suits tempt Gemini into drawing bigger).
 
 ## Scenes
 
@@ -459,6 +621,8 @@ Reroll on: heads at different sizes, a hood that changes the face shape so much 
 
 Gemini edits can shift other pixels, so compare the follow-up against the first version before saving it.
 
+- The character looks like the attached one (same face, hair or clothes):
+  `This is too close to the reference character. Keep the pixel size, the style and the six poses exactly, but redraw the person as described: <paste the Character paragraph>. Different face, different hair, different skin tone, different clothes.`
 - Too fine, too smooth, too much detail:
   `Redraw this at half the resolution: pixels twice as big, fewer details, simpler shapes, exactly like the attached reference.`
 - One cell drifted:

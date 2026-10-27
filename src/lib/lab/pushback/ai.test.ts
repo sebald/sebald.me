@@ -50,18 +50,17 @@ describe('buildMenu', () => {
 });
 
 describe('aiAnswers', () => {
-  it('always answers its own pool and the boss answers everything', () => {
+  it('always answers its repertoire and the boss answers everything', () => {
     for (let seed = 0; seed < 50; seed++) {
-      assert.ok(aiAnswers('dev-3', 'dev', 0, rng(seed)));
-      assert.ok(aiAnswers('pm-3', 'boss', 0, rng(seed)));
+      assert.ok(aiAnswers('dev-3', pool, 0, rng(seed)));
+      assert.ok(aiAnswers('pm-3', 'all', 0, rng(seed)));
     }
   });
 
   it('answers foreign pools with the slot accuracy', () => {
     const r = rng(11);
     let right = 0;
-    for (let i = 0; i < 2000; i++)
-      if (aiAnswers('pm-1', 'dev', 0.6, r)) right++;
+    for (let i = 0; i < 2000; i++) if (aiAnswers('pm-1', pool, 0.6, r)) right++;
     assert.ok(right > 1100 && right < 1300, `${right}`);
   });
 });

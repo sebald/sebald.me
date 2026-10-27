@@ -18,14 +18,19 @@ import {
   buildMenu,
   drawHand,
 } from './ai';
-import { type Character, RULES, type Rules, type Slot } from './characters';
+import {
+  type Character,
+  RULES,
+  type Rules,
+  type Slot,
+  repertoire,
+} from './characters';
 import {
   BOSS_PAIRS,
   type BossPairId,
   type PairId,
   type Role,
   isBossPairId,
-  poolOf,
   poolOfPhrase,
 } from './lines';
 import { Rng, seedRng } from './random';
@@ -195,7 +200,7 @@ const opponentThrows = (state: DuelState): DuelState => {
     [phrase, ...bossQueue] = bossQueue as [BossPairId, ...BossPairId[]];
   } else {
     phrase = aiPick(
-      poolOf(character.role as Role).map(p => p.id),
+      repertoire(character),
       {
         collected: state.collected,
         thrown: state.thrown,
@@ -381,7 +386,12 @@ const playerThrows = (
     };
   }
   const { slot, character } = state.setup;
-  const answered = aiAnswers(phrase, character.role, slot.accuracy, rng);
+  const answered = aiAnswers(
+    phrase,
+    state.boss ? 'all' : repertoire(character),
+    slot.accuracy,
+    rng,
+  );
   const picked = answered ? phrase : aiWrongCounter(phrase, rng);
   return {
     ...resolve(thrown, {

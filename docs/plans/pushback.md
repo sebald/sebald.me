@@ -68,13 +68,15 @@ When the player has the initiative they do not get every phrase they know; they 
 
 ### Who knows what
 
-An opponent knows its own pool perfectly and answers phrases from the other two pools correctly with the duel's tier accuracy (60, 75 or 90 %). The Intern can answer any PM line but struggles with a Dev line in duel one; the Architect answers Dev lines every time. So on attack the player works out which pool the opponent is weak against and throws from that pool, and a hand with no foreign phrase is a bad hand to drop the mic from. The Stakeholder answers everything.
+An opponent's repertoire is its own pool plus one or two pairs it has picked up from the other roles (the "Also knows" column in Opponents: the Senior has heard "We don't have time to do it right" often enough to answer it). It throws from the whole repertoire and answers it every time; phrases outside it, it answers with the slot's accuracy (60 to 90 %). So on attack the player works out what the opponent does not know and throws that, and a hand with nothing the opponent is weak against is a bad hand to drop the mic from. The Stakeholder answers everything.
 
-This is why the player meets their own role last: the pool they start with is foreign to the first two roles and lands hits from duel one, and by the time it is useless (against their own kind, who know it perfectly) they have collected the other two.
+The borrowed pairs do two things. They make the own-role duels more than a memory test: the Head of Product throws your own lines, which you know, and then a Dev line you may not. And they seed the glossary across pools, so a Dev duel can hand you a Designer counter the boss will ask for later.
+
+This is why the player meets their own role last: the pool they start with is foreign to the first two roles and lands hits from duel one, and by the time it is useless (against their own kind, who know it perfectly) they have collected the other two. The simulation (see Workbench) showed the other side of that: on defence the own-role duels are where memory gets tested, because you know that pool from the first second, and the foreign duels are where reasoning and collecting get tested. The slot table follows from it.
 
 ### The silence bar
 
-From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines. Seconds per slot are in data (starting values: 8 s at tier 2, 6 s at tier 3, 5 s against the boss, halved on a mic drop) and get tuned in the grey box.
+From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines. Seconds per slot are in data (starting values: 10 s then 8 s at tier 2, 6 s at tier 3, 5 s against the boss, halved on a mic drop) and get tuned in the grey box.
 
 The bar is off in the two tier 1 duels, off by default under `prefers-reduced-motion` and switchable on the title screen for screen reader users and anyone who wants a quiz instead of a duel. With the bar off every correct counter counts as fast for momentum.
 
@@ -84,59 +86,64 @@ The first duel is the tutorial whoever walks in: four options from any pool, no 
 
 ### Difficulty knobs
 
-All in data: the slot table (menu size, decoy source, silence seconds and foreign-pool accuracy per slot), the draw of two per role, hand size, the starting pool, momentum steps, mic drop value, and the boss mapping. Nothing is hard-coded.
+All in data: the slot table (menu size, decoy source, silence seconds and foreign-pool accuracy per slot), each character's borrowed pairs, the draw of two per role, hand size, the starting pool, momentum steps, mic drop value, and the boss mapping. Nothing is hard-coded. The numbers below are the ones the simulation settled on for v1; the sandbox and real play move them.
 
 ## Player characters
 
-The player picks one of three roles on the title screen. The pick changes the sprite, the order of opponents and the boss's framing; the mechanic and the lines are the same for all three.
+The player picks one of three roles on the title screen, and one of two looks per role. The role changes the order of opponents and the boss's framing; the look only changes the sprite. The mechanic and the lines are the same for all six.
 
-| Role     | Working name | Look                                            | Prop                 | Opponent order                                |
-| -------- | ------------ | ----------------------------------------------- | -------------------- | --------------------------------------------- |
-| PM       | Jo           | Lanyard, rolled sleeves, notebook under the arm | Sticky-note stack    | Dev team, then Designers, then PMs, then boss |
-| Dev      | Sam          | Hoodie, headphones around the neck              | Laptop with stickers | Designers, then PMs, then Devs, then boss     |
-| Designer | Ines         | Turtleneck, round glasses                       | Tablet with stylus   | PMs, then Devs, then Designers, then boss     |
+| Role     | Looks (working names)                                                                                               | Prop                 | Opponent order                                |
+| -------- | ------------------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------------------------- |
+| PM       | Jo: tall, cropped coils, striped shirt, lanyard, notebook under the arm. Ravi: stocky, bald, beard, quarter-zip     | Sticky-note stack    | Dev team, then Designers, then PMs, then boss |
+| Dev      | Sam: the existing sheet, blue hoodie, headphones. Lena: red ponytail, green zip hoodie open over a band shirt       | Laptop with stickers | Designers, then PMs, then Devs, then boss     |
+| Designer | Ines: high bun, round glasses, black turtleneck, yellow socks. Theo: flat-top, gold-rimmed glasses, camel overshirt | Tablet with stylus   | PMs, then Devs, then Designers, then boss     |
 
 Rules behind the table:
 
-- The player always meets their own role last before the boss. Fighting your own kind is the hardest tier because those lines are the ones you find funniest and least fair, and because your own pool, the one you started with, is the one the opponent knows perfectly, so your attacks have to come from what you collected on the way. Tier belongs to the slot in the run, so whoever of your own role shows up is the hardest fight; the Intern who read the whole wiki is the point.
-- Each role has a distinct silhouette: the prop and the head shape do most of the work, colours do the rest. See Art and animation for the paper-doll layout.
+- The player always meets their own role last before the boss. Those lines are the ones you find funniest and least fair, your own pool is the one the opponent knows perfectly, so your attacks have to come from what you collected on the way, and on defence it is where your memory gets tested, with the borrowed pairs as the surprise. Tier belongs to the slot in the run, so whoever of your own role shows up is the tier 3 fight; the Intern who read the whole wiki is the point.
+- Each role has a distinct silhouette: the prop does most of the work, the clothes and the head shape the rest. The two looks of a role share the prop and the silhouette and differ in everything else: face, hair, skin, build, age, clothes. They are two people, not a palette swap, so each is its own model sheet. See Art and animation.
+- The nine colleagues are swaps of these six base sheets (which base each uses is in the swap table), so the cast is as mixed as the players.
 - Names are placeholders and only appear in the title screen and the save; duellists never use them in dialogue so lines stay role-neutral.
 - Role choice is stored with the save. Switching role starts a new run; the old run is kept under its role so the player can finish all three (that is the completionist hook: one line of credits per finished role, three result cards, three full glossaries).
 
-Selection screen: three sprites in idle pose on a plain dark background, the active one lit, name and a one-line blurb below (`Has a roadmap and is not afraid to use it.` / `Will fix it in the next sprint. Which sprint is a detail.` / `Has opinions about your line height.`). Left/right or tap to pick, Enter or tap again to confirm.
+Selection screen: three roles side by side, each shown as one sprite in idle pose on a plain dark background, the active one lit, name and a one-line blurb below (`Has a roadmap and is not afraid to use it.` / `Will fix it in the next sprint. Which sprint is a detail.` / `Has opinions about your line height.`). Left/right or tap picks the role, up/down or a tap on the sprite flips it to the role's other look (both names shown, the active one lit), Enter or tap again confirms. The look is stored with the run.
 
 ## Opponents
 
-A cast of nine colleagues, three per role, each a palette and prop swap of that role's base sprite, plus the Stakeholder. A character is a face, a name, an intro bark and a swap; it throws from its whole pool. Difficulty is not on the character but on the slot in the run.
+A cast of nine colleagues, three per role, each a palette and prop swap of one of that role's two base sprites, plus the Stakeholder. A character is a face, a name, an intro bark, a swap and one or two borrowed pairs; it throws from its whole repertoire. Difficulty is not on the character but on the slot in the run.
 
-| Character           | Role     | Distinguishing swap                 |
-| ------------------- | -------- | ----------------------------------- |
-| The Intern          | PM       | Oversized lanyard, coffee           |
-| The Roadmap Owner   | PM       | Gantt printout                      |
-| The Head of Product | PM       | Blazer, no notebook                 |
-| The Junior          | Dev      | Hoodie up, energy drink             |
-| The Senior          | Dev      | Mechanical keyboard under the arm   |
-| The Architect       | Dev      | Whiteboard marker, grey beard       |
-| The Freelancer      | Designer | Tote bag                            |
-| The Brand Designer  | Designer | Pantone swatch                      |
-| The Design Lead     | Designer | Very small laptop                   |
-| The Stakeholder     | Boss     | Suit, phone in hand, never looks up |
+| Character           | Role     | Distinguishing swap                 | Also knows                                                       |
+| ------------------- | -------- | ----------------------------------- | ---------------------------------------------------------------- |
+| The Intern          | PM       | Oversized lanyard, coffee           | dev-1 Works on my machine.                                       |
+| The Roadmap Owner   | PM       | Gantt printout                      | des-5 Users will never understand that. · dev-3 Three sprints    |
+| The Head of Product | PM       | Blazer, no notebook                 | dev-8 Follow-up PR · des-1 This is off-brand.                    |
+| The Junior          | Dev      | Hoodie up, energy drink             | des-2 That's not how it looks in Figma.                          |
+| The Senior          | Dev      | Mechanical keyboard under the arm   | pm-3 No time to do it right · des-7 The spacing is inconsistent. |
+| The Architect       | Dev      | Whiteboard marker, grey beard       | pm-5 Two-pointer · des-8 This needs more whitespace.             |
+| The Freelancer      | Designer | Tote bag                            | pm-4 Ship it and iterate                                         |
+| The Brand Designer  | Designer | Pantone swatch                      | pm-6 Competitor has it · dev-6 We'd need a migration             |
+| The Design Lead     | Designer | Very small laptop                   | dev-7 It's technically correct. · pm-7 Quick win                 |
+| The Stakeholder     | Boss     | Suit, phone in hand, never looks up | everything                                                       |
+
+Every regular pair is borrowed by at most one character and fifteen of the twenty-four are borrowed by someone, so each pool leaks into the others a little.
 
 ### The run
 
 A run is seven slots: six colleagues and the Stakeholder. Each run draws two of the three characters per role at random, seeded per run, and puts them in the player's role order (see Player characters): two of the first foreign role, two of the second, two of their own. The third character of each role is out of office this run and rotates in on the next one. The slot sets everything the old tier did:
 
-| Slot | Role in the run     | Tier | Menu | Decoys from | Silence | Foreign pools |
-| ---- | ------------------- | ---- | ---- | ----------- | ------- | ------------- |
-| 1    | First foreign role  | 1    | 4    | any pool    | off     | 60 %          |
-| 2    | First foreign role  | 1    | 4    | any pool    | off     | 60 %          |
-| 3    | Second foreign role | 2    | 5    | two pools   | 8 s     | 75 %          |
-| 4    | Second foreign role | 2    | 5    | two pools   | 8 s     | 75 %          |
-| 5    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %          |
-| 6    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %          |
-| 7    | The Stakeholder     | Boss | 6    | all pools   | 5 s     | 100 %         |
+| Slot | Role in the run     | Tier | Menu | Decoys from | Silence | Outside its repertoire |
+| ---- | ------------------- | ---- | ---- | ----------- | ------- | ---------------------- |
+| 1    | First foreign role  | 1    | 4    | any pool    | off     | 60 %                   |
+| 2    | First foreign role  | 1    | 4    | any pool    | off     | 60 %                   |
+| 3    | Second foreign role | 2    | 5    | any pool    | 10 s    | 70 %                   |
+| 4    | Second foreign role | 2    | 5    | any pool    | 8 s     | 75 %                   |
+| 5    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %                   |
+| 6    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %                   |
+| 7    | The Stakeholder     | Boss | 6    | all pools   | 5 s     | 100 %                  |
 
-"Decoys from" is where the wrong counters in the player's defence menu are drawn from: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. "Two pools" is the phrase's own pool plus one other, picked per exchange. A mic drop sets the menu to eight whatever the slot. "Foreign pools" is the AI's accuracy on phrases outside its own role; its own pool it answers every time.
+"Decoys from" is where the wrong counters in the player's defence menu are drawn from: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. Plausible decoys test memory and obvious decoys test reasoning, so the decoys follow what the player knows of the pool: the foreign pools, fresh, get obvious decoys and the pressure comes from the timer and the accuracy; the own pool, known from the first second, gets plausible ones. ("Two pools", the phrase's own pool plus one other, stays in the data as a step between the two but is unused in v1.) A mic drop sets the menu to eight whatever the slot. "Outside its repertoire" is the AI's accuracy on phrases it has not got; its repertoire it answers every time.
+
+With these numbers the simulation's modelled player (recalls a collected pair 90 % of the time) wins a first attempt at 45, 39, 31, 35, 60, 61 and 93 % across the slots, and a retry at about 70 % and up; a weaker player (70 % recall) sits at 35 to 45 % everywhere and 66 % at the boss. The foreign duels are a steady third to a half, the own-role duels and the boss move with how well the player knows the lines.
 
 The ramp is fixed and the faces are random, which is the point: the first duel is always the tutorial whoever walks in, and the run never opens with a silence bar. A run is 12 to 15 minutes.
 
@@ -291,7 +298,7 @@ Nothing is drawn by hand. Gemini generates every image (free tier), `snap.mjs` p
 
 Why Gemini and not a sprite tool: the AI sprite services (PixelLab and similar) are paid, and the Claude Code pixel plugins only script Aseprite, which is paid or a self-compile; neither draws a better figure than a reference-steered Gemini prompt. Gemini holds a character steady inside one image, so every character is generated as a single model sheet, not frame by frame.
 
-The prompts for every image are in `docs/plans/pushback-prompts.md`: nine generations before rerolls (three model sheets, four scenes, one prop sheet, one head sheet), each with the references to attach, the file name under `sources/` and what to reroll on.
+The prompts for every image are in `docs/plans/pushback-prompts.md`: twelve generations before rerolls (six model sheets, four scenes, one prop sheet, one head sheet; the Dev man's sheet exists), each with the references to attach, the file name under `sources/` and what to reroll on.
 
 Pipeline per character:
 
@@ -300,7 +307,7 @@ Pipeline per character:
 3. `sheet.mjs` cuts the strip into 72 by 112 cells by detecting the gaps, aligns each pose on its feet line, checks the figure height, keys out the background, locks the palette to the scene's 32 colours and writes the sheet plus a 4x contact print.
 4. Claude Code reviews the contact print (it can view the PNG) against the checklist in the `pixel-sprite` skill: same height across poses, no stray single pixels, mouth and prop readable, palette within the scene. It fixes small faults in code (`sheet.mjs` has `setPx`-style helpers as in `loop.mjs`) and sends larger faults back to step 1 with a follow-up prompt in the same Gemini chat (`Keep this exactly, but …`).
 
-Opponents are palette and prop swaps done in code, not new drawings: one model sheet per base role plus one for the Stakeholder, so four Gemini sheets in total. A swap is a colour lookup table in the character data plus an optional prop cell pasted at a fixed anchor; the eight props come from one Gemini item sheet cut on its gaps by `sheet.mjs`, like the model sheets. Where a swap needs a head change (hood up, beard), the head comes from one head sheet generated with the Dev sheet attached as reference, cut the same way. The Gemini originals are kept in the repo as `src/assets/lab/pushback/sources/<id>.jpg`; files under `src/assets` only ship when imported, so nothing excludes them from the build, they are simply never imported. They are the reference image for every later prompt, and a snapped PNG works worse as one.
+Opponents are palette and prop swaps done in code, not new drawings: two model sheets per role (the two looks the player can pick) plus one for the Stakeholder, so seven Gemini sheets in total, and each colleague is a swap of one of its role's two bases. A swap is a colour lookup table in the character data plus an optional prop cell pasted at a fixed anchor; the eight props come from one Gemini item sheet cut on its gaps by `sheet.mjs`, like the model sheets. Where a swap needs a head change (hood up, beard), the head comes from one head sheet generated with the Dev sheet attached as reference, cut the same way. The Gemini originals are kept in the repo as `src/assets/lab/pushback/sources/<id>.jpg`; files under `src/assets` only ship when imported, so nothing excludes them from the build, they are simply never imported. They are the reference image for every later prompt, and a snapped PNG works worse as one.
 
 Animation is code, not frames:
 
@@ -468,13 +475,13 @@ Seven work packages, each a mergeable PR with its own tests, ordered so the game
 - [ ] **2. Save and routes** (`save.ts`, `/lab/pushback` page and client wrapper, title with the silence switch, role-select, roster and glossary screens as DOM, result card text). Done when a role can be picked, a run persists across reloads and the roster reflects `beaten`, the stars and the glossary count.
 - [ ] **3. Playable grey box** (canvas stage, dialogue box, hand and counter menus, the two bars and the silence bar as flat rectangles, typing, keyboard and touch input, placeholder rectangles for sprites and a flat background, the workbench route with the duel sandbox). Done when all seven slots can be played start to finish, including the boss gate and the interrupt, and the silence seconds have been tuned in the sandbox and checked against the simulation.
 - [ ] **4. Backgrounds** (four Gemini scenes through `snap.mjs`, four loop scripts, `scene-1x.webp` export added to `loop.mjs`, the scene viewer on the workbench). Done when the scenes animate in the stage at integer scale with no shimmer and the poster shows under reduced motion.
-- [ ] **5. Sprites** (`pixel-sprite` skill with `sheet.mjs` and the review checklist, four Gemini model sheets, the prop sheet and the head sheet through it, swap tables for nine characters, the chrome drawn in code, `sheets.test.ts`, the sprite viewer on the workbench). Done when every character renders from data with the right swaps, the validator runs in `pnpm test` and every pose has been checked in the viewer at 2x.
+- [ ] **5. Sprites** (`pixel-sprite` skill with `sheet.mjs` and the review checklist, seven Gemini model sheets, the prop sheet and the head sheet through it, swap tables for nine characters (each on one of its role's two bases), the chrome drawn in code, `sheets.test.ts`, the sprite viewer on the workbench). Done when every character renders from data with the right swaps, the validator runs in `pnpm test` and every pose has been checked in the viewer at 2x.
 - [ ] **6. Polish** (reduced motion, live region and focus order, pause, result card screen with copy, credits line per role, the phone gag if it reads at native size, rotate hint on portrait phones, OG image for `/lab/pushback`). Done when the route passes the existing lint, format, type and test commands and a VRT baseline exists.
 - [ ] **7. Lines pass** (read every line aloud in a duel, cut what does not land, check the 70-character limit, confirm each counter reads as a reply next to five decoys, fix boss-3). Done when the tables in this spec and `lines.ts` match.
 
 Open questions to settle before package 4:
 
-- Does the Gemini free tier's daily image cap fit the nine generations plus rerolls in one sitting, or does the art spread over a few days? The prompt pack is ordered so the model sheets go first.
+- Does the Gemini free tier's daily image cap fit the twelve generations plus rerolls in one sitting, or does the art spread over a few days? The prompt pack is ordered so the model sheets go first.
 - Keep character names (Jo, Sam, Ines) or drop them entirely? They only exist on the select screen and the result card.
 - Does `/lab/pushback` get a note on the blog announcing it (which then needs a narration, or `narrate:check` fails CI), and a header image via the usual pipeline, or is it a quiet link in the footer?
 - Silence seconds (8/6/5) are a guess until the grey box exists; the mic drop halving might be too brutal at 1x on a phone.

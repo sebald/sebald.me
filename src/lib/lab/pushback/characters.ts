@@ -4,7 +4,7 @@
  * Difficulty is not on the character but on the slot in the run (see
  * `docs/plans/pushback.md`, "The run").
  */
-import { type Role, ROLES } from './lines';
+import { type PairId, type Role, ROLES, poolOf } from './lines';
 import { Rng, seedRng } from './random';
 
 export type CharacterId =
@@ -29,6 +29,12 @@ export interface Character {
   intro: string;
   /** The look, in words, until the sheet and swap tables land */
   swap: string;
+  /**
+   * One or two pairs from other pools this character has picked up: it
+   * throws them too and answers them every time. They make the own-role
+   * duels less of a pure memory test and seed the glossary across pools.
+   */
+  knows: PairId[];
 }
 
 export const CHARACTERS: readonly Character[] = [
@@ -38,6 +44,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "Hi! Is this the meeting? I was told there'd be a meeting.",
     swap: 'Oversized lanyard, coffee',
+    knows: ['dev-1'],
   },
   {
     id: 'roadmap-owner',
@@ -45,6 +52,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "I have a slot for you. It's now. Make it count.",
     swap: 'Gantt printout',
+    knows: ['des-5', 'dev-3'],
   },
   {
     id: 'head-of-product',
@@ -52,6 +60,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'pm',
     intro: "I've heard about you. None of it was in the OKRs.",
     swap: 'Blazer, no notebook',
+    knows: ['dev-8', 'des-1'],
   },
   {
     id: 'junior',
@@ -59,6 +68,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: "Give me a sec, the build's almost green.",
     swap: 'Hoodie up, energy drink',
+    knows: ['des-2'],
   },
   {
     id: 'senior',
@@ -66,6 +76,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: "I've seen this pattern before. It didn't end well then either.",
     swap: 'Mechanical keyboard under the arm',
+    knows: ['pm-3', 'des-7'],
   },
   {
     id: 'architect',
@@ -73,6 +84,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'dev',
     intro: 'Before we start: is this scalable?',
     swap: 'Whiteboard marker, grey beard',
+    knows: ['pm-5', 'des-8'],
   },
   {
     id: 'freelancer',
@@ -80,6 +92,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: "I'm only here until Thursday, so let's be quick.",
     swap: 'Tote bag',
+    knows: ['pm-4'],
   },
   {
     id: 'brand-designer',
@@ -87,6 +100,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: "That's not our blue.",
     swap: 'Pantone swatch',
+    knows: ['pm-6', 'dev-6'],
   },
   {
     id: 'design-lead',
@@ -94,6 +108,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'designer',
     intro: 'Let me stop you right there.',
     swap: 'Very small laptop',
+    knows: ['dev-7', 'pm-7'],
   },
   {
     id: 'stakeholder',
@@ -101,6 +116,7 @@ export const CHARACTERS: readonly Character[] = [
     role: 'boss',
     intro: "Keep it short, I've got a call in five.",
     swap: 'Suit, phone in hand, never looks up',
+    knows: [],
   },
 ];
 
@@ -113,6 +129,12 @@ export const characterById = (id: CharacterId): Character => {
 };
 
 export const STAKEHOLDER = characterById('stakeholder');
+
+/** Everything a character throws and answers: its own pool plus what it knows */
+export const repertoire = (character: Character): PairId[] =>
+  character.role === 'boss'
+    ? []
+    : [...poolOf(character.role).map(p => p.id), ...character.knows];
 
 /** The scene a role's duels play in */
 export const SCENE_OF: Record<Role | 'boss', SceneId> = {
@@ -139,27 +161,6 @@ export interface Slot {
   silence: number | null;
 }
 
-const tier1: Slot = {
-  tier: 1,
-  accuracy: 0.6,
-  menu: 4,
-  decoys: 'any',
-  silence: null,
-};
-const tier2: Slot = {
-  tier: 2,
-  accuracy: 0.75,
-  menu: 5,
-  decoys: 'two',
-  silence: 8,
-};
-const tier3: Slot = {
-  tier: 3,
-  accuracy: 0.9,
-  menu: 6,
-  decoys: 'same',
-  silence: 6,
-};
 export const BOSS_SLOT: Slot = {
   tier: 'boss',
   accuracy: 1,
@@ -168,14 +169,19 @@ export const BOSS_SLOT: Slot = {
   silence: 5,
 };
 
-/** The seven slots of a run, in order: the ramp is fixed, the faces are random */
+/**
+ * The seven slots of a run, in order: the ramp is fixed, the faces are
+ * random. Plausible decoys test memory and obvious decoys test reasoning,
+ * so the decoys follow what the player knows of the pool: a fresh pool
+ * gets obvious ones, the own pool plausible ones.
+ */
 export const SLOTS: readonly Slot[] = [
-  tier1,
-  tier1,
-  tier2,
-  tier2,
-  tier3,
-  tier3,
+  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
+  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
+  { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: 10 },
+  { tier: 2, accuracy: 0.75, menu: 5, decoys: 'any', silence: 8 },
+  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: 6 },
+  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: 6 },
   BOSS_SLOT,
 ];
 

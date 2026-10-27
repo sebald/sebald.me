@@ -1,7 +1,13 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { RULES, STAKEHOLDER, type Slot, characterById } from './characters';
+import {
+  RULES,
+  STAKEHOLDER,
+  type Slot,
+  characterById,
+  repertoire,
+} from './characters';
 import {
   type DuelSetup,
   type DuelState,
@@ -78,11 +84,13 @@ const play = (
 };
 
 describe('a regular duel', () => {
-  it('opens with the opponent throwing from its own pool', () => {
+  it('opens with the opponent throwing from its repertoire', () => {
     const s = begin();
     assert.equal(s.phase, 'defend');
     assert.equal(s.exchange?.by, 'opponent');
-    assert.ok(devPool.includes(s.exchange!.phrase as PairId));
+    assert.ok(
+      repertoire(s.setup.character).includes(s.exchange!.phrase as PairId),
+    );
     assert.equal(s.menu.length, 4);
     assert.ok(s.menu.includes(s.exchange!.answer));
   });

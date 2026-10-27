@@ -7,9 +7,10 @@ import {
   SLOTS,
   characterById,
   drawRun,
+  repertoire,
   roleOrder,
 } from './characters';
-import { ROLES } from './lines';
+import { ROLES, pairById } from './lines';
 
 describe('roleOrder', () => {
   it('meets the two foreign roles first and its own last', () => {
@@ -67,5 +68,23 @@ describe('cast', () => {
       assert.equal(CHARACTERS.filter(c => c.role === role).length, 3, role);
     }
     assert.equal(CHARACTERS.filter(c => c.role === 'boss').length, 1);
+  });
+
+  it('knows one or two pairs from other pools', () => {
+    for (const character of CHARACTERS.filter(c => c.role !== 'boss')) {
+      assert.ok(
+        character.knows.length >= 1 && character.knows.length <= 2,
+        character.id,
+      );
+      for (const id of character.knows) {
+        assert.notEqual(
+          pairById(id).role,
+          character.role,
+          `${character.id} ${id}`,
+        );
+      }
+      assert.equal(repertoire(character).length, 8 + character.knows.length);
+    }
+    assert.deepEqual(repertoire(characterById('stakeholder')), []);
   });
 });

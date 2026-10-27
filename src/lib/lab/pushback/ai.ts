@@ -8,7 +8,6 @@ import {
   type Pair,
   type PairId,
   PAIRS,
-  type Role,
   ROLES,
   bossPairById,
   isBossPairId,
@@ -54,16 +53,18 @@ export const buildMenu = (
   return rng.shuffle([answer, ...rng.sample(wrong, size - 1)]);
 };
 
-/** Whether the opponent answers a phrase correctly */
+/**
+ * Whether the opponent answers a phrase correctly: always for what is in
+ * its repertoire (its own pool and what it knows; the boss knows it all),
+ * with the slot's accuracy for the rest.
+ */
 export const aiAnswers = (
   phrase: PairId,
-  opponentRole: Role | 'boss',
+  repertoire: readonly PairId[] | 'all',
   accuracy: number,
   rng: Rng,
 ): boolean =>
-  opponentRole === 'boss' ||
-  pairById(phrase).role === opponentRole ||
-  rng.chance(accuracy);
+  repertoire === 'all' || repertoire.includes(phrase) || rng.chance(accuracy);
 
 /** A wrong counter from the phrase's pool, for the opponent's miss */
 export const aiWrongCounter = (phrase: PairId, rng: Rng): PairId =>
