@@ -594,7 +594,13 @@ export const DuelScreen = ({
 
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
-    <Legend keys={[['Any key', 'back to the title']]} touch="Tap to go back" />
+    <Legend
+      keys={[
+        ['Enter', 'play'],
+        ['Any key', 'title'],
+      ]}
+      touch="Tap to go back to the title"
+    />
   ) : step?.kind === 'menu' ? (
     <Legend
       keys={[
