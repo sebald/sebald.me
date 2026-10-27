@@ -53,6 +53,7 @@
     "test": "pnpm test:lib",
     "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
     "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'",
+    "pushback:simulate": "node --import tsx src/lib/lab/pushback/simulate.ts",
     "typecheck": "tsc --noEmit",
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots",
