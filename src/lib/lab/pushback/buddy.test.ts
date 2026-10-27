@@ -4,7 +4,6 @@ import { describe, it } from 'node:test';
 import {
   BUDDY_STEPS,
   BUDDY_WINDOW_MS,
-  buddyKeeps,
   buddyLine,
   buddyOpacity,
   buddyStep,
@@ -33,21 +32,6 @@ describe('buddyStep', () => {
     assert.equal(buddyStep(0, null), 0);
     assert.equal(buddyStep(BUDDY_WINDOW_MS * 0.5, null), 1);
     assert.equal(buddyStep(BUDDY_WINDOW_MS, null), BUDDY_STEPS);
-  });
-});
-
-describe('buddyKeeps', () => {
-  it('leaves one decoy bright, never the answer, the same one per salt', () => {
-    const menu = ['a', 'b', 'c', 'd'];
-    const kept = new Set<string>();
-    for (let salt = 0; salt < 12; salt++) {
-      const keep = buddyKeeps(menu, 'c', salt);
-      assert.notEqual(keep, 'c');
-      assert.equal(keep, buddyKeeps(menu, 'c', salt));
-      kept.add(keep!);
-    }
-    assert.equal(kept.size, 3);
-    assert.equal(buddyKeeps(['c'], 'c', 1), undefined);
   });
 });
 

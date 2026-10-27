@@ -633,9 +633,9 @@ Reroll on: legs or feet, a glow or halo (the canvas adds the translucency), a fi
 
 ## Scenes
 
-Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach two images to every scene prompt, in this order: `HEADER` for the style, and `SCALE` = `src/assets/lab/pushback/sources/scale-reference.png` for the size of the people. `SCALE` is a plain two-tone room at the render's 16:9 with two idle figures standing on the game's floor line (row 230 of 270) at the size the game draws them, blown up to Gemini's render size with hard edges; the prompts say the second image is the yardstick and nothing else. Do not attach a model sheet: its figures fill more than half the image and Gemini draws the furniture for giants.
+Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach two images to every scene prompt, in this order: `HEADER` for the style, and `SCALE` = `src/assets/lab/pushback/sources/scale-reference.png` for the size of the people. `SCALE` is a plain two-tone room at the render's 16:9 with two idle figures standing on the game's floor line (row 230 of 270) at the size the game draws them, and grey blocks at the furniture sizes the prompts name (a desk with a monitor on it, a chair seat, a table, a door outline), blown up to Gemini's render size with hard edges (`scale-ref2.mjs` in the session notes drew it; the figures are the idle cells of Jo and Sam, the blocks are 40, 24, 28, 40 and 120 pixels tall). The prompts say the second image is the yardstick and nothing else. Do not attach a model sheet: its figures fill more than half the image and Gemini draws the furniture for giants.
 
-Why: the first four renders were drawn for people twice the game's size. With the figures on the stands the inventory's scene viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated rather than resampled. The old renders stay in `originals/` for reference.
+Why: the first four renders were drawn for people twice the game's size, and the second round, with the figures alone as the reference and the heights in words, still 1.4 times (desks 56 pixels tall for a 40 hip, the studio printer as tall as a person), so the third round puts the heights into the reference as blocks. With the figures on the stands the inventory's scene viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated rather than resampled. The old renders stay in `originals/` for reference.
 
 Three rules, written into every prompt:
 
@@ -657,8 +657,12 @@ first attached image: the same chunky low-resolution look, the same
 simple shapes, shading and muted colours. Do not copy its content or
 its layout. The second attached image is only a scale reference: the
 two people in it stand on the floor of the room you draw, at exactly
-that size and in exactly those places. Do not draw them; draw the room
-around them, with everything in it sized for people that tall.
+that size and in exactly those places, and the grey blocks are the
+sizes of the furniture for people that small: the low block with the
+box on it is a desk with a monitor, the small block a chair seat, the
+long block a table, the tall outline a door. Do not draw the people or
+the blocks; draw the room around the people, far from the camera, with
+every piece of furniture no bigger than its block.
 
 Style: a 16-bit pixel-art background from a 1990s point-and-click
 adventure game, as it looked on screen. Not modern high-resolution pixel
@@ -668,8 +672,9 @@ drawn out. Three or four shades per material, dark outlines only where
 needed, a limited palette of about 32 colours, ordered dithering in
 shadows. No people.
 
-Scale: a standing person is a bit under a third of the image's height,
-head at 56 percent of the height, feet on the floor line at 85 percent.
+Scale: the people are small in the frame, a bit under a third of the
+image's height, head at 56 percent of the height, feet on the floor
+line at 85 percent, and the furniture is as small as the grey blocks.
 A desk top reaches a person's hip, a chair seat a knee, a monitor is
 a head and a bit tall, a door a person and a half, the ceiling lights
 hang well above a head.
@@ -726,8 +731,12 @@ first attached image: the same chunky low-resolution look, the same
 simple shapes, shading and muted colours. Do not copy its content or
 its layout. The second attached image is only a scale reference: the
 two people in it stand on the floor of the room you draw, at exactly
-that size and in exactly those places. Do not draw them; draw the room
-around them, with everything in it sized for people that tall.
+that size and in exactly those places, and the grey blocks are the
+sizes of the furniture for people that small: the low block with the
+box on it is a desk with a monitor, the small block a chair seat, the
+long block a table, the tall outline a door. Do not draw the people or
+the blocks; draw the room around the people, far from the camera, with
+every piece of furniture no bigger than its block.
 
 Style: a 16-bit pixel-art background from a 1990s point-and-click
 adventure game, as it looked on screen. Not modern high-resolution pixel
@@ -737,8 +746,9 @@ drawn out. Three or four shades per material, dark outlines only where
 needed, a limited palette of about 32 colours, ordered dithering in
 shadows. No people.
 
-Scale: a standing person is a bit under a third of the image's height,
-head at 56 percent of the height, feet on the floor line at 85 percent.
+Scale: the people are small in the frame, a bit under a third of the
+image's height, head at 56 percent of the height, feet on the floor
+line at 85 percent, and the furniture is as small as the grey blocks.
 A table top reaches a person's hip, a chair seat a knee, a door is a
 person and a half, the projector hangs well above a head.
 
@@ -791,8 +801,12 @@ first attached image: the same chunky low-resolution look, the same
 simple shapes, shading and muted colours. Do not copy its content or
 its layout. The second attached image is only a scale reference: the
 two people in it stand on the floor of the room you draw, at exactly
-that size and in exactly those places. Do not draw them; draw the room
-around them, with everything in it sized for people that tall.
+that size and in exactly those places, and the grey blocks are the
+sizes of the furniture for people that small: the low block with the
+box on it is a desk with a monitor, the small block a chair seat, the
+long block a table, the tall outline a door. Do not draw the people or
+the blocks; draw the room around the people, far from the camera, with
+every piece of furniture no bigger than its block.
 
 Style: a 16-bit pixel-art background from a 1990s point-and-click
 adventure game, as it looked on screen. Not modern high-resolution pixel
@@ -802,8 +816,9 @@ drawn out. Three or four shades per material, dark outlines only where
 needed, a limited palette of about 32 colours, ordered dithering in
 shadows. No people.
 
-Scale: a standing person is a bit under a third of the image's height,
-head at 56 percent of the height, feet on the floor line at 85 percent.
+Scale: the people are small in the frame, a bit under a third of the
+image's height, head at 56 percent of the height, feet on the floor
+line at 85 percent, and the furniture is as small as the grey blocks.
 A desk top reaches a person's hip, a printer a person's waist, the
 shelf is above a head, the track lights well above it.
 
@@ -858,8 +873,12 @@ first attached image: the same chunky low-resolution look, the same
 simple shapes, shading and muted colours. Do not copy its content or
 its layout. The second attached image is only a scale reference: the
 two people in it stand on the floor of the room you draw, at exactly
-that size and in exactly those places. Do not draw them; draw the room
-around them, with everything in it sized for people that tall.
+that size and in exactly those places, and the grey blocks are the
+sizes of the furniture for people that small: the low block with the
+box on it is a desk with a monitor, the small block a chair seat, the
+long block a table, the tall outline a door. Do not draw the people or
+the blocks; draw the room around the people, far from the camera, with
+every piece of furniture no bigger than its block.
 
 Style: a 16-bit pixel-art background from a 1990s point-and-click
 adventure game, as it looked on screen. Not modern high-resolution pixel
@@ -869,8 +888,9 @@ drawn out. Three or four shades per material, dark outlines only where
 needed, a limited palette of about 32 colours, ordered dithering in
 skies and shadows. No people.
 
-Scale: a standing person is a bit under a third of the image's height,
-head at 56 percent of the height, feet on the floor line at 85 percent.
+Scale: the people are small in the frame, a bit under a third of the
+image's height, head at 56 percent of the height, feet on the floor
+line at 85 percent, and the furniture is as small as the grey blocks.
 The desk top reaches a person's hip, the chair's back a person's
 shoulder, the cabinet a hip, the spotlights are well above a head.
 
