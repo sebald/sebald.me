@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
+import { demoFor } from '@/lib/lab/pushback/attract';
 import { type Look, MODES } from '@/lib/lab/pushback/characters';
 import { type DuelState, createDuel } from '@/lib/lab/pushback/duel';
 import type { Role } from '@/lib/lab/pushback/lines';
@@ -26,6 +27,7 @@ import { TitleScreen } from './title';
 
 type Screen =
   | { name: 'title' }
+  | { name: 'attract'; seed: number }
   | { name: 'select' }
   | { name: 'roster'; role: Role }
   | { name: 'duel'; role: Role; index: number; seed: number }
@@ -43,6 +45,10 @@ export const Pushback = () => {
     [],
   );
   const toTitle = useCallback(() => setScreen({ name: 'title' }), []);
+  const toAttract = useCallback(
+    () => setScreen({ name: 'attract', seed: Date.now() % 100_000 }),
+    [],
+  );
   const toSelect = useCallback(() => setScreen({ name: 'select' }), []);
 
   const confirmRole = useCallback(
@@ -76,8 +82,22 @@ export const Pushback = () => {
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
           onReset={hasRuns(save) ? () => setSave(resetSave) : undefined}
+          onAttract={toAttract}
         />
       );
+    case 'attract': {
+      const demo = demoFor(screen.seed);
+      return (
+        <DuelScreen
+          key={`demo-${screen.seed}`}
+          look={demo.look}
+          initial={createDuel(demo.setup)}
+          auto
+          onEnd={toTitle}
+          onBack={toTitle}
+        />
+      );
+    }
     case 'select':
       return (
         <SelectScreen

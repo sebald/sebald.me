@@ -11,6 +11,11 @@ import {
 } from 'react';
 
 import {
+  DEMO_ACCURACY,
+  DEMO_END_MS,
+  DEMO_PICK_MS,
+} from '@/lib/lab/pushback/attract';
+import {
   GHOST,
   buddyKeeps,
   buddyLine,
@@ -119,6 +124,12 @@ export interface DuelScreenProps {
   reducedMotion?: boolean;
   /** Fix the scale (the workbench) */
   scale?: number;
+  /**
+   * Attract mode: the duel plays itself, the menus picked after a pause,
+   * and any key or tap leaves (`onBack`); `onEnd` fires a few seconds
+   * after the duel is over
+   */
+  auto?: boolean;
   className?: string;
 }
 
@@ -174,6 +185,7 @@ export const DuelScreen = ({
   onBack,
   reducedMotion,
   scale,
+  auto = false,
   className,
 }: DuelScreenProps) => {
   // The duel, and the state before the last exchange resolved: the bars
@@ -269,6 +281,26 @@ export const DuelScreen = ({
           break;
         case 'menu': {
           const s = stateRef.current;
+          if (
+            auto &&
+            elapsed >= DEMO_PICK_MS &&
+            cursor.elapsed < DEMO_PICK_MS
+          ) {
+            // The demo's player: a phrase from the hand, the answer most
+            // of the time, a decoy otherwise
+            if (s.phase === 'attack' && s.hand.length) {
+              const phrase = s.hand[Math.floor(Math.random() * s.hand.length)]!;
+              act({ type: 'throw', phrase, micDrop: s.micDropAvailable });
+            } else if (s.phase === 'defend' && s.exchange) {
+              const answer = s.exchange.answer;
+              const decoys = s.menu.filter(id => id !== answer);
+              const phrase =
+                Math.random() < DEMO_ACCURACY || decoys.length === 0
+                  ? answer
+                  : decoys[Math.floor(Math.random() * decoys.length)]!;
+              act({ type: 'counter', phrase });
+            }
+          }
           if (s.phase === 'defend' && s.silence) act({ type: 'tick', ms });
           // The buddy's whisper has started on this exchange (the frame
           // loop is the event, so the resolve can look it up)
@@ -284,11 +316,24 @@ export const DuelScreen = ({
           break;
         }
         case 'wait':
-          setCursor({ ...cursor, elapsed });
+          if (auto && elapsed >= DEMO_END_MS) onEnd(stateRef.current);
+          else setCursor({ ...cursor, elapsed });
       }
     },
-    [steps, cursor, reduced, advance, act],
+    [steps, cursor, reduced, advance, act, auto, onEnd],
   );
+
+  // Attract mode: any key or tap leaves the demo
+  useEffect(() => {
+    if (!auto) return;
+    const leave = () => onBack();
+    window.addEventListener('keydown', leave);
+    window.addEventListener('pointerdown', leave);
+    return () => {
+      window.removeEventListener('keydown', leave);
+      window.removeEventListener('pointerdown', leave);
+    };
+  }, [auto, onBack]);
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -321,6 +366,7 @@ export const DuelScreen = ({
       }),
       [paused, step?.kind, confirm, toggleMicDrop, canMicDrop],
     ),
+    !auto,
   );
 
   // The onboarding buddy
@@ -547,19 +593,20 @@ export const DuelScreen = ({
       : null;
 
   // The control hints along the window's bottom edge: only what works now
-  const legend =
-    step?.kind === 'menu' ? (
-      <Legend
-        keys={[
-          ['↑↓', 'choose'],
-          ['Enter', 'confirm'],
-          ...(canMicDrop ? ([['M', 'mic drop']] as [string, string][]) : []),
-        ]}
-        touch="Tap a line"
-      />
-    ) : step?.kind === 'line' || step?.kind === 'reveal' ? (
-      <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
-    ) : null;
+  const legend = auto ? (
+    <Legend keys={[['Any key', 'back to the title']]} touch="Tap to go back" />
+  ) : step?.kind === 'menu' ? (
+    <Legend
+      keys={[
+        ['↑↓', 'choose'],
+        ['Enter', 'confirm'],
+        ...(canMicDrop ? ([['M', 'mic drop']] as [string, string][]) : []),
+      ]}
+      touch="Tap a line"
+    />
+  ) : step?.kind === 'line' || step?.kind === 'reveal' ? (
+    <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
+  ) : null;
 
   return (
     <Frame
@@ -667,7 +714,7 @@ export const DuelScreen = ({
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
-              active={!paused}
+              active={!paused && !auto}
               className="gap-0"
             />
             {silenceWidth !== null && (

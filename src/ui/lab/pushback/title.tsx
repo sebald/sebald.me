@@ -4,6 +4,7 @@ import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
 
 import logo from '@/assets/lab/pushback/sheets/logo.png';
+import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
 import { MODE_LABELS, type Mode } from '@/lib/lab/pushback/characters';
 
 import { Picker, type PickerItem } from './picker';
@@ -16,6 +17,8 @@ interface TitleScreenProps {
   onStart: () => void;
   /** Drop the save; the item only shows when there is something to drop */
   onReset?: () => void;
+  /** Nobody has touched anything for a while: play the demo */
+  onAttract?: () => void;
 }
 
 const MODE_BLURBS: Record<Mode, string> = {
@@ -35,7 +38,24 @@ export const TitleScreen = ({
   onMode,
   onStart,
   onReset,
+  onAttract,
 }: TitleScreenProps) => {
+  // Attract mode: a key or a tap resets the clock, silence starts the demo
+  useEffect(() => {
+    if (!onAttract) return;
+    let timer = setTimeout(onAttract, ATTRACT_AFTER_MS);
+    const reset = () => {
+      clearTimeout(timer);
+      timer = setTimeout(onAttract, ATTRACT_AFTER_MS);
+    };
+    window.addEventListener('keydown', reset);
+    window.addEventListener('pointerdown', reset);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', reset);
+      window.removeEventListener('pointerdown', reset);
+    };
+  }, [onAttract]);
   // Reset asks for a second press: the first arms it, the second does it,
   // Escape or a few seconds of nothing disarm it
   const [armed, setArmed] = useState(false);
