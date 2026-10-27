@@ -20,15 +20,18 @@ export interface Save {
   version: typeof SAVE_VERSION;
   /** The silence bar switch on the title screen */
   silence: boolean;
+  /** Buddy mode: the wrong counters dim while the player hesitates */
+  buddy: boolean;
   runs: Partial<Record<Role, SavedRun>>;
 }
 
 /** What the save needs from `localStorage` */
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
-export const emptySave = (silence = true): Save => ({
+export const emptySave = (silence = true, buddy = false): Save => ({
   version: SAVE_VERSION,
   silence,
+  buddy,
   runs: {},
 });
 
@@ -57,6 +60,12 @@ const isSavedRun = (value: unknown): value is SavedRun =>
   typeof value.attempts === 'number' &&
   isRecord(value.stats);
 
+/** Saves from before buddy mode have no flag on the run */
+const withBuddyFlag = (run: SavedRun): SavedRun => ({
+  ...run,
+  buddy: run.buddy === true,
+});
+
 /** Parse a stored save; anything corrupt or from another version is dropped */
 export const parseSave = (raw: string | null): Save | null => {
   if (!raw) return null;
@@ -71,9 +80,14 @@ export const parseSave = (raw: string | null): Save | null => {
   const runs: Save['runs'] = {};
   for (const role of ROLES) {
     const run = data.runs[role];
-    if (isSavedRun(run) && run.role === role) runs[role] = run;
+    if (isSavedRun(run) && run.role === role) runs[role] = withBuddyFlag(run);
   }
-  return { version: SAVE_VERSION, silence: data.silence, runs };
+  return {
+    version: SAVE_VERSION,
+    silence: data.silence,
+    buddy: data.buddy === true,
+    runs,
+  };
 };
 
 /** The save, or null when there is none (or no storage) */
@@ -132,6 +146,11 @@ export const setSilence = (save: Save, silence: boolean): Save => ({
   silence,
 });
 
+export const setBuddy = (save: Save, buddy: boolean): Save => ({
+  ...save,
+  buddy,
+});
+
 /** The player's name on the select screen and the result card */
 export const playerName = (role: Role, look: Look): string =>
   LOOKS[role][look].name;
@@ -142,7 +161,7 @@ export const resultCardText = (run: RunState): string => {
   const { stats } = run;
   return [
     `Pushback · ${ROLE_LABELS[run.role]}`,
-    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless`,
+    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless${run.buddy ? ' · with a buddy' : ''}`,
     `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${run.collected.length}/${PAIRS.length}`,
     `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
     'sebald.me/lab/pushback',

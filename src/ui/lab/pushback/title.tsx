@@ -5,12 +5,16 @@ import { Menu, Stage } from './stage';
 interface TitleScreenProps {
   silence: boolean;
   onSilence: (on: boolean) => void;
+  buddy: boolean;
+  onBuddy: (on: boolean) => void;
   onStart: () => void;
 }
 
 export const TitleScreen = ({
   silence,
   onSilence,
+  buddy,
+  onBuddy,
   onStart,
 }: TitleScreenProps) => (
   <Stage label="Pushback, title">
@@ -32,10 +36,17 @@ export const TitleScreen = ({
             label: `Silence bar: ${silence ? 'on' : 'off'}`,
             onSelect: () => onSilence(!silence),
           },
+          {
+            id: 'buddy',
+            label: `Onboarding buddy: ${buddy ? 'on' : 'off'}`,
+            onSelect: () => onBuddy(!buddy),
+          },
         ]}
       />
-      <Stage.Muted className="text-[0.7rem]">
-        Arrows or W/S to move, Enter to confirm, Escape to go back.
+      <Stage.Muted className="text-[0.7rem] text-balance">
+        {buddy
+          ? 'The buddy whispers the reply. Slowly. No stars with a buddy.'
+          : 'Arrows or W/S to move, Enter to confirm, Escape to go back.'}
       </Stage.Muted>
     </Stage.Center>
   </Stage>

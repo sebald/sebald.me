@@ -51,6 +51,8 @@ export interface DuelSetup {
   silence: boolean;
   /** First duel of a run: shows the hint on the first exchange */
   tutorial?: boolean;
+  /** Buddy mode is on: presentation only, but no flawless star */
+  buddy?: boolean;
   rules?: Rules;
 }
 

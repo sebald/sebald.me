@@ -80,6 +80,14 @@ From the third duel on the defender has a few seconds to answer. A thin bar unde
 
 The bar is off in the two tier 1 duels, off by default under `prefers-reduced-motion` and switchable on the title screen for screen reader users and anyone who wants a quiz instead of a duel. With the bar off every correct counter counts as fast for momentum.
 
+### The onboarding buddy
+
+A switch on the title screen next to the silence bar, off by default: `Onboarding buddy`. With it on, a colleague whispers the reply, slowly. While the player hesitates on defence, the wrong counters dim in three steps and the right one stays bright; by the third step the answer is plain. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
+
+The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card says `with a buddy` when any duel of the run used it. Everything else (collecting, buy-in, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
+
+It is there for players who are here for the jokes rather than the memory test, for first runs, and for anyone who finds the silence bar hostile; with the bar off and the buddy on, the game is a slow quiz with a safety net.
+
 ### First duel
 
 The first duel is the tutorial whoever walks in: four options from any pool, no silence bar, and on the first exchange the dialogue box shows the hint `Pick the reply that answers it`. Nothing else explains the game; the title screen's three lines and the bars do the rest.
@@ -147,7 +155,7 @@ With these numbers the simulation's modelled player (recalls a collected pair 90
 
 The ramp is fixed and the faces are random, which is the point: the first duel is always the tutorial whoever walks in, and the run never opens with a silence bar. A run is 12 to 15 minutes.
 
-Between duels: a single roster screen over the darkened corner office, the seven slots as a vertical list in run order with the character's sprite, name and a tick when beaten; a second mark (a star) when beaten flawless, that is without losing an exchange. The out-of-office characters are listed greyed at the bottom with `Out of office`, so the player sees the cast is bigger than the run. The next unbeaten slot is selected, beaten ones can be replayed for the star or to collect what they throw, the Stakeholder is greyed until all six ticks are there. Enter or tap starts the duel; Escape returns to the title.
+Between duels: a single roster screen over the darkened corner office, the seven slots as a vertical list in run order with the character's sprite, name and a tick when beaten; a second mark (a star) when beaten flawless, that is without losing an exchange and without the buddy. The out-of-office characters are listed greyed at the bottom with `Out of office`, so the player sees the cast is bigger than the run. The next unbeaten slot is selected, beaten ones can be replayed for the star or to collect what they throw, the Stakeholder is greyed until all six ticks are there. Enter or tap starts the duel; Escape returns to the title.
 
 The glossary: a second tab on the roster (Tab or a tap on `Glossary 11/24` in the corner), three columns of eight slots, one per pool. A collected pair shows phrase and counter; an uncollected one shows a blank line in its pool's column, so the player can see which role still has lines to throw and which slot to replay. The starting pool is collected from the first second. The count goes on the result card and is the reason to replay a beaten slot when the roster is already full of ticks.
 

@@ -32,6 +32,8 @@ export interface RunState {
   finished: boolean;
   /** Duels played, retries and replays included */
   attempts: number;
+  /** A duel of this run was played with the buddy (noted on the card) */
+  buddy: boolean;
   stats: DuelStats;
 }
 
@@ -43,6 +45,7 @@ export const createRunState = (role: Role, seed: number): RunState => ({
   collected: poolOf(role).map(p => p.id),
   finished: false,
   attempts: 0,
+  buddy: false,
   stats: emptyStats(),
 });
 
@@ -72,7 +75,7 @@ export const attemptFor = (state: RunState, index: number): Attempt => {
 export const duelSetupFor = (
   state: RunState,
   index: number,
-  options: { seed: number; silence: boolean },
+  options: { seed: number; silence: boolean; buddy?: boolean },
 ): DuelSetup => {
   const slot: RunSlot | undefined = state.run.slots[index];
   if (!slot) throw new Error(`No slot ${index}`);
@@ -84,6 +87,7 @@ export const duelSetupFor = (
     collected: state.collected,
     seed: options.seed,
     silence: options.silence,
+    buddy: options.buddy === true,
     tutorial: index === 0 && !state.beaten[0] && !state.lost.includes(0),
   };
 };
@@ -109,7 +113,9 @@ export const recordDuel = (
   const won = duel.winner === 'player';
   const beaten = { ...state.beaten };
   if (won) {
-    const flawless = isFlawless(duel) || beaten[index]?.flawless === true;
+    const flawless =
+      (isFlawless(duel) && duel.setup.buddy !== true) ||
+      beaten[index]?.flawless === true;
     beaten[index] = { flawless };
   }
   const lost =
@@ -121,6 +127,7 @@ export const recordDuel = (
     collected: duel.collected,
     finished: state.finished || (won && index === BOSS_SLOT_INDEX),
     attempts: state.attempts + 1,
+    buddy: state.buddy || duel.setup.buddy === true,
     stats: addStats(state.stats, duel.stats),
   };
 };

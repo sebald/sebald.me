@@ -11,6 +11,7 @@ import {
   emptySave,
   finishDuel,
   loadSave,
+  setBuddy,
   setSilence,
   startRun,
   writeSave,
@@ -79,6 +80,8 @@ export const Pushback = () => {
         <TitleScreen
           silence={save.silence}
           onSilence={on => setSave(previous => setSilence(previous, on))}
+          buddy={save.buddy}
+          onBuddy={on => setSave(previous => setBuddy(previous, on))}
           onStart={toSelect}
         />
       );
@@ -133,6 +136,7 @@ export const Pushback = () => {
             duelSetupFor(run, screen.index, {
               seed: screen.seed,
               silence: save.silence,
+              buddy: save.buddy,
             }),
           )}
           onEnd={duel => endDuel(screen.role, screen.index, duel)}
