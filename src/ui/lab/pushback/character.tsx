@@ -41,10 +41,12 @@ export interface CharacterProps {
   micDrop?: boolean;
   /**
    * Stage x of the cell's left edge. Given, the character is positioned
-   * absolutely with its feet on the stage's feet line; without it, it is
-   * an inline block the size of its cell.
+   * absolutely with its feet on the feet line; without it, it is a block
+   * the size of its cell.
    */
   x?: number;
+  /** The feet line, the stage's by default (a scene's own in the viewer) */
+  feet?: number;
   /** No animation at all: the resting frame of the pose */
   still?: boolean;
   /** Which placeholder to draw until the sprite is built */
@@ -67,6 +69,7 @@ export const Character = ({
   typing = false,
   micDrop = false,
   x,
+  feet = LAYOUT.feet,
   still = false,
   side = 'player',
   className,
@@ -151,7 +154,7 @@ export const Character = ({
           ? {}
           : {
               left: `calc(var(--px) * ${x})`,
-              top: `calc(var(--px) * ${LAYOUT.feet - LAYOUT.cell.height})`,
+              top: `calc(var(--px) * ${feet - LAYOUT.cell.height})`,
             }),
       }}
     />
