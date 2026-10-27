@@ -4,7 +4,7 @@ Every image the game needs, one prompt each, ready to paste. Thirteen generation
 
 ## Before you start
 
-- Pick **16:9** in Gemini (1376 by 768). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
+- Pick **16:9** in Gemini (currently 2752 by 1536). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
 - **Attach the references named under each prompt** to the same message. The reference is the strongest lever on pixel size and style; the words only back it up.
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
   - `DEV` = `src/assets/lab/pushback/sources/dev-sam-sheet.jpg` (Sam's model sheet, the hoodie character). Every character and prop sheet attaches it so scale and pixel size match across the cast.
