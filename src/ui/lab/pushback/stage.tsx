@@ -1,7 +1,7 @@
 'use client';
 
-import type { CSSProperties, PropsWithChildren } from 'react';
-import { useEffect, useState } from 'react';
+import type { CSSProperties, FocusEvent, PropsWithChildren } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
@@ -17,7 +17,7 @@ const styles = {
       // a scene lands; text is DOM in the site's mono font, like the
       // hotspot remarks, sized from the scale (so em units inside), smooth
       // and without a shadow
-      'relative overflow-hidden',
+      'relative overflow-hidden outline-none',
       'bg-[#07080d] text-[#c9c4b4]',
       'select-none',
     ],
@@ -84,6 +84,21 @@ export const Stage = ({
   crop = 0,
 }: StageProps) => {
   const { scale, portrait } = useScale(fixed);
+  const ref = useRef<HTMLElement>(null);
+  // Focusing the game (a tap on it, or focus arriving from the page)
+  // centres the stage in the viewport
+  const centre = () =>
+    ref.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  const onFocus = (event: FocusEvent<HTMLElement>) => {
+    if (fixed) return;
+    const from = event.relatedTarget as Node | null;
+    if (!from || !ref.current?.contains(from)) centre();
+  };
+  const onPointerDown = () => {
+    if (fixed) return;
+    const active = document.activeElement;
+    if (!active || !ref.current?.contains(active)) ref.current?.focus();
+  };
   if (portrait && !fixed) {
     return (
       <section data-stage aria-label={label} className={styles.portrait()}>
@@ -104,10 +119,14 @@ export const Stage = ({
     // `data-stage`: styles.css gives the stage normal leading back (the site
     // trims every text block to its cap height)
     <section
+      ref={ref}
       data-stage
+      tabIndex={-1}
       aria-label={label ?? 'Pushback'}
       className={styles.root({ className })}
       style={style}
+      onFocus={onFocus}
+      onPointerDown={onPointerDown}
     >
       {/* The full stage, its top rows above the section when cropped */}
       <div

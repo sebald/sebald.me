@@ -175,7 +175,7 @@ export const STANDS: Record<SceneId, { left: number; right: number }> = {
 export type Look = 'a' | 'b';
 
 export const LOOKS: Record<Role, Record<Look, { name: string }>> = {
-  pm: { a: { name: 'Jo' }, b: { name: 'Ravi' } },
+  pm: { a: { name: 'Jo' }, b: { name: 'Piet' } },
   dev: { a: { name: 'Sam' }, b: { name: 'Lena' } },
   designer: { a: { name: 'Ines' }, b: { name: 'Theo' } },
 };

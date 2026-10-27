@@ -115,11 +115,11 @@ All in data: the slot table (menu size, decoy source, silence seconds and foreig
 
 The player picks one of three roles on the title screen, and one of two looks per role. The role changes the order of opponents and the boss's framing; the look only changes the sprite. The mechanic and the lines are the same for all six.
 
-| Role     | Looks (working names)                                                                                               | Prop                 | Opponent order                                |
-| -------- | ------------------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------------------------- |
-| PM       | Jo: tall, cropped coils, striped shirt, lanyard, notebook under the arm. Ravi: stocky, bald, beard, quarter-zip     | Sticky-note stack    | Dev team, then Designers, then PMs, then boss |
-| Dev      | Sam: the existing sheet, blue hoodie, headphones. Lena: red ponytail, green zip hoodie open over a band shirt       | Laptop with stickers | Designers, then PMs, then Devs, then boss     |
-| Designer | Ines: high bun, round glasses, black turtleneck, yellow socks. Theo: flat-top, gold-rimmed glasses, camel overshirt | Tablet with stylus   | PMs, then Devs, then Designers, then boss     |
+| Role     | Looks (working names)                                                                                                                                                        | Prop                 | Opponent order                                |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | --------------------------------------------- |
+| PM       | Jo: tall, cropped coils, striped shirt, lanyard, notebook under the arm. Piet: short and round, late fifties, walrus moustache, wire glasses, mustard knitted vest, wool tie | Sticky-note stack    | PMs, then Dev team, then Designers, then boss |
+| Dev      | Sam: the existing sheet, blue hoodie, headphones. Lena: red ponytail, green zip hoodie open over a band shirt                                                                | Laptop with stickers | Designers, then PMs, then Devs, then boss     |
+| Designer | Ines: high bun, round glasses, black turtleneck, yellow socks. Theo: flat-top, gold-rimmed glasses, camel overshirt                                                          | Tablet with stylus   | PMs, then Devs, then Designers, then boss     |
 
 Rules behind the table:
 

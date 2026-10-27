@@ -88,9 +88,14 @@ const styles = {
       },
     },
   }),
-  // The names in the corners, over the pips
+  // The names in the corners, over the pips, on a plate so they read on
+  // any wall
   name: cva({
-    base: 'absolute font-semibold tracking-wide uppercase',
+    base: [
+      'absolute font-semibold tracking-wide uppercase',
+      'bg-[#0b0d16]/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
+      'shadow-[0_0_0_var(--px)_#0b0d16]',
+    ],
     variants: {
       side: {
         player: 'text-[#f2c14e]',
@@ -224,8 +229,8 @@ export const DuelScreen = ({
     stateRef.current = state;
   });
 
-  // The stage is taller than a short window: bring its bottom (the panel)
-  // into view when the duel starts, so the text is never below the fold
+  // Centre the stage in the viewport when the duel starts, so the panel
+  // is never below the fold
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (scale !== undefined) return;
@@ -233,7 +238,7 @@ export const DuelScreen = ({
     const frame = requestAnimationFrame(() => {
       rootRef.current
         ?.closest('[data-stage]')
-        ?.scrollIntoView({ block: 'end', behavior: 'auto' });
+        ?.scrollIntoView({ block: 'center', behavior: 'auto' });
     });
     return () => cancelAnimationFrame(frame);
   }, [scale]);

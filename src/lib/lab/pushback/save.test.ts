@@ -80,7 +80,7 @@ describe('save', () => {
     save = startRun(save, 'designer', 'a', 2);
     assert.equal(save.runs.pm?.look, 'b');
     assert.equal(save.runs.designer?.look, 'a');
-    assert.equal(playerName('pm', 'b'), 'Ravi');
+    assert.equal(playerName('pm', 'b'), 'Piet');
   });
 
   it('folds a finished duel into the run', () => {
