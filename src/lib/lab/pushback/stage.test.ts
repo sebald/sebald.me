@@ -18,6 +18,8 @@ import {
   fontSizeFor,
   PACE,
   holdFor,
+  BREATH,
+  breathFrame,
   poseOffset,
   posesFor,
   scaleFor,
@@ -182,6 +184,16 @@ describe('poses', () => {
     assert.ok(poseOffset('flinch', 0, 1).lighter);
     assert.ok(!poseOffset('flinch', 500, 1).lighter);
     assert.equal(poseOffset('lose', 300, 1).dy, 0);
+  });
+
+  it('breathes idle, chuckles on a taunt, sobs on a loss, holds a flinch', () => {
+    assert.equal(breathFrame('idle', 0), 0);
+    assert.equal(breathFrame('idle', BREATH.period / 2), 1);
+    assert.equal(breathFrame('taunt', BREATH.chuckle / 2), 1);
+    assert.equal(breathFrame('taunt', BREATH.chuckle), 0);
+    assert.equal(breathFrame('lose', BREATH.sob / 2), 1);
+    assert.equal(breathFrame('lose', BREATH.period / 2), 0);
+    assert.equal(breathFrame('flinch', BREATH.period / 2), 0);
   });
 });
 

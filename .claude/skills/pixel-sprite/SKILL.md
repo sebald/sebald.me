@@ -70,6 +70,24 @@ when a figure does not fit its cell. `pnpm test` runs `sheets.test.ts`,
 which checks every sheet's cells, the idle height (70 to 85) and the
 palette.
 
+### Features
+
+After a model sheet is cut, find the parts the game animates on it:
+
+```sh
+node .claude/skills/pixel-sprite/scripts/features.mjs <id>
+```
+
+It writes `features` into `<id>.json`: the head (a 24 px square in the
+idle cell, the select screen's portrait), the mouth (the lower face of
+the idle cell, pasted over the talk cell between words so only the mouth
+moves while the hand stays up; the talk head is aligned on the idle one
+first) and the eye of the lose cell (where the tears start, a third
+down the bowed head on its facing side). Check
+`sources/contact/<id>-features.png`: the head square should frame the
+head with a row to spare, the cyan patch the mouth and chin but not the
+eyes, the pink dot an eye of the lose cell.
+
 ### Review checklist
 
 Open `sources/contact/<id>.png` and `<id>-keyed.png` and check:

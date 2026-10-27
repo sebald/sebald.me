@@ -23,6 +23,12 @@ const SHEETS = resolve(
 /** The idle figure is this tall, on a 72 by 112 cell (the spec's range) */
 const FIGURE_HEIGHT = { min: 70, max: 85 };
 
+/** `features.mjs` finds these on every model sheet */
+const hasFeatures = (m: SheetMeta) =>
+  m.features !== undefined &&
+  m.features.mouth !== null &&
+  m.features.talkMouth !== null;
+
 /** `sheet.mjs` quantises to this many colours */
 const PALETTE = 32;
 
@@ -94,5 +100,18 @@ describe('the ghost sheet', () => {
     }
     const { width } = await pixels('ghost');
     assert.equal(width, LAYOUT.cell.width * 3);
+  });
+});
+
+describe('the features', () => {
+  it('are on every model sheet: a portrait, a mouth to shut, an eye to cry from', () => {
+    for (const id of SHEET_IDS) {
+      const m = meta(id);
+      assert.ok(hasFeatures(m), id);
+      const { head, mouth, eye } = m.features!;
+      assert.equal(head.width, head.height);
+      assert.ok(mouth!.y > head.y && mouth!.y < head.y + head.height, id);
+      assert.ok(eye.y > m.cells[5]!.box.y, id);
+    }
   });
 });

@@ -6,23 +6,47 @@ import {
   GHOST_CELLS,
   POSE_CELL,
   SHEET_IDS,
+  TALK,
+  TEARS,
   cellFor,
   ghostCell,
+  mouthOpen,
+  tearDrop,
 } from './sprites';
 import { FRAME_MS } from './stage';
 
 describe('cellFor', () => {
   it('maps every pose to its sheet cell', () => {
-    assert.equal(cellFor('idle', 0, false), 0);
-    assert.equal(cellFor('taunt', 999, false), 2);
-    assert.equal(cellFor('lose', 0, true), 5);
+    assert.equal(cellFor('idle'), 0);
+    assert.equal(cellFor('talk'), POSE_CELL.talk);
+    assert.equal(cellFor('taunt'), 2);
+    assert.equal(cellFor('lose'), 5);
+  });
+});
+
+describe('mouthOpen', () => {
+  it('follows the uneven rhythm while the line types, about three openings a second', () => {
+    const openings = TALK.filter((v, i) => v === 1 && TALK[i - 1] !== 1).length;
+    assert.equal(openings, 3);
+    TALK.forEach((open, i) => {
+      assert.equal(mouthOpen(i * FRAME_MS, true), open === 1);
+    });
+    assert.equal(mouthOpen(TALK.length * FRAME_MS, true), TALK[0] === 1);
   });
 
-  it('alternates the mouth while a line types, then rests open', () => {
-    assert.equal(cellFor('talk', 0, true), POSE_CELL.talk);
-    assert.equal(cellFor('talk', FRAME_MS, true), POSE_CELL.idle);
-    assert.equal(cellFor('talk', FRAME_MS * 2, true), POSE_CELL.talk);
-    assert.equal(cellFor('talk', FRAME_MS * 7, false), POSE_CELL.talk);
+  it('shuts once the line is typed', () => {
+    assert.equal(mouthOpen(0, false), false);
+    assert.equal(mouthOpen(FRAME_MS * 7, false), false);
+  });
+});
+
+describe('tearDrop', () => {
+  it('falls two pixels a frame, then pauses until the period is over', () => {
+    assert.equal(tearDrop(0), 0);
+    assert.equal(tearDrop(FRAME_MS), 2);
+    assert.equal(tearDrop(FRAME_MS * (TEARS.fall - 1)), (TEARS.fall - 1) * 2);
+    assert.equal(tearDrop(FRAME_MS * TEARS.fall), null);
+    assert.equal(tearDrop(FRAME_MS * TEARS.period), 0);
   });
 });
 

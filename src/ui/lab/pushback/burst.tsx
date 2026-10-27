@@ -56,7 +56,7 @@ export const Burst = ({
     ctx.setTransform(backing, 0, 0, backing, 0, 0);
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, width, height);
-    if (sprite) drawCell(ctx, sprite, shown, 0, height);
+    if (sprite) drawCell(ctx, sprite, shown, { x: 0, bottom: height });
   }, [backing, sprite, shown, width, height]);
 
   const placed = x !== undefined && y !== undefined;

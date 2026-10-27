@@ -130,57 +130,124 @@ const drawBand = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
   );
 };
 
+/** Where a cell is drawn: its left edge, its bottom, mirrored or not */
+export interface CellPlace {
+  x: number;
+  bottom: number;
+  mirrored?: boolean;
+  /** Times the sheet's pixels */
+  scale?: number;
+}
+
+/** Run `draw` in the cell's own pixels, mirrored about the cell when asked */
+const inCell = (
+  ctx: CanvasRenderingContext2D,
+  sprite: Sprite,
+  { x, bottom, mirrored = false, scale = 1 }: CellPlace,
+  draw: (scale: number) => void,
+) => {
+  const { width, height } = sprite.meta.cell;
+  ctx.save();
+  if (mirrored) {
+    ctx.translate(x + width * scale, bottom - height * scale);
+    ctx.scale(-1, 1);
+  } else {
+    ctx.translate(x, bottom - height * scale);
+  }
+  draw(scale);
+  ctx.restore();
+};
+
+export interface CellOptions {
+  /** The cell in two slices cut at the hip, the upper one a pixel lower */
+  breath?: 0 | 1;
+  /** The idle cell's lower face over this cell's: the mouth shut */
+  mouthShut?: boolean;
+}
+
 /**
- * One cell of a sprite with its bottom on `bottom`, its cell's left edge
- * on `x`, at `scale` times the sheet's pixels, mirrored about the cell
- * when asked. With `breath` the cell is drawn in two slices cut at the
- * hip, the upper one a pixel lower.
+ * One cell of a sprite at a place. With `breath` the cell is drawn in
+ * two slices cut at the hip, the upper one a pixel lower; with
+ * `mouthShut` the idle cell's lower face is pasted over the cell's
+ * (the talk pose between words).
  */
 export const drawCell = (
   ctx: CanvasRenderingContext2D,
   sprite: Sprite,
   cell: number,
-  x: number,
-  bottom: number,
-  mirrored = false,
-  scale = 1,
+  place: CellPlace,
+  { breath = 0, mouthShut = false }: CellOptions = {},
+) =>
+  inCell(ctx, sprite, place, scale => {
+    const { width, height } = sprite.meta.cell;
+    const w = width * scale;
+    const h = height * scale;
+    const sx = cell * width;
+    // The upper body comes down a pixel on the exhale
+    const dy = breath * scale;
+    if (breath === 0) {
+      ctx.drawImage(sprite.canvas, sx, 0, width, height, 0, 0, w, h);
+    } else {
+      // The legs stay, the body above the hip comes down a pixel and
+      // covers the seam row
+      const box = sprite.meta.cells[cell]?.box;
+      const hip = box
+        ? Math.round(box.y + box.height * (1 - BREATH.hip))
+        : Math.round(height * 0.6);
+      const legs = height - hip;
+      ctx.drawImage(
+        sprite.canvas,
+        sx,
+        hip,
+        width,
+        legs,
+        0,
+        hip * scale,
+        w,
+        legs * scale,
+      );
+      ctx.drawImage(sprite.canvas, sx, 0, width, hip, 0, dy, w, hip * scale);
+    }
+    const { mouth, talkMouth } = sprite.meta.features ?? {};
+    if (mouthShut && mouth && talkMouth) {
+      ctx.drawImage(
+        sprite.canvas,
+        mouth.x,
+        mouth.y,
+        mouth.width,
+        mouth.height,
+        talkMouth.x * scale,
+        talkMouth.y * scale + dy,
+        mouth.width * scale,
+        mouth.height * scale,
+      );
+    }
+  });
+
+/** The tears' colours: a pale drop with a darker tail */
+const TEAR = { drop: '#bfe6ff', tail: '#6fb6f0' } as const;
+
+/**
+ * A tear on the lose cell: a two-pixel drop `fallen` pixels under the
+ * eye, moving with the breath like the face does.
+ */
+export const drawTear = (
+  ctx: CanvasRenderingContext2D,
+  sprite: Sprite,
+  place: CellPlace,
+  fallen: number,
   breath: 0 | 1 = 0,
 ) => {
-  const { width, height } = sprite.meta.cell;
-  const w = width * scale;
-  const h = height * scale;
-  ctx.save();
-  if (mirrored) {
-    ctx.translate(x + w, bottom - h);
-    ctx.scale(-1, 1);
-  } else {
-    ctx.translate(x, bottom - h);
-  }
-  const sx = cell * width;
-  if (breath === 0) {
-    ctx.drawImage(sprite.canvas, sx, 0, width, height, 0, 0, w, h);
-  } else {
-    // The legs stay, the body above the hip comes down a pixel and
-    // covers the seam row
-    const box = sprite.meta.cells[cell]?.box;
-    const hip = box
-      ? Math.round(box.y + box.height * (1 - BREATH.hip))
-      : Math.round(height * 0.6);
-    const legs = height - hip;
-    ctx.drawImage(
-      sprite.canvas,
-      sx,
-      hip,
-      width,
-      legs,
-      0,
-      hip * scale,
-      w,
-      legs * scale,
-    );
-    ctx.drawImage(sprite.canvas, sx, 0, width, hip, 0, scale, w, hip * scale);
-  }
-  ctx.restore();
+  const eye = sprite.meta.features?.eye;
+  if (!eye) return;
+  inCell(ctx, sprite, place, scale => {
+    const x = eye.x * scale;
+    const y = (eye.y + 1 + fallen + breath) * scale;
+    ctx.fillStyle = TEAR.tail;
+    ctx.fillRect(x, y, scale, scale);
+    ctx.fillStyle = TEAR.drop;
+    ctx.fillRect(x, y + scale, scale, scale);
+  });
 };
 
 /** A lit box: a light top row, the colour, a shaded bottom row */

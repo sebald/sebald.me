@@ -3,7 +3,12 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { Side } from '@/lib/lab/pushback/duel';
-import { type SheetId, cellFor } from '@/lib/lab/pushback/sprites';
+import {
+  type SheetId,
+  cellFor,
+  mouthOpen,
+  tearDrop,
+} from '@/lib/lab/pushback/sprites';
 import {
   LAYOUT,
   type Pose,
@@ -12,7 +17,7 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
-import { drawCell } from './draw';
+import { drawCell, drawTear } from './draw';
 import { useSprites } from './sheets';
 import { useStage } from './stage';
 import { useClock } from './use-clock';
@@ -50,9 +55,10 @@ export interface CharacterProps {
 /**
  * One duellist: a canvas the size of a sheet cell (72 by 112 stage
  * pixels), drawn at the stage's device pixels, animating its pose on its
- * own clock: breathing when idle, talking while a line types, the step
- * of a taunt, the flash of a flinch. Everything it needs is the sheet
- * and the pose; the duel just tells it which.
+ * own clock: breathing when idle, the mouth moving while a line types,
+ * the step and chuckle of a taunt, the flash of a flinch, the slump and
+ * tears of a loss. Everything it needs is the sheet and the pose; the
+ * duel just tells it which.
  */
 export const Character = ({
   sheet,
@@ -97,11 +103,19 @@ export const Character = ({
       ctx.fillRect(cx - 11, bottom - 100, 22, 22);
       return;
     }
-    const cell = cellFor(pose, still ? 0 : elapsed, typing);
+    const cell = cellFor(pose);
     const breath = still ? 0 : breathFrame(pose, clock);
+    const place = { x: offset.dx, bottom, mirrored };
     const draw = () =>
-      drawCell(ctx, sprite, cell, offset.dx, bottom, mirrored, 1, breath);
+      drawCell(ctx, sprite, cell, place, {
+        breath,
+        // The hand stays up, only the mouth moves; shut between words
+        // and once the line is typed
+        mouthShut: pose === 'talk' && (still || !mouthOpen(elapsed, typing)),
+      });
     draw();
+    const fallen = pose === 'lose' && !still ? tearDrop(elapsed) : null;
+    if (fallen !== null) drawTear(ctx, sprite, place, fallen, breath);
     if (offset.lighter) {
       // The flinch flash: the cell again, added on top of itself
       ctx.save();

@@ -60,5 +60,27 @@
       },
       "clipped": false
     }
-  ]
+  ],
+  "features": {
+    "head": {
+      "x": 25,
+      "y": 34,
+      "width": 24,
+      "height": 24
+    },
+    "mouth": {
+      "x": 29,
+      "y": 48,
+      "width": 17,
+      "height": 12
+    },
+    "talkMouth": {
+      "x": 24,
+      "y": 48
+    },
+    "eye": {
+      "x": 42,
+      "y": 50
+    }
+  }
 }

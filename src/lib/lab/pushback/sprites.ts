@@ -37,15 +37,36 @@ export const PLAYER_SHEETS: Record<Role, Record<Look, SheetId>> = {
   designer: { a: 'designer-ines', b: 'designer-theo' },
 };
 
-/** What `sheet.mjs` writes next to a sheet: the cells and their boxes */
+export interface Rect {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+/**
+ * What `sheet.mjs` writes next to a sheet: the cells and their boxes;
+ * and what `features.mjs` adds to a model sheet: the parts the game
+ * animates or shows on their own.
+ */
 export interface SheetMeta {
   cell: { width: number; height: number };
   count: number;
   cells: {
     /** Where the figure sits inside its cell */
-    box: { x: number; y: number; width: number; height: number };
+    box: Rect;
     clipped: boolean;
   }[];
+  features?: {
+    /** The head in the idle cell: the portrait */
+    head: Rect;
+    /** The lower face in the idle cell, mouth closed */
+    mouth: Rect | null;
+    /** Where that patch goes in the talk cell */
+    talkMouth: { x: number; y: number } | null;
+    /** The eye in the lose cell, where the tears start */
+    eye: { x: number; y: number };
+  };
 }
 
 /** Model sheet cells, left to right */
@@ -61,18 +82,31 @@ export const POSE_CELL: Record<Pose, number> = {
 /** The cells of the ghost sheet: two hover frames and the point */
 export const GHOST_CELLS = { hover: [0, 1], point: 2 } as const;
 
+/** The cell a pose shows */
+export const cellFor = (pose: Pose): number => POSE_CELL[pose];
+
 /**
- * The cell a pose shows at `elapsed` ms into it. Talk alternates the
- * open mouth with the idle cell every frame while the line types, and
- * rests on the open mouth once it is typed.
+ * The mouth while a line types, one entry per frame: open (1) and closed
+ * (0) in an uneven rhythm, about three openings a second, so the hand
+ * stays up and only the mouth moves. Swapping the whole talk cell for
+ * the idle one every frame waved the hand eight times a second.
  */
-export const cellFor = (pose: Pose, elapsed: number, typing: boolean) => {
-  if (pose === 'talk' && typing) {
-    return Math.floor(elapsed / FRAME_MS) % 2 === 0
-      ? POSE_CELL.talk
-      : POSE_CELL.idle;
-  }
-  return POSE_CELL[pose];
+export const TALK = [1, 1, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0] as const;
+
+/** Is the mouth open at `elapsed` ms into a line: closed once it is typed */
+export const mouthOpen = (elapsed: number, typing: boolean): boolean =>
+  typing && TALK[Math.floor(elapsed / FRAME_MS) % TALK.length] === 1;
+
+/**
+ * Tears on the lose pose: a drop falls from the eye for `fall` frames,
+ * two pixels a frame, then nothing until the period is over.
+ */
+export const TEARS = { period: 10, fall: 5, step: 2 } as const;
+
+/** How far below the eye the drop is at `elapsed` ms, or null between drops */
+export const tearDrop = (elapsed: number): number | null => {
+  const frame = Math.floor(elapsed / FRAME_MS) % TEARS.period;
+  return frame < TEARS.fall ? frame * TEARS.step : null;
 };
 
 /** The ghost's cell: it points from the second whisper step on */

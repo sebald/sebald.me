@@ -286,16 +286,37 @@ export const bob = (elapsed: number, period = 600): number =>
  * second. The cut is at the hip, `BREATH.hip` of the figure's height
  * from its feet; the shifted upper part overdraws the seam row. A whole
  * sprite moved up and down reads as hopping, which is why this is not
- * `bob`.
+ * `bob`. The same cut at other rhythms is the taunt's chuckle (the
+ * shoulders shaking) and the slow sob of the lose pose.
  */
-export const BREATH = { period: 1000, hip: 0.5 } as const;
+export const BREATH = {
+  period: 1000,
+  hip: 0.5,
+  chuckle: 400,
+  sob: 1600,
+} as const;
+
+/** The rhythm of the hip cut for a pose, or none */
+const breathPeriod = (pose: Pose): number | null => {
+  switch (pose) {
+    case 'idle':
+    case 'talk':
+    case 'win':
+      return BREATH.period;
+    case 'taunt':
+      return BREATH.chuckle;
+    case 'lose':
+      return BREATH.sob;
+    case 'flinch':
+      return null;
+  }
+};
 
 /** 0 on the inhale, 1 (the upper body a pixel down) on the exhale */
-export const breathFrame = (pose: Pose, elapsed: number): 0 | 1 =>
-  (pose === 'idle' || pose === 'talk' || pose === 'win') &&
-  bob(elapsed, BREATH.period) !== 0
-    ? 1
-    : 0;
+export const breathFrame = (pose: Pose, elapsed: number): 0 | 1 => {
+  const period = breathPeriod(pose);
+  return period !== null && bob(elapsed, period) !== 0 ? 1 : 0;
+};
 
 // Poses
 // ---------------

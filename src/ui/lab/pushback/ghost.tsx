@@ -78,7 +78,7 @@ export const Ghost = ({
     }
     ctx.globalAlpha = GHOST_ALPHA;
     if (sprite) {
-      drawCell(ctx, sprite, cell, 0, bottom);
+      drawCell(ctx, sprite, cell, { x: 0, bottom });
     } else {
       ctx.fillStyle = '#bfe8ea';
       ctx.fillRect(cx - 10, bottom - 40, 20, 34);
