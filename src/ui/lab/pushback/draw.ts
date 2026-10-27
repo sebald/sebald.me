@@ -8,6 +8,7 @@
 import type { SceneId } from '@/lib/lab/pushback/characters';
 import type { Side } from '@/lib/lab/pushback/duel';
 import {
+  BACKING,
   LAYOUT,
   type Pose,
   STAGE,
@@ -270,6 +271,8 @@ export const drawFrame = (
   model: FrameModel,
   { background = true }: DrawOptions = {},
 ) => {
+  // Native coordinates on a canvas `BACKING` times the stage
+  ctx.setTransform(BACKING, 0, 0, BACKING, 0, 0);
   ctx.imageSmoothingEnabled = false;
   if (background) drawScene(ctx, model.scene);
   else ctx.clearRect(0, 0, STAGE.width, STAGE.height);

@@ -10,6 +10,7 @@ import {
   barWidth,
   barsLabel,
   bob,
+  MIN_SCALE,
   fontSizeFor,
   holdFor,
   poseOffset,
@@ -21,21 +22,21 @@ import {
 } from './stage';
 
 describe('scaleFor', () => {
-  it('picks the largest whole number that fits both sides', () => {
-    assert.equal(scaleFor(1440, 900, 4), 3);
-    assert.equal(scaleFor(1920, 1080, 4), 4);
-    assert.equal(scaleFor(960, 600), 2);
-    assert.equal(scaleFor(960, 500), 1);
-    assert.equal(scaleFor(700, 400), 1);
-  });
-
-  it('stops at 2x by default, whatever the screen', () => {
+  it('is 2x wherever the stage fits at 960 by 540', () => {
+    assert.equal(scaleFor(960, 540), 2);
     assert.equal(scaleFor(1920, 1080), 2);
     assert.equal(scaleFor(2560, 1440), 2);
   });
 
-  it('never goes below one', () => {
-    assert.equal(scaleFor(300, 200), 1);
+  it('shrinks with the narrower side below that', () => {
+    assert.equal(scaleFor(720, 600), 1.5);
+    assert.equal(scaleFor(960, 405), 1.5);
+    assert.equal(scaleFor(360, 800), 0.75);
+    assert.ok(scaleFor(300, 800) < MIN_SCALE);
+  });
+
+  it('takes a larger cap for the workbench', () => {
+    assert.equal(scaleFor(1920, 1080, 4), 4);
   });
 
   it('never goes above the maximum', () => {

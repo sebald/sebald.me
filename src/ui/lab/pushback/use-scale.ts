@@ -1,27 +1,27 @@
 import { useLayoutEffect, useState } from 'react';
 
-import { STAGE, scaleFor } from '@/lib/lab/pushback/stage';
+import { MIN_SCALE, scaleFor } from '@/lib/lab/pushback/stage';
 
 /** The side gutter the stage keeps to the viewport, like the site column */
 export const STAGE_GUTTER = 24;
 
 /**
- * The whole-number scale the stage is shown at: the largest that fits the
- * viewport with the gutter, capped by `scaleFor` so the game looks the
- * same on every screen that is big enough. `fixed` pins it (the
- * workbench). `portrait` is a viewport too narrow for even 1x, where the
- * screens show a turn-your-phone notice instead.
+ * The scale the stage is shown at: 2 wherever it fits with the gutter,
+ * a fraction below that so it shrinks with the window (`scaleFor`).
+ * `fixed` pins it (the workbench). `portrait` is a viewport too narrow
+ * for `MIN_SCALE`, where the screens show a turn-your-phone notice.
  */
 export const useScale = (fixed?: number) => {
   const [scale, setScale] = useState(fixed ?? 1);
   const [portrait, setPortrait] = useState(false);
   useLayoutEffect(() => {
     if (fixed) return;
+    // Width only: a phone in landscape is short, and scrolling the
+    // toolbar away beats a stage shrunk to its height
     const measure = () => {
-      const width = window.innerWidth - STAGE_GUTTER * 2;
-      const height = window.innerHeight - 160;
-      setScale(scaleFor(width, Math.max(height, STAGE.height)));
-      setPortrait(window.innerWidth < STAGE.width + STAGE_GUTTER * 2);
+      const fit = scaleFor(window.innerWidth - STAGE_GUTTER * 2, Infinity);
+      setScale(Math.max(MIN_SCALE, fit));
+      setPortrait(fit < MIN_SCALE);
     };
     measure();
     window.addEventListener('resize', measure);

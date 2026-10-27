@@ -4,7 +4,7 @@ import NextImage from 'next/image';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import { FRAME_MS, STAGE } from '@/lib/lab/pushback/stage';
+import { BACKING, FRAME_MS, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
@@ -121,16 +121,21 @@ export const Frame = ({
           onLoad={() => setLoadedScene(sceneKey)}
           className={cn(
             'absolute inset-0 h-full w-full',
-            scale <= 1 && '[image-rendering:pixelated]',
+            scale === 1 && '[image-rendering:pixelated]',
           )}
         />
       </picture>
+      {/*
+        Drawn at 2x and scaled down by CSS: exact at 2x and 1x, and a
+        fraction between stays sharp where `pixelated` would round the
+        art's pixels to uneven widths
+      */}
       <canvas
         ref={canvasRef}
         aria-hidden
-        width={STAGE.width}
-        height={STAGE.height}
-        className="absolute inset-0 h-full w-full [image-rendering:pixelated]"
+        width={STAGE.width * BACKING}
+        height={STAGE.height * BACKING}
+        className="absolute inset-0 h-full w-full"
       />
       <div className="absolute inset-0">{children}</div>
     </Stage>

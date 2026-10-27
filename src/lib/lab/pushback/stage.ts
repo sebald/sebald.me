@@ -38,19 +38,20 @@ export const LAYOUT = {
 } as const;
 
 /**
- * Largest whole-number scale at which the stage fits a viewport, 1 at
- * least. Capped at 2 (960 by 540) so the game looks the same on every
- * screen that is wide enough, instead of growing on tall monitors.
+ * The scale at which the stage fits a viewport: 2 (960 by 540) wherever
+ * there is room, so the game looks the same on every screen wide enough,
+ * and below that whatever fraction the width (or height) allows, so it
+ * shrinks with the window instead of jumping to 1x. The canvas is drawn
+ * at `BACKING` and only ever scaled down, so a fraction stays sharp.
  */
 export const scaleFor = (width: number, height: number, max = 2): number =>
-  Math.max(
-    1,
-    Math.min(
-      max,
-      Math.floor(width / STAGE.width),
-      Math.floor(height / STAGE.height),
-    ),
-  );
+  Math.min(max, width / STAGE.width, height / STAGE.height);
+
+/** Below this the box cannot hold a menu: the screens ask for landscape */
+export const MIN_SCALE = 0.75;
+
+/** The canvas is drawn at this whole-number scale and scaled down by CSS */
+export const BACKING = 2;
 
 /** The overlay's font size at a scale: 14 px at 2x, never below 12 px */
 export const fontSizeFor = (scale: number): number => Math.max(12, 7 * scale);
