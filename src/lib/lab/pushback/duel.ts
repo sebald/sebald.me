@@ -71,7 +71,7 @@ export interface Outcome {
   picked: PairId | 'fallback' | null;
   /** Counter before the silence bar was half full (momentum) */
   fast: boolean;
-  /** Buy-in segments the winner fills */
+  /** Steps the scale moves toward the winner */
   worth: number;
   /** The boss interrupt: no answer, "Let's take this offline." */
   offline: boolean;
@@ -90,7 +90,11 @@ export interface DuelState {
   boss: boolean;
   phase: Phase;
   initiative: Side;
-  buyIn: Record<Side, number>;
+  /**
+   * The shared scale: 0 in the middle, positive toward the player. The
+   * player wins at `toWin`, the opponent at minus `toLose`.
+   */
+  scale: number;
   momentum: Record<Side, number>;
   /** Pairs the player knows, grows during the duel */
   collected: PairId[];
@@ -149,7 +153,7 @@ export const createDuel = (setup: DuelSetup): DuelState => {
     boss,
     phase: 'intro',
     initiative: 'opponent',
-    buyIn: { player: 0, opponent: boss ? rules.bossBuyIn : 0 },
+    scale: 0,
     momentum: { player: 0, opponent: 0 },
     collected: [...setup.collected],
     spent: [],
@@ -171,9 +175,13 @@ export const createDuel = (setup: DuelSetup): DuelState => {
   };
 };
 
-/** Segments the player needs */
+/** Steps the player must push the scale to win */
 export const toWin = (state: DuelState): number =>
-  state.boss ? state.rules.bossBuyIn : state.rules.buyIn;
+  state.boss ? state.rules.bossReach : state.rules.reach;
+
+/** Steps the opponent must push the scale the other way to win */
+export const toLose = (state: DuelState): number =>
+  state.boss ? state.rules.bossMisses : state.rules.reach;
 
 /** Whether the hint shows: first exchange of the first duel */
 export const showsHint = (state: DuelState): boolean =>
@@ -199,6 +207,13 @@ const opponentThrows = (state: DuelState): DuelState => {
   let micDrop = false;
   let bossQueue = state.bossQueue;
   if (state.boss) {
+    // A long barrage goes round again, never repeating the last phrase
+    if (bossQueue.length === 0) {
+      const last = state.exchange?.phrase;
+      bossQueue = rng.shuffle(
+        BOSS_PAIRS.map(p => p.id).filter(id => id !== last),
+      );
+    }
     [phrase, ...bossQueue] = bossQueue as [BossPairId, ...BossPairId[]];
   } else {
     phrase = aiPick(
@@ -213,8 +228,7 @@ const opponentThrows = (state: DuelState): DuelState => {
     );
     micDrop = aiDropsMic(slot.tier, {
       momentumFull: state.momentum.opponent >= state.rules.momentum,
-      buyIn: state.buyIn.opponent,
-      toWin: state.rules.buyIn,
+      remaining: toLose(state) + state.scale,
       worth: state.rules.micDrop.worth,
     });
   }
@@ -270,11 +284,18 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
   if (!exchange) return state;
   const { winner } = outcome;
   const loser = other(winner);
-  const buyIn = { ...state.buyIn };
-  if (!(state.boss && winner === 'opponent')) {
-    buyIn[winner] = Math.min(buyIn[winner] + outcome.worth, toWin(state));
-  }
-  const momentum = { ...state.momentum, [loser]: 0 };
+  const step = winner === 'player' ? outcome.worth : -outcome.worth;
+  const scale = Math.max(
+    -toLose(state),
+    Math.min(toWin(state), state.scale + step),
+  );
+  const momentum = {
+    ...state.momentum,
+    [loser]:
+      state.rules.momentumLoss === 'all'
+        ? 0
+        : Math.max(0, state.momentum[loser] - state.rules.momentumLoss),
+  };
   const winnerGains =
     winner === exchange.by || outcome.fast || state.setup.slot.silence === null;
   if (winnerGains && !outcome.offline) {
@@ -308,18 +329,20 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     collected = [...collected, exchange.phrase];
   }
 
+  const exchanges = state.exchanges + 1;
+  const overtime =
+    state.rules.maxExchanges !== null && exchanges >= state.rules.maxExchanges;
   let duelWinner: Side | null = null;
-  if (buyIn.player >= toWin(state)) duelWinner = 'player';
-  else if (state.boss && misses >= state.rules.bossMisses)
-    duelWinner = 'opponent';
-  else if (!state.boss && buyIn.opponent >= state.rules.buyIn)
-    duelWinner = 'opponent';
+  if (scale >= toWin(state)) duelWinner = 'player';
+  else if (scale <= -toLose(state)) duelWinner = 'opponent';
+  else if (overtime && scale !== 0)
+    duelWinner = scale > 0 ? 'player' : 'opponent';
 
   return {
     ...state,
     phase: 'resolve',
     initiative: winner,
-    buyIn,
+    scale,
     momentum,
     collected,
     outcome,
@@ -327,7 +350,7 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     stats,
     lastMissPool,
     misses,
-    exchanges: state.exchanges + 1,
+    exchanges,
     winner: duelWinner,
   };
 };
@@ -344,7 +367,8 @@ const playerCounters = (
     winner: right ? 'player' : 'opponent',
     picked,
     fast: right && fast,
-    worth: exchange.micDrop && !right ? state.rules.micDrop.worth : 1,
+    // A mic drop moves the scale two steps, landed or countered
+    worth: exchange.micDrop ? state.rules.micDrop.worth : 1,
     offline: false,
   });
 };
@@ -400,7 +424,7 @@ const playerThrows = (
       winner: answered ? 'opponent' : 'player',
       picked,
       fast: true,
-      worth: exchange.micDrop && !answered ? state.rules.micDrop.worth : 1,
+      worth: exchange.micDrop ? state.rules.micDrop.worth : 1,
       offline: false,
     }),
     rng: rng.state,

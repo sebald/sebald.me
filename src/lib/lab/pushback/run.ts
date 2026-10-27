@@ -5,6 +5,7 @@
 import type { Attempt } from './ai';
 import {
   BOSS_SLOT_INDEX,
+  type Rules,
   type Run,
   type RunSlot,
   characterById,
@@ -75,7 +76,7 @@ export const attemptFor = (state: RunState, index: number): Attempt => {
 export const duelSetupFor = (
   state: RunState,
   index: number,
-  options: { seed: number; silence: boolean; buddy?: boolean },
+  options: { seed: number; silence: boolean; buddy?: boolean; rules?: Rules },
 ): DuelSetup => {
   const slot: RunSlot | undefined = state.run.slots[index];
   if (!slot) throw new Error(`No slot ${index}`);
@@ -88,6 +89,7 @@ export const duelSetupFor = (
     seed: options.seed,
     silence: options.silence,
     buddy: options.buddy === true,
+    rules: options.rules,
     tutorial: index === 0 && !state.beaten[0] && !state.lost.includes(0),
   };
 };

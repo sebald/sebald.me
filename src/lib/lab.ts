@@ -16,7 +16,7 @@ export const LAB_ENTRIES: readonly LabEntry[] = [
     slug: 'pushback',
     title: 'Pushback',
     blurb:
-      'A duel of phrases and counters between the roles of a product team. Counter the phrase, fill your buy-in, drop the mic.',
+      'A duel of phrases and counters between the roles of a product team. Counter the phrase, push the scale, drop the mic.',
   },
 ];
 

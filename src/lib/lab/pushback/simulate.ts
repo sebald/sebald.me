@@ -8,7 +8,14 @@
  * against obvious decoys (any pool) and a blind guess otherwise. On
  * attack it prefers a foreign phrase and drops the mic when it can.
  */
-import { BOSS_SLOT_INDEX, SLOTS, type Slot, repertoire } from './characters';
+import {
+  BOSS_SLOT_INDEX,
+  RULES,
+  type Rules,
+  SLOTS,
+  type Slot,
+  repertoire,
+} from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { ROLES, type Role } from './lines';
 import { Rng, seedRng } from './random';
@@ -29,6 +36,15 @@ export const DEFAULT_PLAYER: PlayerModel = {
   guess: 0.5,
 };
 
+/** Rule overrides for a run of the script: `RULES='{"reach":3}'` */
+const rulesFromEnv = (): Rules => ({
+  ...RULES,
+  ...(process.env.RULES
+    ? (JSON.parse(process.env.RULES) as Partial<Rules>)
+    : {}),
+});
+const SIM_RULES = rulesFromEnv();
+
 /**
  * A guess on an uncollected pair. Decoys from another pool are visibly
  * from another conversation, so the player only weighs the plausible
@@ -46,6 +62,12 @@ const guessChance = (slot: Slot, menu: number, model: PlayerModel) => {
   }
 };
 
+/** Mic drops seen in a duel, by who dropped them */
+export interface DuelTally {
+  player: number;
+  opponent: number;
+}
+
 /** One duel, played by the model; returns the finished state */
 export const playDuel = (
   run: RunState,
@@ -53,13 +75,17 @@ export const playDuel = (
   seed: number,
   model: PlayerModel,
   rng: Rng,
+  tally: DuelTally = { player: 0, opponent: 0 },
 ): DuelState => {
-  let s = createDuel(duelSetupFor(run, index, { seed, silence: true }));
+  let s = createDuel(
+    duelSetupFor(run, index, { seed, silence: true, rules: SIM_RULES }),
+  );
   s = reduce(s, { type: 'begin' });
   const known = new Set(repertoire(s.setup.character));
   for (let guard = 0; guard < 200 && s.phase !== 'end'; guard++) {
     if (s.phase === 'defend') {
       const { answer } = s.exchange!;
+      if (s.exchange!.micDrop && !s.boss) tally.opponent++;
       const known =
         s.collected.includes(answer) && !s.boss
           ? true
@@ -81,6 +107,7 @@ export const playDuel = (
     } else if (s.phase === 'attack') {
       const foreign = s.hand.filter(id => !known.has(id));
       const phrase = rng.pick(foreign.length > 0 ? foreign : s.hand)!;
+      if (s.micDropAvailable && !s.boss) tally.player++;
       s = reduce(s, { type: 'throw', phrase, micDrop: s.micDropAvailable });
     } else {
       s = reduce(s, { type: 'continue' });
@@ -95,6 +122,11 @@ export interface SlotReport {
   retryWins: number;
   retryPlays: number;
   attempts: number;
+  /** Over every duel played in the slot */
+  exchanges: number;
+  longest: number;
+  micDropsPlayer: number;
+  micDropsOpponent: number;
 }
 
 export interface Report {
@@ -121,6 +153,10 @@ export const simulate = (
     retryWins: 0,
     retryPlays: 0,
     attempts: 0,
+    exchanges: 0,
+    longest: 0,
+    micDropsPlayer: 0,
+    micDropsOpponent: 0,
   }));
   let glossary = 0;
   let bossWinsFirst = 0;
@@ -140,13 +176,19 @@ export const simulate = (
       for (let attempt = 0; attempt < maxAttempts; attempt++) {
         duels++;
         report.attempts++;
+        const tally = { player: 0, opponent: 0 };
         const duel = playDuel(
           run,
           index,
           seed * 100 + index * 10 + attempt,
           model,
           rng,
+          tally,
         );
+        report.exchanges += duel.exchanges;
+        report.longest = Math.max(report.longest, duel.exchanges);
+        report.micDropsPlayer += tally.player;
+        report.micDropsOpponent += tally.opponent;
         const won = duel.winner === 'player';
         if (attempt === 0) {
           report.firstPlays++;
@@ -181,12 +223,12 @@ const pct = (n: number, d: number) =>
 export const formatReport = (report: Report): string => {
   const lines = [
     `${report.role.padEnd(8)} ${report.runs} runs · ${report.duelsPerRun.toFixed(1)} duels per run · ${pct(report.finished, report.runs)} finished · glossary at boss ${report.glossaryAtBoss.toFixed(1)}/24`,
-    '  slot  tier   first   retry  attempts',
+    '  slot  tier   first   retry  attempts  exchanges  longest  mic drops (you / them, per duel)',
   ];
   report.slots.forEach((slot, index) => {
     const tier = String(SLOTS[index]!.tier).padStart(4);
     lines.push(
-      `  ${String(index + 1).padStart(4)}  ${tier}   ${pct(slot.firstWins, slot.firstPlays)}   ${pct(slot.retryWins, slot.retryPlays)}  ${(slot.attempts / Math.max(1, slot.firstPlays)).toFixed(2)}`,
+      `  ${String(index + 1).padStart(4)}  ${tier}   ${pct(slot.firstWins, slot.firstPlays)}   ${pct(slot.retryWins, slot.retryPlays)}  ${(slot.attempts / Math.max(1, slot.firstPlays)).toFixed(2).padStart(8)}  ${(slot.exchanges / Math.max(1, slot.attempts)).toFixed(1).padStart(9)}  ${String(slot.longest).padStart(7)}  ${(slot.micDropsPlayer / Math.max(1, slot.attempts)).toFixed(2)} / ${(slot.micDropsOpponent / Math.max(1, slot.attempts)).toFixed(2)}`,
     );
   });
   return lines.join('\n');
@@ -201,7 +243,7 @@ const main = () => {
     guess: Number(guessArg) || DEFAULT_PLAYER.guess,
   };
   console.log(
-    `player: recall ${model.recall}, speed ${model.speed}, guess ${model.guess}\n`,
+    `player: recall ${model.recall}, speed ${model.speed}, guess ${model.guess} · rules ${JSON.stringify(SIM_RULES)}\n`,
   );
   for (const role of ROLES) {
     console.log(formatReport(simulate(role, runs, model)));

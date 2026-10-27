@@ -15,6 +15,7 @@ import {
   isFlawless,
   reduce,
   showsHint,
+  toLose,
   toWin,
 } from './duel';
 import { type PairId, poolOf } from './lines';
@@ -95,17 +96,17 @@ describe('a regular duel', () => {
     assert.ok(s.menu.includes(s.exchange!.answer));
   });
 
-  it('a right counter fills buy-in, gains momentum and takes the initiative', () => {
+  it('a right counter pushes the scale, gains momentum and takes the initiative', () => {
     const s = right(begin());
     assert.equal(s.phase, 'resolve');
-    assert.deepEqual(s.buyIn, { player: 1, opponent: 0 });
+    assert.equal(s.scale, 1);
     assert.deepEqual(s.momentum, { player: 1, opponent: 0 });
     assert.equal(next(s).phase, 'attack');
   });
 
-  it('a miss fills the opponent, resets momentum and shows the counter', () => {
+  it('a miss pushes the scale back, resets momentum and shows the counter', () => {
     const s = wrong(begin());
-    assert.deepEqual(s.buyIn, { player: 0, opponent: 1 });
+    assert.equal(s.scale, -1);
     assert.equal(s.momentum.player, 0);
     assert.equal(s.outcome?.winner, 'opponent');
     assert.equal(s.lastMissPool, 'dev');
@@ -131,7 +132,7 @@ describe('a regular duel', () => {
   it('a landed phrase scores and keeps the initiative', () => {
     const s = throwFirst(next(right(begin())));
     assert.equal(s.outcome?.winner, 'player');
-    assert.equal(s.buyIn.player, 2);
+    assert.equal(s.scale, 2);
     assert.equal(s.momentum.player, 2);
     assert.ok(s.spent.length === 1);
     assert.equal(next(s).phase, 'attack');
@@ -146,20 +147,40 @@ describe('a regular duel', () => {
     assert.equal(next(s).phase, 'defend');
   });
 
-  it('ends at full buy-in with the winner set', () => {
+  it("ends when the scale reaches the player's side", () => {
     const s = play(begin(), { defend: right });
     assert.equal(s.phase, 'end');
     assert.equal(s.winner, 'player');
-    assert.equal(s.buyIn.player, toWin(s));
+    assert.equal(s.scale, toWin(s));
     assert.ok(isFlawless(s));
     assert.equal(s.stats.exchangesWon, 3);
   });
 
-  it('loses at full opponent buy-in', () => {
+  it("loses when the scale reaches the opponent's side", () => {
     const s = play(begin(), { defend: wrong });
     assert.equal(s.winner, 'opponent');
-    assert.equal(s.buyIn.opponent, RULES.buyIn);
+    assert.equal(s.scale, -toLose(s));
     assert.ok(!isFlawless(s));
+  });
+
+  it('the meeting ends: from the limit on, whoever leads wins', () => {
+    // Counters land, phrases are countered: the scale swings 1, 0, 1, 0…
+    const strong: Slot = { ...weak, accuracy: 1 };
+    const s = play(begin({ slot: strong }), { defend: right });
+    assert.equal(s.phase, 'end');
+    assert.equal(s.exchanges, RULES.maxExchanges! + 1);
+    assert.equal(s.winner, 'player');
+    assert.equal(s.scale, 1);
+  });
+
+  it('a tie at the limit plays on', () => {
+    const strong: Slot = { ...weak, accuracy: 1 };
+    let s = begin({ slot: strong });
+    for (let i = 0; i < RULES.maxExchanges!; i++) {
+      s = next(s.phase === 'defend' ? right(s) : throwFirst(s));
+    }
+    assert.equal(s.scale, 0);
+    assert.notEqual(s.phase, 'end');
   });
 
   it('ignores actions out of phase', () => {
@@ -184,9 +205,9 @@ describe('a regular duel', () => {
 
 describe('the mic drop', () => {
   const full = (): DuelState => {
-    // Three fast counters in a row would end the duel, so land phrases instead
-    let s = next(right(begin({ rules: { ...RULES, buyIn: 6 } })));
-    s = next(throwFirst(s));
+    // A counter and a landed phrase fill momentum; a wide reach so the
+    // duel does not end on the drop
+    let s = next(right(begin({ rules: { ...RULES, reach: 6 } })));
     s = next(throwFirst(s));
     return s;
   };
@@ -198,8 +219,21 @@ describe('the mic drop', () => {
     const dropped = throwFirst(s, true);
     assert.ok(dropped.exchange?.micDrop);
     assert.equal(dropped.stats.micDrops, 1);
-    assert.equal(dropped.buyIn.player, 3 + RULES.micDrop.worth);
+    assert.equal(dropped.scale, 2 + RULES.micDrop.worth);
     assert.equal(dropped.momentum.player, 1);
+  });
+
+  it('countered, it pushes the scale back by the same two', () => {
+    const strong: Slot = { ...weak, accuracy: 1 };
+    let s = next(right(begin({ rules: { ...RULES, reach: 6 } })));
+    s = next(throwFirst(s)); // lands against the weak slot: momentum full
+    assert.equal(s.momentum.player, RULES.momentum);
+    // The opponent answers everything from here on
+    s = { ...s, setup: { ...s.setup, slot: strong } };
+    const dropped = throwFirst(s, true);
+    assert.ok(dropped.exchange?.micDrop);
+    assert.equal(dropped.outcome?.winner, 'opponent');
+    assert.equal(dropped.scale, 2 - RULES.micDrop.worth);
   });
 
   it('is not available before', () => {
@@ -210,20 +244,19 @@ describe('the mic drop', () => {
     assert.equal(thrown.stats.micDrops, 0);
   });
 
-  it('by the opponent grows the menu and is worth two on a miss', () => {
-    // Tier 1 drops as soon as full: let the opponent win three exchanges
+  it('by the opponent grows the menu and moves the scale two either way', () => {
+    // Tier 1 drops as soon as full: let the opponent win two exchanges
     const strong: Slot = { ...weak, accuracy: 1 };
-    let s = next(right(begin({ slot: strong, rules: { ...RULES, buyIn: 9 } })));
+    let s = next(right(begin({ slot: strong, rules: { ...RULES, reach: 9 } })));
     s = next(throwFirst(s)); // countered: opponent momentum 1
-    s = next(wrong(s)); // landed: 2
-    s = next(wrong(s)); // landed: 3, the next throw drops the mic
+    s = next(wrong(s)); // landed: 2, the next throw drops the mic
     assert.equal(s.phase, 'defend');
     assert.ok(s.exchange?.micDrop);
     assert.equal(s.menu.length, RULES.micDrop.menu);
     assert.equal(s.momentum.opponent, 0);
-    const before = s.buyIn.opponent;
-    assert.equal(wrong(s).buyIn.opponent, before + RULES.micDrop.worth);
-    assert.equal(right(s).buyIn.player, 2);
+    const before = s.scale;
+    assert.equal(wrong(s).scale, before - RULES.micDrop.worth);
+    assert.equal(right(s).scale, before + RULES.micDrop.worth);
   });
 });
 
@@ -248,18 +281,17 @@ describe('the silence bar', () => {
     const slow = right(reduce(begin(timedSetup), { type: 'tick', ms: 5000 }));
     assert.equal(fast.momentum.player, 1);
     assert.equal(slow.momentum.player, 0);
-    assert.equal(slow.buyIn.player, 1);
+    assert.equal(slow.scale, 1);
   });
 
   it('runs at half time on a mic drop', () => {
     const strong: Slot = { ...timed, accuracy: 1 };
     let s = next(
       right(
-        begin({ slot: strong, silence: true, rules: { ...RULES, buyIn: 9 } }),
+        begin({ slot: strong, silence: true, rules: { ...RULES, reach: 9 } }),
       ),
     );
     s = next(throwFirst(s));
-    s = next(wrong(s));
     s = next(wrong(s));
     assert.ok(s.exchange?.micDrop);
     assert.equal(s.silence?.limit, 4000);
@@ -281,32 +313,27 @@ describe('the boss barrage', () => {
       ...overrides,
     });
 
-  it('starts with the boss bar full and the player needing four', () => {
+  it('the player needs four steps, the Stakeholder three', () => {
     const s = boss();
-    assert.equal(s.buyIn.opponent, RULES.bossBuyIn);
-    assert.equal(toWin(s), RULES.bossBuyIn);
+    assert.equal(toWin(s), RULES.bossReach);
+    assert.equal(toLose(s), RULES.bossMisses);
     assert.equal(s.phase, 'defend');
     assert.equal(s.menu.length, 6);
   });
 
-  it('ends within six phrases under every outcome', () => {
-    for (let pattern = 0; pattern < 64; pattern++) {
+  it('ends within the limit under every outcome, the barrage going round', () => {
+    for (let pattern = 0; pattern < 512; pattern++) {
       let phrase = 0;
       const s = play(boss(), {
         defend: state => ((pattern >> phrase++) & 1 ? right : wrong)(state),
         attack: state => throwFirst(state),
       });
-      const misses =
-        s.stats.missesByPool.pm +
-        s.stats.missesByPool.dev +
-        s.stats.missesByPool.designer;
       assert.equal(s.phase, 'end', `pattern ${pattern}`);
-      assert.ok(phrase <= 6, `pattern ${pattern} took ${phrase} phrases`);
-      assert.equal(
-        s.winner,
-        misses >= RULES.bossMisses ? 'opponent' : 'player',
+      assert.ok(
+        s.exchanges <= RULES.maxExchanges! + 1,
+        `pattern ${pattern} took ${s.exchanges} exchanges`,
       );
-      assert.ok(s.buyIn.opponent === RULES.bossBuyIn);
+      assert.equal(s.winner, s.scale > 0 ? 'player' : 'opponent');
     }
   });
 
@@ -317,8 +344,7 @@ describe('the boss barrage', () => {
   });
 
   it('grants the interrupt at full momentum only, worth two and offline', () => {
-    let s = boss({ rules: { ...RULES, bossBuyIn: 9 } });
-    s = next(right(s));
+    let s = boss({ rules: { ...RULES, bossReach: 9 } });
     s = next(right(s));
     assert.equal(s.phase, 'defend');
     s = next(right(s));
@@ -326,15 +352,15 @@ describe('the boss barrage', () => {
     assert.equal(s.momentum.player, RULES.momentum);
     const dropped = throwFirst(s);
     assert.ok(dropped.outcome?.offline);
-    assert.equal(dropped.buyIn.player, 3 + RULES.micDrop.worth);
+    assert.equal(dropped.scale, 2 + RULES.micDrop.worth);
     assert.equal(dropped.momentum.player, 0);
     assert.equal(next(dropped).phase, 'defend');
   });
 
-  it('three fast counters and the interrupt win flawless in four exchanges', () => {
+  it('two fast counters and the interrupt win flawless in three exchanges', () => {
     const s = play(boss(), { defend: right });
     assert.equal(s.winner, 'player');
-    assert.equal(s.exchanges, 4);
+    assert.equal(s.exchanges, 3);
     assert.ok(isFlawless(s));
     assert.equal(s.stats.micDrops, 1);
   });

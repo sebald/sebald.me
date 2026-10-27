@@ -3,7 +3,7 @@
  * a duel state into what the screen shows. Nothing here touches the DOM
  * or a canvas, so it all runs under the Node test runner.
  */
-import { type DuelState, type Side, toWin } from './duel';
+import { type DuelState, type Side, toLose, toWin } from './duel';
 import {
   BOSS_LOSE_BARKS,
   BOSS_WIN_BARKS,
@@ -115,7 +115,30 @@ export const barWidth = (
 // ---------------
 
 /** Characters per second a line types out at */
-export const TYPING_SPEED = 30;
+export const TYPING_SPEED = 25;
+
+/**
+ * Pacing, in ms. Engines default a typewriter to 20 to 50 characters a
+ * second; people read 200 to 250 words a minute, about 20 characters a
+ * second, and the rule of thumb for text that goes away by itself is to
+ * leave it long enough to be read twice. So a line types at 25 and then
+ * holds for a second reading at 20 before the script moves on, and the
+ * poses of a resolved exchange hold long enough to be seen.
+ */
+export const PACE = {
+  /** After a line has typed: a base plus a second reading */
+  holdBase: 600,
+  holdPerChar: 50,
+  holdMax: 3200,
+  /** The phrase before a menu: the menu shows it again, so a short hold */
+  holdBeforeMenu: 700,
+  /** The taunt and flinch after an exchange */
+  resolveBeat: 1500,
+  /** The right counter shown after a miss: the learning moment */
+  reveal: 2400,
+  /** Before the end barks */
+  endBeat: 800,
+} as const;
 
 /** Milliseconds between frames: 8 fps, like the scene loops */
 export const FRAME_MS = 125;
@@ -132,9 +155,10 @@ export const typedChars = (
 export const typingDuration = (text: string, speed = TYPING_SPEED): number =>
   Math.ceil((text.length / speed) * 1000);
 
-/** How long a typed line stays before the next step: readable, not slow */
-export const holdFor = (text: string): number =>
-  Math.min(1800, 500 + text.length * 12);
+/** How long a typed line stays before the next step: read once more */
+export const holdFor = (text: string, hold?: number): number =>
+  hold ??
+  Math.min(PACE.holdMax, PACE.holdBase + text.length * PACE.holdPerChar);
 
 /** 1 px bob on a period: down on the second half */
 export const bob = (elapsed: number, period = 600): number =>
@@ -185,7 +209,7 @@ export const poseOffset = (
 
 /** What the dialogue box does at one point of the duel */
 export type Step =
-  | { kind: 'line'; speaker: Side; text: string }
+  | { kind: 'line'; speaker: Side; text: string; hold?: number }
   | { kind: 'reveal'; text: string; ms: number }
   | { kind: 'beat'; ms: number }
   | { kind: 'menu' }
@@ -227,6 +251,7 @@ export const scriptFor = (state: DuelState): Step[] => {
               kind: 'line',
               speaker: 'opponent',
               text: phraseText(exchange.phrase),
+              hold: PACE.holdBeforeMenu,
             },
             { kind: 'menu' },
           ]
@@ -234,7 +259,7 @@ export const scriptFor = (state: DuelState): Step[] => {
     case 'attack':
       return [{ kind: 'menu' }];
     case 'resolve': {
-      if (!exchange || !outcome) return [{ kind: 'beat', ms: 400 }];
+      if (!exchange || !outcome) return [{ kind: 'beat', ms: PACE.endBeat }];
       const steps: Step[] = [];
       if (exchange.by === 'player') {
         steps.push({
@@ -259,15 +284,15 @@ export const scriptFor = (state: DuelState): Step[] => {
         steps.push({
           kind: 'reveal',
           text: counterText(exchange.answer),
-          ms: 1400,
+          ms: PACE.reveal,
         });
       }
-      steps.push({ kind: 'beat', ms: 900 });
+      steps.push({ kind: 'beat', ms: PACE.resolveBeat });
       return steps;
     }
     case 'end': {
       const won = state.winner === 'player';
-      const steps: Step[] = [{ kind: 'beat', ms: 500 }];
+      const steps: Step[] = [{ kind: 'beat', ms: PACE.endBeat }];
       if (state.boss) {
         steps.push({
           kind: 'line',
@@ -325,17 +350,18 @@ export const posesFor = (
   return idle;
 };
 
-/** The bars in words, for the live region */
+/** The scale and a side's momentum in words, for the live region */
 export const barsLabel = (state: DuelState, side: Side): string => {
-  const total =
-    side === 'player'
-      ? toWin(state)
-      : state.boss
-        ? state.rules.bossBuyIn
-        : state.rules.buyIn;
+  const { scale } = state;
+  const lead =
+    scale === 0
+      ? 'Even'
+      : scale > 0
+        ? `You lead, ${scale} of ${toWin(state)}`
+        : `They lead, ${-scale} of ${toLose(state)}`;
   const momentum =
     state.momentum[side] >= state.rules.momentum
       ? 'momentum full'
       : `momentum ${state.momentum[side]} of ${state.rules.momentum}`;
-  return `Buy-in ${state.buyIn[side]} of ${total}, ${momentum}`;
+  return `${lead}, ${momentum}`;
 };

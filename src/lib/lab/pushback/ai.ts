@@ -109,13 +109,12 @@ export const aiDropsMic = (
   tier: Tier,
   options: {
     momentumFull: boolean;
-    buyIn: number;
-    toWin: number;
+    /** Steps the opponent still needs to win */
+    remaining: number;
     worth: number;
   },
 ): boolean =>
-  options.momentumFull &&
-  (tier !== 3 || options.buyIn + options.worth >= options.toWin);
+  options.momentumFull && (tier !== 3 || options.worth >= options.remaining);
 
 /** The player's hand: up to `size` collected phrases not yet spent */
 export const drawHand = (

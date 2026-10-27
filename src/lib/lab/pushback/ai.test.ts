@@ -118,7 +118,7 @@ describe('aiPick', () => {
 });
 
 describe('aiDropsMic', () => {
-  const base = { momentumFull: true, buyIn: 0, toWin: 3, worth: 2 };
+  const base = { momentumFull: true, remaining: 3, worth: 2 };
 
   it('tiers 1 and 2 drop as soon as the bar is full', () => {
     assert.ok(aiDropsMic(1, base));
@@ -128,7 +128,7 @@ describe('aiDropsMic', () => {
 
   it('tier 3 holds it until the hit would end the duel', () => {
     assert.ok(!aiDropsMic(3, base));
-    assert.ok(aiDropsMic(3, { ...base, buyIn: 1 }));
+    assert.ok(aiDropsMic(3, { ...base, remaining: 2 }));
   });
 });
 

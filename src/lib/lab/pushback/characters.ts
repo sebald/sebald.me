@@ -227,16 +227,22 @@ export const BOSS_SLOT_INDEX = SLOTS.length - 1;
 // ---------------
 
 export interface Rules {
-  /** Buy-in segments to win a regular duel */
-  buyIn: number;
-  /** Buy-in segments the player needs against the boss */
-  bossBuyIn: number;
-  /** Misses that lose the boss duel */
+  /**
+   * The shared scale: it starts in the middle and every won exchange
+   * pushes it one step toward the winner. A duellist wins by pushing it
+   * this many steps to their side.
+   */
+  reach: number;
+  /** Steps the player must push the Stakeholder */
+  bossReach: number;
+  /** Steps the Stakeholder needs: misses push, counters push back */
   bossMisses: number;
   /** Momentum steps until the mic drop is available */
   momentum: number;
+  /** Momentum lost on a lost exchange: all of it, or this many steps */
+  momentumLoss: 'all' | number;
   micDrop: {
-    /** Buy-in segments a landed mic drop is worth */
+    /** Steps a mic drop moves the scale, landed or countered */
     worth: number;
     /** Counter options the defender gets */
     menu: number;
@@ -245,15 +251,22 @@ export interface Rules {
   };
   /** Phrases in the player's hand */
   hand: number;
+  /**
+   * The meeting ends: from this many exchanges on, the duel ends as soon
+   * as the scale is off centre, to whoever leads. Null for no limit.
+   */
+  maxExchanges: number | null;
 }
 
 export const RULES: Rules = {
-  buyIn: 3,
-  bossBuyIn: 4,
+  reach: 3,
+  bossReach: 4,
   bossMisses: 3,
-  momentum: 3,
+  momentum: 2,
+  momentumLoss: 'all',
   micDrop: { worth: 2, menu: 8, silence: 0.5 },
   hand: 4,
+  maxExchanges: 8,
 };
 
 // Runs

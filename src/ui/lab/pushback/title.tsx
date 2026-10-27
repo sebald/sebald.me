@@ -22,8 +22,8 @@ export const TitleScreen = ({
       <div className="grid gap-3">
         <Stage.Title>Pushback</Stage.Title>
         <Stage.Muted className="text-balance">
-          Counter the phrase. Fill your buy-in. Full momentum lets you drop the
-          mic.
+          Counter the phrase. Push the scale to your side. Full momentum lets
+          you drop the mic.
         </Stage.Muted>
       </div>
       <Menu
