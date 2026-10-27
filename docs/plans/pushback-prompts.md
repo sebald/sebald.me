@@ -512,6 +512,66 @@ style, same colours, same lighting.
 
 Reroll on: desks still past the outer eighth, a pixel size that still snaps coarser than the meeting room.
 
+#### Open-plan floor, third roll: new chat
+
+The second roll (kept as `originals/scene-floor-v2.jpeg`) came back at the same coarse pixel size with the desks still at 40 percent of the width: Gemini anchors to its own previous image inside a chat. So the third roll is a fresh chat, with `scene-meeting.jpg` attached as the one reference (it carries the right pixel size and the house style) and the camera pulled back, which shrinks the furniture without arguing about percentages.
+
+Attach: `scene-meeting.jpg` only.
+
+```text
+Create a new pixel-art scene in exactly the same visual style and at
+exactly the same pixel size as the attached image: the same chunky
+low-resolution look, the same size of pixel, the same simple shapes,
+shading and muted colours. Do not copy its content or its layout.
+
+Style: a 16-bit pixel-art background from a 1990s point-and-click
+adventure game, as it looked on screen. Not modern high-resolution pixel
+art. The whole image is about 480 pixels wide, the same as the attached
+image, so every pixel is clearly visible. Big simple shapes; detail
+suggested with a few pixels, not drawn out. Three or four shades per
+material, dark outlines only where needed, a limited palette of about
+32 colours, ordered dithering in shadows. No people.
+
+Scene: a wide, mostly empty open-plan software office floor, late
+afternoon, seen straight on from far back in the aisle so that the room
+looks spacious. The back wall is a row of tall windows with the blinds
+half down and a blue-grey sky behind. On the back wall in the centre, a
+small shelf with a tower lamp with a red and a green bulb, the kind that
+shows whether the build passed, and a rubber duck next to it, and above
+the shelf a small whiteboard with only boxes and arrows on it. The
+desks are far away at the sides: one small desk island at the far left
+edge and one at the far right edge, each seen from the side, each
+taking up only a narrow strip at the edge of the frame, with a monitor
+seen from behind as a plain dark rectangle and a chair pushed in. A
+potted plant that has given up on the right desk, a closed pizza box on
+the left one. Between the two desks, the whole middle of the floor is
+wide, empty, plain grey-brown carpet with nothing on it.
+
+Composition: 16:9 frame. The top 15 percent is plain ceiling with a
+strip of long fluorescent lights, the bottom 17 percent is plain carpet
+with nothing on it. The left-centre and the right-centre of the frame,
+from a fifth of the height down to the floor, show only plain carpet
+and the plain back wall with its windows, because two figures will
+stand there later. The two desk islands stay inside the outer eighth
+of the frame on each side as dark framing shapes and reach no further
+in. The shelf and the whiteboard sit in the middle between the two
+empty areas. The outer edge columns of the image are plain and simple.
+
+Light and colour: cool blue-grey daylight from the windows behind, with
+warm orange light spilling from the two monitors onto the two desks.
+Deep blue shadows under the desks.
+
+Small details that will be animated later, keep them small and set
+against plain dark areas: the red and green bulbs of the tower lamp
+against the plain back wall, the glow of the left monitor on its desk,
+the two leaves of the dying plant against the dark window blind.
+
+No text, letters, numbers, signs with writing, UI, window chrome,
+borders, frames or signatures.
+```
+
+Reroll on: desks past the outer eighth, a pixel size that snaps coarser than the meeting room (check with the snap script: it must say a 6 px grid and about 458 wide).
+
 ### Meeting room, for the PM duels (`scene-meeting.jpg`)
 
 Attach: `HEADER`.
