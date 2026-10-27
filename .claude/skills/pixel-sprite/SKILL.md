@@ -57,8 +57,13 @@ What it does, in order:
 2. The flat background is keyed by flooding from the border within
    `--tolerance` (10) of the border colour, so dark hair and outlines
    inside a figure are safe. The soft shadow under the feet is then taken
-   by growing into near-background pixels (`--soft`, 40) in the lower part
-   of the image only (`--soft-from`, 0.5 of the height).
+   by growing into near-background pixels (`--soft`, 12) in the lowest
+   tenth of the image only (`--soft-from`, 0.9 of the height). The first
+   defaults, 40 from half the height, ate dark trousers and suits on
+   every sheet (hollow legs in the lose pose); the gentle key keeps them
+   and still takes the shadow under the feet. Two figures that touch
+   merge into one group: `--split <column>` cuts a native column to
+   background before the groups are found (Bo, 213).
 3. Figures are the `--cells` largest connected groups, left to right;
    smaller groups (a flying sticky note, the steam over a cup) join the
    nearest figure, dust under `--specks` (6) pixels is dropped. A hand

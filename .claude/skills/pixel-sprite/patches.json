@@ -4,9 +4,49 @@
       "why": "The energy drink came back with a readable claw mark; two plain bands instead",
       "cell": 2,
       "fills": [
-        { "x": 18, "y": 19, "w": 12, "h": 14, "colour": "262327" },
-        { "x": 18, "y": 21, "w": 11, "h": 2, "colour": "a0d558" },
-        { "x": 18, "y": 27, "w": 11, "h": 2, "colour": "a0d558" }
+        {
+          "x": 18,
+          "y": 19,
+          "w": 12,
+          "h": 14,
+          "colour": "262327"
+        },
+        {
+          "x": 18,
+          "y": 21,
+          "w": 11,
+          "h": 2,
+          "colour": "a0d558"
+        },
+        {
+          "x": 18,
+          "y": 27,
+          "w": 11,
+          "h": 2,
+          "colour": "a0d558"
+        }
+      ]
+    }
+  ],
+  "dev-bo": [
+    {
+      "why": "A stray blue stroke hangs over the marker hand in the talk cell; cleared",
+      "cell": 1,
+      "fills": [
+        {
+          "x": 43,
+          "y": 20,
+          "w": 17,
+          "h": 1,
+          "colour": "none"
+        },
+        {
+          "x": 43,
+          "y": 21,
+          "w": 1,
+          "h": 11,
+          "colour": "none"
+        }
       ]
     }
   ]

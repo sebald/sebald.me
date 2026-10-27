@@ -3,6 +3,7 @@
 //   node .claude/skills/pixel-sprite/scripts/sheet.mjs <render> <id>
 //     [--cells N] [--cell 72x112] [--anchor bottom|centre] [--grid N]
 //     [--tolerance N] [--soft N] [--soft-from F] [--colours N] [--scale F]
+//     [--split X[,X]]
 //     [--specks N]
 //     [--contact DIR] [--out DIR]
 //
@@ -46,11 +47,14 @@ const { positionals, values } = parseArgs({
     anchor: { type: 'string', default: 'bottom' },
     grid: { type: 'string' },
     tolerance: { type: 'string', default: '10' },
-    soft: { type: 'string', default: '40' },
-    'soft-from': { type: 'string', default: '0.5' },
+    soft: { type: 'string', default: '12' },
+    'soft-from': { type: 'string', default: '0.9' },
     colours: { type: 'string', default: '32' },
     scale: { type: 'string', default: '1' },
     specks: { type: 'string', default: '6' },
+    // Native columns cut to background before the figures are found: for
+    // two figures Gemini drew touching, which would otherwise merge
+    split: { type: 'string' },
     contact: {
       type: 'string',
       default: join(ROOT, 'src/assets/lab/pushback/sources/contact'),
@@ -104,6 +108,9 @@ const mask = keyBackground(data, w, h, background, {
   soft: Number(values.soft),
   softFrom: Number(values['soft-from']),
 });
+for (const column of values.split ? values.split.split(',').map(Number) : []) {
+  for (let y = 0; y < h; y++) mask[y * w + column] = 1;
+}
 const { labels, figures } = findFigures(mask, w, h, {
   count: values.cells ? Number(values.cells) : undefined,
   specks: Number(values.specks),
@@ -143,19 +150,25 @@ const sheet = cutCells(data, labels, w, figures, cell, {
 // Patches: rectangles painted over a cell after the cut (`patches.json`
 // next to the skill, by sheet id), for a brand mark or a stray pixel that
 // a reroll is not worth. Only opaque pixels are painted, so a fill never
-// grows a figure.
+// grows a figure; the colour `none` clears them instead, for a stray
+// stroke next to a figure.
 const patches = JSON.parse(
   await readFile(resolve(import.meta.dirname, '../patches.json'), 'utf8'),
 )[id];
 for (const patch of patches ?? []) {
   for (const fill of patch.fills) {
-    const [r, g, b] = [0, 2, 4].map(k =>
-      parseInt(fill.colour.slice(k, k + 2), 16),
-    );
+    const clear = fill.colour === 'none';
+    const [r, g, b] = clear
+      ? [0, 0, 0]
+      : [0, 2, 4].map(k => parseInt(fill.colour.slice(k, k + 2), 16));
     for (let y = fill.y; y < fill.y + fill.h; y++)
       for (let x = fill.x; x < fill.x + fill.w; x++) {
         const i = (y * sheet.width + patch.cell * cell.width + x) * 4;
         if (sheet.data[i + 3] === 0) continue;
+        if (clear) {
+          sheet.data[i + 3] = 0;
+          continue;
+        }
         sheet.data[i] = r;
         sheet.data[i + 1] = g;
         sheet.data[i + 2] = b;

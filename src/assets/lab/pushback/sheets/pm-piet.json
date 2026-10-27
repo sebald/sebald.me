@@ -26,18 +26,18 @@
     },
     {
       "box": {
-        "x": 14,
+        "x": 15,
         "y": 34,
-        "width": 44,
+        "width": 42,
         "height": 78
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 16,
+        "x": 14,
         "y": 30,
-        "width": 40,
+        "width": 44,
         "height": 82
       },
       "clipped": false

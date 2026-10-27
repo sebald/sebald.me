@@ -1116,6 +1116,8 @@ Gemini edits can shift other pixels, so compare the follow-up against the first 
   `Keep this image exactly the same, pixel for pixel, but redraw the fourth figure so it is the same person as the others: same height, same hair, same clothes, same colours.`
 - Letters appeared:
   `Keep this image exactly the same, pixel for pixel, but remove all letters and writing from the whiteboard; leave only boxes and arrows.`
+- A scene's furniture is still too big for the cast after the blocked scale reference (the third round: desks at the hip, right, but the chairs and the table a fifth too tall, the executive chair and the door a third to a half); attach the render that came back and `SCALE` again:
+  `Keep this image as it is: the same room, the same colours, the same objects in the same places, the same pixel size. Only the scale of the furniture is wrong: everything in the room is drawn about a quarter too large for the two people in the attached reference, who are exactly as tall as the people who will stand in this room. Redraw the room with every piece of furniture and every fixture at four fifths of its current size, so that a desk or a table reaches the hip of the reference person, a chair's seat their knee and its back their shoulder, a door frame is one and a third of their height, and a printer, cabinet or sideboard reaches their hip. Keep the floor line where it is and keep the middle of the room clear.`
 - Something stands where the figures go:
   `Keep this image exactly the same, pixel for pixel, but remove the chair on the left and fill the area with plain carpet and plain wall.`
 - A living detail is already drawn in its moving state (a steam wisp, a flame), and the loop script needs a clean plate:

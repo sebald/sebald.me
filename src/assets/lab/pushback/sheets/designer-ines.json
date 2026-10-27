@@ -8,19 +8,46 @@
   "cells": [
     {
       "box": {
-        "x": 21,
-        "y": 32,
-        "width": 30,
-        "height": 80
+        "x": 20,
+        "y": 30,
+        "width": 32,
+        "height": 82
       },
       "clipped": false
     },
     {
       "box": {
         "x": 17,
-        "y": 32,
+        "y": 30,
         "width": 37,
-        "height": 80
+        "height": 82
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 20,
+        "y": 30,
+        "width": 32,
+        "height": 82
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 21,
+        "y": 31,
+        "width": 30,
+        "height": 81
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 12,
+        "y": 24,
+        "width": 48,
+        "height": 88
       },
       "clipped": false
     },
@@ -32,55 +59,28 @@
         "height": 80
       },
       "clipped": false
-    },
-    {
-      "box": {
-        "x": 24,
-        "y": 33,
-        "width": 24,
-        "height": 79
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 12,
-        "y": 26,
-        "width": 48,
-        "height": 86
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 21,
-        "y": 34,
-        "width": 29,
-        "height": 78
-      },
-      "clipped": false
     }
   ],
   "features": {
     "head": {
-      "x": 24,
-      "y": 31,
+      "x": 23,
+      "y": 29,
       "width": 24,
       "height": 24
     },
     "mouth": {
-      "x": 29,
-      "y": 45,
+      "x": 28,
+      "y": 43,
       "width": 17,
       "height": 12
     },
     "talkMouth": {
       "x": 25,
-      "y": 45
+      "y": 43
     },
     "eye": {
-      "x": 39,
-      "y": 45
+      "x": 41,
+      "y": 43
     }
   }
 }

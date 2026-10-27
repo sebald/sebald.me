@@ -9,54 +9,54 @@
     {
       "box": {
         "x": 21,
-        "y": 34,
-        "width": 29,
-        "height": 78
+        "y": 32,
+        "width": 30,
+        "height": 80
       },
       "clipped": false
     },
     {
       "box": {
         "x": 18,
-        "y": 34,
+        "y": 32,
         "width": 35,
-        "height": 78
+        "height": 80
       },
       "clipped": false
     },
     {
       "box": {
         "x": 15,
-        "y": 36,
+        "y": 34,
         "width": 41,
-        "height": 76
+        "height": 78
       },
       "clipped": false
     },
     {
       "box": {
         "x": 17,
-        "y": 36,
+        "y": 34,
         "width": 38,
-        "height": 76
+        "height": 78
       },
       "clipped": false
     },
     {
       "box": {
         "x": 16,
-        "y": 29,
+        "y": 27,
         "width": 40,
-        "height": 83
+        "height": 85
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 22,
-        "y": 39,
-        "width": 28,
-        "height": 73
+        "x": 21,
+        "y": 37,
+        "width": 30,
+        "height": 75
       },
       "clipped": false
     }
@@ -64,23 +64,23 @@
   "features": {
     "head": {
       "x": 23,
-      "y": 33,
+      "y": 31,
       "width": 24,
       "height": 24
     },
     "mouth": {
       "x": 26,
-      "y": 47,
+      "y": 45,
       "width": 19,
       "height": 12
     },
     "talkMouth": {
       "x": 23,
-      "y": 47
+      "y": 45
     },
     "eye": {
-      "x": 44,
-      "y": 50
+      "x": 45,
+      "y": 48
     }
   }
 }

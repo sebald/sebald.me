@@ -75,7 +75,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Head of Product',
     role: 'pm',
     intro: "I've heard about you. None of it was in the OKRs.",
-    sheet: 'pm-jo',
+    sheet: 'pm-nadia',
     knows: 2,
   },
   {
@@ -99,7 +99,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Architect',
     role: 'dev',
     intro: 'Before we start: is this scalable?',
-    sheet: 'dev-sam',
+    sheet: 'dev-bo',
     knows: 2,
   },
   {
@@ -123,7 +123,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Design Lead',
     role: 'designer',
     intro: 'Let me stop you right there.',
-    sheet: 'designer-theo',
+    sheet: 'designer-kim',
     knows: 2,
   },
   {
@@ -183,18 +183,18 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
  * move the stands a little once they exist.
  */
 export const STANDS: Record<SceneId, { left: number; right: number }> = {
-  // All four put the figures 150 apart (cells at stage x 49 and 199, so
-  // seventy pixels of room to either edge), the ghost between them.
+  // All four put the figures 160 apart (cells at stage x 44 and 204, so
+  // sixty-five pixels of room to either edge), the ghost between them.
   // The left desk ends at x 128, the right one starts at 323; the shelf
   // with the build light sits between the duellists
-  floor: { left: 122, right: 272 },
+  floor: { left: 117, right: 277 },
   // The chair ends at x 120; the table (243 to 398) stands behind
-  meeting: { left: 132, right: 282 },
+  meeting: { left: 127, right: 287 },
   // The chair ends at x 120, the desk starts at 333
-  studio: { left: 128, right: 278 },
+  studio: { left: 123, right: 283 },
   // The cabinet ends at x 90, the desk spans 250 to 340 with the chair
   // behind its right end, where the Stakeholder stands
-  office: { left: 150, right: 300 },
+  office: { left: 145, right: 305 },
 };
 
 // Player looks

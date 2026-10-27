@@ -11,8 +11,12 @@ import bossMeta from '@/assets/lab/pushback/sheets/boss.json';
 import boss from '@/assets/lab/pushback/sheets/boss.png';
 import inesMeta from '@/assets/lab/pushback/sheets/designer-ines.json';
 import ines from '@/assets/lab/pushback/sheets/designer-ines.png';
+import kimMeta from '@/assets/lab/pushback/sheets/designer-kim.json';
+import kim from '@/assets/lab/pushback/sheets/designer-kim.png';
 import theoMeta from '@/assets/lab/pushback/sheets/designer-theo.json';
 import theo from '@/assets/lab/pushback/sheets/designer-theo.png';
+import boMeta from '@/assets/lab/pushback/sheets/dev-bo.json';
+import bo from '@/assets/lab/pushback/sheets/dev-bo.png';
 import lenaMeta from '@/assets/lab/pushback/sheets/dev-lena.json';
 import lena from '@/assets/lab/pushback/sheets/dev-lena.png';
 import samMeta from '@/assets/lab/pushback/sheets/dev-sam.json';
@@ -23,6 +27,8 @@ import micdropMeta from '@/assets/lab/pushback/sheets/micdrop.json';
 import micdrop from '@/assets/lab/pushback/sheets/micdrop.png';
 import joMeta from '@/assets/lab/pushback/sheets/pm-jo.json';
 import jo from '@/assets/lab/pushback/sheets/pm-jo.png';
+import nadiaMeta from '@/assets/lab/pushback/sheets/pm-nadia.json';
+import nadia from '@/assets/lab/pushback/sheets/pm-nadia.png';
 import pietMeta from '@/assets/lab/pushback/sheets/pm-piet.json';
 import piet from '@/assets/lab/pushback/sheets/pm-piet.png';
 import type { SheetId, SheetMeta } from '@/lib/lab/pushback/sprites';
@@ -41,10 +47,13 @@ export interface Sheet {
 export const SHEETS: Record<SheetKey, Sheet> = {
   'pm-jo': { image: jo, meta: joMeta },
   'pm-piet': { image: piet, meta: pietMeta },
+  'pm-nadia': { image: nadia, meta: nadiaMeta },
   'dev-sam': { image: sam, meta: samMeta },
   'dev-lena': { image: lena, meta: lenaMeta },
+  'dev-bo': { image: bo, meta: boMeta },
   'designer-ines': { image: ines, meta: inesMeta },
   'designer-theo': { image: theo, meta: theoMeta },
+  'designer-kim': { image: kim, meta: kimMeta },
   boss: { image: boss, meta: bossMeta },
   ghost: { image: ghost, meta: ghostMeta },
   micdrop: { image: micdrop, meta: micdropMeta },

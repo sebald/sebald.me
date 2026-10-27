@@ -10,23 +10,29 @@ import { FRAME_MS, type Pose } from './stage';
 // Sheets
 // ---------------
 
-/** The seven model sheets under `src/assets/lab/pushback/sheets/` */
+/** The ten model sheets under `src/assets/lab/pushback/sheets/` */
 export type SheetId =
   | 'pm-jo'
   | 'pm-piet'
+  | 'pm-nadia'
   | 'dev-sam'
   | 'dev-lena'
+  | 'dev-bo'
   | 'designer-ines'
   | 'designer-theo'
+  | 'designer-kim'
   | 'boss';
 
 export const SHEET_IDS: readonly SheetId[] = [
   'pm-jo',
   'pm-piet',
+  'pm-nadia',
   'dev-sam',
   'dev-lena',
+  'dev-bo',
   'designer-ines',
   'designer-theo',
+  'designer-kim',
   'boss',
 ];
 

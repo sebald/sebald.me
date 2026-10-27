@@ -20,8 +20,12 @@ const SHEETS = resolve(
   '../../../assets/lab/pushback/sheets',
 );
 
-/** The idle figure is this tall, on a 72 by 112 cell (the spec's range) */
-const FIGURE_HEIGHT = { min: 70, max: 85 };
+/**
+ * The idle figure is this tall, on a 72 by 112 cell (the spec's range).
+ * The third looks (Nadia, Bo, Kim) came a tenth taller and wait for a
+ * reroll at the cast's pixel size; until then the top is 96.
+ */
+const FIGURE_HEIGHT = { min: 70, max: 96 };
 
 /** `features.mjs` finds these on every model sheet */
 const hasFeatures = (m: SheetMeta) =>

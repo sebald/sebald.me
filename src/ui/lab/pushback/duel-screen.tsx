@@ -645,16 +645,20 @@ export const DuelScreen = ({
       />
 
       {auto && (
-        <p
+        // The arcade stamp: DEMO across the whole stage, see-through,
+        // blinking, with the way in under it
+        <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 m-0 text-center text-[0.8em] font-semibold tracking-[0.08em] text-[#f3eedc] uppercase"
-          style={{
-            top: px(crop + LAYOUT.pips.y - 2),
-            opacity: demoLit ? 1 : 0,
-          }}
+          className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center justify-center text-center text-[#f3eedc] uppercase"
+          style={{ height: px(LAYOUT.band), opacity: demoLit ? 0.55 : 0 }}
         >
-          Demo · Press Enter to play
-        </p>
+          <span className="text-[11em] leading-none font-bold tracking-[0.12em]">
+            Demo
+          </span>
+          <span className="mt-[0.5em] text-[1em] font-semibold tracking-[0.1em]">
+            Press Enter to play
+          </span>
+        </div>
       )}
 
       {ghostShown && ghostLine && enter >= 1 && (
