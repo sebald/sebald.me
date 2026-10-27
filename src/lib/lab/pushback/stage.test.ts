@@ -183,6 +183,15 @@ describe('poses', () => {
     assert.equal(poseOffset('flinch', 0, 1).dx, -2);
     assert.ok(poseOffset('flinch', 0, 1).lighter);
     assert.ok(!poseOffset('flinch', 500, 1).lighter);
+  });
+
+  it('flickers a flinch for a second after the flash', () => {
+    assert.ok(!poseOffset('flinch', 0, 1).hidden);
+    assert.ok(poseOffset('flinch', 125, 1).hidden);
+    assert.ok(!poseOffset('flinch', 250, 1).hidden);
+    assert.ok(poseOffset('flinch', 875, 1).hidden);
+    assert.ok(!poseOffset('flinch', 1125, 1).hidden);
+    assert.ok(!poseOffset('taunt', 125, 1).hidden);
     assert.equal(poseOffset('lose', 300, 1).dy, 0);
   });
 

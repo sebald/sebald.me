@@ -71,7 +71,7 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
       className={cn(DOT, 'right-[var(--px)] bottom-[var(--px)]')}
     />
     <div
-      className="relative flex min-h-0 flex-1 flex-col bg-[#131829] p-[calc(var(--px)*3)] leading-[1.35] text-[#c9c4b4]"
+      className="relative flex min-h-0 flex-1 flex-col bg-[#131829] p-[calc(var(--px)*3+4px)] leading-[1.35] text-[#c9c4b4]"
       style={{
         margin: 'calc(var(--px) * 3)',
         boxShadow: RINGS,

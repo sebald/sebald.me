@@ -286,18 +286,18 @@ describe('the silence bar', () => {
 
   it("is the rules' share of the menu's reading time, on the frame", () => {
     // Five counters of eight words at four words a second: ten seconds
-    // to read, six to find the right one halfway down, five in hard mode
+    // to read, eight to find the right one halfway down, seven in hard mode
     const menu = ['pm-1', 'pm-2', 'pm-3', 'pm-4', 'pm-5'] as const;
     const words = menu.reduce(
       (n, id) => n + wordCount(pairById(id).counter),
       0,
     );
     const limit = silenceLimit(RULES, menu, false);
-    assert.equal(limit, Math.round((words / 4) * 0.6 * 8) * 125);
-    assert.ok(limit >= 5000 && limit <= 9000, String(limit));
+    assert.equal(limit, Math.round((words / 4) * 0.8 * 8) * 125);
+    assert.ok(limit >= 7000 && limit <= 11000, String(limit));
     assert.equal(
       silenceLimit(MODES.hard.rules, menu, false),
-      Math.round((words / 4) * 0.5 * 8) * 125,
+      Math.round((words / 4) * 0.7 * 8) * 125,
     );
     assert.equal(
       wordCount('  Same quarter you promised the last one, then. '),

@@ -35,7 +35,7 @@ export const Inventory = () => (
   <div className="grid gap-24">
     <Section
       title="Character"
-      blurb="One duellist from its sheet. Idle breathes, talk alternates the mouth while typing, taunt steps toward the opponent (further on a mic drop), flinch steps back with a flash."
+      blurb="One duellist from its sheet. Idle breathes, talk alternates the mouth while typing, taunt steps toward the opponent (further on a mic drop), flinch steps back with a flash and flickers for a second."
     >
       <CharacterPlayground />
     </Section>

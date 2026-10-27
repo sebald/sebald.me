@@ -58,7 +58,7 @@ export interface CharacterProps {
  * One duellist: a canvas the size of a sheet cell (72 by 112 stage
  * pixels), drawn at the stage's device pixels, animating its pose on its
  * own clock: breathing when idle, the mouth moving while a line types,
- * the step and chuckle of a taunt, the flash of a flinch, the slump and
+ * the step and chuckle of a taunt, the flash and flicker of a flinch, the slump and
  * tears of a loss. Everything it needs is the sheet and the pose; the
  * duel just tells it which.
  */
@@ -91,8 +91,10 @@ export const Character = ({
     ctx.imageSmoothingEnabled = false;
     ctx.clearRect(0, 0, width, height);
     const offset = still
-      ? { dx: 0, dy: 0, lighter: false }
+      ? { dx: 0, dy: 0, lighter: false, hidden: false }
       : poseOffset(pose, elapsed, mirrored ? -1 : 1, micDrop);
+    // A flicker frame of a flinch: the cell stays clear
+    if (offset.hidden) return;
     const bottom = height + offset.dy;
     if (!sprite) {
       const colours = PLACEHOLDER[side];

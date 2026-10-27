@@ -334,7 +334,7 @@ export const RULES: Rules = {
   momentum: 2,
   momentumLoss: 'all',
   micDrop: { worth: 2, menu: 8, silence: 0.75 },
-  reading: { wordsPerSecond: 4, share: 0.6 },
+  reading: { wordsPerSecond: 4, share: 0.8 },
   hand: 4,
   fatigue: 0.1,
   menuExtra: 0,
@@ -343,7 +343,7 @@ export const RULES: Rules = {
 /**
  * The two ways to play, one switch on the title screen. Normal has the
  * ghost of the player's predecessor whisper along; hard has no ghost, a
- * silence bar at half the reading time instead of 0.6, two more options
+ * silence bar at 0.7 of the reading time instead of 0.8, two more options
  * on every menu, colleagues who tire slowly and a Stakeholder who
  * leaves after two misses. Flawless
  * stars are only earned without the ghost.
@@ -358,7 +358,7 @@ export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
       ...RULES,
       bossMisses: 2,
       fatigue: 0.07,
-      reading: { ...RULES.reading, share: 0.5 },
+      reading: { ...RULES.reading, share: 0.7 },
       menuExtra: 2,
     },
   },

@@ -257,6 +257,12 @@ export const PACE = {
 /** Milliseconds between frames: 8 fps, like the scene loops */
 export const FRAME_MS = 125;
 
+/**
+ * A hit flickers: after the flash, the figure blinks in and out every
+ * frame for this long, the way old arcade games marked a landed hit
+ */
+export const FLINCH_FLICKER_MS = 1000;
+
 /** How many characters of `text` are visible after `elapsed` ms */
 export const typedChars = (
   elapsed: number,
@@ -328,12 +334,12 @@ export const poseOffset = (
   /** Which way the opponent is: +1 for the left duellist, -1 for the right */
   towards: 1 | -1,
   micDrop = false,
-): { dx: number; dy: number; lighter: boolean } => {
+): { dx: number; dy: number; lighter: boolean; hidden: boolean } => {
   switch (pose) {
     case 'idle':
     case 'talk':
       // Breathing is `breathFrame`: the feet stay put
-      return { dx: 0, dy: 0, lighter: false };
+      return { dx: 0, dy: 0, lighter: false, hidden: false };
     case 'taunt': {
       // Two frames of stepping forward, then hold
       const frames = Math.min(2, Math.floor(elapsed / FRAME_MS) + 1);
@@ -342,18 +348,24 @@ export const poseOffset = (
         dx: towards * Math.round((step * frames) / 2),
         dy: 0,
         lighter: false,
+        hidden: false,
       };
     }
-    case 'flinch':
+    case 'flinch': {
+      // The first frame flashes, then the figure flickers: every other
+      // frame missing, for a second
+      const frame = Math.floor(elapsed / FRAME_MS);
       return {
         dx: -towards * 2,
         dy: 0,
-        lighter: elapsed < FRAME_MS,
+        lighter: frame === 0,
+        hidden: frame > 0 && elapsed < FLINCH_FLICKER_MS && frame % 2 === 1,
       };
+    }
     case 'win':
-      return { dx: 0, dy: 0, lighter: false };
+      return { dx: 0, dy: 0, lighter: false, hidden: false };
     case 'lose':
-      return { dx: 0, dy: 0, lighter: false };
+      return { dx: 0, dy: 0, lighter: false, hidden: false };
   }
 };
 

@@ -52,7 +52,7 @@ For the AI as defender the menu size makes no difference, so a player's mic drop
 
 1. Attacker steps forward, line types out at 25 characters per second (tap or Space to complete instantly), then holds long enough to be read once more before the next step; the poses of a resolved exchange hold a second and a half.
 2. Defender gets a menu of counters in random order: the one that answers the phrase plus decoys. Menu size and decoy source depend on the duel's tier (see Opponents): four options from any pool in the first duel, six from the same pool in the last two. From tier 2 on the silence bar runs under the menu (see below).
-3. Match: the counter wins, the attacker flinches, the defender gets the initiative and pushes the scale a step. Miss: the defender flinches, the attacker keeps the initiative and pushes a step (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
+3. Match: the counter wins, the attacker flinches (a flash, then a second of the figure flickering in and out every frame, the arcade mark of a landed hit), the defender gets the initiative and pushes the scale a step. Miss: the defender flinches, the attacker keeps the initiative and pushes a step (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
 4. The scale at an edge ends the duel with win and lose poses and one bark each.
 
 ### Collecting: what the player knows
@@ -79,15 +79,15 @@ The player meets their own role first: the first duel is on home ground, the poo
 
 ### The silence bar
 
-From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines.
+From the second duel on, in both modes, the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines.
 
-The bar's length follows the menu's text, not the slot (`silenceLimit`): a counter is eight words on average, adults read about 240 words a minute (Brysbaert 2019, a meta-analysis of silent reading), and the right counter sits halfway down the list on average, so the bar is a share of the time a median reader needs for the whole menu: 0.6 of it in normal mode, 0.5 in hard mode (`RULES.reading`), times 0.75 on a mic drop. A menu of six is about fifty words, twelve seconds to read, so the bar runs seven and a half seconds in normal mode and six in hard; the mic drop's eight options give nine and seven and a half. Fixed seconds per slot were tried first and hard mode's 0.6 of them was unreadable: 3.6 seconds for eight options, a fifth of the text.
+The bar's length follows the menu's text, not the slot (`silenceLimit`): a counter is eight words on average, adults read about 240 words a minute (Brysbaert 2019, a meta-analysis of silent reading), and the right counter sits halfway down the list on average, so the bar is a share of the time a median reader needs for the whole menu: 0.8 of it in normal mode, 0.7 in hard mode (`RULES.reading`), times 0.75 on a mic drop. A menu of six is about fifty words, twelve seconds to read, so the bar runs about ten seconds in normal mode and eight and a half in hard; the mic drop's eight options give the same. Fixed seconds per slot were tried first and hard mode's 0.6 of them was unreadable: 3.6 seconds for eight options, a fifth of the text; 0.6 and 0.5 of the reading time came next and played two or three seconds too short.
 
-The bar is off in the two tier 1 duels. With the bar off every correct counter counts as fast for momentum.
+The bar is off in the first duel. With the bar off every correct counter counts as fast for momentum.
 
 ### Modes
 
-One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, the silence bar at half the reading time instead of 0.6, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
+One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, the silence bar at 0.7 of the reading time instead of 0.8, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
 
 ### The onboarding buddy
 
