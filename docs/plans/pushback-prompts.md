@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Fourteen generations before rerolls: seven model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used.
+Every image the game needs, one prompt each, ready to paste. Seventeen generations before rerolls: ten model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used.
 
 ## Before you start
 
@@ -23,7 +23,7 @@ What to check before saving, in order of how expensive a miss is:
 
 ## Model sheets
 
-Seven sheets: two looks per role, so the player can pick, and the Stakeholder. All seven are generated and committed under `sources/`; the prompts stay for rerolls. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
+Ten sheets: two looks per role, so the player can pick, a third per role for the colleague that would otherwise share one, and the Stakeholder. The first seven are generated and committed under `sources/`; the prompts stay for rerolls. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
 
 Gemini copies the attached figure when it can: the first PM roll came back with the Dev's face and hair. The prompts therefore put the new character first, in detail, and say three times that the attached sheet is a reference for size and style only. If a roll still looks like the hoodie character, use the "looks like the reference" follow-up at the end of this file rather than rerolling blind. Faces, skin tones, hair, builds and ages are spread across the six on purpose: a cast, not one person in six outfits.
 
@@ -378,6 +378,162 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
 Reroll on: the flat-top turning into ordinary short hair, the overshirt closing or changing colour, a figure drawn taller than the attached sheet to match the description.
+
+### Third looks: one more sheet per role
+
+With props gone, two colleagues per role share a player's sheet (the Head of Product with Jo, the Architect with Sam, the Design Lead with Theo), and the run draw skips any colleague on a sheet already in the run, so a run is six duels instead of seven. A third sheet per role, drawn for the colleague that shares, gives every colleague its own face and the seventh duel back. The three are colleagues first; whether they also become a third playable look is a later call (the select grid is two rows). Same rules as the sheets above: one chat each, `HEADER` and `DEV` attached, the new face spread away from the six that exist (Jo: dark skin, short coils; Piet: bald, moustache, stocky; Sam: hoodie, straight black hair; Lena: ponytail; Ines: bun and glasses; Theo: flat-top and overshirt).
+
+#### PM, look three: Nadia, the Head of Product (`pm-nadia-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: the head of product, a woman in her mid fifties, medium
+height, straight-backed, olive skin, a silver-grey chin-length bob with
+a blunt fringe, small stud earrings, a calm face with one eyebrow that
+is always a little higher than the other. A dark green blazer over a
+plain cream top, slim black trousers, flat black shoes. No lanyard, no
+notebook, no laptop. In the right hand, a tall steel travel mug held
+like a sceptre; the left hand is in the blazer pocket whenever it is
+not needed.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing straight, left hand in the pocket, the mug held at
+   chest height, looking right with the raised eyebrow.
+2. talking: mouth open, the mug lifted slightly as if making a point
+   with it, the left hand out of the pocket, palm up.
+3. taunt: leaning back a little, the mug raised to the right in a slow
+   toast, eyes half closed.
+4. flinch: a small step back, the mug clutched to the chest with both
+   hands, eyes wide, a drop of coffee flying out of it.
+5. win: a single nod, the mug raised high, the other hand still in the
+   pocket.
+6. lose: head tilted down, looking into the empty mug, shoulders
+   dropped a little, the left hand out of the pocket hanging.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: any resemblance to the attached hoodie character, the bob changing length or colour between cells, a figure taller than the attached sheet (blazers tempt Gemini into drawing bigger), a logo on the mug, the blazer turning into a suit jacket with a tie.
+
+#### Dev, look three: Bo, the Architect (`dev-bo-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: the architect, a man in his late forties, broad and a bit
+heavy, pale skin, grey-streaked dark hair curling over the ears and a
+full dark beard with grey in it, round face, tired kind eyes. A rust
+brown cardigan with the sleeves pushed up over a faded plaid shirt,
+worn grey jeans, brown leather shoes. A fat blue whiteboard marker in
+the right hand, cap on, and a very large white mug in the left hand
+that never leaves it.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing with the weight back, the mug held at the belly, the
+   marker hanging in the other hand, looking right.
+2. talking: mouth open, the marker drawing a box in the air to the right.
+3. taunt: the marker uncapped and pointed at the right like a conductor's
+   baton, chin up, the mug raised a little.
+4. flinch: leaning back, the mug held out to the side to save the coffee,
+   eyes shut.
+5. win: a slow sip from the mug, eyes closed, the marker tucked behind
+   the ear.
+6. lose: head bowed, looking into the mug, the marker dropped to the
+   floor next to the foot.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: a hoodie or any resemblance to the attached character, the beard changing length, the mug or the marker missing in a cell, a figure taller than the attached sheet (broad is not tall), writing on the mug or the marker.
+
+#### Designer, look three: Kim, the Design Lead (`designer-kim-sheet.jpg`)
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: the design lead, a person in their early forties, slim,
+light brown skin, very short bleached blond hair, a long face with
+high cheekbones and a small, unimpressed mouth. A black turtleneck, wide
+charcoal trousers with a sharp crease, white socks, black loafers, one
+chunky silver ring on each hand. In the right hand a fan of colour
+swatches spread like a hand of cards; the left hand rests on the hip.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing very straight, hand on the hip, the swatch fan held
+   low at the side, looking right.
+2. talking: mouth open, the swatch fan lifted and tilted towards the
+   right as if comparing it to something.
+3. taunt: one swatch pulled out of the fan and held up between two
+   fingers at the right, head tilted, eyebrows up.
+4. flinch: leaning back, the swatches scattering out of the fan,
+   eyes shut.
+5. win: the swatch fan snapped shut and held up like a trophy, the
+   other hand still on the hip, a small smile.
+6. lose: head down, picking a single swatch off the floor, the fan
+   hanging open at the side.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: any resemblance to the attached character, a bun or glasses (those belong to Ines), the hair growing between cells, a figure taller than the attached sheet, letters on the swatches.
 
 ### The Stakeholder (`boss-sheet.jpg`)
 
