@@ -9,6 +9,8 @@ Every image the game needs, one prompt each, ready to paste. Twelve generations 
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
   - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpeg` (the Dev man's model sheet). Every character and prop sheet attaches it so scale and pixel size match across the cast.
 - Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
+- Gemini currently renders 16:9 at 2752 by 1536. Those sheets snap at an 11 px grid to figures about 82 px tall (Jo 83, Ravi 82), 8 percent taller than the Dev sheet's 76 from its 1376 px render, and inside the 70 to 85 range. Generate every remaining sheet at the same size so the rest of the cast matches Jo and Ravi; Sam stays the short one.
+- Gemini draws a soft shadow under the feet whatever the prompt says; `sheet.mjs` keys it out with the background, nothing to reroll for.
 - One chat per image. Fixes go into the same chat as follow-ups (last section), so Gemini keeps the character.
 - The sheets all face **right**. The right-hand duellist is the sheet mirrored in code, so props carry no writing and no asymmetry that would look wrong flipped.
 
