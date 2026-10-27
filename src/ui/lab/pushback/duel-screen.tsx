@@ -66,23 +66,27 @@ import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
 
-/** The ghost's bubble: right of its head's centre, under the bars */
-const GHOST_BUBBLE = { left: 22, gap: 2 } as const;
+/**
+ * The ghost's bubble: over its head in the gap between the duellists,
+ * its left edge on the figure's, as wide as the gap to the opponent's
+ * figure allows, its bottom this far above the figure's top
+ */
+const GHOST_BUBBLE = { gap: 3 } as const;
 
 // Styles
 // ---------------
 const styles = {
   hint: cva({ base: 'text-[#8a92b8]' }),
   // The ghost's speech bubble in its own pale colour, with a tail
-  // pointing down to the ghost
+  // pointing down to the ghost's head
   bubble: cva({
     base: [
       'absolute w-max px-[0.6em] py-[0.3em]',
       'bg-[#0b1516]/90 text-[0.85em] text-[#bfe8ea] ring-1 ring-[#2f5e60]',
       'transition-opacity duration-300',
-      'after:absolute after:top-full after:left-[calc(var(--px)*4)]',
+      'after:absolute after:top-full after:left-[calc(var(--px)*10)]',
       'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-[#2f5e60]',
-      'after:[clip-path:polygon(0_0,100%_0,25%_100%)]',
+      'after:[clip-path:polygon(0_0,100%_0,50%_100%)]',
     ],
   }),
   silence: cva({
@@ -414,15 +418,17 @@ export const DuelScreen = ({
         : -2
       : 0;
   const flash = !reduced && throwing && cursor.elapsed < 125;
-  // With the ghost along, the view leaves room for it at the player's side
-  const steady = viewFor(stands, { ghost: buddyOn });
+  const steady = viewFor(stands);
   const view = { x: steady.x + shake, y: steady.y };
   const standX: Record<Side, number> = {
     player: stands.left - view.x,
     opponent: stands.right - view.x,
   };
   const poses = posesFor(state, step);
-  const ghostX = standX.player - GHOST.behind;
+  const ghostX = standX.player + GHOST.ahead;
+  // The top row of the ghost's figure: its cell on the feet line, lifted
+  const ghostTop =
+    LAYOUT.feet - LAYOUT.cell.height + GHOST.figure.top - GHOST.lift;
   const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
@@ -590,13 +596,17 @@ export const DuelScreen = ({
         <p
           className={styles.bubble()}
           style={{
-            // In the strip between the bars and the player's head, its
-            // tail down to the ghost at the player's shoulder; never past
-            // the left edge (the ghost can stand off it) and wrapped
-            // before the right one, so it is always on the stage
-            left: px(Math.max(2, ghostX + GHOST_BUBBLE.left)),
-            maxWidth: `calc(100% - ${px(Math.max(2, ghostX + GHOST_BUBBLE.left) + 2)})`,
-            top: px(crop + LAYOUT.hud + GHOST_BUBBLE.gap),
+            // Over the ghost's head in the gap between the duellists: no
+            // wider than the gap to the opponent's figure, its bottom a
+            // few rows above the ghost's head, so it covers nobody
+            left: px(ghostX + GHOST.figure.left),
+            maxWidth: px(
+              standX.opponent +
+                GHOST.figure.left -
+                (ghostX + GHOST.figure.left) -
+                2,
+            ),
+            bottom: px(STAGE.height - (ghostTop - GHOST_BUBBLE.gap)),
           }}
         >
           {ghostLine}

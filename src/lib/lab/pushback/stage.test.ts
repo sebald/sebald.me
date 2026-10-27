@@ -28,8 +28,6 @@ import {
   typingDuration,
   fitFor,
   scaleTicks,
-  ROOM,
-  STAGE,
   viewFor,
 } from './stage';
 
@@ -322,25 +320,5 @@ describe('viewFor', () => {
     // Clamped to the render
     assert.equal(viewFor({ left: 0, right: 60 }).x, 0);
     assert.equal(viewFor({ left: 400, right: 408 }).x, 160);
-  });
-
-  it('slides left for the ghost, as far as the opponent allows', () => {
-    // The meeting room: the pair centred leaves the player at x 9 and
-    // the ghost's figure six columns off the edge; six to the left fixes it
-    const meeting = { left: 94, right: 324 };
-    assert.equal(viewFor(meeting).x, 85);
-    assert.equal(
-      viewFor(meeting, { ghost: true }).x,
-      meeting.left - ROOM.ghost,
-    );
-    // The office: the pair is too far apart for both, the opponent wins
-    const office = { left: 75, right: 332 };
-    assert.equal(
-      viewFor(office, { ghost: true }).x,
-      office.right + ROOM.figure - STAGE.width,
-    );
-    // The floor has the room already
-    const floor = { left: 119, right: 286 };
-    assert.equal(viewFor(floor, { ghost: true }).x, viewFor(floor).x);
   });
 });

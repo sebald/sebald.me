@@ -483,6 +483,10 @@ Composition rule for all four, written into every prompt: nothing but plain floo
 
 Each scene has two or three living details, staged in front of plain dark areas so the loop script can draw them cleanly.
 
+Scale rule, written into every prompt and checked in the inventory's scene viewer with the figures on the stands: a person standing in this room is 78 pixels tall, a tenth short of a third of the image's height. So a desk top is 40 pixels above the floor line (hip height), a chair seat 28, a monitor 24 tall, a door 120, a ceiling light fitting well above head height. The first four renders were drawn for people twice that size: with the figures in them the viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated with the rule rather than resampled. Attach the model sheet as well as `HEADER` this time, with the sentence `The people in the second image stand in this room at exactly this size`; the earlier advice not to attach it was about the pixel pitch, which `snap.mjs` now fits on its own.
+
+Foreground rule, also in every prompt: the strip in front of the people, from the floor line (row 230) down to the bottom edge, is plain floor. No table, desk or chair between the camera and the people; the furniture stands behind them or against the side walls. The meeting room's first render had the table in front, which the figures stood on.
+
 ### Open-plan floor, for the Dev duels (`scene-floor.jpg`)
 
 Attach: `HEADER`.
@@ -534,7 +538,7 @@ No text, letters, numbers, signs with writing, UI, window chrome, borders,
 frames or signatures.
 ```
 
-Reroll on: a person at a desk, letters on the whiteboard or screens, desks reaching into the middle of the frame, a pixel size clearly finer than the header.
+Reroll on: a person at a desk, letters on the whiteboard or screens, desks reaching into the middle of the frame, a pixel size clearly finer than the header, desks higher than a standing person's hip (the first render's were chest high: 0.65 in the viewer).
 
 #### Open-plan floor, second roll
 
@@ -666,7 +670,7 @@ No text, letters, numbers, signs with writing, UI, window chrome, borders,
 frames or signatures.
 ```
 
-Reroll on: writing on the whiteboard (Gemini loves to letter a whiteboard), a table that blocks the middle of the frame above the bottom strip, chairs in the standing areas.
+Reroll on: writing on the whiteboard (Gemini loves to letter a whiteboard), a table that blocks the middle of the frame above the bottom strip or sits in front of the people, chairs in the standing areas, a table higher than a hip (the first render: 0.65 in the viewer, and the table in front).
 
 ### Studio corner, for the Designer duels (`scene-studio.jpg`)
 
@@ -720,7 +724,7 @@ No text, letters, numbers, signs with writing, UI, window chrome, borders,
 frames or signatures.
 ```
 
-Reroll on: letters or a logo on the moodboard, the desk pushed into the right standing area, a window with a view that pulls the eye away from the middle.
+Reroll on: letters or a logo on the moodboard, the desk pushed into the right standing area, a window with a view that pulls the eye away from the middle, furniture drawn for people twice the size (the first render: 0.5 in the viewer).
 
 ### Corner office, for the Stakeholder, the title screen and the roster (`scene-office.jpg`)
 
@@ -775,7 +779,7 @@ No text, letters, numbers, signs with writing, UI, window chrome, borders,
 frames or signatures.
 ```
 
-Reroll on: a person in the chair, a skyline so busy the standing areas are full of lit windows (they must be plain enough to put a figure in front of), the desk reaching into the standing areas, a lit screen on a monitor with writing.
+Reroll on: a person in the chair, a skyline so busy the standing areas are full of lit windows (they must be plain enough to put a figure in front of), the desk reaching into the standing areas, a lit screen on a monitor with writing, a desk and chair drawn for a giant (the first render: 0.5 in the viewer).
 
 ## Prop sheet (`props-sheet.jpg`)
 

@@ -73,8 +73,15 @@ export const buddyLine = (exchange: number, seed: number): string =>
 
 /** Where the ghost floats: behind the player's shoulder */
 export const GHOST = {
-  /** Left of the player's cell, in stage pixels */
-  behind: 36,
+  /**
+   * Right of the player's cell's left edge, in stage pixels: its cell
+   * starts where the player's figure ends, so its own figure (21 columns
+   * into its cell) hovers in the gap between the duellists, facing the
+   * opponent, with room above its head for the bubble
+   */
+  ahead: 52,
+  /** Where its figure sits in its cell (the sheet's idle box) */
+  figure: { left: 21, top: 57, width: 30 },
   /** Above the feet line; its tail brushes the floor, its head is under the bars */
   lift: 0,
 } as const;
