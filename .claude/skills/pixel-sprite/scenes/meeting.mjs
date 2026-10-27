@@ -29,25 +29,27 @@ const { base, rgb, setPx, collect } = scene;
 // ---------------
 const plate = Buffer.from(base);
 
-// The static steam above the mug: pale, desaturated pixels over the beige
-// wall; the wall a few columns to the left shows the same rows without it
-const STEAM = { x0: 37, x1: 56, y0: 172, y1: 218 };
-const wallAt = y => rgb(base, 31, y);
+// The static steam above the mug: grey, desaturated pixels over the
+// whiteboard; the board a few columns to the right shows the same rows
+// without it (inside the beam too, so the tint matches)
+const STEAM = { x0: 254, x1: 268, y0: 150, y1: 165 };
+const wallAt = y => rgb(base, 274, y);
 const isSteam = (c, x, y) => {
   const wall = wallAt(y);
-  return lum(c) > lum(wall) + 12 && sat(c) < 0.25;
+  return lum(c) < lum(wall) - 10 && sat(c) < 0.25;
 };
 for (const [x, y] of collect(STEAM, isSteam)) setPx(plate, x, y, wallAt(y));
 
 // Steam
 // ---------------
-const RIM_Y = 218;
-const STEAM_CORE = [236, 229, 218];
-const STEAM_MID = [214, 203, 188];
-const STEAM_FAINT = [190, 178, 162];
+// Over the white board the steam is the darker thing: grey wisps
+const RIM_Y = 170;
+const STEAM_CORE = [200, 196, 192];
+const STEAM_MID = [212, 209, 205];
+const STEAM_FAINT = [224, 222, 219];
 const WISPS = [
-  { x: 46, len: 26, amp: 1.4, freq: 0.5, off: 0 },
-  { x: 50, len: 18, amp: 1.0, freq: 0.6, off: 2.4 },
+  { x: 259, len: 16, amp: 1.2, freq: 0.5, off: 0 },
+  { x: 263, len: 12, amp: 0.9, freq: 0.6, off: 2.4 },
 ];
 const STEAM_FRAMES = 32; // 4s, three times per loop
 
@@ -74,27 +76,29 @@ const drawSteam = (b, t) => {
 // Single pale pixels drifting down through the beam where it crosses the
 // dark wall above the whiteboard and beside it. They sink a pixel every
 // 1.5 s, sway, and fade through a dim tone at both ends.
-const BEAM_TOP = 45;
-const BOARD_TOP = 59;
-const apex = { x: 240, y: 42 };
-const halfWidthAt = y => ((y - apex.y) / (148 - apex.y)) * 133;
+// The beam leaves the lens at (185, 53) and falls to the right: its left
+// edge reaches the board's foot at x 247, its right edge at x 343
+const BEAM_TOP = 55;
+const BOARD_TOP = 84;
+const apex = { x: 185, y: 53 };
+const leftEdgeAt = y => apex.x + (y - apex.y) * 0.544;
+const rightEdgeAt = y => apex.x + (y - apex.y) * 1.274;
 const inBeam = (x, y) =>
   y >= BEAM_TOP &&
-  Math.abs(x - apex.x) < halfWidthAt(y) - 2 &&
-  // Only over the dark wall: above the board, or beside it below the beam's
-  // reach on the board edges
-  (y < BOARD_TOP || x < 113 || x > 368);
-const DUST_LIGHT = [236, 224, 200];
+  x > leftEdgeAt(y) + 1 &&
+  x < rightEdgeAt(y) - 1 &&
+  // Only over the wall above the board; the beam never leaves the board
+  // sideways
+  y < BOARD_TOP;
+const DUST_LIGHT = [255, 250, 240];
 const MOTES = [
-  { x: 232, y: 46 },
-  { x: 249, y: 48 },
-  { x: 240, y: 51 },
-  { x: 226, y: 49 },
-  { x: 255, y: 52 },
-  { x: 106, y: 88 },
-  { x: 108, y: 120 },
-  { x: 372, y: 95 },
-  { x: 374, y: 126 },
+  { x: 192, y: 60 },
+  { x: 195, y: 64 },
+  { x: 198, y: 66 },
+  { x: 201, y: 69 },
+  { x: 205, y: 72 },
+  { x: 203, y: 75 },
+  { x: 209, y: 76 },
 ];
 const MOTE_STEPS = 8;
 const MOTE_STEP = FRAMES / MOTE_STEPS;
@@ -113,8 +117,8 @@ const drawDust = (b, t) => {
     const y = m.y + step;
     if (!inBeam(x, y)) return;
     const bg = rgb(b, x, y);
-    if (lum(bg) > 150) return; // never over the whiteboard itself
-    setPx(b, x, y, mix(bg, DUST_LIGHT, dim ? 0.3 : 0.6));
+    if (lum(bg) > 225) return; // never over the whiteboard itself
+    setPx(b, x, y, mix(bg, DUST_LIGHT, dim ? 0.4 : 0.75));
   });
 };
 
@@ -122,7 +126,7 @@ const drawDust = (b, t) => {
 // ---------------
 // The small red standby light on the projector body blinks every two
 // seconds, like they do
-const PROJECTOR = { x0: 215, x1: 265, y0: 22, y1: 45 };
+const PROJECTOR = { x0: 150, x1: 190, y0: 30, y1: 56 };
 const isRedLed = c => c[0] > 150 && c[0] > c[1] + 60 && c[2] < 150;
 const led = collect(PROJECTOR, isRedLed);
 const ledOff = led.map(([x, y, c]) => [x, y, mix(c, [90, 86, 84], 0.7)]);
