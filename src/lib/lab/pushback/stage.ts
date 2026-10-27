@@ -83,6 +83,35 @@ export const scaleFor = (width: number, height: number, max = 3): number =>
 /** Below this the panel cannot hold a menu: the screens ask for landscape */
 export const MIN_SCALE = 1.1;
 
+/**
+ * A short window: before the stage shrinks to fit the height, up to this
+ * many rows of ceiling are cropped off the top of the band (the duel's
+ * frame only; the menu screens keep their height). The people and the
+ * panel never shrink for height alone until the ceiling is gone.
+ */
+export const MAX_CROP = 60;
+
+/**
+ * The scale and the ceiling crop for a viewport: the width sets the
+ * scale; when the height is short the ceiling goes first, the scale
+ * after.
+ */
+export const fitFor = (
+  width: number,
+  height: number,
+  max = 3,
+): { scale: number; crop: number } => {
+  const byWidth = scaleFor(width, Infinity, max);
+  const deficit = STAGE.height * byWidth - height;
+  if (deficit <= 0) return { scale: byWidth, crop: 0 };
+  const crop = Math.min(MAX_CROP, Math.ceil(deficit / byWidth));
+  if (crop < MAX_CROP) return { scale: byWidth, crop };
+  return {
+    scale: Math.min(byWidth, height / (STAGE.height - MAX_CROP)),
+    crop: MAX_CROP,
+  };
+};
+
 /** The canvas is drawn at this whole-number scale and scaled down by CSS */
 export const BACKING = 3;
 

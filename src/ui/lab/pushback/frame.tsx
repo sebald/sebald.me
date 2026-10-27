@@ -53,7 +53,7 @@ export const Frame = ({
   // the flat placeholder band itself
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
-  const { scale } = useScale(fixedScale);
+  const { scale, crop } = useScale(fixedScale);
   // The sprites this frame draws, built in the background; placeholders
   // until then
   const sprites = useSprites(
@@ -124,7 +124,7 @@ export const Frame = ({
   const whole = Number.isInteger(scale);
 
   return (
-    <Stage label={label} scale={fixedScale} className={className}>
+    <Stage label={label} scale={fixedScale} crop={crop} className={className}>
       {/*
         The room band: a window of the scene loop. At a whole scale the
         8x export is sampled with hard edges, which lands exactly on the

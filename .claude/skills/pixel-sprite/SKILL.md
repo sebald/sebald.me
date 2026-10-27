@@ -110,7 +110,7 @@ node .claude/skills/pixel-sprite/scenes/floor.mjs \
 `scene.mjs` snaps the render and pads or crops it to 480 by 270 by
 repeating the plain edge rows (`pad.mjs`). Each `scenes/<slug>.mjs` then
 animates two or three living details into `scene.webp` (8x, for the stage
-at 2x and up), `scene-1x.webp` and `poster.png`, the way the note headers
+at 1.1x and up, shown through a 320 by 134 window), `scene-1x.webp` and `poster.png`, the way the note headers
 are built (pixel-header skill, steps 4 and 5). Check the result in the
 workbench's scene viewer with the guides on: the stands must not overlap
 furniture and the band the composition rule keeps clear must be clear.

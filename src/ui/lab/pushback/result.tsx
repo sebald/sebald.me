@@ -31,7 +31,7 @@ export const ResultScreen = ({ run, onBack }: ResultScreenProps) => {
   return (
     <Stage label="Pushback, result card">
       <Stage.Center className="justify-between py-6">
-        <pre className="rounded-xl bg-mist-900/90 px-4 py-3 text-left whitespace-pre ring-1 ring-mist-700">
+        <pre className="bg-[#131829] px-4 py-3 text-left whitespace-pre shadow-[0_0_0_calc(var(--px)*2)_#0b0d16] ring-[length:var(--px)] ring-[#b7b09d]">
           {text}
         </pre>
         <Menu

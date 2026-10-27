@@ -16,8 +16,11 @@ import {
   canPlay,
   nextSlot,
 } from '@/lib/lab/pushback/run';
+import { PROPS, type PropId } from '@/lib/lab/pushback/sprites';
 import { cn } from '@/lib/styles.utils';
 
+import { SCENE_ASSETS } from './scenes';
+import { SHEETS } from './sheets';
 import { Menu, type MenuItem, Stage } from './stage';
 import { useKeys } from './use-keys';
 
@@ -30,6 +33,31 @@ interface RosterScreenProps {
 
 const tierLabel = (tier: 1 | 2 | 3 | 'boss') =>
   tier === 'boss' ? 'Boss' : `Tier ${tier}`;
+
+/**
+ * A colleague's prop from the item sheet, as a CSS sprite at a third of
+ * the stage's pixels (the sheet's own pixels at 3x): the props are not
+ * on the figures any more, so the roster shows what each one carries.
+ */
+const PropIcon = ({ prop }: { prop: PropId }) => {
+  const sheet = SHEETS.props;
+  const { width, height } = sheet.meta.cell;
+  const px = (n: number) => `calc(var(--px) * ${n / 3})`;
+  return (
+    <span
+      aria-hidden
+      className="inline-block shrink-0 [image-rendering:pixelated]"
+      style={{
+        width: px(width),
+        height: px(height),
+        backgroundImage: `url(${sheet.image.src})`,
+        backgroundSize: `${px(width * sheet.meta.count)} ${px(height)}`,
+        backgroundPosition: `${px(-PROPS.indexOf(prop) * width)} 0`,
+        backgroundRepeat: 'no-repeat',
+      }}
+    />
+  );
+};
 
 /**
  * The seven slots in run order with ticks and stars, the out-of-office
@@ -72,6 +100,7 @@ export const RosterScreen = ({
             {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
           </span>
           <span className="flex-1">{character.name}</span>
+          {character.swap.prop && <PropIcon prop={character.swap.prop} />}
           <span className="text-[0.85em] opacity-70">
             {index === BOSS_SLOT_INDEX && !bossUnlocked(run)
               ? 'locked'
@@ -87,14 +116,20 @@ export const RosterScreen = ({
 
   return (
     <Stage label="Pushback, roster">
+      {/* The corner office, dimmed, behind the list */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
+        style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
+      />
       <Stage.Corner>
         <button
           type="button"
           className={cn(
             'cursor-pointer rounded-lg px-2 py-1 outline-none focus-visible:ui-focus',
             tab === 'glossary'
-              ? 'bg-mist-100 text-mist-900'
-              : 'text-mist-400 hover:text-mist-100',
+              ? 'bg-[#f2c14e] text-[#0b0d16]'
+              : 'text-[#8a92b8] hover:text-white',
           )}
           aria-pressed={tab === 'glossary'}
           onClick={() => setTab(t => (t === 'roster' ? 'glossary' : 'roster'))}
@@ -110,6 +145,7 @@ export const RosterScreen = ({
             initial={next >= 0 ? String(next) : 'result'}
             items={items}
             active={tab === 'roster'}
+            className="content-start gap-[0.3em]"
           />
           <div className="text-[0.85em] text-mist-500">
             <div className="mb-1 text-mist-400">Out of office</div>

@@ -13,6 +13,7 @@ import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
 import { LAYOUT } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
+import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage } from './stage';
 import { useKeys } from './use-keys';
@@ -96,6 +97,12 @@ export const SelectScreen = ({
 
   return (
     <Stage label="Pushback, pick a role">
+      {/* The corner office, dimmed, behind the cards */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
+        style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
+      />
       {/* The box is absolute at the bottom: the roles sit above it */}
       <Stage.Center className="justify-between py-6 pb-[calc(var(--px)*48)]">
         <Stage.Muted>Pick a role. Up or down flips the look.</Stage.Muted>
@@ -113,11 +120,13 @@ export const SelectScreen = ({
                   aria-pressed={active}
                   aria-label={`${ROLE_LABELS[r]}, ${LOOKS[r][looks[r]].name}`}
                   className={cn(
-                    'grid place-items-center rounded-lg p-[calc(var(--px)*2)] transition-all duration-150',
+                    // A window like the duel's panel, lit when active
+                    'grid place-items-center p-[calc(var(--px)*3)] transition-all duration-150',
+                    'bg-[#131829] ring-[length:var(--px)] shadow-[0_0_0_calc(var(--px)*2)_#0b0d16]',
                     'outline-none focus-visible:ui-focus',
                     active
-                      ? 'bg-mist-800 ring-1 ring-mist-300'
-                      : 'bg-mist-900/60 opacity-60 hover:opacity-80',
+                      ? 'ring-[#b7b09d]'
+                      : 'bg-[#0e1220] ring-[#4a5066] opacity-70 hover:opacity-90',
                   )}
                   onClick={() => {
                     if (active) flip(r);
@@ -130,18 +139,18 @@ export const SelectScreen = ({
                   <div
                     className={cn(
                       'font-semibold',
-                      active ? 'text-mist-50' : 'text-mist-500',
+                      active ? 'text-[#f3eedc]' : 'text-[#8a92b8]',
                     )}
                   >
                     {ROLE_LABELS[r]}
                   </div>
-                  <div className="text-[0.85em] text-mist-400">
+                  <div className="text-[0.85em] text-[#8a92b8]">
                     {(['a', 'b'] as const).map((l, j) => (
                       <span key={l}>
                         {j > 0 && ' / '}
                         <span
                           className={cn(
-                            looks[r] === l && active && 'text-mist-100',
+                            looks[r] === l && active && 'text-white',
                           )}
                         >
                           {LOOKS[r][l].name}
@@ -150,7 +159,7 @@ export const SelectScreen = ({
                     ))}
                   </div>
                   {run && (
-                    <div className="text-[0.8em] text-mist-500">
+                    <div className="text-[0.8em] text-[#8a92b8]">
                       {run.finished ? 'finished' : 'in progress'}
                     </div>
                   )}
@@ -163,7 +172,7 @@ export const SelectScreen = ({
           <p className="text-balance">{ROLE_BLURBS[role]}</p>
           <button
             type="button"
-            className="mt-2 cursor-pointer rounded-lg bg-mist-100 px-4 py-1 text-mist-900 outline-none focus-visible:ui-focus"
+            className="mt-2 cursor-pointer bg-[#f2c14e] px-4 py-1 font-semibold text-[#0b0d16] outline-none focus-visible:ui-focus"
             onClick={() => onConfirm(role, look)}
           >
             Play as {LOOKS[role][look].name}

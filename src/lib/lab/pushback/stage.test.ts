@@ -20,6 +20,7 @@ import {
   scriptFor,
   typedChars,
   typingDuration,
+  fitFor,
   scaleTicks,
   viewFor,
 } from './stage';
@@ -40,6 +41,16 @@ describe('scaleFor', () => {
 
   it('takes a larger cap for the workbench', () => {
     assert.equal(scaleFor(1920, 1080, 4), 4);
+  });
+
+  it('crops the ceiling of a short window before shrinking', () => {
+    assert.deepEqual(fitFor(1200, 700), { scale: 3, crop: 0 });
+    // 642 tall at 3x, 600 of room: 14 rows go
+    assert.deepEqual(fitFor(1200, 600), { scale: 3, crop: 14 });
+    // Past 60 rows the stage shrinks to fit 154 rows
+    const short = fitFor(1200, 400);
+    assert.equal(short.crop, 60);
+    assert.ok(Math.abs(short.scale - 400 / 154) < 1e-9);
   });
 
   it('never goes above the maximum', () => {

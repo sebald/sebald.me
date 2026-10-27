@@ -67,6 +67,8 @@ interface StageProps extends PropsWithChildren {
   label?: string;
   /** Fix the scale (the workbench) instead of fitting the viewport */
   scale?: number;
+  /** Crop this many rows off the top (the duel's frame in a short window) */
+  crop?: number;
 }
 
 /**
@@ -79,6 +81,7 @@ export const Stage = ({
   className,
   label,
   scale: fixed,
+  crop = 0,
 }: StageProps) => {
   const { scale, portrait } = useScale(fixed);
   if (portrait && !fixed) {
@@ -89,7 +92,7 @@ export const Stage = ({
     );
   }
   const width = STAGE.width * scale;
-  const height = STAGE.height * scale;
+  const height = (STAGE.height - crop) * scale;
   const style: CSSProperties = {
     width,
     height,
@@ -106,7 +109,13 @@ export const Stage = ({
       className={styles.root({ className })}
       style={style}
     >
-      {children}
+      {/* The full stage, its top rows above the section when cropped */}
+      <div
+        className="absolute inset-x-0"
+        style={{ top: -crop * scale, height: STAGE.height * scale }}
+      >
+        {children}
+      </div>
     </section>
   );
 };

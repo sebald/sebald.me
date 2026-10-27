@@ -59,6 +59,7 @@ import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Menu, type MenuItem } from './stage';
 import { useKeys } from './use-keys';
+import { useScale } from './use-scale';
 
 // Styles
 // ---------------
@@ -215,6 +216,8 @@ export const DuelScreen = ({
   // The exchange the buddy's whisper started on, for the miss line
   const [whisperedOn, setWhisperedOn] = useState<number | null>(null);
   const reduced = reducedMotion ?? prefersReducedMotion();
+  // The ceiling rows a short window crops: the HUD and the names move down
+  const { crop } = useScale(scale);
 
   const stateRef = useRef(state);
   useLayoutEffect(() => {
@@ -226,9 +229,13 @@ export const DuelScreen = ({
   const rootRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (scale !== undefined) return;
-    rootRef.current
-      ?.closest('[data-stage]')
-      ?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+    // After the stage has measured itself and taken its size
+    const frame = requestAnimationFrame(() => {
+      rootRef.current
+        ?.closest('[data-stage]')
+        ?.scrollIntoView({ block: 'end', behavior: 'auto' });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [scale]);
 
   const steps = useMemo(() => scriptFor(state), [state]);
@@ -399,6 +406,7 @@ export const DuelScreen = ({
     momentumTotal: state.rules.momentum,
     composure: 1 - state.rules.fatigue * shown.exchanges,
     blinkOn: bob(clock) === 0,
+    crop,
   };
   const sprite = (side: Side) => {
     const pose = poses[side];
@@ -532,14 +540,14 @@ export const DuelScreen = ({
 
       <span
         className={styles.name({ side: 'player' })}
-        style={{ left: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
+        style={{ left: px(LAYOUT.names.x), top: px(LAYOUT.names.y + crop) }}
         aria-hidden
       >
         {playerName(state.setup.role, look)}
       </span>
       <span
         className={styles.name({ side: 'opponent' })}
-        style={{ right: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
+        style={{ right: px(LAYOUT.names.x), top: px(LAYOUT.names.y + crop) }}
         aria-hidden
       >
         {character.name}
@@ -548,7 +556,7 @@ export const DuelScreen = ({
       {micDropLabel && (
         <div
           className={styles.badge()}
-          style={{ top: px(LAYOUT.ticks.y + LAYOUT.ticks.height + 6) }}
+          style={{ top: px(LAYOUT.ticks.y + LAYOUT.ticks.height + 6 + crop) }}
           aria-hidden
         >
           Mic drop!

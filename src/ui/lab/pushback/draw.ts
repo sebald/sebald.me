@@ -101,6 +101,8 @@ export interface HudModel {
   composure: number;
   /** A full momentum bar blinks at the idle rhythm */
   blinkOn: boolean;
+  /** Rows cropped off the top in a short window: the HUD moves down by this */
+  crop: number;
 }
 
 /** The onboarding buddy's ghost, while it shows */
@@ -496,9 +498,13 @@ export const drawFrame = (
   drawSprite(ctx, 'player', model.sprites.player, sprites);
   drawSprite(ctx, 'opponent', model.sprites.opponent, sprites);
   ctx.restore();
+  // The HUD stays at the top of what is shown when the ceiling is cropped
+  ctx.save();
+  ctx.translate(0, model.hud.crop);
   drawScale(ctx, model.hud);
   drawPips(ctx, model.hud, 'player');
   drawPips(ctx, model.hud, 'opponent');
   drawComposure(ctx, model.hud);
+  ctx.restore();
   drawPanel(ctx);
 };
