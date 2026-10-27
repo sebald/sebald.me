@@ -78,7 +78,61 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 
 Reroll on: any resemblance to the attached hoodie character in face or hair, a figure clearly taller or shorter than the attached sheet, a notebook that disappears in some cells, a badge with writing.
 
-### PM, look two: Ravi (`pm-ravi-sheet.jpg`)
+### PM, look two: Piet (`pm-piet-sheet.jpg`)
+
+Replaces Ravi (kept below as the backup). The cast so far is young to middle-aged, slim to average, and five of seven are mid to dark skinned, so the gap is an older, rounder, pale man with hair nobody else has.
+
+Attach: `HEADER`, `DEV`.
+
+```text
+Draw a pixel-art character model sheet of a NEW character for the same
+game as the attached sheet. The attached sheet is only the reference for
+pixel size, drawing style, outline weight and figure height. The new
+character must be a clearly different person: different face, hair, skin
+tone, build, age and clothes. Do not reuse anything of the attached
+character's appearance.
+
+Character: a product manager, a man in his late fifties, short and
+round, pale pink skin, thinning grey-blond hair combed over the top and
+a big grey walrus moustache, small round wire glasses, the calm of
+someone who has survived every methodology so far. A mustard-yellow
+knitted vest over a checked shirt with the sleeves rolled up, a brown
+wool tie, an orange lanyard with a blank badge, brown corduroy trousers,
+brown brogues. A small notebook is clamped under the left arm the whole
+time. In the right hand, a thick stack of sticky notes in yellow and
+pink, held like a weapon.
+
+Style: a 16-bit pixel-art sprite sheet from a 1990s point-and-click
+adventure game, as it looked on screen at 320x200. Not modern
+high-resolution pixel art. Every pixel is big and clearly visible, the
+same pixel size as the attached sheet. Big simple shapes, detail
+suggested with a few pixels. Three or four shades per material, a dark
+outline only on the silhouette, a limited palette. Plain flat dark
+background, no floor, no shadow, no frame.
+
+Layout: the same character six times side by side in a single row,
+identical in size, colours and clothing, the same height as the figures
+in the attached sheet, front three-quarter view facing to the right,
+clear gaps between the figures, nothing touching the edge of the image.
+Left to right:
+1. idle: standing, weight on one leg, notebook under the arm, sticky
+   notes held at the hip, looking right.
+2. talking: mouth open under the moustache, the free hand chopping the
+   air mid-sentence.
+3. taunt: leaning forward, the sticky-note stack thrust towards the right
+   like a pointed finger, eyebrows up over the glasses.
+4. flinch: leaning back, eyes shut, a few sticky notes flying off the
+   stack, the glasses slipping down the nose.
+5. win: both arms up, one sticky note stuck to the forehead on purpose.
+6. lose: shoulders dropped, head down, polishing the glasses on the vest
+   very slowly.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+Reroll on: a slim figure (Gemini likes to draw everyone fit), hair growing back in some cells, the moustache missing, a figure taller than the attached sheet (the whole point is that he is not).
+
+### PM, look two, backup: Ravi (`pm-ravi-sheet.jpg`, generated, kept as the backup)
 
 Attach: `HEADER`, `DEV`.
 
