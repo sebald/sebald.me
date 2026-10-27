@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Fifteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet, the logo.
+Every image the game needs, one prompt each, ready to paste. Sixteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet, the logo, the mic-drop burst.
 
 ## Before you start
 
@@ -895,6 +895,37 @@ shadow. No other words, no tagline, no characters, no icons.
 ```
 
 What to check: the word reads at a quarter size; the pixel size matches the header (if the letters look finer, use the half-resolution follow-up); the outline is one colour and closed; the shadow is hard, not blurred; nothing touches the frame edge. The orange should be the ember of the HUD (around #f0a36f) and the cream its frame (#f3eedc); a different warm pair is fine, the stage takes the logo's colours, not the other way round. Cut it with `sheet.mjs` once it keeps every letter: the letters are separate groups and the cutter joins the largest ones, so a `--cells 1 --specks 0` run with the shadow connecting the letters is the first thing to try, and a `logo.mjs` that keys the background and keeps everything is the fallback.
+
+## Mic drop burst (`micdrop-sheet.jpg`)
+
+The comic burst that goes off between the duellists on a mic drop: the loudest thing in the game. Three cells on a plain dark background like a model sheet, keyed and cut the same way (`--cells 3 --cell 112x64 --anchor centre --specks 0`, the letters are inside the burst so they key with it). About 90 by 50 art pixels per cell, roughly a third of the band's width; nothing else in the frame.
+
+Attach: `HEADER` and, once it exists, the logo, so the lettering matches.
+
+```text
+Draw a pixel-art sprite sheet in the style of the attached image: the
+same pixel size, the same hard-edged outlines, the same limited palette.
+Plain, flat, very dark background, nothing else in the frame. Three
+versions of one comic-book burst in a row, left to right, with clear
+gaps between them.
+
+The burst is a jagged starburst shape like a comic sound effect, with
+about fourteen uneven spikes, filled in bright gold with a burnt orange
+rim and a one-pixel black outline, and a hard two-pixel drop shadow down
+and to the right. Inside it, the words MIC DROP in two rows of heavy
+pixel capitals, dark navy with a one-pixel cream highlight along the top
+of each letter, slightly tilted as if shouted.
+
+Left: the burst as described. Middle: the same burst one step bigger,
+the spikes longer and the letters tilted a little more, as on the loud
+beat of a pulse. Right: the burst popped: the outline torn open in two
+places, a few spikes bent over, the letters sagging and cracked, a
+couple of small loose fragments beside it. All three the same style, the
+same colours, the same pixel size. No gradients, no glow, no blur: flat
+colours, one outline, one shadow. No other words.
+```
+
+What to check: the letters are legible at a quarter size; the three cells share one pixel size; the popped cell is still the same burst, not a different object; nothing touches the frame edge. The gold should be the player's HUD gold (#f2c14e) and the rim the ember (#f0a36f), close is fine.
 
 ## Follow-ups, in the same chat
 
