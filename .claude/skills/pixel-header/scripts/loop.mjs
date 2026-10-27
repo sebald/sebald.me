@@ -119,8 +119,10 @@ export const loadScene = async src => {
  * by `scaleFor` for `shownWidth` (CSS pixels, defaults to a note header).
  * `frames` are native RGB buffers; `layersAt(t)` optionally
  * returns RGBA layers to lay over frame `t`, each moved up by `lift` art
- * pixels (fractions move it by export pixels). With `FRAMES_DIR` set, the
- * frames are also written there for review.
+ * pixels (fractions move it by export pixels). With `oneX` the same loop is
+ * also written unscaled as `scene-1x.webp`, for a stage shown at 1x (a
+ * fractional lift then rounds to whole art pixels). With `FRAMES_DIR` set,
+ * the frames are also written there for review.
  */
 export const writeLoop = async ({
   scene: { W, H },
@@ -129,53 +131,61 @@ export const writeLoop = async ({
   outDir,
   layersAt = () => [],
   shownWidth,
+  oneX = false,
 }) => {
   const SCALE = scaleFor(W, shownWidth);
-  const up = (buf, channels) =>
-    sharp(buf, { raw: { width: W, height: H, channels } })
-      .resize(W * SCALE, H * SCALE, { kernel: 'nearest' })
-      .png()
-      .toBuffer();
 
-  // Up by `lift` art pixels, rounded to export pixels, cropped so it still
-  // fits the frame
-  const lifted = async (layer, artLift) => {
-    const lift = Math.round(artLift * SCALE);
-    return lift === 0
-      ? layer
-      : sharp(layer)
-          .extract({
+  // The frames with their layers composited, at an export scale
+  const render = async scale => {
+    const up = (buf, channels) =>
+      sharp(buf, { raw: { width: W, height: H, channels } })
+        .resize(W * scale, H * scale, { kernel: 'nearest' })
+        .png()
+        .toBuffer();
+
+    // Up by `lift` art pixels, rounded to export pixels, cropped so it still
+    // fits the frame
+    const lifted = async (layer, artLift) => {
+      const lift = Math.round(artLift * scale);
+      return lift === 0
+        ? layer
+        : sharp(layer)
+            .extract({
+              left: 0,
+              top: lift,
+              width: W * scale,
+              height: H * scale - lift,
+            })
+            .toBuffer();
+    };
+
+    return Promise.all(
+      frames.map(async (f, t) => {
+        const frame = await up(f, 3);
+        const layers = layersAt(t);
+        if (!layers.length) return frame;
+        const overlays = await Promise.all(
+          layers.map(async ({ layer, lift }) => ({
+            input: await lifted(await up(layer, 4), lift),
+            top: 0,
             left: 0,
-            top: lift,
-            width: W * SCALE,
-            height: H * SCALE - lift,
-          })
-          .toBuffer();
+          })),
+        );
+        return sharp(frame).composite(overlays).png().toBuffer();
+      }),
+    );
   };
 
-  const scaled = await Promise.all(
-    frames.map(async (f, t) => {
-      const frame = await up(f, 3);
-      const layers = layersAt(t);
-      if (!layers.length) return frame;
-      const overlays = await Promise.all(
-        layers.map(async ({ layer, lift }) => ({
-          input: await lifted(await up(layer, 4), lift),
-          top: 0,
-          left: 0,
-        })),
-      );
-      return sharp(frame).composite(overlays).png().toBuffer();
-    }),
-  );
-
-  await sharp(scaled, { join: { animated: true } })
-    .webp({
+  const animated = pngs =>
+    sharp(pngs, { join: { animated: true } }).webp({
       lossless: true,
       loop: 0,
       delay: Array(frames.length).fill(delay),
-    })
-    .toFile(`${outDir}/scene.webp`);
+    });
+
+  const scaled = await render(SCALE);
+  await animated(scaled).toFile(`${outDir}/scene.webp`);
+  if (oneX) await animated(await render(1)).toFile(`${outDir}/scene-1x.webp`);
 
   // Frame 0 doubles as the reduced-motion poster
   await sharp(scaled[0]).png({ palette: true }).toFile(`${outDir}/poster.png`);

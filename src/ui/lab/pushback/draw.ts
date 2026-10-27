@@ -224,9 +224,23 @@ const drawBox = (ctx: CanvasRenderingContext2D) => {
   for (const [cx, cy] of corners) rect(ctx, cx, cy, 1, 1, CHROME.outer);
 };
 
-export const drawFrame = (ctx: CanvasRenderingContext2D, model: FrameModel) => {
+export interface DrawOptions {
+  /**
+   * Paint the flat placeholder scene. Off once the scene loop under the
+   * canvas has loaded; the canvas is then transparent apart from the
+   * figures and the chrome.
+   */
+  background?: boolean;
+}
+
+export const drawFrame = (
+  ctx: CanvasRenderingContext2D,
+  model: FrameModel,
+  { background = true }: DrawOptions = {},
+) => {
   ctx.imageSmoothingEnabled = false;
-  drawScene(ctx, model.scene);
+  if (background) drawScene(ctx, model.scene);
+  else ctx.clearRect(0, 0, STAGE.width, STAGE.height);
   drawSprite(ctx, 'player', model.sprites.player);
   drawSprite(ctx, 'opponent', model.sprites.opponent);
   drawBars(

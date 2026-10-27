@@ -1,5 +1,6 @@
 'use client';
 
+import NextImage from 'next/image';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
@@ -12,6 +13,7 @@ import {
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
+import { SCENE_ASSETS, loopFor } from './scenes';
 
 /**
  * The scaled frame: a 480 by 270 canvas drawn at native size and scaled
@@ -60,11 +62,20 @@ export const Frame = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef(model);
   const stepRef = useRef(onStep);
+  // The scene loop under the canvas; until it has loaded the canvas paints
+  // the flat placeholder scene itself
+  const [loadedScene, setLoadedScene] = useState<string | null>(null);
+  const loadedRef = useRef(false);
+  const { scale, portrait } = useScale(fixedScale);
+  const assets = SCENE_ASSETS[model.scene];
+  const loop = loopFor(assets, scale);
+  const sceneKey = `${model.scene}:${loop.src}`;
+  const sceneLoaded = loadedScene === sceneKey;
   useLayoutEffect(() => {
     modelRef.current = model;
     stepRef.current = onStep;
+    loadedRef.current = sceneLoaded;
   });
-  const { scale, portrait } = useScale(fixedScale);
 
   // One loop at 8 fps steps: redraw, and tell the screen a step passed
   useEffect(() => {
@@ -74,7 +85,9 @@ export const Frame = ({
     let acc = 0;
     const draw = () => {
       const ctx = canvasRef.current?.getContext('2d');
-      if (ctx) drawFrame(ctx, modelRef.current);
+      if (ctx) {
+        drawFrame(ctx, modelRef.current, { background: !loadedRef.current });
+      }
     };
     draw();
     const loop = (now: number) => {
@@ -95,8 +108,8 @@ export const Frame = ({
   // Redraw on model changes between steps, so input feels immediate
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawFrame(ctx, model);
-  }, [model]);
+    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded });
+  }, [model, sceneLoaded]);
 
   const width = STAGE.width * scale;
   const height = STAGE.height * scale;
@@ -127,6 +140,40 @@ export const Frame = ({
         ['--px' as string]: `${scale}px`,
       }}
     >
+      {/*
+        The scene loop. At 1x the unscaled frames with hard edges; above,
+        the 8x export scaled down smoothly, so every art pixel keeps the
+        same size (scaling up would blur, `pixelated` would round pixels to
+        uneven widths). The poster replaces it under reduced motion.
+      */}
+      <picture
+        key={sceneKey}
+        className={cn(
+          'absolute inset-0 transition-opacity duration-300',
+          sceneLoaded ? 'opacity-100' : 'opacity-0',
+        )}
+      >
+        <source
+          media="(prefers-reduced-motion: reduce)"
+          srcSet={assets.poster.src}
+        />
+        <NextImage
+          src={loop}
+          alt=""
+          width={STAGE.width}
+          height={STAGE.height}
+          // Animated and pre-scaled with hard edges: never resized by the
+          // optimizer
+          unoptimized
+          loading="eager"
+          onLoad={() => setLoadedScene(sceneKey)}
+          className={cn(
+            'absolute inset-0 h-full w-full',
+            scale <= 1 && '[image-rendering:pixelated]',
+          )}
+          style={{ width, height }}
+        />
+      </picture>
       <canvas
         ref={canvasRef}
         aria-hidden

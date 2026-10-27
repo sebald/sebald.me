@@ -19,6 +19,7 @@ import {
 import { PAIRS, type Role, ROLES, poolOf } from '@/lib/lab/pushback/lines';
 
 import { DuelScreen } from '../duel-screen';
+import { SceneViewer } from './scene-viewer';
 
 // Options
 // ---------------
@@ -347,12 +348,11 @@ export const Sandbox = () => {
         />
       </div>
 
+      <SceneViewer />
+
       <section className="grid gap-2 font-mono text-sm text-mist-400">
         <h2 className="text-mist-200">Later panels</h2>
-        <p>
-          Sprite viewer: package 5 (sheets and swaps). Scene viewer: package 4
-          (loops and posters).
-        </p>
+        <p>Sprite viewer: package 5 (sheets and swaps).</p>
       </section>
     </div>
   );
