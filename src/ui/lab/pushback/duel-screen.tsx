@@ -43,7 +43,6 @@ import {
   LAYOUT,
   STAGE,
   barsLabel,
-  bob,
   counterText,
   holdFor,
   phraseText,
@@ -61,34 +60,29 @@ import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Ghost } from './ghost';
+import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
 
+/** The ghost's bubble: right of its head's centre, under the bars */
+const GHOST_BUBBLE = { left: 22, gap: 2 } as const;
+
 // Styles
 // ---------------
 const styles = {
-  name: cva({
-    base: [
-      'absolute font-semibold tracking-wide uppercase',
-      'bg-[#0b0d16]/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
-      'shadow-[0_0_0_var(--px)_#0b0d16]',
-    ],
-    variants: {
-      side: {
-        player: 'text-[#f2c14e]',
-        opponent: 'text-right text-[#f0a36f]',
-      },
-    },
-  }),
   hint: cva({ base: 'text-[#8a92b8]' }),
-  // The ghost's speech bubble, over its head, in its own pale colour
+  // The ghost's speech bubble in its own pale colour, with a tail
+  // pointing down to the ghost
   bubble: cva({
     base: [
-      'absolute max-w-[24em] px-[0.6em] py-[0.3em]',
+      'absolute w-max px-[0.6em] py-[0.3em]',
       'bg-[#0b1516]/90 text-[0.85em] text-[#bfe8ea] ring-1 ring-[#2f5e60]',
       'transition-opacity duration-300',
+      'after:absolute after:top-full after:left-[calc(var(--px)*4)]',
+      'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-[#2f5e60]',
+      'after:[clip-path:polygon(0_0,100%_0,25%_100%)]',
     ],
   }),
   silence: cva({
@@ -420,7 +414,8 @@ export const DuelScreen = ({
         : -2
       : 0;
   const flash = !reduced && throwing && cursor.elapsed < 125;
-  const steady = viewFor(stands);
+  // With the ghost along, the view leaves room for it at the player's side
+  const steady = viewFor(stands, { ghost: buddyOn });
   const view = { x: steady.x + shake, y: steady.y };
   const standX: Record<Side, number> = {
     player: stands.left - view.x,
@@ -431,17 +426,7 @@ export const DuelScreen = ({
   const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
-  const hud: FrameModel['hud'] = {
-    scale: shown.scale,
-    toWin: toWin(state),
-    toLose: toLose(state),
-    momentum: shown.momentum,
-    momentumTotal: state.rules.momentum,
-    composure: 1 - state.rules.fatigue * shown.exchanges,
-    blinkOn: bob(clock) === 0,
-    crop,
-  };
-  const model: FrameModel = { scene, view, hud };
+  const model: FrameModel = { scene, view };
   const micDropBy = (side: Side) =>
     state.exchange?.micDrop === true && state.exchange.by === side;
   const band = (
@@ -584,31 +569,34 @@ export const DuelScreen = ({
         {announce}
       </div>
 
-      <span
-        className={styles.name({ side: 'player' })}
-        style={{ left: px(LAYOUT.names.x), top: px(LAYOUT.names.y + crop) }}
-        aria-hidden
-      >
-        {playerName(state.setup.role, look)}
-      </span>
-      <span
-        className={styles.name({ side: 'opponent' })}
-        style={{ right: px(LAYOUT.names.x), top: px(LAYOUT.names.y + crop) }}
-        aria-hidden
-      >
-        {character.name}
-      </span>
+      {/* The bars, at the top of what is shown when the ceiling is cropped;
+          through a resolve line they show the state before it */}
+      <Hud
+        scale={shown.scale}
+        toWin={toWin(state)}
+        toLose={toLose(state)}
+        momentum={shown.momentum}
+        momentumTotal={state.rules.momentum}
+        composure={1 - state.rules.fatigue * shown.exchanges}
+        names={{
+          player: playerName(state.setup.role, look),
+          opponent: character.name,
+        }}
+        crop={crop}
+        still={reduced}
+      />
 
       {ghostShown && ghostLine && enter >= 1 && (
         <p
           className={styles.bubble()}
           style={{
-            // Over the ghost's head, kept inside the stage: never past the
-            // left edge (the ghost can stand off it), wrapped before the
-            // right one, and under the bars when the ceiling is cropped
-            left: px(Math.max(2, ghostX + 4)),
-            maxWidth: `calc(100% - ${px(Math.max(2, ghostX + 4) + 2)})`,
-            top: px(Math.max(crop + 14, LAYOUT.feet - LAYOUT.cell.height + 2)),
+            // In the strip between the bars and the player's head, its
+            // tail down to the ghost at the player's shoulder; never past
+            // the left edge (the ghost can stand off it) and wrapped
+            // before the right one, so it is always on the stage
+            left: px(Math.max(2, ghostX + GHOST_BUBBLE.left)),
+            maxWidth: `calc(100% - ${px(Math.max(2, ghostX + GHOST_BUBBLE.left) + 2)})`,
+            top: px(crop + LAYOUT.hud + GHOST_BUBBLE.gap),
           }}
         >
           {ghostLine}

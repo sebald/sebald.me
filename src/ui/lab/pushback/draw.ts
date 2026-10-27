@@ -1,22 +1,12 @@
 /**
  * The frame's canvas: the room band (a flat colour until the loop under
- * the canvas has loaded) and the chrome, drawn in code on the same pixel
- * grid as the room: the shared scale, the momentum pips, the composure
- * strip. The duellists and the ghost are their own canvases
- * (`Character`, `Ghost`), which share `drawCell`; the quiet window and
- * the letters are DOM (`Window`, see the screen).
+ * the canvas has loaded) and the panel's ground. The duellists and the
+ * ghost are their own canvases (`Character`, `Ghost`), which share
+ * `drawCell`; the bars, the quiet window and the letters are DOM
+ * (`Hud`, `Window`, see the screen).
  */
 import type { SceneId } from '@/lib/lab/pushback/characters';
-import type { Side } from '@/lib/lab/pushback/duel';
-import {
-  BACKING,
-  BREATH,
-  LAYOUT,
-  STAGE,
-  barRects,
-  barWidth,
-  scaleTicks,
-} from '@/lib/lab/pushback/stage';
+import { BACKING, BREATH, LAYOUT, STAGE } from '@/lib/lab/pushback/stage';
 
 import type { Sprite } from './sheets';
 
@@ -63,27 +53,10 @@ export const GHOST_ALPHA = 0.7;
 // Model
 // ---------------
 
-export interface HudModel {
-  /** The shared scale, positive toward the player */
-  scale: number;
-  toWin: number;
-  toLose: number;
-  momentum: Record<Side, number>;
-  momentumTotal: number;
-  /** The opponent's composure, 0 to 1: fatigue drains it */
-  composure: number;
-  /** A full momentum bar blinks at the idle rhythm */
-  blinkOn: boolean;
-  /** Rows cropped off the top in a short window: the HUD moves down by this */
-  crop: number;
-}
-
-/** The onboarding buddy's ghost, while it shows */
 export interface FrameModel {
   scene: SceneId;
   /** The window of the scene the band shows (`viewFor`) */
   view: { x: number; y: number };
-  hud: HudModel;
 }
 
 // Drawing
@@ -99,22 +72,6 @@ const rect = (
 ) => {
   ctx.fillStyle = colour;
   ctx.fillRect(x, y, w, h);
-};
-
-/** Every other pixel, a dither */
-const checker = (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  colour: string,
-) => {
-  for (let yy = y; yy < y + h; yy++) {
-    for (let xx = x + ((yy + x) % 2); xx < x + w; xx += 2) {
-      rect(ctx, xx, yy, 1, 1, colour);
-    }
-  }
 };
 
 const drawBand = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
@@ -250,123 +207,6 @@ export const drawTear = (
   });
 };
 
-/** A lit box: a light top row, the colour, a shaded bottom row */
-const lit = (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  side: Side,
-  bright = false,
-) => {
-  const player = side === 'player';
-  const top = player ? CHROME.goldLight : CHROME.emberLight;
-  const mid = bright ? top : player ? CHROME.gold : CHROME.ember;
-  const shade = player ? CHROME.goldShade : CHROME.emberShade;
-  rect(ctx, x, y, w, 1, top);
-  rect(ctx, x, y + 1, w, h - 2, mid);
-  rect(ctx, x, y + h - 1, w, 1, shade);
-};
-
-/** An empty box: dark with a dither */
-const empty = (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-) => {
-  rect(ctx, x, y, w, h, CHROME.empty);
-  checker(ctx, x, y + 1, w, h - 2, CHROME.emptyDots);
-};
-
-/** The shared scale: ticks across the top, the marker where it points */
-const drawScale = (ctx: CanvasRenderingContext2D, hud: HudModel) => {
-  const ticks = scaleTicks(hud);
-  for (const tick of ticks) {
-    rect(
-      ctx,
-      tick.x - 1,
-      tick.y - 1,
-      tick.width + 2,
-      tick.height + 2,
-      CHROME.ink,
-    );
-    if (tick.lit && tick.side) {
-      lit(ctx, tick.x, tick.y, tick.width, tick.height, tick.side);
-    } else {
-      empty(ctx, tick.x, tick.y, tick.width, tick.height);
-    }
-  }
-  const marker = ticks.find(tick => tick.marker);
-  if (!marker) return;
-  // The marker: a bright notch on the tick, and a pointer under it
-  const colour = marker.side
-    ? marker.side === 'player'
-      ? CHROME.goldLight
-      : CHROME.emberLight
-    : CHROME.steel;
-  const mx = marker.x + Math.floor(marker.width / 2);
-  rect(
-    ctx,
-    marker.x + 1,
-    marker.y + 1,
-    marker.width - 2,
-    marker.height - 2,
-    colour,
-  );
-  rect(ctx, mx - 2, marker.y + marker.height + 1, 5, 1, CHROME.ink);
-  rect(ctx, mx - 1, marker.y + marker.height + 2, 3, 1, CHROME.ink);
-  rect(ctx, mx, marker.y + marker.height + 3, 1, 1, CHROME.ink);
-  rect(ctx, mx - 1, marker.y + marker.height + 1, 3, 1, colour);
-  rect(ctx, mx, marker.y + marker.height + 2, 1, 1, colour);
-};
-
-/** Momentum pips in a corner, filling from the outside in */
-const drawPips = (ctx: CanvasRenderingContext2D, hud: HudModel, side: Side) => {
-  const { x, y, width, height, gap } = LAYOUT.pips;
-  const total = hud.momentumTotal;
-  const w = barWidth(total, { width, gap });
-  const left = side === 'player' ? x : STAGE.width - x - w;
-  const full = hud.momentum[side] >= total;
-  const pips = barRects({
-    x: left,
-    y,
-    count: total,
-    filled: hud.momentum[side],
-    width,
-    height,
-    gap,
-  });
-  // The right corner fills from its outer end
-  const ordered = side === 'player' ? pips : [...pips].reverse();
-  ordered.forEach((pip, i) => {
-    const filled = i < hud.momentum[side];
-    rect(ctx, pip.x - 1, pip.y - 1, pip.width + 2, pip.height + 2, CHROME.ink);
-    if (filled) {
-      lit(ctx, pip.x, pip.y, pip.width, pip.height, side, full && hud.blinkOn);
-    } else {
-      empty(ctx, pip.x, pip.y, pip.width, pip.height);
-    }
-  });
-};
-
-/** The opponent's composure: a strip that drains as it tires */
-const drawComposure = (ctx: CanvasRenderingContext2D, hud: HudModel) => {
-  const { y, width, height } = LAYOUT.composure;
-  const x = STAGE.width - LAYOUT.pips.x - width;
-  rect(ctx, x - 1, y - 1, width + 2, height + 2, CHROME.ink);
-  rect(ctx, x, y, width, height, CHROME.empty);
-  const left = Math.round(width * Math.max(0, Math.min(1, hud.composure)));
-  // Drains from the inner end, so the outer end is the last to go
-  if (left > 0) {
-    rect(ctx, x + width - left, y, left, height, CHROME.ember);
-    rect(ctx, x + width - left, y, left, 1, CHROME.emberLight);
-  }
-};
-
-/** The quiet window: ink, a pale frame, a dark fill, the corners knocked out */
 /** The ground under the band; the window on it is DOM (`Window`) */
 const drawPanel = (ctx: CanvasRenderingContext2D) => {
   rect(ctx, 0, LAYOUT.band, STAGE.width, STAGE.height - LAYOUT.band, CHROME.bg);
@@ -394,13 +234,5 @@ export const drawFrame = (
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, STAGE.width, STAGE.height);
   if (background) drawBand(ctx, model.scene);
-  // The HUD stays at the top of what is shown when the ceiling is cropped
-  ctx.save();
-  ctx.translate(0, model.hud.crop);
-  drawScale(ctx, model.hud);
-  drawPips(ctx, model.hud, 'player');
-  drawPips(ctx, model.hud, 'opponent');
-  drawComposure(ctx, model.hud);
-  ctx.restore();
   drawPanel(ctx);
 };

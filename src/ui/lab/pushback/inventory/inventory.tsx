@@ -8,6 +8,7 @@ import { Text } from '@/ui/text';
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { GhostDemo } from './ghost-demo';
+import { HudDemo } from './hud-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
 import { WindowDemo } from './window-demo';
@@ -52,6 +53,12 @@ export const Inventory = () => (
       blurb="The burst that goes off between the duellists: pulsing while the phrase is thrown, popped when it is countered."
     >
       <BurstDemo />
+    </Section>
+    <Section
+      title="Bars"
+      blurb="The names, the momentum pips, the composure strip and the shared scale with its marker, every number on a control."
+    >
+      <HudDemo />
     </Section>
     <Section
       title="Window"

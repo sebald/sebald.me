@@ -106,41 +106,37 @@ export const SelectScreen = ({
   onConfirm,
   onBack,
 }: SelectScreenProps) => {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [looks, setLooks] = useState<Record<Role, Look>>({
-    pm: runs.pm?.look ?? 'a',
-    dev: runs.dev?.look ?? 'a',
-    designer: runs.designer?.look ?? 'a',
+  // One cursor over the grid: a column per role, a row per look. It
+  // starts on the first role, on the look its run has if there is one.
+  const [cursor, setCursor] = useState({
+    column: 0,
+    row: runs[ROLES[0]!]?.look === 'b' ? 1 : 0,
   });
-  const role = ROLES[roleIndex]!;
-  const look = looks[role];
+  const role = ROLES[cursor.column]!;
+  const look: Look = cursor.row === 0 ? 'a' : 'b';
   const sheet = PLAYER_SHEETS[role][look];
   const run = runs[role];
   // The frame around the chosen face blinks, four times a second
   const clock = useClock();
   const lit = Math.floor(clock / 250) % 2 === 0;
 
-  const pick = (target: Role, targetLook: Look) => {
-    setRoleIndex(ROLES.indexOf(target));
-    setLooks(previous => ({ ...previous, [target]: targetLook }));
-  };
-  const flip = (target: Role) =>
-    setLooks(previous => ({
-      ...previous,
-      [target]: previous[target] === 'a' ? 'b' : 'a',
+  const move = (dc: number, dr: number) =>
+    setCursor(({ column, row }) => ({
+      column: (column + dc + ROLES.length) % ROLES.length,
+      row: (row + dr + 2) % 2,
     }));
 
   useKeys(
     useMemo(
       () => ({
-        ArrowLeft: () => setRoleIndex(i => (i + 2) % 3),
-        a: () => setRoleIndex(i => (i + 2) % 3),
-        ArrowRight: () => setRoleIndex(i => (i + 1) % 3),
-        d: () => setRoleIndex(i => (i + 1) % 3),
-        ArrowUp: () => flip(role),
-        ArrowDown: () => flip(role),
-        w: () => flip(role),
-        s: () => flip(role),
+        ArrowLeft: () => move(-1, 0),
+        a: () => move(-1, 0),
+        ArrowRight: () => move(1, 0),
+        d: () => move(1, 0),
+        ArrowUp: () => move(0, -1),
+        w: () => move(0, -1),
+        ArrowDown: () => move(0, 1),
+        s: () => move(0, 1),
         Enter: () => onConfirm(role, look),
         ' ': () => onConfirm(role, look),
         Escape: onBack,
@@ -184,7 +180,7 @@ export const SelectScreen = ({
               {ROLE_LABELS[r]}
             </span>
             {(['a', 'b'] as const).map((l, row) => {
-              const active = r === role && l === looks[r];
+              const active = column === cursor.column && row === cursor.row;
               const frame = active
                 ? lit
                   ? CHROME.goldLight
@@ -204,7 +200,7 @@ export const SelectScreen = ({
                   }}
                   onClick={() => {
                     if (active) onConfirm(r, l);
-                    else pick(r, l);
+                    else setCursor({ column, row });
                   }}
                 >
                   <Portrait sheet={PLAYER_SHEETS[r][l]} />

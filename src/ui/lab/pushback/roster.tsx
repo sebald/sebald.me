@@ -22,6 +22,7 @@ import { Picker, type PickerItem } from './picker';
 import { SCENE_ASSETS } from './scenes';
 import { Stage } from './stage';
 import { useKeys } from './use-keys';
+import { Legend, Window } from './window';
 
 interface RosterScreenProps {
   run: RunState;
@@ -33,9 +34,45 @@ interface RosterScreenProps {
 const tierLabel = (tier: 1 | 2 | 3 | 'boss') =>
   tier === 'boss' ? 'Boss' : `Tier ${tier}`;
 
+const px = (n: number) => `calc(var(--px) * ${n})`;
+
+/** The title row: the heading, an explainer, the tab switch */
+const Title = ({
+  heading,
+  blurb,
+  tab,
+  onTab,
+}: {
+  heading: string;
+  blurb: string;
+  tab: 'roster' | 'glossary';
+  onTab: () => void;
+}) => (
+  <div
+    className="absolute inset-x-0 flex items-start justify-between gap-4"
+    style={{ left: px(6), right: px(6), top: px(5) }}
+  >
+    <div className="min-w-0">
+      <h2 className="m-0 font-semibold text-[#f3eedc]">{heading}</h2>
+      <p className="m-0 text-[0.8em] text-[#8a92b8]">{blurb}</p>
+    </div>
+    <button
+      type="button"
+      className={cn(
+        'shrink-0 cursor-pointer text-[0.85em] outline-none focus-visible:ui-focus',
+        'text-[#8a92b8] underline decoration-dotted underline-offset-4 hover:text-white',
+      )}
+      onClick={onTab}
+    >
+      {tab === 'roster' ? 'Glossary' : 'Roster'}
+    </button>
+  </div>
+);
+
 /**
- * The seven slots in run order with ticks and stars, the out-of-office
- * cast, and the glossary as a second tab.
+ * The run as a roster: the colleagues in order with ticks and stars in
+ * the quiet window, the out-of-office cast beside them, and the
+ * glossary (every pair the player has collected, by pool) on Tab.
  */
 export const RosterScreen = ({
   run,
@@ -46,11 +83,12 @@ export const RosterScreen = ({
   const [tab, setTab] = useState<'roster' | 'glossary'>('roster');
   const collected = useMemo(() => new Set(run.collected), [run.collected]);
   const next = nextSlot(run);
+  const toggle = () => setTab(t => (t === 'roster' ? 'glossary' : 'roster'));
 
   useKeys(
     useMemo(
       () => ({
-        Tab: () => setTab(t => (t === 'roster' ? 'glossary' : 'roster')),
+        Tab: toggle,
         Escape: () => (tab === 'glossary' ? setTab('roster') : onBack()),
       }),
       [tab, onBack],
@@ -66,15 +104,15 @@ export const RosterScreen = ({
       disabled: !playable,
       onSelect: () => onPlay(index),
       label: (
-        <span className="flex items-center gap-2">
-          <span className="w-4 text-center" aria-hidden>
+        <span className="flex items-center gap-[calc(var(--px)*3)]">
+          <span className="w-[1.2em] text-center text-[#f2c14e]" aria-hidden>
             {beaten ? (beaten.flawless ? '★' : '✓') : ''}
           </span>
           <span className="sr-only">
             {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
           </span>
           <span className="flex-1">{character.name}</span>
-          <span className="text-[0.85em] opacity-70">
+          <span className="text-[0.8em] text-[#8a92b8]">
             {index === bossIndex(run.run) && !bossUnlocked(run)
               ? 'locked'
               : tierLabel(slot.slot.tier)}
@@ -87,82 +125,120 @@ export const RosterScreen = ({
     items.push({ id: 'result', label: 'Result card', onSelect: onResult });
   }
 
+  const role = ROLE_LABELS[run.role];
+  const glossaryCount = `${run.collected.length}/${PAIRS.length}`;
+
   return (
     <Stage label="Pushback, roster">
-      {/* The corner office, dimmed, behind the list */}
+      {/* The corner office, dimmed, behind the windows */}
       <div
         aria-hidden
         className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
         style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
       />
-      <Stage.Corner>
-        <button
-          type="button"
-          className={cn(
-            'cursor-pointer rounded-lg px-2 py-1 outline-none focus-visible:ui-focus',
-            tab === 'glossary'
-              ? 'bg-[#f2c14e] text-[#0b0d16]'
-              : 'text-[#8a92b8] hover:text-white',
-          )}
-          aria-pressed={tab === 'glossary'}
-          onClick={() => setTab(t => (t === 'roster' ? 'glossary' : 'roster'))}
-        >
-          Glossary {run.collected.length}/{PAIRS.length}
-        </button>
-      </Stage.Corner>
 
       {tab === 'roster' ? (
-        <div className="absolute inset-0 grid grid-cols-[1fr_auto] gap-4 p-4 pt-10 md:p-6 md:pt-10">
-          <Picker
-            label="Opponents in run order"
-            initial={next >= 0 ? String(next) : 'result'}
-            items={items}
-            active={tab === 'roster'}
-            className="content-start gap-[0.3em]"
+        <>
+          <Title
+            heading={`Your run as ${role}`}
+            blurb="Beat your colleagues in order. The Stakeholder waits at the end."
+            tab={tab}
+            onTab={toggle}
           />
-          <div className="text-[0.85em] text-mist-500">
-            <div className="mb-1 text-mist-400">Out of office</div>
-            <ul>
+          <Window
+            className="absolute"
+            style={{ left: px(3), right: px(96), top: px(34), bottom: px(3) }}
+            legend={
+              <Legend
+                keys={[
+                  ['↑↓', 'choose'],
+                  ['Enter', 'play'],
+                  ['Tab', `glossary ${glossaryCount}`],
+                  ['Esc', 'back'],
+                ]}
+                touch={`Tap a colleague to play · glossary ${glossaryCount}`}
+              />
+            }
+          >
+            <Picker
+              label="Opponents in run order"
+              initial={next >= 0 ? String(next) : 'result'}
+              items={items}
+              active={tab === 'roster'}
+              className="gap-0"
+            />
+          </Window>
+          <Window
+            className="absolute text-[0.8em]"
+            style={{ right: px(3), width: px(90), top: px(34), bottom: px(3) }}
+          >
+            <p className="m-0 mb-[calc(var(--px)*2)] text-[#8a92b8]">
+              Out of office
+            </p>
+            <ul className="m-0 grid list-none gap-[var(--px)] p-0">
               {run.run.outOfOffice.map(id => (
                 <li key={id}>{characterById(id).name}</li>
               ))}
             </ul>
-          </div>
-        </div>
+          </Window>
+        </>
       ) : (
-        <div
-          className="absolute inset-0 grid grid-cols-3 gap-3 p-4 pt-10 md:p-6 md:pt-10"
-          aria-label="Glossary"
-        >
-          {ROLES.map(role => (
-            <div key={role} className="min-w-0">
-              <div className="mb-1 font-semibold text-mist-300">
-                {ROLE_LABELS[role]}
-              </div>
-              <ol className="grid list-none content-start gap-1.5 text-[0.8em] leading-snug">
-                {poolOf(role).map(pair => (
-                  <li key={pair.id} className="min-w-0">
-                    {collected.has(pair.id) ? (
-                      <>
-                        <div className="truncate text-mist-100">
-                          {pairById(pair.id).phrase}
-                        </div>
-                        <div className="truncate text-mist-400">
-                          {pairById(pair.id).counter}
-                        </div>
-                      </>
-                    ) : (
-                      <div
-                        className="h-[2.2em] border-b border-dashed border-mist-700"
-                        aria-label="not yet collected"
-                      />
-                    )}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          ))}
-        </div>
+        <>
+          <Title
+            heading={`Glossary ${glossaryCount}`}
+            blurb="Every pair you know: your own pool from the start, the others collected on defence."
+            tab={tab}
+            onTab={toggle}
+          />
+          <div
+            className="absolute grid grid-cols-3 gap-[calc(var(--px)*3)]"
+            style={{ left: px(3), right: px(3), top: px(34), bottom: px(3) }}
+            aria-label="Glossary"
+          >
+            {ROLES.map((pool, i) => (
+              <Window
+                key={pool}
+                className="min-h-0 text-[0.75em]"
+                legend={
+                  i === ROLES.length - 1 ? (
+                    <Legend
+                      keys={[
+                        ['Tab', 'roster'],
+                        ['Esc', 'back'],
+                      ]}
+                      touch="Tap Roster to go back"
+                    />
+                  ) : undefined
+                }
+              >
+                <p className="m-0 mb-[calc(var(--px)*2)] font-semibold text-[#f3eedc]">
+                  {ROLE_LABELS[pool]}
+                </p>
+                <ol className="m-0 grid min-h-0 [scrollbar-width:none] list-none content-start gap-[calc(var(--px)*2)] overflow-y-auto p-0 leading-snug [&::-webkit-scrollbar]:hidden">
+                  {poolOf(pool).map(pair => (
+                    <li key={pair.id} className="min-w-0">
+                      {collected.has(pair.id) ? (
+                        <>
+                          <div className="truncate text-[#d6d1c2]">
+                            {pairById(pair.id).phrase}
+                          </div>
+                          <div className="truncate text-[#8a92b8]">
+                            {pairById(pair.id).counter}
+                          </div>
+                        </>
+                      ) : (
+                        <div
+                          className="h-[2.4em] border-b border-dashed border-[#4a5066]"
+                          aria-label="not yet collected"
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ol>
+              </Window>
+            ))}
+          </div>
+        </>
       )}
     </Stage>
   );

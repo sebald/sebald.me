@@ -57,17 +57,32 @@ export const LAYOUT = {
 } as const;
 
 /**
+ * Room the ghost needs left of the player's cell to be on the stage:
+ * how far behind the shoulder it hovers plus the empty columns of its
+ * own cell; and the last column of a figure in its cell, so the
+ * opponent stays on the stage when the view makes that room.
+ */
+export const ROOM = { ghost: 36 + 21, figure: 54 } as const;
+
+/**
  * The window of the scene the band shows: 320 of its 480 columns, centred
  * on the duellists, and the rows that put the scene's floor line on the
- * stage's feet line. Stage x = scene x − view.x.
+ * stage's feet line. Stage x = scene x − view.x. With `ghost` the window
+ * slides left as far as it must for the ghost at the player's shoulder
+ * to be on the stage, and as far as it can without cutting the opponent.
  */
-export const viewFor = (stands: { left: number; right: number }) => {
+export const viewFor = (
+  stands: { left: number; right: number },
+  { ghost = false } = {},
+) => {
   const centre = (stands.left + stands.right) / 2 + LAYOUT.cell.width / 2;
+  let x = Math.round(centre - STAGE.width / 2);
+  if (ghost) {
+    x = Math.min(x, stands.left - ROOM.ghost);
+    x = Math.max(x, stands.right + ROOM.figure - STAGE.width);
+  }
   return {
-    x: Math.max(
-      0,
-      Math.min(SCENE.width - STAGE.width, Math.round(centre - STAGE.width / 2)),
-    ),
+    x: Math.max(0, Math.min(SCENE.width - STAGE.width, x)),
     y: SCENE.feet - LAYOUT.feet,
   };
 };

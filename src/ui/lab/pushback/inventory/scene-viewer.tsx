@@ -64,6 +64,9 @@ export const SceneViewer = () => {
   const [still, setStill] = useState(false);
   const [guides, setGuides] = useState(true);
   const [figures, setFigures] = useState(true);
+  // The room scaled about the stands' feet, the figures as they are: to
+  // find the factor at which the furniture fits the people
+  const [room, setRoom] = useState(1);
   const [who, setWho] = useState(defaultFigures('floor'));
   const setScene = (next: SceneId) => {
     setSceneOnly(next);
@@ -169,6 +172,24 @@ export const SceneViewer = () => {
           Figures
         </label>
         <label className="flex items-center gap-1">
+          Room ×{room.toFixed(2)}
+          <input
+            type="range"
+            min={0.5}
+            max={2}
+            step={0.05}
+            value={room}
+            onChange={e => setRoom(Number(e.target.value))}
+          />
+          <button
+            type="button"
+            className="rounded bg-mist-900 px-1 py-0.5 text-mist-300"
+            onClick={() => setRoom(1)}
+          >
+            1
+          </button>
+        </label>
+        <label className="flex items-center gap-1">
           Left
           <select
             value={who.player}
@@ -216,7 +237,12 @@ export const SceneViewer = () => {
               'absolute inset-0 h-full w-full',
               '[image-rendering:pixelated]',
             )}
-            style={{ width, height }}
+            style={{
+              width,
+              height,
+              transform: `scale(${room})`,
+              transformOrigin: `50% ${px(SCENE.feet, scale)}`,
+            }}
           />
           {figures && (
             <>
@@ -291,7 +317,9 @@ export const SceneViewer = () => {
         feet on y {SCENE.feet}; the figures must not overlap furniture, and the
         band is what the stage shows of the render. The figures are the
         yardstick for the room: a desk reaches a hip, a chair a knee, a door a
-        head and a half.
+        head and a half. Scale the room until that holds and note the factor
+        {room !== 1 ? ` (now ×${room.toFixed(2)})` : ''}; the render is then
+        regenerated or resampled to it.
       </p>
     </section>
   );
