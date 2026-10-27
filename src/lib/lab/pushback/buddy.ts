@@ -2,7 +2,7 @@
  * Buddy mode: the ghost of the player's predecessor whispers the reply,
  * slowly. While the player hesitates on defence, the ghost fades in
  * behind the player's shoulder with a line, and the wrong counters dim in
- * three steps while the right one stays bright. The cost is built into
+ * three steps while the right one and one decoy stay bright. The cost is built into
  * the existing rules: a counter after the silence bar is half full earns
  * no momentum, and the bar's fallback still fires at the end, so waiting
  * for the whisper is never free. Presentation only; the reducer knows
@@ -26,6 +26,20 @@ export const buddyStep = (elapsed: number, limit: number | null): number => {
   const window = limit ?? BUDDY_WINDOW_MS;
   const marks = [0.3, 0.55, 0.8].map(fraction => fraction * window);
   return marks.filter(mark => elapsed >= mark).length;
+};
+
+/**
+ * The wrong counter the ghost leaves bright, so the last call is still
+ * the player's: a two-way choice at the end of the whisper. Fixed per
+ * exchange by the salt (turn and seed).
+ */
+export const buddyKeeps = <T>(
+  menu: readonly T[],
+  answer: T,
+  salt: number,
+): T | undefined => {
+  const wrong = menu.filter(id => id !== answer);
+  return wrong[Math.abs(salt) % Math.max(1, wrong.length)];
 };
 
 /** Opacity of a wrong counter at a step, in three visible drops */

@@ -163,20 +163,21 @@ describe('a regular duel', () => {
     assert.ok(!isFlawless(s));
   });
 
-  it('the meeting ends: from the limit on, whoever leads wins', () => {
-    // Counters land, phrases are countered: the scale swings 1, 0, 1, 0…
+  it('the opponent tires: an equal duel still ends', () => {
+    // Counters land and, at first, so do the opponent's: the scale swings
+    // 1, 0, 1, 0… until fatigue makes a counter miss
     const strong: Slot = { ...weak, accuracy: 1 };
     const s = play(begin({ slot: strong }), { defend: right });
     assert.equal(s.phase, 'end');
-    assert.equal(s.exchanges, RULES.maxExchanges! + 1);
     assert.equal(s.winner, 'player');
-    assert.equal(s.scale, 1);
+    assert.ok(s.exchanges <= 2 / RULES.fatigue + 2 * RULES.reach);
   });
 
-  it('a tie at the limit plays on', () => {
+  it('without fatigue two perfect duellists trade for ever', () => {
     const strong: Slot = { ...weak, accuracy: 1 };
-    let s = begin({ slot: strong });
-    for (let i = 0; i < RULES.maxExchanges!; i++) {
+    const tireless = { ...RULES, fatigue: 0 };
+    let s = begin({ slot: strong, rules: tireless });
+    for (let i = 0; i < 40; i++) {
       s = next(s.phase === 'defend' ? right(s) : throwFirst(s));
     }
     assert.equal(s.scale, 0);
@@ -321,7 +322,7 @@ describe('the boss barrage', () => {
     assert.equal(s.menu.length, 6);
   });
 
-  it('ends within the limit under every outcome, the barrage going round', () => {
+  it('ends under every outcome, the barrage going round', () => {
     for (let pattern = 0; pattern < 512; pattern++) {
       let phrase = 0;
       const s = play(boss(), {
@@ -329,10 +330,6 @@ describe('the boss barrage', () => {
         attack: state => throwFirst(state),
       });
       assert.equal(s.phase, 'end', `pattern ${pattern}`);
-      assert.ok(
-        s.exchanges <= RULES.maxExchanges! + 1,
-        `pattern ${pattern} took ${s.exchanges} exchanges`,
-      );
       assert.equal(s.winner, s.scale > 0 ? 'player' : 'opponent');
     }
   });

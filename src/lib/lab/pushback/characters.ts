@@ -187,7 +187,7 @@ export type Tier = 1 | 2 | 3 | 'boss';
 
 export interface Slot {
   tier: Tier;
-  /** AI accuracy on foreign pools; its own pool is always right */
+  /** AI accuracy on foreign pools before fatigue; its own pool starts at 1 */
   accuracy: number;
   /** Counter options on defence */
   menu: number;
@@ -208,15 +208,17 @@ export const BOSS_SLOT: Slot = {
 /**
  * The seven slots of a run, in order: the ramp is fixed, the faces are
  * random. Plausible decoys test memory and obvious decoys test reasoning,
- * so the decoys follow what the player knows of the pool: a fresh pool
- * gets obvious ones, the own pool plausible ones.
+ * so the decoys follow what the player knows of the pool: the own pool
+ * (known from the start) gets obvious ones, and each foreign pool's
+ * first colleague is lenient (that duel collects the pool) and the
+ * second strict.
  */
 export const SLOTS: readonly Slot[] = [
   { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
   { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
   { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: 10 },
   { tier: 2, accuracy: 0.75, menu: 5, decoys: 'any', silence: 8 },
-  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: 6 },
+  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'any', silence: 7 },
   { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: 6 },
   BOSS_SLOT,
 ];
@@ -252,10 +254,15 @@ export interface Rules {
   /** Phrases in the player's hand */
   hand: number;
   /**
-   * The meeting ends: from this many exchanges on, the duel ends as soon
-   * as the scale is off centre, to whoever leads. Null for no limit.
+   * The opponent runs out of comebacks: the chance to counter anything,
+   * its own pool included, drops by this much per exchange. Two equal
+   * duellists would otherwise trade their own defences for ever.
    */
-  maxExchanges: number | null;
+  fatigue: number;
+  /** Factor on the slot's silence seconds */
+  silence: number;
+  /** Counter options added to every menu, the boss's included */
+  menuExtra: number;
 }
 
 export const RULES: Rules = {
@@ -266,16 +273,46 @@ export const RULES: Rules = {
   momentumLoss: 'all',
   micDrop: { worth: 2, menu: 8, silence: 0.5 },
   hand: 4,
-  maxExchanges: 8,
+  fatigue: 0.1,
+  silence: 1,
+  menuExtra: 0,
+};
+
+/**
+ * The two ways to play, one switch on the title screen. Normal has the
+ * ghost of the player's predecessor whisper along; hard has no ghost, a
+ * shorter silence bar, two more options on every menu, colleagues who
+ * tire slowly and a Stakeholder who leaves after two misses. Flawless
+ * stars are only earned without the ghost.
+ */
+export type Mode = 'normal' | 'hard';
+
+export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
+  normal: { buddy: true, rules: RULES },
+  hard: {
+    buddy: false,
+    rules: {
+      ...RULES,
+      bossMisses: 2,
+      fatigue: 0.07,
+      silence: 0.6,
+      menuExtra: 2,
+    },
+  },
+};
+
+export const MODE_LABELS: Record<Mode, string> = {
+  normal: 'Normal',
+  hard: 'Hard',
 };
 
 // Runs
 // ---------------
 
-/** The order a role meets the others in: foreign, foreign, own */
+/** The order a role meets the others in: own, then the two foreign ones */
 export const roleOrder = (role: Role): Role[] => {
   const index = ROLES.indexOf(role);
-  return [ROLES[(index + 1) % 3]!, ROLES[(index + 2) % 3]!, role];
+  return [role, ROLES[(index + 1) % 3]!, ROLES[(index + 2) % 3]!];
 };
 
 export interface RunSlot {

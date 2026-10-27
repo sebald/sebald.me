@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { BOSS_SLOT_INDEX } from './characters';
+import { BOSS_SLOT_INDEX, RULES } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { poolOf } from './lines';
 import {
@@ -68,11 +68,17 @@ describe('a run', () => {
 
   it('keeps what the duel collected and adds up the stats', () => {
     let run = createRunState('designer', 8);
+    // The first slot is the own role: nothing new to collect, and the
+    // colleague counters the own pool until fatigue sets in
     run = playSlot(run, 0, true);
+    // (plus what the colleague also knows, at most two foreign pairs)
+    assert.ok(run.collected.length <= 8 + 2);
+    assert.ok(run.stats.exchangesWon >= RULES.reach);
+    run = playSlot(run, 2, true);
     assert.ok(run.collected.length > 8);
-    assert.equal(run.stats.exchangesWon, 3);
+    const { exchangesLost } = run.stats;
     run = playSlot(run, 1, false);
-    assert.equal(run.stats.exchangesLost, 3);
+    assert.ok(run.stats.exchangesLost >= exchangesLost + RULES.reach);
   });
 
   it('unlocks the boss after six ticks and finishes on a boss win', () => {

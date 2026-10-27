@@ -13,10 +13,10 @@ import {
 import { ROLES, pairById } from './lines';
 
 describe('roleOrder', () => {
-  it('meets the two foreign roles first and its own last', () => {
-    assert.deepEqual(roleOrder('pm'), ['dev', 'designer', 'pm']);
-    assert.deepEqual(roleOrder('dev'), ['designer', 'pm', 'dev']);
-    assert.deepEqual(roleOrder('designer'), ['pm', 'dev', 'designer']);
+  it('meets its own role first, then the two foreign ones', () => {
+    assert.deepEqual(roleOrder('pm'), ['pm', 'dev', 'designer']);
+    assert.deepEqual(roleOrder('dev'), ['dev', 'designer', 'pm']);
+    assert.deepEqual(roleOrder('designer'), ['designer', 'pm', 'dev']);
   });
 });
 
@@ -26,12 +26,12 @@ describe('drawRun', () => {
     assert.equal(run.slots.length, 7);
     const roles = run.slots.map(s => characterById(s.character).role);
     assert.deepEqual(roles, [
+      'pm',
+      'pm',
       'dev',
       'dev',
       'designer',
       'designer',
-      'pm',
-      'pm',
       'boss',
     ]);
     const ids = run.slots.map(s => s.character);

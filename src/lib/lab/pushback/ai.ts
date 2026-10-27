@@ -54,17 +54,21 @@ export const buildMenu = (
 };
 
 /**
- * Whether the opponent answers a phrase correctly: always for what is in
- * its repertoire (its own pool and what it knows; the boss knows it all),
- * with the slot's accuracy for the rest.
+ * Whether the opponent answers a phrase correctly: what is in its
+ * repertoire (its own pool and what it knows; the boss knows it all) it
+ * answers every time, the rest with the slot's accuracy, and `fatigue`
+ * (the rules' rate times the exchanges so far) comes off both.
  */
 export const aiAnswers = (
   phrase: PairId,
   repertoire: readonly PairId[] | 'all',
   accuracy: number,
   rng: Rng,
-): boolean =>
-  repertoire === 'all' || repertoire.includes(phrase) || rng.chance(accuracy);
+  fatigue = 0,
+): boolean => {
+  const known = repertoire === 'all' || repertoire.includes(phrase);
+  return rng.chance((known ? 1 : accuracy) - fatigue);
+};
 
 /** A wrong counter from the phrase's pool, for the opponent's miss */
 export const aiWrongCounter = (phrase: PairId, rng: Rng): PairId =>

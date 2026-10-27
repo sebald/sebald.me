@@ -33,7 +33,7 @@ export interface RunState {
   finished: boolean;
   /** Duels played, retries and replays included */
   attempts: number;
-  /** A duel of this run was played with the buddy (noted on the card) */
+  /** A duel of this run was played with the ghost, i.e. in normal mode */
   buddy: boolean;
   stats: DuelStats;
 }

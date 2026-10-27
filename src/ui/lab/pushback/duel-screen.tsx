@@ -11,6 +11,7 @@ import {
 
 import {
   GHOST,
+  buddyKeeps,
   buddyLine,
   buddyOpacity,
   buddyStep,
@@ -416,10 +417,19 @@ export const DuelScreen = ({
     }
     if (state.phase === 'defend') {
       const answer = state.exchange?.answer;
+      // The ghost leaves one decoy bright: the last call stays the player's
+      const kept = buddyKeeps(
+        state.menu,
+        answer,
+        state.turn + state.setup.seed,
+      );
       return state.menu.map(id => ({
         id,
         label: pairById(id).counter,
-        dim: whisper > 0 && id !== answer ? buddyOpacity(whisper) : undefined,
+        dim:
+          whisper > 0 && id !== answer && id !== kept
+            ? buddyOpacity(whisper)
+            : undefined,
         onSelect: () => act({ type: 'counter', phrase: id }),
       }));
     }

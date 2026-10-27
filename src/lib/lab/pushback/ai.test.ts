@@ -63,6 +63,19 @@ describe('aiAnswers', () => {
     for (let i = 0; i < 2000; i++) if (aiAnswers('pm-1', pool, 0.6, r)) right++;
     assert.ok(right > 1100 && right < 1300, `${right}`);
   });
+
+  it('tires: fatigue comes off the repertoire and the foreign pools alike', () => {
+    for (let seed = 0; seed < 50; seed++) {
+      assert.ok(aiAnswers('dev-3', pool, 0, rng(seed), 0));
+      assert.ok(!aiAnswers('dev-3', pool, 0, rng(seed), 1));
+      assert.ok(!aiAnswers('pm-3', pool, 0.6, rng(seed), 0.6));
+    }
+    const r = rng(12);
+    let right = 0;
+    for (let i = 0; i < 2000; i++)
+      if (aiAnswers('dev-3', pool, 0, r, 0.3)) right++;
+    assert.ok(right > 1300 && right < 1500, `${right}`);
+  });
 });
 
 describe('aiPick', () => {

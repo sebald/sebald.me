@@ -195,7 +195,11 @@ export const showsHint = (state: DuelState): boolean =>
 const silenceFor = (state: DuelState, micDrop: boolean) => {
   const seconds = state.setup.slot.silence;
   if (!state.setup.silence || seconds === null) return null;
-  const limit = seconds * 1000 * (micDrop ? state.rules.micDrop.silence : 1);
+  const limit =
+    seconds *
+    1000 *
+    state.rules.silence *
+    (micDrop ? state.rules.micDrop.silence : 1);
   return { elapsed: 0, limit };
 };
 
@@ -232,7 +236,8 @@ const opponentThrows = (state: DuelState): DuelState => {
       worth: state.rules.micDrop.worth,
     });
   }
-  const size = micDrop ? state.rules.micDrop.menu : slot.menu;
+  const size =
+    (micDrop ? state.rules.micDrop.menu : slot.menu) + state.rules.menuExtra;
   const menu = buildMenu(phrase, slot.decoys, size, rng);
   return {
     ...state,
@@ -329,14 +334,9 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     collected = [...collected, exchange.phrase];
   }
 
-  const exchanges = state.exchanges + 1;
-  const overtime =
-    state.rules.maxExchanges !== null && exchanges >= state.rules.maxExchanges;
   let duelWinner: Side | null = null;
   if (scale >= toWin(state)) duelWinner = 'player';
   else if (scale <= -toLose(state)) duelWinner = 'opponent';
-  else if (overtime && scale !== 0)
-    duelWinner = scale > 0 ? 'player' : 'opponent';
 
   return {
     ...state,
@@ -350,7 +350,7 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     stats,
     lastMissPool,
     misses,
-    exchanges,
+    exchanges: state.exchanges + 1,
     winner: duelWinner,
   };
 };
@@ -417,6 +417,7 @@ const playerThrows = (
     state.boss ? 'all' : repertoire(character),
     slot.accuracy,
     rng,
+    state.rules.fatigue * state.exchanges,
   );
   const picked = answered ? phrase : aiWrongCounter(phrase, rng);
   return {

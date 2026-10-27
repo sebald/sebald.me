@@ -1,22 +1,22 @@
 'use client';
 
+import { MODE_LABELS, type Mode } from '@/lib/lab/pushback/characters';
+
 import { Menu, Stage } from './stage';
 
 interface TitleScreenProps {
-  silence: boolean;
-  onSilence: (on: boolean) => void;
-  buddy: boolean;
-  onBuddy: (on: boolean) => void;
+  mode: Mode;
+  onMode: (mode: Mode) => void;
   onStart: () => void;
 }
 
-export const TitleScreen = ({
-  silence,
-  onSilence,
-  buddy,
-  onBuddy,
-  onStart,
-}: TitleScreenProps) => (
+const MODE_BLURBS: Record<Mode, string> = {
+  normal:
+    'The ghost of your predecessor whispers along. Slowly. No stars with a ghost.',
+  hard: 'No ghost, less time, longer menus, colleagues who tire slowly. Stars for flawless duels.',
+};
+
+export const TitleScreen = ({ mode, onMode, onStart }: TitleScreenProps) => (
   <Stage label="Pushback, title">
     <Stage.Center className="justify-between py-8">
       <div className="grid gap-3">
@@ -32,21 +32,14 @@ export const TitleScreen = ({
         items={[
           { id: 'start', label: 'Start', onSelect: onStart },
           {
-            id: 'silence',
-            label: `Silence bar: ${silence ? 'on' : 'off'}`,
-            onSelect: () => onSilence(!silence),
-          },
-          {
-            id: 'buddy',
-            label: `Onboarding buddy: ${buddy ? 'on' : 'off'}`,
-            onSelect: () => onBuddy(!buddy),
+            id: 'mode',
+            label: `Mode: ${MODE_LABELS[mode]}`,
+            onSelect: () => onMode(mode === 'normal' ? 'hard' : 'normal'),
           },
         ]}
       />
       <Stage.Muted className="text-[0.85em] text-balance">
-        {buddy
-          ? 'The ghost of your predecessor whispers the reply. Slowly. No stars with a buddy.'
-          : 'Arrows or W/S to move, Enter to confirm, Escape to go back.'}
+        {MODE_BLURBS[mode]}
       </Stage.Muted>
     </Stage.Center>
   </Stage>

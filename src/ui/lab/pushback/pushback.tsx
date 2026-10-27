@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { BOSS_SLOT_INDEX, type Look } from '@/lib/lab/pushback/characters';
+import {
+  BOSS_SLOT_INDEX,
+  type Look,
+  MODES,
+} from '@/lib/lab/pushback/characters';
 import { type DuelState, createDuel } from '@/lib/lab/pushback/duel';
 import type { Role } from '@/lib/lab/pushback/lines';
 import { duelSetupFor } from '@/lib/lab/pushback/run';
@@ -11,8 +15,7 @@ import {
   emptySave,
   finishDuel,
   loadSave,
-  setBuddy,
-  setSilence,
+  setMode,
   startRun,
   writeSave,
 } from '@/lib/lab/pushback/save';
@@ -30,16 +33,9 @@ type Screen =
   | { name: 'duel'; role: Role; index: number; seed: number }
   | { name: 'result'; role: Role };
 
-const prefersReducedMotion = () =>
-  typeof matchMedia !== 'undefined' &&
-  matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 /** The screens, the save and the duel */
 export const Pushback = () => {
-  // The save defaults the silence bar to off under reduced motion
-  const [save, setSave] = useState<Save>(
-    () => loadSave() ?? emptySave(!prefersReducedMotion()),
-  );
+  const [save, setSave] = useState<Save>(() => loadSave() ?? emptySave());
   const [screen, setScreen] = useState<Screen>({ name: 'title' });
 
   useEffect(() => writeSave(save), [save]);
@@ -78,10 +74,8 @@ export const Pushback = () => {
     case 'title':
       return (
         <TitleScreen
-          silence={save.silence}
-          onSilence={on => setSave(previous => setSilence(previous, on))}
-          buddy={save.buddy}
-          onBuddy={on => setSave(previous => setBuddy(previous, on))}
+          mode={save.mode}
+          onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
         />
       );
@@ -136,8 +130,9 @@ export const Pushback = () => {
           initial={createDuel(
             duelSetupFor(run, screen.index, {
               seed: screen.seed,
-              silence: save.silence,
-              buddy: save.buddy,
+              silence: true,
+              buddy: MODES[save.mode].buddy,
+              rules: MODES[save.mode].rules,
             }),
           )}
           onEnd={duel => endDuel(screen.role, screen.index, duel)}

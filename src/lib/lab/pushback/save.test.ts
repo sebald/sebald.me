@@ -12,7 +12,7 @@ import {
   parseSave,
   playerName,
   resultCardText,
-  setSilence,
+  setMode,
   startRun,
   writeSave,
 } from './save';
@@ -28,7 +28,7 @@ const fakeStorage = (initial: Record<string, string> = {}): SaveStorage => {
 describe('save', () => {
   it('round-trips through storage', () => {
     const storage = fakeStorage();
-    const save = startRun(setSilence(emptySave(), false), 'dev', 'b', 42);
+    const save = startRun(setMode(emptySave(), 'hard'), 'dev', 'b', 42);
     writeSave(save, storage);
     assert.deepEqual(loadSave(storage), save);
   });
@@ -41,8 +41,21 @@ describe('save', () => {
       null,
     );
     assert.equal(
-      parseSave(JSON.stringify({ version: 1, silence: 'yes', runs: {} })),
+      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: [] })),
       null,
+    );
+  });
+
+  it('plays normal for a save from before the mode switch or with an odd one', () => {
+    const old = { version: 1, silence: true, buddy: false, runs: {} };
+    assert.equal(parseSave(JSON.stringify(old))?.mode, 'normal');
+    assert.equal(
+      parseSave(JSON.stringify({ version: 1, mode: 'brutal', runs: {} }))?.mode,
+      'normal',
+    );
+    assert.equal(
+      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: {} }))?.mode,
+      'hard',
     );
   });
 
@@ -123,7 +136,7 @@ describe('resultCardText', () => {
       text,
       [
         'Pushback · Dev',
-        'Stakeholder beaten · 10 duels · 5 flawless',
+        'Stakeholder beaten · 10 duels · 5 flawless · hard mode',
         'Exchanges 31–9 · Mic drops 6 · Glossary 24/24',
         'Missed counters: PM 3 · Dev 1 · Designer 5',
         'sebald.me/lab/pushback',
@@ -135,7 +148,7 @@ describe('resultCardText', () => {
     const run = startRun(emptySave(), 'pm', 'a', 1).runs.pm!;
     assert.match(
       resultCardText(run),
-      /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless\n/,
+      /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless · hard mode\n/,
     );
   });
 });

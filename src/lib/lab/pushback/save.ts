@@ -1,10 +1,10 @@
 /**
- * The save: one object in `localStorage`, versioned, holding the silence
- * bar switch and one run per role. Everything here is pure except the two
+ * The save: one object in `localStorage`, versioned, holding the mode
+ * switch and one run per role. Everything here is pure except the two
  * storage calls, which take the storage as an argument so tests can pass
  * a fake and the server (no `window`) gets an empty save.
  */
-import { type Look, LOOKS } from './characters';
+import { type Look, LOOKS, type Mode } from './characters';
 import type { DuelState } from './duel';
 import { PAIRS, ROLE_LABELS, type Role, ROLES } from './lines';
 import { type RunState, createRunState, recordDuel } from './run';
@@ -18,20 +18,17 @@ export interface SavedRun extends RunState {
 
 export interface Save {
   version: typeof SAVE_VERSION;
-  /** The silence bar switch on the title screen */
-  silence: boolean;
-  /** Buddy mode: the wrong counters dim while the player hesitates */
-  buddy: boolean;
+  /** The mode switch on the title screen */
+  mode: Mode;
   runs: Partial<Record<Role, SavedRun>>;
 }
 
 /** What the save needs from `localStorage` */
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
-export const emptySave = (silence = true, buddy = false): Save => ({
+export const emptySave = (mode: Mode = 'normal'): Save => ({
   version: SAVE_VERSION,
-  silence,
-  buddy,
+  mode,
   runs: {},
 });
 
@@ -76,16 +73,16 @@ export const parseSave = (raw: string | null): Save | null => {
     return null;
   }
   if (!isRecord(data) || data.version !== SAVE_VERSION) return null;
-  if (typeof data.silence !== 'boolean' || !isRecord(data.runs)) return null;
+  if (!isRecord(data.runs)) return null;
   const runs: Save['runs'] = {};
   for (const role of ROLES) {
     const run = data.runs[role];
     if (isSavedRun(run) && run.role === role) runs[role] = withBuddyFlag(run);
   }
+  // Saves from before the mode switch (silence and buddy flags) play normal
   return {
     version: SAVE_VERSION,
-    silence: data.silence,
-    buddy: data.buddy === true,
+    mode: data.mode === 'hard' ? 'hard' : 'normal',
     runs,
   };
 };
@@ -141,14 +138,9 @@ export const finishDuel = (
   };
 };
 
-export const setSilence = (save: Save, silence: boolean): Save => ({
+export const setMode = (save: Save, mode: Mode): Save => ({
   ...save,
-  silence,
-});
-
-export const setBuddy = (save: Save, buddy: boolean): Save => ({
-  ...save,
-  buddy,
+  mode,
 });
 
 /** The player's name on the select screen and the result card */
@@ -161,7 +153,7 @@ export const resultCardText = (run: RunState): string => {
   const { stats } = run;
   return [
     `Pushback · ${ROLE_LABELS[run.role]}`,
-    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless${run.buddy ? ' · with a buddy' : ''}`,
+    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless${run.buddy ? ' · with a ghost' : ' · hard mode'}`,
     `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${run.collected.length}/${PAIRS.length}`,
     `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
     'sebald.me/lab/pushback',

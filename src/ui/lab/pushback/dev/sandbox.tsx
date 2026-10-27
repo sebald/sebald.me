@@ -7,6 +7,7 @@ import {
   CHARACTERS,
   LOOKS,
   type Look,
+  MODES,
   RULES,
   SLOTS,
   type Slot,
@@ -44,6 +45,8 @@ interface Options {
   seed: number;
   silence: boolean;
   buddy: boolean;
+  /** The hard mode's rules (slower fatigue, shorter silence) */
+  hard: boolean;
   seconds: number | null;
   collected: 'own' | 'all' | 'none';
   jump: Jump;
@@ -61,6 +64,7 @@ const DEFAULTS: Options = {
   seed: 1,
   silence: true,
   buddy: false,
+  hard: false,
   seconds: null,
   collected: 'own',
   jump: 'intro',
@@ -136,6 +140,7 @@ export const sandboxState = (options: Options): DuelState => {
     seed: options.seed,
     silence: options.silence,
     buddy: options.buddy,
+    rules: options.hard ? MODES.hard.rules : undefined,
     tutorial: options.slot === 0 && options.attempt === 'first',
   });
   state = play(state, options.jump);
@@ -285,6 +290,14 @@ export const Sandbox = () => {
             type="checkbox"
             checked={options.buddy}
             onChange={e => set('buddy', e.target.checked)}
+          />
+        </label>
+        <label className={field}>
+          Hard rules
+          <input
+            type="checkbox"
+            checked={options.hard}
+            onChange={e => set('hard', e.target.checked)}
           />
         </label>
         <label className={field}>

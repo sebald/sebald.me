@@ -30,7 +30,7 @@ A duel is a sequence of exchanges. The attacker throws a phrase, the defender pi
 One scale between the duellists at the top of the stage, and a momentum bar in each corner:
 
 - **The scale** (the pushback). It starts in the middle and every won exchange moves the marker one step toward the winner, two for a mic drop, landed or countered. Three steps to either edge win the duel (four for the player against the boss, three for the boss). It swings both ways, so a losing streak can turn round and every exchange visibly moves something. An earlier version had a buy-in bar per side that only filled; with three segments and three momentum steps the mic drop could never happen, since the third win already ended the duel.
-- **The meeting ends.** Two good duellists trade steps for ever, so from the eighth exchange on the duel ends as soon as the scale is off centre, to whoever leads; a tie plays on. The simulation puts duels at six to eight exchanges, with a mic drop in most tier-1 duels and about one in four at tier 3.
+- **Fatigue.** Two good duellists would trade their own defences for ever: each counters their own pool every time, so the marker only wobbles. So the opponent runs out of comebacks: its chance to counter anything, own pool included, drops ten points per exchange (five in hard mode). Nothing is on a clock and nobody is declared a winner by the bell; the scale always reaches an edge. The simulation puts duels at six to nine exchanges, with a mic drop in most tier-1 duels and about one in three later.
 - **Momentum**, two steps. Playing well fills it, losing an exchange empties it. Full momentum unlocks the mic drop; at two steps it is reachable before the duel is over.
 
 | Event                                                         | Momentum                            |
@@ -51,7 +51,7 @@ For the AI as defender the menu size makes no difference, so a player's mic drop
 1. Attacker steps forward, line types out at 25 characters per second (tap or Space to complete instantly), then holds long enough to be read once more before the next step; the poses of a resolved exchange hold a second and a half.
 2. Defender gets a menu of counters in random order: the one that answers the phrase plus decoys. Menu size and decoy source depend on the duel's tier (see Opponents): four options from any pool in the first duel, six from the same pool in the last two. From tier 2 on the silence bar runs under the menu (see below).
 3. Match: the counter wins, the attacker flinches, the defender gets the initiative and pushes the scale a step. Miss: the defender flinches, the attacker keeps the initiative and pushes a step (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
-4. The scale at an edge, or the lead when the meeting ends, ends the duel with win and lose poses and one bark each.
+4. The scale at an edge ends the duel with win and lose poses and one bark each.
 
 ### Collecting: what the player knows
 
@@ -79,11 +79,15 @@ This is why the player meets their own role last: the pool they start with is fo
 
 From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines. Seconds per slot are in data (starting values: 10 s then 8 s at tier 2, 6 s at tier 3, 5 s against the boss, halved on a mic drop) and get tuned in the grey box.
 
-The bar is off in the two tier 1 duels, off by default under `prefers-reduced-motion` and switchable on the title screen for screen reader users and anyone who wants a quiz instead of a duel. With the bar off every correct counter counts as fast for momentum.
+The bar is off in the two tier 1 duels and shorter in hard mode (0.6 of the seconds). With the bar off every correct counter counts as fast for momentum.
+
+### Modes
+
+One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, 0.6 of the silence seconds, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
 
 ### The onboarding buddy
 
-A switch on the title screen next to the silence bar, off by default: `Onboarding buddy`. With it on, the ghost of the player's predecessor in the role whispers the reply, slowly. While the player hesitates on defence, the wrong counters dim in three steps and the right one stays bright; by the third step the answer is plain. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
+The ghost of the player's predecessor in the role whispers the reply, slowly, in normal mode (see Modes). While the player hesitates on defence, the wrong counters dim in three steps; the right one and one decoy stay bright, so by the third step it is a two-way call and still the player's. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
 
 The ghost is a character, not a setting. It is off stage until the first step, then fades in behind the player's shoulder at head height, floating, and says one line in its own pale bubble; it stays until the player answers or the fallback fires. It speaks once per appearance, not on every step, so a slow player is not nagged three times an exchange. The lines are helpful and rude, in turn from a start set by the duel's seed so a duel never repeats one before it has used them all:
 
@@ -95,9 +99,9 @@ The ghost is a character, not a setting. It is off stage until the first step, t
 
 It never shows at the start of a duel or on attack turns: the dig lands on hesitation, not on playing. The sprite is one more Gemini sheet (see Art and animation), drawn translucent by the canvas; until it lands the grey box draws a pale placeholder.
 
-The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card says `with a buddy` when any duel of the run used it. Everything else (collecting, buy-in, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
+The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card says `with a ghost` when any duel of the run had it and `hard mode` otherwise. Everything else (collecting, the scale, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
 
-It is there for players who are here for the jokes rather than the memory test, for first runs, and for anyone who finds the silence bar hostile; with the bar off and the buddy on, the game is a slow quiz with a safety net.
+It is there for players who are here for the jokes rather than the memory test and for first runs; with the ghost the game is a quiz with a safety net, and the stars are for playing without one.
 
 ### First duel
 
@@ -119,7 +123,7 @@ The player picks one of three roles on the title screen, and one of two looks pe
 
 Rules behind the table:
 
-- The player always meets their own role last before the boss. Those lines are the ones you find funniest and least fair, your own pool is the one the opponent knows perfectly, so your attacks have to come from what you collected on the way, and on defence it is where your memory gets tested, with the borrowed pairs as the surprise. Tier belongs to the slot in the run, so whoever of your own role shows up is the tier 3 fight; the Intern who read the whole wiki is the point.
+- The player meets their own role first, then the two foreign ones. The own pool is known from the start, so the first two duels are on home ground: easy menus, no silence bar, the mechanics learnt on lines the player can already answer. The opponent knows that pool perfectly too, so attacks only land once fatigue sets in, which is the first lesson in how the scale moves. Each foreign pool then comes as a pair of colleagues: the first is lenient (obvious decoys, that duel collects the pool), the second strict. Tier belongs to the slot in the run, so whoever of the last foreign role shows up is the tier 3 fight.
 - Each role has a distinct silhouette: the prop does most of the work, the clothes and the head shape the rest. The two looks of a role share the prop and the silhouette and differ in everything else: face, hair, skin, build, age, clothes. They are two people, not a palette swap, so each is its own model sheet. See Art and animation.
 - The nine colleagues are swaps of these six base sheets (which base each uses is in the swap table), so the cast is as mixed as the players.
 - Names are placeholders and only appear in the title screen and the save; duellists never use them in dialogue so lines stay role-neutral.
@@ -162,7 +166,7 @@ A run is seven slots: six colleagues and the Stakeholder. Each run draws two of 
 
 "Decoys from" is where the wrong counters in the player's defence menu are drawn from: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. Plausible decoys test memory and obvious decoys test reasoning, so the decoys follow what the player knows of the pool: the foreign pools, fresh, get obvious decoys and the pressure comes from the timer and the accuracy; the own pool, known from the first second, gets plausible ones. ("Two pools", the phrase's own pool plus one other, stays in the data as a step between the two but is unused in v1.) A mic drop sets the menu to eight whatever the slot. "Outside its repertoire" is the AI's accuracy on phrases it has not got; its repertoire it answers every time.
 
-With these numbers the simulation's modelled player (recalls a collected pair 90 % of the time) wins a first attempt at 45, 39, 31, 35, 60, 61 and 93 % across the slots, and a retry at about 70 % and up; a weaker player (70 % recall) sits at 35 to 45 % everywhere and 66 % at the boss. The foreign duels are a steady third to a half, the own-role duels and the boss move with how well the player knows the lines.
+With these numbers the simulation's modelled player (recalls a collected pair 90 % of the time) wins a first attempt at 93, 97, 68, 73, 65, 83 and 100 % across the slots, and a retry at 92 % and up; a weaker player (70 % recall) sits at 59 to 82 % and 93 % at the boss. The own-role duels are the warm-up, each foreign pool's first colleague is the dip, and the boss moves with how well the player knows the lines: it never attacks wrongly, so the finale is a memory test of the glossary, which is why hard mode exists.
 
 The ramp is fixed and the faces are random, which is the point: the first duel is always the tutorial whoever walks in, and the run never opens with a silence bar. A run is 12 to 15 minutes.
 
@@ -173,8 +177,8 @@ The glossary: a second tab on the roster (Tab or a tap on `Glossary 11/24` in th
 ### The Stakeholder
 
 - Only reachable after all six slots are beaten (the save tracks a flag per slot).
-- Never gives up the initiative. The whole duel is a barrage of the six boss phrases, one after the other, in random order, no regular phrases; if the meeting runs past six, the barrage goes round again without repeating the last one.
-- The player has to push the scale four steps, the Stakeholder only three. Every counter pushes one, every miss pushes back one, and the meeting ends at eight exchanges like everywhere else.
+- Never gives up the initiative. The whole duel is a barrage of the six boss phrases, one after the other, in random order, no regular phrases; past six, the barrage goes round again without repeating the last one.
+- The player has to push the scale four steps, the Stakeholder only three (two in hard mode). Every counter pushes one, every miss pushes back one.
 - Every boss phrase is answered by one regular counter. The mapping is fixed in data and the same for every role. The defence menu's six options draw decoys from all three pools, so the player has to recognise the reply in a new context (the Monkey Island Sword Master trick: known counters, new phrases).
 - Momentum is the only way to get a word in. With a full bar the player interrupts: they throw one phrase from a hand of four, the Stakeholder doesn't look up, says `Let's take this offline.`, and the player fills two segments. Two fast counters then the interrupt is the flawless boss win in three exchanges, and that bark is the reward for the hardest fight.
 - On loss, the boss bark names the pool of the counter the player last got wrong (`Have you talked to engineering about this?` when it was a Dev line, and so on). Hints are the only help, and this one is a pointer: that pool's column in the glossary has the blanks, and that role's slots are a tap away on the roster.
@@ -438,7 +442,7 @@ type RunStats = {
 
 type Save = {
   version: 1;
-  silence: boolean; // the silence bar switch on the title screen
+  mode: 'normal' | 'hard'; // the mode switch on the title screen
   runs: Partial<
     Record<
       Role,
