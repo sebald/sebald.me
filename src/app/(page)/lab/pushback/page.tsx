@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { labEntry } from '@/lib/lab';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { Game } from '@/ui/lab/pushback/game';
-import { Article } from '@/ui/layout/article';
 import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config
@@ -28,18 +27,18 @@ export const metadata: Metadata = {
 
 // Page
 // ---------------
+// Not the article layout: the toolbar and the footer keep the page column,
+// the stage breaks out of it to 960 pixels. The title screen names the
+// game, so the heading is only for the outline.
 const PushbackPage = () => (
   <>
     <PageToolbar />
-    <Article aria-labelledby="pushback-title">
-      <Article.Header>
-        <Article.Title id="pushback-title" level="1">
-          {entry.title}
-        </Article.Title>
-      </Article.Header>
-      {/* Not `Article.Content`: the prose grid would lay out the stage */}
+    <section aria-labelledby="pushback-title" className="pb-10 md:pb-16">
+      <h1 id="pushback-title" className="sr-only">
+        {entry.title}
+      </h1>
       <Game />
-    </Article>
+    </section>
   </>
 );
 

@@ -95,7 +95,7 @@ export const SelectScreen = ({
                   }}
                 >
                   {/* Placeholder for the idle sprite */}
-                  <span className="text-[0.65rem]">
+                  <span className="text-[0.8em]">
                     {LOOKS[r][looks[r]].name}
                   </span>
                 </button>
@@ -108,7 +108,7 @@ export const SelectScreen = ({
                   >
                     {ROLE_LABELS[r]}
                   </div>
-                  <div className="text-[0.7rem] text-mist-400">
+                  <div className="text-[0.85em] text-mist-400">
                     {(['a', 'b'] as const).map((l, j) => (
                       <span key={l}>
                         {j > 0 && ' / '}
@@ -123,7 +123,7 @@ export const SelectScreen = ({
                     ))}
                   </div>
                   {run && (
-                    <div className="text-[0.65rem] text-mist-500">
+                    <div className="text-[0.8em] text-mist-500">
                       {run.finished ? 'finished' : 'in progress'}
                     </div>
                   )}

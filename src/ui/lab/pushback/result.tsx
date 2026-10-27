@@ -36,7 +36,7 @@ export const ResultScreen = ({ run, onBack }: ResultScreenProps) => {
         </pre>
         <Menu
           label="Result card"
-          className="w-full max-w-xs"
+          className="w-full max-w-[18em]"
           items={[
             { id: 'copy', label: copied ? 'Copied' : 'Copy', onSelect: copy },
             { id: 'back', label: 'Back to the roster', onSelect: onBack },

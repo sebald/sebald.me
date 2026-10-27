@@ -37,8 +37,12 @@ export const LAYOUT = {
   momentum: { width: 6, height: 3, gap: 2 },
 } as const;
 
-/** Largest whole-number scale at which the stage fits a viewport, 1 at least */
-export const scaleFor = (width: number, height: number, max = 4): number =>
+/**
+ * Largest whole-number scale at which the stage fits a viewport, 1 at
+ * least. Capped at 2 (960 by 540) so the game looks the same on every
+ * screen that is wide enough, instead of growing on tall monitors.
+ */
+export const scaleFor = (width: number, height: number, max = 2): number =>
   Math.max(
     1,
     Math.min(
@@ -48,8 +52,8 @@ export const scaleFor = (width: number, height: number, max = 4): number =>
     ),
   );
 
-/** The overlay's font size at a scale: never below 12 px */
-export const fontSizeFor = (scale: number): number => Math.max(12, 6 * scale);
+/** The overlay's font size at a scale: 14 px at 2x, never below 12 px */
+export const fontSizeFor = (scale: number): number => Math.max(12, 7 * scale);
 
 export interface Rect {
   x: number;

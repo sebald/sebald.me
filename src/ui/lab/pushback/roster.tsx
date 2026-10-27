@@ -72,7 +72,7 @@ export const RosterScreen = ({
             {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
           </span>
           <span className="flex-1">{character.name}</span>
-          <span className="text-[0.7rem] opacity-70">
+          <span className="text-[0.85em] opacity-70">
             {index === BOSS_SLOT_INDEX && !bossUnlocked(run)
               ? 'locked'
               : tierLabel(slot.slot.tier)}
@@ -111,7 +111,7 @@ export const RosterScreen = ({
             items={items}
             active={tab === 'roster'}
           />
-          <div className="text-[0.7rem] text-mist-500">
+          <div className="text-[0.85em] text-mist-500">
             <div className="mb-1 text-mist-400">Out of office</div>
             <ul>
               {run.run.outOfOffice.map(id => (
@@ -130,7 +130,7 @@ export const RosterScreen = ({
               <div className="mb-1 font-semibold text-mist-300">
                 {ROLE_LABELS[role]}
               </div>
-              <ol className="grid list-none content-start gap-1.5 text-[0.65rem] leading-snug md:text-[0.7rem]">
+              <ol className="grid list-none content-start gap-1.5 text-[0.8em] leading-snug">
                 {poolOf(role).map(pair => (
                   <li key={pair.id} className="min-w-0">
                     {collected.has(pair.id) ? (

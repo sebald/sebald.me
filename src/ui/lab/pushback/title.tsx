@@ -28,7 +28,7 @@ export const TitleScreen = ({
       </div>
       <Menu
         label="Title menu"
-        className="w-full max-w-xs"
+        className="w-full max-w-[18em]"
         items={[
           { id: 'start', label: 'Start', onSelect: onStart },
           {
@@ -43,7 +43,7 @@ export const TitleScreen = ({
           },
         ]}
       />
-      <Stage.Muted className="text-[0.7rem] text-balance">
+      <Stage.Muted className="text-[0.85em] text-balance">
         {buddy
           ? 'The buddy whispers the reply. Slowly. No stars with a buddy.'
           : 'Arrows or W/S to move, Enter to confirm, Escape to go back.'}

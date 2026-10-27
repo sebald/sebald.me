@@ -1,28 +1,35 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 import { useEffect, useState } from 'react';
 
+import { STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
 import { cva } from '@/lib/styles.utils';
+
+import { useScale } from './use-scale';
 
 // Styles
 // ---------------
 const styles = {
   root: cva({
     base: [
-      // The 480 by 270 stage, as a dark panel until the canvas lands;
-      // text is DOM in the site's mono font, like the hotspot remarks
-      'relative aspect-video w-full overflow-hidden rounded-2xl',
+      // The 480 by 270 stage at a whole-number scale, as a dark panel
+      // until a scene lands; text is DOM in the site's mono font, like
+      // the hotspot remarks, sized from the scale (so em units inside)
+      'relative overflow-hidden rounded-2xl',
       'bg-mist-950 text-mist-100',
-      'text-xs md:text-sm [text-shadow:0_1px_0_var(--color-mist-950)]',
+      '[text-shadow:0_1px_0_var(--color-mist-950)]',
       'select-none',
     ],
+  }),
+  portrait: cva({
+    base: 'rounded-2xl bg-mist-950 p-6 text-center font-mono text-sm text-mist-200',
   }),
   center: cva({
     base: 'absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center',
   }),
   title: cva({
-    base: 'text-xl font-semibold tracking-wide text-mist-50 md:text-2xl',
+    base: 'text-[2em] font-semibold tracking-wide text-mist-50',
   }),
   muted: cva({ base: 'text-mist-400' }),
   box: cva({
@@ -58,19 +65,51 @@ const styles = {
 interface StageProps extends PropsWithChildren {
   className?: string;
   label?: string;
+  /** Fix the scale (the workbench) instead of fitting the viewport */
+  scale?: number;
 }
 
-export const Stage = ({ children, className, label }: StageProps) => (
-  // `data-stage`: styles.css gives the stage normal leading back (the site
-  // trims every text block to its cap height)
-  <section
-    data-stage
-    aria-label={label ?? 'Pushback'}
-    className={styles.root({ className })}
-  >
-    {children}
-  </section>
-);
+/**
+ * The scaled stage every screen sits in: 480 by 270 times a whole number,
+ * breaking out of the page column to the viewport's centre. Everything
+ * inside positions in native pixels through `--px` and sizes text in em.
+ */
+export const Stage = ({
+  children,
+  className,
+  label,
+  scale: fixed,
+}: StageProps) => {
+  const { scale, portrait } = useScale(fixed);
+  if (portrait && !fixed) {
+    return (
+      <section data-stage aria-label={label} className={styles.portrait()}>
+        Turn your phone sideways: the stage is 480 pixels wide.
+      </section>
+    );
+  }
+  const width = STAGE.width * scale;
+  const height = STAGE.height * scale;
+  const style: CSSProperties = {
+    width,
+    height,
+    marginInline: `calc(50% - ${width / 2}px)`,
+    fontSize: fontSizeFor(scale),
+    ['--px' as string]: `${scale}px`,
+  };
+  return (
+    // `data-stage`: styles.css gives the stage normal leading back (the site
+    // trims every text block to its cap height)
+    <section
+      data-stage
+      aria-label={label ?? 'Pushback'}
+      className={styles.root({ className })}
+      style={style}
+    >
+      {children}
+    </section>
+  );
+};
 
 const Center = ({ children, className }: StageProps) => (
   <div className={styles.center({ className })}>{children}</div>

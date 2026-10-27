@@ -22,11 +22,16 @@ import {
 
 describe('scaleFor', () => {
   it('picks the largest whole number that fits both sides', () => {
-    assert.equal(scaleFor(1440, 900), 3);
-    assert.equal(scaleFor(1920, 1080), 4);
-    assert.equal(scaleFor(2560, 1440), 4);
+    assert.equal(scaleFor(1440, 900, 4), 3);
+    assert.equal(scaleFor(1920, 1080, 4), 4);
     assert.equal(scaleFor(960, 600), 2);
+    assert.equal(scaleFor(960, 500), 1);
     assert.equal(scaleFor(700, 400), 1);
+  });
+
+  it('stops at 2x by default, whatever the screen', () => {
+    assert.equal(scaleFor(1920, 1080), 2);
+    assert.equal(scaleFor(2560, 1440), 2);
   });
 
   it('never goes below one', () => {
@@ -39,10 +44,10 @@ describe('scaleFor', () => {
 });
 
 describe('fontSizeFor', () => {
-  it('has a 12 px floor', () => {
+  it('is 14 px at 2x with a 12 px floor', () => {
     assert.equal(fontSizeFor(1), 12);
-    assert.equal(fontSizeFor(2), 12);
-    assert.equal(fontSizeFor(3), 18);
+    assert.equal(fontSizeFor(2), 14);
+    assert.equal(fontSizeFor(3), 21);
   });
 });
 
