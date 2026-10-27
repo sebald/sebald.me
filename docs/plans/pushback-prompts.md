@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Fourteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet.
+Every image the game needs, one prompt each, ready to paste. Fifteen generations before rerolls: seven model sheets, the ghost, four scenes, one prop sheet, one head sheet, the logo.
 
 ## Before you start
 
@@ -843,6 +843,58 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
 Reroll on: heads at different sizes, a hood that changes the face shape so much it no longer sits on the Dev body.
+
+## Logo (`logo.jpg`)
+
+The wordmark for the start screen, the lab index and the link preview. One render, two prompts to choose from: the shoved letters (A) and the speech bubble (B). Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. It is generated on a plain dark background like a sheet and keyed the same way; it is not a scene, so it carries no room.
+
+Size: the render snaps to a 250 by 139 grid; the word should fill about four fifths of the width, so around 200 by 60 art pixels. On the stage (320 wide) that is two thirds of the band, which is the Street Fighter title proportion. Nothing else in the frame: no tagline, no characters, no bubble but the one the prompt asks for.
+
+Attach: `HEADER`.
+
+### A: the shoved letters
+
+```text
+Draw a pixel-art video game logo in the style of the attached image: the
+same pixel size, the same hard-edged outlines, the same limited palette.
+Plain, flat, very dark background, nothing else in the frame.
+
+The logo is the single word PUSHBACK in heavy pixel capitals, built from
+thick blocky strokes like a 1990s adventure game title, two rows at most
+of pixel height difference between letters. The word fills about four
+fifths of the frame's width and sits centred. The letters are warm cream
+with a one-pixel black outline and a hard two-pixel drop shadow down and
+to the right in a burnt orange. The letters P U S H stand straight and
+level; the letters B A C K are being shoved: each one leans a little
+further to the right than the one before and sits one pixel lower, as if
+the word were being pushed off its line from the left. A small speech
+bubble tail, three or four pixels, hangs off the bottom right of the
+final K, as if the word were being said. No gradients, no glow, no
+bevels, no blur, no texture: flat colours, one outline, one shadow. No
+other words, no tagline, no characters, no icons.
+```
+
+### B: the speech bubble
+
+```text
+Draw a pixel-art video game logo in the style of the attached image: the
+same pixel size, the same hard-edged outlines, the same limited palette.
+Plain, flat, very dark background, nothing else in the frame.
+
+The logo is the single word PUSHBACK in heavy pixel capitals, built from
+thick blocky strokes like a 1990s adventure game title, inside a rounded
+rectangular speech bubble with a short tail at the bottom left. The
+bubble is warm cream with a one-pixel black outline and a hard two-pixel
+drop shadow down and to the right; the letters are a deep navy on the
+cream, with the letters B A C K in burnt orange instead. The bubble is
+being pushed from the right: its right edge is dented in by a few pixels
+and the whole bubble tilts slightly to the left, the tail pointing down
+left. The word fills about four fifths of the frame's width, centred. No
+gradients, no glow, no bevels, no blur: flat colours, one outline, one
+shadow. No other words, no tagline, no characters, no icons.
+```
+
+What to check: the word reads at a quarter size; the pixel size matches the header (if the letters look finer, use the half-resolution follow-up); the outline is one colour and closed; the shadow is hard, not blurred; nothing touches the frame edge. The orange should be the ember of the HUD (around #f0a36f) and the cream its frame (#f3eedc); a different warm pair is fine, the stage takes the logo's colours, not the other way round. Cut it with `sheet.mjs` once it keeps every letter: the letters are separate groups and the cutter joins the largest ones, so a `--cells 1 --specks 0` run with the shadow connecting the letters is the first thing to try, and a `logo.mjs` that keys the background and keeps everything is the fallback.
 
 ## Follow-ups, in the same chat
 

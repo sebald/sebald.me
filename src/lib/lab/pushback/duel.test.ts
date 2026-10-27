@@ -14,6 +14,7 @@ import {
   createDuel,
   isFlawless,
   reduce,
+  showsComposureHint,
   showsHint,
   toLose,
   toWin,
@@ -195,6 +196,18 @@ describe('a regular duel', () => {
     const a = play(begin({ seed: 99 }), { defend: right });
     const b = play(begin({ seed: 99 }), { defend: right });
     assert.deepEqual(a, b);
+  });
+
+  it('shows the composure hint on the second exchange of the tutorial', () => {
+    let s = begin({ tutorial: true });
+    assert.ok(!showsComposureHint(s));
+    s = next(right(s));
+    assert.equal(s.exchanges, 1);
+    assert.ok(showsComposureHint(s));
+    assert.ok(!showsComposureHint(next(throwFirst(s))));
+    assert.ok(
+      !showsComposureHint({ ...s, setup: { ...s.setup, tutorial: false } }),
+    );
   });
 
   it('shows the hint on the first exchange of the tutorial only', () => {

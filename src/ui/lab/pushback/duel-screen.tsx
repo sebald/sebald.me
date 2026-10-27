@@ -24,11 +24,17 @@ import {
   type DuelState,
   type Side,
   reduce,
+  showsComposureHint,
   showsHint,
   toLose,
   toWin,
 } from '@/lib/lab/pushback/duel';
-import { BUDDY_MISS_BARK, HINT, pairById } from '@/lib/lab/pushback/lines';
+import {
+  BUDDY_MISS_BARK,
+  COMPOSURE_HINT,
+  HINT,
+  pairById,
+} from '@/lib/lab/pushback/lines';
 import { playerName } from '@/lib/lab/pushback/save';
 import {
   PLAYER_SHEETS,
@@ -665,6 +671,9 @@ export const DuelScreen = ({
         {step?.kind === 'menu' && (
           <>
             {showsHint(state) && <p className={styles.hint()}>{HINT}</p>}
+            {showsComposureHint(state) && (
+              <p className={styles.hint()}>{COMPOSURE_HINT}</p>
+            )}
             {state.phase === 'defend' && state.exchange && (
               <p className={cn(styles.line(), 'text-[#8a92b8]')}>
                 <span

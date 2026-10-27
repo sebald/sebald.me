@@ -189,6 +189,15 @@ export const showsHint = (state: DuelState): boolean =>
   state.exchanges === 0 &&
   state.phase === 'defend';
 
+/**
+ * Whether the composure hint shows: the second exchange of the first
+ * duel, when the strip has visibly lost its first notch
+ */
+export const showsComposureHint = (state: DuelState): boolean =>
+  state.setup.tutorial === true &&
+  state.exchanges === 1 &&
+  (state.phase === 'defend' || state.phase === 'attack');
+
 // Transitions
 // ---------------
 
