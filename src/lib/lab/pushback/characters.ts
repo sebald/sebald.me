@@ -194,8 +194,8 @@ export interface Slot {
   menu: number;
   /** Where the decoys come from */
   decoys: 'any' | 'two' | 'same' | 'all';
-  /** Silence bar in seconds, null = off */
-  silence: number | null;
+  /** The silence bar runs on defence (its length follows the menu's text) */
+  silence: boolean;
 }
 
 export const BOSS_SLOT: Slot = {
@@ -203,7 +203,7 @@ export const BOSS_SLOT: Slot = {
   accuracy: 1,
   menu: 6,
   decoys: 'all',
-  silence: 5,
+  silence: true,
 };
 
 /**
@@ -215,12 +215,12 @@ export const BOSS_SLOT: Slot = {
  * second strict.
  */
 export const SLOTS: readonly Slot[] = [
-  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
-  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: null },
-  { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: 10 },
-  { tier: 2, accuracy: 0.75, menu: 5, decoys: 'any', silence: 8 },
-  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'any', silence: 7 },
-  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: 6 },
+  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: false },
+  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: false },
+  { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: true },
+  { tier: 2, accuracy: 0.75, menu: 5, decoys: 'any', silence: true },
+  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'any', silence: true },
+  { tier: 3, accuracy: 0.9, menu: 6, decoys: 'same', silence: true },
   BOSS_SLOT,
 ];
 
@@ -250,8 +250,18 @@ export interface Rules {
     worth: number;
     /** Counter options the defender gets */
     menu: number;
-    /** Factor on the silence seconds */
+    /** Factor on the silence bar's length */
     silence: number;
+  };
+  /**
+   * The silence bar is a share of the time a median reader needs for
+   * the menu's text: adults read about 240 words a minute (Brysbaert,
+   * 2019), and the right counter sits halfway down the list on average,
+   * so a little over half the text is what finding it takes.
+   */
+  reading: {
+    wordsPerSecond: number;
+    share: number;
   };
   /** Phrases in the player's hand */
   hand: number;
@@ -261,8 +271,6 @@ export interface Rules {
    * duellists would otherwise trade their own defences for ever.
    */
   fatigue: number;
-  /** Factor on the slot's silence seconds */
-  silence: number;
   /** Counter options added to every menu, the boss's included */
   menuExtra: number;
 }
@@ -273,18 +281,19 @@ export const RULES: Rules = {
   bossMisses: 3,
   momentum: 2,
   momentumLoss: 'all',
-  micDrop: { worth: 2, menu: 8, silence: 0.5 },
+  micDrop: { worth: 2, menu: 8, silence: 0.75 },
+  reading: { wordsPerSecond: 4, share: 0.6 },
   hand: 4,
   fatigue: 0.1,
-  silence: 1,
   menuExtra: 0,
 };
 
 /**
  * The two ways to play, one switch on the title screen. Normal has the
  * ghost of the player's predecessor whisper along; hard has no ghost, a
- * shorter silence bar, two more options on every menu, colleagues who
- * tire slowly and a Stakeholder who leaves after two misses. Flawless
+ * silence bar at half the reading time instead of 0.6, two more options
+ * on every menu, colleagues who tire slowly and a Stakeholder who
+ * leaves after two misses. Flawless
  * stars are only earned without the ghost.
  */
 export type Mode = 'normal' | 'hard';
@@ -297,7 +306,7 @@ export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
       ...RULES,
       bossMisses: 2,
       fatigue: 0.07,
-      silence: 0.6,
+      reading: { ...RULES.reading, share: 0.5 },
       menuExtra: 2,
     },
   },

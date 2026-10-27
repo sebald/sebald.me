@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
 import {
+  MODES,
   RULES,
   STAKEHOLDER,
   type Slot,
@@ -16,10 +17,12 @@ import {
   reduce,
   showsComposureHint,
   showsHint,
+  silenceLimit,
   toLose,
   toWin,
+  wordCount,
 } from './duel';
-import { type PairId, poolOf } from './lines';
+import { type PairId, pairById, poolOf } from './lines';
 
 const devPool = poolOf('dev').map(p => p.id);
 const pmPool = poolOf('pm').map(p => p.id);
@@ -30,14 +33,14 @@ const weak: Slot = {
   accuracy: 0,
   menu: 4,
   decoys: 'any',
-  silence: null,
+  silence: false,
 };
 const timed: Slot = {
   tier: 2,
   accuracy: 0,
   menu: 5,
   decoys: 'two',
-  silence: 8,
+  silence: true,
 };
 
 const setup = (overrides: Partial<DuelSetup> = {}): DuelSetup => ({
@@ -277,14 +280,39 @@ describe('the mic drop', () => {
 describe('the silence bar', () => {
   const timedSetup = { slot: timed, silence: true };
 
-  it('runs only when the switch is on and the slot has seconds', () => {
+  it('runs only when the switch is on and the slot has the bar', () => {
     assert.equal(begin().silence, null);
     assert.equal(begin({ slot: timed }).silence, null);
-    assert.deepEqual(begin(timedSetup).silence, { elapsed: 0, limit: 8000 });
+    const s = begin(timedSetup);
+    assert.deepEqual(s.silence, {
+      elapsed: 0,
+      limit: silenceLimit(RULES, s.menu, false),
+    });
+  });
+
+  it("is the rules' share of the menu's reading time, on the frame", () => {
+    // Five counters of eight words at four words a second: ten seconds
+    // to read, six to find the right one halfway down, five in hard mode
+    const menu = ['pm-1', 'pm-2', 'pm-3', 'pm-4', 'pm-5'] as const;
+    const words = menu.reduce(
+      (n, id) => n + wordCount(pairById(id).counter),
+      0,
+    );
+    const limit = silenceLimit(RULES, menu, false);
+    assert.equal(limit, Math.round((words / 4) * 0.6 * 8) * 125);
+    assert.ok(limit >= 5000 && limit <= 9000, String(limit));
+    assert.equal(
+      silenceLimit(MODES.hard.rules, menu, false),
+      Math.round((words / 4) * 0.5 * 8) * 125,
+    );
+    assert.equal(
+      wordCount('  Same quarter you promised the last one, then. '),
+      8,
+    );
   });
 
   it('plays the fallback as a miss when it runs out', () => {
-    const s = reduce(begin(timedSetup), { type: 'tick', ms: 8000 });
+    const s = reduce(begin(timedSetup), { type: 'tick', ms: 20000 });
     assert.equal(s.phase, 'resolve');
     assert.equal(s.outcome?.picked, 'fallback');
     assert.equal(s.outcome?.winner, 'opponent');
@@ -298,7 +326,7 @@ describe('the silence bar', () => {
     assert.equal(slow.scale, 1);
   });
 
-  it('runs at half time on a mic drop', () => {
+  it('runs shorter on a mic drop', () => {
     const strong: Slot = { ...timed, accuracy: 1 };
     let s = next(
       right(
@@ -308,7 +336,11 @@ describe('the silence bar', () => {
     s = next(throwFirst(s));
     s = next(wrong(s));
     assert.ok(s.exchange?.micDrop);
-    assert.equal(s.silence?.limit, 4000);
+    assert.equal(
+      s.silence?.limit,
+      silenceLimit({ ...RULES, reach: 9 }, s.menu, true),
+    );
+    assert.ok(s.silence!.limit < silenceLimit(RULES, s.menu, false));
   });
 });
 
@@ -321,7 +353,7 @@ describe('the boss barrage', () => {
         accuracy: 1,
         menu: 6,
         decoys: 'all',
-        silence: null,
+        silence: false,
       },
       collected: [...pmPool, ...devPool],
       ...overrides,

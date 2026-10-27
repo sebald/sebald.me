@@ -31,6 +31,7 @@ import {
   type PairId,
   type Role,
   isBossPairId,
+  pairById,
   poolOfPhrase,
 } from './lines';
 import { Rng, seedRng } from './random';
@@ -201,16 +202,36 @@ export const showsComposureHint = (state: DuelState): boolean =>
 // Transitions
 // ---------------
 
-const silenceFor = (state: DuelState, micDrop: boolean) => {
-  const seconds = state.setup.slot.silence;
-  if (!state.setup.silence || seconds === null) return null;
-  const limit =
-    seconds *
-    1000 *
-    state.rules.silence *
-    (micDrop ? state.rules.micDrop.silence : 1);
-  return { elapsed: 0, limit };
+/** Words in a line, for the reading time */
+export const wordCount = (text: string): number =>
+  text.trim().split(/\s+/).filter(Boolean).length;
+
+/**
+ * How long the silence bar runs for a menu: the reading time of its
+ * counters at the rules' pace, the rules' share of it, shorter on a mic
+ * drop. In ms, rounded to the frame.
+ */
+export const silenceLimit = (
+  rules: Rules,
+  menu: readonly PairId[],
+  micDrop: boolean,
+): number => {
+  const words = menu.reduce((n, id) => n + wordCount(pairById(id).counter), 0);
+  const seconds =
+    (words / rules.reading.wordsPerSecond) *
+    rules.reading.share *
+    (micDrop ? rules.micDrop.silence : 1);
+  return Math.round(seconds * 8) * 125;
 };
+
+const silenceFor = (
+  state: DuelState,
+  menu: readonly PairId[],
+  micDrop: boolean,
+) =>
+  state.setup.silence && state.setup.slot.silence
+    ? { elapsed: 0, limit: silenceLimit(state.rules, menu, micDrop) }
+    : null;
 
 /** The opponent throws; the player gets a menu */
 const opponentThrows = (state: DuelState): DuelState => {
@@ -253,7 +274,7 @@ const opponentThrows = (state: DuelState): DuelState => {
     phase: 'defend',
     exchange: { by: 'opponent', phrase, micDrop, answer: answerTo(phrase) },
     menu,
-    silence: silenceFor(state, micDrop),
+    silence: silenceFor(state, menu, micDrop),
     outcome: null,
     thrown: isBossPairId(phrase) ? state.thrown : [...state.thrown, phrase],
     bossQueue,

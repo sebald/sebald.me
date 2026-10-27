@@ -45,7 +45,8 @@ interface Options {
   buddy: boolean;
   /** The hard mode's rules (slower fatigue, shorter silence) */
   hard: boolean;
-  seconds: number | null;
+  /** The silence bar's share of the reading time, instead of the mode's */
+  share: number | null;
   collected: 'own' | 'all' | 'none';
   jump: Jump;
   momentumFull: boolean;
@@ -63,7 +64,7 @@ const DEFAULTS: Options = {
   silence: true,
   buddy: false,
   hard: false,
-  seconds: null,
+  share: null,
   collected: 'own',
   jump: 'intro',
   momentumFull: false,
@@ -121,8 +122,8 @@ export const sandboxState = (options: Options): DuelState => {
   const character = characterById(options.character as 'junior');
   const base: Slot =
     character.role === 'boss' ? BOSS_SLOT : (SLOTS[options.slot] ?? SLOTS[0]!);
-  const slot: Slot =
-    options.seconds === null ? base : { ...base, silence: options.seconds };
+  const slot: Slot = base;
+  const rules = options.hard ? MODES.hard.rules : RULES;
   const collected =
     options.collected === 'all'
       ? PAIRS.map(p => p.id)
@@ -138,7 +139,10 @@ export const sandboxState = (options: Options): DuelState => {
     seed: options.seed,
     silence: options.silence,
     buddy: options.buddy,
-    rules: options.hard ? MODES.hard.rules : undefined,
+    rules:
+      options.share === null
+        ? rules
+        : { ...rules, reading: { ...rules.reading, share: options.share } },
     tutorial: options.slot === 0 && options.attempt === 'first',
   });
   state = play(state, options.jump);
@@ -234,7 +238,7 @@ export const Sandbox = () => {
             {SLOTS.map((slot, index) => (
               <option key={index} value={index}>
                 {index + 1}: tier {slot.tier}, {slot.decoys},{' '}
-                {slot.silence ?? 'no'}s
+                {slot.silence ? 'timed' : 'no bar'}
               </option>
             ))}
           </select>
@@ -299,17 +303,18 @@ export const Sandbox = () => {
           />
         </label>
         <label className={field}>
-          Seconds override
+          Reading share
           <input
             className={input}
             type="number"
-            min={1}
-            max={30}
-            value={options.seconds ?? ''}
-            placeholder="slot"
+            min={0.1}
+            max={2}
+            step={0.1}
+            value={options.share ?? ''}
+            placeholder="mode"
             onChange={e =>
               set(
-                'seconds',
+                'share',
                 e.target.value === '' ? null : Number(e.target.value),
               )
             }

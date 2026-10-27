@@ -204,8 +204,8 @@ const start = (boss = false): DuelState =>
     role: 'pm',
     character: boss ? STAKEHOLDER : characterById('junior'),
     slot: boss
-      ? { tier: 'boss', accuracy: 1, menu: 6, decoys: 'all', silence: null }
-      : { tier: 1, accuracy: 0, menu: 4, decoys: 'any', silence: null },
+      ? { tier: 'boss', accuracy: 1, menu: 6, decoys: 'all', silence: false }
+      : { tier: 1, accuracy: 0, menu: 4, decoys: 'any', silence: false },
     attempt: 'first',
     collected: pmPool,
     seed: 3,

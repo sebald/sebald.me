@@ -79,13 +79,15 @@ This is why the player meets their own role last: the pool they start with is fo
 
 ### The silence bar
 
-From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines. Seconds per slot are in data (starting values: 10 s then 8 s at tier 2, 6 s at tier 3, 5 s against the boss, halved on a mic drop) and get tuned in the grey box.
+From the third duel on the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines.
 
-The bar is off in the two tier 1 duels and shorter in hard mode (0.6 of the seconds). With the bar off every correct counter counts as fast for momentum.
+The bar's length follows the menu's text, not the slot (`silenceLimit`): a counter is eight words on average, adults read about 240 words a minute (Brysbaert 2019, a meta-analysis of silent reading), and the right counter sits halfway down the list on average, so the bar is a share of the time a median reader needs for the whole menu: 0.6 of it in normal mode, 0.5 in hard mode (`RULES.reading`), times 0.75 on a mic drop. A menu of six is about fifty words, twelve seconds to read, so the bar runs seven and a half seconds in normal mode and six in hard; the mic drop's eight options give nine and seven and a half. Fixed seconds per slot were tried first and hard mode's 0.6 of them was unreadable: 3.6 seconds for eight options, a fifth of the text.
+
+The bar is off in the two tier 1 duels. With the bar off every correct counter counts as fast for momentum.
 
 ### Modes
 
-One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, 0.6 of the silence seconds, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
+One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, the silence bar at half the reading time instead of 0.6, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
 
 ### The onboarding buddy
 
@@ -111,7 +113,7 @@ The first duel is the tutorial whoever walks in: four options from any pool, no 
 
 ### Difficulty knobs
 
-All in data: the slot table (menu size, decoy source, silence seconds and foreign-pool accuracy per slot), each character's borrowed pairs, the draw of two per role, hand size, the starting pool, momentum steps, mic drop value, and the boss mapping. Nothing is hard-coded. The numbers below are the ones the simulation settled on for v1; the sandbox and real play move them.
+All in data: the slot table (menu size, decoy source, silence bar on or off and foreign-pool accuracy per slot), each character's borrowed pairs, the draw of two per role, hand size, the starting pool, momentum steps, mic drop value, and the boss mapping. Nothing is hard-coded. The numbers below are the ones the simulation settled on for v1; the sandbox and real play move them.
 
 ## Player characters
 
@@ -158,15 +160,15 @@ Every regular pair is borrowed by at most one character and fifteen of the twent
 
 A run is up to seven slots: up to six colleagues and the Stakeholder. Each run draws up to two of the three characters per role at random, seeded per run, and puts them in the player's role order (see Player characters): the own role first, then the two foreign ones. No face shows twice: the draw skips any character on the player's own sheet or on a sheet the run already has, so with two colleagues per role on one sheet the own role gives one duel and a run is six (`drawRun`, `bossIndex`). The characters not drawn are out of office this run and rotate in on the next one. The slot table applies by role, a role's first slot first, so a run of six skips the second home-ground slot:
 
-| Slot | Role in the run     | Tier | Menu | Decoys from | Silence | Outside its repertoire |
-| ---- | ------------------- | ---- | ---- | ----------- | ------- | ---------------------- |
-| 1    | First foreign role  | 1    | 4    | any pool    | off     | 60 %                   |
-| 2    | First foreign role  | 1    | 4    | any pool    | off     | 60 %                   |
-| 3    | Second foreign role | 2    | 5    | any pool    | 10 s    | 70 %                   |
-| 4    | Second foreign role | 2    | 5    | any pool    | 8 s     | 75 %                   |
-| 5    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %                   |
-| 6    | Own role            | 3    | 6    | same pool   | 6 s     | 90 %                   |
-| 7    | The Stakeholder     | Boss | 6    | all pools   | 5 s     | 100 %                  |
+| Slot | Role in the run     | Tier | Menu | Decoys from | Silence bar | Outside its repertoire |
+| ---- | ------------------- | ---- | ---- | ----------- | ----------- | ---------------------- |
+| 1    | First foreign role  | 1    | 4    | any pool    | off         | 60 %                   |
+| 2    | First foreign role  | 1    | 4    | any pool    | off         | 60 %                   |
+| 3    | Second foreign role | 2    | 5    | any pool    | on          | 70 %                   |
+| 4    | Second foreign role | 2    | 5    | any pool    | on          | 75 %                   |
+| 5    | Own role            | 3    | 6    | same pool   | on          | 90 %                   |
+| 6    | Own role            | 3    | 6    | same pool   | on          | 90 %                   |
+| 7    | The Stakeholder     | Boss | 6    | all pools   | on          | 100 %                  |
 
 "Decoys from" is where the wrong counters in the player's defence menu are drawn from: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. Plausible decoys test memory and obvious decoys test reasoning, so the decoys follow what the player knows of the pool: the foreign pools, fresh, get obvious decoys and the pressure comes from the timer and the accuracy; the own pool, known from the first second, gets plausible ones. ("Two pools", the phrase's own pool plus one other, stays in the data as a step between the two but is unused in v1.) A mic drop sets the menu to eight whatever the slot. "Outside its repertoire" is the AI's accuracy on phrases it has not got; its repertoire it answers every time.
 
@@ -417,7 +419,7 @@ type Slot = {
   accuracy: number; // on foreign pools; own pool is always 1
   menu: number; // counter options on defence
   decoys: 'any' | 'two' | 'same' | 'all';
-  silence: number | null; // seconds, null = off
+  silence: boolean; // the bar runs; its length follows the menu's text
 };
 
 type Run = {
@@ -428,7 +430,8 @@ type Run = {
 type Rules = {
   buyIn: number; // 3, boss duel 4
   momentum: number; // 3
-  micDrop: { worth: number; menu: number; silence: number }; // 2, 8, 0.5
+  micDrop: { worth: number; menu: number; silence: number }; // 2, 8, 0.75
+  reading: { wordsPerSecond: number; share: number }; // 4, 0.6 (hard 0.5)
   hand: number; // 4
   bossMisses: number; // 3
 };
@@ -491,7 +494,7 @@ Its sections:
 - **Mic drop.** The burst's three cells and the pulse.
 - **Window.** The quiet window with a line typing, and with the phrase, the prompt, the picker and the legend.
 - **Scene viewer.** Each scene with its loop and its poster, at the same scales, with the stand positions and the clear band drawn as outlines so a new render can be checked against the composition rule.
-- **Duel sandbox.** Pick character and slot, set a seed, jump to any phase, fill momentum, force the barrage, a slider for the silence seconds, a reduced-motion toggle. Because the reducer is pure, "jump to phase" is constructing a state and handing it to the same stage component the game uses, so the sandbox exercises the real thing, not a copy.
+- **Duel sandbox.** Pick character and slot, set a seed, jump to any phase, fill momentum, force the barrage, an override for the silence bar's share of the reading time, a reduced-motion toggle. Because the reducer is pure, "jump to phase" is constructing a state and handing it to the same stage component the game uses, so the sandbox exercises the real thing, not a copy.
 
 One script beside it, `simulate.ts`, run with the same tsx loader as the tests: a modelled player (answers collected pairs with a given accuracy, guesses the rest at one over the menu size, respects the silence bar with a given speed) plays full runs against the slot table, a thousand seeded runs per setting, and prints win rate per slot on first attempts and on retries (a retry must win more often than a first attempt, or the loop is not earned), average duels to beat the boss, and glossary size when the boss is reached. That is how the 60/75/90, the silence seconds and the boss's four segments get set with numbers before anyone plays, and it is the check that the boss is a wall for a player who knows nothing and not for one who collected the room.
 
