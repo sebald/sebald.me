@@ -144,6 +144,19 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
   boss: 'office',
 };
 
+/**
+ * Where the duellists stand in each scene: the x of the left edge of the
+ * 72 px sprite cell, player on the left, opponent on the right. The
+ * composition rule keeps x 60 to 170 and 310 to 420 clear; scenes may
+ * move the stands a little once they exist.
+ */
+export const STANDS: Record<SceneId, { left: number; right: number }> = {
+  floor: { left: 80, right: 330 },
+  meeting: { left: 80, right: 330 },
+  studio: { left: 80, right: 330 },
+  office: { left: 80, right: 330 },
+};
+
 // Player looks
 // ---------------
 

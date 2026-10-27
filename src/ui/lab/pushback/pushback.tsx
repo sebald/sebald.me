@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { BOSS_SLOT_INDEX, type Look } from '@/lib/lab/pushback/characters';
-import type { DuelState } from '@/lib/lab/pushback/duel';
+import { type DuelState, createDuel } from '@/lib/lab/pushback/duel';
 import type { Role } from '@/lib/lab/pushback/lines';
+import { duelSetupFor } from '@/lib/lab/pushback/run';
 import {
   type Save,
   emptySave,
@@ -15,7 +16,7 @@ import {
   writeSave,
 } from '@/lib/lab/pushback/save';
 
-import { DuelPlaceholder } from './duel-placeholder';
+import { DuelScreen } from './duel-screen';
 import { ResultScreen } from './result';
 import { RosterScreen } from './roster';
 import { SelectScreen } from './select';
@@ -25,14 +26,14 @@ type Screen =
   | { name: 'title' }
   | { name: 'select' }
   | { name: 'roster'; role: Role }
-  | { name: 'duel'; role: Role; index: number }
+  | { name: 'duel'; role: Role; index: number; seed: number }
   | { name: 'result'; role: Role };
 
 const prefersReducedMotion = () =>
   typeof matchMedia !== 'undefined' &&
   matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-/** The screens and the save; the duel itself comes in package 3 */
+/** The screens, the save and the duel */
 export const Pushback = () => {
   // The save defaults the silence bar to off under reduced motion
   const [save, setSave] = useState<Save>(
@@ -103,7 +104,12 @@ export const Pushback = () => {
         <RosterScreen
           run={run}
           onPlay={index =>
-            setScreen({ name: 'duel', role: screen.role, index })
+            setScreen({
+              name: 'duel',
+              role: screen.role,
+              index,
+              seed: Date.now(),
+            })
           }
           onResult={() => setScreen({ name: 'result', role: screen.role })}
           onBack={toSelect}
@@ -121,10 +127,14 @@ export const Pushback = () => {
           />
         );
       return (
-        <DuelPlaceholder
-          run={run}
-          index={screen.index}
-          silence={save.silence}
+        <DuelScreen
+          key={`${screen.role}-${screen.index}-${run.attempts}`}
+          initial={createDuel(
+            duelSetupFor(run, screen.index, {
+              seed: screen.seed,
+              silence: save.silence,
+            }),
+          )}
           onEnd={duel => endDuel(screen.role, screen.index, duel)}
           onBack={() => toRoster(screen.role)}
         />
