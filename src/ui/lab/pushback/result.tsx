@@ -5,7 +5,8 @@ import { useMemo, useState } from 'react';
 import { type RunState } from '@/lib/lab/pushback/run';
 import { resultCardText } from '@/lib/lab/pushback/save';
 
-import { Menu, Stage } from './stage';
+import { Picker } from './picker';
+import { Stage } from './stage';
 import { useKeys } from './use-keys';
 
 interface ResultScreenProps {
@@ -34,7 +35,7 @@ export const ResultScreen = ({ run, onBack }: ResultScreenProps) => {
         <pre className="bg-[#131829] px-4 py-3 text-left whitespace-pre shadow-[0_0_0_calc(var(--px)*2)_#0b0d16] ring-[length:var(--px)] ring-[#b7b09d]">
           {text}
         </pre>
-        <Menu
+        <Picker
           label="Result card"
           className="w-full max-w-[18em]"
           items={[

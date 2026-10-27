@@ -56,42 +56,18 @@ import {
 import { cn, cva } from '@/lib/styles.utils';
 
 import { Character } from './character';
+import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Ghost } from './ghost';
-import { Menu, type MenuItem } from './stage';
+import { Picker, type PickerItem } from './picker';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
+import { Legend, Window } from './window';
 
 // Styles
 // ---------------
-/** Inset of the text from the stage edge: the window's frame plus padding */
-const INSET = LAYOUT.panel.x + LAYOUT.panelPad;
-
 const styles = {
-  // The text inside the drawn window. It sits on the window's fill and,
-  // when a menu is taller than the window at a small scale, grows upward
-  // over the band on the same fill.
-  panel: cva({
-    base: [
-      'absolute flex flex-col justify-start gap-[calc(var(--px)*2)]',
-      'bg-[#131829] leading-[1.35] text-[#c9c4b4]',
-    ],
-  }),
-  line: cva({
-    base: 'flex items-start gap-[calc(var(--px)*3)]',
-  }),
-  speaker: cva({
-    base: 'mt-[0.4em] inline-block size-[0.55em] shrink-0',
-    variants: {
-      side: {
-        player: 'bg-[#f2c14e]',
-        opponent: 'bg-[#f0a36f]',
-      },
-    },
-  }),
-  // The names in the corners, over the pips, on a plate so they read on
-  // any wall
   name: cva({
     base: [
       'absolute font-semibold tracking-wide uppercase',
@@ -485,10 +461,10 @@ export const DuelScreen = ({
         : step.text.slice(0, typedChars(cursor.elapsed, step.text))
       : '';
 
-  const menuItems: MenuItem[] = useMemo(() => {
+  const menuItems: PickerItem[] = useMemo(() => {
     if (step?.kind !== 'menu') return [];
     if (state.phase === 'attack') {
-      const items: MenuItem[] = state.hand.map(id => ({
+      const items: PickerItem[] = state.hand.map(id => ({
         id,
         label: pairById(id).phrase,
         onSelect: () => {
@@ -554,14 +530,20 @@ export const DuelScreen = ({
       ? Math.min(100, (state.silence.elapsed / state.silence.limit) * 100)
       : null;
 
-  // The text box inside the window, in stage pixels
-  const panel = {
-    left: INSET,
-    right: INSET,
-    bottom:
-      STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height) + LAYOUT.panelPad,
-    minHeight: LAYOUT.panel.height - 2 * LAYOUT.panelPad,
-  };
+  // The control hints along the window's bottom edge: only what works now
+  const legend =
+    step?.kind === 'menu' ? (
+      <Legend
+        keys={[
+          ['↑↓', 'choose'],
+          ['Enter', 'confirm'],
+          ...(canMicDrop ? ([['M', 'mic drop']] as [string, string][]) : []),
+        ]}
+        touch="Tap a line"
+      />
+    ) : step?.kind === 'line' || step?.kind === 'reveal' ? (
+      <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
+    ) : null;
 
   return (
     <Frame
@@ -627,33 +609,24 @@ export const DuelScreen = ({
         onClick={() => !paused && step?.kind !== 'menu' && confirm()}
       />
 
-      <div
-        className={styles.panel()}
+      <Window
+        className="absolute"
+        legend={legend}
         style={{
-          left: px(panel.left),
-          right: px(panel.right),
-          bottom: px(panel.bottom),
-          minHeight: px(panel.minHeight),
+          left: px(LAYOUT.panel.x),
+          right: px(LAYOUT.panel.x),
+          bottom: px(STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height)),
+          minHeight: px(LAYOUT.panel.height),
         }}
       >
         {step?.kind === 'line' && (
-          <p className={styles.line()}>
-            <span
-              className={styles.speaker({ side: step.speaker })}
-              aria-hidden
-            />
-            <span>{typed}</span>
-          </p>
+          <Dialogue speaker={step.speaker}>{typed}</Dialogue>
         )}
         {step?.kind === 'reveal' && (
           <>
-            <p className={cn(styles.line(), 'text-[#8a92b8]')}>
-              <span
-                className={styles.speaker({ side: 'player' })}
-                aria-hidden
-              />
-              <span>{counterText(state.outcome?.picked ?? null)}</span>
-            </p>
+            <Dialogue speaker="player" muted>
+              {counterText(state.outcome?.picked ?? null)}
+            </Dialogue>
             <p className={styles.hint()}>The reply: {step.text}</p>
           </>
         )}
@@ -663,13 +636,9 @@ export const DuelScreen = ({
               <p className={styles.hint()}>{COMPOSURE_HINT}</p>
             )}
             {state.phase === 'defend' && state.exchange && (
-              <p className={cn(styles.line(), 'text-[#8a92b8]')}>
-                <span
-                  className={styles.speaker({ side: 'opponent' })}
-                  aria-hidden
-                />
-                <span>{phraseText(state.exchange.phrase)}</span>
-              </p>
+              <Dialogue speaker="opponent" muted>
+                {phraseText(state.exchange.phrase)}
+              </Dialogue>
             )}
             {/* The prompt sits right above the options, after a gap */}
             <p className={cn(styles.hint(), 'mt-[calc(var(--px)*4)]')}>
@@ -677,7 +646,7 @@ export const DuelScreen = ({
                 ? HINT
                 : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend']}
             </p>
-            <Menu
+            <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
               active={!paused}
@@ -699,13 +668,13 @@ export const DuelScreen = ({
             continue.
           </p>
         )}
-      </div>
+      </Window>
 
       {paused && (
         <div className={styles.pause()}>
           <div className={styles.pausePanel()}>
             <p className="text-center">Paused</p>
-            <Menu
+            <Picker
               label="Pause"
               items={[
                 {

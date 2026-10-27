@@ -9,6 +9,7 @@ import { Cast, CharacterPlayground } from './character-playground';
 import { GhostDemo } from './ghost-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
+import { WindowDemo } from './window-demo';
 
 const Section = ({
   title,
@@ -44,6 +45,12 @@ export const Inventory = () => (
       blurb="The predecessor's ghost: hovering, pointing from the second whisper on, in and out of its black hole."
     >
       <GhostDemo />
+    </Section>
+    <Section
+      title="Window"
+      blurb="The quiet window with a line typing, and with the opponent's phrase, the prompt and the picker. The legend at the bottom names the keys, or the tap after a touch."
+    >
+      <WindowDemo />
     </Section>
     <Section
       title="Scenes"

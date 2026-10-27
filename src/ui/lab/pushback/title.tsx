@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 
 import { MODE_LABELS, type Mode } from '@/lib/lab/pushback/characters';
 
-import { Menu, type MenuItem, Stage } from './stage';
+import { Picker, type PickerItem } from './picker';
+import { Stage } from './stage';
 import { useKeys } from './use-keys';
 
 interface TitleScreenProps {
@@ -40,7 +41,7 @@ export const TitleScreen = ({
   }, [armed]);
   useKeys({ Escape: () => setArmed(false) }, armed);
 
-  const items: MenuItem[] = [
+  const items: PickerItem[] = [
     { id: 'start', label: 'Start', onSelect: onStart },
     {
       id: 'mode',
@@ -70,7 +71,7 @@ export const TitleScreen = ({
             you drop the mic.
           </Stage.Muted>
         </div>
-        <Menu
+        <Picker
           label="Title menu"
           className="w-full max-w-[18em]"
           items={items}

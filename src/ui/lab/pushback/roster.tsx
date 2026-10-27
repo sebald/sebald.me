@@ -19,9 +19,10 @@ import {
 import { PROPS, type PropId } from '@/lib/lab/pushback/sprites';
 import { cn } from '@/lib/styles.utils';
 
+import { Picker, type PickerItem } from './picker';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
-import { Menu, type MenuItem, Stage } from './stage';
+import { Stage } from './stage';
 import { useKeys } from './use-keys';
 
 interface RosterScreenProps {
@@ -83,7 +84,7 @@ export const RosterScreen = ({
     ),
   );
 
-  const items: MenuItem[] = run.run.slots.map((slot, index) => {
+  const items: PickerItem[] = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
     const beaten = run.beaten[index];
     const playable = canPlay(run, index);
@@ -140,7 +141,7 @@ export const RosterScreen = ({
 
       {tab === 'roster' ? (
         <div className="absolute inset-0 grid grid-cols-[1fr_auto] gap-4 p-4 pt-10 md:p-6 md:pt-10">
-          <Menu
+          <Picker
             label="Opponents in run order"
             initial={next >= 0 ? String(next) : 'result'}
             items={items}

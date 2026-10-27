@@ -2,9 +2,9 @@
  * The frame's canvas: the room band (a flat colour until the loop under
  * the canvas has loaded) and the chrome, drawn in code on the same pixel
  * grid as the room: the shared scale, the momentum pips, the composure
- * strip and the quiet window the text sits in. The duellists and the
- * ghost are their own canvases (`Character`, `Ghost`), which share
- * `drawCell`. Letters are DOM, see the screen.
+ * strip. The duellists and the ghost are their own canvases
+ * (`Character`, `Ghost`), which share `drawCell`; the quiet window and
+ * the letters are DOM (`Window`, see the screen).
  */
 import type { SceneId } from '@/lib/lab/pushback/characters';
 import type { Side } from '@/lib/lab/pushback/duel';
@@ -114,29 +114,6 @@ const checker = (
     for (let xx = x + ((yy + x) % 2); xx < x + w; xx += 2) {
       rect(ctx, xx, yy, 1, 1, colour);
     }
-  }
-};
-
-/** Knock the corners of a box out to `bg`, with the diagonal in ink */
-const corners = (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  bg: string,
-) => {
-  const points = [
-    [x, y, 1, 1],
-    [x + w - 1, y, -1, 1],
-    [x, y + h - 1, 1, -1],
-    [x + w - 1, y + h - 1, -1, -1],
-  ] as const;
-  for (const [cx, cy, sx, sy] of points) {
-    rect(ctx, cx, cy, 1, 1, bg);
-    rect(ctx, cx + sx, cy, 1, 1, bg);
-    rect(ctx, cx, cy + sy, 1, 1, bg);
-    rect(ctx, cx + sx, cy + sy, 1, 1, CHROME.ink);
   }
 };
 
@@ -323,28 +300,9 @@ const drawComposure = (ctx: CanvasRenderingContext2D, hud: HudModel) => {
 };
 
 /** The quiet window: ink, a pale frame, a dark fill, the corners knocked out */
-export const drawWindow = (
-  ctx: CanvasRenderingContext2D,
-  x: number,
-  y: number,
-  w: number,
-  h: number,
-  on = true,
-  bg = CHROME.bg,
-) => {
-  rect(ctx, x, y, w, h, CHROME.ink);
-  rect(ctx, x + 1, y + 1, w - 2, h - 2, on ? CHROME.frame : CHROME.frameDim);
-  rect(ctx, x + 2, y + 2, w - 4, h - 4, CHROME.frameInner);
-  rect(ctx, x + 3, y + 3, w - 6, h - 6, on ? CHROME.fill : '#0e1220');
-  checker(ctx, x + 3, y + 3, w - 6, 2, on ? CHROME.fillTop : '#121626');
-  corners(ctx, x, y, w, h, bg);
-};
-
-/** The panel under the band: the background and the window */
+/** The ground under the band; the window on it is DOM (`Window`) */
 const drawPanel = (ctx: CanvasRenderingContext2D) => {
   rect(ctx, 0, LAYOUT.band, STAGE.width, STAGE.height - LAYOUT.band, CHROME.bg);
-  const { x, y, width, height } = LAYOUT.panel;
-  drawWindow(ctx, x, y, width, height);
 };
 
 /** The ghost from its sheet, see-through; a pale shape until it is built */

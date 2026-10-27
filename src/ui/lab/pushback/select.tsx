@@ -17,6 +17,7 @@ import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage } from './stage';
 import { useKeys } from './use-keys';
+import { Window } from './window';
 
 /** The empty rows above the tallest idle figure, cropped off the cell */
 const CROP_TOP = 26;
@@ -168,7 +169,7 @@ export const SelectScreen = ({
             );
           })}
         </div>
-        <Stage.Box className="text-center">
+        <Window className="absolute inset-x-3 bottom-3 text-center">
           <p className="text-balance">{ROLE_BLURBS[role]}</p>
           <button
             type="button"
@@ -178,7 +179,7 @@ export const SelectScreen = ({
             Play as {LOOKS[role][look].name}
             {runs[role] && !runs[role].finished ? ' (continue)' : ''}
           </button>
-        </Stage.Box>
+        </Window>
       </Stage.Center>
     </Stage>
   );
