@@ -16,6 +16,7 @@ import {
   buddyLine,
   buddyOpacity,
   buddyStep,
+  ghostEnter,
 } from '@/lib/lab/pushback/buddy';
 import { type Look, SCENE_OF, STANDS } from '@/lib/lab/pushback/characters';
 import {
@@ -218,15 +219,23 @@ export const DuelScreen = ({
   const [paused, setPaused] = useState(false);
   const [micDrop, setMicDrop] = useState(false);
   const [clock, setClock] = useState(0);
-  // The exchange the buddy's whisper started on, for the miss line
+  // The exchange the buddy's whisper started on, for the miss line and
+  // for sending it away afterwards
   const [whisperedOn, setWhisperedOn] = useState<number | null>(null);
+  // The ghost's entrance or exit in progress, by the clock it started at
+  const [ghostAnim, setGhostAnim] = useState<{
+    since: number;
+    leaving: boolean;
+  } | null>(null);
   const reduced = reducedMotion ?? prefersReducedMotion();
   // The ceiling rows a short window crops: the HUD and the names move down
   const { crop } = useScale(scale);
 
   const stateRef = useRef(state);
+  const clockRef = useRef(clock);
   useLayoutEffect(() => {
     stateRef.current = state;
+    clockRef.current = clock;
   });
 
   // Centre the stage in the viewport when the duel starts, so the panel
@@ -348,7 +357,11 @@ export const DuelScreen = ({
   // ---------------
   // How far the whisper has got on this defence: paced by the silence bar
   // when there is one, by its own clock otherwise
-  const buddy = state.setup.buddy === true;
+  const buddyOn = state.setup.buddy === true;
+  // The ghost helps once a duel: after the exchange it whispered on it
+  // leaves, and the counters stop dimming
+  const buddy =
+    buddyOn && (whisperedOn === null || whisperedOn === state.exchanges);
   const defending = state.phase === 'defend' && step?.kind === 'menu';
   const whisper =
     buddy && defending
@@ -359,7 +372,7 @@ export const DuelScreen = ({
       : 0;
   // A miss after the whisper gets the ghost's own line during the resolve
   const missedAfterWhisper =
-    buddy &&
+    buddyOn &&
     state.phase === 'resolve' &&
     whisperedOn === state.exchanges - 1 &&
     state.exchange?.by === 'opponent' &&
@@ -371,6 +384,32 @@ export const DuelScreen = ({
     : missedAfterWhisper
       ? BUDDY_MISS_BARK
       : null;
+  // Out of the black hole when it has something to say, back into it
+  // when it is done
+  const ghostWanted = ghostLine !== null;
+  useEffect(() => {
+    setGhostAnim(previous => {
+      if (ghostWanted) {
+        return previous && !previous.leaving
+          ? previous
+          : { since: clockRef.current, leaving: false };
+      }
+      return previous && !previous.leaving
+        ? { since: clockRef.current, leaving: true }
+        : previous;
+    });
+  }, [ghostWanted]);
+  let enter = 1;
+  let ghostShown = ghostWanted;
+  if (ghostAnim && !reduced) {
+    const progress = ghostEnter(clock - ghostAnim.since);
+    if (ghostAnim.leaving) {
+      enter = 1 - progress;
+      ghostShown = progress < 1;
+    } else {
+      enter = progress;
+    }
+  }
 
   // Frame model
   // ---------------
@@ -383,12 +422,13 @@ export const DuelScreen = ({
     opponent: stands.right - view.x,
   };
   const poses = posesFor(state, step);
-  const ghost: FrameModel['ghost'] = ghostLine
+  const ghost: FrameModel['ghost'] = ghostShown
     ? {
         x: standX.player - GHOST.behind,
         dy: GHOST.lift + (reduced ? 0 : bob(clock, 1200)),
         cell: ghostCell(whisper, reduced ? 0 : clock),
         opacity: 1,
+        enter,
       }
     : undefined;
   const playerSwap: Swap = useMemo(
@@ -568,7 +608,7 @@ export const DuelScreen = ({
         </div>
       )}
 
-      {ghost && ghostLine && (
+      {ghost && ghostLine && enter >= 1 && (
         <p
           className={styles.bubble()}
           style={{

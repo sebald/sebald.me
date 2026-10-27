@@ -114,6 +114,8 @@ export interface GhostModel {
   cell: number;
   /** 0 to 1, fading in */
   opacity: number;
+  /** 0 to 1: how far out of the black hole it is (`ghostEnter`) */
+  enter: number;
 }
 
 export interface FrameModel {
@@ -455,13 +457,33 @@ const drawGhost = (
   sprites: Sprites,
 ) => {
   const sprite = sprites.ghost;
+  const cx = ghost.x + LAYOUT.cell.width / 2;
+  const bottom = LAYOUT.feet - ghost.dy;
+  const box = sprite?.meta.cells[ghost.cell]?.box;
+  // The middle of the figure: where the hole is
+  const midY = box
+    ? Math.round(bottom - (LAYOUT.cell.height - box.y - box.height / 2))
+    : bottom - 28;
   ctx.save();
+  if (ghost.enter < 1) {
+    // The black hole: a dark disc with a pale rim that the ghost is drawn
+    // out of, or into, squeezed sideways
+    const r = Math.round(2 + 5 * (1 - ghost.enter));
+    for (let dy = -r; dy <= r; dy++) {
+      const w = Math.round(Math.sqrt(r * r - dy * dy));
+      rect(ctx, cx - w, midY + dy, 2 * w, 1, '#05060a');
+      if (Math.abs(dy) === r) continue;
+      rect(ctx, cx - w, midY + dy, 1, 1, '#2f5e60');
+      rect(ctx, cx + w - 1, midY + dy, 1, 1, '#2f5e60');
+    }
+    ctx.translate(cx, midY);
+    ctx.scale(Math.max(0.05, ghost.enter), 0.25 + 0.75 * ghost.enter);
+    ctx.translate(-cx, -midY);
+  }
   ctx.globalAlpha = GHOST_ALPHA * ghost.opacity;
   if (sprite) {
-    drawCell(ctx, sprite, ghost.cell, ghost.x, LAYOUT.feet - ghost.dy);
+    drawCell(ctx, sprite, ghost.cell, ghost.x, bottom);
   } else {
-    const cx = ghost.x + LAYOUT.cell.width / 2;
-    const bottom = LAYOUT.feet - ghost.dy;
     rect(ctx, cx - 10, bottom - 40, 20, 34, '#bfe8ea');
     rect(ctx, cx - 9, bottom - 58, 18, 18, '#e8fbfb');
   }

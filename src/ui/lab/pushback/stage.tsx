@@ -117,7 +117,10 @@ export const Stage = ({
   };
   return (
     // `data-stage`: styles.css gives the stage normal leading back (the site
-    // trims every text block to its cap height)
+    // trims every text block to its cap height). The pointer handler only
+    // moves focus; the game itself is keyboard and touch playable through
+    // its menus.
+    // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
       ref={ref}
       data-stage

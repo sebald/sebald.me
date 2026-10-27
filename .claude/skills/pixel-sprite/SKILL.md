@@ -27,9 +27,10 @@ One command per sheet. Run from the repo root.
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   src/assets/lab/pushback/sources/dev-sam-sheet.jpg dev-sam --cells 6
 
-# The ghost: three cells (hover, hover, point), Gemini draws it too big
+# The ghost: three cells (hover, hover, point), Gemini draws it person
+# sized and it floats at the shoulder about half that
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.78
+  src/assets/lab/pushback/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.5
 
 # The item sheet: eight props in 48 by 48 cells, centred, with the blurred
 # figures Gemini put under the items keyed away by the wider soft key

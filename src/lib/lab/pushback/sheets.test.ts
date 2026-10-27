@@ -71,13 +71,14 @@ describe('model sheets', () => {
 });
 
 describe('the ghost sheet', () => {
-  it('has three cells of a figure the size of the people', async () => {
+  it('has three cells of a figure about half the size of the people', async () => {
     const m = meta('ghost');
     assert.deepEqual(m.cell, LAYOUT.cell);
     assert.equal(m.count, 3);
     for (const { box, clipped } of m.cells) {
       assert.equal(clipped, false);
-      assert.ok(box.height >= FIGURE_HEIGHT.min && box.height <= 90);
+      // Built at --scale 0.5: it floats at the shoulder, not in the line-up
+      assert.ok(box.height >= 45 && box.height <= 60, String(box.height));
     }
     const { width } = await pixels('ghost');
     assert.equal(width, LAYOUT.cell.width * 3);

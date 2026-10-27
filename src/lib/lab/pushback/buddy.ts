@@ -47,6 +47,18 @@ export const buddyKeeps = <T>(
   return wrong[Math.abs(salt) % Math.max(1, wrong.length)];
 };
 
+/**
+ * The ghost's entrance and exit, in ms: it is spat out of a black hole
+ * and swallowed back into it.
+ */
+export const GHOST_ANIM_MS = 450;
+
+/** How far in the ghost is after `elapsed` ms, 0 to 1, eased to snap in */
+export const ghostEnter = (elapsed: number): number => {
+  const t = Math.max(0, Math.min(1, elapsed / GHOST_ANIM_MS));
+  return 1 - (1 - t) ** 2;
+};
+
 /** Opacity of a wrong counter at a step, in three visible drops */
 export const buddyOpacity = (step: number): number =>
   [1, 0.7, 0.45, 0.25][Math.max(0, Math.min(BUDDY_STEPS, step))]!;
