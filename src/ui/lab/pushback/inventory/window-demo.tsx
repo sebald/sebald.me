@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { PAIRS } from '@/lib/lab/pushback/lines';
-import { LAYOUT, typedChars } from '@/lib/lab/pushback/stage';
+import { LAYOUT, MAX_CROP, STAGE, typedChars } from '@/lib/lab/pushback/stage';
 
 import { Dialogue, Hint } from '../dialogue';
 import { Picker } from '../picker';
@@ -22,6 +22,10 @@ export const WindowDemo = () => {
   // The line types over and over, four seconds a round
   const typed = LINE.slice(0, typedChars(clock % 4000, LINE));
   const options = PAIRS.slice(1, 5);
+  // Hard mode's mic drop in a short window: ten options, more than the
+  // cropped stage has room for
+  const many = PAIRS.slice(1, 11);
+  const maxHeight = `calc(var(--px) * ${STAGE.height - LAYOUT.panel.x - MAX_CROP - LAYOUT.hud})`;
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
@@ -66,14 +70,43 @@ export const WindowDemo = () => {
             />
           }
         >
-          <Dialogue speaker="opponent" muted>
-            {LINE}
-          </Dialogue>
-          <Hint className="mt-[calc(var(--px)*4)]">Pick your counter.</Hint>
+          <Dialogue speaker="opponent">{LINE}</Dialogue>
+          <Hint className="my-[calc(var(--px)*4)]">Pick your counter.</Hint>
           <Picker
             label="Counters"
             className="gap-0"
             items={options.map(pair => ({
+              id: pair.id,
+              label: pair.counter,
+              onSelect: () => setPicked(pair.counter),
+            }))}
+          />
+        </Window>
+        <Window
+          style={{
+            width: `calc(var(--px) * ${LAYOUT.panel.width})`,
+            minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
+            maxHeight,
+          }}
+          legend={
+            <Legend
+              keys={[
+                ['↑↓', 'choose'],
+                ['Enter', 'confirm'],
+              ]}
+              touch="Tap a line"
+            />
+          }
+        >
+          <Dialogue speaker="opponent">{LINE}</Dialogue>
+          <Hint className="my-[calc(var(--px)*4)]">
+            Pick your counter. (Ten options in a short window: the list scrolls
+            on its rail.)
+          </Hint>
+          <Picker
+            label="Counters, many"
+            className="gap-0"
+            items={many.map(pair => ({
               id: pair.id,
               label: pair.counter,
               onSelect: () => setPicked(pair.counter),

@@ -632,6 +632,9 @@ export const DuelScreen = ({
           right: px(LAYOUT.panel.x),
           bottom: px(STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height)),
           minHeight: px(LAYOUT.panel.height),
+          // A long menu grows the window up over the room, never over the
+          // bars: past that the list scrolls
+          maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
         }}
       >
         {step?.kind === 'line' && (
@@ -650,13 +653,15 @@ export const DuelScreen = ({
             {showsComposureHint(state) && (
               <p className={styles.hint()}>{COMPOSURE_HINT}</p>
             )}
+            {/* The phrase being answered, at full strength: it is what
+                the player reads to pick */}
             {state.phase === 'defend' && state.exchange && (
-              <Dialogue speaker="opponent" muted>
+              <Dialogue speaker="opponent">
                 {phraseText(state.exchange.phrase)}
               </Dialogue>
             )}
-            {/* The prompt sits right above the options, after a gap */}
-            <p className={cn(styles.hint(), 'mt-[calc(var(--px)*4)]')}>
+            {/* The prompt sits above the options, with room on both sides */}
+            <p className={cn(styles.hint(), 'my-[calc(var(--px)*4)]')}>
               {showsHint(state)
                 ? HINT
                 : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend']}

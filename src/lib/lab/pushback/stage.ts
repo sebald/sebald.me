@@ -52,6 +52,8 @@ export const LAYOUT = {
   composure: { y: 23, width: 40, height: 3 },
   /** The names, in the corners */
   names: { x: 6, y: 3 },
+  /** Rows the bars take at the top: a window never grows over them */
+  hud: 30,
 } as const;
 
 /**
