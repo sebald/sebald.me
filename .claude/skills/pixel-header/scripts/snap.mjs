@@ -90,7 +90,8 @@ const fit = (edges, n, around) => {
     for (let phase = 0; phase < pitch; phase += 0.25) {
       let s = 0;
       let k = 0;
-      for (let e = phase; e < n; e += pitch, k++) s += edges[Math.round(e)] ?? 0;
+      for (let e = phase; e < n; e += pitch, k++)
+        s += edges[Math.round(e)] ?? 0;
       s /= k;
       if (s > best.score) best = { score: s, pitch, phase };
     }

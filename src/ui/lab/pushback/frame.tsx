@@ -1,29 +1,30 @@
 'use client';
 
 import NextImage from 'next/image';
-import type { PropsWithChildren } from 'react';
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { FRAME_MS, LAYOUT, SCENE, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
-import { GHOST_KEY, type Sprites, useSprites } from './sheets';
-import { Stage } from './stage';
-import { useScale } from './use-scale';
+import { Stage, useStage } from './stage';
 
 /**
  * The duel's frame: the scene loop in the room band (a window of the
- * 480 by 270 render, at the stage's pixels) under a canvas the size of
- * the stage, drawn at the screen's device pixels where a stage pixel is a
- * whole number of them (`backingFor`) and at 3x scaled down smoothly
- * otherwise, plus a DOM
- * overlay in the same frame for everything that is text. Sits in the
- * same `Stage` as the menu screens, so nothing changes size.
+ * 480 by 270 render, at the stage's pixels) with the duellists and the
+ * ghost standing in it (`band`), under a canvas the size of the stage
+ * for the chrome, drawn at the screen's device pixels where a stage
+ * pixel is a whole number of them (`backingFor`) and at 3x scaled down
+ * smoothly otherwise, plus a DOM overlay in the same frame for
+ * everything that is text. Sits in the same `Stage` as the menu screens,
+ * so nothing changes size.
  */
 interface FrameProps extends PropsWithChildren {
   model: FrameModel;
+  /** What stands in the room: the characters and the ghost */
+  band?: ReactNode;
   /** Called every 125 ms step while mounted and not paused */
   onStep?: (elapsedMs: number) => void;
   paused?: boolean;
@@ -33,42 +34,31 @@ interface FrameProps extends PropsWithChildren {
   className?: string;
 }
 
-export const Frame = ({
+export const Frame = ({ label, scale, className, ...body }: FrameProps) => (
+  <Stage label={label} scale={scale} crop="fit" className={className}>
+    <FrameBody {...body} />
+  </Stage>
+);
+
+type FrameBodyProps = Omit<FrameProps, 'label' | 'scale' | 'className'>;
+
+/** Inside the stage, where its scale is known */
+const FrameBody = ({
   model,
+  band,
   onStep,
   paused = false,
-  label,
-  scale: fixedScale,
-  className,
   children,
-}: FrameProps) => {
+}: FrameBodyProps) => {
+  const { crisp, backing } = useStage();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef(model);
   const stepRef = useRef(onStep);
+  const backingRef = useRef(backing);
   // The scene loop under the canvas; until it has loaded the canvas paints
   // the flat placeholder band itself
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
-  const { crop, crisp, backing } = useScale(fixedScale);
-  // The sprites this frame draws, built in the background; placeholders
-  // until then
-  const sprites = useSprites(
-    useMemo(
-      () => ({
-        [model.sprites.player.key]: model.sprites.player.swap,
-        [model.sprites.opponent.key]: model.sprites.opponent.swap,
-        [GHOST_KEY]: GHOST_KEY,
-      }),
-      [
-        model.sprites.player.key,
-        model.sprites.player.swap,
-        model.sprites.opponent.key,
-        model.sprites.opponent.swap,
-      ],
-    ),
-  );
-  const spritesRef = useRef<Sprites>(sprites);
-  const backingRef = useRef(backing);
   const assets = SCENE_ASSETS[model.scene];
   const loop = loopFor(assets, crisp);
   const sceneKey = `${model.scene}:${loop.src}`;
@@ -77,7 +67,6 @@ export const Frame = ({
     modelRef.current = model;
     stepRef.current = onStep;
     loadedRef.current = sceneLoaded;
-    spritesRef.current = sprites;
     backingRef.current = backing;
   });
 
@@ -92,7 +81,6 @@ export const Frame = ({
       if (ctx) {
         drawFrame(ctx, modelRef.current, {
           background: !loadedRef.current,
-          sprites: spritesRef.current,
           backing: backingRef.current,
         });
       }
@@ -113,22 +101,22 @@ export const Frame = ({
     return () => cancelAnimationFrame(frame);
   }, [paused]);
 
-  // Redraw on model changes between steps, so input feels immediate, when
-  // a sprite lands and when the canvas is resized
+  // Redraw on model changes between steps, so input feels immediate, and
+  // when the canvas is resized
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx)
-      drawFrame(ctx, model, { background: !sceneLoaded, sprites, backing });
-  }, [model, sceneLoaded, sprites, backing]);
+    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded, backing });
+  }, [model, sceneLoaded, backing]);
 
   return (
-    <Stage label={label} scale={fixedScale} crop={crop} className={className}>
+    <>
       {/*
-        The room band: a window of the scene loop. On whole device pixels
-        the 1x frames are blown up with hard edges, which lands exactly on
-        the art's pixels; otherwise the 8x export is scaled down smoothly,
-        so every art pixel keeps the same width (`pixelated` would round
-        them to uneven widths). The poster replaces it under reduced motion.
+        The room band: a window of the scene loop, with the people in it.
+        On whole device pixels the 1x frames are blown up with hard edges,
+        which lands exactly on the art's pixels; otherwise the 8x export
+        is scaled down smoothly, so every art pixel keeps the same width
+        (`pixelated` would round them to uneven widths). The poster
+        replaces it under reduced motion.
       */}
       <div
         className="absolute inset-x-0 top-0 overflow-hidden"
@@ -167,21 +155,23 @@ export const Frame = ({
             )}
           />
         </picture>
+        {band}
       </div>
       {/*
-        Drawn at the device pixels per stage pixel when that is whole, so
-        the canvas is shown at its own size; else at 3x and scaled down
-        smoothly by CSS, which keeps the art's pixels even where
-        `pixelated` would round them
+        The chrome, drawn at the device pixels per stage pixel when that is
+        whole, so the canvas is shown at its own size; else at 3x and
+        scaled down smoothly by CSS, which keeps the art's pixels even
+        where `pixelated` would round them. Transparent, so the band and
+        the people show through.
       */}
       <canvas
         ref={canvasRef}
         aria-hidden
         width={STAGE.width * backing}
         height={STAGE.height * backing}
-        className="absolute inset-0 h-full w-full"
+        className="pointer-events-none absolute inset-0 h-full w-full"
       />
       <div className="absolute inset-0">{children}</div>
-    </Stage>
+    </>
   );
 };

@@ -1,12 +1,52 @@
 'use client';
 
 import type { CSSProperties, FocusEvent, PropsWithChildren } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useContext, useEffect, useRef, useState } from 'react';
 
-import { STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
+import { BACKING, STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
-import { useScale } from './use-scale';
+import { type StageScale, useScale } from './use-scale';
+
+// Context
+// ---------------
+/** The scale of the stage a piece sits in, for its canvas's backing */
+const StageContext = createContext<StageScale>({
+  scale: 3,
+  crop: 0,
+  portrait: false,
+  crisp: true,
+  backing: BACKING,
+});
+
+export const useStage = () => useContext(StageContext);
+
+/**
+ * A bare provider of the stage's pixel unit, for pieces shown outside a
+ * stage (the inventory): sets `--px` and the font size for a scale.
+ */
+export const Pixels = ({
+  scale: fixed,
+  children,
+  className,
+}: PropsWithChildren<{ scale: number; className?: string }>) => {
+  const measured = useScale(fixed);
+  return (
+    <StageContext.Provider value={measured}>
+      <div
+        // `data-stage`: normal leading, like the stage (styles.css)
+        data-stage
+        className={cn('font-mono', className)}
+        style={{
+          fontSize: fontSizeFor(fixed),
+          ['--px' as string]: `${fixed}px`,
+        }}
+      >
+        {children}
+      </div>
+    </StageContext.Provider>
+  );
+};
 
 // Styles
 // ---------------
@@ -67,8 +107,11 @@ interface StageProps extends PropsWithChildren {
   label?: string;
   /** Fix the scale (the workbench) instead of fitting the viewport */
   scale?: number;
-  /** Crop this many rows off the top (the duel's frame in a short window) */
-  crop?: number;
+  /**
+   * Crop rows off the top: a number, or `fit`, the ceiling rows a short
+   * window takes off (the duel's frame)
+   */
+  crop?: number | 'fit';
 }
 
 /**
@@ -81,9 +124,11 @@ export const Stage = ({
   className,
   label,
   scale: fixed,
-  crop = 0,
+  crop: cropProp = 0,
 }: StageProps) => {
-  const { scale, portrait } = useScale(fixed);
+  const measured = useScale(fixed);
+  const { scale, portrait } = measured;
+  const crop = cropProp === 'fit' ? measured.crop : cropProp;
   const ref = useRef<HTMLElement>(null);
   // Focusing the game (a tap on it, or focus arriving from the page)
   // centres the stage in the viewport
@@ -132,12 +177,14 @@ export const Stage = ({
       onPointerDown={onPointerDown}
     >
       {/* The full stage, its top rows above the section when cropped */}
-      <div
-        className="absolute inset-x-0"
-        style={{ top: -crop * scale, height: STAGE.height * scale }}
-      >
-        {children}
-      </div>
+      <StageContext.Provider value={measured}>
+        <div
+          className="absolute inset-x-0"
+          style={{ top: -crop * scale, height: STAGE.height * scale }}
+        >
+          {children}
+        </div>
+      </StageContext.Provider>
     </section>
   );
 };

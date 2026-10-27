@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { Sandbox } from '@/ui/lab/pushback/dev/sandbox';
+import { Inventory } from '@/ui/lab/pushback/inventory/loader';
 import { Article } from '@/ui/layout/article';
 import { PageToolbar } from '@/ui/page-toolbar';
 
@@ -12,28 +12,28 @@ export const dynamic = 'force-dynamic';
 // Meta
 // ---------------
 export const metadata: Metadata = {
-  title: 'Pushback workbench',
+  title: 'Pushback inventory',
   robots: { index: false, follow: false },
 };
 
 // Page
 // ---------------
-/** The workbench: dev only, a 404 in production */
-const WorkbenchPage = () => {
+/** The game's inventory: dev only, a 404 in production */
+const InventoryPage = () => {
   if (process.env.NODE_ENV === 'production') notFound();
   return (
     <>
       <PageToolbar />
-      <Article aria-labelledby="workbench-title">
+      <Article aria-labelledby="inventory-title">
         <Article.Header>
-          <Article.Title id="workbench-title" level="1">
-            Pushback workbench
+          <Article.Title id="inventory-title" level="1">
+            Pushback inventory
           </Article.Title>
         </Article.Header>
-        <Sandbox />
+        <Inventory />
       </Article>
     </>
   );
 };
 
-export default WorkbenchPage;
+export default InventoryPage;

@@ -37,24 +37,16 @@ import {
   pairById,
 } from '@/lib/lab/pushback/lines';
 import { playerName } from '@/lib/lab/pushback/save';
-import {
-  PLAYER_SHEETS,
-  type Swap,
-  cellFor,
-  ghostCell,
-  swapKey,
-} from '@/lib/lab/pushback/sprites';
+import { PLAYER_SHEETS, type Swap } from '@/lib/lab/pushback/sprites';
 import {
   type Step,
   LAYOUT,
   STAGE,
   barsLabel,
   bob,
-  breathFrame,
   counterText,
   holdFor,
   phraseText,
-  poseOffset,
   posesFor,
   scriptFor,
   typedChars,
@@ -63,8 +55,10 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { Character } from './character';
 import type { FrameModel } from './draw';
 import { Frame } from './frame';
+import { Ghost } from './ghost';
 import { Menu, type MenuItem } from './stage';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
@@ -429,15 +423,7 @@ export const DuelScreen = ({
     opponent: stands.right - view.x,
   };
   const poses = posesFor(state, step);
-  const ghost: FrameModel['ghost'] = ghostShown
-    ? {
-        x: standX.player - GHOST.behind,
-        dy: GHOST.lift + (reduced ? 0 : bob(clock, 1200)),
-        cell: ghostCell(whisper, reduced ? 0 : clock),
-        opacity: 1,
-        enter,
-      }
-    : undefined;
+  const ghostX = standX.player - GHOST.behind;
   const playerSwap: Swap = useMemo(
     () => ({ base: PLAYER_SHEETS[state.setup.role][look] }),
     [state.setup.role, look],
@@ -460,35 +446,35 @@ export const DuelScreen = ({
     blinkOn: bob(clock) === 0,
     crop,
   };
-  const sprite = (side: Side) => {
-    const pose = poses[side];
-    const offset = reduced
-      ? { dx: 0, dy: 0, lighter: false }
-      : poseOffset(
-          pose,
-          cursor.elapsed,
-          side === 'player' ? 1 : -1,
-          state.exchange?.micDrop === true && state.exchange.by === side,
-        );
-    const swap = side === 'player' ? playerSwap : opponentSwap;
-    return {
-      x: standX[side],
-      pose,
-      cell: cellFor(pose, reduced ? 0 : cursor.elapsed, !typingDone),
-      swap,
-      key: swapKey(swap),
-      ...offset,
-      breath: reduced ? 0 : breathFrame(pose, clock),
-      mirrored: side === 'opponent',
-    };
-  };
-  const model: FrameModel = {
-    scene,
-    view,
-    sprites: { player: sprite('player'), opponent: sprite('opponent') },
-    hud,
-    ghost,
-  };
+  const model: FrameModel = { scene, view, hud };
+  const micDropBy = (side: Side) =>
+    state.exchange?.micDrop === true && state.exchange.by === side;
+  const band = (
+    <>
+      {ghostShown && (
+        <Ghost x={ghostX} step={whisper} enter={enter} still={reduced} />
+      )}
+      <Character
+        swap={playerSwap}
+        pose={poses.player}
+        typing={!typingDone}
+        micDrop={micDropBy('player')}
+        x={standX.player}
+        still={reduced}
+        side="player"
+      />
+      <Character
+        swap={opponentSwap}
+        pose={poses.opponent}
+        typing={!typingDone}
+        micDrop={micDropBy('opponent')}
+        mirrored
+        x={standX.opponent}
+        still={reduced}
+        side="opponent"
+      />
+    </>
+  );
 
   // Overlay
   // ---------------
@@ -580,6 +566,7 @@ export const DuelScreen = ({
   return (
     <Frame
       model={model}
+      band={band}
       onStep={onStep}
       paused={paused}
       label={`Pushback, duel against ${character.name}`}
@@ -615,21 +602,16 @@ export const DuelScreen = ({
         </div>
       )}
 
-      {ghost && ghostLine && enter >= 1 && (
+      {ghostShown && ghostLine && enter >= 1 && (
         <p
           className={styles.bubble()}
           style={{
             // Over the ghost's head, kept inside the stage: never past the
             // left edge (the ghost can stand off it), wrapped before the
             // right one, and under the bars when the ceiling is cropped
-            left: px(Math.max(2, ghost.x + 4)),
-            maxWidth: `calc(100% - ${px(Math.max(2, ghost.x + 4) + 2)})`,
-            top: px(
-              Math.max(
-                crop + 14,
-                LAYOUT.feet - LAYOUT.cell.height + 2 + ghost.dy,
-              ),
-            ),
+            left: px(Math.max(2, ghostX + 4)),
+            maxWidth: `calc(100% - ${px(Math.max(2, ghostX + 4) + 2)})`,
+            top: px(Math.max(crop + 14, LAYOUT.feet - LAYOUT.cell.height + 2)),
           }}
         >
           {ghostLine}

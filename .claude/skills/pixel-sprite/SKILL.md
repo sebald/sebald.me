@@ -88,7 +88,7 @@ Open `sources/contact/<id>.png` and `<id>-keyed.png` and check:
 - Palette: 32 colours, the outline still one dark colour, no banding on
   the skin.
 
-Then check the sprite in motion on the workbench (`/lab/pushback/dev`,
+Then check the sprite in motion on the workbench (`/lab/pushback/inventory`,
 "Sprite viewer"): every pose, mirrored, the talk cells alternating, the
 swapped colleagues with their props in the hand.
 
@@ -118,5 +118,5 @@ scripts' coordinates are native pixels of that padded image. Each `scenes/<slug>
 animates two or three living details into `scene.webp` (8x, for the stage
 at 1.1x and up, shown through a 320 by 134 window), `scene-1x.webp` and `poster.png`, the way the note headers
 are built (pixel-header skill, steps 4 and 5). Check the result in the
-workbench's scene viewer with the guides on: the stands must not overlap
+inventory's scene viewer with the guides on: the stands must not overlap
 furniture and the band the composition rule keeps clear must be clear.

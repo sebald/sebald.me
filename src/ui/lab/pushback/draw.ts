@@ -1,27 +1,24 @@
 /**
- * Everything drawn into the canvas: the room band (a flat colour until
- * the loop under the canvas has loaded), the two duellists from their
- * sheets (rectangles until the sprites are built), the ghost, and the
- * chrome, which stays drawn in code on the same pixel grid as the room:
- * the shared scale, the momentum pips, the composure strip and the quiet
- * window the text sits in. The canvas is drawn at `BACKING` times the
- * stage and scaled down by the browser. Letters are DOM, see the screen.
+ * The frame's canvas: the room band (a flat colour until the loop under
+ * the canvas has loaded) and the chrome, drawn in code on the same pixel
+ * grid as the room: the shared scale, the momentum pips, the composure
+ * strip and the quiet window the text sits in. The duellists and the
+ * ghost are their own canvases (`Character`, `Ghost`), which share
+ * `drawCell`. Letters are DOM, see the screen.
  */
 import type { SceneId } from '@/lib/lab/pushback/characters';
 import type { Side } from '@/lib/lab/pushback/duel';
-import type { Swap } from '@/lib/lab/pushback/sprites';
 import {
   BACKING,
   BREATH,
   LAYOUT,
-  type Pose,
   STAGE,
   barRects,
   barWidth,
   scaleTicks,
 } from '@/lib/lab/pushback/stage';
 
-import type { Sprite, Sprites } from './sheets';
+import type { Sprite } from './sheets';
 
 // Palette
 // ---------------
@@ -33,12 +30,6 @@ const SCENES: Record<SceneId, { wall: string; floor: string }> = {
   studio: { wall: '#5a4634', floor: '#3e2e20' },
   office: { wall: '#141a2b', floor: '#0e1119' },
 };
-
-const PLACEHOLDER: Record<Side, { body: string; head: string; light: string }> =
-  {
-    player: { body: '#2f8f8a', head: '#d9b38c', light: '#7fd6d0' },
-    opponent: { body: '#c0622f', head: '#e3c2a0', light: '#f0a36f' },
-  };
 
 /** The chrome's colours: the quiet window and the bars */
 export const CHROME = {
@@ -72,24 +63,6 @@ export const GHOST_ALPHA = 0.7;
 // Model
 // ---------------
 
-export interface SpriteModel {
-  /** Left edge of the cell, in stage pixels */
-  x: number;
-  pose: Pose;
-  /** The sheet cell, from `cellFor` */
-  cell: number;
-  /** What to draw from; the key is where `Sprites` holds it */
-  swap: Swap;
-  key: string;
-  dx: number;
-  dy: number;
-  lighter: boolean;
-  /** The breathing frame (`breathFrame`): 1 moves the upper body a pixel down */
-  breath: 0 | 1;
-  /** Faces left (the right-hand duellist) */
-  mirrored: boolean;
-}
-
 export interface HudModel {
   /** The shared scale, positive toward the player */
   scale: number;
@@ -106,25 +79,11 @@ export interface HudModel {
 }
 
 /** The onboarding buddy's ghost, while it shows */
-export interface GhostModel {
-  /** Left edge of its cell, in stage pixels */
-  x: number;
-  dy: number;
-  /** The ghost sheet cell, from `ghostCell` */
-  cell: number;
-  /** 0 to 1, fading in */
-  opacity: number;
-  /** 0 to 1: how far out of the black hole it is (`ghostEnter`) */
-  enter: number;
-}
-
 export interface FrameModel {
   scene: SceneId;
   /** The window of the scene the band shows (`viewFor`) */
   view: { x: number; y: number };
-  sprites: Record<Side, SpriteModel>;
   hud: HudModel;
-  ghost?: GhostModel;
 }
 
 // Drawing
@@ -198,7 +157,7 @@ const drawBand = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
  * One cell of a sprite with its bottom on `bottom`, its cell's left edge
  * on `x`, at `scale` times the sheet's pixels, mirrored about the cell
  * when asked. With `breath` the cell is drawn in two slices cut at the
- * hip, the upper one a pixel lower. Exported for the viewer.
+ * hip, the upper one a pixel lower.
  */
 export const drawCell = (
   ctx: CanvasRenderingContext2D,
@@ -245,68 +204,6 @@ export const drawCell = (
     ctx.drawImage(sprite.canvas, sx, 0, width, hip, 0, scale, w, hip * scale);
   }
   ctx.restore();
-};
-
-/** The grey box's figure, until the sprite is built */
-const drawPlaceholder = (
-  ctx: CanvasRenderingContext2D,
-  side: Side,
-  sprite: SpriteModel,
-) => {
-  const colours = PLACEHOLDER[side];
-  const bottom = LAYOUT.feet + sprite.dy;
-  const cx = sprite.x + sprite.dx + Math.floor(LAYOUT.cell.width / 2);
-  const bodyW = 30;
-  const bodyH = 52;
-  const headS = 22;
-  const body = sprite.lighter ? colours.light : colours.body;
-  rect(ctx, cx - 12, bottom - 24, 10, 24, body);
-  rect(ctx, cx + 2, bottom - 24, 10, 24, body);
-  rect(ctx, cx - bodyW / 2, bottom - 24 - bodyH, bodyW, bodyH, body);
-  const headY = bottom - 24 - bodyH - headS - 2;
-  rect(
-    ctx,
-    cx - headS / 2,
-    headY,
-    headS,
-    headS,
-    sprite.lighter ? colours.light : colours.head,
-  );
-};
-
-const drawSprite = (
-  ctx: CanvasRenderingContext2D,
-  side: Side,
-  model: SpriteModel,
-  sprites: Sprites,
-) => {
-  const sprite = sprites[model.key];
-  if (!sprite) {
-    drawPlaceholder(ctx, side, model);
-    return;
-  }
-  const x = model.x + model.dx;
-  const bottom = LAYOUT.feet + model.dy;
-  const draw = () =>
-    drawCell(
-      ctx,
-      sprite,
-      model.cell,
-      x,
-      bottom,
-      model.mirrored,
-      1,
-      model.breath,
-    );
-  draw();
-  if (model.lighter) {
-    // The flinch flash: the cell again, added on top of itself
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    ctx.globalAlpha = 0.3;
-    draw();
-    ctx.restore();
-  }
 };
 
 /** A lit box: a light top row, the colour, a shaded bottom row */
@@ -451,45 +348,6 @@ const drawPanel = (ctx: CanvasRenderingContext2D) => {
 };
 
 /** The ghost from its sheet, see-through; a pale shape until it is built */
-const drawGhost = (
-  ctx: CanvasRenderingContext2D,
-  ghost: GhostModel,
-  sprites: Sprites,
-) => {
-  const sprite = sprites.ghost;
-  const cx = ghost.x + LAYOUT.cell.width / 2;
-  const bottom = LAYOUT.feet - ghost.dy;
-  const box = sprite?.meta.cells[ghost.cell]?.box;
-  // The middle of the figure: where the hole is
-  const midY = box
-    ? Math.round(bottom - (LAYOUT.cell.height - box.y - box.height / 2))
-    : bottom - 28;
-  ctx.save();
-  if (ghost.enter < 1) {
-    // The black hole: a dark disc with a pale rim that the ghost is drawn
-    // out of, or into, squeezed sideways
-    const r = Math.round(2 + 5 * (1 - ghost.enter));
-    for (let dy = -r; dy <= r; dy++) {
-      const w = Math.round(Math.sqrt(r * r - dy * dy));
-      rect(ctx, cx - w, midY + dy, 2 * w, 1, '#05060a');
-      if (Math.abs(dy) === r) continue;
-      rect(ctx, cx - w, midY + dy, 1, 1, '#2f5e60');
-      rect(ctx, cx + w - 1, midY + dy, 1, 1, '#2f5e60');
-    }
-    ctx.translate(cx, midY);
-    ctx.scale(Math.max(0.05, ghost.enter), 0.25 + 0.75 * ghost.enter);
-    ctx.translate(-cx, -midY);
-  }
-  ctx.globalAlpha = GHOST_ALPHA * ghost.opacity;
-  if (sprite) {
-    drawCell(ctx, sprite, ghost.cell, ghost.x, bottom);
-  } else {
-    rect(ctx, cx - 10, bottom - 40, 20, 34, '#bfe8ea');
-    rect(ctx, cx - 9, bottom - 58, 18, 18, '#e8fbfb');
-  }
-  ctx.restore();
-};
-
 export interface DrawOptions {
   /**
    * Paint the flat placeholder band. Off once the scene loop under the
@@ -497,8 +355,6 @@ export interface DrawOptions {
    * figures and the chrome.
    */
   background?: boolean;
-  /** The sprites that are built; a missing one draws as a placeholder */
-  sprites?: Sprites;
   /** Canvas pixels per stage pixel (`backingFor`) */
   backing?: number;
 }
@@ -506,22 +362,13 @@ export interface DrawOptions {
 export const drawFrame = (
   ctx: CanvasRenderingContext2D,
   model: FrameModel,
-  { background = true, sprites = {}, backing = BACKING }: DrawOptions = {},
+  { background = true, backing = BACKING }: DrawOptions = {},
 ) => {
   // Stage coordinates on a canvas `backing` times the stage
   ctx.setTransform(backing, 0, 0, backing, 0, 0);
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, STAGE.width, STAGE.height);
   if (background) drawBand(ctx, model.scene);
-  // Nothing in the band spills into the panel
-  ctx.save();
-  ctx.beginPath();
-  ctx.rect(0, 0, STAGE.width, LAYOUT.band);
-  ctx.clip();
-  if (model.ghost) drawGhost(ctx, model.ghost, sprites);
-  drawSprite(ctx, 'player', model.sprites.player, sprites);
-  drawSprite(ctx, 'opponent', model.sprites.opponent, sprites);
-  ctx.restore();
   // The HUD stays at the top of what is shown when the ceiling is cropped
   ctx.save();
   ctx.translate(0, model.hud.crop);

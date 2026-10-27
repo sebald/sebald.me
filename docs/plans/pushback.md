@@ -373,22 +373,23 @@ Pushback is the first entry of `/lab`, the section for things that are more code
 
 Layout in the repo for this entry:
 
-| Path                                       | Holds                                                                                                                                         |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/(page)/lab/pushback/page.tsx`     | Route and metadata (a Server Component); renders the client wrapper                                                                           |
-| `src/ui/lab/pushback/game.tsx`             | `'use client'` wrapper that imports the stage with `next/dynamic` and `ssr: false` (not allowed in the page itself)                           |
-| `src/ui/lab/pushback/*.tsx`                | Canvas stage, dialogue box, hand and counter menus, bars, title, select, roster and result screens                                            |
-| `src/lib/lab/pushback/lines.ts`            | The Lines section as typed data: pools, boss pairs, barks, fallback                                                                           |
-| `src/lib/lab/pushback/characters.ts`       | Roles, the cast, the slot table, the run draw, sheet references, palette swaps                                                                |
-| `src/lib/lab/pushback/duel.ts`             | Pure state machine: `reduce(state, action) → state`, no DOM, no timers (the silence bar sends `tick` actions)                                 |
-| `src/lib/lab/pushback/ai.ts`               | Opponent choices, hands and decoy menus, seeded RNG so tests are deterministic                                                                |
-| `src/lib/lab/pushback/save.ts`             | Save shape, `localStorage` read/write, versioned; result card text                                                                            |
-| `src/lib/lab/pushback/sheets.test.ts`      | Sheet validator (cell size, pose count, palette against the scene); a test file so `pnpm test` picks it up                                    |
-| `src/lib/lab/pushback/simulate.ts`         | Balance script: a modelled player against every slot over many seeded runs (see Workbench)                                                    |
-| `src/app/(page)/lab/pushback/dev/page.tsx` | The workbench, dev only (`notFound()` in production)                                                                                          |
-| `src/ui/lab/pushback/dev/*.tsx`            | Its panels: sprite viewer, scene viewer, duel sandbox                                                                                         |
-| `src/assets/lab/pushback/`                 | Sprite sheets and scene loops; `sources/` holds the Gemini originals, which nothing imports                                                   |
-| `.claude/skills/pixel-sprite/`             | `SKILL.md` with the prompt template and the review checklist, `scripts/sheet.mjs` next to it (it imports the pixel-header `loop.mjs` helpers) |
+| Path                                             | Holds                                                                                                                                         |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/(page)/lab/pushback/page.tsx`           | Route and metadata (a Server Component); renders the client wrapper                                                                           |
+| `src/ui/lab/pushback/game.tsx`                   | `'use client'` wrapper that imports the stage with `next/dynamic` and `ssr: false` (not allowed in the page itself)                           |
+| `src/ui/lab/pushback/*.tsx`                      | Canvas stage, dialogue box, hand and counter menus, bars, title, select, roster and result screens                                            |
+| `src/lib/lab/pushback/lines.ts`                  | The Lines section as typed data: pools, boss pairs, barks, fallback                                                                           |
+| `src/lib/lab/pushback/characters.ts`             | Roles, the cast, the slot table, the run draw, sheet references, palette swaps                                                                |
+| `src/lib/lab/pushback/duel.ts`                   | Pure state machine: `reduce(state, action) → state`, no DOM, no timers (the silence bar sends `tick` actions)                                 |
+| `src/lib/lab/pushback/ai.ts`                     | Opponent choices, hands and decoy menus, seeded RNG so tests are deterministic                                                                |
+| `src/lib/lab/pushback/save.ts`                   | Save shape, `localStorage` read/write, versioned; result card text                                                                            |
+| `src/lib/lab/pushback/sheets.test.ts`            | Sheet validator (cell size, pose count, palette against the scene); a test file so `pnpm test` picks it up                                    |
+| `src/lib/lab/pushback/simulate.ts`               | Balance script: a modelled player against every slot over many seeded runs (see Workbench)                                                    |
+| `src/app/(page)/lab/pushback/inventory/page.tsx` | The game's inventory, dev only (`notFound()` in production)                                                                                   |
+| `src/ui/lab/pushback/inventory/*.tsx`            | Its sections: the character playground and the cast, the ghost, the scene viewer, the duel sandbox                                            |
+| `src/ui/lab/pushback/character.tsx`, `ghost.tsx` | The pieces that stand in the room, each its own canvas on its own clock (see Components)                                                      |
+| `src/assets/lab/pushback/`                       | Sprite sheets and scene loops; `sources/` holds the Gemini originals, which nothing imports                                                   |
+| `.claude/skills/pixel-sprite/`                   | `SKILL.md` with the prompt template and the review checklist, `scripts/sheet.mjs` next to it (it imports the pixel-header `loop.mjs` helpers) |
 
 `(page)` has no layout of its own, so `/lab/pushback` gets the site header and footer from the root layout. Keep them: the game sits inside the blog, it is not a separate app.
 
@@ -481,13 +482,18 @@ Reduced motion: scenes show the poster, breathing and talk cycle are off, typing
 
 Tests: `duel.ts` and `ai.ts` under the Node test runner (buy-in and initiative, momentum gains and resets, mic drop worth and cost, the hand draws from collected phrases only and never repeats one within a duel, a run starts with exactly the role's own pool collected and a defended pair is collected win or lose, the AI throws uncollected pairs first on a first attempt and a replay and alternates from a collected pair on a retry, a run draws two distinct characters per role in the role order and the slot table applies by position, decoy rules and menu size per slot, own-pool answers are always right, the silence timeout plays the fallback as a miss, the boss barrage ends on the sixth phrase under every outcome, the interrupt fires only at full momentum, boss mapping completeness: every boss phrase has exactly one answering pair that exists; every line under 70 characters; the result card text matches the stats). `sheets.test.ts` validates the committed sheets. One Playwright VRT screenshot of the title screen and one of a frozen duel frame, added to the existing visual suite (ask before running VRT, per `AGENTS.md`).
 
-### Workbench
+### Components
 
-Tests are enough for the rules and not enough for anything you look at. The reducer, the AI, the draw and the save are pure and the tests above pin them down; what a test cannot tell is whether a 74-pixel sprite reads at 2x, whether six seconds of silence is tense or cruel, whether the `Mic drop!` label lands on the right frame, or whether a palette swap is the wrong shade. Playing through to the slot in question to find out is a tuning loop measured in minutes, so the game gets a workbench. Not a second site: a dev-only route in the same app, `/lab/pushback/dev`, which calls `notFound()` in production. Same bundler, Tailwind, fonts, asset imports and fast refresh as the game, no parallel config for the one thing that makes the pixels right (integer scaling and the asset pipeline). No Storybook, no Vite page.
+The screens are built from pieces that work on their own, the way the site's components do, so each can be shown and tuned in the inventory and reused later: `Character` (one duellist from a sheet: the pose, mirrored or not, typing, a mic drop; a 72 by 112 canvas at the stage's device pixels on its own clock, breathing when idle), `Ghost` (hovering, pointing, in and out of its black hole), `Stage` (the scaled frame, which provides its scale to everything inside through `useStage`, and `Pixels`, the bare provider of the pixel unit for pieces shown outside a stage), `Frame` (the room band with the loop, the pieces standing in it, and the chrome canvas), the `Menu` (the picker) and the screens. Next in line: the quiet window, the dialogue line and the picker as components of their own, the HUD as DOM, the mic-drop burst.
 
-Three panels:
+### Inventory
 
-- **Sprite viewer.** Any character, any pose, 1x to 4x, with the animation table running and the swaps applied; a toggle for the mirrored right-hand side. The contact print from `sheet.mjs` is the still version of this; the viewer is where motion and swaps get checked.
+Tests are enough for the rules and not enough for anything you look at. The reducer, the AI, the draw and the save are pure and the tests above pin them down; what a test cannot tell is whether a 74-pixel sprite reads at 2x, whether six seconds of silence is tense or cruel, whether the `Mic drop!` label lands on the right frame, or whether a palette swap is the wrong shade. Playing through to the slot in question to find out is a tuning loop measured in minutes, so the game gets an inventory, like the site's `/inventory`: every piece on its own with controls. Not a second site: a dev-only route in the same app, `/lab/pushback/inventory`, which calls `notFound()` in production. Same bundler, Tailwind, fonts, asset imports and fast refresh as the game, no parallel config for the one thing that makes the pixels right (integer scaling and the asset pipeline). No Storybook, no Vite page.
+
+Its sections:
+
+- **Character.** One duellist at a time: who, the pose, a prop in the hand, mirrored, typing, a mic drop, still, 1x to 6x; idle by default so the breathing shows. **Cast** shows everyone idle with their props. The contact print from `sheet.mjs` is the still version of this; the playground is where motion and swaps get checked.
+- **Ghost.** Hovering or pointing, and the black hole on demand.
 - **Scene viewer.** Each scene with its loop and its poster, at the same scales, with the stand positions and the clear band drawn as outlines so a new render can be checked against the composition rule.
 - **Duel sandbox.** Pick character and slot, set a seed, jump to any phase, fill momentum, force the barrage, a slider for the silence seconds, a reduced-motion toggle. Because the reducer is pure, "jump to phase" is constructing a state and handing it to the same stage component the game uses, so the sandbox exercises the real thing, not a copy.
 

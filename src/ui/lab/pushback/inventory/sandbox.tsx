@@ -22,8 +22,6 @@ import {
 import { PAIRS, type Role, ROLES, poolOf } from '@/lib/lab/pushback/lines';
 
 import { DuelScreen } from '../duel-screen';
-import { SceneViewer } from './scene-viewer';
-import { SpriteViewer } from './sprite-viewer';
 
 // Options
 // ---------------
@@ -391,10 +389,6 @@ export const Sandbox = () => {
           onBack={() => setLast('Back to the roster.')}
         />
       </div>
-
-      <SpriteViewer />
-
-      <SceneViewer />
     </div>
   );
 };
