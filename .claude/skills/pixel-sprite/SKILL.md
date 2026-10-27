@@ -32,6 +32,12 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   src/assets/lab/pushback/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.5
 
+# The mic-drop burst: three cells (the burst, its big beat, popped), the
+# letters inside key with it
+node .claude/skills/pixel-sprite/scripts/sheet.mjs \
+  src/assets/lab/pushback/sources/originals/micdrop-sheet.jpeg micdrop \
+  --cells 3 --cell 96x96 --anchor centre --specks 0
+
 # The item sheet: eight props in 48 by 48 cells, centred, with the blurred
 # figures Gemini put under the items keyed away by the wider soft key
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \

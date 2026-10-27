@@ -19,6 +19,8 @@ import samMeta from '@/assets/lab/pushback/sheets/dev-sam.json';
 import sam from '@/assets/lab/pushback/sheets/dev-sam.png';
 import ghostMeta from '@/assets/lab/pushback/sheets/ghost.json';
 import ghost from '@/assets/lab/pushback/sheets/ghost.png';
+import micdropMeta from '@/assets/lab/pushback/sheets/micdrop.json';
+import micdrop from '@/assets/lab/pushback/sheets/micdrop.png';
 import joMeta from '@/assets/lab/pushback/sheets/pm-jo.json';
 import jo from '@/assets/lab/pushback/sheets/pm-jo.png';
 import pietMeta from '@/assets/lab/pushback/sheets/pm-piet.json';
@@ -34,12 +36,15 @@ import {
   swapKey,
 } from '@/lib/lab/pushback/sprites';
 
+/** Sheets used as they are, no swap: the key is the sheet */
+export type PlainKey = 'ghost' | 'micdrop';
+
 export interface Sheet {
   image: StaticImageData;
   meta: SheetMeta;
 }
 
-export const SHEETS: Record<SheetId | 'ghost' | 'props', Sheet> = {
+export const SHEETS: Record<SheetId | PlainKey | 'props', Sheet> = {
   'pm-jo': { image: jo, meta: joMeta },
   'pm-piet': { image: piet, meta: pietMeta },
   'dev-sam': { image: sam, meta: samMeta },
@@ -48,6 +53,7 @@ export const SHEETS: Record<SheetId | 'ghost' | 'props', Sheet> = {
   'designer-theo': { image: theo, meta: theoMeta },
   boss: { image: boss, meta: bossMeta },
   ghost: { image: ghost, meta: ghostMeta },
+  micdrop: { image: micdrop, meta: micdropMeta },
   props: { image: props, meta: propsMeta },
 };
 
@@ -59,6 +65,8 @@ export interface Sprite {
 
 /** The ghost sheet as a sprite, by this key */
 export const GHOST_KEY = 'ghost';
+/** The mic-drop burst sheet, by this key */
+export const BURST_KEY = 'micdrop';
 
 // Loading
 // ---------------
@@ -123,32 +131,32 @@ const build = async (swap: Swap): Promise<Sprite> => {
   return { canvas, meta: sheet.meta };
 };
 
-/** The ghost sheet, plain */
-const buildGhost = async (): Promise<Sprite> => {
-  const image = await loadImage(SHEETS.ghost.image.src);
-  return {
-    canvas: toCanvas(image, SHEETS.ghost.meta).canvas,
-    meta: SHEETS.ghost.meta,
-  };
+/** A sheet as it is: the ghost, the burst */
+const buildPlain = async (id: PlainKey): Promise<Sprite> => {
+  const sheet = SHEETS[id];
+  const image = await loadImage(sheet.image.src);
+  return { canvas: toCanvas(image, sheet.meta).canvas, meta: sheet.meta };
 };
 
 /** The sprite of a key, once built; `undefined` until then */
 export const getSprite = (key: string): Sprite | undefined => sprites.get(key);
 
-/** Start building a swap's sprite (or the ghost's); resolves when drawn */
+/** Start building a swap's sprite (or a plain sheet's); resolves when drawn */
 export const loadSprite = (
   key: string,
-  swap: Swap | typeof GHOST_KEY,
+  swap: Swap | PlainKey,
 ): Promise<Sprite> => {
   const done = sprites.get(key);
   if (done) return Promise.resolve(done);
   let pending = building.get(key);
   if (!pending) {
-    pending = (swap === GHOST_KEY ? buildGhost() : build(swap)).then(sprite => {
-      sprites.set(key, sprite);
-      building.delete(key);
-      return sprite;
-    });
+    pending = (typeof swap === 'string' ? buildPlain(swap) : build(swap)).then(
+      sprite => {
+        sprites.set(key, sprite);
+        building.delete(key);
+        return sprite;
+      },
+    );
     building.set(key, pending);
   }
   return pending;
@@ -161,9 +169,7 @@ export type Sprites = Record<string, Sprite | undefined>;
  * The sprites of some swaps (and the ghost), built in the background;
  * returns what is ready and rerenders as more lands.
  */
-export const useSprites = (
-  swaps: Record<string, Swap | typeof GHOST_KEY>,
-): Sprites => {
+export const useSprites = (swaps: Record<string, Swap | PlainKey>): Sprites => {
   const [, setReady] = useState(0);
   useEffect(() => {
     // Cheap on every render: only a missing sprite starts a build, and

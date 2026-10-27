@@ -55,6 +55,7 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { Burst } from './burst';
 import { Character } from './character';
 import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
@@ -80,12 +81,6 @@ const styles = {
         opponent: 'text-right text-[#f0a36f]',
       },
     },
-  }),
-  badge: cva({
-    base: [
-      'absolute left-1/2 -translate-x-1/2',
-      'bg-[#f2c14e] px-[0.5em] py-[0.1em] font-semibold text-[#0b0d16]',
-    ],
   }),
   hint: cva({ base: 'text-[#8a92b8]' }),
   // The ghost's speech bubble, over its head, in its own pale colour
@@ -393,7 +388,40 @@ export const DuelScreen = ({
   const { character } = state.setup;
   const scene = SCENE_OF[character.role];
   const stands = STANDS[scene];
-  const view = viewFor(stands);
+  // The mic-drop burst between the duellists: pulsing while the phrase is
+  // thrown (with a flash and a shake of the room) and again when it lands,
+  // popped when it is countered
+  const thrower = state.exchange?.micDrop === true ? state.exchange.by : null;
+  const burstShown =
+    thrower !== null &&
+    !state.outcome?.offline &&
+    (state.phase === 'defend' || state.phase === 'resolve');
+  const throwing =
+    burstShown &&
+    state.phase === 'defend' &&
+    step?.kind === 'line' &&
+    step.speaker === thrower;
+  const landed =
+    burstShown &&
+    state.phase === 'resolve' &&
+    state.outcome !== null &&
+    state.outcome.winner === thrower;
+  const popped = burstShown && state.phase === 'resolve' && !landed;
+  const pulse =
+    !reduced &&
+    (throwing ||
+      (landed &&
+        (step?.kind === 'reveal' || step?.kind === 'beat') &&
+        cursor.elapsed < 900));
+  const shake =
+    !reduced && throwing && cursor.elapsed < 250
+      ? cursor.elapsed < 125
+        ? 2
+        : -2
+      : 0;
+  const flash = !reduced && throwing && cursor.elapsed < 125;
+  const steady = viewFor(stands);
+  const view = { x: steady.x + shake, y: steady.y };
   const standX: Record<Side, number> = {
     player: stands.left - view.x,
     opponent: stands.right - view.x,
@@ -427,6 +455,17 @@ export const DuelScreen = ({
     state.exchange?.micDrop === true && state.exchange.by === side;
   const band = (
     <>
+      {burstShown && (
+        <Burst
+          x={Math.round(
+            (standX.player + standX.opponent + LAYOUT.cell.width) / 2 - 48,
+          )}
+          y={LAYOUT.feet - LAYOUT.cell.height + 8}
+          cell={popped ? 2 : 0}
+          pulse={pulse}
+        />
+      )}
+      {flash && <div aria-hidden className="absolute inset-0 bg-white/60" />}
       {ghostShown && (
         <Ghost x={ghostX} step={whisper} enter={enter} still={reduced} />
       )}
@@ -502,11 +541,6 @@ export const DuelScreen = ({
     return [];
   }, [step?.kind, state, micDrop, act, toggleMicDrop, canMicDrop, whisper]);
 
-  const micDropLabel =
-    state.exchange?.micDrop === true &&
-    !state.outcome?.offline &&
-    (state.phase === 'defend' || state.phase === 'resolve');
-
   const announce = useMemo(() => {
     if (!step) return '';
     if (step.kind === 'line') {
@@ -573,16 +607,6 @@ export const DuelScreen = ({
       >
         {character.name}
       </span>
-
-      {micDropLabel && (
-        <div
-          className={styles.badge()}
-          style={{ top: px(LAYOUT.ticks.y + LAYOUT.ticks.height + 6 + crop) }}
-          aria-hidden
-        >
-          Mic drop!
-        </div>
-      )}
 
       {ghostShown && ghostLine && enter >= 1 && (
         <p

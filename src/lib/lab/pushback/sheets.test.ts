@@ -70,6 +70,18 @@ describe('model sheets', () => {
   }
 });
 
+describe('the mic-drop burst sheet', () => {
+  it('has three cells of 96 by 96: the burst, the big one, the popped one', () => {
+    const m = meta('micdrop');
+    assert.equal(m.count, 3);
+    assert.deepEqual(m.cell, { width: 96, height: 96 });
+    for (const { box, clipped } of m.cells) {
+      assert.equal(clipped, false);
+      assert.ok(box.height >= 60 && box.height <= 96, String(box.height));
+    }
+  });
+});
+
 describe('the ghost sheet', () => {
   it('has three cells of a figure about half the size of the people', async () => {
     const m = meta('ghost');

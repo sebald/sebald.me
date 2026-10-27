@@ -5,6 +5,7 @@ import type { PropsWithChildren } from 'react';
 import { Headline } from '@/ui/headline';
 import { Text } from '@/ui/text';
 
+import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { GhostDemo } from './ghost-demo';
 import { Sandbox } from './sandbox';
@@ -45,6 +46,12 @@ export const Inventory = () => (
       blurb="The predecessor's ghost: hovering, pointing from the second whisper on, in and out of its black hole."
     >
       <GhostDemo />
+    </Section>
+    <Section
+      title="Mic drop"
+      blurb="The burst that goes off between the duellists: pulsing while the phrase is thrown, popped when it is countered."
+    >
+      <BurstDemo />
     </Section>
     <Section
       title="Window"
