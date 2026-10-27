@@ -58,11 +58,12 @@ export const LAYOUT = {
 
 /**
  * Room the ghost needs left of the player's cell to be on the stage:
- * how far behind the shoulder it hovers plus the empty columns of its
- * own cell; and the last column of a figure in its cell, so the
- * opponent stays on the stage when the view makes that room.
+ * how far behind the shoulder it hovers (36) less the empty columns at
+ * the left of its own cell (21); and the last column of a figure in its
+ * cell, so the opponent stays on the stage when the view makes that
+ * room.
  */
-export const ROOM = { ghost: 36 + 21, figure: 54 } as const;
+export const ROOM = { ghost: 36 - 21, figure: 54 } as const;
 
 /**
  * The window of the scene the band shows: 320 of its 480 columns, centred

@@ -325,14 +325,22 @@ describe('viewFor', () => {
   });
 
   it('slides left for the ghost, as far as the opponent allows', () => {
-    // The meeting room: the pair centred leaves the player at x 9, the
-    // ghost off the edge; room for it, with the opponent still on
-    const stands = { left: 94, right: 324 };
-    assert.equal(viewFor(stands).x, 85);
-    const x = viewFor(stands, { ghost: true }).x;
-    assert.equal(x, stands.right + ROOM.figure - STAGE.width);
-    assert.ok(stands.left - x >= ROOM.ghost - 6);
-    // The floor has the room already: the ghost's room is all it takes
-    assert.equal(viewFor({ left: 119, right: 286 }, { ghost: true }).x, 62);
+    // The meeting room: the pair centred leaves the player at x 9 and
+    // the ghost's figure six columns off the edge; six to the left fixes it
+    const meeting = { left: 94, right: 324 };
+    assert.equal(viewFor(meeting).x, 85);
+    assert.equal(
+      viewFor(meeting, { ghost: true }).x,
+      meeting.left - ROOM.ghost,
+    );
+    // The office: the pair is too far apart for both, the opponent wins
+    const office = { left: 75, right: 332 };
+    assert.equal(
+      viewFor(office, { ghost: true }).x,
+      office.right + ROOM.figure - STAGE.width,
+    );
+    // The floor has the room already
+    const floor = { left: 119, right: 286 };
+    assert.equal(viewFor(floor, { ghost: true }).x, viewFor(floor).x);
   });
 });
