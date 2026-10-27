@@ -1,7 +1,9 @@
 'use client';
 
+import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
 
+import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { MODE_LABELS, type Mode } from '@/lib/lab/pushback/characters';
 
 import { Picker, type PickerItem } from './picker';
@@ -24,6 +26,9 @@ const MODE_BLURBS: Record<Mode, string> = {
 
 /** How long the reset stays armed, waiting for the second press */
 const ARMED_MS = 4000;
+
+/** The logo's native size: the render cut on its pixel grid and keyed */
+const LOGO = { width: 214, height: 103 } as const;
 
 export const TitleScreen = ({
   mode,
@@ -64,8 +69,24 @@ export const TitleScreen = ({
   return (
     <Stage label="Pushback, title">
       <Stage.Center className="justify-between py-8">
-        <div className="grid gap-3">
-          <Stage.Title>Pushback</Stage.Title>
+        <div className="grid justify-items-center gap-3">
+          {/* The logo at the stage's own pixels: two bubbles colliding */}
+          <h2 className="m-0">
+            <NextImage
+              src={logo}
+              alt="Pushback"
+              width={LOGO.width}
+              height={LOGO.height}
+              unoptimized
+              priority
+              draggable={false}
+              className="block [image-rendering:pixelated]"
+              style={{
+                width: `calc(var(--px) * ${LOGO.width})`,
+                height: `calc(var(--px) * ${LOGO.height})`,
+              }}
+            />
+          </h2>
           <Stage.Muted className="text-balance">
             Counter the phrase. Push the scale to your side. Full momentum lets
             you drop the mic.

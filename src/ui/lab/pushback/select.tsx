@@ -9,36 +9,78 @@ import {
   ROLES,
   type Role,
 } from '@/lib/lab/pushback/lines';
-import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
+import { PLAYER_SHEETS, type SheetId } from '@/lib/lab/pushback/sprites';
 import { LAYOUT } from '@/lib/lab/pushback/stage';
-import { cn } from '@/lib/styles.utils';
+import { cn, cva } from '@/lib/styles.utils';
 
+import { Character } from './character';
+import { CHROME } from './draw';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage } from './stage';
+import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
-import { Window } from './window';
+import { Legend, Window } from './window';
 
-/** The empty rows above the tallest idle figure, cropped off the cell */
-const CROP_TOP = 26;
+/** The portrait is the sheet's head square at twice its pixels */
+const PORTRAIT_SCALE = 2;
+
+/** Where things sit on the stage, in stage pixels */
+const PLACE = {
+  /** The grid of faces: left edge, top, the gap between tiles */
+  grid: { x: 18, y: 24, gap: 4 },
+  /** The frame around a tile, and the ink line outside it */
+  frame: 2,
+  /** The chosen one standing, cell left edge */
+  figure: { x: 214 },
+} as const;
+
+const px = (n: number) => `calc(var(--px) * ${n})`;
+
+const styles = {
+  tile: cva({
+    base: [
+      'relative block cursor-pointer bg-[#131829] outline-none',
+      'transition-[filter] duration-150 focus-visible:ui-focus',
+    ],
+    variants: {
+      active: {
+        true: 'brightness-100',
+        false: 'brightness-[0.65] hover:brightness-90',
+      },
+    },
+  }),
+  role: cva({
+    base: 'absolute text-center text-[0.75em] font-semibold',
+    variants: {
+      active: { true: 'text-[#f3eedc]', false: 'text-[#5c6488]' },
+    },
+  }),
+};
 
 /**
- * A look's idle cell as a CSS sprite in stage pixels (`--px`): the sheet
- * as background, its first cell shown, with hard edges.
+ * A look's face: the head square `features.mjs` found in the idle cell,
+ * as a CSS sprite at twice the stage's pixels, hard edges.
  */
-const IdleSprite = ({ role, look }: { role: Role; look: Look }) => {
-  const sheet = SHEETS[PLAYER_SHEETS[role][look]];
-  const { width, height } = LAYOUT.cell;
+const Portrait = ({ sheet }: { sheet: SheetId }) => {
+  const { image, meta } = SHEETS[sheet];
+  const head = meta.features?.head ?? {
+    x: 24,
+    y: 32,
+    width: 24,
+    height: 24,
+  };
+  const s = PORTRAIT_SCALE;
   return (
     <span
       aria-hidden
       className="block [image-rendering:pixelated]"
       style={{
-        width: `calc(var(--px) * ${width})`,
-        height: `calc(var(--px) * ${height - CROP_TOP})`,
-        backgroundImage: `url(${sheet.image.src})`,
-        backgroundSize: `calc(var(--px) * ${width * sheet.meta.count}) calc(var(--px) * ${height})`,
-        backgroundPosition: `0 calc(var(--px) * -${CROP_TOP})`,
+        width: px(head.width * s),
+        height: px(head.height * s),
+        backgroundImage: `url(${image.src})`,
+        backgroundSize: `${px(meta.cell.width * meta.count * s)} ${px(meta.cell.height * s)}`,
+        backgroundPosition: `${px(-head.x * s)} ${px(-head.y * s)}`,
         backgroundRepeat: 'no-repeat',
       }}
     />
@@ -53,9 +95,11 @@ interface SelectScreenProps {
 }
 
 /**
- * Three roles side by side, one idle sprite each. Left/right picks the
- * role, up/down or a tap on the sprite flips the look, Enter or a second
- * tap confirms.
+ * The six faces in a grid, a column per role and a row per look, the
+ * way a fighting game shows its roster; the chosen one stands beside
+ * the grid, breathing, and the role's blurb sits in the window below.
+ * Left and right move across the roles, up and down between the looks,
+ * Enter (or a second tap on the face) plays.
  */
 export const SelectScreen = ({
   runs,
@@ -70,7 +114,16 @@ export const SelectScreen = ({
   });
   const role = ROLES[roleIndex]!;
   const look = looks[role];
+  const sheet = PLAYER_SHEETS[role][look];
+  const run = runs[role];
+  // The frame around the chosen face blinks, four times a second
+  const clock = useClock();
+  const lit = Math.floor(clock / 250) % 2 === 0;
 
+  const pick = (target: Role, targetLook: Look) => {
+    setRoleIndex(ROLES.indexOf(target));
+    setLooks(previous => ({ ...previous, [target]: targetLook }));
+  };
   const flip = (target: Role) =>
     setLooks(previous => ({
       ...previous,
@@ -96,91 +149,107 @@ export const SelectScreen = ({
     ),
   );
 
+  const head = SHEETS[sheet].meta.features?.head.width ?? 24;
+  const tile = head * PORTRAIT_SCALE + PLACE.frame * 2;
+  const step = tile + PLACE.grid.gap;
+
   return (
     <Stage label="Pushback, pick a role">
-      {/* The corner office, dimmed, behind the cards */}
+      {/* The corner office, dimmed, behind the roster */}
       <div
         aria-hidden
         className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
         style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
       />
-      {/* The box is absolute at the bottom: the roles sit above it */}
-      <Stage.Center className="justify-between py-6 pb-[calc(var(--px)*48)]">
-        <Stage.Muted>Pick a role. Up or down flips the look.</Stage.Muted>
-        <div
-          className="grid w-full grid-cols-3 gap-2 md:gap-4"
-          aria-label="Role"
-        >
-          {ROLES.map((r, i) => {
-            const active = i === roleIndex;
-            const run = runs[r];
-            return (
-              <div key={r} className="grid justify-items-center gap-2">
+
+      <p
+        className="absolute inset-x-0 text-center text-[0.85em] text-[#8a92b8]"
+        style={{ top: px(8) }}
+      >
+        Pick a role.
+      </p>
+
+      {/* The grid: a column per role, a row per look */}
+      <div>
+        {ROLES.map((r, column) => (
+          <span key={r}>
+            <span
+              className={styles.role({ active: r === role })}
+              style={{
+                left: px(PLACE.grid.x + column * step),
+                width: px(tile),
+                top: px(PLACE.grid.y + 2 * step + 2),
+              }}
+            >
+              {ROLE_LABELS[r]}
+            </span>
+            {(['a', 'b'] as const).map((l, row) => {
+              const active = r === role && l === looks[r];
+              const frame = active
+                ? lit
+                  ? CHROME.goldLight
+                  : CHROME.gold
+                : CHROME.frameDim;
+              return (
                 <button
+                  key={l}
                   type="button"
                   aria-pressed={active}
-                  aria-label={`${ROLE_LABELS[r]}, ${LOOKS[r][looks[r]].name}`}
-                  className={cn(
-                    // A window like the duel's panel, lit when active
-                    'grid place-items-center p-[calc(var(--px)*3)] transition-all duration-150',
-                    'bg-[#131829] ring-[length:var(--px)] shadow-[0_0_0_calc(var(--px)*2)_#0b0d16]',
-                    'outline-none focus-visible:ui-focus',
-                    active
-                      ? 'ring-[#b7b09d]'
-                      : 'bg-[#0e1220] ring-[#4a5066] opacity-70 hover:opacity-90',
-                  )}
+                  aria-label={`${ROLE_LABELS[r]}, ${LOOKS[r][l].name}`}
+                  className={cn(styles.tile({ active }), 'absolute')}
+                  style={{
+                    left: px(PLACE.grid.x + column * step + PLACE.frame),
+                    top: px(PLACE.grid.y + row * step + PLACE.frame),
+                    boxShadow: `0 0 0 ${px(PLACE.frame)} ${frame}, 0 0 0 ${px(PLACE.frame + 1)} ${CHROME.ink}`,
+                  }}
                   onClick={() => {
-                    if (active) flip(r);
-                    else setRoleIndex(i);
+                    if (active) onConfirm(r, l);
+                    else pick(r, l);
                   }}
                 >
-                  <IdleSprite role={r} look={looks[r]} />
+                  <Portrait sheet={PLAYER_SHEETS[r][l]} />
                 </button>
-                <div className="text-center">
-                  <div
-                    className={cn(
-                      'font-semibold',
-                      active ? 'text-[#f3eedc]' : 'text-[#8a92b8]',
-                    )}
-                  >
-                    {ROLE_LABELS[r]}
-                  </div>
-                  <div className="text-[0.85em] text-[#8a92b8]">
-                    {(['a', 'b'] as const).map((l, j) => (
-                      <span key={l}>
-                        {j > 0 && ' / '}
-                        <span
-                          className={cn(
-                            looks[r] === l && active && 'text-white',
-                          )}
-                        >
-                          {LOOKS[r][l].name}
-                        </span>
-                      </span>
-                    ))}
-                  </div>
-                  {run && (
-                    <div className="text-[0.8em] text-[#8a92b8]">
-                      {run.finished ? 'finished' : 'in progress'}
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </span>
+        ))}
+      </div>
+
+      {/* The chosen one, standing */}
+      <Character key={sheet} sheet={sheet} x={PLACE.figure.x} />
+      <div
+        className="absolute text-center"
+        style={{
+          left: px(PLACE.figure.x - 20),
+          width: px(LAYOUT.cell.width + 40),
+          top: px(PLACE.grid.y + 2 * step + 2),
+        }}
+      >
+        <div className="text-[0.85em] font-semibold text-[#f3eedc]">
+          {LOOKS[role][look].name}
         </div>
-        <Window className="absolute inset-x-3 bottom-3 text-center">
-          <p className="text-balance">{ROLE_BLURBS[role]}</p>
-          <button
-            type="button"
-            className="mt-2 cursor-pointer bg-[#f2c14e] px-4 py-1 font-semibold text-[#0b0d16] outline-none focus-visible:ui-focus"
-            onClick={() => onConfirm(role, look)}
-          >
-            Play as {LOOKS[role][look].name}
-            {runs[role] && !runs[role].finished ? ' (continue)' : ''}
-          </button>
-        </Window>
-      </Stage.Center>
+        {run && (
+          <div className="text-[0.7em] text-[#8a92b8]">
+            {run.finished ? 'finished' : 'in progress'}
+          </div>
+        )}
+      </div>
+
+      <Window
+        className="absolute inset-x-3 bottom-3"
+        legend={
+          <Legend
+            keys={[
+              ['←→', 'role'],
+              ['↑↓', 'look'],
+              ['Enter', run && !run.finished ? 'continue' : 'play'],
+            ]}
+            touch={`Tap the face again to ${run && !run.finished ? 'continue' : 'play'}`}
+          />
+        }
+      >
+        <p className="text-balance">{ROLE_BLURBS[role]}</p>
+      </Window>
     </Stage>
   );
 };

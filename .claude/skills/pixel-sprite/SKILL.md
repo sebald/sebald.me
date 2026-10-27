@@ -32,6 +32,13 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   src/assets/lab/pushback/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.5
 
+# The logo: one cell the size of the whole render, centred, keyed; the
+# JSON it writes is not needed (the title shows the PNG as it is)
+node .claude/skills/pixel-sprite/scripts/sheet.mjs \
+  src/assets/lab/pushback/sources/originals/logo.jpeg logo \
+  --cells 1 --cell 240x134 --anchor centre --specks 0 --colours 16
+rm src/assets/lab/pushback/sheets/logo.json
+
 # The mic-drop burst: three cells (the burst, its big beat, popped), the
 # letters inside key with it
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \

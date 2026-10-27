@@ -42,9 +42,13 @@ const defaultFigures = (scene: SceneId) => {
   const role = (Object.keys(SCENE_OF) as (keyof typeof SCENE_OF)[]).find(
     r => SCENE_OF[r] === scene,
   );
+  const playerRole = role && role !== 'boss' ? role : 'pm';
+  const player = LOOKS[playerRole].a.name;
+  // A colleague of the scene's role who is not the player's twin
   const opponent =
-    CHARACTERS.find(c => c.role === role)?.name ?? FIGURES[0]!.label;
-  const player = role && role !== 'boss' ? LOOKS[role].a.name : LOOKS.pm.a.name;
+    CHARACTERS.find(
+      c => c.role === role && c.sheet !== PLAYER_SHEETS[playerRole].a,
+    )?.name ?? FIGURES[0]!.label;
   return { player, opponent };
 };
 
