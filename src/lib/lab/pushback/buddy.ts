@@ -40,10 +40,10 @@ export const buddyOpacity = (step: number): number =>
 export const buddyLine = (exchange: number, seed: number): string =>
   BUDDY_BARKS[(Math.abs(seed) + exchange) % BUDDY_BARKS.length]!;
 
-/** Where the ghost floats: behind the player's shoulder, off the floor */
+/** Where the ghost floats: behind the player's shoulder */
 export const GHOST = {
-  /** Left of the player's cell, in native pixels */
-  behind: 46,
-  /** Above the feet line: it hovers at head height, clear of the box */
-  lift: 64,
+  /** Left of the player's drawn cell, in native pixels */
+  behind: 80,
+  /** Above the feet line; its tail brushes the floor, its head is under the bars */
+  lift: 0,
 } as const;

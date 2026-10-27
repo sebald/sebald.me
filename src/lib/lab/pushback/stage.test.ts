@@ -19,6 +19,7 @@ import {
   scriptFor,
   typedChars,
   typingDuration,
+  figureCell,
 } from './stage';
 
 describe('scaleFor', () => {
@@ -211,5 +212,11 @@ describe('barsLabel', () => {
     assert.equal(barsLabel(s, 'player'), 'Buy-in 0 of 3, momentum 0 of 3');
     const full = { ...s, momentum: { ...s.momentum, player: RULES.momentum } };
     assert.equal(barsLabel(full, 'player'), 'Buy-in 0 of 3, momentum full');
+  });
+});
+
+describe('figureCell', () => {
+  it('doubles the sheet cell and keeps it centred on the stand', () => {
+    assert.deepEqual(figureCell(124), { x: 88, width: 144, height: 224 });
   });
 });

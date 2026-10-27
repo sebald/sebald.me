@@ -2,13 +2,14 @@
 
 import NextImage from 'next/image';
 import type { PropsWithChildren } from 'react';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { BACKING, FRAME_MS, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
+import { GHOST_KEY, type Sprites, useSprites } from './sheets';
 import { Stage } from './stage';
 import { useScale } from './use-scale';
 
@@ -46,6 +47,24 @@ export const Frame = ({
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
   const { scale } = useScale(fixedScale);
+  // The sprites this frame draws, built in the background; placeholders
+  // until then
+  const sprites = useSprites(
+    useMemo(
+      () => ({
+        [model.sprites.player.key]: model.sprites.player.swap,
+        [model.sprites.opponent.key]: model.sprites.opponent.swap,
+        [GHOST_KEY]: GHOST_KEY,
+      }),
+      [
+        model.sprites.player.key,
+        model.sprites.player.swap,
+        model.sprites.opponent.key,
+        model.sprites.opponent.swap,
+      ],
+    ),
+  );
+  const spritesRef = useRef<Sprites>(sprites);
   const assets = SCENE_ASSETS[model.scene];
   const loop = loopFor(assets, scale);
   const sceneKey = `${model.scene}:${loop.src}`;
@@ -54,6 +73,7 @@ export const Frame = ({
     modelRef.current = model;
     stepRef.current = onStep;
     loadedRef.current = sceneLoaded;
+    spritesRef.current = sprites;
   });
 
   // One loop at 8 fps steps: redraw, and tell the screen a step passed
@@ -65,7 +85,10 @@ export const Frame = ({
     const draw = () => {
       const ctx = canvasRef.current?.getContext('2d');
       if (ctx) {
-        drawFrame(ctx, modelRef.current, { background: !loadedRef.current });
+        drawFrame(ctx, modelRef.current, {
+          background: !loadedRef.current,
+          sprites: spritesRef.current,
+        });
       }
     };
     draw();
@@ -84,11 +107,12 @@ export const Frame = ({
     return () => cancelAnimationFrame(frame);
   }, [paused]);
 
-  // Redraw on model changes between steps, so input feels immediate
+  // Redraw on model changes between steps, so input feels immediate, and
+  // when a sprite lands
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded });
-  }, [model, sceneLoaded]);
+    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded, sprites });
+  }, [model, sceneLoaded, sprites]);
 
   return (
     <Stage label={label} scale={fixedScale} className={className}>

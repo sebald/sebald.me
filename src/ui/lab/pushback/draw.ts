@@ -1,20 +1,26 @@
 /**
- * Everything drawn into the 480 by 270 canvas: the scene (a flat colour
- * until the backgrounds land), the two duellists (rectangles until the
- * sprites land) and the chrome, which stays drawn in code: the bars, the
- * dialogue box as a 9-slice. The canvas is drawn at native size and
- * scaled by the browser with hard edges.
+ * Everything drawn into the canvas: the scene (a flat colour until the
+ * loop under the canvas has loaded), the two duellists from their sheets
+ * (rectangles until the sprites are built), the ghost, and the chrome,
+ * which stays drawn in code: the bars, the dialogue box as a 9-slice.
+ * The canvas is drawn at `BACKING` times the stage and scaled down by the
+ * browser.
  */
 import type { SceneId } from '@/lib/lab/pushback/characters';
 import type { Side } from '@/lib/lab/pushback/duel';
+import type { Swap } from '@/lib/lab/pushback/sprites';
 import {
   BACKING,
+  FIGURE_SCALE,
   LAYOUT,
   type Pose,
   STAGE,
   barRects,
   barWidth,
+  figureCell,
 } from '@/lib/lab/pushback/stage';
+
+import type { Sprite, Sprites } from './sheets';
 
 // Palette
 // ---------------
@@ -27,10 +33,11 @@ const SCENES: Record<SceneId, { wall: string; floor: string; top: string }> = {
   office: { wall: '#141a2b', floor: '#0e1119', top: '#1b2238' },
 };
 
-const SPRITE: Record<Side, { body: string; head: string; light: string }> = {
-  player: { body: '#2f8f8a', head: '#d9b38c', light: '#7fd6d0' },
-  opponent: { body: '#c0622f', head: '#e3c2a0', light: '#f0a36f' },
-};
+const PLACEHOLDER: Record<Side, { body: string; head: string; light: string }> =
+  {
+    player: { body: '#2f8f8a', head: '#d9b38c', light: '#7fd6d0' },
+    opponent: { body: '#c0622f', head: '#e3c2a0', light: '#f0a36f' },
+  };
 
 const CHROME = {
   outer: '#0b0d12',
@@ -42,13 +49,21 @@ const CHROME = {
   momentumFull: '#fff1b8',
 };
 
+/** The ghost is see-through: its opacity when fully shown */
+export const GHOST_ALPHA = 0.7;
+
 // Model
 // ---------------
 
 export interface SpriteModel {
-  /** Left edge of the 72 px cell */
+  /** The stand: left edge of the 1x cell (`figureCell` gives the drawn one) */
   x: number;
   pose: Pose;
+  /** The sheet cell, from `cellFor` */
+  cell: number;
+  /** What to draw from; the key is where `Sprites` holds it */
+  swap: Swap;
+  key: string;
   dx: number;
   dy: number;
   lighter: boolean;
@@ -67,9 +82,11 @@ export interface BarsModel {
 
 /** The onboarding buddy's ghost, while it shows */
 export interface GhostModel {
-  /** Left edge of its cell */
+  /** Left edge of its drawn (`FIGURE_SCALE`) cell */
   x: number;
   dy: number;
+  /** The ghost sheet cell, from `ghostCell` */
+  cell: number;
   /** 0 to 1, fading in */
   opacity: number;
 }
@@ -110,27 +127,56 @@ const drawScene = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
   );
 };
 
-/** A placeholder figure: a body, a head and a nose on the facing side */
-const drawSprite = (
+/**
+ * One cell of a sprite with its bottom on `bottom`, its cell's left edge
+ * on `x`, at `scale` times the sheet's pixels, mirrored about the cell
+ * when asked. Exported for the viewer.
+ */
+export const drawCell = (
+  ctx: CanvasRenderingContext2D,
+  sprite: Sprite,
+  cell: number,
+  x: number,
+  bottom: number,
+  mirrored = false,
+  scale = 1,
+) => {
+  const { width, height } = sprite.meta.cell;
+  const w = width * scale;
+  const h = height * scale;
+  ctx.save();
+  if (mirrored) {
+    ctx.translate(x + w, bottom - h);
+    ctx.scale(-1, 1);
+  } else {
+    ctx.translate(x, bottom - h);
+  }
+  ctx.drawImage(sprite.canvas, cell * width, 0, width, height, 0, 0, w, h);
+  ctx.restore();
+};
+
+/** The grey box's figure, until the sprite is built */
+const drawPlaceholder = (
   ctx: CanvasRenderingContext2D,
   side: Side,
   sprite: SpriteModel,
 ) => {
-  const colours = SPRITE[side];
-  const { width, height } = LAYOUT.cell;
-  const x = sprite.x + sprite.dx;
-  const bottom = LAYOUT.feet + sprite.dy;
+  const colours = PLACEHOLDER[side];
+  // Drawn in 1x cell coordinates, scaled up like the sprite
+  const cell = figureCell(sprite.x);
+  ctx.save();
+  ctx.translate(cell.x + sprite.dx, LAYOUT.feet + sprite.dy);
+  ctx.scale(FIGURE_SCALE, FIGURE_SCALE);
+  const x = 0;
+  const bottom = 0;
   const bodyW = 30;
   const bodyH = 52;
   const headS = 22;
-  const cx = x + Math.floor(width / 2);
+  const cx = x + Math.floor(LAYOUT.cell.width / 2);
   const body = sprite.lighter ? colours.light : colours.body;
-  // Legs
   rect(ctx, cx - 12, bottom - 24, 10, 24, body);
   rect(ctx, cx + 2, bottom - 24, 10, 24, body);
-  // Body
   rect(ctx, cx - bodyW / 2, bottom - 24 - bodyH, bodyW, bodyH, body);
-  // Head
   const headY = bottom - 24 - bodyH - headS - 2;
   rect(
     ctx,
@@ -140,36 +186,33 @@ const drawSprite = (
     headS,
     sprite.lighter ? colours.light : colours.head,
   );
-  // Nose on the facing side, eyes
-  const facing = sprite.mirrored ? -1 : 1;
-  rect(
-    ctx,
-    cx + facing * (headS / 2) - (facing < 0 ? 3 : 0),
-    headY + 10,
-    3,
-    4,
-    colours.head,
-  );
-  rect(ctx, cx + facing * 4 - 1, headY + 7, 2, 2, CHROME.outer);
-  // Pose markers: an arm for talk and taunt, both up for win, down for lose
-  if (sprite.pose === 'talk' || sprite.pose === 'taunt') {
-    rect(
-      ctx,
-      cx + facing * (bodyW / 2) + (facing < 0 ? -16 : 0),
-      bottom - 24 - bodyH + 10,
-      16,
-      6,
-      body,
-    );
-  } else if (sprite.pose === 'win') {
-    rect(ctx, cx - bodyW / 2 - 6, headY - 10, 6, 40, body);
-    rect(ctx, cx + bodyW / 2, headY - 10, 6, 40, body);
-  } else if (sprite.pose === 'lose') {
-    rect(ctx, cx - bodyW / 2 - 6, bottom - 24 - bodyH + 20, 6, 30, body);
-    rect(ctx, cx + bodyW / 2, bottom - 24 - bodyH + 20, 6, 30, body);
+  ctx.restore();
+};
+
+const drawSprite = (
+  ctx: CanvasRenderingContext2D,
+  side: Side,
+  model: SpriteModel,
+  sprites: Sprites,
+) => {
+  const sprite = sprites[model.key];
+  if (!sprite) {
+    drawPlaceholder(ctx, side, model);
+    return;
   }
-  // Cell top marker so the height range is visible in the grey box
-  void height;
+  const x = figureCell(model.x).x + model.dx;
+  const bottom = LAYOUT.feet + model.dy;
+  const draw = () =>
+    drawCell(ctx, sprite, model.cell, x, bottom, model.mirrored, FIGURE_SCALE);
+  draw();
+  if (model.lighter) {
+    // The flinch flash: the cell again, added on top of itself
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = 0.3;
+    draw();
+    ctx.restore();
+  }
 };
 
 const drawBars = (
@@ -216,26 +259,32 @@ const drawBars = (
   }
 };
 
-/**
- * The ghost in the grey box: a pale, translucent figure with no legs,
- * floating; the sheet replaces it when the sprites land.
- */
-const drawGhost = (ctx: CanvasRenderingContext2D, ghost: GhostModel) => {
-  const cx = ghost.x + LAYOUT.cell.width / 2;
-  const bottom = LAYOUT.feet - ghost.dy;
-  const pale = '#bfe8ea';
-  const paler = '#e8fbfb';
-  ctx.globalAlpha = 0.6 * ghost.opacity;
-  // A tapered body that frays into three tails
-  rect(ctx, cx - 10, bottom - 40, 20, 30, pale);
-  rect(ctx, cx - 10, bottom - 10, 5, 8, pale);
-  rect(ctx, cx - 2, bottom - 10, 5, 6, pale);
-  rect(ctx, cx + 6, bottom - 10, 4, 9, pale);
-  // Head, a little lighter, facing the player to the right
-  rect(ctx, cx - 9, bottom - 58, 18, 18, paler);
-  rect(ctx, cx + 9, bottom - 50, 3, 4, paler);
-  rect(ctx, cx + 3, bottom - 53, 2, 2, CHROME.outer);
-  ctx.globalAlpha = 1;
+/** The ghost from its sheet, see-through; a pale shape until it is built */
+const drawGhost = (
+  ctx: CanvasRenderingContext2D,
+  ghost: GhostModel,
+  sprites: Sprites,
+) => {
+  const sprite = sprites.ghost;
+  ctx.save();
+  ctx.globalAlpha = GHOST_ALPHA * ghost.opacity;
+  if (sprite) {
+    drawCell(
+      ctx,
+      sprite,
+      ghost.cell,
+      ghost.x,
+      LAYOUT.feet - ghost.dy,
+      false,
+      FIGURE_SCALE,
+    );
+  } else {
+    const cx = ghost.x + (LAYOUT.cell.width * FIGURE_SCALE) / 2;
+    const bottom = LAYOUT.feet - ghost.dy;
+    rect(ctx, cx - 20, bottom - 80, 40, 68, '#bfe8ea');
+    rect(ctx, cx - 18, bottom - 116, 36, 36, '#e8fbfb');
+  }
+  ctx.restore();
 };
 
 /** The dialogue box: a 9-slice with a 2 px frame, over the floor strip */
@@ -264,21 +313,23 @@ export interface DrawOptions {
    * figures and the chrome.
    */
   background?: boolean;
+  /** The sprites that are built; a missing one draws as a placeholder */
+  sprites?: Sprites;
 }
 
 export const drawFrame = (
   ctx: CanvasRenderingContext2D,
   model: FrameModel,
-  { background = true }: DrawOptions = {},
+  { background = true, sprites = {} }: DrawOptions = {},
 ) => {
   // Native coordinates on a canvas `BACKING` times the stage
   ctx.setTransform(BACKING, 0, 0, BACKING, 0, 0);
   ctx.imageSmoothingEnabled = false;
   if (background) drawScene(ctx, model.scene);
   else ctx.clearRect(0, 0, STAGE.width, STAGE.height);
-  if (model.ghost) drawGhost(ctx, model.ghost);
-  drawSprite(ctx, 'player', model.sprites.player);
-  drawSprite(ctx, 'opponent', model.sprites.opponent);
+  if (model.ghost) drawGhost(ctx, model.ghost, sprites);
+  drawSprite(ctx, 'player', model.sprites.player, sprites);
+  drawSprite(ctx, 'opponent', model.sprites.opponent, sprites);
   drawBars(
     ctx,
     model.bars.player,

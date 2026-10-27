@@ -15,7 +15,7 @@ import {
   buddyOpacity,
   buddyStep,
 } from '@/lib/lab/pushback/buddy';
-import { SCENE_OF, STANDS } from '@/lib/lab/pushback/characters';
+import { type Look, SCENE_OF, STANDS } from '@/lib/lab/pushback/characters';
 import {
   type DuelAction,
   type DuelState,
@@ -26,12 +26,21 @@ import {
 } from '@/lib/lab/pushback/duel';
 import { BUDDY_MISS_BARK, HINT, pairById } from '@/lib/lab/pushback/lines';
 import {
+  PLAYER_SHEETS,
+  type Swap,
+  cellFor,
+  ghostCell,
+  swapKey,
+} from '@/lib/lab/pushback/sprites';
+import {
   type Step,
+  FIGURE_SCALE,
   LAYOUT,
   STAGE,
   barsLabel,
   bob,
   counterText,
+  figureCell,
   holdFor,
   phraseText,
   poseOffset,
@@ -105,6 +114,8 @@ const styles = {
 export interface DuelScreenProps {
   /** A duel at `intro`, or any state the workbench constructed */
   initial: DuelState;
+  /** The player's look, which picks their sheet */
+  look: Look;
   onEnd: (duel: DuelState) => void;
   onBack: () => void;
   /** Force reduced motion (the workbench); otherwise the media query */
@@ -159,6 +170,7 @@ const scriptKey = (state: DuelState) =>
 
 export const DuelScreen = ({
   initial,
+  look,
   onEnd,
   onBack,
   reducedMotion,
@@ -324,11 +336,16 @@ export const DuelScreen = ({
   const poses = posesFor(state, step);
   const ghost: FrameModel['ghost'] = ghostLine
     ? {
-        x: stands.left - GHOST.behind,
+        x: figureCell(stands.left).x - GHOST.behind,
         dy: GHOST.lift + (reduced ? 0 : bob(clock, 1200)),
+        cell: ghostCell(whisper, reduced ? 0 : clock),
         opacity: 1,
       }
     : undefined;
+  const playerSwap: Swap = useMemo(
+    () => ({ base: PLAYER_SHEETS[state.setup.role][look] }),
+    [state.setup.role, look],
+  );
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
   const bars = (side: Side) => ({
@@ -353,9 +370,13 @@ export const DuelScreen = ({
           side === 'player' ? 1 : -1,
           state.exchange?.micDrop === true && state.exchange.by === side,
         );
+    const swap = side === 'player' ? playerSwap : character.swap;
     return {
       x: side === 'player' ? stands.left : stands.right,
       pose,
+      cell: cellFor(pose, reduced ? 0 : cursor.elapsed, !typingDone),
+      swap,
+      key: swapKey(swap),
       ...offset,
       mirrored: side === 'opponent',
     };
@@ -459,8 +480,9 @@ export const DuelScreen = ({
         <p
           className={styles.bubble()}
           style={{
-            left: `calc(var(--px) * ${ghost.x - 8})`,
-            bottom: `calc(var(--px) * ${STAGE.height - LAYOUT.feet + ghost.dy + 62})`,
+            // Over the ghost's head, which is just under the bars
+            left: `calc(var(--px) * ${ghost.x + 8})`,
+            bottom: `calc(var(--px) * ${STAGE.height - LAYOUT.feet + ghost.dy + LAYOUT.cell.height * FIGURE_SCALE - 50})`,
           }}
         >
           {ghostLine}

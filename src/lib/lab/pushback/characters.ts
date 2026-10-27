@@ -6,6 +6,7 @@
  */
 import { type PairId, type Role, ROLES, poolOf } from './lines';
 import { Rng, seedRng } from './random';
+import type { Swap } from './sprites';
 
 export type CharacterId =
   | 'intern'
@@ -27,8 +28,13 @@ export interface Character {
   role: Role | 'boss';
   /** The intro bark */
   intro: string;
-  /** The look, in words, until the sheet and swap tables land */
-  swap: string;
+  /**
+   * How the character is drawn: one of its role's two base sheets, a
+   * recolour of one material (the `from` shade is one `sheet.mjs` prints
+   * for that sheet) and a prop from the item sheet. The Stakeholder has a
+   * sheet of their own.
+   */
+  swap: Swap;
   /**
    * One or two pairs from other pools this character has picked up: it
    * throws them too and answers them every time. They make the own-role
@@ -43,7 +49,12 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Intern',
     role: 'pm',
     intro: "Hi! Is this the meeting? I was told there'd be a meeting.",
-    swap: 'Oversized lanyard, coffee',
+    swap: {
+      base: 'pm-jo',
+      // The teal stripes go raspberry
+      tints: [{ from: '2a7b7c', to: '9c3d6e' }],
+      prop: 'coffee',
+    },
     knows: ['dev-1'],
   },
   {
@@ -51,7 +62,15 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Roadmap Owner',
     role: 'pm',
     intro: "I have a slot for you. It's now. Make it count.",
-    swap: 'Gantt printout',
+    swap: {
+      base: 'pm-piet',
+      // The mustard vest goes bottle green; the hair and the trousers
+      // are near it in hue, so the tint is tight and wants saturation
+      tints: [
+        { from: 'c18b2a', to: '3f7a4a', tolerance: 9, minSaturation: 0.5 },
+      ],
+      prop: 'gantt',
+    },
     knows: ['des-5', 'dev-3'],
   },
   {
@@ -59,7 +78,11 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Head of Product',
     role: 'pm',
     intro: "I've heard about you. None of it was in the OKRs.",
-    swap: 'Blazer, no notebook',
+    swap: {
+      base: 'pm-jo',
+      // The stripes go navy, a blazer at this size
+      tints: [{ from: '2a7b7c', to: '3a4470' }],
+    },
     knows: ['dev-8', 'des-1'],
   },
   {
@@ -67,7 +90,12 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Junior',
     role: 'dev',
     intro: "Give me a sec, the build's almost green.",
-    swap: 'Hoodie up, energy drink',
+    swap: {
+      base: 'dev-sam',
+      // The blue hoodie goes black; the jeans are six degrees off it
+      tints: [{ from: '52687d', to: '34343a', tolerance: 5 }],
+      prop: 'energy-drink',
+    },
     knows: ['des-2'],
   },
   {
@@ -75,7 +103,12 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Senior',
     role: 'dev',
     intro: "I've seen this pattern before. It didn't end well then either.",
-    swap: 'Mechanical keyboard under the arm',
+    swap: {
+      base: 'dev-lena',
+      // The olive jacket goes burgundy
+      tints: [{ from: '68734d', to: '7d3b42' }],
+      prop: 'keyboard',
+    },
     knows: ['pm-3', 'des-7'],
   },
   {
@@ -83,7 +116,12 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Architect',
     role: 'dev',
     intro: 'Before we start: is this scalable?',
-    swap: 'Whiteboard marker, grey beard',
+    swap: {
+      base: 'dev-sam',
+      // The blue hoodie goes aubergine
+      tints: [{ from: '52687d', to: '6a4a7c', tolerance: 5 }],
+      prop: 'marker',
+    },
     knows: ['pm-5', 'des-8'],
   },
   {
@@ -91,7 +129,14 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Freelancer',
     role: 'designer',
     intro: "I'm only here until Thursday, so let's be quick.",
-    swap: 'Tote bag',
+    swap: {
+      base: 'designer-theo',
+      // The camel overshirt goes denim; the skin is ten degrees off it
+      tints: [
+        { from: 'bb8149', to: '4a6fa0', tolerance: 7, minSaturation: 0.4 },
+      ],
+      prop: 'tote',
+    },
     knows: ['pm-4'],
   },
   {
@@ -99,7 +144,16 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Brand Designer',
     role: 'designer',
     intro: "That's not our blue.",
-    swap: 'Pantone swatch',
+    swap: {
+      // Theo's base too: Ines's cream trousers share their hue with her
+      // skin and her black top its lightness with her hair, so neither
+      // can be tinted apart. The camel overshirt goes red: not our blue
+      base: 'designer-theo',
+      tints: [
+        { from: 'bb8149', to: 'c43a3a', tolerance: 7, minSaturation: 0.4 },
+      ],
+      prop: 'swatches',
+    },
     knows: ['pm-6', 'dev-6'],
   },
   {
@@ -107,7 +161,14 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Design Lead',
     role: 'designer',
     intro: 'Let me stop you right there.',
-    swap: 'Very small laptop',
+    swap: {
+      base: 'designer-theo',
+      // The camel overshirt goes charcoal
+      tints: [
+        { from: 'bb8149', to: '3a3a40', tolerance: 7, minSaturation: 0.4 },
+      ],
+      prop: 'tiny-laptop',
+    },
     knows: ['dev-7', 'pm-7'],
   },
   {
@@ -115,7 +176,7 @@ export const CHARACTERS: readonly Character[] = [
     name: 'The Stakeholder',
     role: 'boss',
     intro: "Keep it short, I've got a call in five.",
-    swap: 'Suit, phone in hand, never looks up',
+    swap: { base: 'boss' },
     knows: [],
   },
 ];

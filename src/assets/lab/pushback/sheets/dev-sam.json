@@ -1,0 +1,64 @@
+{
+  "cell": {
+    "width": 72,
+    "height": 112
+  },
+  "count": 6,
+  "background": "2a3139",
+  "cells": [
+    {
+      "box": {
+        "x": 20,
+        "y": 32,
+        "width": 31,
+        "height": 80
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 15,
+        "y": 32,
+        "width": 41,
+        "height": 80
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 13,
+        "y": 33,
+        "width": 46,
+        "height": 79
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 22,
+        "y": 32,
+        "width": 27,
+        "height": 80
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 11,
+        "y": 24,
+        "width": 50,
+        "height": 88
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 21,
+        "y": 36,
+        "width": 29,
+        "height": 76
+      },
+      "clipped": false
+    }
+  ]
+}

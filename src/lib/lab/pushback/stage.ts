@@ -38,6 +38,29 @@ export const LAYOUT = {
 } as const;
 
 /**
+ * The duellists are drawn at this multiple of the scene's pixels: a
+ * sheet figure is a third of the stage tall, and with the dialogue box
+ * open only its head would show. At 2x it stands head to hip above the
+ * box, Street Fighter framing, at the cost of art pixels twice the
+ * room's.
+ */
+export const FIGURE_SCALE = 2;
+
+/**
+ * The on-stage cell of a duellist standing at `stand` (the left edge of
+ * a 1x cell, as `STANDS` gives it): the sheet cell at `FIGURE_SCALE`,
+ * centred on the 1x cell, so the bars stay over the figure's head.
+ */
+export const figureCell = (stand: number) => {
+  const width = LAYOUT.cell.width * FIGURE_SCALE;
+  return {
+    x: Math.round(stand + LAYOUT.cell.width / 2 - width / 2),
+    width,
+    height: LAYOUT.cell.height * FIGURE_SCALE,
+  };
+};
+
+/**
  * The scale at which the stage fits a viewport: 2 (960 by 540) wherever
  * there is room, so the game looks the same on every screen wide enough,
  * and below that whatever fraction the width (or height) allows, so it

@@ -5,6 +5,8 @@ import { useMemo, useState } from 'react';
 import {
   BOSS_SLOT,
   CHARACTERS,
+  LOOKS,
+  type Look,
   RULES,
   SLOTS,
   type Slot,
@@ -20,6 +22,7 @@ import { PAIRS, type Role, ROLES, poolOf } from '@/lib/lab/pushback/lines';
 
 import { DuelScreen } from '../duel-screen';
 import { SceneViewer } from './scene-viewer';
+import { SpriteViewer } from './sprite-viewer';
 
 // Options
 // ---------------
@@ -34,6 +37,7 @@ type Jump =
 
 interface Options {
   role: Role;
+  look: Look;
   character: string;
   slot: number;
   attempt: DuelSetup['attempt'];
@@ -50,6 +54,7 @@ interface Options {
 
 const DEFAULTS: Options = {
   role: 'pm',
+  look: 'a',
   character: 'junior',
   slot: 0,
   attempt: 'first',
@@ -184,6 +189,20 @@ export const Sandbox = () => {
             {ROLES.map(role => (
               <option key={role} value={role}>
                 {role}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className={field}>
+          Look
+          <select
+            className={input}
+            value={options.look}
+            onChange={e => set('look', e.target.value as Look)}
+          >
+            {(['a', 'b'] as const).map(look => (
+              <option key={look} value={look}>
+                {LOOKS[options.role][look].name}
               </option>
             ))}
           </select>
@@ -348,6 +367,7 @@ export const Sandbox = () => {
         <DuelScreen
           key={generation}
           initial={initial}
+          look={applied.look}
           scale={applied.scale}
           reducedMotion={applied.reducedMotion}
           onEnd={duel =>
@@ -359,12 +379,9 @@ export const Sandbox = () => {
         />
       </div>
 
-      <SceneViewer />
+      <SpriteViewer />
 
-      <section className="grid gap-2 font-mono text-sm text-mist-400">
-        <h2 className="text-mist-200">Later panels</h2>
-        <p>Sprite viewer: package 5 (sheets and swaps).</p>
-      </section>
+      <SceneViewer />
     </div>
   );
 };

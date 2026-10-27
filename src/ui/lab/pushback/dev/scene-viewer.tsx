@@ -9,7 +9,7 @@ import {
   STANDS,
   SCENE_OF,
 } from '@/lib/lab/pushback/characters';
-import { LAYOUT, STAGE } from '@/lib/lab/pushback/stage';
+import { LAYOUT, STAGE, figureCell } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { SCENE_ASSETS, loopFor } from '../scenes';
@@ -159,18 +159,18 @@ export const SceneViewer = () => {
               'clear band, right',
             )}
             {outline(
-              stands.left,
-              LAYOUT.feet - LAYOUT.cell.height,
-              LAYOUT.cell.width,
-              LAYOUT.cell.height,
+              figureCell(stands.left).x,
+              LAYOUT.feet - figureCell(stands.left).height,
+              figureCell(stands.left).width,
+              figureCell(stands.left).height,
               'border-amber-300 text-amber-200',
               `player ${stands.left}`,
             )}
             {outline(
-              stands.right,
-              LAYOUT.feet - LAYOUT.cell.height,
-              LAYOUT.cell.width,
-              LAYOUT.cell.height,
+              figureCell(stands.right).x,
+              LAYOUT.feet - figureCell(stands.right).height,
+              figureCell(stands.right).width,
+              figureCell(stands.right).height,
               'border-amber-300 text-amber-200',
               `opponent ${stands.right}`,
             )}
@@ -198,8 +198,9 @@ export const SceneViewer = () => {
         {CHARACTERS.filter(c => SCENE_OF[c.role] === scene)
           .map(c => c.name)
           .join(', ')}
-        . The cells are 72 by 112 with the feet on y {LAYOUT.feet}; the figures
-        must not overlap furniture.
+        . The drawn cells are {figureCell(0).width} by {figureCell(0).height}{' '}
+        with the feet on y {LAYOUT.feet}; the figures must not overlap
+        furniture.
       </p>
     </section>
   );

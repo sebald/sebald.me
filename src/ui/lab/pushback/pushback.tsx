@@ -132,6 +132,7 @@ export const Pushback = () => {
       return (
         <DuelScreen
           key={`${screen.role}-${screen.index}-${run.attempts}`}
+          look={run.look}
           initial={createDuel(
             duelSetupFor(run, screen.index, {
               seed: screen.seed,
