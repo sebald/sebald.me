@@ -493,6 +493,25 @@ frames or signatures.
 
 Reroll on: a person at a desk, letters on the whiteboard or screens, desks reaching into the middle of the frame, a pixel size clearly finer than the header.
 
+#### Open-plan floor, second roll
+
+The first roll (`scene-floor.jpeg`) failed on two counts: Gemini drew it at a coarser pixel size than the other three scenes (it snaps to 305 pixels wide instead of about 458), and both desk islands reach a third of the way into the frame, straight through the areas where the duellists stand. Same chat, paste this as the follow-up, and attach `scene-meeting.jpeg` as a second reference for the pixel size:
+
+```text
+Redraw this scene with two changes. First, the pixel size: use exactly
+the pixel size of the second attached image (the meeting room), finer
+than this one, so the scene is about 480 pixels wide. Second, the
+composition: both desk islands move out to the edges and get narrower,
+each one inside the outer eighth of the frame, seen more from the side,
+so that the aisle of plain carpet takes the middle three quarters of
+the width. The shelf with the tower lamp and the duck, the whiteboard
+with boxes and arrows, the windows, the dying plant and the pizza box
+stay. Nothing stands on the carpet between the two islands. Same
+style, same colours, same lighting.
+```
+
+Reroll on: desks still past the outer eighth, a pixel size that still snaps coarser than the meeting room.
+
 ### Meeting room, for the PM duels (`scene-meeting.jpg`)
 
 Attach: `HEADER`.

@@ -183,7 +183,7 @@ Four scenes, one per opponent role and one for the boss, all made with the `pixe
 | Studio corner   | Designer opponents | Evening, warm wood and one cool desk lamp            | Beside a moodboard wall, printer on the left as a dark frame           | Lamp flicker, a sticky note lifting in a draft, a tablet screen pulsing on standby  |
 | Corner office   | The Stakeholder    | Night, city lights behind glass, dark navy and amber | Desk between the duellists, window behind                              | City windows twinkling, phone screen glowing on the desk, rain streaks on the glass |
 
-Composition rule for all four: the middle band from y=60 to y=225 stays uncluttered where the sprites stand (x=60 to 170 for the left duellist, x=310 to 420 for the right). The top 40 px is a plain ceiling or sky and holds the two bars per duellist; the bottom 45 px a plain floor; the dialogue box overlays the floor. Dark framing shapes on the left and right edges, as in the headers.
+Composition rule for all four: the middle band from y=60 to y=225 stays uncluttered where the sprites stand (x=60 to 170 for the left duellist, x=310 to 420 for the right by default; the stand positions are per scene in data, `STANDS`, so a scene whose furniture creeps in can move its duellists by a few pixels instead of being rerolled: the studio's printer and desk, the office's cabinet). The top 40 px is a plain ceiling or sky and holds the two bars per duellist; the bottom 45 px a plain floor; the dialogue box overlays the floor. Dark framing shapes on the left and right edges, as in the headers.
 
 Title and selection screens reuse the corner office at a darker exposure (no new scene).
 
