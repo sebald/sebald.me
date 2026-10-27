@@ -30,6 +30,8 @@ export interface RunState {
   collected: PairId[];
   /** The boss is beaten */
   finished: boolean;
+  /** Duels played, retries and replays included */
+  attempts: number;
   stats: DuelStats;
 }
 
@@ -40,6 +42,7 @@ export const createRunState = (role: Role, seed: number): RunState => ({
   lost: [],
   collected: poolOf(role).map(p => p.id),
   finished: false,
+  attempts: 0,
   stats: emptyStats(),
 });
 
@@ -117,6 +120,7 @@ export const recordDuel = (
     lost,
     collected: duel.collected,
     finished: state.finished || (won && index === BOSS_SLOT_INDEX),
+    attempts: state.attempts + 1,
     stats: addStats(state.stats, duel.stats),
   };
 };

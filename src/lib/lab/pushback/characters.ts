@@ -144,6 +144,18 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
   boss: 'office',
 };
 
+// Player looks
+// ---------------
+
+/** The two looks of a playable role; each is its own model sheet */
+export type Look = 'a' | 'b';
+
+export const LOOKS: Record<Role, Record<Look, { name: string }>> = {
+  pm: { a: { name: 'Jo' }, b: { name: 'Ravi' } },
+  dev: { a: { name: 'Sam' }, b: { name: 'Lena' } },
+  designer: { a: { name: 'Ines' }, b: { name: 'Theo' } },
+};
+
 // Slots
 // ---------------
 
