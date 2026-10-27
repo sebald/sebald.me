@@ -6,7 +6,7 @@ Oct 26, 2026 · @Sebastian · revised Oct 27
 
 Pushback is a small browser game on sebald.me: a duel of phrases and counters between the roles of a product team, in the pixel-art style of the note headers. The player picks a role (PM, Dev or Designer), works through a gauntlet of colleagues and faces the Stakeholder as the final boss. Each exchange is won by picking the right counter to the phrase just thrown, or by throwing a phrase the opponent cannot answer; the duel is won by filling your buy-in bar first. The player starts knowing their own role's lines and picks up everyone else's in the room.
 
-The three rules on the title screen: Counter the phrase. Fill your buy-in. Full momentum lets you drop the mic.
+The three rules on the title screen: Counter the phrase. Push the scale to your side. Full momentum lets you drop the mic.
 
 Scope for v1:
 
@@ -23,14 +23,15 @@ Tone: dry and affectionate. Every role gets roasted and every role gets to roast
 
 ## Core mechanic
 
-A duel is a sequence of exchanges. The attacker throws a phrase, the defender picks a counter from a short menu; the right counter wins the exchange and swaps the initiative, a miss keeps it with the attacker. Every won exchange fills one segment of the winner's buy-in bar. Full buy-in wins the duel.
+A duel is a sequence of exchanges. The attacker throws a phrase, the defender picks a counter from a short menu; the right counter wins the exchange and swaps the initiative, a miss keeps it with the attacker. Every won exchange pushes the shared scale one step toward the winner. Pushing it to your edge wins the duel.
 
-### The two bars
+### The scale and the momentum bars
 
-Each duellist has two bars above their head, drawn as native-size chrome:
+One scale between the duellists at the top of the stage, and a momentum bar in each corner:
 
-- **Buy-in**, three segments (four against the boss). One segment per won exchange, two for a landed mic drop. Full bar wins. It only fills; nothing drains. This is the score, not health: both players build towards something.
-- **Momentum**, three steps. Playing well fills it, losing an exchange empties it. Full momentum unlocks the mic drop.
+- **The scale** (the pushback). It starts in the middle and every won exchange moves the marker one step toward the winner, two for a mic drop, landed or countered. Three steps to either edge win the duel (four for the player against the boss, three for the boss). It swings both ways, so a losing streak can turn round and every exchange visibly moves something. An earlier version had a buy-in bar per side that only filled; with three segments and three momentum steps the mic drop could never happen, since the third win already ended the duel.
+- **The meeting ends.** Two good duellists trade steps for ever, so from the eighth exchange on the duel ends as soon as the scale is off centre, to whoever leads; a tie plays on. The simulation puts duels at six to eight exchanges, with a mic drop in most tier-1 duels and about one in four at tier 3.
+- **Momentum**, two steps. Playing well fills it, losing an exchange empties it. Full momentum unlocks the mic drop; at two steps it is reachable before the duel is over.
 
 | Event                                                         | Momentum                            |
 | ------------------------------------------------------------- | ----------------------------------- |
@@ -41,16 +42,16 @@ Each duellist has two bars above their head, drawn as native-size chrome:
 
 ### The mic drop
 
-With full momentum and the initiative, the attacker can drop the mic: the next phrase is worth two buy-in segments instead of one. It costs the whole momentum bar and raises the stakes for the defender: the counter menu grows to eight and the silence bar runs at half time. The opponent can drop the mic too, telegraphed by the taunt pose and a `Mic drop!` label over the dialogue box, so a full enemy momentum bar is a visible threat.
+With full momentum and the initiative, the attacker can drop the mic: the next phrase moves the scale two steps instead of one, toward the attacker when it lands and toward the defender when it is countered, so it is a gamble. It costs the whole momentum bar and raises the stakes for the defender: the counter menu grows to eight and the silence bar runs at half time. The opponent can drop the mic too, telegraphed by the taunt pose and a `Mic drop!` label over the dialogue box, so a full enemy momentum bar is a visible threat.
 
 For the AI as defender the menu size makes no difference, so a player's mic drop against it is simply worth two; the decision it leaves the player is which phrase to spend it on (see Who knows what: a mic drop with a phrase from the opponent's own pool is a wasted bar). Momentum resets on any lost exchange, so holding a full bar for the perfect moment is the risk and spending it now is the safe play.
 
 ### The exchange, step by step
 
-1. Attacker steps forward, line types out at 30 characters per second (tap or Space to complete instantly).
+1. Attacker steps forward, line types out at 25 characters per second (tap or Space to complete instantly), then holds long enough to be read once more before the next step; the poses of a resolved exchange hold a second and a half.
 2. Defender gets a menu of counters in random order: the one that answers the phrase plus decoys. Menu size and decoy source depend on the duel's tier (see Opponents): four options from any pool in the first duel, six from the same pool in the last two. From tier 2 on the silence bar runs under the menu (see below).
-3. Match: the counter wins, the attacker flinches, the defender gets the initiative and fills a segment. Miss: the defender flinches, the attacker keeps the initiative and fills a segment (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
-4. Full buy-in ends the duel with win and lose poses and one bark each.
+3. Match: the counter wins, the attacker flinches, the defender gets the initiative and pushes the scale a step. Miss: the defender flinches, the attacker keeps the initiative and pushes a step (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
+4. The scale at an edge, or the lead when the meeting ends, ends the duel with win and lose poses and one bark each.
 
 ### Collecting: what the player knows
 
@@ -172,10 +173,10 @@ The glossary: a second tab on the roster (Tab or a tap on `Glossary 11/24` in th
 ### The Stakeholder
 
 - Only reachable after all six slots are beaten (the save tracks a flag per slot).
-- Never gives up the initiative. The Stakeholder's buy-in bar is full when the fight starts (the joke: they don't need yours), and the whole duel is a barrage of the six boss phrases, one after the other, in random order, no regular phrases.
-- The player's buy-in bar has four segments. Every counter fills one; three misses lose. The maths closes on the sixth phrase: four right and two misses is a win, three misses is a loss, so the last phrase always decides when it gets that far.
+- Never gives up the initiative. The whole duel is a barrage of the six boss phrases, one after the other, in random order, no regular phrases; if the meeting runs past six, the barrage goes round again without repeating the last one.
+- The player has to push the scale four steps, the Stakeholder only three. Every counter pushes one, every miss pushes back one, and the meeting ends at eight exchanges like everywhere else.
 - Every boss phrase is answered by one regular counter. The mapping is fixed in data and the same for every role. The defence menu's six options draw decoys from all three pools, so the player has to recognise the reply in a new context (the Monkey Island Sword Master trick: known counters, new phrases).
-- Momentum is the only way to get a word in. With a full bar the player interrupts: they throw one phrase from a hand of four, the Stakeholder doesn't look up, says `Let's take this offline.`, and the player fills two segments. Three fast counters then the interrupt is the flawless boss win in four exchanges, and that bark is the reward for the hardest fight.
+- Momentum is the only way to get a word in. With a full bar the player interrupts: they throw one phrase from a hand of four, the Stakeholder doesn't look up, says `Let's take this offline.`, and the player fills two segments. Two fast counters then the interrupt is the flawless boss win in three exchanges, and that bark is the reward for the hardest fight.
 - On loss, the boss bark names the pool of the counter the player last got wrong (`Have you talked to engineering about this?` when it was a Dev line, and so on). Hints are the only help, and this one is a pointer: that pool's column in the glossary has the blanks, and that role's slots are a tap away on the roster.
 - The boss can test a pair the player never heard; the counter is in the menu like anywhere else, so it is a guess, not a dead end. Losing to it once and knowing why is the intended experience. The boss is not locked behind a full glossary; that would turn the replay from a choice into homework.
 

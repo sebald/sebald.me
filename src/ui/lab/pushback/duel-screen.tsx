@@ -22,6 +22,7 @@ import {
   type Side,
   reduce,
   showsHint,
+  toLose,
   toWin,
 } from '@/lib/lab/pushback/duel';
 import { BUDDY_MISS_BARK, HINT, pairById } from '@/lib/lab/pushback/lines';
@@ -235,7 +236,7 @@ export const DuelScreen = ({
         case 'line': {
           const typed = reduced ? 0 : typingDuration(current.text);
           const done = cursor.skipped ? cursor.elapsed : typed;
-          if (elapsed >= done + holdFor(current.text)) advance();
+          if (elapsed >= done + holdFor(current.text, current.hold)) advance();
           else setCursor({ ...cursor, elapsed });
           break;
         }
@@ -349,13 +350,9 @@ export const DuelScreen = ({
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
   const bars = (side: Side) => ({
-    buyIn: shown.buyIn[side],
-    buyInTotal:
-      side === 'player'
-        ? toWin(state)
-        : state.boss
-          ? state.rules.bossBuyIn
-          : state.rules.buyIn,
+    // Until the shared scale is drawn: each side's half of it
+    buyIn: Math.max(0, side === 'player' ? shown.scale : -shown.scale),
+    buyInTotal: side === 'player' ? toWin(state) : toLose(state),
     momentum: shown.momentum[side],
     momentumTotal: state.rules.momentum,
     blinkOn: bob(clock) === 0,

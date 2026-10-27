@@ -12,6 +12,7 @@ import {
   bob,
   MIN_SCALE,
   fontSizeFor,
+  PACE,
   holdFor,
   poseOffset,
   posesFor,
@@ -77,14 +78,17 @@ describe('bars', () => {
 describe('typing', () => {
   it('reveals characters at the speed', () => {
     assert.equal(typedChars(0, 'hello'), 0);
-    assert.equal(typedChars(100, 'hello'), 3);
+    assert.equal(typedChars(120, 'hello'), 3);
     assert.equal(typedChars(5000, 'hello'), 5);
-    assert.equal(typingDuration('hello world!'), 400);
+    assert.equal(typingDuration('hello world!'), 480);
   });
 
-  it('holds longer lines a little longer, capped', () => {
+  it('holds a line long enough to read it once more, capped', () => {
     assert.ok(holdFor('Hi.') < holdFor('A much longer line of dialogue.'));
-    assert.equal(holdFor('x'.repeat(500)), 1800);
+    // Seventy characters, the line limit: about 3.5 s at 20 a second
+    assert.ok(holdFor('x'.repeat(70)) >= 3000);
+    assert.equal(holdFor('x'.repeat(500)), PACE.holdMax);
+    assert.equal(holdFor('x'.repeat(500), 700), 700);
   });
 });
 
@@ -174,7 +178,7 @@ describe('scriptFor', () => {
 
   it('says offline on the interrupt', () => {
     let s = reduce(start(true), { type: 'begin' });
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < RULES.momentum; i++) {
       s = reduce(s, { type: 'counter', phrase: s.exchange!.answer });
       s = reduce(s, { type: 'continue' });
     }
@@ -209,9 +213,17 @@ describe('scriptFor', () => {
 describe('barsLabel', () => {
   it('reads the bars in words', () => {
     const s = start();
-    assert.equal(barsLabel(s, 'player'), 'Buy-in 0 of 3, momentum 0 of 3');
+    assert.equal(barsLabel(s, 'player'), 'Even, momentum 0 of 2');
     const full = { ...s, momentum: { ...s.momentum, player: RULES.momentum } };
-    assert.equal(barsLabel(full, 'player'), 'Buy-in 0 of 3, momentum full');
+    assert.equal(barsLabel(full, 'player'), 'Even, momentum full');
+    assert.equal(
+      barsLabel({ ...s, scale: 2 }, 'player'),
+      'You lead, 2 of 3, momentum 0 of 2',
+    );
+    assert.equal(
+      barsLabel({ ...s, scale: -1 }, 'player'),
+      'They lead, 1 of 3, momentum 0 of 2',
+    );
   });
 });
 
