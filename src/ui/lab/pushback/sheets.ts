@@ -1,7 +1,7 @@
 /**
  * The sheets cut by `.claude/skills/pixel-sprite/scripts/sheet.mjs`, and
  * the sprites built from them in the browser: a base sheet drawn into a
- * canvas, recoloured and with its prop pasted into every cell (see
+ * canvas with its prop pasted into every cell (see
  * `src/lib/lab/pushback/sprites.ts`). Built once per swap and cached.
  */
 import type { StaticImageData } from 'next/image';
@@ -31,7 +31,6 @@ import {
   type SheetMeta,
   type Swap,
   handAnchor,
-  recolour,
   swapKey,
 } from '@/lib/lab/pushback/sprites';
 
@@ -88,14 +87,14 @@ const toCanvas = (image: HTMLImageElement, meta: SheetMeta) => {
   const canvas = document.createElement('canvas');
   canvas.width = meta.cell.width * meta.count;
   canvas.height = meta.cell.height;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
+  const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('No 2d context');
   ctx.imageSmoothingEnabled = false;
   ctx.drawImage(image, 0, 0);
   return { canvas, ctx };
 };
 
-/** Build the sprite of a swap: base, tints, then the prop in every cell */
+/** Build the sprite of a swap: the base, then the prop in every cell */
 const build = async (swap: Swap): Promise<Sprite> => {
   const sheet = SHEETS[swap.base];
   const [image, propImage] = await Promise.all([
@@ -103,11 +102,6 @@ const build = async (swap: Swap): Promise<Sprite> => {
     swap.prop ? loadImage(SHEETS.props.image.src) : null,
   ]);
   const { canvas, ctx } = toCanvas(image, sheet.meta);
-  if (swap.tints?.length) {
-    const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    recolour(data.data, swap.tints);
-    ctx.putImageData(data, 0, 0);
-  }
   if (swap.prop && propImage) {
     const index = PROPS.indexOf(swap.prop);
     const { width, height } = SHEETS.props.meta.cell;

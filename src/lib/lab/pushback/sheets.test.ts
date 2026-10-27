@@ -1,7 +1,6 @@
 /**
  * The sheet validator: the cut sheets under `src/assets/lab/pushback/
  * sheets/` have the cells, the sizes and the palettes the game expects,
- * and every swap's tint names a shade that is really on its base sheet.
  * Reads the PNGs with the sharp that ships with Next, like the scripts.
  */
 import assert from 'node:assert/strict';
@@ -10,15 +9,7 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { describe, it } from 'node:test';
 
-import { CHARACTERS } from './characters';
-import {
-  PROPS,
-  SHEET_IDS,
-  type SheetId,
-  type SheetMeta,
-  hexToRgb,
-  tintMatches,
-} from './sprites';
+import { PROPS, SHEET_IDS, type SheetMeta } from './sprites';
 import { LAYOUT } from './stage';
 
 const require = createRequire(import.meta.url);
@@ -105,35 +96,4 @@ describe('the prop sheet', () => {
       );
     }
   });
-});
-
-describe('swaps', () => {
-  const sheets = new Map<SheetId, ReturnType<typeof pixels>>();
-  const sheet = (id: SheetId) => {
-    let pending = sheets.get(id);
-    if (!pending) {
-      pending = pixels(id);
-      sheets.set(id, pending);
-    }
-    return pending;
-  };
-
-  for (const character of CHARACTERS) {
-    for (const tint of character.swap.tints ?? []) {
-      it(`${character.id}: the tint from #${tint.from} is a material on ${character.swap.base}`, async () => {
-        const { data, width } = await sheet(character.swap.base);
-        const from = hexToRgb(tint.from);
-        // In the idle cell, enough pixels to be a garment, not a detail
-        let matches = 0;
-        for (let y = 0; y < LAYOUT.cell.height; y++)
-          for (let x = 0; x < LAYOUT.cell.width; x++) {
-            const i = (y * width + x) * 4;
-            if (data[i + 3] === 0) continue;
-            if (tintMatches([data[i]!, data[i + 1]!, data[i + 2]!], from, tint))
-              matches++;
-          }
-        assert.ok(matches >= 60, `${matches} pixels match`);
-      });
-    }
-  }
 });

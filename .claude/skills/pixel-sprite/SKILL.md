@@ -62,8 +62,8 @@ What it does, in order:
 
 The console line says the figure heights and widths per cell and `CLIPPED`
 when a figure does not fit its cell. `pnpm test` runs `sheets.test.ts`,
-which checks every sheet's cells, the idle height (70 to 85), the palette
-and that every swap's tint shade really is on its base sheet.
+which checks every sheet's cells, the idle height (70 to 85) and the
+palette.
 
 ### Review checklist
 
@@ -91,14 +91,12 @@ swapped colleagues with their props in the hand.
 ## Swaps
 
 The nine colleagues are not drawn: `src/lib/lab/pushback/characters.ts`
-gives each a `swap` (base sheet, one tint, one prop) and the browser builds
-the sprite (`src/ui/lab/pushback/sheets.ts`). A tint names one shade of
-the material as it is on the base sheet; every pixel of that hue (or, for
-a grey, that lightness) takes the new colour at its own light and shade.
-Pick the shade from the contact print or with a colour picker on the
-PNG; `sheets.test.ts` fails when the shade matches fewer than sixty
-pixels of the idle cell, which catches a typo. The prop is pasted at the
-forward hand (`handAnchor` in `sprites.ts`).
+gives each a `swap` (a base sheet and a prop) and the browser builds the
+sprite (`src/ui/lab/pushback/sheets.ts`). Sprites keep the colours Gemini
+drew; never recolour a sheet in code. Hue-based tints caught skin and
+hair next to the garment and left pixels see-through, so they were taken
+out. A colleague that needs its own look gets its own sheet. The prop is
+pasted at the forward hand (`handAnchor` in `sprites.ts`).
 
 ## Scenes
 
