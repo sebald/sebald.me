@@ -14,18 +14,23 @@ import { BUDDY_BARKS } from './lines';
 export const BUDDY_STEPS = 3;
 
 /** Milliseconds the whisper takes when there is no silence bar to pace it */
-export const BUDDY_WINDOW_MS = 6000;
+export const BUDDY_WINDOW_MS = 8000;
+
+/**
+ * Where the three steps land on the window: not before half of it, so
+ * the ghost never shows while a fast answer is still possible, and the
+ * last one before the fallback.
+ */
+export const BUDDY_MARKS = [0.5, 0.7, 0.88] as const;
 
 /**
  * How far the whisper has got: the step the wrong counters are dimmed
- * to after `elapsed` ms. With a silence limit the steps land at 30, 55
- * and 80 percent of it, so the last step shows before the fallback and
- * the first after the momentum cutoff is close.
+ * to after `elapsed` ms, by `BUDDY_MARKS` on the silence limit or on
+ * the window.
  */
 export const buddyStep = (elapsed: number, limit: number | null): number => {
   const window = limit ?? BUDDY_WINDOW_MS;
-  const marks = [0.3, 0.55, 0.8].map(fraction => fraction * window);
-  return marks.filter(mark => elapsed >= mark).length;
+  return BUDDY_MARKS.filter(fraction => elapsed >= fraction * window).length;
 };
 
 /**

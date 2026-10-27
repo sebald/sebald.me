@@ -87,7 +87,7 @@ One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save
 
 ### The onboarding buddy
 
-The ghost of the player's predecessor in the role whispers the reply, slowly, in normal mode (see Modes). While the player hesitates on defence, the wrong counters dim in three steps; the right one and one decoy stay bright, so by the third step it is a two-way call and still the player's. The steps land at 30, 55 and 80 percent of the silence limit (or of six seconds when the bar is off), so the first one shows just before the momentum cutoff and the last one before the fallback.
+The ghost of the player's predecessor in the role whispers the reply, slowly, in normal mode (see Modes). While the player hesitates on defence, the wrong counters dim in three steps; the right one and one decoy stay bright, so by the third step it is a two-way call and still the player's. The steps land at 50, 70 and 88 percent of the silence limit (or of eight seconds when the bar is off): the ghost never shows while a fast answer is still possible, and the last step comes before the fallback.
 
 The ghost is a character, not a setting. It is off stage until the first step, then fades in behind the player's shoulder at head height, floating, and says one line in its own pale bubble; it stays until the player answers or the fallback fires. It speaks once per appearance, not on every step, so a slow player is not nagged three times an exchange. The lines are helpful and rude, in turn from a start set by the duel's seed so a duel never repeats one before it has used them all:
 

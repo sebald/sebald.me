@@ -14,10 +14,10 @@ import { BUDDY_BARKS } from './lines';
 describe('buddyStep', () => {
   it('dims in three steps across the silence limit', () => {
     assert.equal(buddyStep(0, 8000), 0);
-    assert.equal(buddyStep(2399, 8000), 0);
-    assert.equal(buddyStep(2400, 8000), 1);
-    assert.equal(buddyStep(4400, 8000), 2);
-    assert.equal(buddyStep(6400, 8000), BUDDY_STEPS);
+    assert.equal(buddyStep(3999, 8000), 0);
+    assert.equal(buddyStep(4000, 8000), 1);
+    assert.equal(buddyStep(5600, 8000), 2);
+    assert.equal(buddyStep(7040, 8000), BUDDY_STEPS);
     assert.equal(buddyStep(8000, 8000), BUDDY_STEPS);
   });
 
@@ -25,13 +25,13 @@ describe('buddyStep', () => {
     // Fast counters (before half the limit) earn momentum; the first
     // step lands just before that, so a player who waits for the
     // whisper gives momentum up.
-    assert.equal(buddyStep(8000 * 0.29, 8000), 0);
+    assert.equal(buddyStep(8000 * 0.49, 8000), 0);
     assert.equal(buddyStep(8000 * 0.5, 8000), 1);
   });
 
   it('paces itself without a silence bar', () => {
     assert.equal(buddyStep(0, null), 0);
-    assert.equal(buddyStep(BUDDY_WINDOW_MS * 0.3, null), 1);
+    assert.equal(buddyStep(BUDDY_WINDOW_MS * 0.5, null), 1);
     assert.equal(buddyStep(BUDDY_WINDOW_MS, null), BUDDY_STEPS);
   });
 });
