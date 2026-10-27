@@ -7,7 +7,7 @@ Every image the game needs, one prompt each, ready to paste. Thirteen generation
 - Pick **16:9** in Gemini (1376 by 768). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
 - **Attach the references named under each prompt** to the same message. The reference is the strongest lever on pixel size and style; the words only back it up.
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
-  - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpeg` (the Dev man's model sheet). Every character and prop sheet attaches it so scale and pixel size match across the cast.
+  - `DEV` = `src/assets/lab/pushback/sources/dev-sheet.jpg` (the Dev man's model sheet). Every character and prop sheet attaches it so scale and pixel size match across the cast.
 - Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
 - Gemini currently renders 16:9 at 2752 by 1536. Those sheets snap at an 11 px grid to figures about 82 px tall (Jo 83, Ravi 82), 8 percent taller than the Dev sheet's 76 from its 1376 px render, and inside the 70 to 85 range. Generate every remaining sheet at the same size so the rest of the cast matches Jo and Ravi, Sam included (his prompt redraws him at that size).
 - Gemini draws a soft shadow under the feet whatever the prompt says; `sheet.mjs` keys it out with the background, nothing to reroll for.
@@ -23,7 +23,7 @@ What to check before saving, in order of how expensive a miss is:
 
 ## Model sheets
 
-Seven sheets: two looks per role, so the player can pick, and the Stakeholder. The Dev man's sheet exists (`dev-sheet.jpeg`, the hoodie character) but at the old render size, so he is redrawn too; seven to generate, Jo and Ravi are done. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
+Seven sheets: two looks per role, so the player can pick, and the Stakeholder. The Dev man's sheet exists (`dev-sheet.jpg`, the hoodie character) but at the old render size, so he is redrawn too; seven to generate, Jo and Ravi are done. Each sheet is the same figure six times in a row, left to right: **idle, talk, taunt, flinch, win, lose**. The poses mean the same thing for everyone (the animation table keys on the cell index), but each role does them its own way with its prop, and the two looks of a role share the prop and the poses and nothing else.
 
 Gemini copies the attached figure when it can: the first PM roll came back with the Dev's face and hair. The prompts therefore put the new character first, in detail, and say three times that the attached sheet is a reference for size and style only. If a roll still looks like the hoodie character, use the "looks like the reference" follow-up at the end of this file rather than rerolling blind. Faces, skin tones, hair, builds and ages are spread across the six on purpose: a cast, not one person in six outfits.
 
@@ -184,9 +184,9 @@ Reroll on: hair appearing on the head in some cells, the beard changing length, 
 
 ### Dev, look one: Sam (`dev-sam-sheet.jpg`)
 
-Sam exists as `dev-sheet.jpeg`, but that render is 1376 px and snaps to a 76 px figure, 8 percent shorter than the sheets Gemini renders now. This prompt redraws the same character at the current size, so the whole cast shares one grid; the old sheet stays as the style reference for everyone else.
+Sam exists as `dev-sheet.jpg`, but that render is 1376 px and snaps to a 76 px figure, 8 percent shorter than the sheets Gemini renders now. This prompt redraws the same character at the current size, so the whole cast shares one grid; the old sheet stays as the style reference for everyone else.
 
-Attach: `DEV` (the character), `src/assets/lab/pushback/sources/pm-jo-sheet.jpeg` (the size).
+Attach: `DEV` (the character), `src/assets/lab/pushback/sources/pm-jo-sheet.jpg` (the size).
 
 ```text
 Redraw the character from the first attached sheet (the hoodie
@@ -495,7 +495,7 @@ Reroll on: a person at a desk, letters on the whiteboard or screens, desks reach
 
 #### Open-plan floor, second roll
 
-The first roll (`scene-floor.jpeg`) failed on two counts: Gemini drew it at a coarser pixel size than the other three scenes (it snaps to 305 pixels wide instead of about 458), and both desk islands reach a third of the way into the frame, straight through the areas where the duellists stand. Same chat, paste this as the follow-up, and attach `scene-meeting.jpeg` as a second reference for the pixel size:
+The first roll (`scene-floor.jpg`) failed on two counts: Gemini drew it at a coarser pixel size than the other three scenes (it snaps to 305 pixels wide instead of about 458), and both desk islands reach a third of the way into the frame, straight through the areas where the duellists stand. Same chat, paste this as the follow-up, and attach `scene-meeting.jpg` as a second reference for the pixel size:
 
 ```text
 Redraw this scene with two changes. First, the pixel size: use exactly
