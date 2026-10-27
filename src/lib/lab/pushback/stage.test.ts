@@ -20,20 +20,21 @@ import {
   scriptFor,
   typedChars,
   typingDuration,
-  figureCell,
+  scaleTicks,
+  viewFor,
 } from './stage';
 
 describe('scaleFor', () => {
-  it('is 2x wherever the stage fits at 960 by 540', () => {
-    assert.equal(scaleFor(960, 540), 2);
-    assert.equal(scaleFor(1920, 1080), 2);
-    assert.equal(scaleFor(2560, 1440), 2);
+  it('is 3x wherever the stage fits at 960 by 642', () => {
+    assert.equal(scaleFor(960, 642), 3);
+    assert.equal(scaleFor(1920, 1080), 3);
+    assert.equal(scaleFor(2560, 1440), 3);
   });
 
   it('shrinks with the narrower side below that', () => {
-    assert.equal(scaleFor(720, 600), 1.5);
-    assert.equal(scaleFor(960, 405), 1.5);
-    assert.equal(scaleFor(360, 800), 0.75);
+    assert.equal(scaleFor(640, 600), 2);
+    assert.equal(scaleFor(960, 428), 2);
+    assert.equal(scaleFor(360, 800), 1.125);
     assert.ok(scaleFor(300, 800) < MIN_SCALE);
   });
 
@@ -47,10 +48,10 @@ describe('scaleFor', () => {
 });
 
 describe('fontSizeFor', () => {
-  it('is 14 px at 2x with a 12 px floor', () => {
+  it('is 14 px at 3x with a 12 px floor', () => {
     assert.equal(fontSizeFor(1), 12);
-    assert.equal(fontSizeFor(2), 14);
-    assert.equal(fontSizeFor(3), 21);
+    assert.equal(fontSizeFor(3), 14);
+    assert.equal(fontSizeFor(4.5), 21);
   });
 });
 
@@ -61,7 +62,9 @@ describe('bars', () => {
       y: 5,
       count: 3,
       filled: 2,
-      ...LAYOUT.buyIn,
+      width: LAYOUT.ticks.width,
+      height: LAYOUT.ticks.height,
+      gap: LAYOUT.ticks.gap,
     });
     assert.deepEqual(
       rects.map(r => [r.x, r.filled]),
@@ -71,7 +74,41 @@ describe('bars', () => {
         [34, false],
       ],
     );
-    assert.equal(barWidth(3, LAYOUT.buyIn), 34);
+    assert.equal(barWidth(3, LAYOUT.ticks), 34);
+  });
+
+  it('draws the scale as ticks, the player on the left, lit to the marker', () => {
+    const even = scaleTicks({ scale: 0, toWin: 3, toLose: 3 });
+    assert.equal(even.length, 7);
+    assert.deepEqual(
+      even.map(t => t.side),
+      ['player', 'player', 'player', null, 'opponent', 'opponent', 'opponent'],
+    );
+    assert.equal(
+      even.findIndex(t => t.marker),
+      3,
+    );
+    assert.ok(even.every(t => !t.lit));
+    // Centred on the stage
+    assert.equal(even[0]!.x + even[6]!.x + even[6]!.width, 320);
+
+    const ahead = scaleTicks({ scale: 2, toWin: 3, toLose: 3 });
+    assert.deepEqual(
+      ahead.map(t => t.lit),
+      [false, true, true, false, false, false, false],
+    );
+    assert.equal(
+      ahead.findIndex(t => t.marker),
+      1,
+    );
+
+    const boss = scaleTicks({ scale: -1, toWin: 4, toLose: 3 });
+    assert.equal(boss.length, 8);
+    assert.equal(
+      boss.findIndex(t => t.marker),
+      5,
+    );
+    assert.equal(boss[5]!.lit, true);
   });
 });
 
@@ -227,8 +264,11 @@ describe('barsLabel', () => {
   });
 });
 
-describe('figureCell', () => {
-  it('doubles the sheet cell and keeps it centred on the stand', () => {
-    assert.deepEqual(figureCell(124), { x: 88, width: 144, height: 224 });
+describe('viewFor', () => {
+  it('centres the window on the duellists and puts the floor on the feet line', () => {
+    assert.deepEqual(viewFor({ left: 124, right: 284 }), { x: 80, y: 97 });
+    // Clamped to the render
+    assert.equal(viewFor({ left: 0, right: 60 }).x, 0);
+    assert.equal(viewFor({ left: 400, right: 408 }).x, 160);
   });
 });

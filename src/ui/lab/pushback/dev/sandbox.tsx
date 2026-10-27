@@ -70,7 +70,7 @@ const DEFAULTS: Options = {
   jump: 'intro',
   momentumFull: false,
   reducedMotion: false,
-  scale: 2,
+  scale: 3,
 };
 
 /** Play the reducer forward to the asked phase */

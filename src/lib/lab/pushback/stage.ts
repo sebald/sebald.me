@@ -20,64 +20,75 @@ import {
 // Geometry
 // ---------------
 
-/** Native size of the stage in pixels */
-export const STAGE = { width: 480, height: 270 } as const;
+/**
+ * The stage is one pixel grid, 320 by 214, shown at 3x (960 by 642) and
+ * shrunk as a whole below that. The room band on top shows a window of
+ * the scene render at the scene's own pixels, with the duellists at the
+ * sheets' pixels; the text panel below is drawn on the same grid, so the
+ * chrome is pixel art like the room. Only the letters are smooth.
+ */
+export const STAGE = { width: 320, height: 214 } as const;
 
-/** Where the chrome goes, in native pixels */
+/** The scene renders, and where their floor meets the feet */
+export const SCENE = { width: 480, height: 270, feet: 225 } as const;
+
+/** Where everything goes, in stage pixels */
 export const LAYOUT = {
-  /** Top strip with the bars */
-  top: 40,
-  /** Bottom strip with the dialogue box */
-  box: 45,
+  /** The room band: rows 0 to 133 */
+  band: 134,
   /** Feet line of the duellists */
-  feet: 225,
+  feet: 128,
   /** Sprite cell */
   cell: { width: 72, height: 112 },
-  buyIn: { width: 10, height: 6, gap: 2 },
-  momentum: { width: 6, height: 3, gap: 2 },
+  /** The quiet window under the band */
+  panel: { x: 3, y: 136, width: 314, height: 76 },
+  /** Inset of the text inside the panel */
+  panelPad: 6,
+  /** The shared scale across the top centre: one tick per step */
+  ticks: { y: 5, width: 10, height: 6, gap: 2 },
+  /** Momentum pips in the corners, under the names */
+  pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
+  /** The opponent's composure strip, under its pips */
+  composure: { y: 23, width: 40, height: 3 },
+  /** The names, in the corners */
+  names: { x: 6, y: 3 },
 } as const;
 
 /**
- * The duellists are drawn at this multiple of the scene's pixels: a
- * sheet figure is a third of the stage tall, and with the dialogue box
- * open only its head would show. At 2x it stands head to hip above the
- * box, Street Fighter framing, at the cost of art pixels twice the
- * room's.
+ * The window of the scene the band shows: 320 of its 480 columns, centred
+ * on the duellists, and the rows that put the scene's floor line on the
+ * stage's feet line. Stage x = scene x − view.x.
  */
-export const FIGURE_SCALE = 2;
-
-/**
- * The on-stage cell of a duellist standing at `stand` (the left edge of
- * a 1x cell, as `STANDS` gives it): the sheet cell at `FIGURE_SCALE`,
- * centred on the 1x cell, so the bars stay over the figure's head.
- */
-export const figureCell = (stand: number) => {
-  const width = LAYOUT.cell.width * FIGURE_SCALE;
+export const viewFor = (stands: { left: number; right: number }) => {
+  const centre = (stands.left + stands.right) / 2 + LAYOUT.cell.width / 2;
   return {
-    x: Math.round(stand + LAYOUT.cell.width / 2 - width / 2),
-    width,
-    height: LAYOUT.cell.height * FIGURE_SCALE,
+    x: Math.max(
+      0,
+      Math.min(SCENE.width - STAGE.width, Math.round(centre - STAGE.width / 2)),
+    ),
+    y: SCENE.feet - LAYOUT.feet,
   };
 };
 
 /**
- * The scale at which the stage fits a viewport: 2 (960 by 540) wherever
+ * The scale at which the stage fits a viewport: 3 (960 by 642) wherever
  * there is room, so the game looks the same on every screen wide enough,
  * and below that whatever fraction the width (or height) allows, so it
- * shrinks with the window instead of jumping to 1x. The canvas is drawn
- * at `BACKING` and only ever scaled down, so a fraction stays sharp.
+ * shrinks with the window instead of jumping. The canvas is drawn at
+ * `BACKING` and only ever scaled down, so a fraction stays sharp.
  */
-export const scaleFor = (width: number, height: number, max = 2): number =>
+export const scaleFor = (width: number, height: number, max = 3): number =>
   Math.min(max, width / STAGE.width, height / STAGE.height);
 
-/** Below this the box cannot hold a menu: the screens ask for landscape */
-export const MIN_SCALE = 0.75;
+/** Below this the panel cannot hold a menu: the screens ask for landscape */
+export const MIN_SCALE = 1.1;
 
 /** The canvas is drawn at this whole-number scale and scaled down by CSS */
-export const BACKING = 2;
+export const BACKING = 3;
 
-/** The overlay's font size at a scale: 14 px at 2x, never below 12 px */
-export const fontSizeFor = (scale: number): number => Math.max(12, 7 * scale);
+/** The overlay's font size at a scale: 14 px at 3x, never below 12 px */
+export const fontSizeFor = (scale: number): number =>
+  Math.max(12, Math.round((14 * scale) / 3));
 
 export interface Rect {
   x: number;
@@ -110,6 +121,52 @@ export const barWidth = (
   count: number,
   { width, gap }: { width: number; gap: number },
 ): number => count * width + (count - 1) * gap;
+
+/** One tick of the shared scale */
+export interface Tick extends Rect {
+  /** Whose side of the centre it is on; the centre tick is null */
+  side: Side | null;
+  /** Between the centre and the marker: lit for the leader */
+  lit: boolean;
+  /** The marker sits here */
+  marker: boolean;
+}
+
+/**
+ * The shared scale as ticks across the top centre, the player's side on
+ * the left: `toWin` ticks left of the centre one, `toLose` right of it.
+ * The marker is on the tick the scale points at, and the ticks between
+ * the centre and the marker are lit.
+ */
+export const scaleTicks = (options: {
+  scale: number;
+  toWin: number;
+  toLose: number;
+}): Tick[] => {
+  const { width, gap, y, height } = LAYOUT.ticks;
+  const count = options.toWin + options.toLose + 1;
+  const x0 = Math.round(STAGE.width / 2 - barWidth(count, { width, gap }) / 2);
+  return Array.from({ length: count }, (_, i) => {
+    // Steps from the centre, positive toward the player (left)
+    const step = options.toWin - i;
+    const side: Side | null =
+      step === 0 ? null : step > 0 ? 'player' : 'opponent';
+    const between =
+      step !== 0 &&
+      Math.sign(step) === Math.sign(options.scale) &&
+      Math.abs(step) <= Math.abs(options.scale);
+    return {
+      x: x0 + i * (width + gap),
+      y,
+      width,
+      height,
+      filled: between,
+      side,
+      lit: between,
+      marker: step === options.scale,
+    };
+  });
+};
 
 // Timing
 // ---------------
@@ -164,6 +221,23 @@ export const holdFor = (text: string, hold?: number): number =>
 export const bob = (elapsed: number, period = 600): number =>
   Math.floor(elapsed / (period / 2)) % 2 === 0 ? 0 : -1;
 
+/**
+ * Breathing: the standard two-frame idle, the feet planted and the upper
+ * body one pixel lower on the exhale, each frame held about half a
+ * second. The cut is at the hip, `BREATH.hip` of the figure's height
+ * from its feet; the shifted upper part overdraws the seam row. A whole
+ * sprite moved up and down reads as hopping, which is why this is not
+ * `bob`.
+ */
+export const BREATH = { period: 1000, hip: 0.5 } as const;
+
+/** 0 on the inhale, 1 (the upper body a pixel down) on the exhale */
+export const breathFrame = (pose: Pose, elapsed: number): 0 | 1 =>
+  (pose === 'idle' || pose === 'talk' || pose === 'win') &&
+  bob(elapsed, BREATH.period) !== 0
+    ? 1
+    : 0;
+
 // Poses
 // ---------------
 
@@ -180,7 +254,8 @@ export const poseOffset = (
   switch (pose) {
     case 'idle':
     case 'talk':
-      return { dx: 0, dy: bob(elapsed), lighter: false };
+      // Breathing is `breathFrame`: the feet stay put
+      return { dx: 0, dy: 0, lighter: false };
     case 'taunt': {
       // Two frames of stepping forward, then hold
       const frames = Math.min(2, Math.floor(elapsed / FRAME_MS) + 1);
@@ -198,7 +273,7 @@ export const poseOffset = (
         lighter: elapsed < FRAME_MS,
       };
     case 'win':
-      return { dx: 0, dy: bob(elapsed, 300), lighter: false };
+      return { dx: 0, dy: 0, lighter: false };
     case 'lose':
       return { dx: 0, dy: 0, lighter: false };
   }

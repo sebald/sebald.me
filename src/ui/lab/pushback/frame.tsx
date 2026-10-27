@@ -4,7 +4,13 @@ import NextImage from 'next/image';
 import type { PropsWithChildren } from 'react';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import { BACKING, FRAME_MS, STAGE } from '@/lib/lab/pushback/stage';
+import {
+  BACKING,
+  FRAME_MS,
+  LAYOUT,
+  SCENE,
+  STAGE,
+} from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
@@ -14,8 +20,9 @@ import { Stage } from './stage';
 import { useScale } from './use-scale';
 
 /**
- * The duel's frame: the scene loop under a 480 by 270 canvas drawn at
- * native size and scaled by a whole number with hard edges, plus a DOM
+ * The duel's frame: the scene loop in the room band (a window of the
+ * 480 by 270 render, at the stage's pixels) under a canvas the size of
+ * the stage, drawn at `BACKING` and scaled with hard edges, plus a DOM
  * overlay in the same frame for everything that is text. Sits in the
  * same `Stage` as the menu screens, so nothing changes size.
  */
@@ -43,7 +50,7 @@ export const Frame = ({
   const modelRef = useRef(model);
   const stepRef = useRef(onStep);
   // The scene loop under the canvas; until it has loaded the canvas paints
-  // the flat placeholder scene itself
+  // the flat placeholder band itself
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
   const { scale } = useScale(fixedScale);
@@ -114,45 +121,59 @@ export const Frame = ({
     if (ctx) drawFrame(ctx, model, { background: !sceneLoaded, sprites });
   }, [model, sceneLoaded, sprites]);
 
+  const whole = Number.isInteger(scale);
+
   return (
     <Stage label={label} scale={fixedScale} className={className}>
       {/*
-        The scene loop. At 1x the unscaled frames with hard edges; above,
-        the 8x export scaled down smoothly, so every art pixel keeps the
-        same size (scaling up would blur, `pixelated` would round pixels to
+        The room band: a window of the scene loop. At a whole scale the
+        8x export is sampled with hard edges, which lands exactly on the
+        art's pixels; at a fraction it is scaled down smoothly, so every
+        art pixel keeps the same width (`pixelated` would round them to
         uneven widths). The poster replaces it under reduced motion.
       */}
-      <picture
-        key={sceneKey}
-        className={cn(
-          'absolute inset-0 transition-opacity duration-300',
-          sceneLoaded ? 'opacity-100' : 'opacity-0',
-        )}
+      <div
+        className="absolute inset-x-0 top-0 overflow-hidden"
+        style={{ height: `calc(var(--px) * ${LAYOUT.band})` }}
       >
-        <source
-          media="(prefers-reduced-motion: reduce)"
-          srcSet={assets.poster.src}
-        />
-        <NextImage
-          src={loop}
-          alt=""
-          width={STAGE.width}
-          height={STAGE.height}
-          // Animated and pre-scaled with hard edges: never resized by the
-          // optimizer
-          unoptimized
-          loading="eager"
-          onLoad={() => setLoadedScene(sceneKey)}
+        <picture
+          key={sceneKey}
           className={cn(
-            'absolute inset-0 h-full w-full',
-            scale === 1 && '[image-rendering:pixelated]',
+            'absolute transition-opacity duration-300',
+            sceneLoaded ? 'opacity-100' : 'opacity-0',
           )}
-        />
-      </picture>
+          style={{
+            left: `calc(var(--px) * ${-model.view.x})`,
+            top: `calc(var(--px) * ${-model.view.y})`,
+            width: `calc(var(--px) * ${SCENE.width})`,
+            height: `calc(var(--px) * ${SCENE.height})`,
+          }}
+        >
+          <source
+            media="(prefers-reduced-motion: reduce)"
+            srcSet={assets.poster.src}
+          />
+          <NextImage
+            src={loop}
+            alt=""
+            width={SCENE.width}
+            height={SCENE.height}
+            // Animated and pre-scaled with hard edges: never resized by the
+            // optimizer
+            unoptimized
+            loading="eager"
+            onLoad={() => setLoadedScene(sceneKey)}
+            className={cn(
+              'absolute inset-0 h-full w-full',
+              whole && '[image-rendering:pixelated]',
+            )}
+          />
+        </picture>
+      </div>
       {/*
-        Drawn at 2x and scaled down by CSS: exact at 2x and 1x, and a
-        fraction between stays sharp where `pixelated` would round the
-        art's pixels to uneven widths
+        Drawn at 3x and scaled down by CSS: exact at 3x, and a fraction
+        below stays sharp where `pixelated` would round the art's pixels
+        to uneven widths
       */}
       <canvas
         ref={canvasRef}

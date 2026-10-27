@@ -61,8 +61,8 @@ export const buddyLine = (exchange: number, seed: number): string =>
 
 /** Where the ghost floats: behind the player's shoulder */
 export const GHOST = {
-  /** Left of the player's drawn cell, in native pixels */
-  behind: 80,
+  /** Left of the player's cell, in stage pixels */
+  behind: 36,
   /** Above the feet line; its tail brushes the floor, its head is under the bars */
   lift: 0,
 } as const;

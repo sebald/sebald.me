@@ -9,7 +9,7 @@ import {
   STANDS,
   SCENE_OF,
 } from '@/lib/lab/pushback/characters';
-import { LAYOUT, STAGE, figureCell } from '@/lib/lab/pushback/stage';
+import { LAYOUT, SCENE, STAGE, viewFor } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { SCENE_ASSETS, loopFor } from '../scenes';
@@ -34,8 +34,9 @@ export const SceneViewer = () => {
   const assets = SCENE_ASSETS[scene];
   const image = still ? assets.poster : loopFor(assets, scale);
   const stands = STANDS[scene];
-  const width = STAGE.width * scale;
-  const height = STAGE.height * scale;
+  const view = viewFor(stands);
+  const width = SCENE.width * scale;
+  const height = SCENE.height * scale;
   const usedBy = (Object.keys(SCENE_OF) as (keyof typeof SCENE_OF)[])
     .filter(role => SCENE_OF[role] === scene)
     .join(', ');
@@ -131,8 +132,8 @@ export const SceneViewer = () => {
         <NextImage
           src={image}
           alt=""
-          width={STAGE.width}
-          height={STAGE.height}
+          width={SCENE.width}
+          height={SCENE.height}
           unoptimized
           className={cn(
             'absolute inset-0 h-full w-full',
@@ -159,36 +160,28 @@ export const SceneViewer = () => {
               'clear band, right',
             )}
             {outline(
-              figureCell(stands.left).x,
-              LAYOUT.feet - figureCell(stands.left).height,
-              figureCell(stands.left).width,
-              figureCell(stands.left).height,
+              stands.left,
+              SCENE.feet - LAYOUT.cell.height,
+              LAYOUT.cell.width,
+              LAYOUT.cell.height,
               'border-amber-300 text-amber-200',
               `player ${stands.left}`,
             )}
             {outline(
-              figureCell(stands.right).x,
-              LAYOUT.feet - figureCell(stands.right).height,
-              figureCell(stands.right).width,
-              figureCell(stands.right).height,
+              stands.right,
+              SCENE.feet - LAYOUT.cell.height,
+              LAYOUT.cell.width,
+              LAYOUT.cell.height,
               'border-amber-300 text-amber-200',
               `opponent ${stands.right}`,
             )}
             {outline(
-              0,
-              0,
+              view.x,
+              view.y,
               STAGE.width,
-              LAYOUT.top,
-              'border-mist-300/50 text-mist-300',
-              'bars',
-            )}
-            {outline(
-              0,
-              LAYOUT.feet,
-              STAGE.width,
-              STAGE.height - LAYOUT.feet,
-              'border-mist-300/50 text-mist-300',
-              'dialogue box',
+              LAYOUT.band,
+              'border-mist-300/70 text-mist-300',
+              `the band, from ${view.x}, ${view.y}`,
             )}
           </>
         ) : null}
@@ -198,9 +191,9 @@ export const SceneViewer = () => {
         {CHARACTERS.filter(c => SCENE_OF[c.role] === scene)
           .map(c => c.name)
           .join(', ')}
-        . The drawn cells are {figureCell(0).width} by {figureCell(0).height}{' '}
-        with the feet on y {LAYOUT.feet}; the figures must not overlap
-        furniture.
+        . The cells are {LAYOUT.cell.width} by {LAYOUT.cell.height} with the
+        feet on y {SCENE.feet}; the figures must not overlap furniture, and the
+        band is what the stage shows of the render.
       </p>
     </section>
   );

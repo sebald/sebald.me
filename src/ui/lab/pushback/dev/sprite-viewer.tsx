@@ -183,7 +183,7 @@ export const SpriteViewer = () => {
         style={{ width: width * scale }}
       >
         {ENTRIES.map(e => (
-          <li key={e.key}>{e.label}</li>
+          <li key={e.label}>{e.label}</li>
         ))}
       </ol>
     </section>

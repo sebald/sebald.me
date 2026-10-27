@@ -2,6 +2,7 @@
 
 import {
   useCallback,
+  useEffect,
   useLayoutEffect,
   useMemo,
   useReducer,
@@ -27,6 +28,7 @@ import {
   toWin,
 } from '@/lib/lab/pushback/duel';
 import { BUDDY_MISS_BARK, HINT, pairById } from '@/lib/lab/pushback/lines';
+import { playerName } from '@/lib/lab/pushback/save';
 import {
   PLAYER_SHEETS,
   type Swap,
@@ -36,13 +38,12 @@ import {
 } from '@/lib/lab/pushback/sprites';
 import {
   type Step,
-  FIGURE_SCALE,
   LAYOUT,
   STAGE,
   barsLabel,
   bob,
+  breathFrame,
   counterText,
-  figureCell,
   holdFor,
   phraseText,
   poseOffset,
@@ -50,6 +51,7 @@ import {
   scriptFor,
   typedChars,
   typingDuration,
+  viewFor,
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
@@ -60,54 +62,70 @@ import { useKeys } from './use-keys';
 
 // Styles
 // ---------------
+/** Inset of the text from the stage edge: the window's frame plus padding */
+const INSET = LAYOUT.panel.x + LAYOUT.panelPad;
+
 const styles = {
-  box: cva({
+  // The text inside the drawn window. It sits on the window's fill and,
+  // when a menu is taller than the window at a small scale, grows upward
+  // over the band on the same fill.
+  panel: cva({
     base: [
-      // Over the drawn dialogue box; grows upward past it at 1x
-      'absolute right-[calc(var(--px)*6)] bottom-[calc(var(--px)*5)] left-[calc(var(--px)*6)]',
-      'min-h-[calc(var(--px)*38)] p-[calc(var(--px)*4)]',
-      // Same fill and frame as the drawn box, so it grows past it seamlessly
-      'bg-[#171a22] ring-[length:var(--px)] ring-[#e6e2d6] shadow-[0_0_0_calc(var(--px)*2)_#0b0d12]',
-      'flex flex-col justify-end gap-[calc(var(--px)*2)]',
-      'leading-tight',
+      'absolute flex flex-col justify-start gap-[calc(var(--px)*2)]',
+      'bg-[#131829] leading-[1.35] text-[#c9c4b4]',
     ],
   }),
   line: cva({
     base: 'flex items-start gap-[calc(var(--px)*3)]',
   }),
   speaker: cva({
-    base: 'mt-[0.35em] inline-block size-[0.6em] shrink-0',
+    base: 'mt-[0.4em] inline-block size-[0.55em] shrink-0',
     variants: {
       side: {
-        player: 'bg-[#2f8f8a]',
-        opponent: 'bg-[#c0622f]',
+        player: 'bg-[#f2c14e]',
+        opponent: 'bg-[#f0a36f]',
+      },
+    },
+  }),
+  // The names in the corners, over the pips
+  name: cva({
+    base: 'absolute font-semibold tracking-wide uppercase',
+    variants: {
+      side: {
+        player: 'text-[#f2c14e]',
+        opponent: 'text-right text-[#f0a36f]',
       },
     },
   }),
   badge: cva({
     base: [
-      'absolute top-[calc(var(--px)*4)] left-1/2 -translate-x-1/2',
-      'rounded-sm bg-mist-50 px-[0.5em] py-[0.1em] font-semibold text-mist-950',
-      '[text-shadow:none]',
+      'absolute left-1/2 -translate-x-1/2',
+      'bg-[#f2c14e] px-[0.5em] py-[0.1em] font-semibold text-[#0b0d16]',
     ],
   }),
-  hint: cva({ base: 'text-mist-400' }),
+  hint: cva({ base: 'text-[#8a92b8]' }),
   // The ghost's speech bubble, over its head, in its own pale colour
   bubble: cva({
     base: [
-      'absolute max-w-[24em] rounded-lg px-[0.6em] py-[0.3em]',
+      'absolute max-w-[24em] px-[0.6em] py-[0.3em]',
       'bg-[#0b1516]/90 text-[0.85em] text-[#bfe8ea] ring-1 ring-[#2f5e60]',
       'transition-opacity duration-300',
     ],
   }),
   silence: cva({
-    base: 'mt-[calc(var(--px)*2)] h-[var(--px)] w-full bg-mist-700',
+    base: [
+      'mt-[calc(var(--px)*2)] h-[calc(var(--px)*2)] w-full',
+      'bg-[#0b0e1a] shadow-[0_0_0_var(--px)_#0b0d16]',
+    ],
   }),
   pause: cva({
-    base: ['absolute inset-0 flex items-center justify-center bg-mist-950/80'],
+    base: ['absolute inset-0 flex items-center justify-center bg-[#07080d]/80'],
   }),
-  panel: cva({
-    base: 'grid w-[60%] gap-4 rounded-xl bg-mist-900 p-[calc(var(--px)*6)] ring-1 ring-mist-700',
+  pausePanel: cva({
+    base: [
+      'grid w-[60%] gap-4 bg-[#131829] p-[calc(var(--px)*6)]',
+      'ring-[length:var(--px)] ring-[#b7b09d] shadow-[0_0_0_calc(var(--px)*2)_#0b0d16]',
+    ],
   }),
 };
 
@@ -170,6 +188,8 @@ const scriptKey = (state: DuelState) =>
     state.hand.join(','),
   ].join('|');
 
+const px = (n: number) => `calc(var(--px) * ${n})`;
+
 export const DuelScreen = ({
   initial,
   look,
@@ -200,6 +220,16 @@ export const DuelScreen = ({
   useLayoutEffect(() => {
     stateRef.current = state;
   });
+
+  // The stage is taller than a short window: bring its bottom (the panel)
+  // into view when the duel starts, so the text is never below the fold
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (scale !== undefined) return;
+    rootRef.current
+      ?.closest('[data-stage]')
+      ?.scrollIntoView({ block: 'end', behavior: 'smooth' });
+  }, [scale]);
 
   const steps = useMemo(() => scriptFor(state), [state]);
   // A new script starts at step 0 in the same render, so a stale elapsed
@@ -335,10 +365,15 @@ export const DuelScreen = ({
   const { character } = state.setup;
   const scene = SCENE_OF[character.role];
   const stands = STANDS[scene];
+  const view = viewFor(stands);
+  const standX: Record<Side, number> = {
+    player: stands.left - view.x,
+    opponent: stands.right - view.x,
+  };
   const poses = posesFor(state, step);
   const ghost: FrameModel['ghost'] = ghostLine
     ? {
-        x: figureCell(stands.left).x - GHOST.behind,
+        x: standX.player - GHOST.behind,
         dy: GHOST.lift + (reduced ? 0 : bob(clock, 1200)),
         cell: ghostCell(whisper, reduced ? 0 : clock),
         opacity: 1,
@@ -348,16 +383,23 @@ export const DuelScreen = ({
     () => ({ base: PLAYER_SHEETS[state.setup.role][look] }),
     [state.setup.role, look],
   );
+  // The colleagues are drawn without their props: pasted at the hand they
+  // dangled, so the prop is shown on the roster instead
+  const opponentSwap: Swap = useMemo(
+    () => ({ base: character.swap.base }),
+    [character.swap.base],
+  );
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
-  const bars = (side: Side) => ({
-    // Until the shared scale is drawn: each side's half of it
-    buyIn: Math.max(0, side === 'player' ? shown.scale : -shown.scale),
-    buyInTotal: side === 'player' ? toWin(state) : toLose(state),
-    momentum: shown.momentum[side],
+  const hud: FrameModel['hud'] = {
+    scale: shown.scale,
+    toWin: toWin(state),
+    toLose: toLose(state),
+    momentum: shown.momentum,
     momentumTotal: state.rules.momentum,
+    composure: 1 - state.rules.fatigue * shown.exchanges,
     blinkOn: bob(clock) === 0,
-  });
+  };
   const sprite = (side: Side) => {
     const pose = poses[side];
     const offset = reduced
@@ -368,21 +410,23 @@ export const DuelScreen = ({
           side === 'player' ? 1 : -1,
           state.exchange?.micDrop === true && state.exchange.by === side,
         );
-    const swap = side === 'player' ? playerSwap : character.swap;
+    const swap = side === 'player' ? playerSwap : opponentSwap;
     return {
-      x: side === 'player' ? stands.left : stands.right,
+      x: standX[side],
       pose,
       cell: cellFor(pose, reduced ? 0 : cursor.elapsed, !typingDone),
       swap,
       key: swapKey(swap),
       ...offset,
+      breath: reduced ? 0 : breathFrame(pose, clock),
       mirrored: side === 'opponent',
     };
   };
   const model: FrameModel = {
     scene,
+    view,
     sprites: { player: sprite('player'), opponent: sprite('opponent') },
-    bars: { player: bars('player'), opponent: bars('opponent') },
+    hud,
     ghost,
   };
 
@@ -464,6 +508,15 @@ export const DuelScreen = ({
       ? Math.min(100, (state.silence.elapsed / state.silence.limit) * 100)
       : null;
 
+  // The text box inside the window, in stage pixels
+  const panel = {
+    left: INSET,
+    right: INSET,
+    bottom:
+      STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height) + LAYOUT.panelPad,
+    minHeight: LAYOUT.panel.height - 2 * LAYOUT.panelPad,
+  };
+
   return (
     <Frame
       model={model}
@@ -473,12 +526,31 @@ export const DuelScreen = ({
       scale={scale}
       className={className}
     >
-      <div aria-live="polite" className="sr-only">
+      <div ref={rootRef} aria-live="polite" className="sr-only">
         {announce}
       </div>
 
+      <span
+        className={styles.name({ side: 'player' })}
+        style={{ left: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
+        aria-hidden
+      >
+        {playerName(state.setup.role, look)}
+      </span>
+      <span
+        className={styles.name({ side: 'opponent' })}
+        style={{ right: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
+        aria-hidden
+      >
+        {character.name}
+      </span>
+
       {micDropLabel && (
-        <div className={styles.badge()} aria-hidden>
+        <div
+          className={styles.badge()}
+          style={{ top: px(LAYOUT.ticks.y + LAYOUT.ticks.height + 6) }}
+          aria-hidden
+        >
           Mic drop!
         </div>
       )}
@@ -488,15 +560,17 @@ export const DuelScreen = ({
           className={styles.bubble()}
           style={{
             // Over the ghost's head, which is just under the bars
-            left: `calc(var(--px) * ${ghost.x + 8})`,
-            bottom: `calc(var(--px) * ${STAGE.height - LAYOUT.feet + ghost.dy + LAYOUT.cell.height * FIGURE_SCALE - 50})`,
+            left: px(ghost.x + 4),
+            bottom: px(
+              STAGE.height - LAYOUT.feet + ghost.dy + LAYOUT.cell.height - 26,
+            ),
           }}
         >
           {ghostLine}
         </p>
       )}
 
-      {/* Tap the stage to skip typing or move on; the box is for the menus */}
+      {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button
         type="button"
         aria-label="Continue"
@@ -505,7 +579,15 @@ export const DuelScreen = ({
         onClick={() => !paused && step?.kind !== 'menu' && confirm()}
       />
 
-      <div className={styles.box()}>
+      <div
+        className={styles.panel()}
+        style={{
+          left: px(panel.left),
+          right: px(panel.right),
+          bottom: px(panel.bottom),
+          minHeight: px(panel.minHeight),
+        }}
+      >
         {step?.kind === 'line' && (
           <p className={styles.line()}>
             <span
@@ -517,7 +599,7 @@ export const DuelScreen = ({
         )}
         {step?.kind === 'reveal' && (
           <>
-            <p className={cn(styles.line(), 'text-mist-400')}>
+            <p className={cn(styles.line(), 'text-[#8a92b8]')}>
               <span
                 className={styles.speaker({ side: 'player' })}
                 aria-hidden
@@ -531,7 +613,7 @@ export const DuelScreen = ({
           <>
             {showsHint(state) && <p className={styles.hint()}>{HINT}</p>}
             {state.phase === 'defend' && state.exchange && (
-              <p className={cn(styles.line(), 'text-mist-400')}>
+              <p className={cn(styles.line(), 'text-[#8a92b8]')}>
                 <span
                   className={styles.speaker({ side: 'opponent' })}
                   aria-hidden
@@ -548,7 +630,7 @@ export const DuelScreen = ({
             {silenceWidth !== null && (
               <div className={styles.silence()} aria-hidden>
                 <div
-                  className="h-full bg-mist-100"
+                  className="h-full bg-[#ddb65a]"
                   style={{ width: `${silenceWidth}%` }}
                 />
               </div>
@@ -565,7 +647,7 @@ export const DuelScreen = ({
 
       {paused && (
         <div className={styles.pause()}>
-          <div className={styles.panel()}>
+          <div className={styles.pausePanel()}>
             <p className="text-center">Paused</p>
             <Menu
               label="Pause"

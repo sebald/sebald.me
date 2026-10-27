@@ -4,7 +4,7 @@ import type { CSSProperties, PropsWithChildren } from 'react';
 import { useEffect, useState } from 'react';
 
 import { STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
-import { cva } from '@/lib/styles.utils';
+import { cn, cva } from '@/lib/styles.utils';
 
 import { useScale } from './use-scale';
 
@@ -13,30 +13,30 @@ import { useScale } from './use-scale';
 const styles = {
   root: cva({
     base: [
-      // The 480 by 270 stage at a whole-number scale, as a dark panel
-      // until a scene lands; text is DOM in the site's mono font, like
-      // the hotspot remarks, sized from the scale (so em units inside)
-      'relative overflow-hidden rounded-2xl',
-      'bg-mist-950 text-mist-100',
-      '[text-shadow:0_1px_0_var(--color-mist-950)]',
+      // The 320 by 214 stage at its scale, the panel's dark ground until
+      // a scene lands; text is DOM in the site's mono font, like the
+      // hotspot remarks, sized from the scale (so em units inside), smooth
+      // and without a shadow
+      'relative overflow-hidden',
+      'bg-[#07080d] text-[#c9c4b4]',
       'select-none',
     ],
   }),
   portrait: cva({
-    base: 'rounded-2xl bg-mist-950 p-6 text-center font-mono text-sm text-mist-200',
+    base: 'bg-[#07080d] p-6 text-center font-mono text-sm text-[#c9c4b4]',
   }),
   center: cva({
     base: 'absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center',
   }),
   title: cva({
-    base: 'text-[2em] font-semibold tracking-wide text-mist-50',
+    base: 'text-[2em] font-semibold tracking-wide text-[#f3eedc]',
   }),
-  muted: cva({ base: 'text-mist-400' }),
+  muted: cva({ base: 'text-[#8a92b8]' }),
   box: cva({
     base: [
-      // The dialogue box: over the floor strip, two rows of text
-      'absolute inset-x-3 bottom-3 rounded-xl p-3',
-      'bg-mist-900/90 ring-1 ring-mist-700',
+      // A window like the duel's panel, for the menu screens
+      'absolute inset-x-3 bottom-3 p-3',
+      'bg-[#131829] ring-[length:var(--px)] ring-[#b7b09d] shadow-[0_0_0_calc(var(--px)*2)_#0b0d16]',
     ],
   }),
   corner: cva({
@@ -45,15 +45,15 @@ const styles = {
   menu: cva({ base: 'grid gap-1' }),
   item: cva({
     base: [
-      'flex w-full items-center gap-2 rounded-lg px-3 py-1.5 text-left',
+      'flex w-full items-center gap-[calc(var(--px)*3)] px-[calc(var(--px)*2)] py-[0.15em] text-left',
       'cursor-pointer transition-colors duration-100',
       'outline-none focus-visible:ui-focus',
       'disabled:cursor-default disabled:opacity-40',
     ],
     variants: {
       selected: {
-        true: 'bg-mist-100 text-mist-900',
-        false: 'text-mist-200 hover:bg-mist-700/60',
+        true: 'text-white',
+        false: 'text-[#d6d1c2] hover:text-white',
       },
     },
     defaultVariants: { selected: false },
@@ -84,7 +84,7 @@ export const Stage = ({
   if (portrait && !fixed) {
     return (
       <section data-stage aria-label={label} className={styles.portrait()}>
-        Turn your phone sideways: the stage is 480 pixels wide.
+        Turn your phone sideways: the stage needs 360 pixels.
       </section>
     );
   }
@@ -230,9 +230,15 @@ export const Menu = ({
               item.onSelect();
             }}
           >
-            <span aria-hidden className="w-3 shrink-0">
-              {i === current ? '›' : ''}
-            </span>
+            {/* The cursor: a pixel triangle on the stage's grid */}
+            <span
+              aria-hidden
+              className={cn(
+                'h-[calc(var(--px)*7)] w-[calc(var(--px)*4)] shrink-0 bg-current',
+                '[clip-path:polygon(0_0,100%_50%,0_100%)]',
+                i === current ? 'opacity-100' : 'opacity-0',
+              )}
+            />
             <span
               className="min-w-0 flex-1 transition-opacity duration-500"
               style={item.dim === undefined ? undefined : { opacity: item.dim }}
