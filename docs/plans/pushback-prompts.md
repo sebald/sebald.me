@@ -385,7 +385,7 @@ With props gone, two colleagues per role share a player's sheet (the Head of Pro
 
 #### PM, look three: Nadia, the Head of Product (`pm-nadia-sheet.jpg`)
 
-First roll: all six cells right, but at the finer pixel pitch (92 px tall); kept on disk, not in the cast. Second roll pending, with the pixel count in the layout line below (a fresh chat, not the size follow-up).
+First roll: all six cells right, but 92 px tall (the cast is 78 to 82); in the game for now. Second roll with the pixel count in the layout line below: 90 px, the number was ignored again (`originals/pm-nadia-sheet-2.jpeg`). Third roll, the one to paste now, is the **ruler prompt** further down: Jo stands in the picture as the measure, since relative size inside one image is the only lever Gemini obeys.
 
 Attach: `HEADER`, `DEV`.
 
@@ -439,6 +439,58 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 ```
 
 Reroll on: any resemblance to the attached hoodie character, the bob changing length or colour between cells, a figure taller than the attached sheet (blazers tempt Gemini into drawing bigger), a logo on the mug, the blazer turning into a suit jacket with a tie.
+
+**Third roll, the ruler prompt.** Attach only Jo's sheet (`src/assets/lab/pushback/sources/pm-jo-sheet.jpg`), in a fresh chat. Jo's idle figure is redrawn at the left of the row as the ruler and Nadia's six cells follow at the same height; the cutter crops Jo off afterwards (`sheet.mjs … --cells 7`, then the first cell is dropped). Seven figures in one row is tight at this pixel size, so the prompt says to close the gaps rather than shrink the pixels; if Gemini shrinks them anyway the figures come out tall again and it is a reroll.
+
+```text
+The attached image is a pixel-art character model sheet from a 1990s
+point-and-click adventure game. Draw a new sheet in exactly the same
+style, with exactly the same pixel size: your pixels are the same size
+as the attached image's pixels, not smaller. Plain flat dark background
+like the attached, no floor, no shadow, no frame, 16:9.
+
+The row has seven figures, side by side, left to right, all standing on
+the same floor line, front three-quarter view facing right, with small
+clear gaps between them and nothing touching the edge of the image.
+
+Figure 1 is the first figure of the attached sheet, copied exactly as
+it is: same size, same colours, same pose. It is the ruler for the rest.
+
+Figures 2 to 7 are a NEW character, a clearly different person from
+the one in the attached sheet, and each of them is EXACTLY as tall as
+figure 1: the top of the head on the same row as figure 1's head, the
+soles on the same row as figure 1's soles. Not taller. If seven figures
+do not fit, make the gaps smaller; never make the pixels smaller and
+never make figure 1 smaller.
+
+The new character: the head of product, a woman in her mid fifties,
+straight-backed, olive skin, a silver-grey chin-length bob with a blunt
+fringe, small stud earrings, a calm face with one eyebrow always a
+little higher than the other. A dark green blazer over a plain cream
+top, slim black trousers, flat black shoes. No lanyard, no notebook, no
+laptop. In the right hand a tall steel travel mug held like a sceptre;
+the left hand in the blazer pocket whenever it is not needed. Identical
+in size, colours and clothing in all six of her figures. Three or four
+shades per material, a dark outline only on the silhouette, big simple
+shapes, detail suggested with a few pixels.
+
+Her six figures, left to right:
+2. idle: standing straight, left hand in the pocket, the mug at chest
+   height, looking right with the raised eyebrow.
+3. talking: mouth open, the mug lifted a little as if making a point
+   with it, the left hand out of the pocket, palm up.
+4. taunt: leaning back a little, the mug raised to the right in a slow
+   toast, eyes half closed.
+5. flinch: a small step back, the mug clutched to the chest with both
+   hands, eyes wide, a drop of coffee flying out of it.
+6. win: a single nod, the mug raised high, the other hand in the pocket.
+7. lose: head tilted down, looking into the empty mug, shoulders
+   dropped, the left hand hanging.
+
+No text, letters, numbers, logos, UI, borders, frames or signatures.
+```
+
+What to check: figure 1 is Jo as on her sheet and Nadia's heads and feet line up with hers; the pixels are the same size as Jo's sheet (if the whole row looks finer, reroll, do not use the half-resolution follow-up: it would shrink Jo too). Save as `pm-nadia-sheet.jpg` over the old one once it passes.
 
 #### Dev, look three: Bo, the Architect (`dev-bo-sheet.jpg`)
 
