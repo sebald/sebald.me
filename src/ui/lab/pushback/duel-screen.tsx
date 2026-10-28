@@ -61,6 +61,7 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cva } from '@/lib/styles.utils';
 
+import { Banner } from './banner';
 import { Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
@@ -71,7 +72,7 @@ import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
 import { px } from './stage';
-import { Loud, Muted } from './text';
+import { Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
@@ -79,6 +80,9 @@ import { Legend, Window } from './window';
 
 // Styles
 // ---------------
+/** The demo's banner: its top, over the people's legs, clear of their faces */
+const DEMO_BANNER_Y = 88;
+
 const styles = {
   silence: cva({
     base: [
@@ -622,24 +626,8 @@ export const DuelScreen = ({
         still={reduced}
       />
 
-      {auto && (
-        // The arcade stamp: DEMO across the whole stage, see-through,
-        // blinking, with the way in under it
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 opacity-55"
-          style={{ height: px(LAYOUT.band) }}
-        >
-          <Loud className="flex h-full flex-col items-center justify-center text-center text-(--pb-heading) uppercase [--blink-low:0]">
-            <span className="text-[11em] leading-none font-bold tracking-[0.12em]">
-              Demo
-            </span>
-            <span className="mt-[0.5em] text-[1em] font-semibold tracking-[0.1em]">
-              Press Enter to play
-            </span>
-          </Loud>
-        </div>
-      )}
+      {/* The arcade banner across the room, over the people's middle */}
+      {auto && <Banner y={DEMO_BANNER_Y} />}
 
       {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button

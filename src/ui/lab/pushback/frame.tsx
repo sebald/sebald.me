@@ -8,6 +8,7 @@ import type { SceneId } from '@/lib/lab/pushback/characters';
 import { FRAME_MS, LAYOUT, SCENE, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
+import { fadeMask } from './dither';
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
 import { Stage, useStage } from './stage';
@@ -84,31 +85,6 @@ export const Room = ({ scene, view, scale = 1, onLoad }: RoomProps) => {
       />
     </picture>
   );
-};
-
-/** The 4 by 4 ordered dither: the order pixels light up in */
-const BAYER = [
-  [0, 8, 2, 10],
-  [12, 4, 14, 6],
-  [3, 11, 1, 9],
-  [15, 7, 13, 5],
-] as const;
-
-/**
- * A mask of `rows` stage pixels that fades from full at the top to none
- * at the bottom in an ordered dither, a pixel on or off and nothing
- * between, four columns wide and repeated across
- */
-const fadeMask = (rows: number) => {
-  const rects: string[] = [];
-  for (let y = 0; y < rows; y++) {
-    const level = 16 * (1 - (y + 0.5) / rows);
-    for (let x = 0; x < 4; x++)
-      if (BAYER[y % 4]![x]! < level)
-        rects.push(`<rect x="${x}" y="${y}" width="1" height="1"/>`);
-  }
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="${rows}" shape-rendering="crispEdges" fill="white">${rects.join('')}</svg>`;
-  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 };
 
 interface ReflectionProps {

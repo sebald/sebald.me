@@ -5,6 +5,7 @@ import type { PropsWithChildren } from 'react';
 import { Headline } from '@/ui/headline';
 import { Text } from '@/ui/text';
 
+import { BannerDemo } from './banner-demo';
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { PaletteDemo, PickerDemo, TextDemo } from './foundations';
@@ -94,6 +95,12 @@ export const Inventory = () => (
       blurb="The names, the momentum pips and the shared scale as a beam clash, every number on a control."
     >
       <HudDemo />
+    </Section>
+    <Section
+      title="Banner"
+      blurb="The attract mode's label across the room: a dark stripe dithered out at its edges, DEMO in gold and the way in blinking."
+    >
+      <BannerDemo />
     </Section>
     <Section
       title="Result"
