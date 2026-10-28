@@ -1,7 +1,13 @@
 'use client';
 
 import NextImage from 'next/image';
-import { useEffect, useState } from 'react';
+import {
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
@@ -51,6 +57,37 @@ const MODE_BLURBS: Record<Mode, string> = {
   hard: 'No ghost, less time, longer menus, colleagues who tire slowly. Stars for flawless duels.',
 };
 
+/**
+ * How it works, in the quiet window under the band. Stuck to the bottom
+ * edge with the panel's height as a minimum: where the lines wrap on a
+ * small stage, the window grows upward over the scene.
+ */
+const HowTo = ({ legend }: { legend: ReactNode }) => {
+  const { panel } = LAYOUT;
+  return (
+    <Window
+      className="absolute"
+      style={{
+        left: px(panel.x),
+        bottom: px(STAGE.height - panel.y - panel.height),
+        width: px(panel.width),
+        minHeight: px(panel.height),
+      }}
+      legend={legend}
+    >
+      <Heading className="text-[0.85em]">How it works</Heading>
+      <ol className="m-0 mt-[calc(var(--px)*2)] grid list-none gap-[calc(var(--px)*1)] p-0 text-[0.85em]">
+        {HOW_TO.map((line, i) => (
+          <li key={i} className="flex gap-[1ch]">
+            <span className="text-(--pb-gold)">{i + 1}.</span>
+            <span>{line}</span>
+          </li>
+        ))}
+      </ol>
+    </Window>
+  );
+};
+
 /** How long the reset stays armed, waiting for the second press */
 const ARMED_MS = 4000;
 
@@ -90,7 +127,8 @@ const MODIFIERS = new Set([
  * scene. Any key or a tap opens the menu: the logo slides to the top of
  * the band and the menu takes the quiet window below, so the title is
  * the start screen with its menu open, not a second screen. On a first
- * visit the window under the splash explains the game in four lines.
+ * visit the window under the splash explains the game in four lines,
+ * and `How to play` in the menu shows them again.
  */
 export const TitleScreen = ({
   mode,
@@ -101,6 +139,22 @@ export const TitleScreen = ({
   firstVisit = false,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
+  // The how-to again, from the menu; Enter, Escape or a tap goes back
+  const [reading, setReading] = useState(false);
+  const [returned, setReturned] = useState(false);
+  const closeHowTo = useCallback(() => {
+    setReading(false);
+    setReturned(true);
+  }, []);
+  useKeys(
+    useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
+    reading,
+  );
+  useEffect(() => {
+    if (!reading) return;
+    window.addEventListener('pointerdown', closeHowTo);
+    return () => window.removeEventListener('pointerdown', closeHowTo);
+  }, [reading, closeHowTo]);
   const kind = useInputKind();
 
   // Attract mode: a key or a tap resets the clock, silence starts the demo
@@ -154,6 +208,7 @@ export const TitleScreen = ({
       label: `Mode: ${MODE_LABELS[mode]}`,
       onSelect: () => onMode(mode === 'normal' ? 'hard' : 'normal'),
     },
+    { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
   ];
   if (onReset)
     items.push({
@@ -199,7 +254,11 @@ export const TitleScreen = ({
         />
       </h2>
 
-      {open ? (
+      {open && reading ? (
+        <HowTo
+          legend={<Legend keys={[['Enter', 'back']]} touch="Tap to go back" />}
+        />
+      ) : open ? (
         <Window
           className="absolute"
           style={{
@@ -219,7 +278,12 @@ export const TitleScreen = ({
           }
         >
           <div className="flex min-h-0 flex-1 gap-[calc(var(--px)*4)]">
-            <Picker label="Title menu" className="w-[11em]" items={items} />
+            <Picker
+              label="Title menu"
+              className="w-[11em]"
+              items={items}
+              initial={returned ? 'how' : undefined}
+            />
             <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance">
               <Muted>
                 {armed
@@ -243,28 +307,7 @@ export const TitleScreen = ({
             </Loud>
           </p>
           {firstVisit ? (
-            // Stuck to the bottom edge: where the lines wrap on a small
-            // stage, the window grows upward over the scene
-            <Window
-              className="absolute"
-              style={{
-                left: px(panel.x),
-                bottom: px(STAGE.height - panel.y - panel.height),
-                width: px(panel.width),
-                minHeight: px(panel.height),
-              }}
-              legend={FICTION}
-            >
-              <Heading className="text-[0.85em]">How it works</Heading>
-              <ol className="m-0 mt-[calc(var(--px)*2)] grid list-none gap-[calc(var(--px)*1)] p-0 text-[0.85em]">
-                {HOW_TO.map((line, i) => (
-                  <li key={i} className="flex gap-[1ch]">
-                    <span className="text-(--pb-gold)">{i + 1}.</span>
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ol>
-            </Window>
+            <HowTo legend={FICTION} />
           ) : (
             <div
               className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
