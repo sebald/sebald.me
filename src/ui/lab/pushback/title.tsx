@@ -14,18 +14,17 @@ import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
 import {
   MODE_LABELS,
   type Mode,
-  STANDS,
   nextMode,
   stepMode,
 } from '@/lib/lab/pushback/characters';
-import { LAYOUT, SCENE, STAGE, viewFor } from '@/lib/lab/pushback/stage';
+import { STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { Confirm } from './confirm';
 import { Room } from './frame';
 import { Picker, type PickerItem } from './picker';
 import { Stage, px } from './stage';
-import { Heading, Loud, Muted } from './text';
+import { Heading, Loud } from './text';
 import { useInputKind } from './use-input-kind';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -38,14 +37,12 @@ interface TitleScreenProps {
   onReset?: () => void;
   /** Nobody has touched anything for a while: play the demo */
   onAttract?: () => void;
-  /** No run and nothing collected yet: the first key explains the game */
-  firstVisit?: boolean;
   /** A run or a collected phrase: switching the mode asks first */
   progress?: boolean;
 }
 
 /**
- * How the game works, for a first visit, five lines in the window: the
+ * How the game works, behind `How to play` in the menu, five lines: the
  * exchange, the scale, momentum and the mic drop, the collecting, and
  * what the three modes change.
  */
@@ -62,25 +59,15 @@ const FICTION =
   'All characters are fictional. Any resemblance to actual persons or teams is coincidental.';
 
 /**
- * How it works, in the quiet window under the band. Stuck to the bottom
- * edge with the panel's height as a minimum: where the lines wrap on a
- * small stage, the window grows upward over the scene.
+ * How it works, in a window over the dimmed room in place of the logo
+ * and the menu: a lot of text, so it gets the stage to itself and the
+ * full text size, centred, growing both ways where the lines wrap.
  */
-const HowTo = ({ legend }: { legend: ReactNode }) => {
-  const { panel } = LAYOUT;
-  return (
-    <Window
-      className="absolute"
-      style={{
-        left: px(panel.x),
-        bottom: px(STAGE.height - panel.y - panel.height),
-        width: px(panel.width),
-        minHeight: px(panel.height),
-      }}
-      legend={legend}
-    >
-      <Heading className="text-[0.85em]">How it works</Heading>
-      <ol className="m-0 mt-[calc(var(--px)*2)] grid list-none gap-[calc(var(--px)*1)] p-0 text-[0.85em]">
+const HowTo = ({ legend }: { legend: ReactNode }) => (
+  <div className="absolute inset-0 flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
+    <Window className="w-full" legend={legend}>
+      <Heading>How it works</Heading>
+      <ol className="m-0 mt-[calc(var(--px)*3)] grid list-none gap-[calc(var(--px)*2.5)] p-0 leading-[1.4]">
         {HOW_TO.map((line, i) => (
           <li key={i} className="flex gap-[1ch]">
             <span className="text-(--pb-gold)">{i + 1}.</span>
@@ -89,8 +76,8 @@ const HowTo = ({ legend }: { legend: ReactNode }) => {
         ))}
       </ol>
     </Window>
-  );
-};
+  </div>
+);
 
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
 const LOGO_NATIVE = { width: 226, height: 77 } as const;
@@ -117,13 +104,23 @@ const CALL = { top: LOGO_TOP.splash + LOGO.height + 4, height: 22 } as const;
 const MENU_TOP = LOGO_TOP.menu + LOGO.height + 6;
 
 /**
- * The corner office the title shows: the duel's columns, and all of the
- * scene's rows the stage has room for, down to its floor, so the room
- * fills the whole screen
+ * The corner office's picture inside its render: the room was drawn
+ * smaller and padded to 480 by 270 with a flat dark, so the title fits
+ * this box, not the render
  */
+const OFFICE = { x: 58, y: 55, width: 365, height: 205 } as const;
+
+/**
+ * The corner office the title shows: its picture scaled to cover the
+ * stage, a hair more so no padding shows at an edge, and centred; cut
+ * off a little at the sides, smooth rather than on the art's pixels,
+ * which is fine for a backdrop
+ */
+const ROOM_SCALE =
+  Math.max(STAGE.width / OFFICE.width, STAGE.height / OFFICE.height) * 1.02;
 const VIEW = {
-  x: viewFor(STANDS.office).x,
-  y: SCENE.height - STAGE.height,
+  x: OFFICE.x + OFFICE.width / 2 - STAGE.width / ROOM_SCALE / 2,
+  y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
 } as const;
 
 /** Left or right of the mode: a pixel triangle, dim at the end it cannot go past */
@@ -155,9 +152,8 @@ const MODIFIERS = new Set([
  * dimmed a little, the logo over it and an arcade line blinking under
  * it. Any key or a tap opens the menu: the logo slides up and a small
  * window under it holds the menu, so the title is the start screen with
- * its menu open, not a second screen. On a first visit that key shows
- * how the game works first, in five lines; `How to play` in the menu
- * shows them again. The mode is switched with left and right on it.
+ * its menu open, not a second screen. `How to play` in the menu shows
+ * how the game works. The mode is switched with left and right on it.
  */
 export const TitleScreen = ({
   mode,
@@ -165,23 +161,19 @@ export const TitleScreen = ({
   onStart,
   onReset,
   onAttract,
-  firstVisit = false,
   progress = false,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
-  // How it works: on a first visit's first key, or from the menu; Enter,
-  // Escape or a tap goes on to the menu, the cursor back where it was
-  const [reading, setReading] = useState<'splash' | 'menu' | null>(null);
+  // How it works, from the menu; Enter, Escape or a tap goes back
+  const [reading, setReading] = useState(false);
   const [returned, setReturned] = useState(false);
   const closeHowTo = useCallback(() => {
-    setReading(previous => {
-      if (previous === 'menu') setReturned(true);
-      return null;
-    });
+    setReading(false);
+    setReturned(true);
   }, []);
   useKeys(
     useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
-    reading !== null,
+    reading,
   );
   useEffect(() => {
     if (!reading) return;
@@ -207,14 +199,10 @@ export const TitleScreen = ({
     };
   }, [onAttract]);
 
-  // The splash: any key or a tap opens the menu, on a first visit after
-  // how the game works
+  // The splash: any key or a tap opens the menu
   useEffect(() => {
     if (open) return;
-    const go = () => {
-      setOpen(true);
-      if (firstVisit) setReading('splash');
-    };
+    const go = () => setOpen(true);
     const onKey = (event: KeyboardEvent) => {
       if (MODIFIERS.has(event.key)) return;
       event.preventDefault();
@@ -227,7 +215,7 @@ export const TitleScreen = ({
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('pointerdown', onPointer);
     };
-  }, [open, firstVisit]);
+  }, [open]);
 
   // Reset, and a mode switch with progress at stake, ask in a dialog
   const [asking, setAsking] = useState<'reset' | Mode | null>(null);
@@ -256,7 +244,7 @@ export const TitleScreen = ({
       onSelect: () => switchTo(nextMode(mode)),
       onStep: step => switchTo(stepMode(mode, step)),
     },
-    { id: 'how', label: 'How to play', onSelect: () => setReading('menu') },
+    { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
   ];
   if (onReset)
     items.push({
@@ -269,7 +257,7 @@ export const TitleScreen = ({
     <Stage label="Pushback, title">
       {/* The corner office at night, the whole stage, dimmed a little */}
       <div aria-hidden className="absolute inset-0 overflow-hidden">
-        <Room scene="office" view={VIEW} />
+        <Room scene="office" view={VIEW} scale={ROOM_SCALE} />
         <div className="absolute inset-0 bg-(--pb-bg)/15" />
       </div>
       <h2
@@ -293,14 +281,7 @@ export const TitleScreen = ({
 
       {open && reading ? (
         <HowTo
-          legend={
-            <Legend
-              keys={[['Enter', reading === 'splash' ? 'continue' : 'back']]}
-              touch={
-                reading === 'splash' ? 'Tap to continue' : 'Tap to go back'
-              }
-            />
-          }
+          legend={<Legend keys={[['Enter', 'back']]} touch="Tap to go back" />}
         />
       ) : open ? (
         <Window
@@ -337,9 +318,9 @@ export const TitleScreen = ({
         </p>
       )}
       {!reading && (
-        <Muted className="absolute inset-x-0 bottom-[calc(var(--px)*4)] text-center text-[0.65em] text-balance opacity-70">
+        <p className="absolute inset-x-0 bottom-[calc(var(--px)*4)] m-0 text-center text-[0.7em] text-balance text-(--pb-text)">
           {FICTION}
-        </Muted>
+        </p>
       )}
       {asking !== null && asking !== 'reset' && (
         <Confirm
