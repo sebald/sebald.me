@@ -61,7 +61,7 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cva } from '@/lib/styles.utils';
 
-import { Bubble } from './bubble';
+import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
 import { DemoLabel } from './demo-label';
@@ -733,8 +733,9 @@ export const DuelScreen = ({
             style={{
               right: px(GHOST.bubble.right),
               // Above the figure: its top is the cell's height less where
-              // the figure starts in it, over the corner it sinks into
-              bottom: `calc(100% - ${px(GHOST.corner.overlap)} + ${px(LAYOUT.cell.height - GHOST.figure.top + GHOST.bubble.gap)})`,
+              // the figure starts in it, over the corner it sinks into,
+              // and the tail hangs below the bubble's edge
+              bottom: `calc(100% - ${px(GHOST.corner.overlap)} + ${px(LAYOUT.cell.height - GHOST.figure.top + GHOST.bubble.gap + BUBBLE_TAIL)})`,
             }}
           >
             {ghostLine}

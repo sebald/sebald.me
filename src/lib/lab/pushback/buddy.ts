@@ -66,8 +66,11 @@ export const buddyLine = (exchange: number, seed: number): string =>
  * never moves the window's text.
  */
 export const GHOST = {
-  /** Where its figure sits in its cell (the sheet's idle box) */
-  figure: { left: 21, top: 57, width: 30 },
+  /**
+   * Where its figure sits in its cell (the sheet's idle box; `top` is the
+   * highest of its cells, so nothing above it ever touches the head)
+   */
+  figure: { left: 21, top: 56, width: 30 },
   /**
    * The figure on the window's corner, in stage pixels: its right edge
    * this far in from the window's right edge, its bottom this far down
@@ -75,8 +78,9 @@ export const GHOST = {
    */
   corner: { right: 12, overlap: 29 },
   /**
-   * The bubble over its head: this far above the figure's top, its right
-   * edge this far in from the window's
+   * The bubble over its head: its tail's tip this far above the
+   * figure's top (the hover only ever drops the figure, so the gap holds
+   * as it bobs), its right edge this far in from the window's
    */
   bubble: { gap: 2, right: 2 },
   /** Lifted off where it sits; its tail rests on the corner */

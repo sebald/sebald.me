@@ -32,6 +32,9 @@ const stairs = (steps: number): string => {
 /** The tail's rows from its tip down: ink outline, then the paper inside */
 const TAIL = [0, 1, 2, 3, 4];
 
+/** How far the tail's tip reaches past the bubble's edge, in stage pixels */
+export const BUBBLE_TAIL = TAIL.length;
+
 export interface BubbleProps extends PropsWithChildren {
   /** Where the tail sits, in stage pixels from the right edge */
   tail?: number;
