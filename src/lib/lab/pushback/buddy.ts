@@ -73,7 +73,7 @@ export const GHOST = {
    * this far in from the window's right edge, its bottom this far down
    * into the window, over the frame and the right end of the first rows
    */
-  corner: { right: 6, overlap: 26 },
+  corner: { right: 38, overlap: 29 },
   /**
    * The bubble over its head: this far above the figure's top, its right
    * edge this far in from the window's
