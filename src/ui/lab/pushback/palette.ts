@@ -32,6 +32,8 @@ export const PALETTE = {
   ember: '#f0a36f',
   emberLight: '#ffd6b8',
   emberShade: '#b86a35',
+  /** Where the two beams of the scale meet */
+  spark: '#fffdf2',
 
   // Empty
   /** Empty ticks, pips and tracks, with their dots */

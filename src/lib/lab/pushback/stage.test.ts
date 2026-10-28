@@ -27,7 +27,7 @@ import {
   typedChars,
   typingDuration,
   fitFor,
-  scaleTicks,
+  scaleBeam,
   viewFor,
 } from './stage';
 
@@ -102,9 +102,9 @@ describe('bars', () => {
       y: 5,
       count: 3,
       filled: 2,
-      width: LAYOUT.ticks.width,
-      height: LAYOUT.ticks.height,
-      gap: LAYOUT.ticks.gap,
+      width: 10,
+      height: 6,
+      gap: 2,
     });
     assert.deepEqual(
       rects.map(r => [r.x, r.filled]),
@@ -114,41 +114,34 @@ describe('bars', () => {
         [34, false],
       ],
     );
-    assert.equal(barWidth(3, LAYOUT.ticks), 34);
+    assert.equal(barWidth(3, { width: 10, gap: 2 }), 34);
   });
 
-  it('draws the scale as ticks, the player on the left, lit to the marker', () => {
-    const even = scaleTicks({ scale: 0, toWin: 3, toLose: 3 });
-    assert.equal(even.length, 7);
-    assert.deepEqual(
-      even.map(t => t.side),
-      ['player', 'player', 'player', null, 'opponent', 'opponent', 'opponent'],
-    );
-    assert.equal(
-      even.findIndex(t => t.marker),
-      3,
-    );
-    assert.ok(even.every(t => !t.lit));
-    // Centred on the stage
-    assert.equal(even[0]!.x + even[6]!.x + even[6]!.width, 320);
+  it('draws the scale as a beam clash, the spark pushed toward the loser', () => {
+    const even = scaleBeam({ scale: 0, toWin: 3, toLose: 3 });
+    assert.equal(even.steps, 6);
+    assert.equal(even.width, 6 * LAYOUT.beam.step);
+    // Centred on the stage, the spark in the middle
+    assert.equal(even.x * 2 + even.width, 320);
+    assert.equal(even.spark, 160);
+    assert.equal(even.closing, null);
 
-    const ahead = scaleTicks({ scale: 2, toWin: 3, toLose: 3 });
-    assert.deepEqual(
-      ahead.map(t => t.lit),
-      [false, true, true, false, false, false, false],
-    );
-    assert.equal(
-      ahead.findIndex(t => t.marker),
-      1,
-    );
+    // Two steps ahead: the gold beam is two steps longer
+    const ahead = scaleBeam({ scale: 2, toWin: 3, toLose: 3 });
+    assert.equal(ahead.spark, 160 + 2 * LAYOUT.beam.step);
+    assert.equal(ahead.closing, 'player');
+    // At the win the spark is at the far end
+    const won = scaleBeam({ scale: 3, toWin: 3, toLose: 3 });
+    assert.equal(won.spark, won.x + won.width);
 
-    const boss = scaleTicks({ scale: -1, toWin: 4, toLose: 3 });
-    assert.equal(boss.length, 8);
+    // The Stakeholder: further to push, the start off centre toward them
+    const boss = scaleBeam({ scale: 0, toWin: 4, toLose: 3 });
+    assert.equal(boss.steps, 7);
+    assert.equal(boss.spark, boss.x + 3 * LAYOUT.beam.step);
     assert.equal(
-      boss.findIndex(t => t.marker),
-      5,
+      scaleBeam({ scale: -2, toWin: 4, toLose: 3 }).closing,
+      'opponent',
     );
-    assert.equal(boss[5]!.lit, true);
   });
 });
 

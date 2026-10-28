@@ -91,7 +91,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Bars"
-      blurb="The names, the momentum pips and the shared scale with its marker, every number on a control."
+      blurb="The names, the momentum pips and the shared scale as a beam clash, every number on a control."
     >
       <HudDemo />
     </Section>

@@ -7,7 +7,7 @@ import {
   barRects,
   barWidth,
   bob,
-  scaleTicks,
+  scaleBeam,
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
@@ -98,6 +98,145 @@ export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
   );
 };
 
+/** A lit stretch of beam: a light top row, the colour, a shaded bottom row */
+const lit = (side: Side) => {
+  const c = SIDE[side];
+  return `linear-gradient(to bottom, ${c.top} 0 var(--px), ${c.mid} var(--px) calc(100% - var(--px)), ${c.shade} calc(100% - var(--px)) 100%)`;
+};
+
+/** Slides with the scale; snaps under reduced motion */
+const SLIDE =
+  'transition-[left,width] duration-300 ease-out motion-reduce:transition-none';
+
+/**
+ * The shared scale as a beam clash: gold from the player's end, ember
+ * from the opponent's, a notch every step, meeting at a white spark
+ * that crackles on two frames. A post caps each end in its side's
+ * colour; the end the spark is one step from blinks.
+ */
+const ScaleBeam = ({
+  beam,
+  blinkOn,
+  still,
+}: {
+  beam: ReturnType<typeof scaleBeam>;
+  blinkOn: boolean;
+  still: boolean;
+}) => {
+  const { x, y, width, height, step, spark, closing } = beam;
+  const crackle = !still && blinkOn;
+  // The end the spark is about to hit: the far end of whoever is closing
+  const blinking: Side | null =
+    closing === 'player'
+      ? 'opponent'
+      : closing === 'opponent'
+        ? 'player'
+        : null;
+  const post = (side: Side) => {
+    const c = SIDE[side];
+    const left = side === 'player' ? x - 4 : x + width + 1;
+    return (
+      <span
+        className="absolute"
+        style={{
+          left: px(left),
+          top: px(y - 3),
+          width: px(3),
+          height: px(height + 6),
+          boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
+          background:
+            blinking === side && blinkOn
+              ? PALETTE.spark
+              : `linear-gradient(to right, ${c.top} 0 var(--px), ${c.mid} var(--px) calc(100% - var(--px)), ${c.shade} calc(100% - var(--px)) 100%)`,
+        }}
+      />
+    );
+  };
+  const dot = (dx: number, dy: number, colour: string) => (
+    <span
+      className={cn('absolute', SLIDE)}
+      style={{
+        left: px(spark + dx),
+        top: px(y + dy),
+        width: 'var(--px)',
+        height: 'var(--px)',
+        background: colour,
+      }}
+    />
+  );
+  return (
+    <>
+      {/* The ink around the whole beam */}
+      <span
+        className="absolute"
+        style={{
+          left: px(x - 1),
+          top: px(y - 1),
+          width: px(width + 2),
+          height: px(height + 2),
+          background: PALETTE.ink,
+        }}
+      />
+      <span
+        className={cn('absolute', SLIDE)}
+        style={{
+          left: px(x),
+          top: px(y),
+          width: px(spark - x),
+          height: px(height),
+          background: lit('player'),
+        }}
+      />
+      <span
+        className={cn('absolute', SLIDE)}
+        style={{
+          left: px(spark),
+          top: px(y),
+          width: px(x + width - spark),
+          height: px(height),
+          background: lit('opponent'),
+        }}
+      />
+      {/* A notch of ink at every step, so the steps can be counted */}
+      <span
+        className="absolute"
+        style={{
+          left: px(x),
+          top: px(y + 1),
+          width: px(width),
+          height: px(height - 2),
+          backgroundImage: `repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * ${step - 1}), color-mix(in srgb, ${PALETTE.ink} 45%, transparent) calc(var(--px) * ${step - 1}) calc(var(--px) * ${step}))`,
+        }}
+      />
+      {post('player')}
+      {post('opponent')}
+      {/* The spark: a white core taller than the beam, sparks off it */}
+      <span
+        className={cn('absolute', SLIDE)}
+        style={{
+          left: px(spark - 1),
+          top: px(y - 2),
+          width: px(2),
+          height: px(height + 4),
+          background: PALETTE.spark,
+          boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
+        }}
+      />
+      {crackle ? (
+        <>
+          {dot(-3, -2, PALETTE.goldLight)}
+          {dot(2, height + 1, PALETTE.emberLight)}
+        </>
+      ) : (
+        <>
+          {dot(2, -2, PALETTE.emberLight)}
+          {dot(-3, height + 1, PALETTE.goldLight)}
+        </>
+      )}
+    </>
+  );
+};
+
 export interface HudProps {
   /** The shared scale, positive toward the player */
   scale: number;
@@ -116,8 +255,8 @@ export interface HudProps {
 /**
  * The bars along the top of the band, on the stage's pixel grid like
  * the room: the names in the corners, the momentum pips under them
- * filling from the outside in, and the shared scale across the centre with its marker. A full momentum bar
- * blinks at the idle rhythm.
+ * filling from the outside in, and the shared scale across the centre as
+ * a beam clash. A full momentum bar blinks at the idle rhythm.
  */
 export const Hud = ({
   scale,
@@ -132,9 +271,7 @@ export const Hud = ({
 }: HudProps) => {
   const clock = useClock(!still);
   const blinkOn = !still && bob(clock) === 0;
-  const ticks = scaleTicks({ scale, toWin, toLose });
-  const marker = ticks.find(tick => tick.marker);
-  const markerColour = marker?.side ? SIDE[marker.side].top : PALETTE.steel;
+  const beam = scaleBeam({ scale, toWin, toLose });
   const pips = (side: Side) => {
     const { x, y, width, height, gap } = LAYOUT.pips;
     const w = barWidth(momentumTotal, { width, gap });
@@ -186,51 +323,7 @@ export const Hud = ({
       {pips('player')}
       {pips('opponent')}
 
-      {ticks.map(tick => (
-        <Box
-          key={`tick-${tick.x}`}
-          x={tick.x}
-          y={tick.y}
-          width={tick.width}
-          height={tick.height}
-          side={tick.lit ? tick.side : null}
-        />
-      ))}
-      {marker && (
-        <>
-          {/* A bright notch on the marker's tick, and a pointer under it */}
-          <span
-            className="absolute"
-            style={{
-              left: px(marker.x + 1),
-              top: px(marker.y + 1),
-              width: px(marker.width - 2),
-              height: px(marker.height - 2),
-              background: markerColour,
-            }}
-          />
-          <span
-            className="absolute [clip-path:polygon(0_0,100%_0,50%_100%)]"
-            style={{
-              left: px(marker.x + Math.floor(marker.width / 2) - 2),
-              top: px(marker.y + marker.height + 1),
-              width: px(5),
-              height: px(3),
-              background: PALETTE.ink,
-            }}
-          />
-          <span
-            className="absolute [clip-path:polygon(0_0,100%_0,50%_100%)]"
-            style={{
-              left: px(marker.x + Math.floor(marker.width / 2) - 1),
-              top: px(marker.y + marker.height + 1),
-              width: px(3),
-              height: px(2),
-              background: markerColour,
-            }}
-          />
-        </>
-      )}
+      <ScaleBeam beam={beam} blinkOn={blinkOn} still={still} />
     </div>
   );
 };

@@ -44,8 +44,8 @@ export const LAYOUT = {
   panel: { x: 3, y: 136, width: 314, height: 76 },
   /** Inset of the text inside the panel */
   panelPad: 6,
-  /** The shared scale across the top centre: one tick per step */
-  ticks: { y: 5, width: 10, height: 6, gap: 2 },
+  /** The shared scale across the top centre: a beam, `step` pixels a step */
+  beam: { y: 6, step: 12, height: 6 },
   /** Momentum pips in the corners, under the names */
   pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
   /** The names, in the corners */
@@ -184,49 +184,55 @@ export const barWidth = (
 ): number => count * width + (count - 1) * gap;
 
 /** One tick of the shared scale */
-export interface Tick extends Rect {
-  /** Whose side of the centre it is on; the centre tick is null */
-  side: Side | null;
-  /** Between the centre and the marker: lit for the leader */
-  lit: boolean;
-  /** The marker sits here */
-  marker: boolean;
+export interface Beam {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /** Pixels a step of the scale moves the spark */
+  step: number;
+  /** Steps across the whole beam: `toWin + toLose` */
+  steps: number;
+  /** Where the two beams meet: the gold one ends, the ember one starts */
+  spark: number;
+  /** Who is one step from pushing the spark into the far end, if anyone */
+  closing: Side | null;
 }
 
 /**
- * The shared scale as ticks across the top centre, the player's side on
- * the left: `toWin` ticks left of the centre one, `toLose` right of it.
- * The marker is on the tick the scale points at, and the ticks between
- * the centre and the marker are lit.
+ * The shared scale as a beam clash across the top centre: the player's
+ * beam in gold from the left, the opponent's in ember from the right,
+ * meeting at the spark. Winning an exchange pushes the spark a step
+ * toward the other end; the player wins at the right end (`toWin` steps
+ * from the start), the opponent at the left (`toLose`). Against the
+ * Stakeholder the start is off centre, since the player has further to
+ * push.
  */
-export const scaleTicks = (options: {
+export const scaleBeam = (options: {
   scale: number;
   toWin: number;
   toLose: number;
-}): Tick[] => {
-  const { width, gap, y, height } = LAYOUT.ticks;
-  const count = options.toWin + options.toLose + 1;
-  const x0 = Math.round(STAGE.width / 2 - barWidth(count, { width, gap }) / 2);
-  return Array.from({ length: count }, (_, i) => {
-    // Steps from the centre, positive toward the player (left)
-    const step = options.toWin - i;
-    const side: Side | null =
-      step === 0 ? null : step > 0 ? 'player' : 'opponent';
-    const between =
-      step !== 0 &&
-      Math.sign(step) === Math.sign(options.scale) &&
-      Math.abs(step) <= Math.abs(options.scale);
-    return {
-      x: x0 + i * (width + gap),
-      y,
-      width,
-      height,
-      filled: between,
-      side,
-      lit: between,
-      marker: step === options.scale,
-    };
-  });
+}): Beam => {
+  const { y, step, height } = LAYOUT.beam;
+  const steps = options.toWin + options.toLose;
+  const width = steps * step;
+  const x = Math.round(STAGE.width / 2 - width / 2);
+  const at = Math.max(0, Math.min(steps, options.toLose + options.scale));
+  return {
+    x,
+    y,
+    width,
+    height,
+    step,
+    steps,
+    spark: x + at * step,
+    closing:
+      options.scale === options.toWin - 1
+        ? 'player'
+        : options.scale === -(options.toLose - 1)
+          ? 'opponent'
+          : null,
+  };
 };
 
 // Timing
