@@ -45,15 +45,16 @@ interface TitleScreenProps {
 }
 
 /**
- * How the game works, for a first visit, four lines in the window under
- * the splash: the exchange, the scale, momentum and the mic drop, the
- * collecting. The ghost is the mode blurb's to explain.
+ * How the game works, for a first visit, five lines in the window: the
+ * exchange, the scale, momentum and the mic drop, the collecting, and
+ * what the three modes change.
  */
 const HOW_TO = [
   'A colleague throws a phrase. Pick the reply that answers it before the bar runs out.',
   'Every exchange you win pushes the shared scale your way. Three steps past the middle and the duel is yours.',
   'Win on your own throw, or counter fast, and your momentum grows. Full, a gold line appears: the mic drop, worth two steps.',
   'Their phrases are collected as you counter them. What you pick up answers the next colleague, and the boss.',
+  'Easy: a ghost helps and nothing rushes you. Normal: a bar times you from the second colleague on. Hard: less time, longer menus, double score.',
 ] as const;
 
 /** The usual line, because the cast is nine office archetypes and nobody in particular */
@@ -155,7 +156,7 @@ const MODIFIERS = new Set([
  * it. Any key or a tap opens the menu: the logo slides up and a small
  * window under it holds the menu, so the title is the start screen with
  * its menu open, not a second screen. On a first visit that key shows
- * how the game works first, in four lines; `How to play` in the menu
+ * how the game works first, in five lines; `How to play` in the menu
  * shows them again. The mode is switched with left and right on it.
  */
 export const TitleScreen = ({
