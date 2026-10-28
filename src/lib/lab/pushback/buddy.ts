@@ -59,10 +59,11 @@ export const buddyLine = (exchange: number, seed: number): string =>
   BUDDY_BARKS[(Math.abs(seed) + exchange) % BUDDY_BARKS.length]!;
 
 /**
- * Where the ghost floats: perched on the top-right corner of the window
+ * Where the ghost floats: sunk into the top-right corner of the window
  * the counters are picked in, where the eye is while the player reads
- * them, facing the options. Its line is a bubble in the window's prompt
- * row, under it.
+ * them, facing the options. Its line is a bubble above its head, over
+ * the room (and a little over the opponent), placed on its own so it
+ * never moves the window's text.
  */
 export const GHOST = {
   /** Where its figure sits in its cell (the sheet's idle box) */
@@ -70,9 +71,14 @@ export const GHOST = {
   /**
    * The figure on the window's corner, in stage pixels: its right edge
    * this far in from the window's right edge, its bottom this far down
-   * into the window, over the frame and the end of the phrase row
+   * into the window, over the frame and the right end of the first rows
    */
-  corner: { right: 6, overlap: 9 },
+  corner: { right: 6, overlap: 20 },
+  /**
+   * The bubble over its head: this far above the figure's top, its right
+   * edge this far in from the window's
+   */
+  bubble: { gap: 2, right: 2 },
   /** Lifted off where it sits; its tail rests on the corner */
   lift: 0,
 } as const;

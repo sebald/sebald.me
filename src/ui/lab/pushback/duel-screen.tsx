@@ -465,13 +465,8 @@ export const DuelScreen = ({
     opponent: stands.right - view.x,
   };
   const poses = posesFor(state, step);
-  // The ghost's line in the window's row, once it is out of its hole
-  const bubble =
-    ghostShown && ghostLine && enter >= 1 ? (
-      <Bubble className="ml-auto max-w-[60%] shrink-0 text-balance">
-        {ghostLine}
-      </Bubble>
-    ) : null;
+  // The ghost's line over its head, once it is out of its hole
+  const bubble = ghostShown && ghostLine && enter >= 1;
   const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
@@ -661,10 +656,7 @@ export const DuelScreen = ({
               <Dialogue speaker="player" muted>
                 {counterText(state.outcome?.picked ?? null)}
               </Dialogue>
-              <div className="flex items-start gap-[calc(var(--px)*4)]">
-                <Muted>The reply: {step.text}</Muted>
-                {bubble}
-              </div>
+              <Muted>The reply: {step.text}</Muted>
             </>
           )}
           {step?.kind === 'menu' && (
@@ -676,12 +668,10 @@ export const DuelScreen = ({
                   {phraseText(state.exchange.phrase)}
                 </Dialogue>
               )}
-              {/* The prompt sits above the options, with room on both
-                sides; the ghost's line at its right end */}
-              <div className="my-[calc(var(--px)*4)] flex items-start gap-[calc(var(--px)*4)]">
-                <Muted>{showsHint(state) ? HINT : prompt(state)}</Muted>
-                {bubble}
-              </div>
+              {/* The prompt sits above the options, with room on both sides */}
+              <Muted className="my-[calc(var(--px)*4)]">
+                {showsHint(state) ? HINT : prompt(state)}
+              </Muted>
               <Picker
                 label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
                 items={menuItems}
@@ -720,6 +710,24 @@ export const DuelScreen = ({
           >
             <Ghost step={whisper} enter={enter} still={reduced} mirrored />
           </span>
+        )}
+        {bubble && (
+          <Bubble
+            point="down"
+            // The tail over the middle of the figure's head
+            tail={
+              GHOST.corner.right + GHOST.figure.width / 2 - GHOST.bubble.right
+            }
+            className="pointer-events-none absolute max-w-[55%] text-balance"
+            style={{
+              right: px(GHOST.bubble.right),
+              // Above the figure: its top is the cell's height less where
+              // the figure starts in it, over the corner it sinks into
+              bottom: `calc(100% - ${px(GHOST.corner.overlap)} + ${px(LAYOUT.cell.height - GHOST.figure.top + GHOST.bubble.gap)})`,
+            }}
+          >
+            {ghostLine}
+          </Bubble>
         )}
       </div>
 

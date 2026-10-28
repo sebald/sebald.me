@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
@@ -33,69 +33,83 @@ const stairs = (steps: number): string => {
 const TAIL = [0, 1, 2, 3, 4];
 
 export interface BubbleProps extends PropsWithChildren {
-  /** Where the tail points up from, in stage pixels from the right edge */
+  /** Where the tail sits, in stage pixels from the right edge */
   tail?: number;
+  /** Which way the tail points: up to a speaker above, down to one below */
+  point?: 'up' | 'down';
   className?: string;
+  style?: CSSProperties;
 }
 
 /**
  * A comic speech bubble on the stage's pixel grid: white paper, ink
  * letters, an ink outline with the corners stepped, a row of dithered
  * shade along the bottom like the window's, and a stair-stepped tail
- * pointing up to whoever is speaking (the ghost on the window's corner).
+ * pointing to whoever is speaking (down to the ghost under it).
  */
-export const Bubble = ({ tail = 10, className, children }: BubbleProps) => (
-  <p
-    className={cn(
-      'relative m-0 px-[1em] pt-[0.7em] pb-[0.9em] text-[0.85em] leading-snug text-(--pb-ink)',
-      className,
-    )}
-  >
-    <span
-      aria-hidden
-      className="absolute inset-0"
-      style={{ background: PALETTE.ink, clipPath: `polygon(${stairs(2)})` }}
-    />
-    <span
-      aria-hidden
-      className="absolute"
-      style={{
-        inset: 'var(--px)',
-        clipPath: `polygon(${stairs(1)})`,
-        background: `repeating-conic-gradient(${PALETTE.paperShade} 0 25%, ${PALETTE.paper} 0 50%) left bottom / ${px(2)} ${px(2)} repeat-x, ${PALETTE.paper}`,
-        backgroundSize: `${px(2)} ${px(2)}, auto`,
-      }}
-    />
-    {/* The tail: ink rows widening from the tip, paper rows inside them,
+export const Bubble = ({
+  tail = 10,
+  point = 'up',
+  className,
+  style,
+  children,
+}: BubbleProps) => {
+  // The tail's rows count from its tip, at the top or the bottom edge
+  const edge = point === 'up' ? 'top' : 'bottom';
+  return (
+    <p
+      className={cn(
+        'relative m-0 px-[1em] pt-[0.7em] pb-[0.9em] text-[0.85em] leading-snug text-(--pb-ink)',
+        className,
+      )}
+      style={style}
+    >
+      <span
+        aria-hidden
+        className="absolute inset-0"
+        style={{ background: PALETTE.ink, clipPath: `polygon(${stairs(2)})` }}
+      />
+      <span
+        aria-hidden
+        className="absolute"
+        style={{
+          inset: 'var(--px)',
+          clipPath: `polygon(${stairs(1)})`,
+          background: `repeating-conic-gradient(${PALETTE.paperShade} 0 25%, ${PALETTE.paper} 0 50%) left bottom / ${px(2)} ${px(2)} repeat-x, ${PALETTE.paper}`,
+          backgroundSize: `${px(2)} ${px(2)}, auto`,
+        }}
+      />
+      {/* The tail: ink rows widening from the tip, paper rows inside them,
         the last paper row cutting the outline where they meet */}
-    {TAIL.map(row => (
-      <span
-        key={`ink-${row}`}
-        aria-hidden
-        className="absolute"
-        style={{
-          right: px(tail - row),
-          top: px(row - 5),
-          width: px(row * 2 + 1),
-          height: 'var(--px)',
-          background: PALETTE.ink,
-        }}
-      />
-    ))}
-    {TAIL.slice(0, 4).map(row => (
-      <span
-        key={`paper-${row}`}
-        aria-hidden
-        className="absolute"
-        style={{
-          right: px(tail - row),
-          top: px(row - 3),
-          width: px(row * 2 + 1),
-          height: px(row === 3 ? 2 : 1),
-          background: PALETTE.paper,
-        }}
-      />
-    ))}
-    <span className="relative">{children}</span>
-  </p>
-);
+      {TAIL.map(row => (
+        <span
+          key={`ink-${row}`}
+          aria-hidden
+          className="absolute"
+          style={{
+            right: px(tail - row),
+            [edge]: px(row - 5),
+            width: px(row * 2 + 1),
+            height: 'var(--px)',
+            background: PALETTE.ink,
+          }}
+        />
+      ))}
+      {TAIL.slice(0, 4).map(row => (
+        <span
+          key={`paper-${row}`}
+          aria-hidden
+          className="absolute"
+          style={{
+            right: px(tail - row),
+            [edge]: px(row - 3),
+            width: px(row * 2 + 1),
+            height: px(row === 3 ? 2 : 1),
+            background: PALETTE.paper,
+          }}
+        />
+      ))}
+      <span className="relative">{children}</span>
+    </p>
+  );
+};
