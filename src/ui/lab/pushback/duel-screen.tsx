@@ -80,8 +80,8 @@ import { Legend, Window } from './window';
 
 // Styles
 // ---------------
-/** The demo's label: its top, under the bars, over the room's middle */
-const DEMO_LABEL_Y = 40;
+/** The demo's label: its top, at the duellists' chests, under their faces */
+const DEMO_LABEL_Y = 68;
 
 const styles = {
   silence: cva({
@@ -110,6 +110,12 @@ export interface DuelScreenProps {
   reducedMotion?: boolean;
   /** Fix the scale (the workbench) */
   scale?: number;
+  /**
+   * The ghost out on every defence from its start, without the wait and
+   * without leaving after it helped (the workbench, to judge where it
+   * stands); only with the buddy on
+   */
+  ghostAlways?: boolean;
   /** Another room than the opponent's (the workbench, to judge the scale) */
   scene?: SceneId;
   /**
@@ -175,6 +181,7 @@ export const DuelScreen = ({
   onPlay,
   reducedMotion,
   scale,
+  ghostAlways = false,
   scene: sceneProp,
   auto = false,
   className,
@@ -371,13 +378,17 @@ export const DuelScreen = ({
   // The ghost helps once a duel: after the exchange it whispered on it
   // leaves, and the counters stop dimming
   const buddy =
-    buddyOn && (whisperedOn === null || whisperedOn === state.exchanges);
+    buddyOn &&
+    (ghostAlways || whisperedOn === null || whisperedOn === state.exchanges);
   const defending = state.phase === 'defend' && step?.kind === 'menu';
   const whisper =
     buddy && defending
-      ? buddyStep(
-          state.silence?.elapsed ?? cursor.elapsed,
-          state.silence?.limit ?? null,
+      ? Math.max(
+          ghostAlways ? 1 : 0,
+          buddyStep(
+            state.silence?.elapsed ?? cursor.elapsed,
+            state.silence?.limit ?? null,
+          ),
         )
       : 0;
   // A miss after the whisper gets the ghost's own line during the resolve

@@ -28,33 +28,25 @@ interface DemoLabelProps {
 }
 
 /**
- * The attract mode's label, the way an arcade cabinet stamps its demo:
- * `DEMO` in big solid gold with a hard ink outline and drop like the
- * logo, and the way in under it, blinking, outlined the same, centred
- * over the room so it reads over the lightest wall.
+ * The attract mode's label, the way an arcade cabinet marks its demo:
+ * `DEMO` and the way in, one size, slanted, in gold with a hard ink outline and
+ * drop like the logo's, blinking together, centred over the room so it
+ * reads over the lightest wall without taking the scene over.
  */
 export const DemoLabel = ({ y, className }: DemoLabelProps) => {
   const kind = useInputKind();
   return (
     <div
       aria-hidden
-      className={cn(
-        'pointer-events-none absolute inset-x-0 flex flex-col items-center gap-[calc(var(--px)*4)] text-center uppercase',
-        className,
-      )}
+      className={cn('pointer-events-none absolute inset-x-0', className)}
       style={{ top: px(y) }}
     >
-      <span
-        className="text-[5em] leading-none font-bold tracking-[0.12em] text-(--pb-gold)"
-        style={{ textShadow: outline(2, 2) }}
-      >
-        Demo
-      </span>
       <Loud
-        className="text-[1.1em] font-bold tracking-[0.12em] text-(--pb-heading) [--blink-low:0]"
+        className="flex flex-col items-center gap-[calc(var(--px)*2)] text-center text-[1.6em] leading-none font-bold tracking-[0.12em] text-(--pb-gold) uppercase italic [--blink-low:0]"
         style={{ textShadow: outline(1, 1) }}
       >
-        {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
+        <span>Demo</span>
+        <span>{kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}</span>
       </Loud>
     </div>
   );

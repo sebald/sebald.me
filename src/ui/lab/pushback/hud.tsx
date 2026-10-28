@@ -55,7 +55,8 @@ export interface BoxProps {
 /**
  * One box of a bar on the stage's grid, a pixel of ink around it: lit,
  * a light top row, the colour, a shaded bottom row; empty, dark with a
- * checker of dots inside its top and bottom rows. Placed on the stage
+ * slightly brighter rim a pixel wide inside the ink, so the slot shows,
+ * and a checker of dots inside that. Placed on the stage
  * with `x` and `y`, or in the flow without them (a meter's boxes).
  */
 export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
@@ -70,7 +71,9 @@ export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
         top: placed ? px(y) : undefined,
         width: px(width),
         height: px(height),
-        boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
+        boxShadow: colours
+          ? `0 0 0 var(--px) ${PALETTE.ink}`
+          : `0 0 0 var(--px) ${PALETTE.ink}, inset 0 0 0 var(--px) ${PALETTE.emptyRim}`,
         background: colours
           ? bright
             ? colours.top
@@ -80,10 +83,9 @@ export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
     >
       {!colours && (
         <span
-          className="absolute inset-x-0"
+          className="absolute"
           style={{
-            top: 'var(--px)',
-            bottom: 'var(--px)',
+            inset: 'var(--px)',
             background: `repeating-conic-gradient(${PALETTE.emptyDots} 0 25%, transparent 0 50%)`,
             backgroundSize: `${px(2)} ${px(2)}`,
           }}

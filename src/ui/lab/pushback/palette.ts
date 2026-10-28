@@ -39,6 +39,8 @@ export const PALETTE = {
   /** Empty ticks, pips and tracks, with their dots */
   empty: '#0f1433',
   emptyDots: '#19224f',
+  /** The inset rim inside an empty box, so a slot reads as a slot */
+  emptyRim: '#2a3570',
   /** The marker on the centre tick, the rail's thumb */
   steel: '#8a92b8',
 

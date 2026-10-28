@@ -53,7 +53,10 @@ interface Options {
   attempt: DuelSetup['attempt'];
   seed: number;
   silence: boolean;
+  /** The ghost of the predecessor, as in easy mode */
   buddy: boolean;
+  /** The ghost out on every defence right away, to see where it stands */
+  ghostAlways: boolean;
   /** Whose rules: easy has no timer, hard tires slowly and rushes */
   mode: Mode;
   /** The silence bar's share of the reading time, instead of the mode's */
@@ -83,6 +86,7 @@ const DEFAULTS: Options = {
   seed: 1,
   silence: true,
   buddy: false,
+  ghostAlways: false,
   mode: 'normal',
   share: null,
   collected: 'own',
@@ -310,11 +314,21 @@ export const Sandbox = () => {
             onChange={e => set('silence', e.target.checked)}
           />
         </Field>
-        <Field label="Onboarding buddy">
+        <Field label="Ghost">
           <input
             type="checkbox"
             checked={options.buddy}
             onChange={e => set('buddy', e.target.checked)}
+          />
+        </Field>
+        <Field label="Ghost right away">
+          <input
+            type="checkbox"
+            checked={options.ghostAlways}
+            onChange={e => {
+              set('ghostAlways', e.target.checked);
+              if (e.target.checked) set('buddy', true);
+            }}
           />
         </Field>
         <Field label="Rules">
@@ -408,6 +422,7 @@ export const Sandbox = () => {
           initial={initial}
           look={applied.look}
           scale={applied.scale}
+          ghostAlways={applied.ghostAlways}
           scene={applied.scene ?? undefined}
           reducedMotion={applied.reducedMotion}
           onEnd={duel =>
