@@ -197,34 +197,46 @@ export const TitleScreen = ({
     };
   }, [open]);
 
-  // Reset asks for a second press: the first arms it, the second does it,
-  // Escape or a few seconds of nothing disarm it
-  const [armed, setArmed] = useState(false);
+  // Reset, and a mode switch while a run is going, ask for a second
+  // press: the first arms it, the second does it, Escape or a few
+  // seconds of nothing disarm it
+  const [armed, setArmed] = useState<'reset' | 'mode' | null>(null);
   useEffect(() => {
     if (!armed) return;
-    const timer = setTimeout(() => setArmed(false), ARMED_MS);
+    const timer = setTimeout(() => setArmed(null), ARMED_MS);
     return () => clearTimeout(timer);
   }, [armed]);
-  useKeys({ Escape: () => setArmed(false) }, armed);
+  useKeys({ Escape: () => setArmed(null) }, armed !== null);
+  // A run is going when there is something to reset
+  const runsGoing = onReset !== undefined;
+  const upcoming = nextMode(mode);
 
   const items: PickerItem[] = [
     { id: 'start', label: 'Start', onSelect: onStart },
     {
       id: 'mode',
-      label: `Mode: ${MODE_LABELS[mode]}`,
-      onSelect: () => onMode(nextMode(mode)),
+      label:
+        armed === 'mode'
+          ? `${MODE_LABELS[upcoming]}? Press again`
+          : `Mode: ${MODE_LABELS[mode]}`,
+      onSelect: () => {
+        if (!runsGoing || armed === 'mode') {
+          setArmed(null);
+          onMode(upcoming);
+        } else setArmed('mode');
+      },
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
   ];
   if (onReset)
     items.push({
       id: 'reset',
-      label: armed ? 'Reset? Press again' : 'Reset',
+      label: armed === 'reset' ? 'Reset? Press again' : 'Reset',
       onSelect: () => {
-        if (armed) {
-          setArmed(false);
+        if (armed === 'reset') {
+          setArmed(null);
           onReset();
-        } else setArmed(true);
+        } else setArmed('reset');
       },
     });
 
@@ -292,9 +304,11 @@ export const TitleScreen = ({
             />
             <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance">
               <Muted>
-                {armed
+                {armed === 'reset'
                   ? 'This forgets every run and every collected phrase.'
-                  : MODE_BLURBS[mode]}
+                  : armed === 'mode'
+                    ? `A run is played in one mode. Switching to ${MODE_LABELS[upcoming].toLowerCase()} ends your runs; the phrases you collected stay.`
+                    : MODE_BLURBS[mode]}
               </Muted>
               <Muted className="text-[0.8em] opacity-70">{FICTION}</Muted>
             </div>

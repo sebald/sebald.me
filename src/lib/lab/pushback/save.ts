@@ -197,10 +197,13 @@ export const finishDuel = (
   };
 };
 
-export const setMode = (save: Save, mode: Mode): Save => ({
-  ...save,
-  mode,
-});
+/**
+ * Switch the mode. A run is played in one mode, so its score means one
+ * thing: switching ends every run (the glossary, a record across runs,
+ * stays)
+ */
+export const setMode = (save: Save, mode: Mode): Save =>
+  mode === save.mode ? save : { ...save, mode, runs: {} };
 
 /** Whether there is anything a reset would throw away */
 export const hasRuns = (save: Save): boolean =>

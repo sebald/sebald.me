@@ -36,6 +36,18 @@ describe('save', () => {
     assert.deepEqual(loadSave(storage), save);
   });
 
+  it('ends every run when the mode changes and keeps the glossary', () => {
+    const save = {
+      ...startRun(emptySave('easy', ['pm-1']), 'dev', 'a', 1),
+    };
+    assert.ok(hasRuns(save));
+    assert.equal(setMode(save, 'easy'), save);
+    const hard = setMode(save, 'hard');
+    assert.equal(hard.mode, 'hard');
+    assert.deepEqual(hard.runs, {});
+    assert.deepEqual(hard.glossary, ['pm-1']);
+  });
+
   it('resets to an empty save and keeps the mode', () => {
     const save = startRun(setMode(emptySave(), 'hard'), 'pm', 'b', 1);
     assert.equal(hasRuns(save), true);
