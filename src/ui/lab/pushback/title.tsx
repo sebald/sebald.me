@@ -11,8 +11,8 @@ import { cn } from '@/lib/styles.utils';
 
 import { Room } from './frame';
 import { Picker, type PickerItem } from './picker';
-import { Stage } from './stage';
-import { prefersReducedMotion, useClock } from './use-clock';
+import { Stage, px } from './stage';
+import { Loud, Muted } from './text';
 import { useInputKind } from './use-input-kind';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -52,8 +52,6 @@ const LOGO_TOP = {
 /** The window of the corner office the title shows: the duel's */
 const VIEW = viewFor(STANDS.office);
 
-const px = (n: number) => `calc(var(--px) * ${n})`;
-
 /** Keys that only modify: not a press that opens the menu */
 const MODIFIERS = new Set([
   'Shift',
@@ -80,10 +78,6 @@ export const TitleScreen = ({
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
   const kind = useInputKind();
-  const reduced = prefersReducedMotion();
-  // The arcade blink: half a second on, half off; steady under reduced motion
-  const clock = useClock(!open && !reduced);
-  const lit = reduced || Math.floor(clock / 500) % 2 === 0;
 
   // Attract mode: a key or a tap resets the clock, silence starts the demo
   useEffect(() => {
@@ -160,7 +154,7 @@ export const TitleScreen = ({
         style={{ height: px(LAYOUT.band) }}
       >
         <Room scene="office" view={VIEW} />
-        <div className="absolute inset-0 bg-[#07080d]/60" />
+        <div className="absolute inset-0 bg-(--pb-bg)/60" />
       </div>
       <h2
         className={cn(
@@ -202,13 +196,13 @@ export const TitleScreen = ({
         >
           <div className="flex min-h-0 flex-1 gap-[calc(var(--px)*4)]">
             <Picker label="Title menu" className="w-[11em]" items={items} />
-            <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance text-[#8a92b8]">
-              <p className="m-0">
+            <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance">
+              <Muted>
                 {armed
                   ? 'This forgets every run and every collected phrase.'
                   : MODE_BLURBS[mode]}
-              </p>
-              <p className="m-0 text-[0.8em] opacity-70">{FICTION}</p>
+              </Muted>
+              <Muted className="text-[0.8em] opacity-70">{FICTION}</Muted>
             </div>
           </div>
         </Window>
@@ -217,20 +211,19 @@ export const TitleScreen = ({
           className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
           style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
         >
-          <p
-            aria-live="polite"
-            className="m-0 text-[1.25em] font-bold tracking-[0.15em] text-[#f3c25a] uppercase"
-            style={{ opacity: lit ? 1 : 0 }}
-          >
-            {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
+          {/* The arcade call to play: a full blink, nothing between on and off */}
+          <p aria-live="polite" className="m-0 text-[1.25em] [--blink-low:0]">
+            <Loud className="font-bold tracking-[0.15em] uppercase">
+              {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
+            </Loud>
           </p>
-          <Stage.Muted className="m-0 text-[0.85em] text-balance">
+          <Muted className="text-[0.85em] text-balance">
             Counter the phrase. Push the scale to your side. Full momentum lets
             you drop the mic.
-          </Stage.Muted>
-          <Stage.Muted className="m-0 text-[0.7em] text-balance opacity-70">
+          </Muted>
+          <Muted className="text-[0.7em] text-balance opacity-70">
             {FICTION}
-          </Stage.Muted>
+          </Muted>
         </div>
       )}
     </Stage>

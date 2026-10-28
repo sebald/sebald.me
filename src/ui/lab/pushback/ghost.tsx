@@ -8,6 +8,7 @@ import { LAYOUT, bob } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { GHOST_ALPHA, drawCell } from './draw';
+import { PALETTE } from './palette';
 import { GHOST_KEY, useSprites } from './sheets';
 
 const GHOST_KEYS = [GHOST_KEY] as const;
@@ -65,10 +66,10 @@ export const Ghost = ({
       const r = Math.round(2 + 5 * (1 - enter));
       for (let yy = -r; yy <= r; yy++) {
         const w = Math.round(Math.sqrt(r * r - yy * yy));
-        ctx.fillStyle = '#05060a';
+        ctx.fillStyle = PALETTE.ghostHole;
         ctx.fillRect(cx - w, midY + yy, 2 * w, 1);
         if (Math.abs(yy) === r) continue;
-        ctx.fillStyle = '#2f5e60';
+        ctx.fillStyle = PALETTE.ghostRim;
         ctx.fillRect(cx - w, midY + yy, 1, 1);
         ctx.fillRect(cx + w - 1, midY + yy, 1, 1);
       }
@@ -80,9 +81,9 @@ export const Ghost = ({
     if (sprite) {
       drawCell(ctx, sprite, cell, { x: 0, bottom });
     } else {
-      ctx.fillStyle = '#bfe8ea';
+      ctx.fillStyle = PALETTE.ghost;
       ctx.fillRect(cx - 10, bottom - 40, 20, 34);
-      ctx.fillStyle = '#e8fbfb';
+      ctx.fillStyle = PALETTE.ghostLight;
       ctx.fillRect(cx - 9, bottom - 58, 18, 18);
     }
     ctx.restore();

@@ -23,7 +23,8 @@ import { cn } from '@/lib/styles.utils';
 
 import { Picker, type PickerItem } from './picker';
 import { SCENE_ASSETS } from './scenes';
-import { Stage } from './stage';
+import { Stage, px } from './stage';
+import { Heading, Muted } from './text';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
 
@@ -38,8 +39,6 @@ interface RosterScreenProps {
 
 const tierLabel = (tier: 1 | 2 | 3 | 'boss') =>
   tier === 'boss' ? 'Boss' : `Tier ${tier}`;
-
-const px = (n: number) => `calc(var(--px) * ${n})`;
 
 /** The title row: the heading, an explainer, the tab switch */
 const Title = ({
@@ -58,14 +57,14 @@ const Title = ({
     style={{ left: px(6), right: px(6), top: px(5) }}
   >
     <div className="min-w-0">
-      <h2 className="m-0 font-semibold text-[#f3eedc]">{heading}</h2>
-      <p className="m-0 text-[0.8em] text-[#8a92b8]">{blurb}</p>
+      <Heading>{heading}</Heading>
+      <Muted className="text-[0.8em]">{blurb}</Muted>
     </div>
     <button
       type="button"
       className={cn(
         'shrink-0 cursor-pointer text-[0.85em] outline-none focus-visible:ui-focus',
-        'text-[#8a92b8] underline decoration-dotted underline-offset-4 hover:text-white',
+        'text-(--pb-muted) underline decoration-dotted underline-offset-4 hover:text-white',
       )}
       onClick={onTab}
     >
@@ -111,14 +110,14 @@ export const RosterScreen = ({
       onSelect: () => onPlay(index),
       label: (
         <span className="flex items-center gap-[calc(var(--px)*3)]">
-          <span className="w-[1.2em] text-center text-[#f2c14e]" aria-hidden>
+          <span className="w-[1.2em] text-center text-(--pb-gold)" aria-hidden>
             {beaten ? (beaten.flawless ? '★' : '✓') : ''}
           </span>
           <span className="sr-only">
             {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
           </span>
           <span className="flex-1">{character.name}</span>
-          <span className="text-[0.8em] text-[#8a92b8]">
+          <span className="text-[0.8em] text-(--pb-muted)">
             {index === bossIndex(run.run) && !bossUnlocked(run)
               ? 'locked'
               : tierLabel(slot.slot.tier)}
@@ -178,9 +177,7 @@ export const RosterScreen = ({
             className="absolute text-[0.8em]"
             style={{ right: px(3), width: px(90), top: px(34), bottom: px(3) }}
           >
-            <p className="m-0 mb-[calc(var(--px)*2)] text-[#8a92b8]">
-              Out of office
-            </p>
+            <Muted className="mb-[calc(var(--px)*2)]">Out of office</Muted>
             <ul className="m-0 grid list-none gap-[var(--px)] p-0">
               {run.run.outOfOffice.map(id => (
                 <li key={id}>{characterById(id).name}</li>
@@ -217,24 +214,24 @@ export const RosterScreen = ({
                   ) : undefined
                 }
               >
-                <p className="m-0 mb-[calc(var(--px)*2)] font-semibold text-[#f3eedc]">
+                <Heading level={3} className="mb-[calc(var(--px)*2)]">
                   {ROLE_LABELS[pool]}
-                </p>
+                </Heading>
                 <ol className="m-0 grid min-h-0 [scrollbar-width:none] list-none content-start gap-[calc(var(--px)*2)] overflow-y-auto p-0 leading-snug [&::-webkit-scrollbar]:hidden">
                   {poolOf(pool).map(pair => (
                     <li key={pair.id} className="min-w-0">
                       {collected.has(pair.id) ? (
                         <>
-                          <div className="truncate text-[#d6d1c2]">
+                          <div className="truncate text-(--pb-text-bright)">
                             {pairById(pair.id).phrase}
                           </div>
-                          <div className="truncate text-[#8a92b8]">
+                          <div className="truncate text-(--pb-muted)">
                             {pairById(pair.id).counter}
                           </div>
                         </>
                       ) : (
                         <div
-                          className="h-[2.4em] border-b border-dashed border-[#4a5066]"
+                          className="h-[2.4em] border-b border-dashed border-(--pb-frame-dim)"
                           aria-label="not yet collected"
                         />
                       )}
@@ -247,21 +244,21 @@ export const RosterScreen = ({
                       className={cn(
                         'min-w-0',
                         j === 0 &&
-                          'mt-[var(--px)] border-t border-[#4a5066] pt-[calc(var(--px)*2)]',
+                          'mt-[var(--px)] border-t border-(--pb-frame-dim) pt-[calc(var(--px)*2)]',
                       )}
                     >
                       {collected.has(pair.id) ? (
                         <>
-                          <div className="truncate text-[#f3c25a]">
+                          <div className="truncate text-(--pb-gold)">
                             {pair.phrase}
                           </div>
-                          <div className="truncate text-[#8a92b8]">
+                          <div className="truncate text-(--pb-muted)">
                             {pair.counter}
                           </div>
                         </>
                       ) : (
                         <div
-                          className="h-[2.4em] border-b border-dashed border-[#4a5066]"
+                          className="h-[2.4em] border-b border-dashed border-(--pb-frame-dim)"
                           aria-label="closer not yet collected"
                         />
                       )}

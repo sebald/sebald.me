@@ -8,6 +8,7 @@
 import type { SceneId } from '@/lib/lab/pushback/characters';
 import { BACKING, BREATH, LAYOUT, STAGE } from '@/lib/lab/pushback/stage';
 
+import { PALETTE } from './palette';
 import type { Sprite } from './sheets';
 
 // Palette
@@ -15,37 +16,11 @@ import type { Sprite } from './sheets';
 
 /** Placeholder band colours: wall and floor */
 const SCENES: Record<SceneId, { wall: string; floor: string }> = {
-  floor: { wall: '#2e3a4a', floor: '#23292f' },
+  floor: { wall: PALETTE.wall, floor: PALETTE.floor },
   meeting: { wall: '#6b6256', floor: '#4b4a48' },
   studio: { wall: '#5a4634', floor: '#3e2e20' },
   office: { wall: '#141a2b', floor: '#0e1119' },
 };
-
-/** The chrome's colours: the quiet window and the bars */
-export const CHROME = {
-  /** Behind the panel and outside the window's corners */
-  bg: '#07080d',
-  ink: '#0b0d16',
-  /** The window's frame, lit and unlit */
-  frame: '#b7b09d',
-  frameDim: '#4a5066',
-  frameInner: '#1c2236',
-  fill: '#131829',
-  fillTop: '#1a2035',
-  /** The player's side */
-  gold: '#f2c14e',
-  goldLight: '#fff1b8',
-  goldShade: '#b8871f',
-  /** The opponent's side */
-  ember: '#f0a36f',
-  emberLight: '#ffd6b8',
-  emberShade: '#b86a35',
-  /** Empty ticks and pips */
-  empty: '#0f1433',
-  emptyDots: '#19224f',
-  /** The marker on the centre tick */
-  steel: '#8a92b8',
-} as const;
 
 /** The ghost is see-through: its opacity when fully shown */
 export const GHOST_ALPHA = 0.7;
@@ -209,7 +184,14 @@ export const drawTear = (
 
 /** The ground under the band; the window on it is DOM (`Window`) */
 const drawPanel = (ctx: CanvasRenderingContext2D) => {
-  rect(ctx, 0, LAYOUT.band, STAGE.width, STAGE.height - LAYOUT.band, CHROME.bg);
+  rect(
+    ctx,
+    0,
+    LAYOUT.band,
+    STAGE.width,
+    STAGE.height - LAYOUT.band,
+    PALETTE.bg,
+  );
 };
 
 /** The ghost from its sheet, see-through; a pale shape until it is built */

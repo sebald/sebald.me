@@ -11,22 +11,21 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
-import { CHROME } from './draw';
+import { PALETTE } from './palette';
+import { px } from './stage';
 import { useClock } from './use-clock';
-
-const px = (n: number) => `calc(var(--px) * ${n})`;
 
 const styles = {
   name: cva({
     base: [
       'absolute font-semibold tracking-wide uppercase',
-      'bg-[#0b0d16]/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
-      'shadow-[0_0_0_var(--px)_#0b0d16]',
+      'bg-(--pb-ink)/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
+      'shadow-[0_0_0_var(--px)_var(--pb-ink)]',
     ],
     variants: {
       side: {
-        player: 'text-[#f2c14e]',
-        opponent: 'text-right text-[#f0a36f]',
+        player: 'text-(--pb-gold)',
+        opponent: 'text-right text-(--pb-ember)',
       },
     },
   }),
@@ -35,14 +34,14 @@ const styles = {
 /** The side's colours for a lit box */
 const SIDE = {
   player: {
-    top: CHROME.goldLight,
-    mid: CHROME.gold,
-    shade: CHROME.goldShade,
+    top: PALETTE.goldLight,
+    mid: PALETTE.gold,
+    shade: PALETTE.goldShade,
   },
   opponent: {
-    top: CHROME.emberLight,
-    mid: CHROME.ember,
-    shade: CHROME.emberShade,
+    top: PALETTE.emberLight,
+    mid: PALETTE.ember,
+    shade: PALETTE.emberShade,
   },
 } as const;
 
@@ -73,12 +72,12 @@ const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
         top: px(y),
         width: px(width),
         height: px(height),
-        boxShadow: `0 0 0 var(--px) ${CHROME.ink}`,
+        boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
         background: colours
           ? bright
             ? colours.top
             : `linear-gradient(to bottom, ${colours.top} 0 var(--px), ${colours.mid} var(--px) calc(100% - var(--px)), ${colours.shade} calc(100% - var(--px)) 100%)`
-          : CHROME.empty,
+          : PALETTE.empty,
       }}
     >
       {!colours && (
@@ -87,7 +86,7 @@ const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
           style={{
             top: 'var(--px)',
             bottom: 'var(--px)',
-            background: `repeating-conic-gradient(${CHROME.emptyDots} 0 25%, transparent 0 50%)`,
+            background: `repeating-conic-gradient(${PALETTE.emptyDots} 0 25%, transparent 0 50%)`,
             backgroundSize: `${px(2)} ${px(2)}`,
           }}
         />
@@ -132,7 +131,7 @@ export const Hud = ({
   const blinkOn = !still && bob(clock) === 0;
   const ticks = scaleTicks({ scale, toWin, toLose });
   const marker = ticks.find(tick => tick.marker);
-  const markerColour = marker?.side ? SIDE[marker.side].top : CHROME.steel;
+  const markerColour = marker?.side ? SIDE[marker.side].top : PALETTE.steel;
   const pips = (side: Side) => {
     const { x, y, width, height, gap } = LAYOUT.pips;
     const w = barWidth(momentumTotal, { width, gap });
@@ -214,7 +213,7 @@ export const Hud = ({
               top: px(marker.y + marker.height + 1),
               width: px(5),
               height: px(3),
-              background: CHROME.ink,
+              background: PALETTE.ink,
             }}
           />
           <span

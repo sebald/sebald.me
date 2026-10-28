@@ -9,6 +9,7 @@ import { resultCardText } from '@/lib/lab/pushback/save';
 import { Picker } from './picker';
 import { Stage } from './stage';
 import { useKeys } from './use-keys';
+import { Window } from './window';
 
 interface ResultScreenProps {
   run: RunState;
@@ -35,9 +36,9 @@ export const ResultScreen = ({ run, glossary, onBack }: ResultScreenProps) => {
   return (
     <Stage label="Pushback, result card">
       <Stage.Center className="justify-between py-6">
-        <pre className="bg-[#131829] px-4 py-3 text-left whitespace-pre shadow-[0_0_0_calc(var(--px)*2)_#0b0d16] ring-[length:var(--px)] ring-[#b7b09d]">
-          {text}
-        </pre>
+        <Window>
+          <pre className="m-0 text-left whitespace-pre">{text}</pre>
+        </Window>
         <Picker
           label="Result card"
           className="w-full max-w-[18em]"

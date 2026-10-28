@@ -6,7 +6,11 @@ import { createContext, useContext, useRef } from 'react';
 import { BACKING, STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { paletteVars } from './palette';
 import { type StageScale, useScale } from './use-scale';
+
+/** A length in stage pixels, for inline styles: `px(3)` is three of them */
+export const px = (n: number) => `calc(var(--px) * ${n})`;
 
 // Context
 // ---------------
@@ -38,6 +42,7 @@ export const Pixels = ({
         data-stage
         className={cn('font-mono', className)}
         style={{
+          ...paletteVars,
           fontSize: fontSizeFor(fixed),
           ['--px' as string]: `${fixed}px`,
         }}
@@ -58,22 +63,15 @@ const styles = {
       // hotspot remarks, sized from the scale (so em units inside), smooth
       // and without a shadow
       'relative overflow-hidden outline-none',
-      'bg-[#07080d] text-[#c9c4b4]',
+      'bg-(--pb-bg) text-(--pb-text)',
       'select-none',
     ],
   }),
   portrait: cva({
-    base: 'bg-[#07080d] p-6 text-center font-mono text-sm text-[#c9c4b4]',
+    base: 'bg-(--pb-bg) p-6 text-center font-mono text-sm text-(--pb-text)',
   }),
   center: cva({
     base: 'absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center',
-  }),
-  title: cva({
-    base: 'text-[2em] font-semibold tracking-wide text-[#f3eedc]',
-  }),
-  muted: cva({ base: 'text-[#8a92b8]' }),
-  corner: cva({
-    base: 'absolute top-3 right-3 flex gap-2',
   }),
 };
 
@@ -123,7 +121,12 @@ export const Stage = ({
   };
   if (portrait && !fixed) {
     return (
-      <section data-stage aria-label={label} className={styles.portrait()}>
+      <section
+        data-stage
+        aria-label={label}
+        className={styles.portrait()}
+        style={paletteVars}
+      >
         Turn your phone sideways: the stage needs 360 pixels.
       </section>
     );
@@ -131,6 +134,7 @@ export const Stage = ({
   const width = STAGE.width * scale;
   const height = (STAGE.height - crop) * scale;
   const style: CSSProperties = {
+    ...paletteVars,
     width,
     height,
     marginInline: `calc(50% - ${width / 2}px)`,
@@ -170,19 +174,4 @@ const Center = ({ children, className }: StageProps) => (
   <div className={styles.center({ className })}>{children}</div>
 );
 
-const Title = ({ children, className }: StageProps) => (
-  <h2 className={styles.title({ className })}>{children}</h2>
-);
-
-const Muted = ({ children, className }: StageProps) => (
-  <p className={styles.muted({ className })}>{children}</p>
-);
-
-const Corner = ({ children, className }: StageProps) => (
-  <div className={styles.corner({ className })}>{children}</div>
-);
-
 Stage.Center = Center;
-Stage.Title = Title;
-Stage.Muted = Muted;
-Stage.Corner = Corner;

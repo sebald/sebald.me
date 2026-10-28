@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 
 import { Stage } from './stage';
+import { Muted } from './text';
 
 // The game reads `localStorage` and `matchMedia` on mount and later draws
 // into a canvas, none of which exists on the server, so it is client-only.
@@ -14,7 +15,7 @@ const Pushback = dynamic(
     loading: () => (
       <Stage>
         <Stage.Center>
-          <Stage.Muted>Loading…</Stage.Muted>
+          <Muted>Loading…</Muted>
         </Stage.Center>
       </Stage>
     ),

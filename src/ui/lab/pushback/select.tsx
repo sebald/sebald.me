@@ -14,10 +14,11 @@ import { LAYOUT } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { Character } from './character';
-import { CHROME } from './draw';
+import { PALETTE } from './palette';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
-import { Stage } from './stage';
+import { Stage, px } from './stage';
+import { Heading, Muted } from './text';
 import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -35,12 +36,10 @@ const PLACE = {
   figure: { x: 214 },
 } as const;
 
-const px = (n: number) => `calc(var(--px) * ${n})`;
-
 const styles = {
   tile: cva({
     base: [
-      'relative block cursor-pointer bg-[#131829] outline-none',
+      'relative block cursor-pointer bg-(--pb-fill) outline-none',
       'transition-[filter] duration-150 focus-visible:ui-focus',
     ],
     variants: {
@@ -53,7 +52,7 @@ const styles = {
   role: cva({
     base: 'absolute text-center text-[0.75em] font-semibold',
     variants: {
-      active: { true: 'text-[#f3eedc]', false: 'text-[#5c6488]' },
+      active: { true: 'text-(--pb-heading)', false: 'text-(--pb-dim)' },
     },
   }),
 };
@@ -158,12 +157,12 @@ export const SelectScreen = ({
         style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
       />
 
-      <p
-        className="absolute inset-x-0 text-center text-[0.85em] text-[#8a92b8]"
+      <Muted
+        className="absolute inset-x-0 text-center text-[0.85em]"
         style={{ top: px(8) }}
       >
         Pick a role.
-      </p>
+      </Muted>
 
       {/* The grid: a column per role, a row per look */}
       <div>
@@ -183,9 +182,9 @@ export const SelectScreen = ({
               const active = column === cursor.column && row === cursor.row;
               const frame = active
                 ? lit
-                  ? CHROME.goldLight
-                  : CHROME.gold
-                : CHROME.frameDim;
+                  ? PALETTE.goldLight
+                  : PALETTE.gold
+                : PALETTE.frameDim;
               return (
                 <button
                   key={l}
@@ -196,7 +195,7 @@ export const SelectScreen = ({
                   style={{
                     left: px(PLACE.grid.x + column * step + PLACE.frame),
                     top: px(PLACE.grid.y + row * step + PLACE.frame),
-                    boxShadow: `0 0 0 ${px(PLACE.frame)} ${frame}, 0 0 0 ${px(PLACE.frame + 1)} ${CHROME.ink}`,
+                    boxShadow: `0 0 0 ${px(PLACE.frame)} ${frame}, 0 0 0 ${px(PLACE.frame + 1)} ${PALETTE.ink}`,
                   }}
                   onClick={() => {
                     if (active) onConfirm(r, l);
@@ -221,13 +220,13 @@ export const SelectScreen = ({
           top: px(PLACE.grid.y + 2 * step + 2),
         }}
       >
-        <div className="text-[0.85em] font-semibold text-[#f3eedc]">
+        <Heading level={3} className="text-[0.85em]">
           {LOOKS[role][look].name}
-        </div>
+        </Heading>
         {run && (
-          <div className="text-[0.7em] text-[#8a92b8]">
+          <Muted className="text-[0.7em]">
             {run.finished ? 'finished' : 'in progress'}
-          </div>
+          </Muted>
         )}
       </div>
 

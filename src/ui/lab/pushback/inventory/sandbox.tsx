@@ -27,6 +27,7 @@ import { type Role, ROLES, deckPool } from '@/lib/lab/pushback/lines';
 import { Rng, seedRng } from '@/lib/lab/pushback/random';
 
 import { DuelScreen } from '../duel-screen';
+import { Field, field } from './controls';
 
 // Options
 // ---------------
@@ -173,10 +174,6 @@ export const sandboxState = (options: Options): DuelState => {
 
 // Sandbox
 // ---------------
-const field = 'flex items-center justify-between gap-3 text-sm';
-const input =
-  'rounded-md bg-mist-900 px-2 py-1 text-mist-100 ring-1 ring-mist-700';
-
 export const Sandbox = () => {
   const [options, setOptions] = useState<Options>(DEFAULTS);
   const [applied, setApplied] = useState<Options>(DEFAULTS);
@@ -195,16 +192,15 @@ export const Sandbox = () => {
   return (
     <div className="grid gap-6">
       <form
-        className="grid grid-cols-2 gap-x-6 gap-y-2 rounded-xl bg-mist-950 p-4 font-mono md:grid-cols-3"
+        className={field.form}
         onSubmit={event => {
           event.preventDefault();
           apply();
         }}
       >
-        <label className={field}>
-          Player role
+        <Field label="Player role">
           <select
-            className={input}
+            className={field.input}
             value={options.role}
             onChange={e => set('role', e.target.value as Role)}
           >
@@ -214,11 +210,10 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={field}>
-          Look
+        </Field>
+        <Field label="Look">
           <select
-            className={input}
+            className={field.input}
             value={options.look}
             onChange={e => set('look', e.target.value as Look)}
           >
@@ -228,11 +223,10 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={field}>
-          Opponent
+        </Field>
+        <Field label="Opponent">
           <select
-            className={input}
+            className={field.input}
             value={options.character}
             onChange={e => set('character', e.target.value)}
           >
@@ -243,11 +237,10 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={field}>
-          Room
+        </Field>
+        <Field label="Room">
           <select
-            className={input}
+            className={field.input}
             value={options.scene ?? ''}
             onChange={e =>
               set('scene', e.target.value ? (e.target.value as SceneId) : null)
@@ -260,11 +253,10 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={field}>
-          Slot
+        </Field>
+        <Field label="Slot">
           <select
-            className={input}
+            className={field.input}
             value={options.slot}
             onChange={e => set('slot', Number(e.target.value))}
           >
@@ -275,11 +267,10 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
-        <label className={field}>
-          Attempt
+        </Field>
+        <Field label="Attempt">
           <select
-            className={input}
+            className={field.input}
             value={options.attempt}
             onChange={e => set('attempt', e.target.value as Options['attempt'])}
           >
@@ -287,20 +278,18 @@ export const Sandbox = () => {
             <option value="retry">retry</option>
             <option value="replay">replay</option>
           </select>
-        </label>
-        <label className={field}>
-          Seed
+        </Field>
+        <Field label="Seed">
           <input
-            className={input}
+            className={field.input}
             type="number"
             value={options.seed}
             onChange={e => set('seed', Number(e.target.value))}
           />
-        </label>
-        <label className={field}>
-          Collected
+        </Field>
+        <Field label="Collected">
           <select
-            className={input}
+            className={field.input}
             value={options.collected}
             onChange={e =>
               set('collected', e.target.value as Options['collected'])
@@ -310,35 +299,31 @@ export const Sandbox = () => {
             <option value="all">everything</option>
             <option value="none">nothing</option>
           </select>
-        </label>
-        <label className={field}>
-          Silence bar
+        </Field>
+        <Field label="Silence bar">
           <input
             type="checkbox"
             checked={options.silence}
             onChange={e => set('silence', e.target.checked)}
           />
-        </label>
-        <label className={field}>
-          Onboarding buddy
+        </Field>
+        <Field label="Onboarding buddy">
           <input
             type="checkbox"
             checked={options.buddy}
             onChange={e => set('buddy', e.target.checked)}
           />
-        </label>
-        <label className={field}>
-          Hard rules
+        </Field>
+        <Field label="Hard rules">
           <input
             type="checkbox"
             checked={options.hard}
             onChange={e => set('hard', e.target.checked)}
           />
-        </label>
-        <label className={field}>
-          Reading share
+        </Field>
+        <Field label="Reading share">
           <input
-            className={input}
+            className={field.input}
             type="number"
             min={0.1}
             max={2}
@@ -352,11 +337,10 @@ export const Sandbox = () => {
               )
             }
           />
-        </label>
-        <label className={field}>
-          Jump to
+        </Field>
+        <Field label="Jump to">
           <select
-            className={input}
+            className={field.input}
             value={options.jump}
             onChange={e => set('jump', e.target.value as Jump)}
           >
@@ -368,27 +352,24 @@ export const Sandbox = () => {
             <option value="end-win">end, won</option>
             <option value="end-lose">end, lost</option>
           </select>
-        </label>
-        <label className={field}>
-          Momentum full
+        </Field>
+        <Field label="Momentum full">
           <input
             type="checkbox"
             checked={options.momentumFull}
             onChange={e => set('momentumFull', e.target.checked)}
           />
-        </label>
-        <label className={field}>
-          Reduced motion
+        </Field>
+        <Field label="Reduced motion">
           <input
             type="checkbox"
             checked={options.reducedMotion}
             onChange={e => set('reducedMotion', e.target.checked)}
           />
-        </label>
-        <label className={field}>
-          Scale
+        </Field>
+        <Field label="Scale">
           <select
-            className={input}
+            className={field.input}
             value={options.scale}
             onChange={e => set('scale', Number(e.target.value))}
           >
@@ -398,7 +379,7 @@ export const Sandbox = () => {
               </option>
             ))}
           </select>
-        </label>
+        </Field>
         <div className="col-span-full flex items-center gap-4">
           <button
             type="submit"

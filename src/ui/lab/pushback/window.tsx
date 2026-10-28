@@ -4,11 +4,11 @@ import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
-import { CHROME } from './draw';
+import { PALETTE } from './palette';
 import { useInputKind } from './use-input-kind';
 
 /** The quiet window's layers, from the outside in, one stage pixel each */
-const RINGS = `0 0 0 var(--px) ${CHROME.frameInner}, 0 0 0 calc(var(--px) * 2) ${CHROME.frame}, 0 0 0 calc(var(--px) * 3) ${CHROME.ink}`;
+const RINGS = `0 0 0 var(--px) ${PALETTE.frameInner}, 0 0 0 calc(var(--px) * 2) ${PALETTE.frame}, 0 0 0 calc(var(--px) * 3) ${PALETTE.ink}`;
 
 /** The corners knocked out: a staircase notch of three pixels at each */
 const NOTCHED = [
@@ -34,7 +34,7 @@ const NOTCHED = [
   'calc(var(--px) * 2) var(--px)',
 ].join(', ');
 
-const DOT = 'absolute size-[var(--px)] bg-[#0b0d16]';
+const DOT = 'absolute size-[var(--px)] bg-(--pb-ink)';
 
 export interface WindowProps extends PropsWithChildren {
   /** The control hints along the bottom edge */
@@ -71,12 +71,12 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
       className={cn(DOT, 'right-[var(--px)] bottom-[var(--px)]')}
     />
     <div
-      className="relative flex min-h-0 flex-1 flex-col bg-[#131829] p-[calc(var(--px)*3+4px)] leading-[1.35] text-[#c9c4b4]"
+      className="relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) p-[calc(var(--px)*3+4px)] leading-[1.35] text-(--pb-text)"
       style={{
         margin: 'calc(var(--px) * 3)',
         boxShadow: RINGS,
         // The two dithered rows under the frame
-        backgroundImage: `repeating-linear-gradient(90deg, ${CHROME.fillTop} 0 var(--px), transparent var(--px) calc(var(--px) * 2)), repeating-linear-gradient(90deg, transparent 0 var(--px), ${CHROME.fillTop} var(--px) calc(var(--px) * 2))`,
+        backgroundImage: `repeating-linear-gradient(90deg, ${PALETTE.fillTop} 0 var(--px), transparent var(--px) calc(var(--px) * 2)), repeating-linear-gradient(90deg, transparent 0 var(--px), ${PALETTE.fillTop} var(--px) calc(var(--px) * 2))`,
         backgroundSize: '100% var(--px), 100% var(--px)',
         backgroundPosition: '0 0, 0 var(--px)',
         backgroundRepeat: 'no-repeat',
@@ -84,7 +84,7 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
     >
       {children}
       {legend && (
-        <div className="mt-auto pt-[calc(var(--px)*2)] text-right text-[0.75em] text-[#5c6488]">
+        <div className="mt-auto pt-[calc(var(--px)*2)] text-right text-[0.75em] text-(--pb-dim)">
           {legend}
         </div>
       )}
@@ -108,7 +108,7 @@ export const Legend = ({ keys, touch }: LegendProps) => {
       {keys.map(([key, does], i) => (
         <span key={key}>
           {i > 0 && ' · '}
-          <span className="text-[#8a92b8]">{key}</span> {does}
+          <span className="text-(--pb-muted)">{key}</span> {does}
         </span>
       ))}
     </>

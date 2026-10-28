@@ -75,7 +75,7 @@ export const HudDemo = () => {
       </form>
       <Pixels scale={3}>
         <div
-          className="relative overflow-hidden bg-[#2e3a4a]"
+          className="relative overflow-hidden bg-(--pb-wall)"
           style={{
             width: `calc(var(--px) * ${STAGE.width})`,
             height: `calc(var(--px) * ${LAYOUT.hud + 60})`,

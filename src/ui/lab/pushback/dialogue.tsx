@@ -1,17 +1,17 @@
 import type { PropsWithChildren } from 'react';
 
 import type { Side } from '@/lib/lab/pushback/duel';
-import { cn, cva } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 const styles = {
   line: cva({
     base: 'flex items-start gap-[calc(var(--px)*3)]',
-    variants: { muted: { true: 'text-[#8a92b8]' } },
+    variants: { muted: { true: 'text-(--pb-muted)' } },
   }),
   speaker: cva({
     base: 'mt-[0.4em] inline-block size-[0.55em] shrink-0',
     variants: {
-      side: { player: 'bg-[#f2c14e]', opponent: 'bg-[#f0a36f]' },
+      side: { player: 'bg-(--pb-gold)', opponent: 'bg-(--pb-ember)' },
     },
   }),
 };
@@ -35,12 +35,4 @@ export const Dialogue = ({
     <span className={styles.speaker({ side: speaker })} aria-hidden />
     <span>{children}</span>
   </p>
-);
-
-/** A hint under or over the lines, in the muted colour */
-export const Hint = ({
-  className,
-  children,
-}: PropsWithChildren<{ className?: string }>) => (
-  <p className={cn('text-[#8a92b8]', className)}>{children}</p>
 );

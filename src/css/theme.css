@@ -82,14 +82,15 @@
     alternate-reverse;
   --animate-glitch-shift-fast: glitch-shift 0.3s infinite linear alternate;
 
-  /* Pushback: the arcade blink, half a second on, half off, no fade */
+  /* Pushback: the arcade blink, half a second on, half off, no fade; how
+     low it goes is --blink-low (0.6 by default, 0 for a full blink) */
   @keyframes arcade-blink {
     0%,
     100% {
       opacity: 1;
     }
     50% {
-      opacity: 0.5;
+      opacity: var(--blink-low, 0.6);
     }
   }
 

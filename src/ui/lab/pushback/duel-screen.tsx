@@ -59,7 +59,7 @@ import {
   typingDuration,
   viewFor,
 } from '@/lib/lab/pushback/stage';
-import { cn, cva } from '@/lib/styles.utils';
+import { cva } from '@/lib/styles.utils';
 
 import { Burst } from './burst';
 import { Character } from './character';
@@ -69,7 +69,9 @@ import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
-import { prefersReducedMotion, useClock } from './use-clock';
+import { px } from './stage';
+import { Loud, Muted } from './text';
+import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
@@ -84,33 +86,26 @@ const GHOST_BUBBLE = { gap: 3 } as const;
 // Styles
 // ---------------
 const styles = {
-  hint: cva({ base: 'text-[#8a92b8]' }),
   // The ghost's speech bubble in its own pale colour, with a tail
   // pointing down to the ghost's head
   bubble: cva({
     base: [
       'absolute w-max px-[0.6em] py-[0.3em]',
-      'bg-[#0b1516]/90 text-[0.85em] text-[#bfe8ea] ring-1 ring-[#2f5e60]',
+      'bg-(--pb-ghost-ink)/90 text-[0.85em] text-(--pb-ghost) ring-1 ring-(--pb-ghost-rim)',
       'transition-opacity duration-300',
       'after:absolute after:top-full after:left-[calc(var(--px)*10)]',
-      'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-[#2f5e60]',
+      'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-(--pb-ghost-rim)',
       'after:[clip-path:polygon(0_0,100%_0,50%_100%)]',
     ],
   }),
   silence: cva({
     base: [
       'mt-[calc(var(--px)*2)] h-[calc(var(--px)*2)] w-full',
-      'bg-[#0b0e1a] shadow-[0_0_0_var(--px)_#0b0d16]',
+      'bg-(--pb-empty) shadow-[0_0_0_var(--px)_var(--pb-ink)]',
     ],
   }),
   pause: cva({
-    base: ['absolute inset-0 flex items-center justify-center bg-[#07080d]/80'],
-  }),
-  pausePanel: cva({
-    base: [
-      'grid w-[60%] gap-4 bg-[#131829] p-[calc(var(--px)*6)]',
-      'ring-[length:var(--px)] ring-[#b7b09d] shadow-[0_0_0_calc(var(--px)*2)_#0b0d16]',
-    ],
+    base: ['absolute inset-0 flex items-center justify-center bg-(--pb-bg)/80'],
   }),
 };
 
@@ -179,8 +174,6 @@ const scriptKey = (state: DuelState) =>
     state.hand.join(','),
     state.closer ?? '',
   ].join('|');
-
-const px = (n: number) => `calc(var(--px) * ${n})`;
 
 /** What the menu is for: attack, attack with a closer on offer, or defend */
 const prompt = (state: DuelState) =>
@@ -352,9 +345,6 @@ export const DuelScreen = ({
       window.removeEventListener('pointerdown', leave);
     };
   }, [auto, onBack, onPlay]);
-  // The demo's label blinks at the title's rhythm
-  const demoClock = useClock(auto && !reduced);
-  const demoLit = reduced || Math.floor(demoClock / 500) % 2 === 0;
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -652,15 +642,17 @@ export const DuelScreen = ({
         // blinking, with the way in under it
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center justify-center text-center text-[#f3eedc] uppercase"
-          style={{ height: px(LAYOUT.band), opacity: demoLit ? 0.55 : 0 }}
+          className="pointer-events-none absolute inset-x-0 top-0 opacity-55"
+          style={{ height: px(LAYOUT.band) }}
         >
-          <span className="text-[11em] leading-none font-bold tracking-[0.12em]">
-            Demo
-          </span>
-          <span className="mt-[0.5em] text-[1em] font-semibold tracking-[0.1em]">
-            Press Enter to play
-          </span>
+          <Loud className="flex h-full flex-col items-center justify-center text-center text-(--pb-heading) uppercase [--blink-low:0]">
+            <span className="text-[11em] leading-none font-bold tracking-[0.12em]">
+              Demo
+            </span>
+            <span className="mt-[0.5em] text-[1em] font-semibold tracking-[0.1em]">
+              Press Enter to play
+            </span>
+          </Loud>
         </div>
       )}
 
@@ -715,7 +707,7 @@ export const DuelScreen = ({
             <Dialogue speaker="player" muted>
               {counterText(state.outcome?.picked ?? null)}
             </Dialogue>
-            <p className={styles.hint()}>The reply: {step.text}</p>
+            <Muted>The reply: {step.text}</Muted>
           </>
         )}
         {step?.kind === 'menu' && (
@@ -728,9 +720,9 @@ export const DuelScreen = ({
               </Dialogue>
             )}
             {/* The prompt sits above the options, with room on both sides */}
-            <p className={cn(styles.hint(), 'my-[calc(var(--px)*4)]')}>
+            <Muted className="my-[calc(var(--px)*4)]">
               {showsHint(state) ? HINT : prompt(state)}
-            </p>
+            </Muted>
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
@@ -740,7 +732,7 @@ export const DuelScreen = ({
             {silenceWidth !== null && (
               <div className={styles.silence()} aria-hidden>
                 <div
-                  className="h-full bg-[#ddb65a]"
+                  className="h-full bg-(--pb-gold)"
                   style={{ width: `${silenceWidth}%` }}
                 />
               </div>
@@ -748,17 +740,20 @@ export const DuelScreen = ({
           </>
         )}
         {step?.kind === 'wait' && (
-          <p className={styles.hint()}>
+          <Muted>
             {state.winner === 'player' ? 'You won.' : 'You lost.'} Enter to
             continue.
-          </p>
+          </Muted>
         )}
       </Window>
 
       {paused && (
         <div className={styles.pause()}>
-          <div className={styles.pausePanel()}>
-            <p className="text-center">Paused</p>
+          <Window
+            className="w-[60%]"
+            legend={<Legend keys={[['Esc', 'resume']]} touch="Tap Resume" />}
+          >
+            <Muted className="mb-[calc(var(--px)*3)] text-center">Paused</Muted>
             <Picker
               label="Pause"
               items={[
@@ -770,7 +765,7 @@ export const DuelScreen = ({
                 { id: 'back', label: 'Back to the roster', onSelect: onBack },
               ]}
             />
-          </div>
+          </Window>
         </div>
       )}
     </Frame>

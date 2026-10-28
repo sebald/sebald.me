@@ -146,7 +146,7 @@ export const Cast = () => (
       {CAST.map(e => (
         <figure key={e.label} className="grid justify-items-center gap-1">
           <Character sheet={e.sheet} />
-          <figcaption className="text-[0.75em] text-[#8a92b8]">
+          <figcaption className="text-[0.75em] text-(--pb-muted)">
             {e.label}
           </figcaption>
         </figure>

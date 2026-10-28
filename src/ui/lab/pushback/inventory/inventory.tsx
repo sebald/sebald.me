@@ -7,6 +7,7 @@ import { Text } from '@/ui/text';
 
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
+import { PaletteDemo, PickerDemo, TextDemo } from './foundations';
 import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
 import { Sandbox } from './sandbox';
@@ -28,11 +29,37 @@ const Section = ({
 );
 
 /**
- * The game's inventory: every piece on its own, with controls, the way
- * the site's inventory shows its components. Dev only.
+ * The game's inventory: the style guide first (the palette, the
+ * letters, the window and the picker every screen is built from), then
+ * every piece on its own with controls, the way the site's inventory
+ * shows its components. Dev and preview only.
  */
 export const Inventory = () => (
   <div className="grid gap-24">
+    <Section
+      title="Palette"
+      blurb="Every colour of the chrome and the letters, from one list (palette.ts): the canvas reads the hex, the DOM the CSS variable the stage sets. The sprites and the rooms keep their own."
+    >
+      <PaletteDemo />
+    </Section>
+    <Section
+      title="Text"
+      blurb="The letters by role (text.tsx): headings, body, the muted line for prompts and hints, the loud one that blinks, and a line of dialogue with its speaker's mark. Sizes are the caller's, in em."
+    >
+      <TextDemo />
+    </Section>
+    <Section
+      title="Picker"
+      blurb="The list the player moves through: the cursor, the loud item in gold, items the ghost has dimmed, a disabled one the keys skip. In a short window it scrolls on a rail (see Window)."
+    >
+      <PickerDemo />
+    </Section>
+    <Section
+      title="Window"
+      blurb="The quiet window with a line typing; with the opponent's phrase, the prompt and the counters; with the hand and a closer on offer; and with ten options in a short window, where the list scrolls on its rail. The legend at the bottom names the keys, or the tap after a touch."
+    >
+      <WindowDemo />
+    </Section>
     <Section
       title="Character"
       blurb="One duellist from its sheet. Idle breathes, talk alternates the mouth while typing, taunt steps toward the opponent (further on a mic drop), flinch steps back with a flash and flickers for a second."
@@ -59,12 +86,6 @@ export const Inventory = () => (
       blurb="The names, the momentum pips and the shared scale with its marker, every number on a control."
     >
       <HudDemo />
-    </Section>
-    <Section
-      title="Window"
-      blurb="The quiet window with a line typing, and with the opponent's phrase, the prompt and the picker. The legend at the bottom names the keys, or the tap after a touch."
-    >
-      <WindowDemo />
     </Section>
     <Section
       title="Scenes"

@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn, cva } from '@/lib/styles.utils';
 
+import { Loud } from './text';
+
 const pickerStyles = {
   root: cva({ base: 'flex min-h-0' }),
   menu: cva({
@@ -23,20 +25,16 @@ const pickerStyles = {
     variants: {
       selected: {
         true: 'text-white',
-        false: 'text-[#d6d1c2] hover:text-white',
+        false: 'text-(--pb-text-bright) hover:text-white',
       },
       accent: {
-        true: 'font-semibold text-[#f3c25a] hover:text-[#fff1b8]',
+        true: 'text-(--pb-gold) hover:text-(--pb-gold-light)',
       },
     },
     compoundVariants: [
-      { selected: true, accent: true, className: 'text-[#fff1b8]' },
+      { selected: true, accent: true, className: 'text-(--pb-gold-light)' },
     ],
     defaultVariants: { selected: false },
-  }),
-  /** The accent's label blinks; the cursor beside it does not */
-  accentLabel: cva({
-    base: 'animate-arcade-blink motion-reduce:animate-none',
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
@@ -49,13 +47,13 @@ const pickerStyles = {
         true: '[clip-path:polygon(50%_0,100%_100%,0_100%)]',
         false: '[clip-path:polygon(0_0,100%_0,50%_100%)]',
       },
-      more: { true: 'bg-[#c9c4b4]', false: 'bg-[#2a3150]' },
+      more: { true: 'bg-(--pb-text)', false: 'bg-(--pb-empty-dots)' },
     },
   }),
   track: cva({
-    base: 'relative my-[var(--px)] w-[var(--px)] flex-1 bg-[#19224f]',
+    base: 'relative my-[var(--px)] w-[var(--px)] flex-1 bg-(--pb-empty-dots)',
   }),
-  thumb: cva({ base: 'absolute inset-x-0 bg-[#8a92b8]' }),
+  thumb: cva({ base: 'absolute inset-x-0 bg-(--pb-steel)' }),
 };
 
 export interface PickerItem {
@@ -221,15 +219,17 @@ export const Picker = ({
                 )}
               />
               <span
-                className={cn(
-                  'min-w-0 flex-1 transition-opacity duration-500',
-                  item.accent && pickerStyles.accentLabel(),
-                )}
+                className="min-w-0 flex-1 transition-opacity duration-500"
                 style={
                   item.dim === undefined ? undefined : { opacity: item.dim }
                 }
               >
-                {item.label}
+                {/* The loud one blinks; the cursor beside it does not */}
+                {item.accent ? (
+                  <Loud className="text-inherit">{item.label}</Loud>
+                ) : (
+                  item.label
+                )}
               </span>
             </button>
           </li>

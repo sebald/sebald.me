@@ -24,10 +24,10 @@ export const Floor = ({
   className,
 }: PropsWithChildren<{ className?: string }>) => (
   <div
-    className={cn('w-fit bg-[#23292f] p-[calc(var(--px)*6)]', className)}
+    className={cn('w-fit bg-(--pb-floor) p-[calc(var(--px)*6)]', className)}
     style={{
       backgroundImage:
-        'linear-gradient(#2e3a4a, #2e3a4a calc(100% - var(--px) * 12), #23292f calc(100% - var(--px) * 12))',
+        'linear-gradient(var(--pb-wall), var(--pb-wall) calc(100% - var(--px) * 12), var(--pb-floor) calc(100% - var(--px) * 12))',
     }}
   >
     {children}

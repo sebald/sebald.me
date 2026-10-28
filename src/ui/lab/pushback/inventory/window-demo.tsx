@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 
-import { PAIRS } from '@/lib/lab/pushback/lines';
+import { CLOSERS, MENU_PROMPTS, PAIRS } from '@/lib/lab/pushback/lines';
 import { LAYOUT, MAX_CROP, STAGE, typedChars } from '@/lib/lab/pushback/stage';
 
-import { Dialogue, Hint } from '../dialogue';
+import { Dialogue } from '../dialogue';
 import { Picker } from '../picker';
 import { Pixels } from '../stage';
+import { Muted } from '../text';
 import { useClock } from '../use-clock';
 import { Legend, Window } from '../window';
 import { Field, field } from './controls';
@@ -25,6 +26,9 @@ export const WindowDemo = () => {
   // Hard mode's mic drop in a short window: ten options, more than the
   // cropped stage has room for
   const many = PAIRS.slice(1, 11);
+  // The hand with a closer on offer: the gold line drops the mic
+  const hand = PAIRS.slice(0, 4);
+  const closer = CLOSERS[0]!;
   const maxHeight = `calc(var(--px) * ${STAGE.height - LAYOUT.panel.x - MAX_CROP - LAYOUT.hud})`;
   return (
     <div className="grid gap-4">
@@ -71,7 +75,7 @@ export const WindowDemo = () => {
           }
         >
           <Dialogue speaker="opponent">{LINE}</Dialogue>
-          <Hint className="my-[calc(var(--px)*4)]">Pick your counter.</Hint>
+          <Muted className="my-[calc(var(--px)*4)]">Pick your counter.</Muted>
           <Picker
             label="Counters"
             className="gap-0"
@@ -80,6 +84,42 @@ export const WindowDemo = () => {
               label: pair.counter,
               onSelect: () => setPicked(pair.counter),
             }))}
+          />
+        </Window>
+        <Window
+          style={{
+            width: `calc(var(--px) * ${LAYOUT.panel.width})`,
+            minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
+          }}
+          legend={
+            <Legend
+              keys={[
+                ['↑↓', 'choose'],
+                ['Enter', 'confirm'],
+              ]}
+              touch="Tap a line"
+            />
+          }
+        >
+          <Muted className="my-[calc(var(--px)*4)]">
+            {MENU_PROMPTS.micDrop}
+          </Muted>
+          <Picker
+            label="Your phrases"
+            className="gap-0"
+            items={[
+              ...hand.map(pair => ({
+                id: pair.id,
+                label: pair.phrase,
+                onSelect: () => setPicked(pair.phrase),
+              })),
+              {
+                id: closer.id,
+                label: closer.phrase,
+                accent: true,
+                onSelect: () => setPicked(`${closer.phrase} (mic drop)`),
+              },
+            ]}
           />
         </Window>
         <Window
@@ -99,10 +139,10 @@ export const WindowDemo = () => {
           }
         >
           <Dialogue speaker="opponent">{LINE}</Dialogue>
-          <Hint className="my-[calc(var(--px)*4)]">
+          <Muted className="my-[calc(var(--px)*4)]">
             Pick your counter. (Ten options in a short window: the list scrolls
             on its rail.)
-          </Hint>
+          </Muted>
           <Picker
             label="Counters, many"
             className="gap-0"
