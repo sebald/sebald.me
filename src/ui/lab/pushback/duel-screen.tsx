@@ -76,26 +76,19 @@ import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
 
-/**
- * The ghost's bubble: over its head in the gap between the duellists,
- * its left edge on the figure's, as wide as the gap to the opponent's
- * figure allows, its bottom this far above the figure's top
- */
-const GHOST_BUBBLE = { gap: 3 } as const;
-
 // Styles
 // ---------------
 const styles = {
-  // The ghost's speech bubble in its own pale colour, with a tail
-  // pointing down to the ghost's head
+  // The ghost's speech bubble in its own pale colour, in the window's
+  // row at the right end, with a tail pointing up to the ghost on the
+  // corner above it
   bubble: cva({
     base: [
-      'absolute w-max px-[0.6em] py-[0.3em]',
-      'bg-(--pb-ghost-ink)/90 text-[0.85em] text-(--pb-ghost) ring-1 ring-(--pb-ghost-rim)',
-      'transition-opacity duration-300',
-      'after:absolute after:top-full after:left-[calc(var(--px)*10)]',
+      'relative m-0 ml-auto max-w-[60%] shrink-0 px-[0.6em] py-[0.3em] text-balance',
+      'bg-(--pb-ghost-ink) text-[0.85em] text-(--pb-ghost) ring-1 ring-(--pb-ghost-rim)',
+      'after:absolute after:bottom-full after:right-[calc(var(--px)*8)]',
       'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-(--pb-ghost-rim)',
-      'after:[clip-path:polygon(0_0,100%_0,50%_100%)]',
+      'after:[clip-path:polygon(50%_0,100%_100%,0_100%)]',
     ],
   }),
   silence: cva({
@@ -477,10 +470,11 @@ export const DuelScreen = ({
     opponent: stands.right - view.x,
   };
   const poses = posesFor(state, step);
-  const ghostX = standX.player + GHOST.ahead;
-  // The top row of the ghost's figure: its cell on the feet line, lifted
-  const ghostTop =
-    LAYOUT.feet - LAYOUT.cell.height + GHOST.figure.top - GHOST.lift;
+  // The ghost's line in the window's row, once it is out of its hole
+  const bubble =
+    ghostShown && ghostLine && enter >= 1 ? (
+      <p className={styles.bubble()}>{ghostLine}</p>
+    ) : null;
   const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
     state.phase === 'resolve' && step?.kind === 'line' ? shownBefore : state;
@@ -500,9 +494,6 @@ export const DuelScreen = ({
         />
       )}
       {flash && <div aria-hidden className="absolute inset-0 bg-white/60" />}
-      {ghostShown && (
-        <Ghost x={ghostX} step={whisper} enter={enter} still={reduced} />
-      )}
       <Character
         sheet={playerSheet}
         pose={poses.player}
@@ -656,27 +647,6 @@ export const DuelScreen = ({
         </div>
       )}
 
-      {ghostShown && ghostLine && enter >= 1 && (
-        <p
-          className={styles.bubble()}
-          style={{
-            // Over the ghost's head in the gap between the duellists: no
-            // wider than the gap to the opponent's figure, its bottom a
-            // few rows above the ghost's head, so it covers nobody
-            left: px(ghostX + GHOST.figure.left),
-            maxWidth: px(
-              standX.opponent +
-                GHOST.figure.left -
-                (ghostX + GHOST.figure.left) -
-                2,
-            ),
-            bottom: px(STAGE.height - (ghostTop - GHOST_BUBBLE.gap)),
-          }}
-        >
-          {ghostLine}
-        </p>
-      )}
-
       {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button
         type="button"
@@ -686,9 +656,10 @@ export const DuelScreen = ({
         onClick={() => !paused && step?.kind !== 'menu' && confirm()}
       />
 
-      <Window
-        className="absolute"
-        legend={legend}
+      {/* The window and the ghost perched on its corner, which moves
+          up with it when a long menu grows the window */}
+      <div
+        className="absolute flex flex-col"
         style={{
           left: px(LAYOUT.panel.x),
           right: px(LAYOUT.panel.x),
@@ -699,53 +670,76 @@ export const DuelScreen = ({
           maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
         }}
       >
-        {step?.kind === 'line' && (
-          <Dialogue speaker={step.speaker}>{typed}</Dialogue>
-        )}
-        {step?.kind === 'reveal' && (
-          <>
-            <Dialogue speaker="player" muted>
-              {counterText(state.outcome?.picked ?? null)}
-            </Dialogue>
-            <Muted>The reply: {step.text}</Muted>
-          </>
-        )}
-        {step?.kind === 'menu' && (
-          <>
-            {/* The phrase being answered, at full strength: it is what
-                the player reads to pick */}
-            {state.phase === 'defend' && state.exchange && (
-              <Dialogue speaker="opponent">
-                {phraseText(state.exchange.phrase)}
+        <Window className="min-h-0 flex-1" legend={legend}>
+          {step?.kind === 'line' && (
+            <Dialogue speaker={step.speaker}>{typed}</Dialogue>
+          )}
+          {step?.kind === 'reveal' && (
+            <>
+              <Dialogue speaker="player" muted>
+                {counterText(state.outcome?.picked ?? null)}
               </Dialogue>
-            )}
-            {/* The prompt sits above the options, with room on both sides */}
-            <Muted className="my-[calc(var(--px)*4)]">
-              {showsHint(state) ? HINT : prompt(state)}
-            </Muted>
-            <Picker
-              label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
-              items={menuItems}
-              active={!paused && !auto}
-              className="gap-0"
-            />
-            {silenceWidth !== null && (
-              <div className={styles.silence()} aria-hidden>
-                <div
-                  className="h-full bg-(--pb-gold)"
-                  style={{ width: `${silenceWidth}%` }}
-                />
+              <div className="flex items-start gap-[calc(var(--px)*4)]">
+                <Muted>The reply: {step.text}</Muted>
+                {bubble}
               </div>
-            )}
-          </>
+            </>
+          )}
+          {step?.kind === 'menu' && (
+            <>
+              {/* The phrase being answered, at full strength: it is what
+                the player reads to pick */}
+              {state.phase === 'defend' && state.exchange && (
+                <Dialogue speaker="opponent">
+                  {phraseText(state.exchange.phrase)}
+                </Dialogue>
+              )}
+              {/* The prompt sits above the options, with room on both
+                sides; the ghost's line at its right end */}
+              <div className="my-[calc(var(--px)*4)] flex items-start gap-[calc(var(--px)*4)]">
+                <Muted>{showsHint(state) ? HINT : prompt(state)}</Muted>
+                {bubble}
+              </div>
+              <Picker
+                label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
+                items={menuItems}
+                active={!paused && !auto}
+                className="gap-0"
+              />
+              {silenceWidth !== null && (
+                <div className={styles.silence()} aria-hidden>
+                  <div
+                    className="h-full bg-(--pb-gold)"
+                    style={{ width: `${silenceWidth}%` }}
+                  />
+                </div>
+              )}
+            </>
+          )}
+          {step?.kind === 'wait' && (
+            <Muted>
+              {state.winner === 'player' ? 'You won.' : 'You lost.'} Enter to
+              continue.
+            </Muted>
+          )}
+        </Window>
+        {ghostShown && (
+          <span
+            className="pointer-events-none absolute"
+            style={{
+              // The figure's right edge `corner.right` in from the
+              // window's, its bottom `corner.overlap` down into it
+              right: px(
+                GHOST.corner.right -
+                  (LAYOUT.cell.width - GHOST.figure.left - GHOST.figure.width),
+              ),
+              bottom: `calc(100% - ${px(GHOST.corner.overlap)})`,
+            }}
+          >
+            <Ghost step={whisper} enter={enter} still={reduced} mirrored />
+          </span>
         )}
-        {step?.kind === 'wait' && (
-          <Muted>
-            {state.winner === 'player' ? 'You won.' : 'You lost.'} Enter to
-            continue.
-          </Muted>
-        )}
-      </Window>
+      </div>
 
       {paused && (
         <div className={styles.pause()}>

@@ -58,17 +58,21 @@ export const buddyOpacity = (step: number): number =>
 export const buddyLine = (exchange: number, seed: number): string =>
   BUDDY_BARKS[(Math.abs(seed) + exchange) % BUDDY_BARKS.length]!;
 
-/** Where the ghost floats: behind the player's shoulder */
+/**
+ * Where the ghost floats: perched on the top-right corner of the window
+ * the counters are picked in, where the eye is while the player reads
+ * them, facing the options. Its line is a bubble in the window's prompt
+ * row, under it.
+ */
 export const GHOST = {
-  /**
-   * Right of the player's cell's left edge, in stage pixels: its cell
-   * starts where the player's figure ends, so its own figure (21 columns
-   * into its cell) hovers in the gap between the duellists, facing the
-   * opponent, with room above its head for the bubble
-   */
-  ahead: 52,
   /** Where its figure sits in its cell (the sheet's idle box) */
   figure: { left: 21, top: 57, width: 30 },
-  /** Above the feet line; its tail brushes the floor, its head is under the bars */
+  /**
+   * The figure on the window's corner, in stage pixels: its right edge
+   * this far in from the window's right edge, its bottom this far down
+   * into the window, over the frame and the end of the phrase row
+   */
+  corner: { right: 6, overlap: 9 },
+  /** Lifted off where it sits; its tail rests on the corner */
   lift: 0,
 } as const;
