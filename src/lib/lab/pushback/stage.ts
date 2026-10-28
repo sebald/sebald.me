@@ -48,9 +48,10 @@ export const LAYOUT = {
    * The shared scale across the top, from one face to the other: as many
    * whole pixels a step as fit between them, 7 px high
    */
-  beam: { y: 9, height: 7 },
+  beam: { y: 4, height: 7 },
   /**
-   * The duellists' faces in the corners, the beam's middle on theirs: the
+   * The duellists' faces in the corners, the beam's top on theirs (the
+   * spark's two pixels above it stay clear of the stage's edge): the
    * 24 px head square at two thirds (16 px, two screen pixels a sprite
    * pixel at 3x, so it stays sharp), this far in from the stage's edge,
    * the beam this far from the faces
@@ -59,7 +60,7 @@ export const LAYOUT = {
   /** Momentum pips after the names */
   pips: { width: 8, height: 5, gap: 2 },
   /** The names under the beam, at its ends */
-  names: { y: 20 },
+  names: { y: 14 },
   /** Rows the bars take at the top: a window never grows over them */
   hud: 30,
 } as const;
