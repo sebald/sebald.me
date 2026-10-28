@@ -55,15 +55,18 @@ export const PALETTE = {
   dim: '#5c6488',
 
   // The ghost
-  /** Its sprite placeholder and its bubble's letters */
+  /** Its sprite placeholder */
   ghost: '#bfe8ea',
   ghostLight: '#e8fbfb',
-  /** The bubble's ring and tail, the black hole's rim */
+  /** The black hole's rim */
   ghostRim: '#2f5e60',
-  /** The bubble's fill */
-  ghostInk: '#0b1516',
   /** The black hole */
   ghostHole: '#05060a',
+
+  // The speech bubble
+  /** Its paper, and the dithered row of shade along its bottom */
+  paper: '#f6f3e8',
+  paperShade: '#cfc9b6',
 
   // The placeholder room, until a scene loop has loaded
   wall: '#2e3a4a',

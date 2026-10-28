@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 import { GHOST_ANIM_MS, ghostEnter } from '@/lib/lab/pushback/buddy';
 
+import { Bubble } from '../bubble';
 import { Ghost } from '../ghost';
 import { Pixels } from '../stage';
 import { useClock } from '../use-clock';
@@ -68,6 +69,17 @@ export const GhostDemo = () => {
         <Floor>
           <Ghost step={step} enter={enter} />
         </Floor>
+      </Pixels>
+      <Pixels
+        scale={scale}
+        className="flex w-fit flex-col gap-[calc(var(--px)*10)] bg-(--pb-fill) p-[calc(var(--px)*10)]"
+      >
+        <Bubble className="w-fit">
+          I&apos;m not haunting you. I&apos;m onboarding you.
+        </Bubble>
+        <Bubble className="max-w-[calc(var(--px)*160)]">
+          Read it again. Slowly. I have time. I have nothing but time.
+        </Bubble>
       </Pixels>
     </div>
   );

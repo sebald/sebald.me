@@ -29,8 +29,9 @@ const GROUPS: { title: string; keys: PaletteKey[] }[] = [
   },
   {
     title: 'The ghost',
-    keys: ['ghost', 'ghostLight', 'ghostRim', 'ghostInk', 'ghostHole'],
+    keys: ['ghost', 'ghostLight', 'ghostRim', 'ghostHole'],
   },
+  { title: 'The speech bubble', keys: ['paper', 'paperShade'] },
   { title: 'The placeholder room', keys: ['wall', 'floor'] },
 ];
 

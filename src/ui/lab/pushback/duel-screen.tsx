@@ -61,6 +61,7 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cva } from '@/lib/styles.utils';
 
+import { Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
 import { Dialogue } from './dialogue';
@@ -79,18 +80,6 @@ import { Legend, Window } from './window';
 // Styles
 // ---------------
 const styles = {
-  // The ghost's speech bubble in its own pale colour, in the window's
-  // row at the right end, with a tail pointing up to the ghost on the
-  // corner above it
-  bubble: cva({
-    base: [
-      'relative m-0 ml-auto max-w-[60%] shrink-0 px-[0.6em] py-[0.3em] text-balance',
-      'bg-(--pb-ghost-ink) text-[0.85em] text-(--pb-ghost) ring-1 ring-(--pb-ghost-rim)',
-      'after:absolute after:bottom-full after:right-[calc(var(--px)*8)]',
-      'after:h-[calc(var(--px)*4)] after:w-[calc(var(--px)*6)] after:bg-(--pb-ghost-rim)',
-      'after:[clip-path:polygon(50%_0,100%_100%,0_100%)]',
-    ],
-  }),
   silence: cva({
     base: [
       'mt-[calc(var(--px)*2)] h-[calc(var(--px)*2)] w-full',
@@ -475,7 +464,9 @@ export const DuelScreen = ({
   // The ghost's line in the window's row, once it is out of its hole
   const bubble =
     ghostShown && ghostLine && enter >= 1 ? (
-      <p className={styles.bubble()}>{ghostLine}</p>
+      <Bubble className="ml-auto max-w-[60%] shrink-0 text-balance">
+        {ghostLine}
+      </Bubble>
     ) : null;
   const playerSheet = PLAYER_SHEETS[state.setup.role][look];
   const shown =
