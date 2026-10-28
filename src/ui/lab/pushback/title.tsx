@@ -237,8 +237,6 @@ export const TitleScreen = ({
     if (progress) setAsking(target);
     else onMode(target);
   };
-  // The legend says what works on the item the cursor is on
-  const [current, setCurrent] = useState('start');
 
   const items: PickerItem[] = [
     { id: 'start', label: 'Start', onSelect: onStart },
@@ -310,17 +308,10 @@ export const TitleScreen = ({
           style={{ top: px(MENU_TOP) }}
           legend={
             <Legend
-              keys={
-                current === 'mode'
-                  ? [
-                      ['←→', 'mode'],
-                      ['Enter', 'confirm'],
-                    ]
-                  : [
-                      ['↑↓', 'choose'],
-                      ['Enter', 'confirm'],
-                    ]
-              }
+              keys={[
+                ['↑↓', 'choose'],
+                ['Enter', 'confirm'],
+              ]}
               touch="Tap a line"
             />
           }
@@ -331,7 +322,6 @@ export const TitleScreen = ({
             items={items}
             initial={returned ? 'how' : undefined}
             active={asking === null}
-            onCurrent={setCurrent}
           />
         </Window>
       ) : (

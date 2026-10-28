@@ -79,8 +79,6 @@ interface PickerProps {
   /** Keyboard handling on (one menu at a time) */
   active?: boolean;
   label: string;
-  /** The item the cursor is on, by id, whenever it moves */
-  onCurrent?: (id: string) => void;
   /** On the list itself */
   className?: string;
 }
@@ -105,7 +103,6 @@ export const Picker = ({
   initial,
   active = true,
   label,
-  onCurrent,
   className,
 }: PickerProps) => {
   const firstEnabled = Math.max(
@@ -169,11 +166,6 @@ export const Picker = ({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [active, items, current]);
-
-  const currentId = items[current]?.id;
-  useEffect(() => {
-    if (currentId !== undefined) onCurrent?.(currentId);
-  }, [currentId, onCurrent]);
 
   // Measure the list: on scroll, and whenever it or its items resize
   useEffect(() => {
