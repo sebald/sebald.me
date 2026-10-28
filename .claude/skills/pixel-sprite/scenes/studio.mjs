@@ -103,10 +103,11 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   return f;
 });
 
-// The room a fifth smaller than drawn, see shrink.mjs
+// The room a fifth smaller than drawn, see shrink.mjs, and the studio
+// another twentieth: its drafting table and door came large
 await writeLoop({
   scene,
-  frames: await shrinkFrames(frames, scene.W, scene.H),
+  frames: await shrinkFrames(frames, scene.W, scene.H, { factor: 0.76 }),
   delay: DELAY,
   outDir,
   shownWidth: SHOWN_WIDTH,
