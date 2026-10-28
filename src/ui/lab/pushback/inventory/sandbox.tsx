@@ -14,6 +14,7 @@ import {
   characterById,
   drawDeck,
   repertoireFor,
+  type SceneId,
 } from '@/lib/lab/pushback/characters';
 import {
   type DuelSetup,
@@ -41,6 +42,8 @@ interface Options {
   role: Role;
   look: Look;
   character: string;
+  /** The room, instead of the opponent's: to judge the scale of each */
+  scene: SceneId | null;
   slot: number;
   attempt: DuelSetup['attempt'];
   seed: number;
@@ -57,10 +60,19 @@ interface Options {
   scale: number;
 }
 
+const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
+
+/** The person on a sheet, from its id: `dev-sam` is Sam */
+const personOn = (sheet: string) => {
+  const name = sheet.slice(sheet.indexOf('-') + 1);
+  return name[0]!.toUpperCase() + name.slice(1);
+};
+
 const DEFAULTS: Options = {
   role: 'pm',
   look: 'a',
   character: 'junior',
+  scene: null,
   slot: 0,
   attempt: 'first',
   seed: 1,
@@ -221,7 +233,7 @@ export const Sandbox = () => {
           </select>
         </label>
         <label className={field}>
-          Character
+          Opponent
           <select
             className={input}
             value={options.character}
@@ -230,6 +242,24 @@ export const Sandbox = () => {
             {CHARACTERS.map(c => (
               <option key={c.id} value={c.id}>
                 {c.name}
+                {c.sheet === 'boss' ? '' : ` · ${personOn(c.sheet)}`}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className={field}>
+          Room
+          <select
+            className={input}
+            value={options.scene ?? ''}
+            onChange={e =>
+              set('scene', e.target.value ? (e.target.value as SceneId) : null)
+            }
+          >
+            <option value="">the opponent's</option>
+            {SCENES.map(id => (
+              <option key={id} value={id}>
+                {id}
               </option>
             ))}
           </select>
@@ -391,6 +421,7 @@ export const Sandbox = () => {
           initial={initial}
           look={applied.look}
           scale={applied.scale}
+          scene={applied.scene ?? undefined}
           reducedMotion={applied.reducedMotion}
           onEnd={duel =>
             setLast(

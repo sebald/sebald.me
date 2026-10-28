@@ -22,7 +22,12 @@ import {
   buddyStep,
   ghostEnter,
 } from '@/lib/lab/pushback/buddy';
-import { type Look, SCENE_OF, STANDS } from '@/lib/lab/pushback/characters';
+import {
+  type Look,
+  SCENE_OF,
+  STANDS,
+  type SceneId,
+} from '@/lib/lab/pushback/characters';
 import {
   type DuelAction,
   type DuelState,
@@ -124,6 +129,8 @@ export interface DuelScreenProps {
   reducedMotion?: boolean;
   /** Fix the scale (the workbench) */
   scale?: number;
+  /** Another room than the opponent's (the workbench, to judge the scale) */
+  scene?: SceneId;
   /**
    * Attract mode: the duel plays itself, the menus picked after a pause,
    * and any key or tap leaves (`onBack`); `onEnd` fires a few seconds
@@ -182,6 +189,7 @@ export const DuelScreen = ({
   onPlay,
   reducedMotion,
   scale,
+  scene: sceneProp,
   auto = false,
   className,
 }: DuelScreenProps) => {
@@ -435,7 +443,7 @@ export const DuelScreen = ({
   // Frame model
   // ---------------
   const { character } = state.setup;
-  const scene = SCENE_OF[character.role];
+  const scene = sceneProp ?? SCENE_OF[character.role];
   const stands = STANDS[scene];
   // The mic-drop burst between the duellists: pulsing while the phrase is
   // thrown (with a flash and a shake of the room) and again when it lands,
