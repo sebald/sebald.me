@@ -1,7 +1,7 @@
 'use client';
 
 import NextImage from 'next/image';
-import type { PropsWithChildren, ReactNode } from 'react';
+import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type { SceneId } from '@/lib/lab/pushback/characters';
@@ -77,6 +77,87 @@ export const Room = ({ scene, view, onLoad }: RoomProps) => {
         )}
       />
     </picture>
+  );
+};
+
+/** The 4 by 4 ordered dither: the order pixels light up in */
+const BAYER = [
+  [0, 8, 2, 10],
+  [12, 4, 14, 6],
+  [3, 11, 1, 9],
+  [15, 7, 13, 5],
+] as const;
+
+/**
+ * A mask of `rows` stage pixels that fades from full at the top to none
+ * at the bottom in an ordered dither, a pixel on or off and nothing
+ * between, four columns wide and repeated across
+ */
+const fadeMask = (rows: number) => {
+  const rects: string[] = [];
+  for (let y = 0; y < rows; y++) {
+    const level = 16 * (1 - (y + 0.5) / rows);
+    for (let x = 0; x < 4; x++)
+      if (BAYER[y % 4]![x]! < level)
+        rects.push(`<rect x="${x}" y="${y}" width="1" height="1"/>`);
+  }
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="4" height="${rows}" shape-rendering="crispEdges" fill="white">${rects.join('')}</svg>`;
+  return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+};
+
+interface ReflectionProps {
+  scene: SceneId;
+  /** The band's window of the scene (`viewFor`) */
+  view: { x: number; y: number };
+  /** Stage columns left of where the reflection starts */
+  x?: number;
+  /** How far down it reaches, in stage pixels */
+  rows?: number;
+  className?: string;
+  style?: CSSProperties;
+}
+
+/**
+ * The room's bottom rows mirrored under its edge, the way a floor
+ * catches what stands on it: the band's last `rows` rows flipped and
+ * faded out downward in an ordered dither, so where the room meets
+ * the window the colours carry on for a moment instead of stopping at
+ * a line. Its colours are the scene's own. Place it at the top of
+ * what it lies on, `x` columns in from the stage's left; the duel lays
+ * it on the ground under the band, behind the window, so the dark round
+ * the window has a trace of the room in it.
+ */
+export const Reflection = ({
+  scene,
+  view,
+  x = 0,
+  rows = 30,
+  className,
+  style,
+}: ReflectionProps) => {
+  const mask = fadeMask(rows);
+  return (
+    <div
+      aria-hidden
+      className={cn(
+        'pointer-events-none absolute inset-x-0 top-0 overflow-hidden',
+        className,
+      )}
+      style={{
+        height: `calc(var(--px) * ${rows})`,
+        maskImage: mask,
+        maskSize: `calc(var(--px) * 4) calc(var(--px) * ${rows})`,
+        maskRepeat: 'repeat-x',
+        ...style,
+      }}
+    >
+      <div className="absolute inset-0 -scale-y-100">
+        <Room
+          scene={scene}
+          view={{ x: view.x + x, y: view.y + LAYOUT.band - rows }}
+        />
+      </div>
+    </div>
   );
 };
 
@@ -198,6 +279,12 @@ const FrameBody = ({
         width={STAGE.width * backing}
         height={STAGE.height * backing}
         className="pointer-events-none absolute inset-0 h-full w-full"
+      />
+      {/* The room mirrored onto the ground, behind the window */}
+      <Reflection
+        scene={model.scene}
+        view={model.view}
+        style={{ top: `calc(var(--px) * ${LAYOUT.band})` }}
       />
       <div className="absolute inset-0">{children}</div>
     </>
