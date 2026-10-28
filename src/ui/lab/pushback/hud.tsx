@@ -111,8 +111,7 @@ const SLIDE =
 /**
  * The shared scale as a beam clash: gold from the player's end, ember
  * from the opponent's, a notch every step, meeting at a white spark
- * that crackles on two frames. A post caps each end in its side's
- * colour; the end the spark is one step from blinks.
+ * that crackles on two frames.
  */
 const ScaleBeam = ({
   beam,
@@ -123,35 +122,8 @@ const ScaleBeam = ({
   blinkOn: boolean;
   still: boolean;
 }) => {
-  const { x, y, width, height, step, spark, closing } = beam;
+  const { x, y, width, height, step, spark } = beam;
   const crackle = !still && blinkOn;
-  // The end the spark is about to hit: the far end of whoever is closing
-  const blinking: Side | null =
-    closing === 'player'
-      ? 'opponent'
-      : closing === 'opponent'
-        ? 'player'
-        : null;
-  const post = (side: Side) => {
-    const c = SIDE[side];
-    const left = side === 'player' ? x - 4 : x + width + 1;
-    return (
-      <span
-        className="absolute"
-        style={{
-          left: px(left),
-          top: px(y - 3),
-          width: px(3),
-          height: px(height + 6),
-          boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
-          background:
-            blinking === side && blinkOn
-              ? PALETTE.spark
-              : `linear-gradient(to right, ${c.top} 0 var(--px), ${c.mid} var(--px) calc(100% - var(--px)), ${c.shade} calc(100% - var(--px)) 100%)`,
-        }}
-      />
-    );
-  };
   const dot = (dx: number, dy: number, colour: string) => (
     <span
       className={cn('absolute', SLIDE)}
@@ -208,8 +180,6 @@ const ScaleBeam = ({
           backgroundImage: `repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * ${step - 1}), color-mix(in srgb, ${PALETTE.ink} 45%, transparent) calc(var(--px) * ${step - 1}) calc(var(--px) * ${step}))`,
         }}
       />
-      {post('player')}
-      {post('opponent')}
       {/* The spark: a white core taller than the beam, sparks off it */}
       <span
         className={cn('absolute', SLIDE)}

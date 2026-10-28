@@ -45,7 +45,7 @@ export const LAYOUT = {
   /** Inset of the text inside the panel */
   panelPad: 6,
   /** The shared scale across the top centre: a beam, `step` pixels a step */
-  beam: { y: 6, step: 12, height: 6 },
+  beam: { y: 6, step: 13, height: 7 },
   /** Momentum pips in the corners, under the names */
   pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
   /** The names, in the corners */
@@ -195,8 +195,6 @@ export interface Beam {
   steps: number;
   /** Where the two beams meet: the gold one ends, the ember one starts */
   spark: number;
-  /** Who is one step from pushing the spark into the far end, if anyone */
-  closing: Side | null;
 }
 
 /**
@@ -226,12 +224,6 @@ export const scaleBeam = (options: {
     step,
     steps,
     spark: x + at * step,
-    closing:
-      options.scale === options.toWin - 1
-        ? 'player'
-        : options.scale === -(options.toLose - 1)
-          ? 'opponent'
-          : null,
   };
 };
 

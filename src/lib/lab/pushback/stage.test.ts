@@ -124,12 +124,10 @@ describe('bars', () => {
     // Centred on the stage, the spark in the middle
     assert.equal(even.x * 2 + even.width, 320);
     assert.equal(even.spark, 160);
-    assert.equal(even.closing, null);
 
     // Two steps ahead: the gold beam is two steps longer
     const ahead = scaleBeam({ scale: 2, toWin: 3, toLose: 3 });
     assert.equal(ahead.spark, 160 + 2 * LAYOUT.beam.step);
-    assert.equal(ahead.closing, 'player');
     // At the win the spark is at the far end
     const won = scaleBeam({ scale: 3, toWin: 3, toLose: 3 });
     assert.equal(won.spark, won.x + won.width);
@@ -138,10 +136,6 @@ describe('bars', () => {
     const boss = scaleBeam({ scale: 0, toWin: 4, toLose: 3 });
     assert.equal(boss.steps, 7);
     assert.equal(boss.spark, boss.x + 3 * LAYOUT.beam.step);
-    assert.equal(
-      scaleBeam({ scale: -2, toWin: 4, toLose: 3 }).closing,
-      'opponent',
-    );
   });
 });
 
