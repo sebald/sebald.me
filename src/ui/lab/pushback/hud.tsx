@@ -1,6 +1,7 @@
 'use client';
 
 import type { Side } from '@/lib/lab/pushback/duel';
+import type { SheetId } from '@/lib/lab/pushback/sprites';
 import {
   LAYOUT,
   STAGE,
@@ -12,6 +13,7 @@ import {
 import { cn, cva } from '@/lib/styles.utils';
 
 import { PALETTE } from './palette';
+import { Portrait } from './portrait';
 import { px } from './stage';
 import { useClock } from './use-clock';
 
@@ -110,32 +112,38 @@ const SLIDE =
 
 /**
  * The shared scale as a beam clash: gold from the player's end, ember
- * from the opponent's, a notch every step, meeting at a white spark
- * that crackles on two frames.
+ * from the opponent's, a notch every step, meeting at a white spark,
+ * and each duellist's face at its own end, framed in its colour, so the
+ * beam says whose is whose.
  */
 const ScaleBeam = ({
   beam,
-  blinkOn,
-  still,
+  heads,
 }: {
   beam: ReturnType<typeof scaleBeam>;
-  blinkOn: boolean;
-  still: boolean;
+  heads?: Record<Side, SheetId>;
 }) => {
   const { x, y, width, height, step, spark } = beam;
-  const crackle = !still && blinkOn;
-  const dot = (dx: number, dy: number, colour: string) => (
-    <span
-      className={cn('absolute', SLIDE)}
-      style={{
-        left: px(spark + dx),
-        top: px(y + dy),
-        width: 'var(--px)',
-        height: 'var(--px)',
-        background: colour,
-      }}
-    />
-  );
+  // A duellist's face at its end of the beam, framed in its side's colour
+  const head = (side: Side, sheet: SheetId) => {
+    const { size, gap } = LAYOUT.heads;
+    return (
+      <span
+        className="absolute bg-(--pb-frame-inner)"
+        style={{
+          left: px(side === 'player' ? x - gap - size : x + width + gap),
+          top: px(LAYOUT.heads.y),
+          boxShadow: `0 0 0 var(--px) ${SIDE[side].mid}, 0 0 0 ${px(2)} ${PALETTE.ink}`,
+        }}
+      >
+        <Portrait
+          sheet={sheet}
+          scale={LAYOUT.heads.scale}
+          mirrored={side === 'opponent'}
+        />
+      </span>
+    );
+  };
   return (
     <>
       {/* The ink around the whole beam */}
@@ -180,7 +188,13 @@ const ScaleBeam = ({
           backgroundImage: `repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * ${step - 1}), color-mix(in srgb, ${PALETTE.ink} 45%, transparent) calc(var(--px) * ${step - 1}) calc(var(--px) * ${step}))`,
         }}
       />
-      {/* The spark: a white core taller than the beam, sparks off it */}
+      {heads && (
+        <>
+          {head('player', heads.player)}
+          {head('opponent', heads.opponent)}
+        </>
+      )}
+      {/* The spark: a white core taller than the beam */}
       <span
         className={cn('absolute', SLIDE)}
         style={{
@@ -192,17 +206,6 @@ const ScaleBeam = ({
           boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
         }}
       />
-      {crackle ? (
-        <>
-          {dot(-3, -2, PALETTE.goldLight)}
-          {dot(2, height + 1, PALETTE.emberLight)}
-        </>
-      ) : (
-        <>
-          {dot(2, -2, PALETTE.emberLight)}
-          {dot(-3, height + 1, PALETTE.goldLight)}
-        </>
-      )}
     </>
   );
 };
@@ -215,6 +218,8 @@ export interface HudProps {
   momentum: Record<Side, number>;
   momentumTotal: number;
   names: Record<Side, string>;
+  /** The duellists' sheets, for their faces beside the scale */
+  heads?: Record<Side, SheetId>;
   /** Rows cropped off the top in a short window: the HUD moves down by this */
   crop?: number;
   /** No blinking */
@@ -235,6 +240,7 @@ export const Hud = ({
   momentum,
   momentumTotal,
   names,
+  heads,
   crop = 0,
   still = false,
   className,
@@ -293,7 +299,7 @@ export const Hud = ({
       {pips('player')}
       {pips('opponent')}
 
-      <ScaleBeam beam={beam} blinkOn={blinkOn} still={still} />
+      <ScaleBeam beam={beam} heads={heads} />
     </div>
   );
 };

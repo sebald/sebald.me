@@ -20,6 +20,7 @@ import {
 import { LAYOUT, STAGE, viewFor } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
+import { Confirm } from './confirm';
 import { Room } from './frame';
 import { Picker, type PickerItem } from './picker';
 import { Stage, px } from './stage';
@@ -38,6 +39,8 @@ interface TitleScreenProps {
   onAttract?: () => void;
   /** No run and nothing collected yet: the splash explains the game */
   firstVisit?: boolean;
+  /** A run or a collected phrase: switching the mode asks first */
+  progress?: boolean;
 }
 
 /**
@@ -94,9 +97,6 @@ const HowTo = ({ legend }: { legend: ReactNode }) => {
   );
 };
 
-/** How long the reset stays armed, waiting for the second press */
-const ARMED_MS = 4000;
-
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
 const LOGO_NATIVE = { width: 226, height: 77 } as const;
 
@@ -143,6 +143,7 @@ export const TitleScreen = ({
   onReset,
   onAttract,
   firstVisit = false,
+  progress = false,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
   // The how-to again, from the menu; Enter, Escape or a tap goes back
@@ -197,47 +198,25 @@ export const TitleScreen = ({
     };
   }, [open]);
 
-  // Reset, and a mode switch while a run is going, ask for a second
-  // press: the first arms it, the second does it, Escape or a few
-  // seconds of nothing disarm it
-  const [armed, setArmed] = useState<'reset' | 'mode' | null>(null);
-  useEffect(() => {
-    if (!armed) return;
-    const timer = setTimeout(() => setArmed(null), ARMED_MS);
-    return () => clearTimeout(timer);
-  }, [armed]);
-  useKeys({ Escape: () => setArmed(null) }, armed !== null);
-  // A run is going when there is something to reset
-  const runsGoing = onReset !== undefined;
+  // Reset, and a mode switch with progress at stake, ask in a dialog
+  const [asking, setAsking] = useState<'reset' | 'mode' | null>(null);
+  const cancel = useCallback(() => setAsking(null), []);
   const upcoming = nextMode(mode);
 
   const items: PickerItem[] = [
     { id: 'start', label: 'Start', onSelect: onStart },
     {
       id: 'mode',
-      label:
-        armed === 'mode'
-          ? `${MODE_LABELS[upcoming]}? Press again`
-          : `Mode: ${MODE_LABELS[mode]}`,
-      onSelect: () => {
-        if (!runsGoing || armed === 'mode') {
-          setArmed(null);
-          onMode(upcoming);
-        } else setArmed('mode');
-      },
+      label: `Mode: ${MODE_LABELS[mode]}`,
+      onSelect: () => (progress ? setAsking('mode') : onMode(upcoming)),
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
   ];
   if (onReset)
     items.push({
       id: 'reset',
-      label: armed === 'reset' ? 'Reset? Press again' : 'Reset',
-      onSelect: () => {
-        if (armed === 'reset') {
-          setArmed(null);
-          onReset();
-        } else setArmed('reset');
-      },
+      label: 'Reset',
+      onSelect: () => setAsking('reset'),
     });
 
   const { panel } = LAYOUT;
@@ -301,15 +280,10 @@ export const TitleScreen = ({
               className="w-[11em]"
               items={items}
               initial={returned ? 'how' : undefined}
+              active={asking === null}
             />
             <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance">
-              <Muted>
-                {armed === 'reset'
-                  ? 'This forgets every run and every collected phrase.'
-                  : armed === 'mode'
-                    ? `A run is played in one mode. Switching to ${MODE_LABELS[upcoming].toLowerCase()} ends your runs; the phrases you collected stay.`
-                    : MODE_BLURBS[mode]}
-              </Muted>
+              <Muted>{MODE_BLURBS[mode]}</Muted>
               <Muted className="text-[0.8em] opacity-70">{FICTION}</Muted>
             </div>
           </div>
@@ -343,6 +317,33 @@ export const TitleScreen = ({
             </div>
           )}
         </>
+      )}
+      {asking === 'mode' && (
+        <Confirm
+          title={`Switch to ${MODE_LABELS[upcoming].toLowerCase()}?`}
+          confirm={`Switch to ${MODE_LABELS[upcoming].toLowerCase()}`}
+          onCancel={cancel}
+          onConfirm={() => {
+            setAsking(null);
+            onMode(upcoming);
+          }}
+        >
+          A run is played in one mode, so switching starts over: every run and
+          every collected phrase is gone.
+        </Confirm>
+      )}
+      {asking === 'reset' && onReset && (
+        <Confirm
+          title="Reset the game?"
+          confirm="Reset"
+          onCancel={cancel}
+          onConfirm={() => {
+            setAsking(null);
+            onReset();
+          }}
+        >
+          This forgets every run and every collected phrase. The mode stays.
+        </Confirm>
       )}
     </Stage>
   );

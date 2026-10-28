@@ -199,11 +199,14 @@ export const finishDuel = (
 
 /**
  * Switch the mode. A run is played in one mode, so its score means one
- * thing: switching ends every run (the glossary, a record across runs,
- * stays)
+ * thing: switching starts over, every run and the glossary gone
  */
 export const setMode = (save: Save, mode: Mode): Save =>
-  mode === save.mode ? save : { ...save, mode, runs: {} };
+  mode === save.mode ? save : emptySave(mode);
+
+/** Whether switching the mode or a reset would throw anything away */
+export const hasProgress = (save: Save): boolean =>
+  hasRuns(save) || save.glossary.length > 0;
 
 /** Whether there is anything a reset would throw away */
 export const hasRuns = (save: Save): boolean =>

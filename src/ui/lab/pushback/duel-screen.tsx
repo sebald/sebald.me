@@ -617,6 +617,7 @@ export const DuelScreen = ({
           player: playerName(state.setup.role, look),
           opponent: character.name,
         }}
+        heads={{ player: playerSheet, opponent: character.sheet }}
         crop={crop}
         still={reduced}
       />

@@ -45,7 +45,13 @@ export const LAYOUT = {
   /** Inset of the text inside the panel */
   panelPad: 6,
   /** The shared scale across the top centre: a beam, `step` pixels a step */
-  beam: { y: 6, step: 13, height: 7 },
+  beam: { y: 9, step: 13, height: 7 },
+  /**
+   * The duellists' heads either side of the beam, its middle on theirs:
+   * the 24 px head square at two thirds (16 px, two screen pixels a
+   * sprite pixel at 3x, so it stays sharp), this far from the beam's ends
+   */
+  heads: { y: 4, scale: 2 / 3, size: 16, gap: 4 },
   /** Momentum pips in the corners, under the names */
   pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
   /** The names, in the corners */

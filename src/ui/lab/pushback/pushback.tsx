@@ -11,6 +11,7 @@ import {
   type Save,
   emptySave,
   finishDuel,
+  hasProgress,
   hasRuns,
   loadSave,
   resetSave,
@@ -82,6 +83,7 @@ export const Pushback = () => {
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
           onReset={hasRuns(save) ? () => setSave(resetSave) : undefined}
+          progress={hasProgress(save)}
           firstVisit={!hasRuns(save) && save.glossary.length === 0}
           onAttract={toAttract}
         />

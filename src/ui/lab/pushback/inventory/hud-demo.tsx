@@ -87,7 +87,11 @@ export const HudDemo = () => {
             toLose={toLose}
             momentum={{ player, opponent }}
             momentumTotal={2}
-            names={{ player: 'Jo', opponent: 'The Junior' }}
+            names={{
+              player: 'Jo',
+              opponent: boss ? 'The Stakeholder' : 'The Junior',
+            }}
+            heads={{ player: 'pm-jo', opponent: boss ? 'boss' : 'dev-sam' }}
             crop={crop}
             still={still}
           />

@@ -11,10 +11,13 @@ import { px } from './stage';
 export const Portrait = ({
   sheet,
   scale = 2,
+  mirrored = false,
 }: {
   sheet: SheetId;
   /** Pixels of the portrait per stage pixel */
   scale?: number;
+  /** Facing the other way: the opponent's, looking at the player */
+  mirrored?: boolean;
 }) => {
   const { image, meta } = SHEETS[sheet];
   const head = meta.features?.head ?? {
@@ -35,6 +38,7 @@ export const Portrait = ({
         backgroundSize: `${px(meta.cell.width * meta.count * s)} ${px(meta.cell.height * s)}`,
         backgroundPosition: `${px(-head.x * s)} ${px(-head.y * s)}`,
         backgroundRepeat: 'no-repeat',
+        transform: mirrored ? 'scaleX(-1)' : undefined,
       }}
     />
   );
