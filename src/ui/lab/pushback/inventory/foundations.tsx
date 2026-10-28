@@ -17,7 +17,7 @@ const GROUPS: { title: string; keys: PaletteKey[] }[] = [
   { title: 'Ground and ink', keys: ['bg', 'ink'] },
   {
     title: 'The quiet window',
-    keys: ['frame', 'frameDim', 'frameInner', 'fill', 'fillTop'],
+    keys: ['frame', 'frameDim', 'frameInner', 'fill', 'fillTop', 'fillShade'],
   },
   { title: 'The player', keys: ['gold', 'goldLight', 'goldShade'] },
   { title: 'The opponent', keys: ['ember', 'emberLight', 'emberShade'] },

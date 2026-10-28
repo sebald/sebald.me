@@ -36,6 +36,59 @@ const NOTCHED = [
 
 const DOT = 'absolute size-[var(--px)] bg-(--pb-ink)';
 
+/**
+ * The dithered gradient of the fill, in stage pixels: a solid row of the
+ * light shade under the frame, then rows at a half, a quarter and an
+ * eighth of the dots, into the fill; the same steps in the dark shade up
+ * from the bottom edge, without the solid row. One `repeating-linear-
+ * gradient` per row, a dot every `period` pixels from `offset`, so it
+ * stays on the grid at every scale. Low contrast on purpose: a texture
+ * the eye reads as light falling on the window, not a pattern.
+ */
+interface Row {
+  /** Rows from the edge, 0 the first */
+  at: number;
+  /** A dot every so many pixels; 1 is a solid row */
+  period: number;
+  /** The first dot's column */
+  offset: number;
+}
+
+const FADE: Row[] = [
+  { at: 1, period: 2, offset: 0 },
+  { at: 2, period: 2, offset: 1 },
+  { at: 3, period: 4, offset: 0 },
+  { at: 4, period: 4, offset: 2 },
+  { at: 5, period: 8, offset: 0 },
+  { at: 6, period: 8, offset: 4 },
+];
+
+const TOP: Row[] = [{ at: 0, period: 1, offset: 0 }, ...FADE];
+const BOTTOM: Row[] = FADE.map(row => ({ ...row, at: row.at - 1 }));
+
+const px = (n: number) => (n === 0 ? '0px' : `calc(var(--px) * ${n})`);
+
+const dither = (rows: Row[], colour: string, from: 'top' | 'bottom') =>
+  rows.map(({ at, period, offset }) => ({
+    image:
+      period === 1
+        ? `linear-gradient(${colour}, ${colour})`
+        : `repeating-linear-gradient(90deg, ${colour} 0 var(--px), transparent var(--px) ${px(period)})`,
+    position: `${px(offset)} ${from === 'top' ? px(at) : `calc(100% - ${px(at)})`}`,
+  }));
+
+const LAYERS = [
+  ...dither(TOP, PALETTE.fillTop, 'top'),
+  ...dither(BOTTOM, PALETTE.fillShade, 'bottom'),
+];
+
+const DITHER: CSSProperties = {
+  backgroundImage: LAYERS.map(layer => layer.image).join(', '),
+  backgroundPosition: LAYERS.map(layer => layer.position).join(', '),
+  backgroundSize: '100% var(--px)',
+  backgroundRepeat: 'no-repeat',
+};
+
 export interface WindowProps extends PropsWithChildren {
   /** The control hints along the bottom edge */
   legend?: ReactNode;
@@ -45,7 +98,8 @@ export interface WindowProps extends PropsWithChildren {
 
 /**
  * The quiet RPG window every text sits in: ink, a pale frame, a dark
- * fill with two dithered rows, the corners knocked out, all on the
+ * fill with a dithered gradient, lighter under the frame and darker at
+ * the bottom edge, the corners knocked out, all on the
  * stage's pixel grid through `--px`. DOM, so it grows with what is in it
  * and the same window serves the duel, the menu screens and the
  * inventory. Position and size it from outside; `3 * --px` of that is
@@ -75,11 +129,7 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
       style={{
         margin: 'calc(var(--px) * 3)',
         boxShadow: RINGS,
-        // The two dithered rows under the frame
-        backgroundImage: `repeating-linear-gradient(90deg, ${PALETTE.fillTop} 0 var(--px), transparent var(--px) calc(var(--px) * 2)), repeating-linear-gradient(90deg, transparent 0 var(--px), ${PALETTE.fillTop} var(--px) calc(var(--px) * 2))`,
-        backgroundSize: '100% var(--px), 100% var(--px)',
-        backgroundPosition: '0 0, 0 var(--px)',
-        backgroundRepeat: 'no-repeat',
+        ...DITHER,
       }}
     >
       {children}

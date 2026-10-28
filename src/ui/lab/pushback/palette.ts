@@ -18,9 +18,10 @@ export const PALETTE = {
   frame: '#b7b09d',
   frameDim: '#4a5066',
   frameInner: '#1c2236',
-  /** The window's fill, and its two dithered rows */
+  /** The window's fill, with the dither lighter at the top, darker at the bottom */
   fill: '#131829',
-  fillTop: '#1a2035',
+  fillTop: '#232b4a',
+  fillShade: '#0a0d1a',
 
   // The sides
   /** The player's side: the name plate, the pips, the dialogue mark */

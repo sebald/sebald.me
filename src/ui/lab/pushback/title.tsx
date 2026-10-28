@@ -41,13 +41,21 @@ const MODE_BLURBS: Record<Mode, string> = {
 const ARMED_MS = 4000;
 
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
-const LOGO = { width: 226, height: 77 } as const;
+const LOGO_NATIVE = { width: 226, height: 77 } as const;
 
-/** Where the logo sits in the band: centred on the splash, at the top with the menu open */
-const LOGO_TOP = {
-  splash: Math.floor((LAYOUT.band - LOGO.height) / 2),
-  menu: 4,
-} as const;
+/**
+ * The logo as shown, in stage pixels: a quarter larger than its render,
+ * nine tenths of the band's width. The stage scales it on, so a logo
+ * pixel is three and three quarter screen pixels at 3x, which the eye
+ * does not catch on a drawn mark the way it would on a sprite.
+ */
+const LOGO = { width: 282, height: 96 } as const;
+
+/** Where the logo sits in the band: high on the splash, with the call to play under it; at the top with the menu open */
+const LOGO_TOP = { splash: 10, menu: 4 } as const;
+
+/** The call to play, centred in the rows the logo leaves under it */
+const CALL_TOP = LOGO_TOP.splash + LOGO.height;
 
 /** The window of the corner office the title shows: the duel's */
 const VIEW = viewFor(STANDS.office);
@@ -64,10 +72,10 @@ const MODIFIERS = new Set([
 
 /**
  * The start screen: the corner office at night fills the band, dimmed,
- * the logo over it and an arcade line blinking under it. Any key or a
- * tap opens the menu: the logo slides to the top of the band and the
- * menu takes the quiet window below, so the title is the start screen
- * with its menu open, not a second screen.
+ * the logo over it and an arcade line blinking under it, both in the
+ * scene. Any key or a tap opens the menu: the logo slides to the top of
+ * the band and the menu takes the quiet window below, so the title is
+ * the start screen with its menu open, not a second screen.
  */
 export const TitleScreen = ({
   mode,
@@ -165,8 +173,8 @@ export const TitleScreen = ({
         <NextImage
           src={logo}
           alt="Pushback"
-          width={LOGO.width}
-          height={LOGO.height}
+          width={LOGO_NATIVE.width}
+          height={LOGO_NATIVE.height}
           unoptimized
           priority
           draggable={false}
@@ -207,24 +215,30 @@ export const TitleScreen = ({
           </div>
         </Window>
       ) : (
-        <div
-          className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
-          style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
-        >
-          {/* The arcade call to play: a full blink, nothing between on and off */}
-          <p aria-live="polite" className="m-0 text-[1.25em] [--blink-low:0]">
+        <>
+          {/* The arcade call to play, in the scene under the logo: a full blink, nothing between on and off */}
+          <p
+            aria-live="polite"
+            className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
+            style={{ top: px(CALL_TOP), height: px(LAYOUT.band - CALL_TOP) }}
+          >
             <Loud className="font-bold tracking-[0.15em] uppercase">
               {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
             </Loud>
           </p>
-          <Muted className="text-[0.85em] text-balance">
-            Counter the phrase. Push the scale to your side. Full momentum lets
-            you drop the mic.
-          </Muted>
-          <Muted className="text-[0.7em] text-balance opacity-70">
-            {FICTION}
-          </Muted>
-        </div>
+          <div
+            className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
+            style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
+          >
+            <Muted className="text-[0.85em] text-balance">
+              Counter the phrase. Push the scale to your side. Full momentum
+              lets you drop the mic.
+            </Muted>
+            <Muted className="text-[0.7em] text-balance opacity-70">
+              {FICTION}
+            </Muted>
+          </div>
+        </>
       )}
     </Stage>
   );
