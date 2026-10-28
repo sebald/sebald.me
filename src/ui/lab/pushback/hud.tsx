@@ -55,8 +55,8 @@ export interface BoxProps {
 /**
  * One box of a bar on the stage's grid, a pixel of ink around it: lit,
  * a light top row, the colour, a shaded bottom row; empty, dark with a
- * slightly brighter rim a pixel wide inside the ink, so the slot shows,
- * and a checker of dots inside that. Placed on the stage
+ * rim a pixel wide inside the ink in the dots' colour, so the slot
+ * shows, and a checker of dots inside that. Placed on the stage
  * with `x` and `y`, or in the flow without them (a meter's boxes).
  */
 export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
@@ -73,7 +73,7 @@ export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
         height: px(height),
         boxShadow: colours
           ? `0 0 0 var(--px) ${PALETTE.ink}`
-          : `0 0 0 var(--px) ${PALETTE.ink}, inset 0 0 0 var(--px) ${PALETTE.emptyRim}`,
+          : `0 0 0 var(--px) ${PALETTE.ink}, inset 0 0 0 var(--px) ${PALETTE.emptyDots}`,
         background: colours
           ? bright
             ? colours.top
