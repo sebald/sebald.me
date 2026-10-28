@@ -161,5 +161,5 @@ down smoothly about the floor line, every pixel snapped back to the
 first frame's palette, and padded to the stage with the render's corner
 colour (never in the window). The loop scripts and `native.png` stay in
 the render's own pixels; only `scene.webp`, `scene-1x.webp` and
-`poster.png` are smaller. A fresh render that fits the cast gets the
+`poster.png` are smaller. The corner office takes 0.76, its desk and chair came the largest. A fresh render that fits the cast gets the
 factor set to 1.
