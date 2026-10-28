@@ -385,7 +385,7 @@ With props gone, two colleagues per role share a player's sheet (the Head of Pro
 
 #### PM, look three: Nadia, the Head of Product (`pm-nadia-sheet.jpg`)
 
-First roll: all six cells right, but 92 px tall (the cast is 78 to 82); in the game for now. Second roll with the pixel count in the layout line below: 90 px, the number was ignored again (`originals/pm-nadia-sheet-2.jpeg`). Third roll, the one to paste now, is the **ruler prompt** further down: Jo stands in the picture as the measure, since relative size inside one image is the only lever Gemini obeys.
+First roll: all six cells right, but 92 px tall (the cast is 78 to 82; `originals/pm-nadia-sheet-1.jpeg`). Second roll with the pixel count in the layout line below: 90 px, the number was ignored again (`originals/pm-nadia-sheet-2.jpeg`). Third roll, the **ruler prompt** further down, is the one in the game (`originals/pm-nadia-sheet.jpeg`): Jo stands in the picture as the measure, and Nadia came out at Jo's height to the pixel. Gemini redrew Jo at 86 instead of her sheet's 80, so Nadia is 87, a head shorter than before and between the cast and Bo and Kim. The cut drops Jo's cell (`--cells 7`, then the first cell is removed from the png and the json).
 
 Attach: `HEADER`, `DEV`.
 
@@ -1066,7 +1066,7 @@ Reroll on: heads at different sizes, a hood that changes the face shape so much 
 
 ## Logo (`logo.jpg`)
 
-The wordmark for the start screen, the lab index and the link preview. The first render (plain shoved letters) read fine but said nothing about the game; the second (two bubbles colliding, prompt A, the one in the repo) says what the game is but sits politely: two flat shapes and a word each. The start screen and the OG card hang on this mark, so the third round goes big. The direction is settled (the logo board of 28 October): **C, the shove**. D stays as the variant for a stacked crop if the OG card ever needs one. Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. Generated on a plain dark background like a sheet and keyed the same way.
+The wordmark for the start screen, the lab index and the link preview. The first render (plain shoved letters) read fine but said nothing about the game; the second (two bubbles colliding, prompt A) says what the game is but sits politely: two flat shapes and a word each. The third, **C, the shove**, is the one in the repo (`originals/logo-c.jpeg`, first roll): the cup as the U, the duck on the B, the note on the K, the burst at the join, BACK leaning away with motion lines. Cut with the logo command in the skill at 24 colours and trimmed to its art, 226 by 77. D stays as the variant for a stacked crop if the OG card ever needs one. Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. Generated on a plain dark background like a sheet and keyed the same way.
 
 Size: the render snaps to a 240 by 133 grid; the mark should fill about four fifths of the width, so around 190 by 80 art pixels with the overhangs. On the stage (320 wide) that is two thirds of the band. Nothing else in the frame.
 

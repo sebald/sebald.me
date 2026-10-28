@@ -40,8 +40,8 @@ const MODE_BLURBS: Record<Mode, string> = {
 /** How long the reset stays armed, waiting for the second press */
 const ARMED_MS = 4000;
 
-/** The logo's native size: the render cut on its pixel grid and keyed */
-const LOGO = { width: 214, height: 103 } as const;
+/** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
+const LOGO = { width: 226, height: 77 } as const;
 
 /** Where the logo sits in the band: centred on the splash, at the top with the menu open */
 const LOGO_TOP = {

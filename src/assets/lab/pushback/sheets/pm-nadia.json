@@ -4,83 +4,83 @@
     "height": 112
   },
   "count": 6,
-  "background": "31353e",
+  "background": "2e3035",
   "cells": [
     {
       "box": {
-        "x": 17,
-        "y": 20,
-        "width": 38,
-        "height": 92
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 15,
-        "y": 20,
-        "width": 42,
-        "height": 92
-      },
-      "clipped": false
-    },
-    {
-      "box": {
-        "x": 13,
-        "y": 20,
-        "width": 45,
-        "height": 92
+        "x": 20,
+        "y": 25,
+        "width": 32,
+        "height": 87
       },
       "clipped": false
     },
     {
       "box": {
         "x": 18,
-        "y": 21,
+        "y": 25,
         "width": 35,
-        "height": 91
+        "height": 87
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 13,
-        "y": 12,
-        "width": 45,
-        "height": 100
+        "x": 18,
+        "y": 25,
+        "width": 35,
+        "height": 87
       },
       "clipped": false
     },
     {
       "box": {
-        "x": 19,
+        "x": 20,
         "y": 26,
-        "width": 33,
+        "width": 31,
         "height": 86
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 17,
+        "y": 16,
+        "width": 38,
+        "height": 96
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 20,
+        "y": 29,
+        "width": 31,
+        "height": 83
       },
       "clipped": false
     }
   ],
   "features": {
     "head": {
-      "x": 20,
-      "y": 19,
+      "x": 21,
+      "y": 24,
       "width": 24,
       "height": 24
     },
     "mouth": {
-      "x": 22,
-      "y": 33,
-      "width": 21,
+      "x": 23,
+      "y": 38,
+      "width": 20,
       "height": 12
     },
     "talkMouth": {
-      "x": 20,
-      "y": 33
+      "x": 21,
+      "y": 38
     },
     "eye": {
-      "x": 45,
-      "y": 37
+      "x": 44,
+      "y": 40
     }
   }
 }
