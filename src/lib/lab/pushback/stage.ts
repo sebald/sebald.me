@@ -3,6 +3,8 @@
  * a duel state into what the screen shows. Nothing here touches the DOM
  * or a canvas, so it all runs under the Node test runner.
  */
+import ROOM_FACTORS from '../../../assets/lab/pushback/scenes/rooms.json';
+import type { SceneId } from './characters';
 import { type DuelState, type Side, toLose, toWin } from './duel';
 import {
   BOSS_LOSE_BARKS,
@@ -31,6 +33,25 @@ export const STAGE = { width: 320, height: 214 } as const;
 
 /** The scene renders, and where their floor meets the feet */
 export const SCENE = { width: 480, height: 270, feet: 230 } as const;
+
+/**
+ * Where a scene's room sits inside its render: the room was drawn too
+ * large for the cast, so the loop scripts shrink it by its factor in
+ * `rooms.json` about the floor line and pad the rest with a flat dark
+ * (`shrink.mjs`, the same rounding). A screen that shows the whole room
+ * fits this box, not the render.
+ */
+export const roomBox = (scene: SceneId) => {
+  const factor = ROOM_FACTORS[scene];
+  const width = Math.round(SCENE.width * factor);
+  const height = Math.round(SCENE.height * factor);
+  return {
+    x: Math.round((SCENE.width - width) / 2),
+    y: SCENE.feet - Math.round(SCENE.feet * factor),
+    width,
+    height,
+  };
+};
 
 /** Where everything goes, in stage pixels */
 export const LAYOUT = {

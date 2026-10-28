@@ -168,5 +168,9 @@ down smoothly about the floor line, every pixel snapped back to the
 first frame's palette, and padded to the stage with the render's corner
 colour (never in the window). The loop scripts and `native.png` stay in
 the render's own pixels; only `scene.webp`, `scene-1x.webp` and
-`poster.png` are smaller. The corner office and the studio take 0.76, their desks, chairs and doors came the largest. A fresh render that fits the cast gets the
+`poster.png` are smaller. Each scene's factor is in
+`src/assets/lab/pushback/scenes/rooms.json`, which the loop scripts
+and the game both read (the title fits the room's picture inside the
+padded render to the stage; a test checks every `scene-1x.webp`
+against it). The corner office and the studio take 0.76, their desks, chairs and doors came the largest. A fresh render that fits the cast gets the
 factor set to 1.

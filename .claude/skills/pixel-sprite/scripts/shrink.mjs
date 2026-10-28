@@ -13,7 +13,14 @@ import { createRequire } from 'node:module';
 const require = createRequire(import.meta.url);
 const sharp = createRequire(require.resolve('next/package.json'))('sharp');
 
-/** The factor the rooms are shrunk by; 1 would write the render as is */
+/**
+ * The factor each room is shrunk by, by scene; 1 would write the render
+ * as is. Kept with the scenes, where the game reads it too: the title
+ * fits the room's picture, not the padded render, to the stage.
+ */
+export { default as ROOM_FACTORS } from '../../../../src/assets/lab/pushback/scenes/rooms.json' with { type: 'json' };
+
+/** The factor a room takes unless the scenes say otherwise */
 export const ROOM_FACTOR = 0.8;
 
 /** The scene's floor line (the duellists' feet), which stays put */

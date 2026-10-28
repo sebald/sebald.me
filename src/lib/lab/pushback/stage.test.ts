@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
+import { fileURLToPath } from 'node:url';
 
-import { RULES, STAKEHOLDER, characterById } from './characters';
+import { RULES, STAKEHOLDER, type SceneId, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
   barRects,
+  roomBox,
   barWidth,
   barsLabel,
   bob,
@@ -322,4 +325,67 @@ describe('viewFor', () => {
     assert.equal(viewFor({ left: 400, right: 408 }).x, 160);
     assert.equal(viewFor({ left: 145, right: 297, view: 101 }).x, 101);
   });
+});
+
+describe('roomBox', () => {
+  // The room's picture as the scene files have it: everything that is not
+  // the flat padding round it, measured in the first frame of the 1x loop
+  const measure = async (scene: SceneId) => {
+    // sharp comes with Next, as in the scene scripts
+    const local = createRequire(import.meta.url);
+    const sharp = createRequire(local.resolve('next/package.json'))(
+      'sharp',
+    ) as (
+      file: string,
+      options: { page: number },
+    ) => {
+      removeAlpha(): {
+        raw(): {
+          toBuffer(options: { resolveWithObject: true }): Promise<{
+            data: Buffer;
+            info: { width: number; height: number };
+          }>;
+        };
+      };
+    };
+    const file = fileURLToPath(
+      new URL(
+        `../../../assets/lab/pushback/scenes/${scene}/scene-1x.webp`,
+        import.meta.url,
+      ),
+    );
+    const { data, info } = await sharp(file, { page: 0 })
+      .removeAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const pad = [data[0], data[1], data[2]];
+    let [x0, y0, x1, y1] = [Infinity, Infinity, -1, -1];
+    for (let y = 0; y < info.height; y++)
+      for (let x = 0; x < info.width; x++) {
+        const i = (y * info.width + x) * 3;
+        if (
+          data[i] === pad[0] &&
+          data[i + 1] === pad[1] &&
+          data[i + 2] === pad[2]
+        )
+          continue;
+        x0 = Math.min(x0, x);
+        y0 = Math.min(y0, y);
+        x1 = Math.max(x1, x);
+        y1 = Math.max(y1, y);
+      }
+    return { x: x0, y: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 };
+  };
+
+  for (const scene of ['floor', 'meeting', 'studio', 'office'] as const)
+    it(`matches the room in the ${scene} scene's files`, async () => {
+      const box = roomBox(scene);
+      const found = await measure(scene);
+      // A pixel of slack: the room's own edge can match the padding
+      for (const key of ['x', 'y', 'width', 'height'] as const)
+        assert.ok(
+          Math.abs(found[key] - box[key]) <= 1,
+          `${key}: the files have ${found[key]}, rooms.json says ${box[key]}`,
+        );
+    });
 });

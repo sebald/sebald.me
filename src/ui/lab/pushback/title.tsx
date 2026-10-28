@@ -17,7 +17,7 @@ import {
   nextMode,
   stepMode,
 } from '@/lib/lab/pushback/characters';
-import { STAGE } from '@/lib/lab/pushback/stage';
+import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { Confirm } from './confirm';
@@ -103,12 +103,8 @@ const CALL = { top: LOGO_TOP.splash + LOGO.height + 4, height: 22 } as const;
 /** The menu's window, under the logo */
 const MENU_TOP = LOGO_TOP.menu + LOGO.height + 6;
 
-/**
- * The corner office's picture inside its render: the room was drawn
- * smaller and padded to 480 by 270 with a flat dark, so the title fits
- * this box, not the render
- */
-const OFFICE = { x: 58, y: 55, width: 365, height: 205 } as const;
+/** The corner office's room inside its padded render */
+const OFFICE = roomBox('office');
 
 /**
  * The corner office the title shows: its picture scaled to cover the

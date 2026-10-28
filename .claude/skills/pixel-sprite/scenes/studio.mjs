@@ -16,7 +16,7 @@ import {
   scale,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
-import { shrinkFrames } from '../scripts/shrink.mjs';
+import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
 
@@ -107,7 +107,9 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
 // another twentieth: its drafting table and door came large
 await writeLoop({
   scene,
-  frames: await shrinkFrames(frames, scene.W, scene.H, { factor: 0.76 }),
+  frames: await shrinkFrames(frames, scene.W, scene.H, {
+    factor: ROOM_FACTORS.studio,
+  }),
   delay: DELAY,
   outDir,
   shownWidth: SHOWN_WIDTH,
