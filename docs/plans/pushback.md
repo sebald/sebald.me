@@ -211,7 +211,7 @@ Four scenes, one per opponent role and one for the boss, all made with the `pixe
 | Studio corner   | Designer opponents | Evening, warm wood and one cool desk lamp            | Beside a moodboard wall, printer on the left as a dark frame           | Lamp flicker, a sticky note lifting in a draft, a tablet screen pulsing on standby  |
 | Corner office   | The Stakeholder    | Night, city lights behind glass, dark navy and amber | Desk between the duellists, window behind                              | City windows twinkling, phone screen glowing on the desk, rain streaks on the glass |
 
-Composition rule for all four: the middle band from y=60 to y=225 stays uncluttered where the sprites stand (x=60 to 170 for the left duellist, x=310 to 420 for the right by default; the stand positions are per scene in data, `STANDS`, so a scene whose furniture creeps in can move its duellists by a few pixels instead of being rerolled: the studio's printer and desk, the office's cabinet). The top 40 px is a plain ceiling or sky and holds the two bars per duellist; the bottom 45 px a plain floor; the dialogue box overlays the floor. Dark framing shapes on the left and right edges, as in the headers.
+Composition rule for all four: the middle band from y=60 to y=225 stays uncluttered where the sprites stand (x=60 to 170 for the left duellist, x=310 to 420 for the right by default; the stand positions are per scene in data, `STANDS`, so a scene whose furniture creeps in can move its duellists by a few pixels instead of being rerolled: the studio's printer and desk, the office's cabinet). The top 40 px is a plain ceiling or sky and holds the two bars per duellist; the bottom 45 px a plain floor; the dialogue box overlays the floor. Dark framing shapes on the left and right edges, as in the headers. In the game the duellists stand 160 stage pixels apart (`STANDS`), the room centred between them; in the corner office the Stakeholder stands eight pixels closer, in front of the chair, with the room left where it was (`view`).
 
 Title and selection screens reuse the corner office at a darker exposure (no new scene).
 
@@ -352,7 +352,7 @@ boss-3 is the weakest fit (dev-2 answers "undocumented behaviour", not "never ap
 
 ## Result card
 
-After the boss, win or lose, a card over the darkened office with the run's numbers, and a `Copy` button that puts the same card on the clipboard as plain text (no analytics needed; this is the Wordle trick). The roster shows it again for a finished run.
+After the boss, win or lose, the run's end as an RPG status screen: one quiet window filling the stage, the player's face (the head square at three times its pixels, framed) with the name and role on the left, the result in gold (`Stakeholder beaten` or `Taken offline`) and the run's numbers on the right as a `Ledger` (duels, flawless, exchanges, mic drops, each with a dot leader from the label to the value, the way arcade score tables line up), and under a rule the glossary by pool, a `Meter` of sixteen boxes per pool lit as far as it is collected, the count and the counters missed, so the gaps show. The mode is not on it. `Copy result` puts the text card on the clipboard as plain text (no analytics needed; this is the Wordle trick). The roster shows it again for a finished run. The numbers come from `resultModel`, the text from `resultCardText`, both in `save.ts`; the inventory shows the screen for any role and look.
 
 ```
 Pushback · Dev
@@ -362,7 +362,7 @@ Missed counters: PM 3 · Dev 1 · Designer 5
 sebald.me/lab/pushback
 ```
 
-Everything on it comes from the stats in the save (see Tech). A lost boss fight says `Stakeholder took it offline` instead of `beaten`.
+Everything on it comes from the stats in the save (see Tech). A lost boss fight says `Stakeholder took it offline` instead of `beaten` on the card, `Taken offline` on the screen.
 
 ## Art and animation
 

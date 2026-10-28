@@ -14,6 +14,7 @@ import {
   playerName,
   resetSave,
   resultCardText,
+  resultModel,
   setMode,
   startRun,
   writeSave,
@@ -166,5 +167,40 @@ describe('resultCardText', () => {
       resultCardText(run),
       /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless · hard mode\n/,
     );
+  });
+});
+
+describe('resultModel', () => {
+  it('lines up the numbers and counts the glossary by pool', () => {
+    const run = startRun(emptySave(), 'dev', 'a', 1).runs.dev!;
+    const model = resultModel(
+      {
+        ...run,
+        finished: true,
+        attempts: 6,
+        beaten: { 0: { flawless: true }, 1: { flawless: false } },
+        stats: {
+          exchangesWon: 23,
+          exchangesLost: 9,
+          micDrops: 3,
+          missesByPool: { pm: 2, dev: 0, designer: 1 },
+        },
+      },
+      ['pm-1', 'pm-2', 'dev-1', 'des-4', 'dev-mic-1'],
+    );
+    assert.equal(model.finished, true);
+    assert.deepEqual(model.rows, [
+      ['Duels', '6'],
+      ['Flawless', '1'],
+      ['Exchanges', '23–9'],
+      ['Mic drops', '3'],
+    ]);
+    assert.deepEqual(model.pools, [
+      { role: 'pm', collected: 2, total: 16, missed: 2 },
+      { role: 'dev', collected: 1, total: 16, missed: 0 },
+      { role: 'designer', collected: 1, total: 16, missed: 1 },
+    ]);
+    // The closers are not in the glossary's count
+    assert.deepEqual(model.glossary, { collected: 4, total: 48 });
   });
 });

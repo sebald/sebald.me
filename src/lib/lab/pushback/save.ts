@@ -8,6 +8,8 @@ import { type Look, LOOKS, type Mode } from './characters';
 import type { DuelState } from './duel';
 import {
   PAIRS,
+  POOL_SIZE,
+  pairById,
   poolPairs,
   type PairId,
   ROLE_LABELS,
@@ -198,4 +200,45 @@ export const resultCardText = (
     `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
     'sebald.me/lab/pushback',
   ].join('\n');
+};
+
+/** One pool on the result screen: what of it is collected, what was missed */
+export interface ResultPool {
+  role: Role;
+  collected: number;
+  total: number;
+  missed: number;
+}
+
+/** What the result screen shows: the ledger and the glossary by pool */
+export interface ResultModel {
+  finished: boolean;
+  rows: [label: string, value: string][];
+  pools: ResultPool[];
+  glossary: { collected: number; total: number };
+}
+
+export const resultModel = (
+  run: RunState,
+  glossary: readonly PairId[] = run.collected,
+): ResultModel => {
+  const flawless = Object.values(run.beaten).filter(b => b.flawless).length;
+  const { stats } = run;
+  const pairs = poolPairs(glossary);
+  return {
+    finished: run.finished,
+    rows: [
+      ['Duels', String(run.attempts)],
+      ['Flawless', String(flawless)],
+      ['Exchanges', `${stats.exchangesWon}–${stats.exchangesLost}`],
+      ['Mic drops', String(stats.micDrops)],
+    ],
+    pools: ROLES.map(role => ({
+      role,
+      collected: pairs.filter(id => pairById(id).role === role).length,
+      total: POOL_SIZE,
+      missed: stats.missesByPool[role],
+    })),
+    glossary: { collected: pairs.length, total: PAIRS.length },
+  };
 };

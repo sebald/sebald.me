@@ -45,9 +45,10 @@ const SIDE = {
   },
 } as const;
 
-interface BoxProps {
-  x: number;
-  y: number;
+export interface BoxProps {
+  /** Where it sits on the stage; without them it sits in the flow */
+  x?: number;
+  y?: number;
   width: number;
   height: number;
   /** Lit in this side's colour; empty and dithered without one */
@@ -59,17 +60,19 @@ interface BoxProps {
 /**
  * One box of a bar on the stage's grid, a pixel of ink around it: lit,
  * a light top row, the colour, a shaded bottom row; empty, dark with a
- * checker of dots inside its top and bottom rows.
+ * checker of dots inside its top and bottom rows. Placed on the stage
+ * with `x` and `y`, or in the flow without them (a meter's boxes).
  */
-const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
+export const Box = ({ x, y, width, height, side, bright }: BoxProps) => {
   const colours = side ? SIDE[side] : null;
+  const placed = x !== undefined && y !== undefined;
   return (
     <span
       aria-hidden
-      className="absolute"
+      className={placed ? 'absolute' : 'relative inline-block shrink-0'}
       style={{
-        left: px(x),
-        top: px(y),
+        left: placed ? px(x) : undefined,
+        top: placed ? px(y) : undefined,
         width: px(width),
         height: px(height),
         boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,

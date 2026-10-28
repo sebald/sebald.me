@@ -9,12 +9,13 @@ import {
   ROLES,
   type Role,
 } from '@/lib/lab/pushback/lines';
-import { PLAYER_SHEETS, type SheetId } from '@/lib/lab/pushback/sprites';
+import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
 import { LAYOUT } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { Character } from './character';
 import { PALETTE } from './palette';
+import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage, px } from './stage';
@@ -55,35 +56,6 @@ const styles = {
       active: { true: 'text-(--pb-heading)', false: 'text-(--pb-dim)' },
     },
   }),
-};
-
-/**
- * A look's face: the head square `features.mjs` found in the idle cell,
- * as a CSS sprite at twice the stage's pixels, hard edges.
- */
-const Portrait = ({ sheet }: { sheet: SheetId }) => {
-  const { image, meta } = SHEETS[sheet];
-  const head = meta.features?.head ?? {
-    x: 24,
-    y: 32,
-    width: 24,
-    height: 24,
-  };
-  const s = PORTRAIT_SCALE;
-  return (
-    <span
-      aria-hidden
-      className="block [image-rendering:pixelated]"
-      style={{
-        width: px(head.width * s),
-        height: px(head.height * s),
-        backgroundImage: `url(${image.src})`,
-        backgroundSize: `${px(meta.cell.width * meta.count * s)} ${px(meta.cell.height * s)}`,
-        backgroundPosition: `${px(-head.x * s)} ${px(-head.y * s)}`,
-        backgroundRepeat: 'no-repeat',
-      }}
-    />
-  );
 };
 
 interface SelectScreenProps {
@@ -202,7 +174,10 @@ export const SelectScreen = ({
                     else setCursor({ column, row });
                   }}
                 >
-                  <Portrait sheet={PLAYER_SHEETS[r][l]} />
+                  <Portrait
+                    sheet={PLAYER_SHEETS[r][l]}
+                    scale={PORTRAIT_SCALE}
+                  />
                 </button>
               );
             })}

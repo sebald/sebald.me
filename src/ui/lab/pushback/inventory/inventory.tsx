@@ -10,6 +10,8 @@ import { Cast, CharacterPlayground } from './character-playground';
 import { PaletteDemo, PickerDemo, TextDemo } from './foundations';
 import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
+import { LedgerDemo } from './ledger-demo';
+import { ResultDemo } from './result-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
 import { WindowDemo } from './window-demo';
@@ -55,6 +57,12 @@ export const Inventory = () => (
       <PickerDemo />
     </Section>
     <Section
+      title="Ledger"
+      blurb="Numbers in rows with a dot leader from the label to the value, and the meter: a pool's boxes, lit as far as it is collected."
+    >
+      <LedgerDemo />
+    </Section>
+    <Section
       title="Window"
       blurb="The quiet window with a line typing; with the opponent's phrase, the prompt and the counters; with the hand and a closer on offer; and with ten options in a short window, where the list scrolls on its rail. The legend at the bottom names the keys, or the tap after a touch."
     >
@@ -86,6 +94,12 @@ export const Inventory = () => (
       blurb="The names, the momentum pips and the shared scale with its marker, every number on a control."
     >
       <HudDemo />
+    </Section>
+    <Section
+      title="Result"
+      blurb="The end of a run as a status screen: the face, the numbers with dot leaders, the glossary by pool."
+    >
+      <ResultDemo />
     </Section>
     <Section
       title="Scenes"
