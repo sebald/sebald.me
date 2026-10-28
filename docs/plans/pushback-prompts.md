@@ -385,7 +385,7 @@ With props gone, two colleagues per role share a player's sheet (the Head of Pro
 
 #### PM, look three: Nadia, the Head of Product (`pm-nadia-sheet.jpg`)
 
-First roll: all six cells right, but at the finer pixel pitch (90 px tall); the "figures snap taller" follow-up.
+First roll: all six cells right, but at the finer pixel pitch (92 px tall); kept on disk, not in the cast. Second roll pending, with the pixel count in the layout line below (a fresh chat, not the size follow-up).
 
 Attach: `HEADER`, `DEV`.
 
@@ -415,8 +415,11 @@ outline only on the silhouette, a limited palette. Plain flat dark
 background, no floor, no shadow, no frame.
 
 Layout: the same character six times side by side in a single row,
-identical in size, colours and clothing, the same height as the figures
-in the attached sheet, front three-quarter view facing to the right,
+identical in size, colours and clothing, exactly the same height as
+the figures in the attached sheet, about 80 of its pixels from the top
+of the head to the soles (if yours come out taller, your pixels are too
+small: make them bigger, not the figure smaller), front three-quarter
+view facing to the right,
 clear gaps between the figures, nothing touching the edge of the image.
 Left to right:
 1. idle: standing straight, left hand in the pocket, the mug held at
@@ -439,7 +442,7 @@ Reroll on: any resemblance to the attached hoodie character, the bob changing le
 
 #### Dev, look three: Bo, the Architect (`dev-bo-sheet.jpg`)
 
-First roll: the finer pitch (93 px), and the win and lose figures touch, so the cut merged them; both follow-ups, the size one first. The blue box he draws in the air in the talk cell is a small separate shape that joins his cell; it stays.
+First roll: the finer pitch (94 px), and the win and lose figures touch. Kept as he is: a broad, tall man a head above the rest reads as a build, not a mistake, and the cast gains a body type. The touch is cut with `--split 213`, the blue stroke he draws in the air in the talk cell is cleared by a patch (`patches.json`).
 
 Attach: `HEADER`, `DEV`.
 
@@ -491,7 +494,7 @@ Reroll on: a hoodie or any resemblance to the attached character, the beard chan
 
 #### Designer, look three: Kim, the Design Lead (`designer-kim-sheet.jpg`)
 
-First roll: the finer pitch (95 px); the charcoal trousers were eaten by the default shadow key and came back with `--soft 12 --soft-from 0.9`. The size follow-up.
+First roll: the finer pitch (95 px); the charcoal trousers were eaten by the old shadow key (now the gentle key is the default for every sheet). Kept as she is: tall, like Bo, on purpose.
 
 Attach: `HEADER`, `DEV`.
 

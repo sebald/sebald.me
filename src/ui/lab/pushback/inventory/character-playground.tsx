@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 
-import { CHARACTERS, LOOKS } from '@/lib/lab/pushback/characters';
-import { ROLES } from '@/lib/lab/pushback/lines';
-import { PLAYER_SHEETS, type SheetId } from '@/lib/lab/pushback/sprites';
+import { SHEET_IDS, type SheetId } from '@/lib/lab/pushback/sprites';
 import { type Pose } from '@/lib/lab/pushback/stage';
 
 import { Character } from '../character';
@@ -14,23 +12,30 @@ import { Field, Floor, field } from './controls';
 const POSES: Pose[] = ['idle', 'talk', 'taunt', 'flinch', 'win', 'lose'];
 
 interface Entry {
-  /** The name, which is unique; two entries can share a sheet */
+  /** The person on the sheet */
   label: string;
   sheet: SheetId;
 }
 
-/** The six looks, the nine colleagues and the boss */
-export const CAST: Entry[] = [
-  ...ROLES.flatMap(role =>
-    (['a', 'b'] as const).map(look => {
-      return {
-        label: LOOKS[role][look].name,
-        sheet: PLAYER_SHEETS[role][look],
-      };
-    }),
-  ),
-  ...CHARACTERS.map(c => ({ label: c.name, sheet: c.sheet })),
-];
+/** The people on the ten sheets; a colleague is one of them with a title */
+const NAMES: Record<SheetId, string> = {
+  'pm-jo': 'Jo',
+  'pm-piet': 'Piet',
+  'pm-nadia': 'Nadia',
+  'dev-sam': 'Sam',
+  'dev-lena': 'Lena',
+  'dev-bo': 'Bo',
+  'designer-ines': 'Ines',
+  'designer-theo': 'Theo',
+  'designer-kim': 'Kim',
+  boss: 'The Stakeholder',
+};
+
+/** One entry per sheet */
+export const CAST: Entry[] = SHEET_IDS.map(sheet => ({
+  label: NAMES[sheet],
+  sheet,
+}));
 
 /**
  * One character at a time: who, the pose, mirrored, the scale, talking

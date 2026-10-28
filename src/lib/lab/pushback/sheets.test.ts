@@ -21,9 +21,9 @@ const SHEETS = resolve(
 );
 
 /**
- * The idle figure is this tall, on a 72 by 112 cell (the spec's range).
- * The third looks (Nadia, Bo, Kim) came a tenth taller and wait for a
- * reroll at the cast's pixel size; until then the top is 96.
+ * The idle figure is this tall, on a 72 by 112 cell (the spec's range,
+ * 70 to 85). Bo and Kim are kept at 94 and 95 by decision, a broad man
+ * and a tall woman, so the ceiling is 96; nothing taller gets in.
  */
 const FIGURE_HEIGHT = { min: 70, max: 96 };
 
