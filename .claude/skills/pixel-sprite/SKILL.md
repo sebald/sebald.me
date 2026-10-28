@@ -152,3 +152,14 @@ at 1.1x and up, shown through a 320 by 134 window), `scene-1x.webp` and `poster.
 are built (pixel-header skill, steps 4 and 5). Check the result in the
 inventory's scene viewer with the guides on: the stands must not overlap
 furniture and the band the composition rule keeps clear must be clear.
+
+The finished frames are written a fifth smaller than drawn
+(`scripts/shrink.mjs`, `ROOM_FACTOR` 0.8): three rounds of renders kept
+the furniture too large for the cast, so each loop script hands its
+frames to `shrinkFrames` before `writeLoop`. The frames are scaled
+down smoothly about the floor line, every pixel snapped back to the
+first frame's palette, and padded to the stage with the render's corner
+colour (never in the window). The loop scripts and `native.png` stay in
+the render's own pixels; only `scene.webp`, `scene-1x.webp` and
+`poster.png` are smaller. A fresh render that fits the cast gets the
+factor set to 1.
