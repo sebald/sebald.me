@@ -16,8 +16,9 @@ import {
   type Mode,
   STANDS,
   nextMode,
+  stepMode,
 } from '@/lib/lab/pushback/characters';
-import { LAYOUT, STAGE, viewFor } from '@/lib/lab/pushback/stage';
+import { LAYOUT, SCENE, STAGE, viewFor } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { Confirm } from './confirm';
@@ -37,7 +38,7 @@ interface TitleScreenProps {
   onReset?: () => void;
   /** Nobody has touched anything for a while: play the demo */
   onAttract?: () => void;
-  /** No run and nothing collected yet: the splash explains the game */
+  /** No run and nothing collected yet: the first key explains the game */
   firstVisit?: boolean;
   /** A run or a collected phrase: switching the mode asks first */
   progress?: boolean;
@@ -58,13 +59,6 @@ const HOW_TO = [
 /** The usual line, because the cast is nine office archetypes and nobody in particular */
 const FICTION =
   'All characters are fictional. Any resemblance to actual persons or teams is coincidental.';
-
-const MODE_BLURBS: Record<Mode, string> = {
-  easy: 'The ghost of your predecessor whispers along, and nobody rushes you. No stars with a ghost.',
-  normal:
-    'No ghost. From the second colleague on, a bar gives you time to read, and a little more.',
-  hard: 'Less time, longer menus, colleagues who tire slowly. The score counts double.',
-};
 
 /**
  * How it works, in the quiet window under the band. Stuck to the bottom
@@ -108,14 +102,42 @@ const LOGO_NATIVE = { width: 226, height: 77 } as const;
  */
 const LOGO = { width: 282, height: 96 } as const;
 
-/** Where the logo sits in the band: high on the splash, with the call to play under it; at the top with the menu open */
-const LOGO_TOP = { splash: 10, menu: 4 } as const;
+/**
+ * Where the logo sits: on the splash, the logo and the call to play
+ * under it centred on the stage; with the menu open, near the top with
+ * the menu under it
+ */
+const LOGO_TOP = { splash: 44, menu: 14 } as const;
 
-/** The call to play, centred in the rows the logo leaves under it */
-const CALL_TOP = LOGO_TOP.splash + LOGO.height;
+/** The call to play, in the rows under the logo */
+const CALL = { top: LOGO_TOP.splash + LOGO.height + 4, height: 22 } as const;
 
-/** The window of the corner office the title shows: the duel's */
-const VIEW = viewFor(STANDS.office);
+/** The menu's window, under the logo */
+const MENU_TOP = LOGO_TOP.menu + LOGO.height + 6;
+
+/**
+ * The corner office the title shows: the duel's columns, and all of the
+ * scene's rows the stage has room for, down to its floor, so the room
+ * fills the whole screen
+ */
+const VIEW = {
+  x: viewFor(STANDS.office).x,
+  y: SCENE.height - STAGE.height,
+} as const;
+
+/** Left or right of the mode: a pixel triangle, dim at the end it cannot go past */
+const Step = ({ left, more }: { left: boolean; more: boolean }) => (
+  <span
+    aria-hidden
+    className={cn(
+      'inline-block h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] bg-current',
+      left
+        ? '[clip-path:polygon(100%_0,0_50%,100%_100%)]'
+        : '[clip-path:polygon(0_0,100%_50%,0_100%)]',
+      more ? 'opacity-100' : 'opacity-25',
+    )}
+  />
+);
 
 /** Keys that only modify: not a press that opens the menu */
 const MODIFIERS = new Set([
@@ -128,13 +150,13 @@ const MODIFIERS = new Set([
 ]);
 
 /**
- * The start screen: the corner office at night fills the band, dimmed,
- * the logo over it and an arcade line blinking under it, both in the
- * scene. Any key or a tap opens the menu: the logo slides to the top of
- * the band and the menu takes the quiet window below, so the title is
- * the start screen with its menu open, not a second screen. On a first
- * visit the window under the splash explains the game in four lines,
- * and `How to play` in the menu shows them again.
+ * The start screen: the corner office at night fills the whole stage,
+ * dimmed a little, the logo over it and an arcade line blinking under
+ * it. Any key or a tap opens the menu: the logo slides up and a small
+ * window under it holds the menu, so the title is the start screen with
+ * its menu open, not a second screen. On a first visit that key shows
+ * how the game works first, in four lines; `How to play` in the menu
+ * shows them again. The mode is switched with left and right on it.
  */
 export const TitleScreen = ({
   mode,
@@ -146,16 +168,19 @@ export const TitleScreen = ({
   progress = false,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
-  // The how-to again, from the menu; Enter, Escape or a tap goes back
-  const [reading, setReading] = useState(false);
+  // How it works: on a first visit's first key, or from the menu; Enter,
+  // Escape or a tap goes on to the menu, the cursor back where it was
+  const [reading, setReading] = useState<'splash' | 'menu' | null>(null);
   const [returned, setReturned] = useState(false);
   const closeHowTo = useCallback(() => {
-    setReading(false);
-    setReturned(true);
+    setReading(previous => {
+      if (previous === 'menu') setReturned(true);
+      return null;
+    });
   }, []);
   useKeys(
     useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
-    reading,
+    reading !== null,
   );
   useEffect(() => {
     if (!reading) return;
@@ -181,36 +206,58 @@ export const TitleScreen = ({
     };
   }, [onAttract]);
 
-  // The splash: any key or a tap opens the menu
+  // The splash: any key or a tap opens the menu, on a first visit after
+  // how the game works
   useEffect(() => {
     if (open) return;
+    const go = () => {
+      setOpen(true);
+      if (firstVisit) setReading('splash');
+    };
     const onKey = (event: KeyboardEvent) => {
       if (MODIFIERS.has(event.key)) return;
       event.preventDefault();
-      setOpen(true);
+      go();
     };
-    const onPointer = () => setOpen(true);
+    const onPointer = go;
     window.addEventListener('keydown', onKey);
     window.addEventListener('pointerdown', onPointer);
     return () => {
       window.removeEventListener('keydown', onKey);
       window.removeEventListener('pointerdown', onPointer);
     };
-  }, [open]);
+  }, [open, firstVisit]);
 
   // Reset, and a mode switch with progress at stake, ask in a dialog
-  const [asking, setAsking] = useState<'reset' | 'mode' | null>(null);
+  const [asking, setAsking] = useState<'reset' | Mode | null>(null);
   const cancel = useCallback(() => setAsking(null), []);
-  const upcoming = nextMode(mode);
+  const switchTo = (target: Mode) => {
+    if (target === mode) return;
+    if (progress) setAsking(target);
+    else onMode(target);
+  };
+  // The legend says what works on the item the cursor is on
+  const [current, setCurrent] = useState('start');
 
   const items: PickerItem[] = [
     { id: 'start', label: 'Start', onSelect: onStart },
     {
       id: 'mode',
-      label: `Mode: ${MODE_LABELS[mode]}`,
-      onSelect: () => (progress ? setAsking('mode') : onMode(upcoming)),
+      label: (
+        <span className="flex items-center gap-[1ch]">
+          Mode
+          <span className="ml-auto flex items-center gap-[calc(var(--px)*2)]">
+            <Step left more={mode !== 'easy'} />
+            <span className="w-[6ch] text-center">{MODE_LABELS[mode]}</span>
+            <Step left={false} more={mode !== 'hard'} />
+          </span>
+        </span>
+      ),
+      // Enter or a tap goes round; left and right stop at the ends
+      onSelect: () => switchTo(nextMode(mode)),
+      onStep: step => switchTo(stepMode(mode, step)),
     },
-    { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
+    { id: 'how', label: 'How to play', onSelect: () => setReading('menu') },
   ];
   if (onReset)
     items.push({
@@ -219,18 +266,12 @@ export const TitleScreen = ({
       onSelect: () => setAsking('reset'),
     });
 
-  const { panel } = LAYOUT;
-
   return (
     <Stage label="Pushback, title">
-      {/* The corner office at night, dimmed, with the logo over it */}
-      <div
-        aria-hidden
-        className="absolute inset-x-0 top-0 overflow-hidden"
-        style={{ height: px(LAYOUT.band) }}
-      >
+      {/* The corner office at night, the whole stage, dimmed a little */}
+      <div aria-hidden className="absolute inset-0 overflow-hidden">
         <Room scene="office" view={VIEW} />
-        <div className="absolute inset-0 bg-(--pb-bg)/60" />
+        <div className="absolute inset-0 bg-(--pb-bg)/15" />
       </div>
       <h2
         className={cn(
@@ -253,79 +294,70 @@ export const TitleScreen = ({
 
       {open && reading ? (
         <HowTo
-          legend={<Legend keys={[['Enter', 'back']]} touch="Tap to go back" />}
+          legend={
+            <Legend
+              keys={[['Enter', reading === 'splash' ? 'continue' : 'back']]}
+              touch={
+                reading === 'splash' ? 'Tap to continue' : 'Tap to go back'
+              }
+            />
+          }
         />
       ) : open ? (
         <Window
-          className="absolute"
-          style={{
-            left: px(panel.x),
-            top: px(panel.y),
-            width: px(panel.width),
-            height: px(panel.height),
-          }}
+          className="absolute left-1/2 -translate-x-1/2"
+          style={{ top: px(MENU_TOP) }}
           legend={
             <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
+              keys={
+                current === 'mode'
+                  ? [
+                      ['←→', 'mode'],
+                      ['Enter', 'confirm'],
+                    ]
+                  : [
+                      ['↑↓', 'choose'],
+                      ['Enter', 'confirm'],
+                    ]
+              }
               touch="Tap a line"
             />
           }
         >
-          <div className="flex min-h-0 flex-1 gap-[calc(var(--px)*4)]">
-            <Picker
-              label="Title menu"
-              className="w-[11em]"
-              items={items}
-              initial={returned ? 'how' : undefined}
-              active={asking === null}
-            />
-            <div className="grid flex-1 content-start gap-[calc(var(--px)*2)] text-[0.85em] text-balance">
-              <Muted>{MODE_BLURBS[mode]}</Muted>
-              <Muted className="text-[0.8em] opacity-70">{FICTION}</Muted>
-            </div>
-          </div>
+          <Picker
+            label="Title menu"
+            className="w-[15em]"
+            items={items}
+            initial={returned ? 'how' : undefined}
+            active={asking === null}
+            onCurrent={setCurrent}
+          />
         </Window>
       ) : (
-        <>
-          {/* The arcade call to play, in the scene under the logo: a full blink, nothing between on and off */}
-          <p
-            aria-live="polite"
-            className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
-            style={{ top: px(CALL_TOP), height: px(LAYOUT.band - CALL_TOP) }}
-          >
-            <Loud className="font-bold tracking-[0.15em] uppercase">
-              {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
-            </Loud>
-          </p>
-          {firstVisit ? (
-            <HowTo legend={FICTION} />
-          ) : (
-            <div
-              className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
-              style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
-            >
-              <Muted className="text-[0.85em] text-balance">
-                Counter the phrase. Push the scale to your side. Full momentum
-                lets you drop the mic.
-              </Muted>
-              <Muted className="text-[0.7em] text-balance opacity-70">
-                {FICTION}
-              </Muted>
-            </div>
-          )}
-        </>
+        /* The arcade call to play, under the logo: a full blink, nothing between on and off */
+        <p
+          aria-live="polite"
+          className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
+          style={{ top: px(CALL.top), height: px(CALL.height) }}
+        >
+          <Loud className="font-bold tracking-[0.15em] uppercase">
+            {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
+          </Loud>
+        </p>
       )}
-      {asking === 'mode' && (
+      {!reading && (
+        <Muted className="absolute inset-x-0 bottom-[calc(var(--px)*4)] text-center text-[0.65em] text-balance opacity-70">
+          {FICTION}
+        </Muted>
+      )}
+      {asking !== null && asking !== 'reset' && (
         <Confirm
-          title={`Switch to ${MODE_LABELS[upcoming].toLowerCase()}?`}
-          confirm={`Switch to ${MODE_LABELS[upcoming].toLowerCase()}`}
+          title={`Switch to ${MODE_LABELS[asking].toLowerCase()}?`}
+          confirm={`Switch to ${MODE_LABELS[asking].toLowerCase()}`}
           onCancel={cancel}
           onConfirm={() => {
             setAsking(null);
-            onMode(upcoming);
+            onMode(asking);
           }}
         >
           A run is played in one mode, so switching starts over: every run and

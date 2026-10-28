@@ -46,21 +46,22 @@ export const LAYOUT = {
   panelPad: 6,
   /**
    * The shared scale across the top, from one face to the other: as many
-   * whole pixels a step as fit between them, 7 px high
+   * whole pixels a step as fit between them, 5 px high
    */
-  beam: { y: 4, height: 7 },
+  beam: { y: 4, height: 5 },
   /**
-   * The duellists' faces in the corners, the beam's top on theirs (the
-   * spark's two pixels above it stay clear of the stage's edge): the
+   * The duellists' faces in the corners, the beam's top on their
+   * frame's (the spark's two pixels above it stay clear of the stage's
+   * edge): the
    * 24 px head square at two thirds (16 px, two screen pixels a sprite
    * pixel at 3x, so it stays sharp), this far in from the stage's edge,
    * the beam this far from the faces
    */
-  heads: { x: 6, y: 4, scale: 2 / 3, size: 16, gap: 4 },
+  heads: { x: 6, y: 5, scale: 2 / 3, size: 16, gap: 4 },
   /** Momentum pips after the names */
   pips: { width: 8, height: 5, gap: 2 },
   /** The names under the beam, at its ends */
-  names: { y: 14 },
+  names: { y: 12 },
   /** Rows the bars take at the top: a window never grows over them */
   hud: 30,
 } as const;

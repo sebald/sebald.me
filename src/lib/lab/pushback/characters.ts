@@ -395,6 +395,15 @@ export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
 export const nextMode = (mode: Mode): Mode =>
   MODE_ORDER[(MODE_ORDER.indexOf(mode) + 1) % MODE_ORDER.length]!;
 
+/** The mode a step left or right of this one, stopping at the ends */
+export const stepMode = (mode: Mode, step: 1 | -1): Mode =>
+  MODE_ORDER[
+    Math.max(
+      0,
+      Math.min(MODE_ORDER.length - 1, MODE_ORDER.indexOf(mode) + step),
+    )
+  ]!;
+
 export const MODE_LABELS: Record<Mode, string> = {
   easy: 'Easy',
   normal: 'Normal',

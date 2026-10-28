@@ -68,6 +68,8 @@ export interface PickerItem {
    */
   accent?: boolean;
   onSelect: () => void;
+  /** Left and right on it, for an item that is a setting (the mode) */
+  onStep?: (step: 1 | -1) => void;
 }
 
 interface PickerProps {
@@ -77,6 +79,8 @@ interface PickerProps {
   /** Keyboard handling on (one menu at a time) */
   active?: boolean;
   label: string;
+  /** The item the cursor is on, by id, whenever it moves */
+  onCurrent?: (id: string) => void;
   /** On the list itself */
   className?: string;
 }
@@ -90,7 +94,8 @@ interface Scroll {
 
 /**
  * A list the player moves through with the arrow keys (or W/S), confirms
- * with Enter or Space, and taps on touch. Disabled items are skipped.
+ * with Enter or Space, and taps on touch. Disabled items are skipped;
+ * an item with `onStep` takes left and right (or A/D) as well.
  * Given less room than its items need, the list scrolls, keeps the
  * current item in view, and shows a pixel rail beside it: an arrow lit
  * at each end where there is more, and a track with where the list is.
@@ -100,6 +105,7 @@ export const Picker = ({
   initial,
   active = true,
   label,
+  onCurrent,
   className,
 }: PickerProps) => {
   const firstEnabled = Math.max(
@@ -136,6 +142,19 @@ export const Picker = ({
           event.preventDefault();
           move(-1);
           break;
+        case 'ArrowLeft':
+        case 'ArrowRight':
+        case 'a':
+        case 'd': {
+          const item = items[current];
+          if (item?.onStep && !item.disabled) {
+            event.preventDefault();
+            item.onStep(
+              event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1,
+            );
+          }
+          break;
+        }
         case 'Enter':
         case ' ': {
           const item = items[current];
@@ -150,6 +169,11 @@ export const Picker = ({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [active, items, current]);
+
+  const currentId = items[current]?.id;
+  useEffect(() => {
+    if (currentId !== undefined) onCurrent?.(currentId);
+  }, [currentId, onCurrent]);
 
   // Measure the list: on scroll, and whenever it or its items resize
   useEffect(() => {

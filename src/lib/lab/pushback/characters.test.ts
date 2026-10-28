@@ -12,6 +12,7 @@ import {
   drawRun,
   repertoireFor,
   roleOrder,
+  stepMode,
 } from './characters';
 import { BOSS_ANSWERS, ROLES, deckPool, pairById } from './lines';
 import { Rng, seedRng } from './random';
@@ -126,5 +127,14 @@ describe('cast', () => {
       assert.equal(foreign.length, character.knows);
     }
     assert.deepEqual(repertoireFor(characterById('stakeholder'), deck, 1), []);
+  });
+});
+
+describe('stepMode', () => {
+  it('steps left and right through the modes, stopping at the ends', () => {
+    assert.equal(stepMode('normal', 1), 'hard');
+    assert.equal(stepMode('normal', -1), 'easy');
+    assert.equal(stepMode('hard', 1), 'hard');
+    assert.equal(stepMode('easy', -1), 'easy');
   });
 });

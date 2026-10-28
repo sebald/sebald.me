@@ -258,7 +258,7 @@ export const Hud = ({
     return (
       <span
         className={cn(
-          'absolute flex items-center',
+          'absolute flex items-start',
           side === 'opponent' && 'flex-row-reverse',
         )}
         style={{
