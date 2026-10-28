@@ -9,6 +9,7 @@ import {
   TALK,
   TEARS,
   cellFor,
+  cries,
   ghostCell,
   mouthOpen,
   tearDrop,
@@ -47,6 +48,15 @@ describe('tearDrop', () => {
     assert.equal(tearDrop(FRAME_MS * (TEARS.fall - 1)), (TEARS.fall - 1) * 2);
     assert.equal(tearDrop(FRAME_MS * TEARS.fall), null);
     assert.equal(tearDrop(FRAME_MS * TEARS.period), 0);
+  });
+});
+
+describe('cries', () => {
+  it('lets every duellist cry on a loss except the Stakeholder', () => {
+    assert.equal(cries('boss'), false);
+    for (const id of SHEET_IDS.filter(id => id !== 'boss')) {
+      assert.equal(cries(id), true, id);
+    }
   });
 });
 

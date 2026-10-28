@@ -7,6 +7,7 @@ import {
   type SheetId,
   cellFor,
   mouthOpen,
+  cries,
   tearDrop,
 } from '@/lib/lab/pushback/sprites';
 import {
@@ -59,7 +60,7 @@ export interface CharacterProps {
  * pixels), drawn at the stage's device pixels, animating its pose on its
  * own clock: breathing when idle, the mouth moving while a line types,
  * the step and chuckle of a taunt, the flash and flicker of a flinch, the slump and
- * tears of a loss. Everything it needs is the sheet and the pose; the
+ * tears of a loss (not the Stakeholder's). Everything it needs is the sheet and the pose; the
  * duel just tells it which.
  */
 export const Character = ({
@@ -119,7 +120,8 @@ export const Character = ({
         mouthShut: pose === 'talk' && (still || !mouthOpen(elapsed, typing)),
       });
     draw();
-    const fallen = pose === 'lose' && !still ? tearDrop(elapsed) : null;
+    const fallen =
+      pose === 'lose' && !still && cries(sheet) ? tearDrop(elapsed) : null;
     if (fallen !== null) drawTear(ctx, sprite, place, fallen, breath);
     if (offset.lighter) {
       // The flinch flash: the cell again, added on top of itself
@@ -131,6 +133,7 @@ export const Character = ({
     }
   }, [
     backing,
+    sheet,
     sprite,
     pose,
     elapsed,

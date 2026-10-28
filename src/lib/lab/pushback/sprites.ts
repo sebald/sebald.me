@@ -109,6 +109,15 @@ export const mouthOpen = (elapsed: number, typing: boolean): boolean =>
  */
 export const TEARS = { period: 10, fall: 5, step: 2 } as const;
 
+/**
+ * Who loses without tears: the Stakeholder takes it offline, slumped,
+ * and does not cry about it
+ */
+export const TEARLESS: ReadonlySet<SheetId> = new Set<SheetId>(['boss']);
+
+/** Whether a sheet cries on its lose pose */
+export const cries = (sheet: SheetId): boolean => !TEARLESS.has(sheet);
+
 /** How far below the eye the drop is at `elapsed` ms, or null between drops */
 export const tearDrop = (elapsed: number): number | null => {
   const frame = Math.floor(elapsed / FRAME_MS) % TEARS.period;
