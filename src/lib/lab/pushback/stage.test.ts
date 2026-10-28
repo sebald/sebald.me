@@ -332,5 +332,6 @@ describe('viewFor', () => {
     // Clamped to the render
     assert.equal(viewFor({ left: 0, right: 60 }).x, 0);
     assert.equal(viewFor({ left: 400, right: 408 }).x, 160);
+    assert.equal(viewFor({ left: 145, right: 297, view: 101 }).x, 101);
   });
 });

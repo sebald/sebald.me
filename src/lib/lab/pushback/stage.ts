@@ -56,12 +56,16 @@ export const LAYOUT = {
 
 /**
  * The window of the scene the band shows: 320 of its 480 columns, centred
- * on the duellists, and the rows that put the scene's floor line on the
+ * on the duellists unless the stands fix it (`view`), and the rows that put the scene's floor line on the
  * stage's feet line. Stage x = scene x − view.x.
  */
-export const viewFor = (stands: { left: number; right: number }) => {
+export const viewFor = (stands: {
+  left: number;
+  right: number;
+  view?: number;
+}) => {
   const centre = (stands.left + stands.right) / 2 + LAYOUT.cell.width / 2;
-  const x = Math.round(centre - STAGE.width / 2);
+  const x = stands.view ?? Math.round(centre - STAGE.width / 2);
   return {
     x: Math.max(0, Math.min(SCENE.width - STAGE.width, x)),
     y: SCENE.feet - LAYOUT.feet,

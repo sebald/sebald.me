@@ -182,8 +182,19 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
  * composition rule keeps x 60 to 170 and 310 to 420 clear; scenes may
  * move the stands a little once they exist.
  */
-export const STANDS: Record<SceneId, { left: number; right: number }> = {
-  // All four put the figures 160 apart (cells at stage x 44 and 204, so
+export interface Stands {
+  left: number;
+  right: number;
+  /**
+   * The scene column the band starts at, when it is not centred on the
+   * duellists: a stand moved without moving the room
+   */
+  view?: number;
+}
+
+export const STANDS: Record<SceneId, Stands> = {
+  // All four put the figures 160 apart (the office's Stakeholder
+  // eight closer) (cells at stage x 44 and 204, so
   // sixty-five pixels of room to either edge), the ghost between them.
   // The left desk ends at x 128, the right one starts at 323; the shelf
   // with the build light sits between the duellists
@@ -193,8 +204,10 @@ export const STANDS: Record<SceneId, { left: number; right: number }> = {
   // The chair ends at x 120, the desk starts at 333
   studio: { left: 123, right: 283 },
   // The cabinet ends at x 90, the desk spans 250 to 340 with the chair
-  // behind its right end, where the Stakeholder stands
-  office: { left: 145, right: 305 },
+  // behind its right end, where the Stakeholder stands: eight pixels in
+  // from the chair, two and a half percent of the stage toward the
+  // middle, with the room where the duellists 160 apart put it
+  office: { left: 145, right: 297, view: 101 },
 };
 
 // Player looks
