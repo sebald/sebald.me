@@ -5,7 +5,6 @@ import { RULES, STAKEHOLDER, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
-  LAYOUT,
   barRects,
   barWidth,
   barsLabel,
@@ -120,14 +119,16 @@ describe('bars', () => {
   it('draws the scale as a beam clash, the spark pushed toward the loser', () => {
     const even = scaleBeam({ scale: 0, toWin: 3, toLose: 3 });
     assert.equal(even.steps, 6);
-    assert.equal(even.width, 6 * LAYOUT.beam.step);
+    assert.equal(even.width, 6 * even.step);
+    // Between the faces in the corners, as wide as whole steps allow
+    assert.equal(even.step, 44);
     // Centred on the stage, the spark in the middle
     assert.equal(even.x * 2 + even.width, 320);
     assert.equal(even.spark, 160);
 
     // Two steps ahead: the gold beam is two steps longer
     const ahead = scaleBeam({ scale: 2, toWin: 3, toLose: 3 });
-    assert.equal(ahead.spark, 160 + 2 * LAYOUT.beam.step);
+    assert.equal(ahead.spark, 160 + 2 * ahead.step);
     // At the win the spark is at the far end
     const won = scaleBeam({ scale: 3, toWin: 3, toLose: 3 });
     assert.equal(won.spark, won.x + won.width);
@@ -135,7 +136,7 @@ describe('bars', () => {
     // The Stakeholder: further to push, the start off centre toward them
     const boss = scaleBeam({ scale: 0, toWin: 4, toLose: 3 });
     assert.equal(boss.steps, 7);
-    assert.equal(boss.spark, boss.x + 3 * LAYOUT.beam.step);
+    assert.equal(boss.spark, boss.x + 3 * boss.step);
   });
 });
 

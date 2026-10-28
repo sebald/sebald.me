@@ -44,18 +44,22 @@ export const LAYOUT = {
   panel: { x: 3, y: 136, width: 314, height: 76 },
   /** Inset of the text inside the panel */
   panelPad: 6,
-  /** The shared scale across the top centre: a beam, `step` pixels a step */
-  beam: { y: 9, step: 13, height: 7 },
   /**
-   * The duellists' heads either side of the beam, its middle on theirs:
-   * the 24 px head square at two thirds (16 px, two screen pixels a
-   * sprite pixel at 3x, so it stays sharp), this far from the beam's ends
+   * The shared scale across the top, from one face to the other: as many
+   * whole pixels a step as fit between them, 7 px high
    */
-  heads: { y: 4, scale: 2 / 3, size: 16, gap: 4 },
-  /** Momentum pips in the corners, under the names */
-  pips: { x: 6, y: 15, width: 8, height: 5, gap: 2 },
-  /** The names, in the corners */
-  names: { x: 6, y: 3 },
+  beam: { y: 9, height: 7 },
+  /**
+   * The duellists' faces in the corners, the beam's middle on theirs: the
+   * 24 px head square at two thirds (16 px, two screen pixels a sprite
+   * pixel at 3x, so it stays sharp), this far in from the stage's edge,
+   * the beam this far from the faces
+   */
+  heads: { x: 6, y: 4, scale: 2 / 3, size: 16, gap: 4 },
+  /** Momentum pips after the names */
+  pips: { width: 8, height: 5, gap: 2 },
+  /** The names under the beam, at its ends */
+  names: { y: 20 },
   /** Rows the bars take at the top: a window never grows over them */
   hud: 30,
 } as const;
@@ -204,7 +208,7 @@ export interface Beam {
 }
 
 /**
- * The shared scale as a beam clash across the top centre: the player's
+ * The shared scale as a beam clash across the top, from face to face: the player's
  * beam in gold from the left, the opponent's in ember from the right,
  * meeting at the spark. Winning an exchange pushes the spark a step
  * toward the other end; the player wins at the right end (`toWin` steps
@@ -217,8 +221,11 @@ export const scaleBeam = (options: {
   toWin: number;
   toLose: number;
 }): Beam => {
-  const { y, step, height } = LAYOUT.beam;
+  const { y, height } = LAYOUT.beam;
+  const { x: inset, size, gap } = LAYOUT.heads;
   const steps = options.toWin + options.toLose;
+  const room = STAGE.width - 2 * (inset + size + gap);
+  const step = Math.floor(room / steps);
   const width = steps * step;
   const x = Math.round(STAGE.width / 2 - width / 2);
   const at = Math.max(0, Math.min(steps, options.toLose + options.scale));

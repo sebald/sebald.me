@@ -2,14 +2,7 @@
 
 import type { Side } from '@/lib/lab/pushback/duel';
 import type { SheetId } from '@/lib/lab/pushback/sprites';
-import {
-  LAYOUT,
-  STAGE,
-  barRects,
-  barWidth,
-  bob,
-  scaleBeam,
-} from '@/lib/lab/pushback/stage';
+import { LAYOUT, STAGE, bob, scaleBeam } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { PALETTE } from './palette';
@@ -20,7 +13,7 @@ import { useClock } from './use-clock';
 const styles = {
   name: cva({
     base: [
-      'absolute font-semibold tracking-wide uppercase',
+      'font-semibold tracking-wide uppercase',
       'bg-(--pb-ink)/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
       'shadow-[0_0_0_var(--px)_var(--pb-ink)]',
     ],
@@ -113,8 +106,8 @@ const SLIDE =
 /**
  * The shared scale as a beam clash: gold from the player's end, ember
  * from the opponent's, a notch every step, meeting at a white spark,
- * and each duellist's face at its own end, framed in its colour, so the
- * beam says whose is whose.
+ * and each duellist's face in the corner at its own end, framed in its
+ * colour, so the beam says whose is whose.
  */
 const ScaleBeam = ({
   beam,
@@ -124,15 +117,15 @@ const ScaleBeam = ({
   heads?: Record<Side, SheetId>;
 }) => {
   const { x, y, width, height, step, spark } = beam;
-  // A duellist's face at its end of the beam, framed in its side's colour
+  // A duellist's face in its corner, framed in its side's colour
   const head = (side: Side, sheet: SheetId) => {
-    const { size, gap } = LAYOUT.heads;
+    const { x: inset, y: top, size } = LAYOUT.heads;
     return (
       <span
         className="absolute bg-(--pb-frame-inner)"
         style={{
-          left: px(side === 'player' ? x - gap - size : x + width + gap),
-          top: px(LAYOUT.heads.y),
+          left: px(side === 'player' ? inset : STAGE.width - inset - size),
+          top: px(top),
           boxShadow: `0 0 0 var(--px) ${SIDE[side].mid}, 0 0 0 ${px(2)} ${PALETTE.ink}`,
         }}
       >
@@ -229,9 +222,10 @@ export interface HudProps {
 
 /**
  * The bars along the top of the band, on the stage's pixel grid like
- * the room: the names in the corners, the momentum pips under them
- * filling from the outside in, and the shared scale across the centre as
- * a beam clash. A full momentum bar blinks at the idle rhythm.
+ * the room, in the fighting-game arrangement: each duellist's face in
+ * its corner, the shared scale as a beam clash from one face to the
+ * other, and under each end of it the name with the momentum pips after
+ * it. A full momentum bar blinks at the idle rhythm.
  */
 export const Hud = ({
   scale,
@@ -248,33 +242,43 @@ export const Hud = ({
   const clock = useClock(!still);
   const blinkOn = !still && bob(clock) === 0;
   const beam = scaleBeam({ scale, toWin, toLose });
-  const pips = (side: Side) => {
-    const { x, y, width, height, gap } = LAYOUT.pips;
-    const w = barWidth(momentumTotal, { width, gap });
-    const left = side === 'player' ? x : STAGE.width - x - w;
-    const rects = barRects({
-      x: left,
-      y,
-      count: momentumTotal,
-      filled: momentum[side],
-      width,
-      height,
-      gap,
-    });
-    // The right corner fills from its outer end
-    const ordered = side === 'player' ? rects : [...rects].reverse();
+  // A side's name and momentum, one row under its end of the beam
+  const plate = (side: Side) => {
+    const { width, height, gap } = LAYOUT.pips;
     const full = momentum[side] >= momentumTotal;
-    return ordered.map((pip, i) => (
+    const boxes = Array.from({ length: momentumTotal }, (_, i) => (
       <Box
-        key={`${side}-${i}`}
-        x={pip.x}
-        y={pip.y}
-        width={pip.width}
-        height={pip.height}
+        key={i}
+        width={width}
+        height={height}
         side={i < momentum[side] ? side : null}
         bright={full && blinkOn}
       />
     ));
+    return (
+      <span
+        className={cn(
+          'absolute flex items-center',
+          side === 'opponent' && 'flex-row-reverse',
+        )}
+        style={{
+          top: px(LAYOUT.names.y),
+          gap: px(gap * 2),
+          ...(side === 'player'
+            ? { left: px(beam.x) }
+            : { right: px(STAGE.width - beam.x - beam.width) }),
+        }}
+      >
+        <span className={styles.name({ side })}>{names[side]}</span>
+        {/* Filling from the name outward */}
+        <span
+          className={cn('flex', side === 'opponent' && 'flex-row-reverse')}
+          style={{ gap: px(gap) }}
+        >
+          {boxes}
+        </span>
+      </span>
+    );
   };
 
   return (
@@ -283,21 +287,8 @@ export const Hud = ({
       className={cn('pointer-events-none absolute inset-x-0', className)}
       style={{ top: px(crop), height: px(LAYOUT.hud) }}
     >
-      <span
-        className={styles.name({ side: 'player' })}
-        style={{ left: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
-      >
-        {names.player}
-      </span>
-      <span
-        className={styles.name({ side: 'opponent' })}
-        style={{ right: px(LAYOUT.names.x), top: px(LAYOUT.names.y) }}
-      >
-        {names.opponent}
-      </span>
-
-      {pips('player')}
-      {pips('opponent')}
+      {plate('player')}
+      {plate('opponent')}
 
       <ScaleBeam beam={beam} heads={heads} />
     </div>
