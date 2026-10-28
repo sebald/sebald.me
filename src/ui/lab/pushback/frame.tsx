@@ -4,12 +4,81 @@ import NextImage from 'next/image';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
+import type { SceneId } from '@/lib/lab/pushback/characters';
 import { FRAME_MS, LAYOUT, SCENE, STAGE } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
 import { Stage, useStage } from './stage';
+
+/** The loop of a scene to show at this stage's pixels, and its key */
+const sceneLoop = (scene: SceneId, crisp: boolean) => {
+  const assets = SCENE_ASSETS[scene];
+  const loop = loopFor(assets, crisp);
+  return { assets, loop, key: `${scene}:${loop.src}` };
+};
+
+interface RoomProps {
+  scene: SceneId;
+  /** The window of the render the band shows (`viewFor`) */
+  view: { x: number; y: number };
+  /** The loop has loaded (per scene and scale) */
+  onLoad?: (key: string) => void;
+}
+
+/**
+ * The room: a window of the scene loop at the stage's pixels, fading in
+ * once it has loaded. On whole device pixels the 1x frames are blown up
+ * with hard edges, which lands exactly on the art's pixels; otherwise the
+ * 8x export is scaled down smoothly, so every art pixel keeps the same
+ * width (`pixelated` would round them to uneven widths). The poster
+ * replaces it under reduced motion. Position it inside a band-sized box
+ * with `overflow-hidden`.
+ */
+export const Room = ({ scene, view, onLoad }: RoomProps) => {
+  const { crisp } = useStage();
+  const { assets, loop, key } = sceneLoop(scene, crisp);
+  const [loaded, setLoaded] = useState<string | null>(null);
+  return (
+    <picture
+      key={key}
+      className={cn(
+        'absolute transition-opacity duration-300',
+        loaded === key ? 'opacity-100' : 'opacity-0',
+      )}
+      style={{
+        left: `calc(var(--px) * ${-view.x})`,
+        top: `calc(var(--px) * ${-view.y})`,
+        width: `calc(var(--px) * ${SCENE.width})`,
+        height: `calc(var(--px) * ${SCENE.height})`,
+      }}
+    >
+      <source
+        media="(prefers-reduced-motion: reduce)"
+        srcSet={assets.poster.src}
+      />
+      <NextImage
+        src={loop}
+        alt=""
+        width={SCENE.width}
+        height={SCENE.height}
+        // Animated and pre-scaled with hard edges: never resized by the
+        // optimizer
+        unoptimized
+        loading="eager"
+        onLoad={() => {
+          setLoaded(key);
+          onLoad?.(key);
+        }}
+        className={cn(
+          'absolute inset-0 h-full w-full',
+          crisp && '[image-rendering:pixelated]',
+        )}
+      />
+    </picture>
+  );
+};
 
 /**
  * The duel's frame: the scene loop in the room band (a window of the
@@ -59,9 +128,7 @@ const FrameBody = ({
   // the flat placeholder band itself
   const [loadedScene, setLoadedScene] = useState<string | null>(null);
   const loadedRef = useRef(false);
-  const assets = SCENE_ASSETS[model.scene];
-  const loop = loopFor(assets, crisp);
-  const sceneKey = `${model.scene}:${loop.src}`;
+  const sceneKey = sceneLoop(model.scene, crisp).key;
   const sceneLoaded = loadedScene === sceneKey;
   useLayoutEffect(() => {
     modelRef.current = model;
@@ -110,51 +177,12 @@ const FrameBody = ({
 
   return (
     <>
-      {/*
-        The room band: a window of the scene loop, with the people in it.
-        On whole device pixels the 1x frames are blown up with hard edges,
-        which lands exactly on the art's pixels; otherwise the 8x export
-        is scaled down smoothly, so every art pixel keeps the same width
-        (`pixelated` would round them to uneven widths). The poster
-        replaces it under reduced motion.
-      */}
+      {/* The room band: a window of the scene loop, with the people in it */}
       <div
         className="absolute inset-x-0 top-0 overflow-hidden"
         style={{ height: `calc(var(--px) * ${LAYOUT.band})` }}
       >
-        <picture
-          key={sceneKey}
-          className={cn(
-            'absolute transition-opacity duration-300',
-            sceneLoaded ? 'opacity-100' : 'opacity-0',
-          )}
-          style={{
-            left: `calc(var(--px) * ${-model.view.x})`,
-            top: `calc(var(--px) * ${-model.view.y})`,
-            width: `calc(var(--px) * ${SCENE.width})`,
-            height: `calc(var(--px) * ${SCENE.height})`,
-          }}
-        >
-          <source
-            media="(prefers-reduced-motion: reduce)"
-            srcSet={assets.poster.src}
-          />
-          <NextImage
-            src={loop}
-            alt=""
-            width={SCENE.width}
-            height={SCENE.height}
-            // Animated and pre-scaled with hard edges: never resized by the
-            // optimizer
-            unoptimized
-            loading="eager"
-            onLoad={() => setLoadedScene(sceneKey)}
-            className={cn(
-              'absolute inset-0 h-full w-full',
-              crisp && '[image-rendering:pixelated]',
-            )}
-          />
-        </picture>
+        <Room scene={model.scene} view={model.view} onLoad={setLoadedScene} />
         {band}
       </div>
       {/*

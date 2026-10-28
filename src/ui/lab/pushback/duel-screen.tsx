@@ -64,7 +64,7 @@ import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
-import { useClock } from './use-clock';
+import { prefersReducedMotion, useClock } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { Legend, Window } from './window';
@@ -149,10 +149,6 @@ const atStart = (key: string): Cursor => ({
   elapsed: 0,
   skipped: false,
 });
-
-const prefersReducedMotion = () =>
-  typeof matchMedia !== 'undefined' &&
-  matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 interface Wrapped {
   duel: DuelState;

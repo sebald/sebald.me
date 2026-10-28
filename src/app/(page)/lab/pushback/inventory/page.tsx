@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { shouldShowDrafts } from '@/lib/draft.utils';
 import { Inventory } from '@/ui/lab/pushback/inventory/loader';
 import { Article } from '@/ui/layout/article';
 import { PageToolbar } from '@/ui/page-toolbar';
@@ -18,9 +19,9 @@ export const metadata: Metadata = {
 
 // Page
 // ---------------
-/** The game's inventory: dev only, a 404 in production */
+/** The game's inventory: dev and preview deployments only, a 404 in production */
 const InventoryPage = () => {
-  if (process.env.NODE_ENV === 'production') notFound();
+  if (!shouldShowDrafts(process.env)) notFound();
   return (
     <>
       <PageToolbar />

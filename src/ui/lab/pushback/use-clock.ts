@@ -4,6 +4,11 @@ import { useEffect, useState } from 'react';
 
 import { FRAME_MS } from '@/lib/lab/pushback/stage';
 
+/** The visitor asked the OS for less motion: nothing blinks or slides */
+export const prefersReducedMotion = () =>
+  typeof matchMedia !== 'undefined' &&
+  matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /**
  * A clock in 125 ms steps since mount, for a piece that animates on its
  * own (a character breathing, the ghost hovering). Stopped, it stays at

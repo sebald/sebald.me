@@ -21,9 +21,6 @@ import { Pixels } from '../stage';
 
 const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
 
-/** The band the composition rule keeps clear, in native pixels */
-const CLEAR_BAND = { x0: 60, x1: 170, x2: 310, x3: 420, y0: 60, y1: 225 };
-
 const px = (n: number, scale: number) => `${n * scale}px`;
 
 /** Everyone who can stand in a scene: the six looks and the cast */
@@ -53,8 +50,9 @@ const defaultFigures = (scene: SceneId) => {
 };
 
 /**
- * Scene viewer: each scene's loop or poster at 1x to 4x, with the stand
- * cells and the clear band drawn over it as outlines, and two idle
+ * Scene viewer: each scene's loop or poster at 1x to 4x, through the
+ * band's window as the game shows it (or the whole render), with the
+ * stand cells and the window drawn over it as outlines, and two idle
  * figures on the stands, so the furniture can be judged against the
  * people (a desk is a desk only if it reaches their hips).
  */
@@ -64,6 +62,8 @@ export const SceneViewer = () => {
   const [still, setStill] = useState(false);
   const [guides, setGuides] = useState(true);
   const [figures, setFigures] = useState(true);
+  // The band's window of the render, as the game shows it, or the whole
+  const [windowed, setWindowed] = useState(true);
   // The room scaled about the stands' feet, the figures as they are: to
   // find the factor at which the furniture fits the people
   const [room, setRoom] = useState(1);
@@ -81,6 +81,10 @@ export const SceneViewer = () => {
   const view = viewFor(stands);
   const width = SCENE.width * scale;
   const height = SCENE.height * scale;
+  const shown = windowed
+    ? { width: STAGE.width * scale, height: LAYOUT.band * scale }
+    : { width, height };
+  const offset = windowed ? { x: -view.x, y: -view.y } : { x: 0, y: 0 };
   const usedBy = (Object.keys(SCENE_OF) as (keyof typeof SCENE_OF)[])
     .filter(role => SCENE_OF[role] === scene)
     .join(', ');
@@ -158,6 +162,14 @@ export const SceneViewer = () => {
         <label className="flex items-center gap-1">
           <input
             type="checkbox"
+            checked={windowed}
+            onChange={e => setWindowed(e.target.checked)}
+          />
+          Window
+        </label>
+        <label className="flex items-center gap-1">
+          <input
+            type="checkbox"
             checked={guides}
             onChange={e => setGuides(e.target.checked)}
           />
@@ -224,88 +236,86 @@ export const SceneViewer = () => {
 
       <Pixels scale={scale}>
         <div
-          className="relative overflow-x-auto"
-          style={{ width, height, marginInline: `calc(50% - ${width / 2}px)` }}
+          className="relative overflow-hidden"
+          style={{
+            width: shown.width,
+            height: shown.height,
+            marginInline: `calc(50% - ${shown.width / 2}px)`,
+          }}
         >
-          <NextImage
-            src={image}
-            alt=""
-            width={SCENE.width}
-            height={SCENE.height}
-            unoptimized
-            className={cn(
-              'absolute inset-0 h-full w-full',
-              '[image-rendering:pixelated]',
-            )}
+          <div
+            className="absolute"
             style={{
+              left: px(offset.x, scale),
+              top: px(offset.y, scale),
               width,
               height,
-              transform: `scale(${room})`,
-              transformOrigin: `50% ${px(SCENE.feet, scale)}`,
             }}
-          />
-          {figures && (
-            <>
-              <Character
-                key={`l-${who.player}`}
-                sheet={sheetOf(who.player)}
-                x={stands.left}
-                feet={SCENE.feet}
-              />
-              <Character
-                key={`r-${who.opponent}`}
-                sheet={sheetOf(who.opponent)}
-                x={stands.right}
-                feet={SCENE.feet}
-                mirrored
-                side="opponent"
-              />
-            </>
-          )}
-          {guides ? (
-            <>
-              {outline(
-                CLEAR_BAND.x0,
-                CLEAR_BAND.y0,
-                CLEAR_BAND.x1 - CLEAR_BAND.x0,
-                CLEAR_BAND.y1 - CLEAR_BAND.y0,
-                'border-dashed border-sky-300/70 text-sky-200',
-                'clear band, left',
+          >
+            <NextImage
+              src={image}
+              alt=""
+              width={SCENE.width}
+              height={SCENE.height}
+              unoptimized
+              className={cn(
+                'absolute inset-0 h-full w-full',
+                '[image-rendering:pixelated]',
               )}
-              {outline(
-                CLEAR_BAND.x2,
-                CLEAR_BAND.y0,
-                CLEAR_BAND.x3 - CLEAR_BAND.x2,
-                CLEAR_BAND.y1 - CLEAR_BAND.y0,
-                'border-dashed border-sky-300/70 text-sky-200',
-                'clear band, right',
-              )}
-              {outline(
-                stands.left,
-                SCENE.feet - LAYOUT.cell.height,
-                LAYOUT.cell.width,
-                LAYOUT.cell.height,
-                'border-amber-300 text-amber-200',
-                `player ${stands.left}`,
-              )}
-              {outline(
-                stands.right,
-                SCENE.feet - LAYOUT.cell.height,
-                LAYOUT.cell.width,
-                LAYOUT.cell.height,
-                'border-amber-300 text-amber-200',
-                `opponent ${stands.right}`,
-              )}
-              {outline(
-                view.x,
-                view.y,
-                STAGE.width,
-                LAYOUT.band,
-                'border-mist-300/70 text-mist-300',
-                `the band, from ${view.x}, ${view.y}`,
-              )}
-            </>
-          ) : null}
+              style={{
+                width,
+                height,
+                transform: `scale(${room})`,
+                transformOrigin: `50% ${px(SCENE.feet, scale)}`,
+              }}
+            />
+            {figures && (
+              <>
+                <Character
+                  key={`l-${who.player}`}
+                  sheet={sheetOf(who.player)}
+                  x={stands.left}
+                  feet={SCENE.feet}
+                />
+                <Character
+                  key={`r-${who.opponent}`}
+                  sheet={sheetOf(who.opponent)}
+                  x={stands.right}
+                  feet={SCENE.feet}
+                  mirrored
+                  side="opponent"
+                />
+              </>
+            )}
+            {guides ? (
+              <>
+                {outline(
+                  stands.left,
+                  SCENE.feet - LAYOUT.cell.height,
+                  LAYOUT.cell.width,
+                  LAYOUT.cell.height,
+                  'border-amber-300 text-amber-200',
+                  `player ${stands.left}`,
+                )}
+                {outline(
+                  stands.right,
+                  SCENE.feet - LAYOUT.cell.height,
+                  LAYOUT.cell.width,
+                  LAYOUT.cell.height,
+                  'border-amber-300 text-amber-200',
+                  `opponent ${stands.right}`,
+                )}
+                {outline(
+                  view.x,
+                  view.y,
+                  STAGE.width,
+                  LAYOUT.band,
+                  'border-mist-300/70 text-mist-300',
+                  `the band, from ${view.x}, ${view.y}`,
+                )}
+              </>
+            ) : null}
+          </div>
         </div>
       </Pixels>
       <p className="text-mist-500">
