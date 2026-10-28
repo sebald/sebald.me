@@ -300,7 +300,9 @@ export const DuelScreen = ({
               act({ type: 'counter', phrase });
             }
           }
-          if (s.phase === 'defend' && s.silence) act({ type: 'tick', ms });
+          // Ticks run the silence bar and the answer time the score's
+          // speed points come from, timer or not
+          if (s.phase === 'defend') act({ type: 'tick', ms });
           // The buddy's whisper has started on this exchange (the frame
           // loop is the event, so the resolve can look it up)
           if (

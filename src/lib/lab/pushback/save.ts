@@ -4,7 +4,13 @@
  * storage calls, which take the storage as an argument so tests can pass
  * a fake and the server (no `window`) gets an empty save.
  */
-import { type Look, LOOKS, type Mode } from './characters';
+import {
+  type Look,
+  LOOKS,
+  MODE_LABELS,
+  MODE_ORDER,
+  type Mode,
+} from './characters';
 import type { DuelState } from './duel';
 import {
   PAIRS,
@@ -17,10 +23,10 @@ import {
   ROLES,
   isPairId,
 } from './lines';
-import { type RunState, createRunState, recordDuel } from './run';
+import { type RunState, createRunState, recordDuel, runScore } from './run';
 
 export const SAVE_KEY = 'pushback';
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 
 export interface SavedRun extends RunState {
   look: Look;
@@ -42,7 +48,7 @@ export interface Save {
 export type SaveStorage = Pick<Storage, 'getItem' | 'setItem'>;
 
 export const emptySave = (
-  mode: Mode = 'normal',
+  mode: Mode = 'easy',
   glossary: PairId[] = [],
 ): Save => ({
   version: SAVE_VERSION,
@@ -77,10 +83,21 @@ const isSavedRun = (value: unknown): value is SavedRun =>
   typeof value.attempts === 'number' &&
   isRecord(value.stats);
 
-/** Saves from before buddy mode have no flag on the run */
+/**
+ * Fill in what older saves lack: the buddy flag, the speed points and
+ * a score on every beaten slot (none before the score existed)
+ */
 const withBuddyFlag = (run: SavedRun): SavedRun => ({
   ...run,
   buddy: run.buddy === true,
+  mode: MODE_ORDER.includes(run.mode as Mode) ? run.mode : undefined,
+  beaten: Object.fromEntries(
+    Object.entries(run.beaten).map(([index, b]) => [
+      index,
+      { flawless: b.flawless === true, score: Number(b.score) || 0 },
+    ]),
+  ),
+  stats: { ...run.stats, speed: Number(run.stats.speed) || 0 },
 });
 
 /** Parse a stored save; anything corrupt or from another version is dropped */
@@ -92,7 +109,9 @@ export const parseSave = (raw: string | null): Save | null => {
   } catch {
     return null;
   }
-  if (!isRecord(data) || data.version !== SAVE_VERSION) return null;
+  // Version 2 knew two modes: its normal had the ghost, which is easy now
+  if (!isRecord(data) || (data.version !== SAVE_VERSION && data.version !== 2))
+    return null;
   if (!isRecord(data.runs)) return null;
   const runs: Save['runs'] = {};
   for (const role of ROLES) {
@@ -102,10 +121,18 @@ export const parseSave = (raw: string | null): Save | null => {
   const glossary = Array.isArray(data.glossary)
     ? data.glossary.filter((id): id is PairId => isPairId(id))
     : [];
-  // A save with an odd mode plays normal
+  // A save with an odd mode plays easy
+  const mode: Mode =
+    data.version === 2
+      ? data.mode === 'hard'
+        ? 'hard'
+        : 'easy'
+      : MODE_ORDER.includes(data.mode as Mode)
+        ? (data.mode as Mode)
+        : 'easy';
   return {
     version: SAVE_VERSION,
-    mode: data.mode === 'hard' ? 'hard' : 'normal',
+    mode,
     runs,
     glossary,
   };
@@ -143,7 +170,7 @@ export const startRun = (
   ...save,
   runs: {
     ...save.runs,
-    [role]: { ...createRunState(role, look, seed), look },
+    [role]: { ...createRunState(role, look, seed), look, mode: save.mode },
   },
 });
 
@@ -195,12 +222,21 @@ export const resultCardText = (
   const { stats } = run;
   return [
     `Pushback · ${ROLE_LABELS[run.role]}`,
-    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless${run.buddy ? ' · with a ghost' : ' · hard mode'}`,
+    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless · ${MODE_LABELS[runMode(run)].toLowerCase()} mode`,
+    `Score ${formatScore(runScore(run))}`,
     `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${poolPairs(glossary).length}/${PAIRS.length}`,
     `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
     'sebald.me/lab/pushback',
   ].join('\n');
 };
+
+/** The mode a run was played in: the last duel's, or what an old save's flag says */
+export const runMode = (run: RunState): Mode =>
+  run.mode ?? (run.buddy ? 'easy' : 'hard');
+
+/** A score with thousands separated: 12,340 */
+export const formatScore = (score: number): string =>
+  score.toLocaleString('en-US');
 
 /** One pool on the result screen: what of it is collected, what was missed */
 export interface ResultPool {
@@ -213,6 +249,8 @@ export interface ResultPool {
 /** What the result screen shows: the ledger and the glossary by pool */
 export interface ResultModel {
   finished: boolean;
+  score: number;
+  mode: Mode;
   rows: [label: string, value: string][];
   pools: ResultPool[];
   glossary: { collected: number; total: number };
@@ -227,6 +265,8 @@ export const resultModel = (
   const pairs = poolPairs(glossary);
   return {
     finished: run.finished,
+    score: runScore(run),
+    mode: runMode(run),
     rows: [
       ['Duels', String(run.attempts)],
       ['Flawless', String(flawless)],

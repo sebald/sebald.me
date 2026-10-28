@@ -56,9 +56,13 @@ describe('save', () => {
     );
   });
 
-  it('plays normal with an odd mode and keeps only real pairs in the glossary', () => {
+  it('plays easy with an odd mode and keeps only real pairs in the glossary', () => {
     assert.equal(
-      parseSave(JSON.stringify({ version: 2, mode: 'brutal', runs: {} }))?.mode,
+      parseSave(JSON.stringify({ version: 3, mode: 'brutal', runs: {} }))?.mode,
+      'easy',
+    );
+    assert.equal(
+      parseSave(JSON.stringify({ version: 3, mode: 'normal', runs: {} }))?.mode,
       'normal',
     );
     const parsed = parseSave(
@@ -71,6 +75,34 @@ describe('save', () => {
     );
     assert.equal(parsed?.mode, 'hard');
     assert.deepEqual(parsed?.glossary, ['pm-1']);
+  });
+
+  it('gives an old run a score of nothing and its speed points', () => {
+    const run = startRun(emptySave(), 'pm', 'a', 1).runs.pm!;
+    const { speed: _speed, ...stats } = run.stats;
+    const raw = JSON.stringify({
+      version: 2,
+      mode: 'normal',
+      runs: {
+        pm: {
+          ...run,
+          mode: undefined,
+          beaten: { 0: { flawless: true } },
+          stats,
+        },
+      },
+      glossary: [],
+    });
+    const parsed = parseSave(raw)!.runs.pm!;
+    assert.deepEqual(parsed.beaten, { 0: { flawless: true, score: 0 } });
+    assert.equal(parsed.stats.speed, 0);
+  });
+
+  it('reads a two-mode save: its normal had the ghost, so it is easy', () => {
+    const old = (mode: string) =>
+      parseSave(JSON.stringify({ version: 2, mode, runs: {} }))?.mode;
+    assert.equal(old('normal'), 'easy');
+    assert.equal(old('hard'), 'hard');
   });
 
   it('drops a run that does not look like one and keeps the rest', () => {
@@ -130,13 +162,13 @@ describe('resultCardText', () => {
       finished: true,
       attempts: 10,
       beaten: {
-        0: { flawless: true },
-        1: { flawless: true },
-        2: { flawless: false },
-        3: { flawless: true },
-        4: { flawless: true },
-        5: { flawless: false },
-        6: { flawless: true },
+        0: { flawless: true, score: 1000 },
+        1: { flawless: true, score: 1000 },
+        2: { flawless: false, score: 1000 },
+        3: { flawless: true, score: 1000 },
+        4: { flawless: true, score: 1000 },
+        5: { flawless: false, score: 1000 },
+        6: { flawless: true, score: 1000 },
       },
       collected: [
         ...run.collected,
@@ -147,13 +179,15 @@ describe('resultCardText', () => {
         exchangesLost: 9,
         micDrops: 6,
         missesByPool: { pm: 3, dev: 1, designer: 5 },
+        speed: 0,
       },
     });
     assert.equal(
       text,
       [
         'Pushback · Dev',
-        'Stakeholder beaten · 10 duels · 5 flawless · hard mode',
+        'Stakeholder beaten · 10 duels · 5 flawless · easy mode',
+        'Score 7,000',
         'Exchanges 31–9 · Mic drops 6 · Glossary 24/48',
         'Missed counters: PM 3 · Dev 1 · Designer 5',
         'sebald.me/lab/pushback',
@@ -165,7 +199,7 @@ describe('resultCardText', () => {
     const run = startRun(emptySave(), 'pm', 'a', 1).runs.pm!;
     assert.match(
       resultCardText(run),
-      /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless · hard mode\n/,
+      /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless · easy mode\nScore 0\n/,
     );
   });
 });
@@ -178,12 +212,16 @@ describe('resultModel', () => {
         ...run,
         finished: true,
         attempts: 6,
-        beaten: { 0: { flawless: true }, 1: { flawless: false } },
+        beaten: {
+          0: { flawless: true, score: 1000 },
+          1: { flawless: false, score: 1000 },
+        },
         stats: {
           exchangesWon: 23,
           exchangesLost: 9,
           micDrops: 3,
           missesByPool: { pm: 2, dev: 0, designer: 1 },
+          speed: 0,
         },
       },
       ['pm-1', 'pm-2', 'dev-1', 'des-4', 'dev-mic-1'],

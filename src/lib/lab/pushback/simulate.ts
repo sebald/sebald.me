@@ -1,8 +1,8 @@
 /**
  * Balance check: a modelled player plays full runs against the slot
  * table and the numbers come out as a table. Run it with
- * `pnpm pushback:simulate [runs] [recall] [guess]` (`MODE=hard` for the
- * hard mode's rules).
+ * `pnpm pushback:simulate [runs] [recall] [guess]` (`MODE=easy` or `MODE=hard` for
+ * that mode's rules).
  *
  * The player answers a collected pair correctly with `recall` and fast
  * with `speed`; an uncollected pair is a reasoned guess with `guess`
@@ -38,12 +38,16 @@ export const DEFAULT_PLAYER: PlayerModel = {
 };
 
 /**
- * The rules for a run of the script: `MODE=hard` for the hard mode's,
+ * The rules for a run of the script: `MODE=easy` or `MODE=hard` for that mode's,
  * then overrides from `RULES='{"reach":3}'`. The ghost is not modelled:
  * the player's recall stands in for it.
  */
 const rulesFromEnv = (): Rules => ({
-  ...MODES[process.env.MODE === 'hard' ? 'hard' : 'normal'].rules,
+  ...MODES[
+    process.env.MODE === 'hard' || process.env.MODE === 'easy'
+      ? process.env.MODE
+      : 'normal'
+  ].rules,
   ...(process.env.RULES
     ? (JSON.parse(process.env.RULES) as Partial<Rules>)
     : {}),

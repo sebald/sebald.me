@@ -8,6 +8,9 @@ import {
   LOOKS,
   type Look,
   MODES,
+  MODE_LABELS,
+  MODE_ORDER,
+  type Mode,
   RULES,
   SLOTS,
   type Slot,
@@ -51,8 +54,8 @@ interface Options {
   seed: number;
   silence: boolean;
   buddy: boolean;
-  /** The hard mode's rules (slower fatigue, shorter silence) */
-  hard: boolean;
+  /** Whose rules: easy has no timer, hard tires slowly and rushes */
+  mode: Mode;
   /** The silence bar's share of the reading time, instead of the mode's */
   share: number | null;
   collected: 'own' | 'all' | 'none';
@@ -80,7 +83,7 @@ const DEFAULTS: Options = {
   seed: 1,
   silence: true,
   buddy: false,
-  hard: false,
+  mode: 'normal',
   share: null,
   collected: 'own',
   jump: 'intro',
@@ -136,7 +139,7 @@ export const sandboxState = (options: Options): DuelState => {
   const base: Slot =
     character.role === 'boss' ? BOSS_SLOT : (SLOTS[options.slot] ?? SLOTS[0]!);
   const slot: Slot = base;
-  const rules = options.hard ? MODES.hard.rules : RULES;
+  const rules = MODES[options.mode].rules;
   const deck = drawDeck(new Rng(seedRng(options.seed)));
   const collected =
     options.collected === 'all'
@@ -314,12 +317,18 @@ export const Sandbox = () => {
             onChange={e => set('buddy', e.target.checked)}
           />
         </Field>
-        <Field label="Hard rules">
-          <input
-            type="checkbox"
-            checked={options.hard}
-            onChange={e => set('hard', e.target.checked)}
-          />
+        <Field label="Rules">
+          <select
+            className={field.input}
+            value={options.mode}
+            onChange={e => set('mode', e.target.value as Mode)}
+          >
+            {MODE_ORDER.map(mode => (
+              <option key={mode} value={mode}>
+                {MODE_LABELS[mode]}
+              </option>
+            ))}
+          </select>
         </Field>
         <Field label="Reading share">
           <input

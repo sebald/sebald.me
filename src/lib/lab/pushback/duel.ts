@@ -19,7 +19,13 @@ import {
   buildMenu,
   drawHand,
 } from './ai';
-import { type Character, RULES, type Rules, type Slot } from './characters';
+import {
+  type Character,
+  type Mode,
+  RULES,
+  type Rules,
+  type Slot,
+} from './characters';
 import {
   BOSS_PAIRS,
   type BossPairId,
@@ -55,6 +61,8 @@ export interface DuelSetup {
   /** Buddy mode is on: presentation only, but no flawless star */
   buddy?: boolean;
   rules?: Rules;
+  /** The mode the duel is played in, for the result card */
+  mode?: Mode;
 }
 
 export interface Exchange {
@@ -83,6 +91,8 @@ export interface DuelStats {
   exchangesLost: number;
   micDrops: number;
   missesByPool: Record<Role, number>;
+  /** Speed points: a share of `SCORE.speed` per right counter, by time left */
+  speed: number;
 }
 
 export interface DuelState {
@@ -112,6 +122,11 @@ export interface DuelState {
   /** The player's counter options while defending */
   menu: PairId[];
   silence: { elapsed: number; limit: number } | null;
+  /**
+   * How long the player has been on this defence, in ms, timer or not:
+   * the score's speed points
+   */
+  answerMs: number;
   outcome: Outcome | null;
   /** Phrases the opponent threw this duel */
   thrown: PairId[];
@@ -142,6 +157,7 @@ export const emptyStats = (): DuelStats => ({
   exchangesLost: 0,
   micDrops: 0,
   missesByPool: { pm: 0, dev: 0, designer: 0 },
+  speed: 0,
 });
 
 const other = (side: Side): Side => (side === 'player' ? 'opponent' : 'player');
@@ -166,6 +182,7 @@ export const createDuel = (setup: DuelSetup): DuelState => {
     exchange: null,
     menu: [],
     silence: null,
+    answerMs: 0,
     outcome: null,
     thrown: [],
     bossQueue,
@@ -202,6 +219,36 @@ export const showsHint = (state: DuelState): boolean =>
 // Transitions
 // ---------------
 
+/**
+ * The points of a duel, before the mode's factor (`Rules.score`): every
+ * exchange won, up to `speed` more for a right counter by how much of
+ * the menu's reading time was left, a mic drop, the win, a flawless win
+ * and the Stakeholder. A lost duel scores nothing.
+ */
+export const SCORE = {
+  exchange: 100,
+  speed: 100,
+  micDrop: 200,
+  win: 500,
+  flawless: 500,
+  boss: 1000,
+} as const;
+
+/**
+ * The time a median reader needs for a menu's counters, in ms: the
+ * yardstick for speed points, the same in every mode, timer or not
+ */
+export const readingMs = (menu: readonly PairId[]): number =>
+  (menu.reduce((n, id) => n + wordCount(pairById(id).counter), 0) /
+    RULES.reading.wordsPerSecond) *
+  1000;
+
+/** Speed points for a right counter after `answerMs` of `reading` ms */
+export const speedPoints = (answerMs: number, reading: number): number =>
+  reading <= 0
+    ? 0
+    : Math.round(SCORE.speed * Math.max(0, 1 - answerMs / reading));
+
 /** Words in a line, for the reading time */
 export const wordCount = (text: string): number =>
   text.trim().split(/\s+/).filter(Boolean).length;
@@ -229,7 +276,7 @@ const silenceFor = (
   menu: readonly PairId[],
   micDrop: boolean,
 ) =>
-  state.setup.silence && state.setup.slot.silence
+  state.setup.silence && state.setup.slot.silence && state.rules.timer
     ? { elapsed: 0, limit: silenceLimit(state.rules, menu, micDrop) }
     : null;
 
@@ -278,6 +325,7 @@ const opponentThrows = (state: DuelState): DuelState => {
     exchange: { by: 'opponent', phrase, micDrop, answer: answerTo(phrase) },
     menu,
     silence: silenceFor(state, menu, micDrop),
+    answerMs: 0,
     outcome: null,
     thrown: isBossPairId(phrase) ? state.thrown : [...state.thrown, phrase],
     bossQueue,
@@ -408,7 +456,15 @@ const playerCounters = (
   if (!exchange) return state;
   const right = picked === exchange.answer;
   const fast = silence === null || silence.elapsed < silence.limit / 2;
-  return resolve(state, {
+  const speed = right ? speedPoints(state.answerMs, readingMs(state.menu)) : 0;
+  const scored =
+    speed > 0
+      ? {
+          ...state,
+          stats: { ...state.stats, speed: state.stats.speed + speed },
+        }
+      : state;
+  return resolve(scored, {
     winner: right ? 'player' : 'opponent',
     picked,
     fast: right && fast,
@@ -490,15 +546,17 @@ export const reduce = (state: DuelState, action: DuelAction): DuelState => {
       }
       return playerCounters(state, action.phrase);
     case 'tick': {
-      if (state.phase !== 'defend' || !state.silence) return state;
+      if (state.phase !== 'defend') return state;
+      const answerMs = state.answerMs + action.ms;
+      if (!state.silence) return { ...state, answerMs };
       const elapsed = state.silence.elapsed + action.ms;
       if (elapsed >= state.silence.limit) {
         return playerCounters(
-          { ...state, silence: { ...state.silence, elapsed } },
+          { ...state, answerMs, silence: { ...state.silence, elapsed } },
           'fallback',
         );
       }
-      return { ...state, silence: { ...state.silence, elapsed } };
+      return { ...state, answerMs, silence: { ...state.silence, elapsed } };
     }
     case 'continue':
       if (state.phase !== 'resolve') return state;
@@ -512,3 +570,20 @@ export const reduce = (state: DuelState, action: DuelAction): DuelState => {
 /** Whether the player never lost an exchange */
 export const isFlawless = (state: DuelState): boolean =>
   state.winner === 'player' && state.stats.exchangesLost === 0;
+
+/**
+ * A finished duel's score: its points (`SCORE`) times the mode's factor,
+ * on tens. Nothing for a loss.
+ */
+export const duelScore = (state: DuelState): number => {
+  if (state.winner !== 'player') return 0;
+  const { stats } = state;
+  const points =
+    stats.exchangesWon * SCORE.exchange +
+    stats.speed +
+    stats.micDrops * SCORE.micDrop +
+    SCORE.win +
+    (isFlawless(state) ? SCORE.flawless : 0) +
+    (state.boss ? SCORE.boss : 0);
+  return Math.round((points * state.rules.score) / 10) * 10;
+};

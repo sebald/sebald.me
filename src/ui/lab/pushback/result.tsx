@@ -2,10 +2,11 @@
 
 import { useMemo, useState } from 'react';
 
-import { LOOKS } from '@/lib/lab/pushback/characters';
+import { LOOKS, MODES, MODE_LABELS } from '@/lib/lab/pushback/characters';
 import { type PairId, ROLE_LABELS } from '@/lib/lab/pushback/lines';
 import {
   type SavedRun,
+  formatScore,
   resultCardText,
   resultModel,
 } from '@/lib/lab/pushback/save';
@@ -34,8 +35,9 @@ const PORTRAIT_SCALE = 3;
 
 /**
  * The end of a run as an RPG status screen, one window filling the
- * stage: the face, the name and the role on the left, the run's numbers
- * on the right with dot leaders, and under a rule the glossary by pool,
+ * stage: the face, the name and the role on the left, the result, the
+ * score with the mode's factor and the run's numbers with dot leaders
+ * on the right, and under a rule the glossary by pool,
  * a meter of the pool's sixteen pairs each, so the gaps show. Copy puts
  * the text card on the clipboard.
  */
@@ -106,6 +108,14 @@ export const ResultScreen = ({
             <Heading className="text-[1.15em] tracking-[0.1em] text-(--pb-gold) uppercase">
               {model.finished ? 'Stakeholder beaten' : 'Taken offline'}
             </Heading>
+            <div className="flex items-baseline gap-[1ch]">
+              <span className="text-[1.8em] leading-none font-bold text-(--pb-heading) tabular-nums">
+                {formatScore(model.score)}
+              </span>
+              <span className="text-(--pb-muted)">
+                {MODE_LABELS[model.mode]} ×{MODES[model.mode].rules.score}
+              </span>
+            </div>
             <Ledger rows={model.rows} />
           </div>
         </div>

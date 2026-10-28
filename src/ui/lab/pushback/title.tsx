@@ -11,7 +11,12 @@ import {
 
 import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
-import { MODE_LABELS, type Mode, STANDS } from '@/lib/lab/pushback/characters';
+import {
+  MODE_LABELS,
+  type Mode,
+  STANDS,
+  nextMode,
+} from '@/lib/lab/pushback/characters';
 import { LAYOUT, STAGE, viewFor } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
@@ -52,9 +57,10 @@ const FICTION =
   'All characters are fictional. Any resemblance to actual persons or teams is coincidental.';
 
 const MODE_BLURBS: Record<Mode, string> = {
+  easy: 'The ghost of your predecessor whispers along, and nobody rushes you. No stars with a ghost.',
   normal:
-    'The ghost of your predecessor whispers along. Slowly. No stars with a ghost.',
-  hard: 'No ghost, less time, longer menus, colleagues who tire slowly. Stars for flawless duels.',
+    'No ghost. From the second colleague on, a bar gives you time to read, and a little more.',
+  hard: 'Less time, longer menus, colleagues who tire slowly. The score counts double.',
 };
 
 /**
@@ -206,7 +212,7 @@ export const TitleScreen = ({
     {
       id: 'mode',
       label: `Mode: ${MODE_LABELS[mode]}`,
-      onSelect: () => onMode(mode === 'normal' ? 'hard' : 'normal'),
+      onSelect: () => onMode(nextMode(mode)),
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
   ];

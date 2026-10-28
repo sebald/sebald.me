@@ -155,6 +155,7 @@ export const Pushback = () => {
               silence: true,
               buddy: MODES[save.mode].buddy,
               rules: MODES[save.mode].rules,
+              mode: save.mode,
             }),
           )}
           onEnd={duel => endDuel(screen.role, screen.index, duel)}

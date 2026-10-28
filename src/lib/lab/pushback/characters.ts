@@ -338,6 +338,13 @@ export interface Rules {
   fatigue: number;
   /** Counter options added to every menu, the boss's included */
   menuExtra: number;
+  /**
+   * The silence bar runs where the slot has one; off, nobody is rushed
+   * and every won defence counts as fast
+   */
+  timer: boolean;
+  /** Factor on a duel's score: what the mode is worth */
+  score: number;
 }
 
 export const RULES: Rules = {
@@ -347,24 +354,30 @@ export const RULES: Rules = {
   momentum: 2,
   momentumLoss: 'all',
   micDrop: { worth: 2, menu: 8, silence: 0.75 },
-  reading: { wordsPerSecond: 4, share: 0.8 },
+  reading: { wordsPerSecond: 4, share: 1.1 },
   hand: 4,
   fatigue: 0.1,
   menuExtra: 0,
+  timer: true,
+  score: 1.5,
 };
 
 /**
- * The two ways to play, one switch on the title screen. Normal has the
- * ghost of the player's predecessor whisper along; hard has no ghost, a
- * silence bar at 0.7 of the reading time instead of 0.8, two more options
- * on every menu, colleagues who tire slowly and a Stakeholder who
- * leaves after two misses. Flawless
- * stars are only earned without the ghost.
+ * The three ways to play, one switch on the title screen. Easy has the
+ * ghost of the player's predecessor whisper along and no silence bar.
+ * Normal has neither the ghost nor a hurry: the bar runs from the second
+ * colleague on, at 1.1 of the time a median reader needs. Hard has a bar
+ * at 0.7 of it, two more options on every menu, colleagues who tire
+ * slowly and a Stakeholder who leaves after two misses. Flawless stars
+ * are only earned without the ghost; the score counts a mode's worth.
  */
-export type Mode = 'normal' | 'hard';
+export type Mode = 'easy' | 'normal' | 'hard';
+
+export const MODE_ORDER: readonly Mode[] = ['easy', 'normal', 'hard'];
 
 export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
-  normal: { buddy: true, rules: RULES },
+  easy: { buddy: true, rules: { ...RULES, timer: false, score: 1 } },
+  normal: { buddy: false, rules: RULES },
   hard: {
     buddy: false,
     rules: {
@@ -373,11 +386,17 @@ export const MODES: Record<Mode, { buddy: boolean; rules: Rules }> = {
       fatigue: 0.07,
       reading: { ...RULES.reading, share: 0.7 },
       menuExtra: 2,
+      score: 2,
     },
   },
 };
 
+/** The mode after this one on the title's switch */
+export const nextMode = (mode: Mode): Mode =>
+  MODE_ORDER[(MODE_ORDER.indexOf(mode) + 1) % MODE_ORDER.length]!;
+
 export const MODE_LABELS: Record<Mode, string> = {
+  easy: 'Easy',
   normal: 'Normal',
   hard: 'Hard',
 };

@@ -12,11 +12,15 @@ import {
 import {
   type DuelSetup,
   type DuelState,
+  SCORE,
   createDuel,
+  duelScore,
   isFlawless,
+  readingMs,
   reduce,
   showsHint,
   silenceLimit,
+  speedPoints,
   toLose,
   toWin,
   wordCount,
@@ -324,6 +328,13 @@ describe('the mic drop', () => {
 describe('the silence bar', () => {
   const timedSetup = { slot: timed, silence: true };
 
+  it('does not run where the mode has no timer, and every counter is fast', () => {
+    const s = begin({ ...timedSetup, rules: MODES.easy.rules });
+    assert.equal(s.silence, null);
+    const won = right(reduce(s, { type: 'tick', ms: 60_000 }));
+    assert.equal(won.momentum.player, 1);
+  });
+
   it('runs only when the switch is on and the slot has the bar', () => {
     assert.equal(begin().silence, null);
     assert.equal(begin({ slot: timed }).silence, null);
@@ -336,15 +347,15 @@ describe('the silence bar', () => {
 
   it("is the rules' share of the menu's reading time, on the frame", () => {
     // Five counters of eight words at four words a second: ten seconds
-    // to read, eight to find the right one halfway down, seven in hard mode
+    // to read, eleven with normal's margin, seven in hard mode
     const menu = ['pm-1', 'pm-2', 'pm-3', 'pm-4', 'pm-5'] as const;
     const words = menu.reduce(
       (n, id) => n + wordCount(pairById(id).counter),
       0,
     );
     const limit = silenceLimit(RULES, menu, false);
-    assert.equal(limit, Math.round((words / 4) * 0.8 * 8) * 125);
-    assert.ok(limit >= 7000 && limit <= 11000, String(limit));
+    assert.equal(limit, Math.round((words / 4) * 1.1 * 8) * 125);
+    assert.ok(limit >= 9000 && limit <= 15000, String(limit));
     assert.equal(
       silenceLimit(MODES.hard.rules, menu, false),
       Math.round((words / 4) * 0.7 * 8) * 125,
@@ -363,8 +374,11 @@ describe('the silence bar', () => {
   });
 
   it('gives momentum for a fast counter only', () => {
+    const half = begin(timedSetup).silence!.limit / 2;
     const fast = right(reduce(begin(timedSetup), { type: 'tick', ms: 1000 }));
-    const slow = right(reduce(begin(timedSetup), { type: 'tick', ms: 5000 }));
+    const slow = right(
+      reduce(begin(timedSetup), { type: 'tick', ms: half + 125 }),
+    );
     assert.equal(fast.momentum.player, 1);
     assert.equal(slow.momentum.player, 0);
     assert.equal(slow.scale, 1);
@@ -461,5 +475,46 @@ describe('the boss barrage', () => {
   it('does not collect boss phrases', () => {
     const s = right(boss());
     assert.equal(s.collected.length, pmPool.length + devPool.length);
+  });
+});
+
+describe('the score', () => {
+  it('gives speed points by the share of the reading time left', () => {
+    assert.equal(speedPoints(0, 10_000), SCORE.speed);
+    assert.equal(speedPoints(2500, 10_000), 75);
+    assert.equal(speedPoints(10_000, 10_000), 0);
+    assert.equal(speedPoints(30_000, 10_000), 0);
+  });
+
+  it('adds speed points for a right counter, timer or not', () => {
+    const s = begin({ rules: MODES.easy.rules });
+    const reading = readingMs(s.menu);
+    const ticked = reduce(s, { type: 'tick', ms: Math.round(reading / 2) });
+    assert.equal(ticked.answerMs, Math.round(reading / 2));
+    const done = right(ticked);
+    assert.equal(done.stats.speed, speedPoints(ticked.answerMs, reading));
+    assert.ok(done.stats.speed > 0);
+    // A miss scores nothing
+    assert.equal(wrong(begin()).stats.speed, 0);
+  });
+
+  it('scores a won duel by its points times the mode, nothing for a loss', () => {
+    const won: DuelState = {
+      ...createDuel(setup()),
+      phase: 'end',
+      winner: 'player',
+      stats: {
+        exchangesWon: 3,
+        exchangesLost: 0,
+        micDrops: 1,
+        missesByPool: { pm: 0, dev: 0, designer: 0 },
+        speed: 180,
+      },
+    };
+    // 3 × 100 + 180 + 200 + 500 win + 500 flawless = 1680
+    assert.equal(duelScore({ ...won, rules: MODES.easy.rules }), 1680);
+    assert.equal(duelScore({ ...won, rules: MODES.normal.rules }), 2520);
+    assert.equal(duelScore({ ...won, rules: MODES.hard.rules }), 3360);
+    assert.equal(duelScore({ ...won, winner: 'opponent' }), 0);
   });
 });

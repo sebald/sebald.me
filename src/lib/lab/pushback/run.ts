@@ -5,6 +5,7 @@
 import type { Attempt } from './ai';
 import {
   type Look,
+  type Mode,
   type Rules,
   type Run,
   type RunSlot,
@@ -17,6 +18,7 @@ import {
   type DuelSetup,
   type DuelState,
   type DuelStats,
+  duelScore,
   emptyStats,
   isFlawless,
 } from './duel';
@@ -25,8 +27,8 @@ import { type PairId, type Role, closersOf, deckPool } from './lines';
 export interface RunState {
   role: Role;
   run: Run;
-  /** By slot index */
-  beaten: Record<number, { flawless: boolean }>;
+  /** By slot index, with the best score a win of it got */
+  beaten: Record<number, { flawless: boolean; score: number }>;
   /** Slots lost at least once, by index (a retry is earned) */
   lost: number[];
   /**
@@ -38,8 +40,10 @@ export interface RunState {
   finished: boolean;
   /** Duels played, retries and replays included */
   attempts: number;
-  /** A duel of this run was played with the ghost, i.e. in normal mode */
+  /** A duel of this run was played with the ghost, i.e. in easy mode */
   buddy: boolean;
+  /** The mode of the last duel played, for the result card */
+  mode?: Mode;
   stats: DuelStats;
 }
 
@@ -88,7 +92,13 @@ export const attemptFor = (state: RunState, index: number): Attempt => {
 export const duelSetupFor = (
   state: RunState,
   index: number,
-  options: { seed: number; silence: boolean; buddy?: boolean; rules?: Rules },
+  options: {
+    seed: number;
+    silence: boolean;
+    buddy?: boolean;
+    rules?: Rules;
+    mode?: Mode;
+  },
 ): DuelSetup => {
   const slot: RunSlot | undefined = state.run.slots[index];
   if (!slot) throw new Error(`No slot ${index}`);
@@ -105,6 +115,7 @@ export const duelSetupFor = (
     silence: options.silence,
     buddy: options.buddy === true,
     rules: options.rules,
+    mode: options.mode,
     tutorial: index === 0 && !state.beaten[0] && !state.lost.includes(0),
   };
 };
@@ -118,6 +129,7 @@ const addStats = (a: DuelStats, b: DuelStats): DuelStats => ({
     dev: a.missesByPool.dev + b.missesByPool.dev,
     designer: a.missesByPool.designer + b.missesByPool.designer,
   },
+  speed: a.speed + b.speed,
 });
 
 /** Fold a finished duel back into the run */
@@ -133,7 +145,10 @@ export const recordDuel = (
     const flawless =
       (isFlawless(duel) && duel.setup.buddy !== true) ||
       beaten[index]?.flawless === true;
-    beaten[index] = { flawless };
+    beaten[index] = {
+      flawless,
+      score: Math.max(duelScore(duel), beaten[index]?.score ?? 0),
+    };
   }
   const lost =
     !won && !state.lost.includes(index) ? [...state.lost, index] : state.lost;
@@ -145,6 +160,11 @@ export const recordDuel = (
     finished: state.finished || (won && index === bossIndex(state.run)),
     attempts: state.attempts + 1,
     buddy: state.buddy || duel.setup.buddy === true,
+    mode: duel.setup.mode ?? state.mode,
     stats: addStats(state.stats, duel.stats),
   };
 };
+
+/** A run's score: the best win of every colleague beaten, added up */
+export const runScore = (state: RunState): number =>
+  Object.values(state.beaten).reduce((sum, b) => sum + (b.score ?? 0), 0);

@@ -81,19 +81,19 @@ The player meets their own role first: the first duel is on home ground, the poo
 
 ### The silence bar
 
-From the second duel on, in both modes, the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines.
+From the second duel on, in normal and hard mode (easy has no bar), the defender has a few seconds to answer. A thin bar under the menu fills while the player hesitates; when it is full the game answers for them with the fallback line `Uh… that's a good point.`, which counts as a miss. Memorised pairs still have to come out under pressure, which is what keeps tier 3 and the boss hard once the player knows the lines.
 
-The bar's length follows the menu's text, not the slot (`silenceLimit`): a counter is eight words on average, adults read about 240 words a minute (Brysbaert 2019, a meta-analysis of silent reading), and the right counter sits halfway down the list on average, so the bar is a share of the time a median reader needs for the whole menu: 0.8 of it in normal mode, 0.7 in hard mode (`RULES.reading`), times 0.75 on a mic drop. A menu of six is about fifty words, twelve seconds to read, so the bar runs about ten seconds in normal mode and eight and a half in hard; the mic drop's eight options give the same. Fixed seconds per slot were tried first and hard mode's 0.6 of them was unreadable: 3.6 seconds for eight options, a fifth of the text; 0.6 and 0.5 of the reading time came next and played two or three seconds too short.
+The bar's length follows the menu's text, not the slot (`silenceLimit`): a counter is eight words on average, adults read about 240 words a minute (Brysbaert 2019, a meta-analysis of silent reading), and the right counter sits halfway down the list on average, so the bar is a share of the time a median reader needs for the whole menu: 1.1 of it in normal mode, 0.7 in hard mode (`RULES.reading`), times 0.75 on a mic drop. A menu of six is about fifty words, twelve seconds to read, so the bar runs about thirteen seconds in normal mode and eight and a half in hard; the mic drop's eight options give the same. Normal played at 0.8 first and was too stressful; at 1.1 it gives a median reader the whole menu and a little more. Fixed seconds per slot were tried first and hard mode's 0.6 of them was unreadable: 3.6 seconds for eight options, a fifth of the text; 0.6 and 0.5 of the reading time came next and played two or three seconds too short.
 
 The bar is off in the first duel. With the bar off every correct counter counts as fast for momentum.
 
 ### Modes
 
-One switch on the title screen, `Mode: Normal` or `Mode: Hard`, kept in the save. Normal has the ghost (below) whisper along and the colleagues tire at ten points per exchange. Hard has no ghost, the silence bar at 0.7 of the reading time instead of 0.8, two more options on every menu (the boss's included), colleagues who tire at seven points, and a Stakeholder who leaves after two misses instead of three. The simulation (`MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned in hard mode, because the ghost is a safety net.
+One switch on the title screen, `Mode: Easy`, `Mode: Normal` or `Mode: Hard` in turn, kept in the save; a new save starts on easy, since the ghost is the onboarding. The ghost and the timer are different help, so each mode changes one thing: easy has the ghost (below) whisper along and no silence bar (`Rules.timer` off: nobody is rushed and every won defence counts as fast); normal has no ghost and the bar at 1.1 of the reading time; hard has no ghost, the bar at 0.7, two more options on every menu (the boss's included), colleagues who tire at seven points instead of ten, and a Stakeholder who leaves after two misses instead of three. The score counts a mode's worth (`Rules.score`: easy 1, normal 1.5, hard 2, see Result card). The simulation (`MODE=easy` or `MODE=hard`) cannot see most of that, since it does not model reading time or the ghost; the difference is for people. Flawless stars are only earned without the ghost, in normal and hard, because the ghost is a safety net. A save from the two-mode version reads its normal as easy, since that normal had the ghost.
 
 ### The onboarding buddy
 
-The ghost of the player's predecessor in the role whispers the reply, slowly, in normal mode (see Modes). While the player hesitates on defence, the wrong counters dim in three steps until only the right one is bright (a first version kept one decoy bright for a two-way call at the end; it read as the ghost being wrong, and went). The steps land at 50, 70 and 88 percent of the silence limit (or of eight seconds when the bar is off): the ghost never shows while a fast answer is still possible, and the last step comes before the fallback.
+The ghost of the player's predecessor in the role whispers the reply, slowly, in easy mode (see Modes). While the player hesitates on defence, the wrong counters dim in three steps until only the right one is bright (a first version kept one decoy bright for a two-way call at the end; it read as the ghost being wrong, and went). The steps land at 50, 70 and 88 percent of the silence limit (or of eight seconds when the bar is off): the ghost never shows while a fast answer is still possible, and the last step comes before the fallback.
 
 The ghost is a character, not a setting. It is off stage until the first step, then a small black hole opens on the top-right corner of the window the counters are picked in, where the eye is while the player reads them, and spits it out (about half a second, the sprite squeezed sideways out of a dark disc with a pale rim), floating at about half the people's size, its tail resting on the window's frame, facing the options and pointing at them; it says one line in its own pale bubble inside the window, at the right end of the prompt row, with a tail up to it, so the layout keeps it off every line of text and it covers nobody in the room (it first stood behind the player's shoulder, then in the gap between the duellists with the bubble over its head; there the player, reading the options, did not look up to see it); it stays until the player answers or the fallback fires, then the hole swallows it again. It helps once a duel: after the exchange it whispered on it is gone and the counters stop dimming. It speaks once per appearance, not on every step, so a slow player is not nagged three times an exchange. The lines are helpful and rude, in turn from a start set by the duel's seed so a duel never repeats one before it has used them all:
 
@@ -105,7 +105,7 @@ The ghost is a character, not a setting. It is off stage until the first step, t
 
 It never shows at the start of a duel or on attack turns: the dig lands on hesitation, not on playing. The sprite is one more Gemini sheet (see Art and animation), drawn translucent by the canvas; until it lands the grey box draws a pale placeholder.
 
-The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card says `with a ghost` when any duel of the run had it and `hard mode` otherwise. Everything else (collecting, the scale, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
+The cost is built into the rules the game already has, which is why the buddy needs none of its own: a counter after the bar is half full earns no momentum, so a player who waits for the whisper gives momentum up and never drops the mic; the fallback still fires at the end, so waiting out the whole whisper loses the exchange; and a duel played with the buddy earns no flawless star. The result card names the mode of the run's last duel. Everything else (collecting, the scale, the boss) is unchanged, and the reducer knows nothing about the buddy: it is presentation in the duel screen plus one flag on the duel setup for the star.
 
 It is there for players who are here for the jokes rather than the memory test and for first runs; with the ghost the game is a quiz with a safety net, and the stars are for playing without one.
 
@@ -356,13 +356,27 @@ After the boss, win or lose, the run's end as an RPG status screen: one quiet wi
 
 ```
 Pushback · Dev
-Stakeholder beaten · 10 duels · 5 flawless
+Stakeholder beaten · 10 duels · 5 flawless · normal mode
+Score 18,240
 Exchanges 31–9 · Mic drops 6 · Glossary 24/48
 Missed counters: PM 3 · Dev 1 · Designer 5
 sebald.me/lab/pushback
 ```
 
-Everything on it comes from the stats in the save (see Tech). A lost boss fight says `Stakeholder took it offline` instead of `beaten` on the card, `Taken offline` on the screen.
+Everything on it comes from the stats in the save (see Tech).
+
+The score is one number to beat on a replay and to share, next to the ticks and stars on the roster, which stay: a tick says beaten, a star says beaten without losing an exchange and without the ghost, and the number says how well. A won duel scores (`SCORE`, `duelScore`):
+
+| Points    | For                                                                                                |
+| --------- | -------------------------------------------------------------------------------------------------- |
+| 100       | every exchange won                                                                                 |
+| up to 100 | every right counter, by how much of the menu's reading time was left (`speedPoints`, timer or not) |
+| 200       | every mic drop                                                                                     |
+| 500       | the win                                                                                            |
+| 500       | a flawless win                                                                                     |
+| 1000      | the Stakeholder                                                                                    |
+
+times the mode's factor (easy 1, normal 1.5, hard 2), on tens; a lost duel scores nothing. The reading time for the speed points is the median reader's for the whole menu in every mode, so speed counts the same with or without a bar, and the duel counts the time on every defence (`answerMs`). A run keeps the best win of each colleague (`beaten[i].score`), and its score is their sum (`runScore`), so a replay can only raise it. The result screen shows it large under the result, with the mode and its factor. A lost boss fight says `Stakeholder took it offline` instead of `beaten` on the card, `Taken offline` on the screen.
 
 ## Art and animation
 
@@ -477,10 +491,12 @@ type Rules = {
   momentum: number; // 2
   momentumLoss: 'all' | number; // 'all'
   micDrop: { worth: number; menu: number; silence: number }; // 2, 8, 0.75
-  reading: { wordsPerSecond: number; share: number }; // 4, 0.8 (hard 0.7)
+  reading: { wordsPerSecond: number; share: number }; // 4, 1.1 (hard 0.7)
   hand: number; // 4
   fatigue: number; // 0.1 (hard 0.07)
   menuExtra: number; // 0 (hard 2)
+  timer: boolean; // the silence bar runs (easy off)
+  score: number; // the mode's factor on the score: easy 1, normal 1.5, hard 2
 };
 
 type RunStats = {
@@ -488,18 +504,20 @@ type RunStats = {
   exchangesLost: number;
   micDrops: number;
   missesByPool: Record<Role, number>;
+  speed: number; // speed points of the right counters
 };
 
 type Save = {
-  version: 2;
-  mode: 'normal' | 'hard'; // the mode switch on the title screen
+  version: 3; // 2 is read too, its normal as easy
+  mode: 'easy' | 'normal' | 'hard'; // the mode switch on the title screen
   glossary: Pair['id'][]; // every pair ever collected, across runs
   runs: Partial<
     Record<
       Role,
       {
         run: Run; // the draw, so a reload keeps the same cast
-        beaten: Record<number, { flawless: boolean }>; // by slot index
+        beaten: Record<number, { flawless: boolean; score: number }>; // by slot index, the best win's score
+        mode?: 'easy' | 'normal' | 'hard'; // the last duel's, for the result card
         collected: Pair['id'][]; // starts as the role's own pool
         finished: boolean;
         stats: RunStats;
@@ -561,7 +579,7 @@ Seven work packages, each a mergeable PR with its own tests, ordered so the game
 - [x] **3. Playable grey box** (canvas stage, dialogue box, hand and counter menus, the two bars and the silence bar as flat rectangles, typing, keyboard and touch input, placeholder rectangles for sprites and a flat background, the workbench route with the duel sandbox). Done when all seven slots can be played start to finish, including the boss gate and the interrupt, and the silence seconds have been tuned in the sandbox and checked against the simulation.
 - [x] **4. Backgrounds** (four Gemini scenes through `snap.mjs`, four loop scripts, `scene-1x.webp` export added to `loop.mjs`, the scene viewer on the workbench). Done when the scenes animate in the stage at integer scale with no shimmer and the poster shows under reduced motion.
 - [x] **5. Sprites** (`pixel-sprite` skill with `sheet.mjs` and the review checklist, seven Gemini model sheets and the ghost sheet through it (no head sheet, the item sheet dropped), a sheet per character (one of its role's two), `sheets.test.ts`, the sprite viewer on the workbench, the idle sprites on the select screen). Done when every character renders from data from the right sheet, the validator runs in `pnpm test` and every pose has been checked in the viewer at 2x.
-- [ ] **6. Polish** (reduced motion, live region and focus order, pause, result card screen with copy, rotate hint on portrait phones are in; still open: credits line per role, the phone gag if it reads at native size, OG image for `/lab/pushback`, the VRT baselines; **sound**: a few short bleeps for cursor, confirm, hit and mic drop, off by default with a switch in the title menu; a **shareable result**: a link to the page with the result card as its link preview, next to the copy; a **mobile check** of the title, the roster and the duel on a phone, landscape and the portrait prompt). Done when the route passes the existing lint, format, type and test commands and a VRT baseline exists.
+- [ ] **6. Polish** (reduced motion, live region and focus order, pause, result card screen with copy, rotate hint on portrait phones are in; still open: credits line per role, the phone gag if it reads at native size, OG image for `/lab/pushback`, the VRT baselines; **sound**: a few short bleeps for cursor, confirm, hit and mic drop, off by default with a switch in the title menu; a **shareable result**: a link to the page with the result card as its link preview, next to the copy; a **mobile check** of the title, the roster and the duel on a phone, landscape and the portrait prompt; the **result as an image**: the status screen rendered to a PNG to save or share, next to the text card). Done when the route passes the existing lint, format, type and test commands and a VRT baseline exists.
 - [ ] **7. Lines pass** (read every line aloud in a duel, cut what does not land, check the 70-character limit, confirm each counter reads as a reply next to five decoys, fix boss-3; the closers too). Done when the tables in this spec and `lines.ts` match.
 
 Open questions to settle before package 4:

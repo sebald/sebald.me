@@ -17,12 +17,14 @@ const sampleRun = (role: Role, look: Look, finished: boolean): SavedRun => {
     ...run,
     look,
     finished,
+    mode: 'normal',
     attempts: 6,
-    buddy: true,
+    buddy: false,
     beaten: {
-      0: { flawless: true },
-      1: { flawless: false },
-      2: { flawless: true },
+      0: { flawless: true, score: 2460 },
+      1: { flawless: false, score: 1830 },
+      2: { flawless: true, score: 2950 },
+      3: { flawless: false, score: 4170 },
     },
     stats: {
       ...run.stats,
