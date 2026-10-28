@@ -95,4 +95,17 @@
   }
 
   --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
+
+  /* Pushback: the demo banner's ticker, its two identical halves sliding
+     one half's width to the left, so the loop has no seam */
+  @keyframes arcade-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  --animate-arcade-marquee: arcade-marquee 18s linear infinite;
 }

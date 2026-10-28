@@ -98,7 +98,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Banner"
-      blurb="The attract mode's label across the room: a dark stripe dithered out at its edges, DEMO in gold and the way in blinking."
+      blurb="The attract mode's label across the room: a pale stripe dithered out at its edges with a ticker running along it, DEMO and the way in."
     >
       <BannerDemo />
     </Section>
