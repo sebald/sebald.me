@@ -61,10 +61,10 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cva } from '@/lib/styles.utils';
 
-import { Banner } from './banner';
 import { Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
+import { DemoLabel } from './demo-label';
 import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
 import { Frame } from './frame';
@@ -80,8 +80,8 @@ import { Legend, Window } from './window';
 
 // Styles
 // ---------------
-/** The demo's banner: its top, over the people's legs, clear of their faces */
-const DEMO_BANNER_Y = 88;
+/** The demo's label: its top, under the bars, over the room's middle */
+const DEMO_LABEL_Y = 40;
 
 const styles = {
   silence: cva({
@@ -621,8 +621,8 @@ export const DuelScreen = ({
         still={reduced}
       />
 
-      {/* The arcade banner across the room, over the people's middle */}
-      {auto && <Banner y={DEMO_BANNER_Y} />}
+      {/* The arcade stamp over the room */}
+      {auto && <DemoLabel y={DEMO_LABEL_Y} />}
 
       {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button

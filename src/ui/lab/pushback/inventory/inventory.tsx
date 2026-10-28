@@ -5,9 +5,9 @@ import type { PropsWithChildren } from 'react';
 import { Headline } from '@/ui/headline';
 import { Text } from '@/ui/text';
 
-import { BannerDemo } from './banner-demo';
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
+import { DemoDemo } from './demo-demo';
 import { PaletteDemo, PickerDemo, TextDemo } from './foundations';
 import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
@@ -97,10 +97,10 @@ export const Inventory = () => (
       <HudDemo />
     </Section>
     <Section
-      title="Banner"
-      blurb="The attract mode's label across the room: a pale stripe dithered out at its edges with a ticker running along it, DEMO and the way in."
+      title="Demo"
+      blurb="The attract mode as the title plays it after twenty seconds: the AI on both sides under the arcade stamp. Next demo, or any key, starts another."
     >
-      <BannerDemo />
+      <DemoDemo />
     </Section>
     <Section
       title="Result"
