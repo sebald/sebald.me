@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Seventeen generations before rerolls: ten model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used.
+Every image the game needs, one prompt each, ready to paste. Seventeen generations before rerolls: ten model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used in the game, but the prop sheet is attached to the logo prompts for the cup.
 
 ## Before you start
 
@@ -1014,13 +1014,112 @@ Reroll on: heads at different sizes, a hood that changes the face shape so much 
 
 ## Logo (`logo.jpg`)
 
-The wordmark for the start screen, the lab index and the link preview. The first render (plain shoved letters, kept in `sources/originals/logo.jpeg`) read fine but said nothing about the game. The logo should carry the page: the two duellists, the lines they throw, the office. Two prompts on that brief; A is the one to try first. Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. Generated on a plain dark background like a sheet and keyed the same way.
+The wordmark for the start screen, the lab index and the link preview. The first render (plain shoved letters) read fine but said nothing about the game; the second (two bubbles colliding, prompt A, the one in the repo) says what the game is but sits politely: two flat shapes and a word each. The start screen and the OG card hang on this mark, so the third round goes big. C is the one to try first, D the variant. Pick by the thumbnail test: shrink the result to a quarter and see whether it still reads as a word. Generated on a plain dark background like a sheet and keyed the same way.
 
-Size: the render snaps to a 240 by 133 grid; the mark should fill about four fifths of the width, so around 190 by 70 art pixels with the tails. On the stage (320 wide) that is two thirds of the band. Nothing else in the frame.
+Size: the render snaps to a 240 by 133 grid; the mark should fill about four fifths of the width, so around 190 by 80 art pixels with the overhangs. On the stage (320 wide) that is two thirds of the band. Nothing else in the frame.
 
-Attach: `HEADER`, and a model sheet for the colours of the people.
+### What the old arcade logos do
 
-### A: two bubbles, one shove
+The lesson from the 1980s and 1990s marks (Capcom, Konami, Sega, SNK, LucasArts), read against Toshi Omagari's survey of arcade type and a pixel artist's craft notes on the classics:
+
+- **Letters are objects, not type.** The mark is drawn, never set. Letters have weight: a thick outline, a lit top edge, a dark extruded block under them two or three pixels deep, and a hard drop shadow. Mega Man's chrome bands, Breath of Fire's flame gradient, Castlevania's stonework are all surface treatments on fat letters, in three or four posterised steps, never a smooth gradient.
+- **One letter is the hero.** Castlevania's oversized V, Contra's burning C, Street Fighter's glowing II: one letter is bigger or made of something else and carries the mark. The rest stay plain so the hero reads.
+- **The letters do what the game does.** Street Fighter's are brushed and italic because the game is fast; Battletoads' are warty and bulbous; Bubble Bobble's are inflated. Golden Axe puts the axe in the mark, Metal Slug rivets its letters out of plate, Sega's Pico turns the i into a bulb and the o into a sun. The letters act out the title.
+- **Tilt and overlap.** The words lean, one over the other, letters a different size, so the mark has motion and a silhouette, not a line of text. Watch the cramped middle (Battletoads' TTLE) and letters that merge into one word (Doctor Octoroc).
+- **Few colours, hard edges.** The classics that still look best used seven to ten colours; the Street Fighter mark with fifteen reads airbrushed. One outline colour, closed everywhere.
+- **It reads at a quarter.** The marquee was seen across the arcade; the OG card is seen as a thumbnail. Silhouette first, surface second.
+
+For Pushback that means: the word acts out the shove, one letter is an office thing, the letters are fat blocks with an extrusion and a shadow, everything from the game's own palette, and a few props from the sheets we already have, in the same pixels.
+
+Attach for C and D: `HEADER`, the props sheet (`sources/originals/props-sheet.jpeg`, for the cup and the marker drawn in the game's pixels), the mic-drop burst sheet (`micdrop-sheet.jpeg`), and the floor scene (`scene-floor.jpeg`, for the rubber duck).
+
+### C: the shove, with a cup in it
+
+PUSH leans into BACK and knocks it over: the letters of BACK are tilting backwards, the K already falling, with the mic-drop burst at the point of impact. The U of PUSH is the paper coffee cup from the prop sheet, the rubber duck from the floor scene sits on top of the B, and a sticky note is stuck to the K. Fat letters, a lit top edge, a dark block under them, one hard shadow: an arcade marquee made of office.
+
+```text
+Draw a pixel-art video game logo in the style of the attached header
+image: the same pixel size, the same hard-edged one-pixel outlines, the
+same limited palette, as it looked on a 1990s arcade title screen. Plain,
+flat, very dark background, nothing else in the frame. The logo fills
+about four fifths of the width.
+
+The title is PUSHBACK, as two words, PUSH and BACK, drawn as heavy,
+chunky, 1990s arcade-marquee capitals: very fat block letters with a
+one-pixel black outline, a lighter one-pixel highlight along every top
+edge, and a dark three-dimensional block extruded down and to the right
+under each letter, three pixels deep, in a darker shade of the letter's
+colour. Under everything, one hard black drop shadow. Posterised
+shading in three steps, no smooth gradients.
+
+PUSH is on the left, in warm cream with a dark navy extrusion, the four
+letters leaning hard to the right, slightly larger than BACK, the H
+biggest, as if the word is charging. Its U is not a letter: it is the
+paper coffee cup with a lid from the attached prop sheet, drawn at the
+size of a letter, a wisp of steam above it, so the word still reads
+PUSH.
+
+BACK is on the right, in burnt orange with a dark brown extrusion, and
+it is being knocked over: the B is dented on its left side where the H
+hits it, the A leans back, the C leans further, and the K is tipping
+over backwards and lifting off the baseline, with three short pixel
+motion lines behind it. At the point where the H meets the B sits the
+jagged pale-yellow pixel impact burst from the attached burst sheet,
+small, overlapping both letters' outlines. A small yellow sticky note is
+stuck on the face of the K at a slight angle, blank. The yellow rubber
+duck from the attached scene sits on top of the B, facing left, calm,
+unbothered.
+
+All letters share one baseline except the falling K. Everything is drawn
+with big, clearly visible pixels and one closed black outline; the
+letters are solid, not hollow. Use at most ten colours in total. No
+gradients, no glow, no blur, no bevel lines inside the letters, no
+texture. No other words, no tagline, no characters, no icons beyond the
+cup, the duck, the note and the burst.
+```
+
+### D: the marquee, stacked
+
+The same letters as a two-line marquee, PUSH over BACK, taller and bigger, the way a cabinet header reads from across the room: for the OG card and anywhere the mark gets height. The hero letter is the B, oversized and made of two sticky notes, and the ghost peeks out from behind the K. Quieter on the shove, louder as a block.
+
+```text
+Draw a pixel-art video game logo in the style of the attached header
+image: the same pixel size, the same hard-edged one-pixel outlines, the
+same limited palette, as it looked on a 1990s arcade title screen. Plain,
+flat, very dark background, nothing else in the frame. The logo fills
+about three quarters of the width and most of the height.
+
+The title is PUSHBACK on two lines, PUSH above BACK, left-aligned, in
+heavy chunky 1990s arcade-marquee capitals: very fat block letters with a
+one-pixel black outline, a lighter one-pixel highlight along the top
+edges, a dark three-dimensional block extruded down and to the right
+under each letter three pixels deep, and one hard black drop shadow
+under everything. Posterised shading in three steps, no smooth
+gradients. The whole mark is tilted a few degrees, rising to the right.
+
+PUSH is warm cream with a dark navy extrusion. Its U is the paper coffee
+cup with a lid from the attached prop sheet, drawn at letter size, steam
+above it. BACK is burnt orange with a dark brown extrusion and its B is
+the hero: half again as tall as the other letters, overlapping the line
+above, and built from two square yellow sticky notes stuck one above the
+other and curling at the corners, with the B's holes cut out of them.
+The jagged pale-yellow impact burst from the attached burst sheet sits
+behind the top right corner of the H, half hidden by it. From behind the
+right edge of the K, the small pale translucent ghost from the attached
+sheet peeks out, only its head and one hand showing.
+
+Everything is drawn with big, clearly visible pixels and one closed
+black outline; letters solid, not hollow. At most ten colours. No
+gradients, no glow, no blur, no bevel lines inside the letters, no
+texture. No other words, no tagline, no icons beyond the cup, the notes,
+the burst and the ghost.
+```
+
+For D attach the ghost sheet too. What to check on both: the word reads at a quarter size with the cup still reading as a U (if not, ask for the cup's outline to be squared off at the bottom); the extrusion is a flat darker block, not a gradient; the burst sits at the join; the duck and the note are at the letters' pixel size, not finer; the outline is one colour and closed; nothing touches the frame edge. Reroll on: a smooth chrome gradient, letters hollow or outlined only, a third word, the cup replacing the wrong letter, the K falling the wrong way (it falls backwards, to the right).
+
+The earlier prompts stay below for the record.
+
+### A: two bubbles, one shove (the mark in the repo)
 
 The game in one picture: two speech bubbles slam into each other. PUSH comes from the left in the window's cream, BACK from the right in the opponent's ember, and where they meet both are dented in, with a small pixel impact star at the join (the mic-drop burst's little cousin). Each bubble's tail points down and outward, to where the two duellists stand on the start screen, so the logo sits over the people like their lines do in the duel.
 
