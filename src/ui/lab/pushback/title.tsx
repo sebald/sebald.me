@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
 import { MODE_LABELS, type Mode, STANDS } from '@/lib/lab/pushback/characters';
-import { LAYOUT, viewFor } from '@/lib/lab/pushback/stage';
+import { LAYOUT, STAGE, viewFor } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { Room } from './frame';
 import { Picker, type PickerItem } from './picker';
 import { Stage, px } from './stage';
-import { Loud, Muted } from './text';
+import { Heading, Loud, Muted } from './text';
 import { useInputKind } from './use-input-kind';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -25,7 +25,21 @@ interface TitleScreenProps {
   onReset?: () => void;
   /** Nobody has touched anything for a while: play the demo */
   onAttract?: () => void;
+  /** No run and nothing collected yet: the splash explains the game */
+  firstVisit?: boolean;
 }
+
+/**
+ * How the game works, for a first visit, four lines in the window under
+ * the splash: the exchange, the scale, momentum and the mic drop, the
+ * collecting. The ghost is the mode blurb's to explain.
+ */
+const HOW_TO = [
+  'A colleague throws a phrase. Pick the reply that answers it before the bar runs out.',
+  'Every exchange you win pushes the shared scale your way. Three steps past the middle and the duel is yours.',
+  'Win on your own throw, or counter fast, and your momentum grows. Full, a gold line appears: the mic drop, worth two steps.',
+  'Their phrases are collected as you counter them. What you pick up answers the next colleague, and the boss.',
+] as const;
 
 /** The usual line, because the cast is nine office archetypes and nobody in particular */
 const FICTION =
@@ -75,7 +89,8 @@ const MODIFIERS = new Set([
  * the logo over it and an arcade line blinking under it, both in the
  * scene. Any key or a tap opens the menu: the logo slides to the top of
  * the band and the menu takes the quiet window below, so the title is
- * the start screen with its menu open, not a second screen.
+ * the start screen with its menu open, not a second screen. On a first
+ * visit the window under the splash explains the game in four lines.
  */
 export const TitleScreen = ({
   mode,
@@ -83,6 +98,7 @@ export const TitleScreen = ({
   onStart,
   onReset,
   onAttract,
+  firstVisit = false,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(false);
   const kind = useInputKind();
@@ -226,18 +242,43 @@ export const TitleScreen = ({
               {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
             </Loud>
           </p>
-          <div
-            className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
-            style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
-          >
-            <Muted className="text-[0.85em] text-balance">
-              Counter the phrase. Push the scale to your side. Full momentum
-              lets you drop the mic.
-            </Muted>
-            <Muted className="text-[0.7em] text-balance opacity-70">
-              {FICTION}
-            </Muted>
-          </div>
+          {firstVisit ? (
+            // Stuck to the bottom edge: where the lines wrap on a small
+            // stage, the window grows upward over the scene
+            <Window
+              className="absolute"
+              style={{
+                left: px(panel.x),
+                bottom: px(STAGE.height - panel.y - panel.height),
+                width: px(panel.width),
+                minHeight: px(panel.height),
+              }}
+              legend={FICTION}
+            >
+              <Heading className="text-[0.85em]">How it works</Heading>
+              <ol className="m-0 mt-[calc(var(--px)*2)] grid list-none gap-[calc(var(--px)*1)] p-0 text-[0.85em]">
+                {HOW_TO.map((line, i) => (
+                  <li key={i} className="flex gap-[1ch]">
+                    <span className="text-(--pb-gold)">{i + 1}.</span>
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ol>
+            </Window>
+          ) : (
+            <div
+              className="absolute inset-x-0 flex flex-col items-center justify-center gap-[calc(var(--px)*4)] text-center"
+              style={{ top: px(LAYOUT.band), height: px(panel.height + 2) }}
+            >
+              <Muted className="text-[0.85em] text-balance">
+                Counter the phrase. Push the scale to your side. Full momentum
+                lets you drop the mic.
+              </Muted>
+              <Muted className="text-[0.7em] text-balance opacity-70">
+                {FICTION}
+              </Muted>
+            </div>
+          )}
         </>
       )}
     </Stage>

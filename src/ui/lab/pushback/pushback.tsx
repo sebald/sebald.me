@@ -82,6 +82,7 @@ export const Pushback = () => {
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
           onReset={hasRuns(save) ? () => setSave(resetSave) : undefined}
+          firstVisit={!hasRuns(save) && save.glossary.length === 0}
           onAttract={toAttract}
         />
       );
