@@ -4,13 +4,19 @@ import { describe, it } from 'node:test';
 import {
   BOSS_ANSWERS,
   BOSS_PAIRS,
+  CLOSERS,
+  CLOSERS_PER_ROLE,
   MAX_LINE_LENGTH,
   PAIRS,
   ROLES,
   allLines,
+  closersOf,
+  isCloserId,
+  isPairId,
   pairById,
   poolOf,
   poolOfPhrase,
+  poolPairs,
 } from './lines';
 
 describe('pairs', () => {
@@ -19,6 +25,21 @@ describe('pairs', () => {
       assert.equal(poolOf(role).length, 16, role);
     }
     assert.equal(new Set(PAIRS.map(p => p.id)).size, PAIRS.length);
+  });
+
+  it('has three closers per role, with ids of their own', () => {
+    for (const role of ROLES) {
+      const own = closersOf(role);
+      assert.equal(own.length, CLOSERS_PER_ROLE);
+      assert.ok(own.every(pair => isCloserId(pair.id) && isPairId(pair.id)));
+      assert.ok(own.every(pair => pairById(pair.id) === pair));
+    }
+    assert.equal(new Set(CLOSERS.map(p => p.id)).size, CLOSERS.length);
+    assert.ok(PAIRS.every(pair => !isCloserId(pair.id)));
+    assert.deepEqual(
+      poolPairs([...PAIRS, ...CLOSERS].map(p => p.id)).length,
+      PAIRS.length,
+    );
   });
 
   it('numbers the ids per pool', () => {

@@ -18,7 +18,7 @@ import {
   type Slot,
 } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
-import { ROLES, type Role } from './lines';
+import { ROLES, type Role, poolPairs } from './lines';
 import { Rng, seedRng } from './random';
 import { type RunState, createRunState, duelSetupFor, recordDuel } from './run';
 
@@ -112,8 +112,9 @@ export const playDuel = (
     } else if (s.phase === 'attack') {
       const foreign = s.hand.filter(id => !known.has(id));
       const phrase = rng.pick(foreign.length > 0 ? foreign : s.hand)!;
-      if (s.micDropAvailable && !s.boss) tally.player++;
-      s = reduce(s, { type: 'throw', phrase, micDrop: s.micDropAvailable });
+      // The modelled player drops the mic whenever a closer is on offer
+      if (s.closer && !s.boss) tally.player++;
+      s = reduce(s, { type: 'throw', phrase: s.closer ?? phrase });
     } else {
       s = reduce(s, { type: 'continue' });
     }
@@ -175,7 +176,7 @@ export const simulate = (
     for (let index = 0; index < run.run.slots.length && !stuck; index++) {
       if (index === bossIndex(run.run)) {
         bossReached++;
-        glossary += run.collected.length;
+        glossary += poolPairs(run.collected).length;
       }
       // Reported by the slot table, since a run can skip a slot
       const report = slots[SLOTS.indexOf(run.run.slots[index]!.slot)]!;

@@ -177,9 +177,16 @@ const scriptKey = (state: DuelState) =>
     state.exchange?.phrase ?? '',
     state.outcome?.picked ?? '',
     state.hand.join(','),
+    state.closer ?? '',
   ].join('|');
 
 const px = (n: number) => `calc(var(--px) * ${n})`;
+
+/** What the menu is for: attack, attack with a closer on offer, or defend */
+const prompt = (state: DuelState) =>
+  state.phase === 'attack'
+    ? MENU_PROMPTS[state.closer ? 'micDrop' : 'attack']
+    : MENU_PROMPTS.defend;
 
 export const DuelScreen = ({
   initial,
@@ -204,7 +211,6 @@ export const DuelScreen = ({
     atStart(scriptKey(initial)),
   );
   const [paused, setPaused] = useState(false);
-  const [micDrop, setMicDrop] = useState(false);
   const [clock, setClock] = useState(0);
   // The exchange the buddy's whisper started on, for the miss line and
   // for sending it away afterwards
@@ -291,11 +297,13 @@ export const DuelScreen = ({
             elapsed >= DEMO_PICK_MS &&
             cursor.elapsed < DEMO_PICK_MS
           ) {
-            // The demo's player: a phrase from the hand, the answer most
-            // of the time, a decoy otherwise
+            // The demo's player: the closer when one is on offer, else a
+            // phrase from the hand; the answer most of the time, a decoy
+            // otherwise
             if (s.phase === 'attack' && s.hand.length) {
-              const phrase = s.hand[Math.floor(Math.random() * s.hand.length)]!;
-              act({ type: 'throw', phrase, micDrop: s.micDropAvailable });
+              const phrase =
+                s.closer ?? s.hand[Math.floor(Math.random() * s.hand.length)]!;
+              act({ type: 'throw', phrase });
             } else if (s.phase === 'defend' && s.exchange) {
               const answer = s.exchange.answer;
               const decoys = s.menu.filter(id => id !== answer);
@@ -364,10 +372,6 @@ export const DuelScreen = ({
     }
   }, [step, typingDone, cursor, advance, onEnd]);
 
-  const canMicDrop =
-    state.phase === 'attack' && state.micDropAvailable && !state.boss;
-  const toggleMicDrop = useCallback(() => setMicDrop(on => !on), []);
-
   useKeys(
     useMemo(
       () => ({
@@ -375,9 +379,8 @@ export const DuelScreen = ({
         ...(paused || step?.kind === 'menu'
           ? {}
           : { Enter: confirm, ' ': confirm }),
-        ...(canMicDrop ? { m: toggleMicDrop, M: toggleMicDrop } : {}),
       }),
-      [paused, step?.kind, confirm, toggleMicDrop, canMicDrop],
+      [paused, step?.kind, confirm],
     ),
     !auto,
   );
@@ -547,16 +550,17 @@ export const DuelScreen = ({
       const items: PickerItem[] = state.hand.map(id => ({
         id,
         label: pairById(id).phrase,
-        onSelect: () => {
-          act({ type: 'throw', phrase: id, micDrop });
-          setMicDrop(false);
-        },
+        onSelect: () => act({ type: 'throw', phrase: id }),
       }));
-      if (canMicDrop) {
+      // The closer on offer stands under the hand, in gold: throwing it
+      // drops the mic
+      const { closer } = state;
+      if (closer) {
         items.push({
-          id: 'mic-drop',
-          label: `Mic drop: ${micDrop ? 'on' : 'off'} (M)`,
-          onSelect: toggleMicDrop,
+          id: closer,
+          label: pairById(closer).phrase,
+          accent: true,
+          onSelect: () => act({ type: 'throw', phrase: closer }),
         });
       }
       return items;
@@ -571,7 +575,7 @@ export const DuelScreen = ({
       }));
     }
     return [];
-  }, [step?.kind, state, micDrop, act, toggleMicDrop, canMicDrop, whisper]);
+  }, [step?.kind, state, act, whisper]);
 
   const announce = useMemo(() => {
     if (!step) return '';
@@ -580,11 +584,7 @@ export const DuelScreen = ({
       return `${who}: ${step.text}`;
     }
     if (step.kind === 'reveal') return `The reply was: ${step.text}`;
-    if (step.kind === 'menu') {
-      return showsHint(state)
-        ? HINT
-        : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend'];
-    }
+    if (step.kind === 'menu') return showsHint(state) ? HINT : prompt(state);
     if (step.kind === 'wait') {
       return `${state.winner === 'player' ? 'You won' : 'You lost'}. ${barsLabel(state, 'player')}. Press Enter to continue.`;
     }
@@ -610,7 +610,6 @@ export const DuelScreen = ({
       keys={[
         ['↑↓', 'choose'],
         ['Enter', 'confirm'],
-        ...(canMicDrop ? ([['M', 'mic drop']] as [string, string][]) : []),
       ]}
       touch="Tap a line"
     />
@@ -730,9 +729,7 @@ export const DuelScreen = ({
             )}
             {/* The prompt sits above the options, with room on both sides */}
             <p className={cn(styles.hint(), 'my-[calc(var(--px)*4)]')}>
-              {showsHint(state)
-                ? HINT
-                : MENU_PROMPTS[state.phase === 'attack' ? 'attack' : 'defend']}
+              {showsHint(state) ? HINT : prompt(state)}
             </p>
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}

@@ -21,7 +21,14 @@ import {
   toWin,
   wordCount,
 } from './duel';
-import { PAIRS, type PairId, pairById, poolOf } from './lines';
+import {
+  PAIRS,
+  type PairId,
+  closersOf,
+  isCloserId,
+  pairById,
+  poolOf,
+} from './lines';
 
 const devPool = poolOf('dev').map(p => p.id);
 const pmPool = poolOf('pm').map(p => p.id);
@@ -76,8 +83,12 @@ const wrong = (state: DuelState) =>
 
 const next = (state: DuelState) => reduce(state, { type: 'continue' });
 
-const throwFirst = (state: DuelState, micDrop = false) =>
-  reduce(state, { type: 'throw', phrase: state.hand[0]!, micDrop });
+const throwFirst = (state: DuelState) =>
+  reduce(state, { type: 'throw', phrase: state.hand[0]! });
+
+/** Throw the closer on offer: the mic drop */
+const dropMic = (state: DuelState) =>
+  reduce(state, { type: 'throw', phrase: state.closer! });
 
 /** Play until the end with a strategy per phase */
 const play = (
@@ -223,15 +234,40 @@ describe('the mic drop', () => {
     return s;
   };
 
-  it('is available at full momentum and costs the bar', () => {
+  it('offers a closer of the role at full momentum, and throwing it costs the bar', () => {
     const s = full();
     assert.equal(s.momentum.player, RULES.momentum);
-    assert.ok(s.micDropAvailable);
-    const dropped = throwFirst(s, true);
+    assert.ok(s.closer && isCloserId(s.closer));
+    assert.equal(pairById(s.closer!).role, s.setup.role);
+    assert.ok(!s.hand.includes(s.closer!));
+    const dropped = dropMic(s);
     assert.ok(dropped.exchange?.micDrop);
+    assert.equal(dropped.exchange?.phrase, s.closer);
     assert.equal(dropped.stats.micDrops, 1);
     assert.equal(dropped.scale, 2 + RULES.micDrop.worth);
     assert.equal(dropped.momentum.player, 1);
+  });
+
+  it('a phrase from the hand at full momentum is not a mic drop', () => {
+    const s = full();
+    const thrown = throwFirst(s);
+    assert.ok(!thrown.exchange?.micDrop);
+    assert.equal(thrown.stats.micDrops, 0);
+    assert.equal(thrown.momentum.player, RULES.momentum);
+  });
+
+  it('offers the three closers in turn, the same one until it is thrown', () => {
+    const rules = { ...RULES, reach: 9 };
+    let s = next(right(begin({ rules })));
+    s = next(throwFirst(s)); // momentum full: a closer on offer
+    const first = s.closer!;
+    s = next(throwFirst(s)); // not thrown: still on offer
+    assert.equal(s.closer, first);
+    s = next(dropMic(s)); // thrown: momentum 1, nothing on offer
+    assert.equal(s.closer, null);
+    s = next(throwFirst(s));
+    s = next(throwFirst(s)); // full again: the next closer
+    assert.ok(s.closer && s.closer !== first);
   });
 
   it('countered, it pushes the scale back by the same two', () => {
@@ -241,18 +277,28 @@ describe('the mic drop', () => {
     assert.equal(s.momentum.player, RULES.momentum);
     // The opponent answers everything from here on
     s = { ...s, setup: { ...s.setup, slot: strong } };
-    const dropped = throwFirst(s, true);
+    const dropped = dropMic(s);
     assert.ok(dropped.exchange?.micDrop);
     assert.equal(dropped.outcome?.winner, 'opponent');
     assert.equal(dropped.scale, 2 - RULES.micDrop.worth);
   });
 
-  it('is not available before', () => {
+  it('is not on offer before, and a closer thrown then is ignored', () => {
     const s = next(right(begin()));
-    assert.ok(!s.micDropAvailable);
-    const thrown = throwFirst(s, true);
-    assert.ok(!thrown.exchange?.micDrop);
-    assert.equal(thrown.stats.micDrops, 0);
+    assert.equal(s.closer, null);
+    const closer = closersOf(s.setup.role)[0]!.id;
+    assert.equal(reduce(s, { type: 'throw', phrase: closer }), s);
+  });
+
+  it('is answered at the slot accuracy, never from the repertoire', () => {
+    // The weak slot answers nothing foreign, so a closer lands every
+    // time, although the opponent answers its own pool without fail
+    let s = next(right(begin({ rules: { ...RULES, reach: 9 } })));
+    s = next(throwFirst(s));
+    for (let i = 0; i < 5; i++) {
+      const dropped = dropMic({ ...s, setup: { ...s.setup, seed: i } });
+      assert.equal(dropped.outcome?.winner, 'player');
+    }
   });
 
   it('by the opponent grows the menu and moves the scale two either way', () => {
@@ -263,6 +309,10 @@ describe('the mic drop', () => {
     s = next(wrong(s)); // landed: 2, the next throw drops the mic
     assert.equal(s.phase, 'defend');
     assert.ok(s.exchange?.micDrop);
+    // With one of the opponent's closers, whose counter is in the menu
+    assert.ok(isCloserId(s.exchange!.phrase));
+    assert.equal(pairById(s.exchange!.phrase as PairId).role, 'dev');
+    assert.ok(s.menu.includes(s.exchange!.answer));
     assert.equal(s.menu.length, RULES.micDrop.menu);
     assert.equal(s.momentum.opponent, 0);
     const before = s.scale;

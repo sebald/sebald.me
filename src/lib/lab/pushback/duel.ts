@@ -11,6 +11,7 @@
 import {
   type Attempt,
   aiAnswers,
+  aiCloser,
   aiDropsMic,
   aiPick,
   aiWrongCounter,
@@ -24,6 +25,7 @@ import {
   type BossPairId,
   type PairId,
   type Role,
+  closersOf,
   isBossPairId,
   pairById,
   poolOfPhrase,
@@ -101,8 +103,11 @@ export interface DuelState {
   spent: PairId[];
   /** The player's hand while attacking */
   hand: PairId[];
-  /** Whether the player may drop the mic on this throw */
-  micDropAvailable: boolean;
+  /**
+   * The closer on offer while attacking at full momentum: throwing it
+   * is the mic drop. Null when momentum is short.
+   */
+  closer: PairId | null;
   exchange: Exchange | null;
   /** The player's counter options while defending */
   menu: PairId[];
@@ -127,7 +132,7 @@ export interface DuelState {
 
 export type DuelAction =
   | { type: 'begin' }
-  | { type: 'throw'; phrase: PairId; micDrop?: boolean }
+  | { type: 'throw'; phrase: PairId }
   | { type: 'counter'; phrase: PairId }
   | { type: 'tick'; ms: number }
   | { type: 'continue' };
@@ -157,7 +162,7 @@ export const createDuel = (setup: DuelSetup): DuelState => {
     collected: [...setup.collected],
     spent: [],
     hand: [],
-    micDropAvailable: false,
+    closer: null,
     exchange: null,
     menu: [],
     silence: null,
@@ -245,21 +250,24 @@ const opponentThrows = (state: DuelState): DuelState => {
     }
     [phrase, ...bossQueue] = bossQueue as [BossPairId, ...BossPairId[]];
   } else {
-    phrase = aiPick(
-      state.setup.repertoire,
-      {
-        collected: state.collected,
-        thrown: state.thrown,
-        attempt: state.setup.attempt,
-        turn: state.turn,
-      },
-      rng,
-    );
     micDrop = aiDropsMic(slot.tier, {
       momentumFull: state.momentum.opponent >= state.rules.momentum,
       remaining: toLose(state) + state.scale,
       worth: state.rules.micDrop.worth,
     });
+    // A mic drop is one of the opponent's closers, else a pool phrase
+    phrase = micDrop
+      ? aiCloser(state.setup.character.role as Role, state.thrown, rng)
+      : aiPick(
+          state.setup.repertoire,
+          {
+            collected: state.collected,
+            thrown: state.thrown,
+            attempt: state.setup.attempt,
+            turn: state.turn,
+          },
+          rng,
+        );
   }
   const size =
     (micDrop ? state.rules.micDrop.menu : slot.menu) + state.rules.menuExtra;
@@ -279,7 +287,18 @@ const opponentThrows = (state: DuelState): DuelState => {
   };
 };
 
-/** The player gets the initiative: a hand, and the mic drop if full */
+/**
+ * The closer the player is offered at full momentum: their role's three
+ * in turn, from a start set by the duel's seed, moving on with every
+ * mic drop thrown, so the one on offer stays until it is used.
+ */
+export const closerFor = (state: DuelState): PairId => {
+  const own = closersOf(state.setup.role);
+  return own[(Math.abs(state.setup.seed) + state.stats.micDrops) % own.length]!
+    .id;
+};
+
+/** The player gets the initiative: a hand, and a closer if full */
 const playerAttacks = (state: DuelState): DuelState => {
   const rng = new Rng(state.rng);
   const hand = drawHand(state.collected, state.spent, state.rules.hand, rng);
@@ -287,7 +306,8 @@ const playerAttacks = (state: DuelState): DuelState => {
     ...state,
     phase: 'attack',
     hand,
-    micDropAvailable: state.momentum.player >= state.rules.momentum,
+    closer:
+      state.momentum.player >= state.rules.momentum ? closerFor(state) : null,
     exchange: null,
     menu: [],
     silence: null,
@@ -398,17 +418,14 @@ const playerCounters = (
   });
 };
 
-const playerThrows = (
-  state: DuelState,
-  phrase: PairId,
-  micDrop: boolean,
-): DuelState => {
+const playerThrows = (state: DuelState, phrase: PairId): DuelState => {
   const rng = new Rng(state.rng);
-  const micDropUsed = micDrop && state.micDropAvailable;
+  // Throwing the closer is the mic drop; at the boss every throw is the
+  // interrupt, which is one too
   const exchange: Exchange = {
     by: 'player',
     phrase,
-    micDrop: micDropUsed || state.boss,
+    micDrop: phrase === state.closer || state.boss,
     answer: phrase,
   };
   const spent = [...state.spent, phrase];
@@ -420,7 +437,7 @@ const playerThrows = (
     exchange,
     spent,
     hand: [],
-    micDropAvailable: false,
+    closer: null,
     momentum,
   };
   if (state.boss) {
@@ -461,11 +478,12 @@ export const reduce = (state: DuelState, action: DuelAction): DuelState => {
   switch (action.type) {
     case 'begin':
       return state.phase === 'intro' ? nextExchange(state) : state;
-    case 'throw':
-      if (state.phase !== 'attack' || !state.hand.includes(action.phrase)) {
-        return state;
-      }
-      return playerThrows(state, action.phrase, action.micDrop === true);
+    case 'throw': {
+      const offered =
+        state.hand.includes(action.phrase) || action.phrase === state.closer;
+      if (state.phase !== 'attack' || !offered) return state;
+      return playerThrows(state, action.phrase);
+    }
     case 'counter':
       if (state.phase !== 'defend' || !state.menu.includes(action.phrase)) {
         return state;

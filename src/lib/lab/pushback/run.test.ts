@@ -3,7 +3,7 @@ import { describe, it } from 'node:test';
 
 import { RULES, bossIndex } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
-import { deckPool } from './lines';
+import { closersOf, deckPool, poolPairs } from './lines';
 import {
   attemptFor,
   bossUnlocked,
@@ -41,10 +41,13 @@ const playSlot = (
 };
 
 describe('a run', () => {
-  it('starts with exactly the own pool collected and the first slot up', () => {
+  it('starts with exactly the own pool and closers collected and the first slot up', () => {
     const run = createRunState('dev', 'a', 3);
-    assert.deepEqual(run.collected, deckPool(run.run.deck, 'dev'));
-    assert.equal(run.collected.length, 8);
+    assert.deepEqual(run.collected, [
+      ...deckPool(run.run.deck, 'dev'),
+      ...closersOf('dev').map(p => p.id),
+    ]);
+    assert.equal(poolPairs(run.collected).length, 8);
     assert.equal(nextSlot(run), 0);
     assert.ok(!bossUnlocked(run));
     assert.ok(!canPlay(run, bossIndex(run.run)));
@@ -69,11 +72,12 @@ describe('a run', () => {
     // The first slot is the own role: nothing new to collect, and the
     // colleague counters the own pool until fatigue sets in
     run = playSlot(run, 0, true);
-    // (plus what the colleague also knows, at most two foreign pairs)
-    assert.ok(run.collected.length <= 8 + 2);
+    // (plus what the colleague also knows, at most two foreign pairs,
+    // and a closer of theirs if they dropped the mic)
+    assert.ok(poolPairs(run.collected).length <= 8 + 2);
     assert.ok(run.stats.exchangesWon >= RULES.reach);
     run = playSlot(run, 2, true);
-    assert.ok(run.collected.length > 8);
+    assert.ok(poolPairs(run.collected).length > 8);
     const { exchangesLost } = run.stats;
     run = playSlot(run, 1, false);
     assert.ok(run.stats.exchangesLost >= exchangesLost + RULES.reach);

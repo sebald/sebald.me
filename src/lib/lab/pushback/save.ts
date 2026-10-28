@@ -8,6 +8,7 @@ import { type Look, LOOKS, type Mode } from './characters';
 import type { DuelState } from './duel';
 import {
   PAIRS,
+  poolPairs,
   type PairId,
   ROLE_LABELS,
   type Role,
@@ -193,7 +194,7 @@ export const resultCardText = (
   return [
     `Pushback · ${ROLE_LABELS[run.role]}`,
     `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless${run.buddy ? ' · with a ghost' : ' · hard mode'}`,
-    `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${glossary.length}/${PAIRS.length}`,
+    `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${poolPairs(glossary).length}/${PAIRS.length}`,
     `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
     'sebald.me/lab/pushback',
   ].join('\n');

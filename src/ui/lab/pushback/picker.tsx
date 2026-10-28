@@ -25,8 +25,18 @@ const pickerStyles = {
         true: 'text-white',
         false: 'text-[#d6d1c2] hover:text-white',
       },
+      accent: {
+        true: 'font-semibold text-[#f3c25a] hover:text-[#fff1b8]',
+      },
     },
+    compoundVariants: [
+      { selected: true, accent: true, className: 'text-[#fff1b8]' },
+    ],
     defaultVariants: { selected: false },
+  }),
+  /** The accent's label blinks; the cursor beside it does not */
+  accentLabel: cva({
+    base: 'animate-arcade-blink motion-reduce:animate-none',
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
@@ -54,6 +64,11 @@ export interface PickerItem {
   disabled?: boolean;
   /** Opacity of the label, 1 by default (the buddy dims wrong counters) */
   dim?: number;
+  /**
+   * The loud one: in gold, blinking at the arcade rhythm (steady under
+   * reduced motion). The closer on offer, which drops the mic.
+   */
+  accent?: boolean;
   onSelect: () => void;
 }
 
@@ -186,7 +201,10 @@ export const Picker = ({
               type="button"
               disabled={item.disabled}
               aria-current={i === current ? 'true' : undefined}
-              className={pickerStyles.item({ selected: i === current })}
+              className={pickerStyles.item({
+                selected: i === current,
+                accent: item.accent,
+              })}
               onPointerEnter={() => !item.disabled && setIndex(i)}
               onClick={() => {
                 setIndex(i);
@@ -203,7 +221,10 @@ export const Picker = ({
                 )}
               />
               <span
-                className="min-w-0 flex-1 transition-opacity duration-500"
+                className={cn(
+                  'min-w-0 flex-1 transition-opacity duration-500',
+                  item.accent && pickerStyles.accentLabel(),
+                )}
                 style={
                   item.dim === undefined ? undefined : { opacity: item.dim }
                 }

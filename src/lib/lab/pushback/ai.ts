@@ -7,9 +7,12 @@ import {
   type BossPairId,
   type PairId,
   ROLES,
+  type Role,
   bossPairById,
+  closersOf,
   deckPool,
   isBossPairId,
+  isCloserId,
   pairById,
   poolOf,
 } from './lines';
@@ -128,7 +131,24 @@ export const aiDropsMic = (
 ): boolean =>
   options.momentumFull && (tier !== 3 || options.worth >= options.remaining);
 
-/** The player's hand: up to `size` collected phrases not yet spent */
+/**
+ * The opponent's closer when it drops the mic: one of its role's three
+ * it has not thrown this duel, any of them once all are used.
+ */
+export const aiCloser = (
+  role: Role,
+  thrown: readonly PairId[],
+  rng: Rng,
+): PairId => {
+  const all = closersOf(role).map(pair => pair.id);
+  const fresh = all.filter(id => !thrown.includes(id));
+  return rng.pick(fresh.length > 0 ? fresh : all)!;
+};
+
+/**
+ * The player's hand: up to `size` collected pool phrases not yet spent.
+ * The closers are never in it; the one on offer stands beside it.
+ */
 export const drawHand = (
   collected: readonly PairId[],
   spent: readonly PairId[],
@@ -136,6 +156,7 @@ export const drawHand = (
   rng: Rng,
 ): PairId[] => {
   const used = new Set(spent);
-  const available = collected.filter(id => !used.has(id));
-  return rng.sample(available.length > 0 ? available : collected, size);
+  const pool = collected.filter(id => !isCloserId(id));
+  const available = pool.filter(id => !used.has(id));
+  return rng.sample(available.length > 0 ? available : pool, size);
 };

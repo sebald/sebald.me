@@ -8,8 +8,10 @@ import {
   type PairId,
   ROLE_LABELS,
   ROLES,
+  closersOf,
   pairById,
   poolOf,
+  poolPairs,
 } from '@/lib/lab/pushback/lines';
 import {
   type RunState,
@@ -130,7 +132,7 @@ export const RosterScreen = ({
   }
 
   const role = ROLE_LABELS[run.role];
-  const glossaryCount = `${glossary.length}/${PAIRS.length}`;
+  const glossaryCount = `${poolPairs(glossary).length}/${PAIRS.length}`;
 
   return (
     <Stage label="Pushback, roster">
@@ -234,6 +236,33 @@ export const RosterScreen = ({
                         <div
                           className="h-[2.4em] border-b border-dashed border-[#4a5066]"
                           aria-label="not yet collected"
+                        />
+                      )}
+                    </li>
+                  ))}
+                  {/* The role's three closers, under a rule */}
+                  {closersOf(pool).map((pair, j) => (
+                    <li
+                      key={pair.id}
+                      className={cn(
+                        'min-w-0',
+                        j === 0 &&
+                          'mt-[var(--px)] border-t border-[#4a5066] pt-[calc(var(--px)*2)]',
+                      )}
+                    >
+                      {collected.has(pair.id) ? (
+                        <>
+                          <div className="truncate text-[#f3c25a]">
+                            {pair.phrase}
+                          </div>
+                          <div className="truncate text-[#8a92b8]">
+                            {pair.counter}
+                          </div>
+                        </>
+                      ) : (
+                        <div
+                          className="h-[2.4em] border-b border-dashed border-[#4a5066]"
+                          aria-label="closer not yet collected"
                         />
                       )}
                     </li>

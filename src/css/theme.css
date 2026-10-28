@@ -81,4 +81,17 @@
   --animate-glitch-shift-slow: glitch-shift 0.4s infinite linear
     alternate-reverse;
   --animate-glitch-shift-fast: glitch-shift 0.3s infinite linear alternate;
+
+  /* Pushback: the arcade blink, half a second on, half off, no fade */
+  @keyframes arcade-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
 }

@@ -27,11 +27,23 @@ export interface Pair {
 
 /** Prefix of a pool's pair ids (`pm-1`, `dev-1`, `des-1`) */
 export const POOL_PREFIX = { pm: 'pm', dev: 'dev', designer: 'des' } as const;
-export type PairId =
-  `${(typeof POOL_PREFIX)[Role]}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16}`;
+type PoolPrefix = (typeof POOL_PREFIX)[Role];
+
+/** A pair of a pool: the sixteen regular ones per role */
+export type PoolPairId =
+  `${PoolPrefix}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16}`;
+
+/** A closer: the three mic-drop lines of a role (`pm-mic-1`) */
+export type CloserId = `${PoolPrefix}-mic-${1 | 2 | 3}`;
+
+/** Anything with a phrase and a counter: a pool pair or a closer */
+export type PairId = PoolPairId | CloserId;
 
 /** Pairs per pool */
 export const POOL_SIZE = 16;
+
+/** Closers per role */
+export const CLOSERS_PER_ROLE = 3;
 
 /** A boss phrase, answered by a regular counter */
 export interface BossPair {
@@ -49,6 +61,17 @@ export const MAX_LINE_LENGTH = 70;
 const pool = (role: Role, lines: [phrase: string, counter: string][]): Pair[] =>
   lines.map(([phrase, counter], index) => ({
     id: `${POOL_PREFIX[role]}-${(index + 1) as 1}`,
+    role,
+    phrase,
+    counter,
+  }));
+
+const closers = (
+  role: Role,
+  lines: [phrase: string, counter: string][],
+): Pair[] =>
+  lines.map(([phrase, counter], index) => ({
+    id: `${POOL_PREFIX[role]}-mic-${(index + 1) as 1}`,
     role,
     phrase,
     counter,
@@ -303,12 +326,68 @@ export const BOSS_PAIRS: readonly BossPair[] = [
   },
 ];
 
+/**
+ * The closers: three mic-drop lines per role, louder than the pool's,
+ * with a counter each. The one on offer is the mic drop: with full
+ * momentum it joins the player's hand, in gold, and throwing it is the
+ * drop; an opponent at full momentum throws one of its role's. Outside
+ * every deck and repertoire, so nobody answers them from memory: a
+ * colleague counters a closer at the slot's accuracy, tired or not. The
+ * player knows their own three from the start and collects the foreign
+ * six on defence like any pair.
+ */
+export const CLOSERS: readonly Pair[] = [
+  ...closers('pm', [
+    [
+      'I have the numbers, the slides and the room. Pick one.',
+      'You have the room because everyone else left it.',
+    ],
+    [
+      "The roadmap isn't a suggestion.",
+      "It isn't a plan either. It's a wish list with dates.",
+    ],
+    [
+      "Say no to this and you're saying no to the customer.",
+      'The customer said no first. I have the recording.',
+    ],
+  ]),
+  ...closers('dev', [
+    [
+      "Works on my machine. We're shipping my machine.",
+      'Your machine is why we have an on-call rota.',
+    ],
+    [
+      'Four hundred review comments. I wrote every one of them.',
+      'And I resolved every one of them. Unread. Approved.',
+    ],
+    [
+      "It's not a bug. It's the spec, compiled.",
+      'Then the bug is in the spec. Assigning it to you.',
+    ],
+  ]),
+  ...closers('designer', [
+    [
+      "I have forty screens that say you're wrong.",
+      'I have one user who says you are. Shall we watch the tape?',
+    ],
+    [
+      'Every pixel here is intentional.',
+      'Including the ones that moved since Tuesday?',
+    ],
+    [
+      "This isn't a preference. It's the system.",
+      'The system has eight button styles. Which one is it?',
+    ],
+  ]),
+];
+
 /** The pairs whose counters answer a boss phrase; a run's deck keeps some of each pool */
 export const BOSS_ANSWERS: ReadonlySet<PairId> = new Set(
   BOSS_PAIRS.map(pair => pair.answeredBy),
 );
 
-const pairIndex = new Map(PAIRS.map(pair => [pair.id, pair]));
+const pairIndex = new Map([...PAIRS, ...CLOSERS].map(pair => [pair.id, pair]));
+const closerIndex = new Map(CLOSERS.map(pair => [pair.id, pair]));
 const bossIndex = new Map(BOSS_PAIRS.map(pair => [pair.id, pair]));
 
 export const pairById = (id: PairId): Pair => {
@@ -329,9 +408,20 @@ export const isBossPairId = (id: string): id is BossPairId =>
 export const isPairId = (id: unknown): id is PairId =>
   typeof id === 'string' && pairIndex.has(id as PairId);
 
-/** The pairs of one pool */
+export const isCloserId = (id: string): id is CloserId =>
+  closerIndex.has(id as CloserId);
+
+/** The pairs of one pool (the closers are not in it) */
 export const poolOf = (role: Role): Pair[] =>
   PAIRS.filter(pair => pair.role === role);
+
+/** The three closers of a role */
+export const closersOf = (role: Role): Pair[] =>
+  CLOSERS.filter(pair => pair.role === role);
+
+/** The pool pairs among some ids: what the glossary counts */
+export const poolPairs = (ids: readonly PairId[]): PoolPairId[] =>
+  ids.filter((id): id is PoolPairId => !isCloserId(id));
 
 /** The ids of one pool within a run's deck, in the deck's order */
 export const deckPool = (deck: readonly PairId[], role: Role): PairId[] =>
@@ -355,6 +445,8 @@ export const HINT = 'Pick the reply that answers it';
 /** Above the options, what the menu is for */
 export const MENU_PROMPTS = {
   attack: 'Your turn. Pick a phrase to throw.',
+  /** A closer is on offer: the gold line */
+  micDrop: 'Full momentum. The gold line drops the mic.',
   defend: 'Pick your counter.',
 } as const;
 
@@ -415,7 +507,7 @@ export const ROLE_BLURBS: Record<Role, string> = {
 
 /** Every line that can appear in the dialogue box, for the length check */
 export const allLines = (): string[] => [
-  ...PAIRS.flatMap(pair => [pair.phrase, pair.counter]),
+  ...[...PAIRS, ...CLOSERS].flatMap(pair => [pair.phrase, pair.counter]),
   ...BOSS_PAIRS.map(pair => pair.phrase),
   FALLBACK,
   HINT,

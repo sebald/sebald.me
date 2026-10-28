@@ -20,7 +20,7 @@ import {
   emptyStats,
   isFlawless,
 } from './duel';
-import { type PairId, type Role, deckPool } from './lines';
+import { type PairId, type Role, closersOf, deckPool } from './lines';
 
 export interface RunState {
   role: Role;
@@ -29,7 +29,10 @@ export interface RunState {
   beaten: Record<number, { flawless: boolean }>;
   /** Slots lost at least once, by index (a retry is earned) */
   lost: number[];
-  /** Starts as the role's own pool of the deck; every run starts cold */
+  /**
+   * Starts as the role's own pool of the deck and its three closers;
+   * every run starts cold
+   */
   collected: PairId[];
   /** The boss is beaten */
   finished: boolean;
@@ -51,7 +54,7 @@ export const createRunState = (
     run,
     beaten: {},
     lost: [],
-    collected: deckPool(run.deck, role),
+    collected: [...deckPool(run.deck, role), ...closersOf(role).map(p => p.id)],
     finished: false,
     attempts: 0,
     buddy: false,

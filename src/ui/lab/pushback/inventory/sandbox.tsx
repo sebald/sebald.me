@@ -19,6 +19,7 @@ import {
 import {
   type DuelSetup,
   type DuelState,
+  closerFor,
   createDuel,
   reduce,
 } from '@/lib/lab/pushback/duel';
@@ -99,11 +100,7 @@ const play = (state: DuelState, jump: Jump): DuelState => {
     });
   const next = (s: DuelState) => reduce(s, { type: 'continue' });
   const throwFirst = (s: DuelState) =>
-    reduce(s, {
-      type: 'throw',
-      phrase: s.hand[0]!,
-      micDrop: s.micDropAvailable,
-    });
+    reduce(s, { type: 'throw', phrase: s.closer ?? s.hand[0]! });
   const run = (s: DuelState, defend: (s: DuelState) => DuelState) => {
     for (let guard = 0; guard < 60 && s.phase !== 'end'; guard++) {
       if (s.phase === 'defend') s = defend(s);
@@ -168,7 +165,7 @@ export const sandboxState = (options: Options): DuelState => {
     state = {
       ...state,
       momentum: { ...state.momentum, player: RULES.momentum },
-      micDropAvailable: state.phase === 'attack',
+      closer: state.phase === 'attack' ? closerFor(state) : null,
     };
   }
   return state;
@@ -256,7 +253,7 @@ export const Sandbox = () => {
               set('scene', e.target.value ? (e.target.value as SceneId) : null)
             }
           >
-            <option value="">the opponent's</option>
+            <option value="">{"the opponent's"}</option>
             {SCENES.map(id => (
               <option key={id} value={id}>
                 {id}
