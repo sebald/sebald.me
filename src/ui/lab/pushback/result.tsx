@@ -38,7 +38,7 @@ const PORTRAIT_SCALE = 3;
  * stage: the face, the name and the role on the left, the result, the
  * score with the mode's factor and the run's numbers with dot leaders
  * on the right, and under a rule the glossary by pool,
- * a meter of the pool's sixteen pairs each, so the gaps show. Copy puts
+ * a meter of the pool's twenty pairs each, so the gaps show. Copy puts
  * the text card on the clipboard.
  */
 export const ResultScreen = ({

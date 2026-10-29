@@ -200,7 +200,7 @@ describe('resultCardText', () => {
         'Pushback · Dev',
         'Stakeholder beaten · 10 duels · 5 flawless · easy mode',
         'Score 7,000',
-        'Exchanges 31–9 · Mic drops 6 · Glossary 24/48',
+        'Exchanges 31–9 · Mic drops 6 · Glossary 24/60',
         'Missed counters: PM 3 · Dev 1 · Designer 5',
         'sebald.me/lab/pushback',
       ].join('\n'),
@@ -246,11 +246,11 @@ describe('resultModel', () => {
       ['Mic drops', '3'],
     ]);
     assert.deepEqual(model.pools, [
-      { role: 'pm', collected: 2, total: 16, missed: 2 },
-      { role: 'dev', collected: 1, total: 16, missed: 0 },
-      { role: 'designer', collected: 1, total: 16, missed: 1 },
+      { role: 'pm', collected: 2, total: 20, missed: 2 },
+      { role: 'dev', collected: 1, total: 20, missed: 0 },
+      { role: 'designer', collected: 1, total: 20, missed: 1 },
     ]);
     // The closers are not in the glossary's count
-    assert.deepEqual(model.glossary, { collected: 4, total: 48 });
+    assert.deepEqual(model.glossary, { collected: 4, total: 60 });
   });
 });

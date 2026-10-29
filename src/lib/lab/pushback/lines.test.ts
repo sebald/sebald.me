@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
+import { CHARACTERS } from './characters';
 import {
   BOSS_ANSWERS,
   BOSS_PAIRS,
@@ -8,8 +9,10 @@ import {
   CLOSERS_PER_ROLE,
   MAX_LINE_LENGTH,
   PAIRS,
+  POOL_SIZE,
   ROLES,
   allLines,
+  inTurn,
   closersOf,
   isCloserId,
   isPairId,
@@ -20,9 +23,9 @@ import {
 } from './lines';
 
 describe('pairs', () => {
-  it('has sixteen pairs per pool with unique ids', () => {
+  it('has twenty pairs per pool with unique ids', () => {
     for (const role of ROLES) {
-      assert.equal(poolOf(role).length, 16, role);
+      assert.equal(poolOf(role).length, POOL_SIZE, role);
     }
     assert.equal(new Set(PAIRS.map(p => p.id)).size, PAIRS.length);
   });
@@ -45,7 +48,7 @@ describe('pairs', () => {
   it('numbers the ids per pool', () => {
     assert.deepEqual(
       poolOf('designer').map(p => p.id),
-      Array.from({ length: 16 }, (_, n) => `des-${n + 1}`),
+      Array.from({ length: POOL_SIZE }, (_, n) => `des-${n + 1}`),
     );
   });
 });
@@ -78,11 +81,44 @@ describe('boss pairs', () => {
 
 describe('lines', () => {
   it('fit two rows of the dialogue box', () => {
-    for (const line of allLines()) {
+    const intros = CHARACTERS.flatMap(character => character.intros);
+    for (const line of [...allLines(), ...intros]) {
       assert.ok(
         line.length <= MAX_LINE_LENGTH,
         `${line.length} chars: ${line}`,
       );
     }
+  });
+  it('gives every character three intros', () => {
+    for (const character of CHARACTERS) {
+      assert.equal(character.intros.length, 3, character.id);
+    }
+  });
+
+  it('opens no two counters of a pool the same way', () => {
+    const opening = (line: string) =>
+      line
+        .toLowerCase()
+        .split(/[ ,.]+/)
+        .slice(0, 2)
+        .join(' ');
+    for (const role of ROLES) {
+      const counters = [...poolOf(role), ...closersOf(role)].map(
+        p => p.counter,
+      );
+      const seen = new Map<string, string>();
+      for (const counter of counters) {
+        const word = opening(counter);
+        assert.ok(!seen.has(word), `${seen.get(word)} / ${counter}`);
+        seen.set(word, counter);
+      }
+    }
+  });
+
+  it('picks a line in turn and wraps', () => {
+    const lines = ['a', 'b', 'c'];
+    assert.equal(inTurn(lines), 'a');
+    assert.equal(inTurn(lines, 4), 'b');
+    assert.equal(inTurn(lines, -1), 'b');
   });
 });

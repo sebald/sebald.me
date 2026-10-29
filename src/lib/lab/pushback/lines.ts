@@ -1,7 +1,7 @@
 /**
  * Every line in the game: the three pools of phrase/counter pairs, the
  * Stakeholder's phrases, and the barks. The tables in
- * `docs/plans/pushback.md` are the source; this file has to match them.
+ * `docs/plans/pushback-lines.md` are the source; this file has to match them.
  *
  * Rules for a line: role-neutral (never names the target's role), under
  * 70 characters, no names, and a counter has to read as a reply even out
@@ -29,9 +29,9 @@ export interface Pair {
 export const POOL_PREFIX = { pm: 'pm', dev: 'dev', designer: 'des' } as const;
 type PoolPrefix = (typeof POOL_PREFIX)[Role];
 
-/** A pair of a pool: the sixteen regular ones per role */
+/** A pair of a pool: the twenty regular ones per role */
 export type PoolPairId =
-  `${PoolPrefix}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16}`;
+  `${PoolPrefix}-${1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20}`;
 
 /** A closer: the three mic-drop lines of a role (`pm-mic-1`) */
 export type CloserId = `${PoolPrefix}-mic-${1 | 2 | 3}`;
@@ -40,7 +40,7 @@ export type CloserId = `${PoolPrefix}-mic-${1 | 2 | 3}`;
 export type PairId = PoolPairId | CloserId;
 
 /** Pairs per pool */
-export const POOL_SIZE = 16;
+export const POOL_SIZE = 20;
 
 /** Closers per role */
 export const CLOSERS_PER_ROLE = 3;
@@ -80,145 +80,156 @@ const closers = (
 export const PAIRS: readonly Pair[] = [
   ...pool('pm', [
     [
-      "I've put your idea on the roadmap. Q4. Of next year.",
-      'Same quarter you promised the last one, then.',
+      "Great idea! I've put it on the roadmap. Q4. Of next year.",
+      "That's not a roadmap, that's a horoscope.",
     ],
     [
-      "The customer doesn't care about that.",
-      "The customer hasn't been told. That part is your job.",
+      'Trust me, no customer has ever asked for that.',
+      'Asked, no. Complained about, every Monday.',
     ],
     [
       "We don't have time to do it right.",
-      "We'll have time to do it twice, then.",
+      "Funny how there's always time to do it again.",
     ],
     [
-      'Can we just ship it and iterate?',
-      "We shipped it. You're looking at the iteration.",
+      "Let's ship the MVP and iterate.",
+      'Iterate is a big word for “leave it like that”.',
     ],
     [
-      'This is a two-pointer, tops.',
-      "Then you won't mind if I estimate your roadmap.",
+      "It's low-hanging fruit.",
+      "If it's that low, why has nobody picked it in three years?",
     ],
     [
-      'Our competitor already has this feature.',
-      'And their users are already complaining about it.',
+      "The competition already has this. We're falling behind!",
+      'They also have a support forum. Have a read.',
     ],
     [
       'I need a quick win for the steering meeting.',
       'Quick wins are why the backlog is full of slow losses.',
     ],
     [
-      'Have you even read the PRD?',
-      'Have you? It contradicts itself on page two.',
+      "It's all in the ticket.",
+      'The ticket is one line long. And a screenshot.',
     ],
     [
       "Let's park that in the backlog.",
-      'The backlog is where ideas go to be forgotten politely.',
+      'The backlog is where ideas go to die. With a ticket number.',
     ],
     [
-      'Can you give me a rough estimate? No commitment.',
-      "Sure. And you'll quote it as a deadline by lunch.",
+      "Just a ballpark. I won't hold you to it.",
+      'The last ballpark is in a customer contract.',
     ],
     [
-      "Stakeholders are asking why it's not live yet.",
-      "Tell them it's live. They haven't opened the app since May.",
+      'Management wants to know when it goes live.',
+      "It's been live since March. Nobody noticed.",
     ],
     [
       'This is a must-have for the launch.',
       'So were the last nine. The launch moved. Twice.',
     ],
     [
-      "Let's align on this in a quick sync.",
-      'We aligned yesterday. Then you changed the goal.',
+      "Let's set up a sync to align on this.",
+      "We're so aligned we all agree nobody knows.",
     ],
+    ["Don't shoot the messenger.", "You're a very creative messenger."],
     [
-      "I'm just the messenger here.",
-      "Messengers don't rewrite the message on the way.",
-    ],
-    [
-      "We'll validate it after launch.",
-      'Launch is the expensive way to validate.',
+      'We need to be more agile here.',
+      "Any more agile and we'll need a physio.",
     ],
     [
       "It's a small change, how hard can it be?",
-      'Small on the slide. Big in the code. Ask anyone.',
+      'Small changes are how big outages introduce themselves.',
     ],
+    [
+      "Let's circle back on that.",
+      "We've circled it so often it's a roundabout.",
+    ],
+    [
+      'Quick question, got a sec?',
+      'Your last quick question had a follow-up meeting.',
+    ],
+    [
+      'We need to think outside the box.',
+      "We can't even find the box. It's somewhere in Confluence.",
+    ],
+    ["Let's put a pin in that.", 'That idea has more pins than a voodoo doll.'],
   ]),
   ...pool('dev', [
     ['Works on my machine.', "Then we'll ship your machine."],
     [
-      "That's not a bug, that's undocumented behaviour.",
-      'Then document it. In the changelog. Under "bugs".',
+      "That's not a bug. That's a feature.",
+      'Lovely. Put it on the pricing page.',
     ],
     [
-      'That would take three sprints and a rewrite.',
-      'Funny, the prototype took an afternoon.',
+      "Honestly, it'd be faster to start from scratch.",
+      "That's what you said about the current version.",
     ],
     [
       'Have you tried turning it off and on again?',
-      'Yes. The feature stayed off. Users noticed.',
+      "Twice. Now it's off for good.",
     ],
     [
-      'The legacy code is the problem, not me.',
-      'You wrote the legacy code. In March.',
+      'Whoever wrote this legacy code should be fired.',
+      'Legacy? You wrote it last sprint.',
     ],
     [
       "We'd need a migration for that.",
-      'You need a migration for a button label.',
+      'Last time you migrated, the data emigrated.',
     ],
     [
-      "It's technically correct.",
-      'Technically correct and nobody can use it. Well done.',
+      'Well, it meets the acceptance criteria.',
+      "The criteria were met. The users weren't.",
     ],
     [
-      "I'll fix it in a follow-up PR.",
-      'That follow-up has been open since the last reorg.',
+      "I'll leave a TODO and come back to it.",
+      'Your TODOs are old enough to have TODOs.',
     ],
-    ["Can't reproduce.", 'Then come to my desk. It reproduces fine there.'],
+    ['The code is self-documenting.', 'So is a ransom note.'],
     [
-      "That's a config issue, not a code issue.",
-      "You wrote the config. It's checked into the code.",
+      'Looks like an infrastructure problem to me.',
+      "Infrastructure is just someone else's code you can't read.",
     ],
     [
-      "We'll need to refactor first.",
-      'You said that before the last two features. They shipped.',
+      "Let's split that out into a microservice.",
+      'Great. Now the bug is distributed too.',
     ],
     ['The tests pass.', 'The tests test that the tests pass.'],
-    ["It's a known issue.", "Known since when? It's new to the users."],
+    ["It's a known issue.", 'Known? It has a fan club by now.'],
     [
-      "The framework doesn't support that.",
-      "The framework's docs do. Page one.",
+      "That's not how the framework wants it.",
+      "Give it a week. It'll change its mind.",
+    ],
+    ["Sorry, that's out of scope.", 'Out of scope, into production.'],
+    ["I haven't changed anything.", 'Git says otherwise. Tuesday, 11:40.'],
+    [
+      "Ignore that red test. It's just flaky.",
+      "It's been flaky so long it's load-bearing.",
     ],
     [
-      "That's out of scope for this ticket.",
-      'Then the ticket is out of scope for the feature.',
+      "Don't worry, it's only a temporary fix.",
+      'Nothing is more permanent than a temporary fix.',
     ],
-    [
-      "I didn't touch that part of the code.",
-      'Git says otherwise. Tuesday, 11:40.',
-    ],
+    ['Just google it.', 'I did. The top answer is your post from 2019.'],
+    ["Easy fix. I'll do it tonight.", 'Easy fixes always come with a sequel.'],
   ]),
   ...pool('designer', [
     [
       'This is off-brand.',
       'The brand changed twice while you were saying that.',
     ],
+    ['It looked perfect in Figma.', 'Figma never met a German product name.'],
     [
-      "That's not how it looks in Figma.",
-      "Figma doesn't have to load on a train.",
-    ],
-    [
-      'Did you even open the design file?',
-      'I did. Which of the forty pages is the real one?',
+      'Did you check the latest version of the file?',
+      'Final, final_v2 or final_REALLY_this_one?',
     ],
     ["It's one pixel off.", 'And the deadline is one week off. Pick one.'],
     [
-      'Users will never understand that.',
-      'They understood the old version. You redesigned it.',
+      "That's way too complicated for our users.",
+      "Our users run their business in Excel. They'll cope.",
     ],
     [
-      'We should test this with real users first.',
-      'The last test loved it. You redesigned it anyway.',
+      "Let's do a round of user research first.",
+      'We did. The users asked us to stop asking.',
     ],
     [
       'The spacing is inconsistent.',
@@ -226,39 +237,43 @@ export const PAIRS: readonly Pair[] = [
     ],
     [
       'This needs more whitespace.',
-      "The sidebar is ninety percent whitespace. It's called empty.",
+      "Any more whitespace and it's a loading screen.",
     ],
     [
-      "It doesn't feel right.",
-      "Feelings aren't specs. Tell me what to change.",
+      "Something's off, but I can't say what.",
+      'Noted. One vague feeling, no steps to reproduce.',
+    ],
+    ['Can we make it pop more?', 'Bigger, bolder, and slightly on fire?'],
+    ['It really needs a dark mode.', 'Great. The bugs will be harder to see.'],
+    [
+      'Just build it like the prototype.',
+      'Sure. Clicking anywhere goes to the next screen?',
+    ],
+    ['It needs a nice loading animation.', 'Or the page could just load.'],
+    [
+      "Let's map the user journey first.",
+      'The journey map is longer than the journey.',
     ],
     [
-      'Can we make it pop more?',
-      "It pops. It's the only thing on the page that does.",
+      "Users don't read. They scan.",
+      'They read it when it says “Delete account”.',
     ],
     [
-      'I need the real content before I can design it.',
-      'You designed the last three with lorem ipsum.',
+      'I liked the first version better.',
+      'The first version is the one you rejected.',
+    ],
+    ['We need a design system for that.', "We have three. That's the problem."],
+    [
+      "Let's use an icon instead of the label.",
+      'Perfect. A button that plays charades.',
     ],
     [
-      "That interaction isn't in the prototype.",
-      "The prototype also doesn't have an error state.",
+      'We should A/B test that first.',
+      'Users already picked C: closing the tab.',
     ],
     [
-      "We can't ship it without the animation.",
-      "The animation is why it can't ship on a phone.",
-    ],
-    [
-      'The user flow is broken.',
-      'The flow has one step. Which part is broken?',
-    ],
-    [
-      'Nobody reads the text anyway.',
-      "They read it when it says 'Delete account'.",
-    ],
-    [
-      "Let's go back to the original concept.",
-      'Which one? There were five original concepts.',
+      'The confetti really sells it.',
+      'Confetti for a password reset is a lot.',
     ],
   ]),
 ];
@@ -276,17 +291,17 @@ export const BOSS_PAIRS: readonly BossPair[] = [
   },
   {
     id: 'boss-3',
-    phrase: 'I never approved any of this.',
+    phrase: "Can't we just call it a feature?",
     answeredBy: 'dev-2',
   },
   {
     id: 'boss-4',
-    phrase: 'Just switch it off until the investors have left.',
+    phrase: 'Have you tried unplugging it? That always works at home.',
     answeredBy: 'dev-4',
   },
   {
     id: 'boss-5',
-    phrase: "We'll revisit the budget for that next quarter.",
+    phrase: "Put it on my to-do list. I'll get to it.",
     answeredBy: 'dev-8',
   },
   {
@@ -316,7 +331,7 @@ export const BOSS_PAIRS: readonly BossPair[] = [
   },
   {
     id: 'boss-11',
-    phrase: "I showed it to my wife and she didn't get it.",
+    phrase: "I showed it to my partner and they didn't get it.",
     answeredBy: 'des-9',
   },
   {
@@ -338,45 +353,39 @@ export const BOSS_PAIRS: readonly BossPair[] = [
  */
 export const CLOSERS: readonly Pair[] = [
   ...closers('pm', [
+    ["I haven't said no since 2015.", "We can tell. It's all in the product."],
+    ['My Gantt chart goes all the way to 2031.', 'So does our technical debt.'],
     [
-      'I have the numbers, the slides and the room. Pick one.',
-      'You have the room because everyone else left it.',
-    ],
-    [
-      "The roadmap isn't a suggestion.",
-      "It isn't a plan either. It's a wish list with dates.",
-    ],
-    [
-      "Say no to this and you're saying no to the customer.",
-      'The customer said no first. I have the recording.',
+      "I've written more user stories than Tolkien.",
+      'And not one of them has a happy ending.',
     ],
   ]),
   ...closers('dev', [
     [
-      "Works on my machine. We're shipping my machine.",
-      'Your machine is why we have an on-call rota.',
+      'I code in vim. Without syntax highlighting.',
+      "That explains the bugs. They're camouflaged.",
     ],
     [
-      'Four hundred review comments. I wrote every one of them.',
-      'And I resolved every one of them. Unread. Approved.',
+      'I once dropped the production database. Calmly.',
+      'The users were less calm.',
     ],
     [
-      "It's not a bug. It's the spec, compiled.",
-      'Then the bug is in the spec. Assigning it to you.',
+      'Eleven years, zero tests, zero incidents.',
+      "Zero incidents reported. That's different.",
     ],
   ]),
   ...closers('designer', [
     [
-      "I have forty screens that say you're wrong.",
-      'I have one user who says you are. Shall we watch the tape?',
+      "I've done fifty user interviews this month.",
+      'And quoted the one who agreed with you.',
     ],
     [
-      'Every pixel here is intentional.',
-      'Including the ones that moved since Tuesday?',
+      'I named every colour in this palette. Personally.',
+      '“Slightly sadder grey” is not a token.',
     ],
     [
-      "This isn't a preference. It's the system.",
-      'The system has eight button styles. Which one is it?',
+      'My empathy is so strong I cried at a form.',
+      'So did the users. At the same form.',
     ],
   ]),
 ];
@@ -440,7 +449,7 @@ export const poolOfPhrase = (id: PairId | BossPairId): Role =>
 export const FALLBACK = "Uh… that's a good point.";
 
 /** Shown on the first exchange of a run */
-export const HINT = 'Pick the reply that answers it';
+export const HINT = 'Pick the reply that answers it.';
 
 /** Above the options, what the menu is for */
 export const MENU_PROMPTS = {
@@ -469,18 +478,60 @@ export const BUDDY_BARKS: readonly string[] = [
 /** The buddy, when the player misses after the whisper */
 export const BUDDY_MISS_BARK = 'I dimmed them. I literally dimmed them.';
 
-export const PLAYER_BARKS: Record<Role, { win: string; lose: string }> = {
+/**
+ * The line of a list whose turn it is: intros and barks rotate with the
+ * duel's `encounter`, so a replay doesn't open with the same words
+ */
+export const inTurn = (lines: readonly string[], encounter = 0): string =>
+  lines[Math.abs(encounter) % lines.length]!;
+
+/** The player's line at the end of a duel, picked in turn */
+export const PLAYER_BARKS: Record<
+  Role,
+  { win: readonly string[]; lose: readonly string[] }
+> = {
   pm: {
-    win: "I'll add that to the release notes.",
-    lose: 'Noted. Parking it for now.',
+    win: [
+      "I'll add that to the release notes.",
+      "Great sync, everyone. I'll send a summary.",
+      'Marking that one as shipped.',
+      "That's going in my quarterly review.",
+    ],
+    lose: [
+      'Noted. Parking it for now.',
+      "Good feedback. I'll circle back.",
+      "Fine. I'll update the roadmap.",
+      "Let's take the learnings and move on.",
+    ],
   },
   dev: {
-    win: 'Closed as fixed.',
-    lose: "Fine. I'll open a ticket.",
+    win: [
+      'Closed as fixed.',
+      'Merged. Nobody reviewed it.',
+      'Deployed on a Friday. Feeling lucky.',
+      'LGTM.',
+    ],
+    lose: [
+      'Rolling back my dignity.',
+      'That was a breaking change. For me.',
+      "Error 418. I'm a teapot.",
+      "I'll blame the cache. It's always the cache.",
+    ],
   },
   designer: {
-    win: 'Shipped. Pixel-perfect.',
-    lose: "I'll take it back to the moodboard.",
+    win: [
+      'Shipped. Pixel-perfect.',
+      "That's going in my portfolio.",
+      'Nailed it. On the grid.',
+      'Design review: approved. By me.',
+    ],
+    lose: [
+      "I'll take it back to the moodboard.",
+      "I'll go stare at some kerning.",
+      'Fine. Make the logo bigger.',
+      "I'll be in the corner, adjusting a shadow.",
+      'Fine. Ship it in Comic Sans.',
+    ],
   },
 };
 
@@ -491,11 +542,14 @@ export const BOSS_LOSE_BARKS: Record<Role, string> = {
   designer: 'Fine. Put it in the next steering deck. I used to draw those.',
 };
 
-/** The Stakeholder wins; keyed to the pool of the last missed counter */
-export const BOSS_WIN_BARKS: Record<Role, string> = {
-  pm: 'Have you aligned this with product?',
-  dev: 'Have you talked to engineering about this?',
-  designer: 'Has design seen this?',
+/** The Stakeholder wins; keyed to the pool of the last missed counter, picked in turn */
+export const BOSS_WIN_BARKS: Record<Role, readonly string[]> = {
+  pm: ['Have you aligned this with product?', 'Did product sign off on this?'],
+  dev: [
+    'Have you talked to engineering about this?',
+    'What does engineering say?',
+  ],
+  designer: ['Has design seen this?', 'Did design approve this?'],
 };
 
 /** Blurbs on the role-select screen */
@@ -512,7 +566,10 @@ export const allLines = (): string[] => [
   FALLBACK,
   HINT,
   OFFLINE,
-  ...Object.values(PLAYER_BARKS).flatMap(bark => [bark.win, bark.lose]),
+  ...Object.values(PLAYER_BARKS).flatMap(bark => [...bark.win, ...bark.lose]),
   ...Object.values(BOSS_LOSE_BARKS),
-  ...Object.values(BOSS_WIN_BARKS),
+  ...Object.values(BOSS_WIN_BARKS).flat(),
+  ...Object.values(MENU_PROMPTS),
+  ...BUDDY_BARKS,
+  BUDDY_MISS_BARK,
 ];

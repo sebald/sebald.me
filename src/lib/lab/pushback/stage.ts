@@ -15,6 +15,7 @@ import {
   type BossPairId,
   type PairId,
   bossPairById,
+  inTurn,
   isBossPairId,
   pairById,
 } from './lines';
@@ -444,7 +445,7 @@ export const scriptFor = (state: DuelState): Step[] => {
         {
           kind: 'line',
           speaker: 'opponent',
-          text: state.setup.character.intro,
+          text: inTurn(state.setup.character.intros, state.setup.encounter),
         },
       ];
     case 'defend':
@@ -502,13 +503,19 @@ export const scriptFor = (state: DuelState): Step[] => {
           speaker: 'opponent',
           text: won
             ? BOSS_LOSE_BARKS[state.setup.role]
-            : BOSS_WIN_BARKS[state.lastMissPool ?? state.setup.role],
+            : inTurn(
+                BOSS_WIN_BARKS[state.lastMissPool ?? state.setup.role],
+                state.setup.encounter,
+              ),
         });
       }
       steps.push({
         kind: 'line',
         speaker: 'player',
-        text: PLAYER_BARKS[state.setup.role][won ? 'win' : 'lose'],
+        text: inTurn(
+          PLAYER_BARKS[state.setup.role][won ? 'win' : 'lose'],
+          state.setup.encounter,
+        ),
       });
       steps.push({ kind: 'wait' });
       return steps;

@@ -112,6 +112,7 @@ export const duelSetupFor = (
     repertoire: repertoireFor(character, state.run.deck, state.run.seed),
     collected: state.collected,
     seed: options.seed,
+    encounter: state.run.seed + state.attempts,
     silence: options.silence,
     buddy: options.buddy === true,
     rules: options.rules,

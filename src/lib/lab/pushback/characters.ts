@@ -1,6 +1,6 @@
 /**
  * The cast, the slot table and the run draw. A character is a face, a
- * name, an intro bark and a sheet; it throws from its whole pool.
+ * name, three intro barks and a sheet; it throws from its whole pool.
  * Difficulty is not on the character but on the slot in the run (see
  * `docs/plans/pushback.md`, "The run").
  */
@@ -33,8 +33,8 @@ export interface Character {
   id: CharacterId;
   name: string;
   role: Role | 'boss';
-  /** The intro bark */
-  intro: string;
+  /** The intro barks, one per encounter in turn (`inTurn`) */
+  intros: readonly string[];
   /**
    * The sheet the character is drawn from, as Gemini drew it: one of its
    * role's looks, or the Stakeholder's own. Nothing is recoloured (a
@@ -58,7 +58,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'intern',
     name: 'The Intern',
     role: 'pm',
-    intro: "Hi! Is this the meeting? I was told there'd be a meeting.",
+    intros: [
+      "Hi! Is this the meeting? I was told there'd be a meeting.",
+      'Is this the stand-up? Do I stand up?',
+      "Hi! I made a deck. It's mostly stock photos.",
+    ],
     sheet: 'pm-jo',
     knows: 1,
   },
@@ -66,7 +70,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'roadmap-owner',
     name: 'The Roadmap Owner',
     role: 'pm',
-    intro: "I have a slot for you. It's now. Make it count.",
+    intros: [
+      "I have a slot for you. It's now. Make it count.",
+      "I've got five minutes between two syncs. Go.",
+      "You're on my roadmap. Right now. Enjoy it.",
+    ],
     sheet: 'pm-piet',
     knows: 2,
   },
@@ -74,7 +82,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'head-of-product',
     name: 'The Head of Product',
     role: 'pm',
-    intro: "I've heard about you. None of it was in the OKRs.",
+    intros: [
+      "I've heard about you. None of it was in the OKRs.",
+      "Let's keep this strategic. No details, please.",
+      "I've read your Slack messages. All of them.",
+    ],
     sheet: 'pm-nadia',
     knows: 2,
   },
@@ -82,7 +94,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'junior',
     name: 'The Junior',
     role: 'dev',
-    intro: "Give me a sec, the build's almost green.",
+    intros: [
+      "Give me a sec, the build's almost green.",
+      'Is this a pairing session? I brought snacks.',
+      'I watched three tutorials about you.',
+    ],
     sheet: 'dev-sam',
     knows: 1,
   },
@@ -90,7 +106,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'senior',
     name: 'The Senior',
     role: 'dev',
-    intro: "I've seen this pattern before. It didn't end well then either.",
+    intros: [
+      "I've seen this pattern before. It didn't end well then either.",
+      'I was here before the monolith. I built the monolith.',
+      'Let me guess. Another framework?',
+    ],
     sheet: 'dev-lena',
     knows: 2,
   },
@@ -98,7 +118,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'architect',
     name: 'The Architect',
     role: 'dev',
-    intro: 'Before we start: is this scalable?',
+    intros: [
+      'Before we start: is this scalable?',
+      "I've drawn a diagram of this conversation.",
+      "Let's think about this in layers.",
+    ],
     sheet: 'dev-bo',
     knows: 2,
   },
@@ -106,7 +130,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'freelancer',
     name: 'The Freelancer',
     role: 'designer',
-    intro: "I'm only here until Thursday, so let's be quick.",
+    intros: [
+      "I'm only here until Thursday, so let's be quick.",
+      'My day rate starts now.',
+      "I've given this feedback at three agencies already.",
+    ],
     sheet: 'designer-theo',
     knows: 1,
   },
@@ -114,7 +142,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'brand-designer',
     name: 'The Brand Designer',
     role: 'designer',
-    intro: "That's not our blue.",
+    intros: [
+      "That's not our blue.",
+      'Is that font even licensed?',
+      'I brought the brand book. All 140 pages.',
+    ],
     sheet: 'designer-ines',
     knows: 2,
   },
@@ -122,7 +154,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'design-lead',
     name: 'The Design Lead',
     role: 'designer',
-    intro: 'Let me stop you right there.',
+    intros: [
+      'Let me stop you right there.',
+      "Let's take a step back.",
+      'Have you considered the bigger picture?',
+    ],
     sheet: 'designer-kim',
     knows: 2,
   },
@@ -130,7 +166,11 @@ export const CHARACTERS: readonly Character[] = [
     id: 'stakeholder',
     name: 'The Stakeholder',
     role: 'boss',
-    intro: "Keep it short, I've got a call in five.",
+    intros: [
+      "Keep it short, I've got a call in five.",
+      "I've read the summary of the summary.",
+      'Walk me through it. Quickly. Without slides.',
+    ],
     sheet: 'boss',
     knows: 0,
   },

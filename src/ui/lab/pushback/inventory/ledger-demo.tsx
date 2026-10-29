@@ -18,9 +18,9 @@ export const LedgerDemo = () => (
       ]}
     />
     <div className="grid gap-[calc(var(--px)*2)]">
-      <Meter value={13} total={16} />
-      <Meter value={0} total={16} />
-      <Meter value={16} total={16} />
+      <Meter value={13} total={20} />
+      <Meter value={0} total={20} />
+      <Meter value={20} total={20} />
     </div>
   </Pixels>
 );

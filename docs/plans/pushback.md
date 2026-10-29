@@ -59,11 +59,11 @@ For the AI as defender the menu size makes no difference, so a player's mic drop
 
 ### Collecting: what the player knows
 
-Each pool has sixteen pairs; a run plays eight of each, its deck (`drawDeck`, seeded per run: of each pool two pairs whose counter answers a boss phrase, so the Stakeholder has lines, and six of the rest, so no two runs read the same). The player starts a run knowing their own role's eight pairs of the deck, phrase and counter (`You know your own lines. Everything else you pick up in the room.`). The other sixteen are collected on defence: when an opponent throws a phrase the player has heard it, and the counter is shown either way, picked on a match or revealed on a miss. One exchange on the receiving end collects the whole pair, win or lose, so a lost duel still leaves the player better equipped for the retry, and no exchange is ever a dead end: the right counter is always in the menu, a miss is a guess that did not land.
+Each pool has twenty pairs; a run plays eight of each, its deck (`drawDeck`, seeded per run: of each pool two pairs whose counter answers a boss phrase, so the Stakeholder has lines, and six of the rest, so no two runs read the same). The player starts a run knowing their own role's eight pairs of the deck, phrase and counter (`You know your own lines. Everything else you pick up in the room.`). The other sixteen are collected on defence: when an opponent throws a phrase the player has heard it, and the counter is shown either way, picked on a match or revealed on a miss. One exchange on the receiving end collects the whole pair, win or lose, so a lost duel still leaves the player better equipped for the retry, and no exchange is ever a dead end: the right counter is always in the menu, a miss is a guess that did not land.
 
 Collecting changes two things and nothing else: the hand (below) draws from collected phrases only, and the glossary fills up. The defence menus, the bars, the mic drop and the boss are the same whether a pair is collected or not. Knowledge is per run: every run starts cold with a fresh deck, nothing learnt carries into play, so the three roles are three different runs rather than three copies of one and a second run as the same role is new too. The glossary is the one thing that outlives a run: the save keeps every pair ever collected, as a record, and it fills towards 48 over several runs.
 
-Opponents help with the collecting without knowing it: every opponent throws from its whole pool, and on a first attempt prefers the pairs the player has not collected yet (see AI behaviour). A duel with three opponent attacks is three new pairs, so the two foreign duels of a run collect about ten of the sixteen (the simulation says 17 to 18 of the deck's 24 at the boss), and a replay of a beaten slot is a guaranteed gain, never a lottery. A full deck needs a replay or two; that is what the roster's replay is for, and after a lost boss fight the loss bark says which column to fill.
+Opponents help with the collecting without knowing it: every opponent throws from its whole pool, and on a first attempt prefers the pairs the player has not collected yet (see AI behaviour). A duel with three opponent attacks is three new pairs, so the two foreign duels of a run collect about ten of the sixteen foreign pairs of the deck (the simulation says 17 to 18 of the deck's 24 at the boss), and a replay of a beaten slot is a guaranteed gain, never a lottery. A full deck needs a replay or two; that is what the roster's replay is for, and after a lost boss fight the loss bark says which column to fill.
 
 The retry is the exception, because "unheard first" alone would make every retry a fresh exam. After a lost duel the opponent alternates, heard first: the first exchange of a retry is one the player can win from memory, which hands them the initiative and a momentum step, and the next throw is new. So a retry is earned and still collects one or two pairs. What is collected from a role pays off later, not against that role: Devs answer Dev lines every time, but those lines are the attack for the next role and the defence for the boss.
 
@@ -141,7 +141,7 @@ Selection screen: the six looks as a grid of faces over the dimmed corner office
 
 ## Opponents
 
-A cast of nine colleagues, three per role, each drawn from one of that role's two model sheets as it is, plus the Stakeholder. A character is a face, a name, an intro bark, a sheet and one or two borrowed pairs; it throws from its whole repertoire. Difficulty is not on the character but on the slot in the run.
+A cast of nine colleagues, three per role, each drawn from one of that role's two model sheets as it is, plus the Stakeholder. A character is a face, a name, three intro barks (one per encounter, in turn), a sheet and one or two borrowed pairs; it throws from its whole repertoire. Difficulty is not on the character but on the slot in the run.
 
 | Character           | Role     | Distinguishing swap                 | Also knows                                                       |
 | ------------------- | -------- | ----------------------------------- | ---------------------------------------------------------------- |
@@ -177,7 +177,7 @@ The ramp is fixed and the faces and lines are random, which is the point: the fi
 
 Between duels: a single roster screen over the darkened corner office, built from the quiet windows like the duel: a title (`Your run as Dev`) with a one-line explainer, the slots as a list in run order in a window with the legend along its bottom (`↑↓ choose · Enter play · Tab glossary 8/24 · Esc back`), the name and a tick when beaten; a second mark (a star) when beaten flawless, that is without losing an exchange and without the buddy. The out-of-office characters are listed in a narrow window beside the list under `Out of office`, so the player sees the cast is bigger than the run. The next unbeaten slot is selected, beaten ones can be replayed for the star or to collect what they throw, the Stakeholder is greyed until all six ticks are there. Enter or tap starts the duel; Escape returns to the title. Tab (or the `Glossary` link in the title row) shows the glossary: three windows, one per pool, every pair the player knows with its counter under it and a dashed line for each one still to collect.
 
-The glossary: a second tab on the roster (Tab or a tap on `Glossary 11/48` in the corner), three columns of sixteen slots, one per pool, across every run the save has seen. A collected pair shows phrase and counter; an uncollected one shows a blank line in its pool's column. The pairs in play this run that the player has not met yet are among the blanks, so the column still says which role has lines left to hear. The count goes on the result card and is the reason to play again: a run can fill at most 24 of the 48.
+The glossary: a second tab on the roster (Tab or a tap on `Glossary 11/60` in the corner), three columns of twenty slots, one per pool, across every run the save has seen. A collected pair shows phrase and counter; an uncollected one shows a blank line in its pool's column. The pairs in play this run that the player has not met yet are among the blanks, so the column still says which role has lines left to hear. The count goes on the result card and is the reason to play again: a run can fill at most 24 of the 60.
 
 ### The Stakeholder
 
@@ -221,7 +221,7 @@ Output per scene: `native.png`, `scene.webp` (lossless, 8 fps, 12 s loop) and `p
 
 ## Lines
 
-Three pools of sixteen phrase/counter pairs (one pool per role), three closers per role (the mic-drop lines, with a counter each), twelve boss pairs that reuse regular counters (four per pool), and the barks. 48 regular pairs (96 lines), 9 closers (18 lines), 12 boss phrases, 24 barks and fallbacks. A run plays a deck of eight pairs per pool, two of them boss answers (see Collecting); the closers are in every run.
+Three pools of twenty phrase/counter pairs (one pool per role), three closers per role (the mic-drop lines, with a counter each), twelve boss pairs that reuse regular counters (four per pool), and the barks. 60 regular pairs (120 lines), 9 closers (18 lines), 12 boss phrases, three intros per character, and the barks, which come in lists picked in turn (`inTurn`, by the duel's `encounter`: the run's seed plus the duels played). The lines themselves are kept in `docs/plans/pushback-lines.md`. A run plays a deck of eight pairs per pool, two of them boss answers (see Collecting); the closers are in every run.
 
 Who throws what: every character throws from its whole pool, uncollected pairs first, except on a retry (see AI behaviour). The player's hand draws from what they have collected.
 
@@ -352,13 +352,13 @@ boss-3 is the weakest fit (dev-2 answers "undocumented behaviour", not "never ap
 
 ## Result card
 
-After the boss, win or lose, the run's end as an RPG status screen: one quiet window filling the stage, the player's face (the head square at three times its pixels, framed) with the name and role on the left, the result in gold (`Stakeholder beaten` or `Taken offline`) and the run's numbers on the right as a `Ledger` (duels, flawless, exchanges, mic drops, each with a dot leader from the label to the value, the way arcade score tables line up), and under a rule the glossary by pool, a `Meter` of sixteen boxes per pool lit as far as it is collected, the count and the counters missed, so the gaps show. The mode is not on it. `Copy result` puts the text card on the clipboard as plain text (no analytics needed; this is the Wordle trick). The roster shows it again for a finished run. The numbers come from `resultModel`, the text from `resultCardText`, both in `save.ts`; the inventory shows the screen for any role and look.
+After the boss, win or lose, the run's end as an RPG status screen: one quiet window filling the stage, the player's face (the head square at three times its pixels, framed) with the name and role on the left, the result in gold (`Stakeholder beaten` or `Taken offline`) and the run's numbers on the right as a `Ledger` (duels, flawless, exchanges, mic drops, each with a dot leader from the label to the value, the way arcade score tables line up), and under a rule the glossary by pool, a `Meter` of twenty boxes per pool lit as far as it is collected, the count and the counters missed, so the gaps show. The mode is not on it. `Copy result` puts the text card on the clipboard as plain text (no analytics needed; this is the Wordle trick). The roster shows it again for a finished run. The numbers come from `resultModel`, the text from `resultCardText`, both in `save.ts`; the inventory shows the screen for any role and look.
 
 ```
 Pushback · Dev
 Stakeholder beaten · 10 duels · 5 flawless · normal mode
 Score 18,240
-Exchanges 31–9 · Mic drops 6 · Glossary 24/48
+Exchanges 31–9 · Mic drops 6 · Glossary 24/60
 Missed counters: PM 3 · Dev 1 · Designer 5
 sebald.me/lab/pushback
 ```

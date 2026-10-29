@@ -54,6 +54,11 @@ export interface DuelSetup {
   /** Pairs the player knows at the start */
   collected: readonly PairId[];
   seed: number;
+  /**
+   * Moves on with every duel of a run, from the run's seed: the intro and
+   * the barks are picked in turn by it (`inTurn`)
+   */
+  encounter?: number;
   /** The silence bar switch (title screen) */
   silence: boolean;
   /** First duel of a run: shows the hint on the first exchange */

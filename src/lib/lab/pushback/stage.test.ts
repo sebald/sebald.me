@@ -221,8 +221,17 @@ describe('scriptFor', () => {
     assert.deepEqual(step, {
       kind: 'line',
       speaker: 'opponent',
-      text: characterById('junior').intro,
+      text: characterById('junior').intros[0],
     });
+  });
+
+  it('picks the intro in turn by the encounter', () => {
+    const later = { ...start(), setup: { ...start().setup, encounter: 4 } };
+    const [step] = scriptFor(later);
+    assert.equal(
+      (step as { text: string }).text,
+      characterById('junior').intros[1],
+    );
   });
 
   it('types the phrase then shows the menu on defence', () => {
@@ -292,7 +301,7 @@ describe('scriptFor', () => {
     const steps = scriptFor(s);
     assert.equal(steps.at(-1)?.kind, 'wait');
     const bark = steps.find(step => step.kind === 'line');
-    assert.equal((bark as { text: string }).text, PLAYER_BARKS.pm.win);
+    assert.equal((bark as { text: string }).text, PLAYER_BARKS.pm.win[0]);
     assert.deepEqual(posesFor(s, steps.at(-1)), {
       player: 'win',
       opponent: 'lose',
