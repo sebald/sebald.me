@@ -48,6 +48,19 @@
           "colour": "none"
         }
       ]
+    },
+    {
+      "why": "The same blue stroke stands left of the head in the taunt cell; cleared",
+      "cell": 2,
+      "fills": [
+        {
+          "x": 15,
+          "y": 21,
+          "w": 1,
+          "h": 11,
+          "colour": "none"
+        }
+      ]
     }
   ]
 }

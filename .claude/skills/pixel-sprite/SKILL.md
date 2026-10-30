@@ -46,6 +46,14 @@ rm src/assets/lab/pushback/sheets/logo.json
 # the measure): cut with one cell more, then drop the first cell from the
 # PNG and the JSON
 
+# The glossary's icon: the rolled printout from the prop sheet, cropped
+# out of the original (sharp, extract left 355, top 540, 380 by 400) to
+# `originals/glossary-sheet.png`, then one centred cell; trimmed to its
+# art (29 by 30) like the logo, and the JSON dropped
+node .claude/skills/pixel-sprite/scripts/sheet.mjs \
+  src/assets/lab/pushback/sources/originals/glossary-sheet.png glossary \
+  --cells 1 --cell 40x40 --anchor centre --specks 0
+
 # The mic-drop burst: three cells (the burst, its big beat, popped), the
 # letters inside key with it
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
@@ -88,6 +96,24 @@ The console line says the figure heights and widths per cell and `CLIPPED`
 when a figure does not fit its cell. `pnpm test` runs `sheets.test.ts`,
 which checks every sheet's cells, the idle height (70 to 85) and the
 palette.
+
+### Holes
+
+The key floods from the border, so the background between the legs,
+closed off by the legs and the shadow under the feet, stays in. Clear
+it on the cut sheet, after the patches:
+
+```sh
+node .claude/skills/pixel-sprite/scripts/holes.mjs <id> [<id> ...]
+```
+
+It clears every group of background-coloured pixels (`--tolerance` 12)
+of at least `--min` (10) pixels that runs from above the last `--feet`
+(12) rows of the cell down into them. The shadow has a darker colour of
+its own and dark shoes lie inside the feet rows, so both stay. Every
+person sheet has had it except Kim (`designer-kim`), whose trousers are
+drawn in the background's own shades and whose legs touch; check the
+sheet at 4x on a bright colour after each run.
 
 ### Features
 
