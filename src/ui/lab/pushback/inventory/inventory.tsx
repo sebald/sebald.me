@@ -15,6 +15,7 @@ import { LedgerDemo } from './ledger-demo';
 import { ResultDemo } from './result-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
+import { TimerDemo } from './timer-demo';
 import { WindowDemo } from './window-demo';
 
 const Section = ({
@@ -74,6 +75,12 @@ export const Inventory = () => (
       blurb="The quiet window with a line typing; with the opponent's phrase, the prompt and the counters; with the hand and a closer on offer; and with ten options in a short window, where the list scrolls on its rail. The legend at the bottom names the keys, or the tap after a touch."
     >
       <WindowDemo />
+    </Section>
+    <Section
+      title="Timer"
+      blurb="The silence bar (silence-timer.tsx): the dialogue window's own top frame burns down from both ends while the player picks a counter. Gold while a counter still counts as fast, a flash when that half is gone, ember after it, red and blinking for the last quarter, a spark at each burning end. Play it or hold it with the slider."
+    >
+      <TimerDemo />
     </Section>
     <Section
       title="Character"

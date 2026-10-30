@@ -71,6 +71,7 @@ import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Picker, type PickerItem } from './picker';
+import { SilenceTimer } from './silence-timer';
 import { px } from './stage';
 import { Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
@@ -84,12 +85,6 @@ import { Legend, Window } from './window';
 const DEMO_LABEL_Y = 68;
 
 const styles = {
-  silence: cva({
-    base: [
-      'mt-[calc(var(--px)*2)] h-[calc(var(--px)*2)] w-full',
-      'bg-(--pb-empty) shadow-[0_0_0_var(--px)_var(--pb-ink)]',
-    ],
-  }),
   pause: cva({
     base: ['absolute inset-0 flex items-center justify-center bg-(--pb-bg)/80'],
   }),
@@ -572,6 +567,7 @@ export const DuelScreen = ({
     state.phase === 'defend' && state.silence && step?.kind === 'menu'
       ? Math.min(100, (state.silence.elapsed / state.silence.limit) * 100)
       : null;
+  const timing = silenceWidth !== null && state.silence ? state.silence : null;
 
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
@@ -645,6 +641,15 @@ export const DuelScreen = ({
           maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
         }}
       >
+        {/* The silence bar: the window's top frame, burning down */}
+        {timing && (
+          <SilenceTimer
+            elapsed={timing.elapsed}
+            limit={timing.limit}
+            still={reduced}
+            look="tab"
+          />
+        )}
         <Window className="min-h-0 flex-1" legend={legend}>
           {step?.kind === 'line' && (
             <Dialogue speaker={step.speaker}>{typed}</Dialogue>
@@ -676,14 +681,6 @@ export const DuelScreen = ({
                 active={!paused && !auto}
                 className="gap-0"
               />
-              {silenceWidth !== null && (
-                <div className={styles.silence()} aria-hidden>
-                  <div
-                    className="h-full bg-(--pb-gold)"
-                    style={{ width: `${silenceWidth}%` }}
-                  />
-                </div>
-              )}
             </>
           )}
           {step?.kind === 'wait' && (

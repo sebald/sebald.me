@@ -108,6 +108,11 @@ const DITHER: CSSProperties = {
 export interface WindowProps extends PropsWithChildren {
   /** The control hints along the bottom edge */
   legend?: ReactNode;
+  /**
+   * A small window holding one thing (the silence bar's tab): two pixels
+   * of padding and a plain fill, no light falling on it
+   */
+  tight?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -121,7 +126,13 @@ export interface WindowProps extends PropsWithChildren {
  * inventory. Position and size it from outside; `3 * --px` of that is
  * the frame.
  */
-export const Window = ({ legend, className, style, children }: WindowProps) => (
+export const Window = ({
+  legend,
+  tight = false,
+  className,
+  style,
+  children,
+}: WindowProps) => (
   // `data-window`: what a picker's description box sits beside
   <div
     data-window
@@ -143,8 +154,14 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
       />
     ))}
     <div
-      className="relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) p-[calc(var(--px)*3+4px)] leading-[1.35] text-(--pb-text)"
-      style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...DITHER }}
+      className={cn(
+        'relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) leading-[1.35] text-(--pb-text)',
+        tight ? 'p-[calc(var(--px)*2)]' : 'p-[calc(var(--px)*3+4px)]',
+      )}
+      style={{
+        margin: `calc(var(--px) * ${RINGS.length})`,
+        ...(tight ? {} : DITHER),
+      }}
     >
       {children}
       {legend && (
