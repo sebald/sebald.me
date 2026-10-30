@@ -641,15 +641,6 @@ export const DuelScreen = ({
           maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
         }}
       >
-        {/* The silence bar: the window's top frame, burning down */}
-        {timing && (
-          <SilenceTimer
-            elapsed={timing.elapsed}
-            limit={timing.limit}
-            still={reduced}
-            look="tab"
-          />
-        )}
         <Window className="min-h-0 flex-1" legend={legend}>
           {step?.kind === 'line' && (
             <Dialogue speaker={step.speaker}>{typed}</Dialogue>
@@ -664,6 +655,14 @@ export const DuelScreen = ({
           )}
           {step?.kind === 'menu' && (
             <>
+              {/* The silence bar, growing in at the window's top */}
+              {timing && (
+                <SilenceTimer
+                  elapsed={timing.elapsed}
+                  limit={timing.limit}
+                  still={reduced}
+                />
+              )}
               {/* The phrase being answered, at full strength: it is what
                 the player reads to pick */}
               {state.phase === 'defend' && state.exchange && (

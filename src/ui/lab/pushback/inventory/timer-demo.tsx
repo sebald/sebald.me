@@ -7,7 +7,7 @@ import { LAYOUT } from '@/lib/lab/pushback/stage';
 
 import { Dialogue } from '../dialogue';
 import { Picker } from '../picker';
-import { SilenceTimer, type TimerLook } from '../silence-timer';
+import { SilenceTimer } from '../silence-timer';
 import { Pixels } from '../stage';
 import { Muted } from '../text';
 import { useClock } from '../use-clock';
@@ -21,16 +21,16 @@ const LIMIT = 13_000;
 const REST = 1_500;
 
 /**
- * The silence bar on the duel's window: it burns on a loop, or holds at
- * the point the slider picks, so each phase can be looked at (gold while
- * a counter counts as fast, the flash at the half, ember, red)
+ * The silence bar in the duel's window: it grows in and burns on a loop,
+ * or holds at the point the slider picks, so each phase can be looked at
+ * (gold while a counter counts as fast, the flash at the half, ember,
+ * red)
  */
 export const TimerDemo = () => {
   const [scale, setScale] = useState(3);
   const [playing, setPlaying] = useState(true);
   const [held, setHeld] = useState(LIMIT * 0.3);
   const [still, setStill] = useState(false);
-  const [look, setLook] = useState<TimerLook>('tab');
   const clock = useClock(playing);
   const elapsed = playing ? Math.min(LIMIT, clock % (LIMIT + REST)) : held;
   const left = Math.max(0, (LIMIT - elapsed) / 1000);
@@ -83,19 +83,6 @@ export const TimerDemo = () => {
             }}
           />
         </Field>
-        <Field label="Look">
-          <select
-            className={field.input}
-            value={look}
-            onChange={e => setLook(e.target.value as TimerLook)}
-          >
-            <option value="fuse">Fuse (sparks)</option>
-            <option value="fade">Fade (dithered ends)</option>
-            <option value="chunks">Progress bar (chunks)</option>
-            <option value="clock">Meeting clock (tab)</option>
-            <option value="tab">Fade in a tab on top</option>
-          </select>
-        </Field>
         <Field label="Reduced motion">
           <input
             type="checkbox"
@@ -107,43 +94,39 @@ export const TimerDemo = () => {
           {left.toFixed(1)} s left · {phase}
         </span>
       </form>
-      <Pixels scale={scale} className="pt-[calc(var(--px)*16)]">
-        <div
-          className="relative flex flex-col"
+      <Pixels scale={scale}>
+        <Window
           style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}
+          legend={
+            <Legend
+              keys={[
+                ['↑↓', 'choose'],
+                ['Enter', 'confirm'],
+              ]}
+              touch="Tap a line"
+            />
+          }
         >
           {elapsed < LIMIT && (
             <SilenceTimer
+              key={playing ? Math.floor(clock / (LIMIT + REST)) : 'held'}
               elapsed={elapsed}
               limit={LIMIT}
               still={still}
-              look={look}
             />
           )}
-          <Window
-            legend={
-              <Legend
-                keys={[
-                  ['↑↓', 'choose'],
-                  ['Enter', 'confirm'],
-                ]}
-                touch="Tap a line"
-              />
-            }
-          >
-            <Dialogue speaker="opponent">{pair.phrase}</Dialogue>
-            <Muted className="my-[calc(var(--px)*4)]">Pick your counter.</Muted>
-            <Picker
-              label="Counters"
-              className="gap-0"
-              items={options.map(p => ({
-                id: p.id,
-                label: p.counter,
-                onSelect: () => {},
-              }))}
-            />
-          </Window>
-        </div>
+          <Dialogue speaker="opponent">{pair.phrase}</Dialogue>
+          <Muted className="my-[calc(var(--px)*4)]">Pick your counter.</Muted>
+          <Picker
+            label="Counters"
+            className="gap-0"
+            items={options.map(p => ({
+              id: p.id,
+              label: p.counter,
+              onSelect: () => {},
+            }))}
+          />
+        </Window>
       </Pixels>
     </div>
   );
