@@ -1,6 +1,6 @@
 /**
  * The save: one object in `localStorage`, versioned, holding the mode
- * switch and one run per role. Everything here is pure except the two
+ * switch, the one run in play, the roles shipped and the glossary. Everything here is pure except the two
  * storage calls, which take the storage as an argument so tests can pass
  * a fake and the server (no `window`) gets an empty save.
  */
@@ -26,7 +26,7 @@ import {
 import { type RunState, createRunState, recordDuel, runScore } from './run';
 
 export const SAVE_KEY = 'pushback';
-export const SAVE_VERSION = 3;
+export const SAVE_VERSION = 4;
 
 export interface SavedRun extends RunState {
   look: Look;
@@ -36,7 +36,16 @@ export interface Save {
   version: typeof SAVE_VERSION;
   /** The mode switch on the title screen */
   mode: Mode;
-  runs: Partial<Record<Role, SavedRun>>;
+  /**
+   * The run in play, one at a time: a new one replaces it. A finished
+   * run stays until then, so its result can still be read.
+   */
+  run: SavedRun | null;
+  /**
+   * The roles the Stakeholder has signed off, with the look that did
+   * it: the stamp on the select screen, which outlives the runs
+   */
+  shipped: Partial<Record<Role, Look>>;
   /**
    * Every pair collected in any run: the glossary, which outlives the
    * runs. A record only; a new run starts cold with a fresh deck.
@@ -53,7 +62,8 @@ export const emptySave = (
 ): Save => ({
   version: SAVE_VERSION,
   mode,
-  runs: {},
+  run: null,
+  shipped: {},
   glossary,
 });
 
@@ -100,6 +110,37 @@ const withBuddyFlag = (run: SavedRun): SavedRun => ({
   stats: { ...run.stats, speed: Number(run.stats.speed) || 0 },
 });
 
+const parseRun = (value: unknown): SavedRun | null =>
+  isSavedRun(value) ? withBuddyFlag(value) : null;
+
+/**
+ * Versions 2 and 3 kept a run per role. One carries over: the unfinished
+ * run played the most; the finished ones are shipped.
+ */
+const fromRuns = (
+  value: Record<string, unknown>,
+): Pick<Save, 'run' | 'shipped'> => {
+  const runs = ROLES.map(role => parseRun(value[role])).filter(
+    (run, i): run is SavedRun => run !== null && run.role === ROLES[i],
+  );
+  const shipped: Save['shipped'] = {};
+  for (const run of runs) if (run.finished) shipped[run.role] = run.look;
+  const open = runs
+    .filter(run => !run.finished)
+    .sort((a, b) => b.attempts - a.attempts);
+  return { run: open[0] ?? null, shipped };
+};
+
+const parseShipped = (value: unknown): Save['shipped'] => {
+  const shipped: Save['shipped'] = {};
+  if (!isRecord(value)) return shipped;
+  for (const role of ROLES) {
+    const look = value[role];
+    if (look === 'a' || look === 'b') shipped[role] = look;
+  }
+  return shipped;
+};
+
 /** Parse a stored save; anything corrupt or from another version is dropped */
 export const parseSave = (raw: string | null): Save | null => {
   if (!raw) return null;
@@ -109,14 +150,16 @@ export const parseSave = (raw: string | null): Save | null => {
   } catch {
     return null;
   }
-  // Version 2 knew two modes: its normal had the ghost, which is easy now
-  if (!isRecord(data) || (data.version !== SAVE_VERSION && data.version !== 2))
+  // Version 2 knew two modes: its normal had the ghost, which is easy now;
+  // 2 and 3 kept a run per role
+  if (!isRecord(data) || ![2, 3, SAVE_VERSION].includes(Number(data.version)))
     return null;
-  if (!isRecord(data.runs)) return null;
-  const runs: Save['runs'] = {};
-  for (const role of ROLES) {
-    const run = data.runs[role];
-    if (isSavedRun(run) && run.role === role) runs[role] = withBuddyFlag(run);
+  let runs: Pick<Save, 'run' | 'shipped'>;
+  if (data.version === SAVE_VERSION) {
+    runs = { run: parseRun(data.run), shipped: parseShipped(data.shipped) };
+  } else {
+    if (!isRecord(data.runs)) return null;
+    runs = fromRuns(data.runs);
   }
   const glossary = Array.isArray(data.glossary)
     ? data.glossary.filter((id): id is PairId => isPairId(id))
@@ -130,12 +173,7 @@ export const parseSave = (raw: string | null): Save | null => {
       : MODE_ORDER.includes(data.mode as Mode)
         ? (data.mode as Mode)
         : 'easy';
-  return {
-    version: SAVE_VERSION,
-    mode,
-    runs,
-    glossary,
-  };
+  return { version: SAVE_VERSION, mode, ...runs, glossary };
 };
 
 /** The save, or null when there is none (or no storage) */
@@ -160,7 +198,7 @@ export const writeSave = (save: Save, storage?: SaveStorage): void => {
   }
 };
 
-/** Start (or restart) a run for a role with a look */
+/** Start a run for a role with a look; it replaces the one in play */
 export const startRun = (
   save: Save,
   role: Role,
@@ -168,28 +206,28 @@ export const startRun = (
   seed: number = Date.now(),
 ): Save => ({
   ...save,
-  runs: {
-    ...save.runs,
-    [role]: { ...createRunState(role, look, seed), look, mode: save.mode },
-  },
+  run: { ...createRunState(role, look, seed), look, mode: save.mode },
 });
 
-/** Fold a finished duel of a role's run into the save */
+/**
+ * Fold a finished duel of the run into the save; beating the Stakeholder
+ * ships the role
+ */
 export const finishDuel = (
   save: Save,
-  role: Role,
   index: number,
   duel: DuelState,
 ): Save => {
-  const run = save.runs[role];
+  const { run } = save;
   if (!run) return save;
   const known = new Set(save.glossary);
+  const next = { ...recordDuel(run, index, duel), look: run.look };
   return {
     ...save,
-    runs: {
-      ...save.runs,
-      [role]: { ...recordDuel(run, index, duel), look: run.look },
-    },
+    run: next,
+    shipped: next.finished
+      ? { ...save.shipped, [next.role]: next.look }
+      : save.shipped,
     glossary: [
       ...save.glossary,
       ...duel.collected.filter(id => !known.has(id)),
@@ -199,20 +237,22 @@ export const finishDuel = (
 
 /**
  * Switch the mode. A run is played in one mode, so its score means one
- * thing: switching starts over, every run and the glossary gone
+ * thing: switching starts over, the run, the stamps and the glossary gone
  */
 export const setMode = (save: Save, mode: Mode): Save =>
   mode === save.mode ? save : emptySave(mode);
 
 /** Whether switching the mode or a reset would throw anything away */
 export const hasProgress = (save: Save): boolean =>
-  hasRuns(save) || save.glossary.length > 0;
+  save.run !== null ||
+  Object.keys(save.shipped).length > 0 ||
+  save.glossary.length > 0;
 
-/** Whether there is anything a reset would throw away */
-export const hasRuns = (save: Save): boolean =>
-  Object.keys(save.runs).length > 0;
+/** The run in play, if it is not over yet: what Continue picks up */
+export const openRun = (save: Save): SavedRun | null =>
+  save.run && !save.run.finished ? save.run : null;
 
-/** Drop every run and the glossary; the mode switch stays as it was */
+/** Drop the run, the stamps and the glossary; the mode stays as it was */
 export const resetSave = (save: Save): Save => emptySave(save.mode);
 
 /** The player's name on the select screen and the result card */

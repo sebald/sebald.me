@@ -26,6 +26,8 @@ interface ResultScreenProps {
   /** The save's glossary, across runs */
   glossary: readonly PairId[];
   onBack: () => void;
+  /** Pick a role for the next run; once the Stakeholder is beaten */
+  onNewRun?: () => void;
   /** Fix the scale (the inventory) */
   scale?: number;
 }
@@ -45,6 +47,7 @@ export const ResultScreen = ({
   run,
   glossary,
   onBack,
+  onNewRun,
   scale,
 }: ResultScreenProps) => {
   const text = useMemo(() => resultCardText(run, glossary), [run, glossary]);
@@ -166,6 +169,9 @@ export const ResultScreen = ({
                 label: copied ? 'Copied' : 'Copy result',
                 onSelect: copy,
               },
+              ...(onNewRun
+                ? [{ id: 'new', label: 'New run', onSelect: onNewRun }]
+                : []),
               { id: 'back', label: 'Back to the roster', onSelect: onBack },
             ]}
           />

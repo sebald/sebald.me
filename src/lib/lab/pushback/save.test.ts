@@ -9,8 +9,8 @@ import {
   emptySave,
   finishDuel,
   hasProgress,
-  hasRuns,
   loadSave,
+  openRun,
   parseSave,
   playerName,
   resetSave,
@@ -37,7 +37,7 @@ describe('save', () => {
     assert.deepEqual(loadSave(storage), save);
   });
 
-  it('starts over when the mode changes: no runs, no glossary', () => {
+  it('starts over when the mode changes: no run, no stamps, no glossary', () => {
     const save = startRun(emptySave('easy', ['pm-1']), 'dev', 'a', 1);
     assert.ok(hasProgress(save));
     assert.equal(setMode(save, 'easy'), save);
@@ -50,9 +50,11 @@ describe('save', () => {
 
   it('resets to an empty save and keeps the mode', () => {
     const save = startRun(setMode(emptySave(), 'hard'), 'pm', 'b', 1);
-    assert.equal(hasRuns(save), true);
+    assert.ok(openRun(save));
     assert.deepEqual(resetSave(save), emptySave('hard'));
-    assert.equal(hasRuns(resetSave(save)), false);
+    assert.equal(openRun(resetSave(save)), null);
+    // A stamp alone is progress too
+    assert.ok(hasProgress({ ...emptySave(), shipped: { dev: 'a' } }));
   });
 
   it('returns null without a save, on corrupt data and on another version', () => {
@@ -90,7 +92,7 @@ describe('save', () => {
   });
 
   it('gives an old run a score of nothing and its speed points', () => {
-    const run = startRun(emptySave(), 'pm', 'a', 1).runs.pm!;
+    const run = startRun(emptySave(), 'pm', 'a', 1).run!;
     const { speed: _speed, ...stats } = run.stats;
     const raw = JSON.stringify({
       version: 2,
@@ -105,7 +107,7 @@ describe('save', () => {
       },
       glossary: [],
     });
-    const parsed = parseSave(raw)!.runs.pm!;
+    const parsed = parseSave(raw)!.run!;
     assert.deepEqual(parsed.beaten, { 0: { flawless: true, score: 0 } });
     assert.equal(parsed.stats.speed, 0);
   });
@@ -117,15 +119,41 @@ describe('save', () => {
     assert.equal(old('hard'), 'hard');
   });
 
-  it('drops a run that does not look like one and keeps the rest', () => {
+  it('drops a run that does not look like one and an odd stamp', () => {
     const save = startRun(emptySave(), 'pm', 'a', 1);
-    const raw = JSON.stringify({
-      ...save,
-      runs: { ...save.runs, dev: { role: 'dev' } },
+    const parsed = parseSave(
+      JSON.stringify({
+        ...save,
+        run: { role: 'dev' },
+        shipped: { pm: 'b', dev: 'c', boss: 'a' },
+      }),
+    );
+    assert.equal(parsed?.run, null);
+    assert.deepEqual(parsed?.shipped, { pm: 'b' });
+  });
+
+  it('carries one run over from a save with a run per role', () => {
+    const run = (role: 'pm' | 'dev' | 'designer', attempts: number) => ({
+      ...startRun(emptySave(), role, 'b', 1).run!,
+      attempts,
     });
-    const parsed = parseSave(raw);
-    assert.ok(parsed?.runs.pm);
-    assert.equal(parsed?.runs.dev, undefined);
+    const parsed = parseSave(
+      JSON.stringify({
+        version: 3,
+        mode: 'normal',
+        runs: {
+          pm: run('pm', 2),
+          dev: run('dev', 5),
+          designer: { ...run('designer', 9), finished: true },
+        },
+        glossary: ['pm-1'],
+      }),
+    );
+    // The unfinished run played the most; the finished one is shipped
+    assert.equal(parsed?.run?.role, 'dev');
+    assert.deepEqual(parsed?.shipped, { designer: 'b' });
+    assert.deepEqual(parsed?.glossary, ['pm-1']);
+    assert.equal(parsed?.version, 4);
   });
 
   it('does nothing without storage', () => {
@@ -133,17 +161,25 @@ describe('save', () => {
     writeSave(emptySave(), undefined);
   });
 
-  it('keeps the look and the other runs when starting a run', () => {
-    let save = startRun(emptySave(), 'pm', 'b', 1);
+  it('keeps one run: a new one replaces it, the stamps and glossary stay', () => {
+    let save = startRun(
+      { ...emptySave('easy', ['pm-1']), shipped: { dev: 'a' } },
+      'pm',
+      'b',
+      1,
+    );
+    assert.equal(save.run?.look, 'b');
     save = startRun(save, 'designer', 'a', 2);
-    assert.equal(save.runs.pm?.look, 'b');
-    assert.equal(save.runs.designer?.look, 'a');
+    assert.equal(save.run?.role, 'designer');
+    assert.equal(save.run?.look, 'a');
+    assert.deepEqual(save.shipped, { dev: 'a' });
+    assert.deepEqual(save.glossary, ['pm-1']);
     assert.equal(playerName('pm', 'b'), 'Piet');
   });
 
   it('folds a finished duel into the run', () => {
     let save = startRun(emptySave(), 'pm', 'a', 3);
-    const run = save.runs.pm!;
+    const run = save.run!;
     let duel = createDuel(duelSetupFor(run, 0, { seed: 1, silence: false }));
     duel = reduce(duel, { type: 'begin' });
     for (let guard = 0; guard < 100 && duel.phase !== 'end'; guard++) {
@@ -155,20 +191,29 @@ describe('save', () => {
         duel = reduce(duel, { type: 'continue' });
       }
     }
-    save = finishDuel(save, 'pm', 0, duel);
-    assert.ok(save.runs.pm?.beaten[0]);
+    save = finishDuel(save, 0, duel);
+    assert.ok(save.run?.beaten[0]);
     // The glossary records what the duel collected, once each
     assert.deepEqual(save.glossary, duel.collected);
-    assert.deepEqual(finishDuel(save, 'pm', 0, duel).glossary, duel.collected);
-    assert.equal(save.runs.pm?.attempts, 1);
-    assert.equal(save.runs.pm?.look, 'a');
-    assert.equal(finishDuel(save, 'dev', 0, duel), save);
+    assert.deepEqual(finishDuel(save, 0, duel).glossary, duel.collected);
+    assert.equal(save.run?.attempts, 1);
+    assert.equal(save.run?.look, 'a');
+    assert.deepEqual(save.shipped, {});
+    assert.equal(finishDuel(emptySave(), 0, duel).run, null);
+    // A finished run ships its role with its look, and is not continued
+    const done = finishDuel(
+      { ...save, run: { ...save.run!, finished: true } },
+      0,
+      duel,
+    );
+    assert.deepEqual(done.shipped, { pm: 'a' });
+    assert.equal(openRun(done), null);
   });
 });
 
 describe('resultCardText', () => {
   it('prints the card from the spec', () => {
-    const run = startRun(emptySave(), 'dev', 'a', 1).runs.dev!;
+    const run = startRun(emptySave(), 'dev', 'a', 1).run!;
     const text = resultCardText({
       ...run,
       finished: true,
@@ -208,7 +253,7 @@ describe('resultCardText', () => {
   });
 
   it('says the boss took it offline on a lost run', () => {
-    const run = startRun(emptySave(), 'pm', 'a', 1).runs.pm!;
+    const run = startRun(emptySave(), 'pm', 'a', 1).run!;
     assert.match(
       resultCardText(run),
       /^Pushback · PM\nStakeholder took it offline · 0 duels · 0 flawless · easy mode\nScore 0\n/,
@@ -218,7 +263,7 @@ describe('resultCardText', () => {
 
 describe('resultModel', () => {
   it('lines up the numbers and counts the glossary by pool', () => {
-    const run = startRun(emptySave(), 'dev', 'a', 1).runs.dev!;
+    const run = startRun(emptySave(), 'dev', 'a', 1).run!;
     const model = resultModel(
       {
         ...run,

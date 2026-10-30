@@ -22,6 +22,7 @@ const GROUPS: { title: string; keys: PaletteKey[] }[] = [
   { title: 'The player', keys: ['gold', 'goldLight', 'goldShade'] },
   { title: 'The opponent', keys: ['ember', 'emberLight', 'emberShade'] },
   { title: 'The clash', keys: ['spark'] },
+  { title: 'The stamp', keys: ['stamp'] },
   { title: 'Empty', keys: ['empty', 'emptyDots', 'steel'] },
   {
     title: 'The letters',

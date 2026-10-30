@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 
 import { cn, cva } from '@/lib/styles.utils';
 
@@ -70,6 +70,8 @@ export interface PickerItem {
   onSelect: () => void;
   /** Left and right on it, for an item that is a setting (the mode) */
   onStep?: (step: 1 | -1) => void;
+  /** A rule above it: the first of a group apart from the rest */
+  divider?: boolean;
 }
 
 interface PickerProps {
@@ -83,12 +85,75 @@ interface PickerProps {
   className?: string;
 }
 
-/** What the list shows of itself: for the rail beside it */
-interface Scroll {
+/** What a list shows of itself: for the rail beside it */
+export interface Scroll {
   top: number;
   height: number;
   view: number;
 }
+
+/**
+ * Measures a scrolling element: on scroll, and whenever it or its
+ * children resize. `key` changes when the children do.
+ */
+export const useScroll = (
+  ref: RefObject<HTMLElement | null>,
+  key: unknown,
+): Scroll => {
+  const [scroll, setScroll] = useState<Scroll>({ top: 0, height: 0, view: 0 });
+  useEffect(() => {
+    const list = ref.current;
+    if (!list) return;
+    const measure = () =>
+      setScroll(previous => {
+        const next = {
+          top: list.scrollTop,
+          height: list.scrollHeight,
+          view: list.clientHeight,
+        };
+        return previous.top === next.top &&
+          previous.height === next.height &&
+          previous.view === next.view
+          ? previous
+          : next;
+      });
+    measure();
+    list.addEventListener('scroll', measure);
+    const observer = new ResizeObserver(measure);
+    observer.observe(list);
+    for (const child of list.children) observer.observe(child);
+    return () => {
+      list.removeEventListener('scroll', measure);
+      observer.disconnect();
+    };
+  }, [ref, key]);
+  return scroll;
+};
+
+/** Whether a measured list has more than it shows */
+export const overflows = (scroll: Scroll) => scroll.height > scroll.view + 1;
+
+/** The rail beside a list that does not fit: an arrow lit where there is more, the track */
+export const ScrollRail = ({ scroll }: { scroll: Scroll }) => (
+  <div aria-hidden className={pickerStyles.rail()}>
+    <span className={pickerStyles.arrow({ up: true, more: scroll.top > 1 })} />
+    <span className={pickerStyles.track()}>
+      <span
+        className={pickerStyles.thumb()}
+        style={{
+          top: `${(scroll.top / scroll.height) * 100}%`,
+          height: `${(scroll.view / scroll.height) * 100}%`,
+        }}
+      />
+    </span>
+    <span
+      className={pickerStyles.arrow({
+        up: false,
+        more: scroll.top + scroll.view < scroll.height - 1,
+      })}
+    />
+  </div>
+);
 
 /**
  * A list the player moves through with the arrow keys (or W/S), confirms
@@ -112,8 +177,8 @@ export const Picker = ({
   const [index, setIndex] = useState(firstEnabled);
   const current = Math.min(index, items.length - 1);
   const listRef = useRef<HTMLUListElement>(null);
-  const [scroll, setScroll] = useState<Scroll>({ top: 0, height: 0, view: 0 });
-  const overflow = scroll.height > scroll.view + 1;
+  const scroll = useScroll(listRef, items.length);
+  const overflow = overflows(scroll);
 
   useEffect(() => {
     if (!active) return;
@@ -167,34 +232,6 @@ export const Picker = ({
     return () => window.removeEventListener('keydown', onKey);
   }, [active, items, current]);
 
-  // Measure the list: on scroll, and whenever it or its items resize
-  useEffect(() => {
-    const list = listRef.current;
-    if (!list) return;
-    const measure = () =>
-      setScroll(previous => {
-        const next = {
-          top: list.scrollTop,
-          height: list.scrollHeight,
-          view: list.clientHeight,
-        };
-        return previous.top === next.top &&
-          previous.height === next.height &&
-          previous.view === next.view
-          ? previous
-          : next;
-      });
-    measure();
-    list.addEventListener('scroll', measure);
-    const observer = new ResizeObserver(measure);
-    observer.observe(list);
-    for (const child of list.children) observer.observe(child);
-    return () => {
-      list.removeEventListener('scroll', measure);
-      observer.disconnect();
-    };
-  }, [items.length]);
-
   // The current item stays in view; only a list that scrolls is moved,
   // so a short list never scrolls the page
   useEffect(() => {
@@ -210,7 +247,13 @@ export const Picker = ({
         aria-label={label}
       >
         {items.map((item, i) => (
-          <li key={item.id}>
+          <li
+            key={item.id}
+            className={cn(
+              item.divider &&
+                'mt-[calc(var(--px)*2)] border-t border-(--pb-frame-dim) pt-[calc(var(--px)*2)]',
+            )}
+          >
             <button
               type="button"
               disabled={item.disabled}
@@ -251,28 +294,7 @@ export const Picker = ({
           </li>
         ))}
       </ul>
-      {overflow && (
-        <div aria-hidden className={pickerStyles.rail()}>
-          <span
-            className={pickerStyles.arrow({ up: true, more: scroll.top > 1 })}
-          />
-          <span className={pickerStyles.track()}>
-            <span
-              className={pickerStyles.thumb()}
-              style={{
-                top: `${(scroll.top / scroll.height) * 100}%`,
-                height: `${(scroll.view / scroll.height) * 100}%`,
-              }}
-            />
-          </span>
-          <span
-            className={pickerStyles.arrow({
-              up: false,
-              more: scroll.top + scroll.view < scroll.height - 1,
-            })}
-          />
-        </div>
-      )}
+      {overflow && <ScrollRail scroll={scroll} />}
     </div>
   );
 };

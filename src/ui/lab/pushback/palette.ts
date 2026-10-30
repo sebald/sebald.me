@@ -35,6 +35,10 @@ export const PALETTE = {
   /** Where the two beams of the scale meet */
   spark: '#fffdf2',
 
+  // The stamp
+  /** SHIPPED across the face of a role the Stakeholder signed off */
+  stamp: '#d9483b',
+
   // Empty
   /** Empty ticks, pips and tracks, with their dots */
   empty: '#0f1433',

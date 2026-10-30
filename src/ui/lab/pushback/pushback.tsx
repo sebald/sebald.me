@@ -12,8 +12,8 @@ import {
   emptySave,
   finishDuel,
   hasProgress,
-  hasRuns,
   loadSave,
+  openRun,
   resetSave,
   setMode,
   startRun,
@@ -30,9 +30,9 @@ type Screen =
   | { name: 'title' }
   | { name: 'attract'; seed: number }
   | { name: 'select' }
-  | { name: 'roster'; role: Role }
-  | { name: 'duel'; role: Role; index: number; seed: number }
-  | { name: 'result'; role: Role };
+  | { name: 'roster' }
+  | { name: 'duel'; index: number; seed: number }
+  | { name: 'result' };
 
 /** The screens, the save and the duel */
 export const Pushback = () => {
@@ -41,10 +41,7 @@ export const Pushback = () => {
 
   useEffect(() => writeSave(save), [save]);
 
-  const toRoster = useCallback(
-    (role: Role) => setScreen({ name: 'roster', role }),
-    [],
-  );
+  const toRoster = useCallback(() => setScreen({ name: 'roster' }), []);
   const toTitle = useCallback(() => setScreen({ name: 'title' }), []);
   const toAttract = useCallback(
     () => setScreen({ name: 'attract', seed: Date.now() % 100_000 }),
@@ -52,28 +49,33 @@ export const Pushback = () => {
   );
   const toSelect = useCallback(() => setScreen({ name: 'select' }), []);
 
+  // A role picked is a new run: it replaces the one in play
   const confirmRole = useCallback(
     (role: Role, look: Look) => {
-      setSave(previous => {
-        const run = previous.runs[role];
-        // Continue an unfinished run with the same look, else start fresh
-        return run && !run.finished && run.look === look
-          ? previous
-          : startRun(previous, role, look);
-      });
-      toRoster(role);
+      setSave(previous => startRun(previous, role, look));
+      toRoster();
     },
     [toRoster],
   );
 
-  const endDuel = useCallback((role: Role, index: number, duel: DuelState) => {
-    setSave(previous => finishDuel(previous, role, index, duel));
+  const endDuel = useCallback((index: number, duel: DuelState) => {
+    setSave(previous => finishDuel(previous, index, duel));
     setScreen(
       duel.setup.character.role === 'boss'
-        ? { name: 'result', role }
-        : { name: 'roster', role },
+        ? { name: 'result' }
+        : { name: 'roster' },
     );
   }, []);
+
+  const select = (
+    <SelectScreen
+      shipped={save.shipped}
+      onConfirm={confirmRole}
+      onBack={toTitle}
+    />
+  );
+  const open = openRun(save);
+  const { run } = save;
 
   switch (screen.name) {
     case 'title':
@@ -82,7 +84,17 @@ export const Pushback = () => {
           mode={save.mode}
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
-          onReset={hasRuns(save) ? () => setSave(resetSave) : undefined}
+          onContinue={open ? toRoster : undefined}
+          running={
+            open
+              ? {
+                  role: open.role,
+                  beaten: Object.keys(open.beaten).length,
+                  slots: open.run.slots.length,
+                }
+              : undefined
+          }
+          onReset={hasProgress(save) ? () => setSave(resetSave) : undefined}
           progress={hasProgress(save)}
           onAttract={toAttract}
         />
@@ -102,53 +114,23 @@ export const Pushback = () => {
       );
     }
     case 'select':
-      return (
-        <SelectScreen
-          runs={save.runs}
-          onConfirm={confirmRole}
-          onBack={toTitle}
-        />
-      );
-    case 'roster': {
-      const run = save.runs[screen.role];
-      if (!run)
-        return (
-          <SelectScreen
-            runs={save.runs}
-            onConfirm={confirmRole}
-            onBack={toTitle}
-          />
-        );
+      return select;
+    case 'roster':
+      if (!run) return select;
       return (
         <RosterScreen
           run={run}
           glossary={save.glossary}
-          onPlay={index =>
-            setScreen({
-              name: 'duel',
-              role: screen.role,
-              index,
-              seed: Date.now(),
-            })
-          }
-          onResult={() => setScreen({ name: 'result', role: screen.role })}
-          onBack={toSelect}
+          onPlay={index => setScreen({ name: 'duel', index, seed: Date.now() })}
+          onResult={() => setScreen({ name: 'result' })}
+          onBack={toTitle}
         />
       );
-    }
-    case 'duel': {
-      const run = save.runs[screen.role];
-      if (!run)
-        return (
-          <SelectScreen
-            runs={save.runs}
-            onConfirm={confirmRole}
-            onBack={toTitle}
-          />
-        );
+    case 'duel':
+      if (!run) return select;
       return (
         <DuelScreen
-          key={`${screen.role}-${screen.index}-${run.attempts}`}
+          key={`${screen.index}-${run.attempts}`}
           look={run.look}
           initial={createDuel(
             duelSetupFor(run, screen.index, {
@@ -159,28 +141,19 @@ export const Pushback = () => {
               mode: save.mode,
             }),
           )}
-          onEnd={duel => endDuel(screen.role, screen.index, duel)}
-          onBack={() => toRoster(screen.role)}
+          onEnd={duel => endDuel(screen.index, duel)}
+          onBack={toRoster}
         />
       );
-    }
-    case 'result': {
-      const run = save.runs[screen.role];
-      if (!run)
-        return (
-          <SelectScreen
-            runs={save.runs}
-            onConfirm={confirmRole}
-            onBack={toTitle}
-          />
-        );
+    case 'result':
+      if (!run) return select;
       return (
         <ResultScreen
           run={run}
           glossary={save.glossary}
-          onBack={() => toRoster(screen.role)}
+          onBack={toRoster}
+          onNewRun={run.finished ? toSelect : undefined}
         />
       );
-    }
   }
 };

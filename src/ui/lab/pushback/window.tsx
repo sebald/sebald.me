@@ -7,34 +7,50 @@ import { cn } from '@/lib/styles.utils';
 import { PALETTE } from './palette';
 import { useInputKind } from './use-input-kind';
 
-/** The quiet window's layers, from the outside in, one stage pixel each */
-const RINGS = `0 0 0 var(--px) ${PALETTE.frameInner}, 0 0 0 calc(var(--px) * 2) ${PALETTE.frame}, 0 0 0 calc(var(--px) * 3) ${PALETTE.ink}`;
+/**
+ * The rounded corner as a pixel staircase: how far in each row from the
+ * corner starts, top row first. The ink outline takes the outermost,
+ * each ring inside one step smaller, so the corner curves the same way
+ * through every layer and the fill's own corner is square.
+ */
+const CORNERS = [[3, 1, 1], [2, 1], [1]];
 
-/** The corners knocked out: a staircase notch of three pixels at each */
-const NOTCHED = [
-  'calc(var(--px) * 2) 0',
-  'calc(100% - var(--px) * 2) 0',
-  'calc(100% - var(--px) * 2) var(--px)',
-  'calc(100% - var(--px)) var(--px)',
-  'calc(100% - var(--px)) calc(var(--px) * 2)',
-  '100% calc(var(--px) * 2)',
-  '100% calc(100% - var(--px) * 2)',
-  'calc(100% - var(--px)) calc(100% - var(--px) * 2)',
-  'calc(100% - var(--px)) calc(100% - var(--px))',
-  'calc(100% - var(--px) * 2) calc(100% - var(--px))',
-  'calc(100% - var(--px) * 2) 100%',
-  'calc(var(--px) * 2) 100%',
-  'calc(var(--px) * 2) calc(100% - var(--px))',
-  'var(--px) calc(100% - var(--px))',
-  'var(--px) calc(100% - var(--px) * 2)',
-  '0 calc(100% - var(--px) * 2)',
-  '0 calc(var(--px) * 2)',
-  'var(--px) calc(var(--px) * 2)',
-  'var(--px) var(--px)',
-  'calc(var(--px) * 2) var(--px)',
-].join(', ');
+/** The window's rings, from the outside in, one stage pixel each */
+const RINGS = [PALETTE.ink, PALETTE.frame, PALETTE.frameInner];
 
-const DOT = 'absolute size-[var(--px)] bg-(--pb-ink)';
+/**
+ * A `clip-path` with the staircase at all four corners, walked
+ * clockwise: each corner's steps as offsets from that corner, mirrored
+ * onto it, in the order the outline passes them
+ */
+const rounded = (steps: number[]) => {
+  // From the left edge up to the top edge, round the top left corner,
+  // the bottom row's step first
+  const topLeft = [
+    [0, steps.length],
+    ...steps
+      .map((indent, row) => [
+        [indent, row + 1],
+        [indent, row],
+      ])
+      .reverse()
+      .flat(),
+  ];
+  const at = (n: number, from: 'start' | 'end') =>
+    from === 'start'
+      ? `calc(var(--px) * ${n})`
+      : `calc(100% - var(--px) * ${n})`;
+  const place = (x: 'start' | 'end', y: 'start' | 'end', reverse: boolean) =>
+    (reverse ? [...topLeft].reverse() : topLeft).map(
+      ([dx, dy]) => `${at(dx!, x)} ${at(dy!, y)}`,
+    );
+  return `polygon(${[
+    ...place('start', 'start', false),
+    ...place('end', 'start', true),
+    ...place('end', 'end', false),
+    ...place('start', 'end', true),
+  ].join(', ')})`;
+};
 
 /**
  * The dithered gradient of the fill, in stage pixels: a solid row of the
@@ -99,7 +115,7 @@ export interface WindowProps extends PropsWithChildren {
 /**
  * The quiet RPG window every text sits in: ink, a pale frame, a dark
  * fill with a dithered gradient, lighter under the frame and darker at
- * the bottom edge, the corners knocked out, all on the
+ * the bottom edge, the corners rounded in pixel steps, all on the
  * stage's pixel grid through `--px`. DOM, so it grows with what is in it
  * and the same window serves the duel, the menu screens and the
  * inventory. Position and size it from outside; `3 * --px` of that is
@@ -108,29 +124,28 @@ export interface WindowProps extends PropsWithChildren {
 export const Window = ({ legend, className, style, children }: WindowProps) => (
   <div
     className={cn('relative flex flex-col', className)}
-    style={{ clipPath: `polygon(${NOTCHED})`, ...style }}
+    style={{
+      backgroundColor: RINGS[0],
+      clipPath: rounded(CORNERS[0]!),
+      ...style,
+    }}
   >
-    {/* The diagonal pixel of each corner stays ink */}
-    <span aria-hidden className={cn(DOT, 'top-[var(--px)] left-[var(--px)]')} />
-    <span
-      aria-hidden
-      className={cn(DOT, 'top-[var(--px)] right-[var(--px)]')}
-    />
-    <span
-      aria-hidden
-      className={cn(DOT, 'bottom-[var(--px)] left-[var(--px)]')}
-    />
-    <span
-      aria-hidden
-      className={cn(DOT, 'right-[var(--px)] bottom-[var(--px)]')}
-    />
+    {/* The frame's rings inside the ink, each a pixel further in */}
+    {RINGS.slice(1).map((colour, i) => (
+      <span
+        key={colour}
+        aria-hidden
+        className="absolute"
+        style={{
+          inset: `calc(var(--px) * ${i + 1})`,
+          backgroundColor: colour,
+          clipPath: rounded(CORNERS[i + 1]!),
+        }}
+      />
+    ))}
     <div
       className="relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) p-[calc(var(--px)*3+4px)] leading-[1.35] text-(--pb-text)"
-      style={{
-        margin: 'calc(var(--px) * 3)',
-        boxShadow: RINGS,
-        ...DITHER,
-      }}
+      style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...DITHER }}
     >
       {children}
       {legend && (
@@ -164,3 +179,10 @@ export const Legend = ({ keys, touch }: LegendProps) => {
     </>
   );
 };
+
+/** The legend on its own, in the stage's bottom right corner */
+export const CornerLegend = (props: LegendProps) => (
+  <div className="absolute right-3 bottom-2 text-right text-[0.75em] text-(--pb-dim)">
+    <Legend {...props} />
+  </div>
+);

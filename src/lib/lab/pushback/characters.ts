@@ -256,10 +256,41 @@ export const STANDS: Record<SceneId, Stands> = {
 /** The two looks of a playable role; each is its own model sheet */
 export type Look = 'a' | 'b';
 
-export const LOOKS: Record<Role, Record<Look, { name: string }>> = {
-  pm: { a: { name: 'Jo' }, b: { name: 'Piet' } },
-  dev: { a: { name: 'Sam' }, b: { name: 'Lena' } },
-  designer: { a: { name: 'Ines' }, b: { name: 'Theo' } },
+/** A look's name, and the line about the person under them on the select */
+export const LOOKS: Record<
+  Role,
+  Record<Look, { name: string; quip: string }>
+> = {
+  pm: {
+    a: {
+      name: 'Jo',
+      quip: 'Carries sticky notes the way others carry knives.',
+    },
+    b: {
+      name: 'Piet',
+      quip: 'Remembers waterfall fondly. Says so in retros.',
+    },
+  },
+  dev: {
+    a: {
+      name: 'Sam',
+      quip: 'Three stickers on the laptop, one per framework he regrets.',
+    },
+    b: {
+      name: 'Lena',
+      quip: 'The band on her shirt split up before you heard of them.',
+    },
+  },
+  designer: {
+    a: {
+      name: 'Ines',
+      quip: 'The bun is tighter than your spacing scale.',
+    },
+    b: {
+      name: 'Theo',
+      quip: 'The flat-top sits on an 8-point grid.',
+    },
+  },
 };
 
 // Slots

@@ -29,8 +29,9 @@ interface DemoLabelProps {
 
 /**
  * The attract mode's label, the way an arcade cabinet marks its demo:
- * `DEMO` and the way in, one size, slanted, in gold with a hard ink outline and
- * drop like the logo's, blinking together, centred over the room so it
+ * `DEMO` and the way in, one size, slanted, in gold with a heavy ink outline
+ * and drop like the logo's, blinking together and slower than the title's
+ * call to play, centred over the room so it
  * reads over the lightest wall without taking the scene over.
  */
 export const DemoLabel = ({ y, className }: DemoLabelProps) => {
@@ -42,8 +43,8 @@ export const DemoLabel = ({ y, className }: DemoLabelProps) => {
       style={{ top: px(y) }}
     >
       <Loud
-        className="flex flex-col items-center gap-[calc(var(--px)*2)] text-center text-[1.6em] leading-none font-bold tracking-[0.12em] text-(--pb-gold) uppercase italic [--blink-low:0]"
-        style={{ textShadow: outline(1, 1) }}
+        className="flex flex-col items-center gap-[calc(var(--px)*2)] text-center text-[3em] leading-none font-bold tracking-[0.12em] text-(--pb-gold) uppercase italic [--blink-low:0]"
+        style={{ textShadow: outline(2, 2), animationDuration: '1.6s' }}
       >
         <span>Demo</span>
         <span>{kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}</span>

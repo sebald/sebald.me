@@ -1,16 +1,18 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useMemo,
+  useState,
+} from 'react';
 
+import glossaryIcon from '@/assets/lab/pushback/sheets/glossary.png';
 import { bossIndex, characterById } from '@/lib/lab/pushback/characters';
 import {
   PAIRS,
   type PairId,
   ROLE_LABELS,
-  ROLES,
-  closersOf,
-  pairById,
-  poolOf,
   poolPairs,
 } from '@/lib/lab/pushback/lines';
 import {
@@ -21,12 +23,18 @@ import {
 } from '@/lib/lab/pushback/run';
 import { cn } from '@/lib/styles.utils';
 
+import { Glossary } from './glossary';
+import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
+import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
-import { Heading, Muted } from './text';
+import { ScreenTitle } from './text';
 import { useKeys } from './use-keys';
-import { Legend, Window } from './window';
+import { CornerLegend, Window } from './window';
+
+/** The run window is centred between here, under the title and its line, and the legend */
+const LIST_TOP = 40;
 
 interface RosterScreenProps {
   run: RunState;
@@ -40,43 +48,52 @@ interface RosterScreenProps {
 const tierLabel = (tier: 1 | 2 | 3 | 'boss') =>
   tier === 'boss' ? 'Boss' : `Tier ${tier}`;
 
-/** The title row: the heading, an explainer, the tab switch */
-const Title = ({
-  heading,
-  blurb,
-  tab,
-  onTab,
-}: {
-  heading: string;
-  blurb: string;
-  tab: 'roster' | 'glossary';
-  onTab: () => void;
-}) => (
-  <div
-    className="absolute inset-x-0 flex items-start justify-between gap-4"
-    style={{ left: px(6), right: px(6), top: px(5) }}
-  >
-    <div className="min-w-0">
-      <Heading>{heading}</Heading>
-      <Muted className="text-[0.8em]">{blurb}</Muted>
-    </div>
-    <button
-      type="button"
-      className={cn(
-        'shrink-0 cursor-pointer text-[0.85em] outline-none focus-visible:ui-focus',
-        'text-(--pb-muted) underline decoration-dotted underline-offset-4 hover:text-white',
-      )}
-      onClick={onTab}
+/** The thin frame round a headshot: a dim line, then ink */
+const FRAME = `0 0 0 var(--px) ${PALETTE.frameDim}, 0 0 0 calc(var(--px) * 2) ${PALETTE.ink}`;
+
+/** The headshot is the head square less this on every side: 16 by 16 */
+const FACE_INSET = 4;
+
+/** The icon column: wide enough for a headshot and the glossary's printout */
+const ICON_WIDTH = 30;
+
+/**
+ * One line of the run: the tick or star, an icon (the colleague's face,
+ * the glossary's printout), the name and what is on the right
+ */
+const Row = ({
+  mark,
+  markLabel,
+  icon,
+  aside,
+  children,
+}: PropsWithChildren<{
+  mark?: string;
+  markLabel?: string;
+  icon?: ReactNode;
+  aside?: string;
+}>) => (
+  <span className="flex items-center gap-[calc(var(--px)*3)]">
+    <span className="w-[1.2em] text-center text-(--pb-gold)" aria-hidden>
+      {mark}
+    </span>
+    {markLabel && <span className="sr-only">{markLabel}, </span>}
+    <span
+      className="flex shrink-0 justify-center"
+      style={{ width: px(ICON_WIDTH) }}
     >
-      {tab === 'roster' ? 'Glossary' : 'Roster'}
-    </button>
-  </div>
+      {icon}
+    </span>
+    <span className="flex-1">{children}</span>
+    {aside && <span className="text-[0.8em] text-(--pb-muted)">{aside}</span>}
+  </span>
 );
 
 /**
  * The run as a roster: the colleagues in order with ticks and stars in
- * the quiet window, the out-of-office cast beside them, and the
- * glossary (every pair the player has collected, by pool) on Tab.
+ * one window as large as the list, the glossary as its last line, and
+ * the glossary itself (every pair the player has collected, by pool)
+ * as a dialog over it, on that line or on Tab.
  */
 export const RosterScreen = ({
   run,
@@ -85,190 +102,127 @@ export const RosterScreen = ({
   onResult,
   onBack,
 }: RosterScreenProps) => {
-  const [tab, setTab] = useState<'roster' | 'glossary'>('roster');
-  const collected = useMemo(() => new Set(glossary), [glossary]);
+  const [open, setOpen] = useState(false);
   const next = nextSlot(run);
-  const toggle = () => setTab(t => (t === 'roster' ? 'glossary' : 'roster'));
 
   useKeys(
-    useMemo(
-      () => ({
-        Tab: toggle,
-        Escape: () => (tab === 'glossary' ? setTab('roster') : onBack()),
-      }),
-      [tab, onBack],
-    ),
+    useMemo(() => ({ Tab: () => setOpen(true), Escape: onBack }), [onBack]),
+    !open,
   );
 
   const items: PickerItem[] = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
     const beaten = run.beaten[index];
-    const playable = canPlay(run, index);
+    const locked = index === bossIndex(run.run) && !bossUnlocked(run);
     return {
       id: String(index),
-      disabled: !playable,
+      disabled: !canPlay(run, index),
       onSelect: () => onPlay(index),
       label: (
-        <span className="flex items-center gap-[calc(var(--px)*3)]">
-          <span className="w-[1.2em] text-center text-(--pb-gold)" aria-hidden>
-            {beaten ? (beaten.flawless ? '★' : '✓') : ''}
-          </span>
-          <span className="sr-only">
-            {beaten ? (beaten.flawless ? 'beaten flawless, ' : 'beaten, ') : ''}
-          </span>
-          <span className="flex-1">{character.name}</span>
-          <span className="text-[0.8em] text-(--pb-muted)">
-            {index === bossIndex(run.run) && !bossUnlocked(run)
-              ? 'locked'
-              : tierLabel(slot.slot.tier)}
-          </span>
-        </span>
+        <Row
+          mark={beaten ? (beaten.flawless ? '★' : '✓') : undefined}
+          markLabel={
+            beaten
+              ? beaten.flawless
+                ? 'beaten flawless'
+                : 'beaten'
+              : undefined
+          }
+          icon={
+            // Locked, the Stakeholder is a silhouette in its frame
+            <span className="block" style={{ boxShadow: FRAME }}>
+              <span className={cn('block', locked && 'brightness-0')}>
+                <Portrait
+                  sheet={character.sheet}
+                  scale={1}
+                  inset={FACE_INSET}
+                />
+              </span>
+            </span>
+          }
+          aside={locked ? 'locked' : tierLabel(slot.slot.tier)}
+        >
+          {character.name}
+        </Row>
       ),
     };
   });
   if (run.finished) {
-    items.push({ id: 'result', label: 'Result card', onSelect: onResult });
+    items.push({
+      id: 'result',
+      label: <Row>Result card</Row>,
+      onSelect: onResult,
+    });
   }
-
-  const role = ROLE_LABELS[run.role];
-  const glossaryCount = `${poolPairs(glossary).length}/${PAIRS.length}`;
+  items.push({
+    id: 'glossary',
+    divider: true,
+    onSelect: () => setOpen(true),
+    label: (
+      <Row
+        icon={
+          <span
+            aria-hidden
+            className="block bg-cover [image-rendering:pixelated]"
+            style={{
+              width: px(glossaryIcon.width),
+              height: px(glossaryIcon.height),
+              backgroundImage: `url(${glossaryIcon.src})`,
+            }}
+          />
+        }
+        aside={`${poolPairs(glossary).length}/${PAIRS.length}`}
+      >
+        Glossary
+      </Row>
+    ),
+  });
 
   return (
     <Stage label="Pushback, roster">
-      {/* The corner office, dimmed, behind the windows */}
+      {/* The corner office, dimmed, behind the window */}
       <div
         aria-hidden
         className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
         style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
       />
 
-      {tab === 'roster' ? (
-        <>
-          <Title
-            heading={`Your run as ${role}`}
-            blurb="Beat your colleagues in order. The Stakeholder waits at the end."
-            tab={tab}
-            onTab={toggle}
+      <ScreenTitle blurb="Beat your colleagues in order. The Stakeholder waits at the end.">
+        Your run as {ROLE_LABELS[run.role]}
+      </ScreenTitle>
+
+      {/* The run, centred, the window as large as the list */}
+      <div
+        className="absolute inset-x-0 flex items-center justify-center"
+        style={{ top: px(LIST_TOP), bottom: px(14) }}
+      >
+        <Window className="max-h-full text-[1.15em]" style={{ width: px(180) }}>
+          <Picker
+            label="Opponents in run order"
+            initial={next >= 0 ? String(next) : 'result'}
+            items={items}
+            active={!open}
+            className="gap-0"
           />
-          <Window
-            className="absolute"
-            style={{ left: px(3), right: px(96), top: px(34), bottom: px(3) }}
-            legend={
-              <Legend
-                keys={[
-                  ['↑↓', 'choose'],
-                  ['Enter', 'play'],
-                  ['Tab', `glossary ${glossaryCount}`],
-                  ['Esc', 'back'],
-                ]}
-                touch={`Tap a colleague to play · glossary ${glossaryCount}`}
-              />
-            }
-          >
-            <Picker
-              label="Opponents in run order"
-              initial={next >= 0 ? String(next) : 'result'}
-              items={items}
-              active={tab === 'roster'}
-              className="gap-0"
-            />
-          </Window>
-          <Window
-            className="absolute text-[0.8em]"
-            style={{ right: px(3), width: px(90), top: px(34), bottom: px(3) }}
-          >
-            <Muted className="mb-[calc(var(--px)*2)]">Out of office</Muted>
-            <ul className="m-0 grid list-none gap-[var(--px)] p-0">
-              {run.run.outOfOffice.map(id => (
-                <li key={id}>{characterById(id).name}</li>
-              ))}
-            </ul>
-          </Window>
-        </>
-      ) : (
-        <>
-          <Title
-            heading={`Glossary ${glossaryCount}`}
-            blurb="Every pair you have met, across your runs: the ones in play you know from the start, the rest are collected on defence."
-            tab={tab}
-            onTab={toggle}
-          />
-          <div
-            className="absolute grid grid-cols-3 gap-[calc(var(--px)*3)]"
-            style={{ left: px(3), right: px(3), top: px(34), bottom: px(3) }}
-            aria-label="Glossary"
-          >
-            {ROLES.map((pool, i) => (
-              <Window
-                key={pool}
-                className="min-h-0 text-[0.75em]"
-                legend={
-                  i === ROLES.length - 1 ? (
-                    <Legend
-                      keys={[
-                        ['Tab', 'roster'],
-                        ['Esc', 'back'],
-                      ]}
-                      touch="Tap Roster to go back"
-                    />
-                  ) : undefined
-                }
-              >
-                <Heading level={3} className="mb-[calc(var(--px)*2)]">
-                  {ROLE_LABELS[pool]}
-                </Heading>
-                <ol className="m-0 grid min-h-0 [scrollbar-width:none] list-none content-start gap-[calc(var(--px)*2)] overflow-y-auto p-0 leading-snug [&::-webkit-scrollbar]:hidden">
-                  {poolOf(pool).map(pair => (
-                    <li key={pair.id} className="min-w-0">
-                      {collected.has(pair.id) ? (
-                        <>
-                          <div className="truncate text-(--pb-text-bright)">
-                            {pairById(pair.id).phrase}
-                          </div>
-                          <div className="truncate text-(--pb-muted)">
-                            {pairById(pair.id).counter}
-                          </div>
-                        </>
-                      ) : (
-                        <div
-                          className="h-[2.4em] border-b border-dashed border-(--pb-frame-dim)"
-                          aria-label="not yet collected"
-                        />
-                      )}
-                    </li>
-                  ))}
-                  {/* The role's three closers, under a rule */}
-                  {closersOf(pool).map((pair, j) => (
-                    <li
-                      key={pair.id}
-                      className={cn(
-                        'min-w-0',
-                        j === 0 &&
-                          'mt-[var(--px)] border-t border-(--pb-frame-dim) pt-[calc(var(--px)*2)]',
-                      )}
-                    >
-                      {collected.has(pair.id) ? (
-                        <>
-                          <div className="truncate text-(--pb-gold)">
-                            {pair.phrase}
-                          </div>
-                          <div className="truncate text-(--pb-muted)">
-                            {pair.counter}
-                          </div>
-                        </>
-                      ) : (
-                        <div
-                          className="h-[2.4em] border-b border-dashed border-(--pb-frame-dim)"
-                          aria-label="closer not yet collected"
-                        />
-                      )}
-                    </li>
-                  ))}
-                </ol>
-              </Window>
-            ))}
-          </div>
-        </>
+        </Window>
+      </div>
+
+      <CornerLegend
+        keys={[
+          ['↑↓', 'choose'],
+          ['Enter', 'play'],
+          ['Tab', 'glossary'],
+          ['Esc', 'back'],
+        ]}
+        touch="Tap a colleague to play"
+      />
+
+      {open && (
+        <Glossary
+          glossary={glossary}
+          role={run.role}
+          onClose={() => setOpen(false)}
+        />
       )}
     </Stage>
   );

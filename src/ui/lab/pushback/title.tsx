@@ -17,6 +17,7 @@ import {
   nextMode,
   stepMode,
 } from '@/lib/lab/pushback/characters';
+import { ROLE_LABELS, type Role } from '@/lib/lab/pushback/lines';
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
@@ -32,7 +33,12 @@ import { Legend, Window } from './window';
 interface TitleScreenProps {
   mode: Mode;
   onMode: (mode: Mode) => void;
+  /** Pick a role for a new run; with a run in play, it asks first */
   onStart: () => void;
+  /** Back to the run in play; the item only shows when there is one */
+  onContinue?: () => void;
+  /** The run in play, for the Continue line and the question before Start */
+  running?: { role: Role; beaten: number; slots: number };
   /** Drop the save; the item only shows when there is something to drop */
   onReset?: () => void;
   /** Nobody has touched anything for a while: play the demo */
@@ -155,6 +161,8 @@ export const TitleScreen = ({
   mode,
   onMode,
   onStart,
+  onContinue,
+  running,
   onReset,
   onAttract,
   progress = false,
@@ -213,8 +221,9 @@ export const TitleScreen = ({
     };
   }, [open]);
 
-  // Reset, and a mode switch with progress at stake, ask in a dialog
-  const [asking, setAsking] = useState<'reset' | Mode | null>(null);
+  // Reset, a new run over the one in play and a mode switch with
+  // progress at stake ask in a dialog
+  const [asking, setAsking] = useState<'reset' | 'start' | Mode | null>(null);
   const cancel = useCallback(() => setAsking(null), []);
   const switchTo = (target: Mode) => {
     if (target === mode) return;
@@ -222,8 +231,26 @@ export const TitleScreen = ({
     else onMode(target);
   };
 
-  const items: PickerItem[] = [
-    { id: 'start', label: 'Start', onSelect: onStart },
+  const items: PickerItem[] = [];
+  if (onContinue && running)
+    items.push({
+      id: 'continue',
+      label: (
+        <span className="flex items-center gap-[1ch]">
+          Continue
+          <span className="ml-auto text-[0.8em] text-(--pb-muted)">
+            {ROLE_LABELS[running.role]} · {running.beaten}/{running.slots}
+          </span>
+        </span>
+      ),
+      onSelect: onContinue,
+    });
+  items.push(
+    {
+      id: 'start',
+      label: running ? 'New run' : 'Start',
+      onSelect: () => (running ? setAsking('start') : onStart()),
+    },
     {
       id: 'mode',
       label: (
@@ -241,7 +268,7 @@ export const TitleScreen = ({
       onStep: step => switchTo(stepMode(mode, step)),
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
-  ];
+  );
   if (onReset)
     items.push({
       id: 'reset',
@@ -318,7 +345,21 @@ export const TitleScreen = ({
           {FICTION}
         </p>
       )}
-      {asking !== null && asking !== 'reset' && (
+      {asking === 'start' && running && (
+        <Confirm
+          title={`Abandon your run as ${ROLE_LABELS[running.role]}?`}
+          confirm="New run"
+          onCancel={cancel}
+          onConfirm={() => {
+            setAsking(null);
+            onStart();
+          }}
+        >
+          One run at a time: picking a role starts over. The glossary and the
+          roles you shipped stay.
+        </Confirm>
+      )}
+      {asking !== null && asking !== 'reset' && asking !== 'start' && (
         <Confirm
           title={`Switch to ${MODE_LABELS[asking].toLowerCase()}?`}
           confirm={`Switch to ${MODE_LABELS[asking].toLowerCase()}`}
@@ -328,8 +369,8 @@ export const TitleScreen = ({
             onMode(asking);
           }}
         >
-          A run is played in one mode, so switching starts over: every run and
-          every collected phrase is gone.
+          A run is played in one mode, so switching starts over: the run, the
+          roles you shipped and every collected phrase are gone.
         </Confirm>
       )}
       {asking === 'reset' && onReset && (
@@ -342,7 +383,8 @@ export const TitleScreen = ({
             onReset();
           }}
         >
-          This forgets every run and every collected phrase. The mode stays.
+          This forgets the run, the roles you shipped and every collected
+          phrase. The mode stays.
         </Confirm>
       )}
     </Stage>

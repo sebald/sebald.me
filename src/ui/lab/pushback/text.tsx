@@ -2,6 +2,8 @@ import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 
+import { px } from './stage';
+
 /**
  * The letters, by role, so every screen says the same thing the same
  * way: a heading, a muted line (prompts, blurbs, hints, what the ghost
@@ -10,6 +12,9 @@ import { cva } from '@/lib/styles.utils';
  */
 const styles = {
   heading: cva({ base: 'm-0 font-semibold text-(--pb-heading)' }),
+  title: cva({
+    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-[var(--px)] text-center',
+  }),
   muted: cva({ base: 'm-0 text-(--pb-muted)' }),
   loud: cva({
     base: [
@@ -38,6 +43,29 @@ export const Heading = ({
     </Tag>
   );
 };
+
+/** Where a screen's title sits: its top, in stage pixels */
+const TITLE_TOP = 8;
+
+/**
+ * A menu screen's title, centred along the top in gold capitals, with
+ * an optional muted line under it saying what the screen is for
+ */
+export const ScreenTitle = ({
+  blurb,
+  className,
+  children,
+}: PropsWithChildren<{ blurb?: string; className?: string }>) => (
+  <header
+    className={styles.title({ className })}
+    style={{ top: px(TITLE_TOP) }}
+  >
+    <h2 className="m-0 text-[2em] font-semibold tracking-[0.1em] text-(--pb-gold) uppercase">
+      {children}
+    </h2>
+    {blurb && <Muted className="text-[0.8em]">{blurb}</Muted>}
+  </header>
+);
 
 /** A muted line: a prompt over the options, a blurb, a hint */
 export const Muted = ({ className, style, children }: TextProps) => (
