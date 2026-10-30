@@ -103,9 +103,8 @@ export interface DuelScreenProps {
   /** The player's look, which picks their sheet */
   look: Look;
   onEnd: (duel: DuelState) => void;
+  /** Leave; in attract mode, any key or a tap */
   onBack: () => void;
-  /** Attract mode: Enter or Space go straight to playing instead of back */
-  onPlay?: () => void;
   /** Force reduced motion (the workbench); otherwise the media query */
   reducedMotion?: boolean;
   /** Fix the scale (the workbench) */
@@ -178,7 +177,6 @@ export const DuelScreen = ({
   look,
   onEnd,
   onBack,
-  onPlay,
   reducedMotion,
   scale,
   ghostAlways = false,
@@ -324,22 +322,17 @@ export const DuelScreen = ({
     [steps, cursor, reduced, advance, act, auto, onEnd],
   );
 
-  // Attract mode: any key or tap leaves the demo; Enter and Space play
+  // Attract mode: any key or tap leaves the demo, for the title's menu
   useEffect(() => {
     if (!auto) return;
-    const leave = (event: KeyboardEvent | PointerEvent) => {
-      const play =
-        'key' in event && (event.key === 'Enter' || event.key === ' ');
-      if (play && onPlay) onPlay();
-      else onBack();
-    };
+    const leave = () => onBack();
     window.addEventListener('keydown', leave);
     window.addEventListener('pointerdown', leave);
     return () => {
       window.removeEventListener('keydown', leave);
       window.removeEventListener('pointerdown', leave);
     };
-  }, [auto, onBack, onPlay]);
+  }, [auto, onBack]);
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -582,13 +575,7 @@ export const DuelScreen = ({
 
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
-    <Legend
-      keys={[
-        ['Enter', 'play'],
-        ['Any key', 'title'],
-      ]}
-      touch="Tap to go back to the title"
-    />
+    <Legend keys={[['Any key', 'menu']]} touch="Tap for the menu" />
   ) : step?.kind === 'menu' ? (
     <Legend
       keys={[

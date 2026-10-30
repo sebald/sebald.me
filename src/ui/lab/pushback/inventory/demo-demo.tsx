@@ -34,7 +34,6 @@ export const DemoDemo = () => {
         scale={2}
         onEnd={next}
         onBack={next}
-        onPlay={next}
       />
     </div>
   );

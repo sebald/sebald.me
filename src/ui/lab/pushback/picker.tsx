@@ -1,10 +1,20 @@
 'use client';
 
-import { type RefObject, useEffect, useRef, useState } from 'react';
+import {
+  type RefObject,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
+import { createPortal } from 'react-dom';
 
+import { STAGE } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { useStage } from './stage';
 import { Loud } from './text';
+import { Window } from './window';
 
 const pickerStyles = {
   root: cva({ base: 'flex min-h-0' }),
@@ -20,7 +30,7 @@ const pickerStyles = {
       'flex w-full items-center gap-[calc(var(--px)*3)] px-[calc(var(--px)*2)] py-[0.15em] text-left',
       'cursor-pointer transition-colors duration-100',
       'outline-none focus-visible:ui-focus',
-      'disabled:cursor-default disabled:opacity-40',
+      'aria-disabled:cursor-default',
     ],
     variants: {
       selected: {
@@ -54,12 +64,25 @@ const pickerStyles = {
     base: 'relative my-[var(--px)] w-[var(--px)] flex-1 bg-(--pb-empty-dots)',
   }),
   thumb: cva({ base: 'absolute inset-x-0 bg-(--pb-steel)' }),
+  /** The description box beside the menu's window */
+  note: cva({
+    base: 'pointer-events-none absolute z-20 text-[0.8em] leading-[1.35] text-balance',
+  }),
 };
 
 export interface PickerItem {
   id: string;
   label: React.ReactNode;
+  /**
+   * Shown, dimmed, and reachable by the cursor, but Enter does nothing:
+   * nothing in a menu is hidden, so give it a `note` that says why
+   */
   disabled?: boolean;
+  /**
+   * What it does, or why it is off: a small window of its own beside the
+   * menu's, at the item's row, while the cursor is on it
+   */
+  note?: string;
   /** Opacity of the label, 1 by default (the buddy dims wrong counters) */
   dim?: number;
   /**
@@ -155,6 +178,59 @@ export const ScrollRail = ({ scroll }: { scroll: Scroll }) => (
   </div>
 );
 
+/** The description box: its width, how far it reaches over the menu's window, the stage's margin */
+const NOTE = { width: 72, overlap: 6, margin: 4 } as const;
+
+interface NotePlace {
+  root: HTMLElement;
+  left: number;
+  top: number;
+}
+
+/**
+ * Where the description box goes, in stage pixels: beside the window the
+ * list sits in, reaching a little over its frame, at the current row's
+ * height; on the right, or on the left where the right has no room, and
+ * kept on the stage either way. Rendered into the stage itself, over
+ * everything, so no window it sits in can cut it off.
+ */
+const useNotePlace = (
+  listRef: RefObject<HTMLUListElement | null>,
+  index: number,
+  scrollTop: number,
+): NotePlace | null => {
+  const { scale } = useStage();
+  const [place, setPlace] = useState<NotePlace | null>(null);
+  useLayoutEffect(() => {
+    const row = listRef.current?.children[index] as HTMLElement | undefined;
+    const section = row?.closest<HTMLElement>('[data-stage]');
+    if (!row || !section) {
+      setPlace(null);
+      return;
+    }
+    // The stage's full area: inside the section, its first child (the
+    // whole stage even when the section crops its top rows)
+    const root =
+      section.tagName === 'SECTION'
+        ? ((section.firstElementChild as HTMLElement | null) ?? section)
+        : section;
+    const frame = row.closest<HTMLElement>('[data-window]') ?? row;
+    const origin = root.getBoundingClientRect();
+    const box = frame.getBoundingClientRect();
+    const line = row.getBoundingClientRect();
+    const toStage = (n: number) => Math.round(n / scale);
+    const max = STAGE.width - NOTE.margin - NOTE.width;
+    const onRight = toStage(box.right - origin.left) - NOTE.overlap;
+    const onLeft = toStage(box.left - origin.left) + NOTE.overlap - NOTE.width;
+    setPlace({
+      root,
+      left: onRight <= max ? onRight : onLeft >= NOTE.margin ? onLeft : max,
+      top: Math.max(NOTE.margin, toStage(line.top - origin.top) - 4),
+    });
+  }, [listRef, index, scrollTop, scale]);
+  return index < 0 ? null : place;
+};
+
 /**
  * A list the player moves through with the arrow keys (or W/S), confirms
  * with Enter or Space, and taps on touch. Disabled items are skipped;
@@ -182,16 +258,9 @@ export const Picker = ({
 
   useEffect(() => {
     if (!active) return;
-    const move = (step: number) => {
-      setIndex(previous => {
-        let next = previous;
-        for (let i = 0; i < items.length; i++) {
-          next = (next + step + items.length) % items.length;
-          if (!items[next]?.disabled) return next;
-        }
-        return previous;
-      });
-    };
+    // Disabled items are stops too, so their note can say why
+    const move = (step: number) =>
+      setIndex(previous => (previous + step + items.length) % items.length);
     const onKey = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowDown':
@@ -239,7 +308,10 @@ export const Picker = ({
     listRef.current?.children[current]?.scrollIntoView({ block: 'nearest' });
   }, [current, overflow]);
 
-  return (
+  const note = active ? items[current]?.note : undefined;
+  const place = useNotePlace(listRef, note ? current : -1, scroll.top);
+
+  const list = (
     <div className={pickerStyles.root()}>
       <ul
         ref={listRef}
@@ -256,16 +328,16 @@ export const Picker = ({
           >
             <button
               type="button"
-              disabled={item.disabled}
+              aria-disabled={item.disabled || undefined}
               aria-current={i === current ? 'true' : undefined}
               className={pickerStyles.item({
                 selected: i === current,
                 accent: item.accent,
               })}
-              onPointerEnter={() => !item.disabled && setIndex(i)}
+              onPointerEnter={() => setIndex(i)}
               onClick={() => {
                 setIndex(i);
-                item.onSelect();
+                if (!item.disabled) item.onSelect();
               }}
             >
               {/* The cursor: a pixel triangle on the stage's grid */}
@@ -278,7 +350,10 @@ export const Picker = ({
                 )}
               />
               <span
-                className="min-w-0 flex-1 transition-opacity duration-500"
+                className={cn(
+                  'min-w-0 flex-1 transition-opacity duration-500',
+                  item.disabled && 'opacity-40',
+                )}
                 style={
                   item.dim === undefined ? undefined : { opacity: item.dim }
                 }
@@ -296,5 +371,27 @@ export const Picker = ({
       </ul>
       {overflow && <ScrollRail scroll={scroll} />}
     </div>
+  );
+  return (
+    <>
+      {list}
+      {note &&
+        place &&
+        createPortal(
+          <Window
+            className={pickerStyles.note()}
+            style={{
+              left: `calc(var(--px) * ${place.left})`,
+              top: `calc(var(--px) * ${place.top})`,
+              width: `calc(var(--px) * ${NOTE.width})`,
+            }}
+          >
+            <p aria-live="polite" className="m-0">
+              {note}
+            </p>
+          </Window>,
+          place.root,
+        )}
+    </>
   );
 };

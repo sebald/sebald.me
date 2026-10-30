@@ -53,7 +53,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Picker"
-      blurb="The list the player moves through: the cursor, the loud item in gold, items the ghost has dimmed, a disabled one the keys skip. In a short window it scrolls on a rail (see Window)."
+      blurb="The list the player moves through: the cursor, the loud item in gold, items the ghost has dimmed, a disabled one the cursor still stops on, a description box beside the window saying why. In a short window it scrolls on a rail (see Window)."
     >
       <PickerDemo />
     </Section>

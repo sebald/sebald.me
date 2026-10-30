@@ -176,7 +176,8 @@ export const PickerDemo = () => {
             },
             {
               id: 'off',
-              label: 'A disabled item, skipped by the keys',
+              label: 'A disabled item',
+              note: 'Off, and this box says why: the cursor stops on it, Enter does nothing.',
               disabled: true,
               onSelect: () => {},
             },

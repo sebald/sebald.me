@@ -117,6 +117,9 @@ export const RosterScreen = ({
     return {
       id: String(index),
       disabled: !canPlay(run, index),
+      note: locked
+        ? 'Beat the three colleagues first. The Stakeholder only sees you after.'
+        : undefined,
       onSelect: () => onPlay(index),
       label: (
         <Row

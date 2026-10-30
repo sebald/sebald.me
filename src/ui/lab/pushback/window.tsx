@@ -122,24 +122,23 @@ export interface WindowProps extends PropsWithChildren {
  * the frame.
  */
 export const Window = ({ legend, className, style, children }: WindowProps) => (
+  // `data-window`: what a picker's description box sits beside
   <div
+    data-window
     className={cn('relative flex flex-col', className)}
-    style={{
-      backgroundColor: RINGS[0],
-      clipPath: rounded(CORNERS[0]!),
-      ...style,
-    }}
+    style={style}
   >
-    {/* The frame's rings inside the ink, each a pixel further in */}
-    {RINGS.slice(1).map((colour, i) => (
+    {/* The ink and the frame's rings, each a pixel further in; the
+        content is not clipped, so nothing in it is cut at a corner */}
+    {RINGS.map((colour, i) => (
       <span
         key={colour}
         aria-hidden
         className="absolute"
         style={{
-          inset: `calc(var(--px) * ${i + 1})`,
+          inset: `calc(var(--px) * ${i})`,
           backgroundColor: colour,
-          clipPath: rounded(CORNERS[i + 1]!),
+          clipPath: rounded(CORNERS[i]!),
         }}
       />
     ))}

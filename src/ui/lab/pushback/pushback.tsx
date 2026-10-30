@@ -5,13 +5,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { demoFor } from '@/lib/lab/pushback/attract';
 import { type Look, MODES } from '@/lib/lab/pushback/characters';
 import { type DuelState, createDuel } from '@/lib/lab/pushback/duel';
-import type { Role } from '@/lib/lab/pushback/lines';
+import { type Role, poolPairs } from '@/lib/lab/pushback/lines';
 import { duelSetupFor } from '@/lib/lab/pushback/run';
 import {
   type Save,
   emptySave,
   finishDuel,
-  hasProgress,
   loadSave,
   openRun,
   resetSave,
@@ -27,7 +26,8 @@ import { SelectScreen } from './select';
 import { TitleScreen } from './title';
 
 type Screen =
-  | { name: 'title' }
+  /** `menu`: open on the menu, skipping the splash (back from the demo) */
+  | { name: 'title'; menu?: boolean }
   | { name: 'attract'; seed: number }
   | { name: 'select' }
   | { name: 'roster' }
@@ -43,6 +43,10 @@ export const Pushback = () => {
 
   const toRoster = useCallback(() => setScreen({ name: 'roster' }), []);
   const toTitle = useCallback(() => setScreen({ name: 'title' }), []);
+  const toMenu = useCallback(
+    () => setScreen({ name: 'title', menu: true }),
+    [],
+  );
   const toAttract = useCallback(
     () => setScreen({ name: 'attract', seed: Date.now() % 100_000 }),
     [],
@@ -81,10 +85,11 @@ export const Pushback = () => {
     case 'title':
       return (
         <TitleScreen
+          menu={screen.menu}
           mode={save.mode}
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}
-          onContinue={open ? toRoster : undefined}
+          onContinue={toRoster}
           running={
             open
               ? {
@@ -94,8 +99,12 @@ export const Pushback = () => {
                 }
               : undefined
           }
-          onReset={hasProgress(save) ? () => setSave(resetSave) : undefined}
-          progress={hasProgress(save)}
+          save={{
+            running: open?.role,
+            shipped: Object.keys(save.shipped).length,
+            lines: poolPairs(save.glossary).length,
+          }}
+          onErase={() => setSave(resetSave)}
           onAttract={toAttract}
         />
       );
@@ -108,8 +117,7 @@ export const Pushback = () => {
           initial={createDuel(demo.setup)}
           auto
           onEnd={toTitle}
-          onBack={toTitle}
-          onPlay={toSelect}
+          onBack={toMenu}
         />
       );
     }

@@ -11,18 +11,14 @@ import {
 
 import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
-import {
-  MODE_LABELS,
-  type Mode,
-  nextMode,
-  stepMode,
-} from '@/lib/lab/pushback/characters';
+import type { Mode } from '@/lib/lab/pushback/characters';
 import { ROLE_LABELS, type Role } from '@/lib/lab/pushback/lines';
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { Confirm } from './confirm';
 import { Room } from './frame';
+import { Options, type SaveSummary } from './options';
 import { Picker, type PickerItem } from './picker';
 import { Stage, px } from './stage';
 import { Heading, Loud } from './text';
@@ -31,20 +27,22 @@ import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
 
 interface TitleScreenProps {
+  /** Open on the menu, the splash skipped: back from the demo */
+  menu?: boolean;
   mode: Mode;
   onMode: (mode: Mode) => void;
   /** Pick a role for a new run; with a run in play, it asks first */
   onStart: () => void;
-  /** Back to the run in play; the item only shows when there is one */
-  onContinue?: () => void;
-  /** The run in play, for the Continue line and the question before Start */
+  /** Back to the run in play; off while there is none */
+  onContinue: () => void;
+  /** The run in play, unfinished, for the Continue line */
   running?: { role: Role; beaten: number; slots: number };
-  /** Drop the save; the item only shows when there is something to drop */
-  onReset?: () => void;
+  /** What is in the save, for what the options' Erase save deletes */
+  save: SaveSummary;
+  /** Delete everything but the mode, from the options */
+  onErase: () => void;
   /** Nobody has touched anything for a while: play the demo */
   onAttract?: () => void;
-  /** A run or a collected phrase: switching the mode asks first */
-  progress?: boolean;
 }
 
 /**
@@ -125,20 +123,6 @@ const VIEW = {
   y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
 } as const;
 
-/** Left or right of the mode: a pixel triangle, dim at the end it cannot go past */
-const Step = ({ left, more }: { left: boolean; more: boolean }) => (
-  <span
-    aria-hidden
-    className={cn(
-      'inline-block h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] bg-current',
-      left
-        ? '[clip-path:polygon(100%_0,0_50%,100%_100%)]'
-        : '[clip-path:polygon(0_0,100%_50%,0_100%)]',
-      more ? 'opacity-100' : 'opacity-25',
-    )}
-  />
-);
-
 /** Keys that only modify: not a press that opens the menu */
 const MODIFIERS = new Set([
   'Shift',
@@ -154,26 +138,38 @@ const MODIFIERS = new Set([
  * dimmed a little, the logo over it and an arcade line blinking under
  * it. Any key or a tap opens the menu: the logo slides up and a small
  * window under it holds the menu, so the title is the start screen with
- * its menu open, not a second screen. `How to play` in the menu shows
- * how the game works. The mode is switched with left and right on it.
+ * its menu open, not a second screen. The menu: `Start`, which asks
+ * first with a run in play; `Continue` under it, off without one;
+ * `How to play`, how the game works; and `Options`, the mode and
+ * erasing the save.
  */
 export const TitleScreen = ({
+  menu = false,
   mode,
   onMode,
   onStart,
   onContinue,
   running,
-  onReset,
+  save,
+  onErase,
   onAttract,
-  progress = false,
 }: TitleScreenProps) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(menu);
   // How it works, from the menu; Enter, Escape or a tap goes back
   const [reading, setReading] = useState(false);
-  const [returned, setReturned] = useState(false);
+  // The options, from the menu; Escape or Back goes back
+  const [setting, setSetting] = useState(false);
+  // Start over a run in play asks first
+  const [asking, setAsking] = useState(false);
+  // The item the cursor goes back to, once the menu is shown again
+  const [returned, setReturned] = useState<string>();
   const closeHowTo = useCallback(() => {
     setReading(false);
-    setReturned(true);
+    setReturned('how');
+  }, []);
+  const closeOptions = useCallback(() => {
+    setSetting(false);
+    setReturned('options');
   }, []);
   useKeys(
     useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
@@ -221,60 +217,35 @@ export const TitleScreen = ({
     };
   }, [open]);
 
-  // Reset, a new run over the one in play and a mode switch with
-  // progress at stake ask in a dialog
-  const [asking, setAsking] = useState<'reset' | 'start' | Mode | null>(null);
-  const cancel = useCallback(() => setAsking(null), []);
-  const switchTo = (target: Mode) => {
-    if (target === mode) return;
-    if (progress) setAsking(target);
-    else onMode(target);
-  };
-
-  const items: PickerItem[] = [];
-  if (onContinue && running)
-    items.push({
+  // Start always works; with a run in play it asks first. Continue is
+  // under it, off without a run, and the cursor starts on it with one.
+  const items: PickerItem[] = [
+    {
+      id: 'start',
+      label: 'Start',
+      onSelect: () => (running ? setAsking(true) : onStart()),
+    },
+    {
       id: 'continue',
       label: (
         <span className="flex items-center gap-[1ch]">
           Continue
-          <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-            {ROLE_LABELS[running.role]} · {running.beaten}/{running.slots}
-          </span>
+          {running && (
+            <span className="ml-auto text-[0.8em] text-(--pb-muted)">
+              {ROLE_LABELS[running.role]} · {running.beaten}/{running.slots}
+            </span>
+          )}
         </span>
       ),
+      disabled: !running,
+      note: running
+        ? undefined
+        : 'No run in progress yet. Start one and pick a role.',
       onSelect: onContinue,
-    });
-  items.push(
-    {
-      id: 'start',
-      label: running ? 'New run' : 'Start',
-      onSelect: () => (running ? setAsking('start') : onStart()),
-    },
-    {
-      id: 'mode',
-      label: (
-        <span className="flex items-center gap-[1ch]">
-          Mode
-          <span className="ml-auto flex items-center gap-[calc(var(--px)*2)]">
-            <Step left more={mode !== 'easy'} />
-            <span className="w-[6ch] text-center">{MODE_LABELS[mode]}</span>
-            <Step left={false} more={mode !== 'hard'} />
-          </span>
-        </span>
-      ),
-      // Enter or a tap goes round; left and right stop at the ends
-      onSelect: () => switchTo(nextMode(mode)),
-      onStep: step => switchTo(stepMode(mode, step)),
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
-  );
-  if (onReset)
-    items.push({
-      id: 'reset',
-      label: 'Reset',
-      onSelect: () => setAsking('reset'),
-    });
+    { id: 'options', label: 'Options', onSelect: () => setSetting(true) },
+  ];
 
   return (
     <Stage label="Pushback, title">
@@ -306,6 +277,14 @@ export const TitleScreen = ({
         <HowTo
           legend={<Legend keys={[['Enter', 'back']]} touch="Tap to go back" />}
         />
+      ) : open && setting ? (
+        <Options
+          mode={mode}
+          onMode={onMode}
+          save={save}
+          onErase={onErase}
+          onClose={closeOptions}
+        />
       ) : open ? (
         <Window
           className="absolute left-1/2 -translate-x-1/2"
@@ -324,8 +303,8 @@ export const TitleScreen = ({
             label="Title menu"
             className="w-[15em]"
             items={items}
-            initial={returned ? 'how' : undefined}
-            active={asking === null}
+            initial={returned ?? (running ? 'continue' : 'start')}
+            active={!asking}
           />
         </Window>
       ) : (
@@ -340,51 +319,23 @@ export const TitleScreen = ({
           </Loud>
         </p>
       )}
-      {!reading && (
+      {!reading && !setting && (
         <p className="absolute inset-x-0 bottom-[calc(var(--px)*4)] m-0 text-center text-[0.7em] text-balance text-(--pb-text)">
           {FICTION}
         </p>
       )}
-      {asking === 'start' && running && (
+      {asking && running && (
         <Confirm
           title={`Abandon your run as ${ROLE_LABELS[running.role]}?`}
-          confirm="New run"
-          onCancel={cancel}
+          confirm="Start a new run"
+          onCancel={() => setAsking(false)}
           onConfirm={() => {
-            setAsking(null);
+            setAsking(false);
             onStart();
           }}
         >
-          One run at a time: picking a role starts over. The glossary and the
-          roles you shipped stay.
-        </Confirm>
-      )}
-      {asking !== null && asking !== 'reset' && asking !== 'start' && (
-        <Confirm
-          title={`Switch to ${MODE_LABELS[asking].toLowerCase()}?`}
-          confirm={`Switch to ${MODE_LABELS[asking].toLowerCase()}`}
-          onCancel={cancel}
-          onConfirm={() => {
-            setAsking(null);
-            onMode(asking);
-          }}
-        >
-          A run is played in one mode, so switching starts over: the run, the
-          roles you shipped and every collected phrase are gone.
-        </Confirm>
-      )}
-      {asking === 'reset' && onReset && (
-        <Confirm
-          title="Reset the game?"
-          confirm="Reset"
-          onCancel={cancel}
-          onConfirm={() => {
-            setAsking(null);
-            onReset();
-          }}
-        >
-          This forgets the run, the roles you shipped and every collected
-          phrase. The mode stays.
+          One run at a time: picking a role for a new one ends this one. Your
+          glossary and the roles you shipped stay.
         </Confirm>
       )}
     </Stage>
