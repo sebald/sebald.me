@@ -8,6 +8,7 @@ import { Dialogue } from '../dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '../palette';
 import { Picker } from '../picker';
 import { Pixels } from '../stage';
+import { Stamp } from '../stamp';
 import { Heading, Loud, Muted } from '../text';
 import { Legend } from '../window';
 import { Field, field } from './controls';
@@ -187,3 +188,19 @@ export const PickerDemo = () => {
     </div>
   );
 };
+
+/** The stamp's three words, on the fill and over a face's colours */
+export const StampDemo = () => (
+  <Pixels
+    scale={4}
+    className="flex w-fit flex-wrap items-center gap-[calc(var(--px)*8)] bg-(--pb-fill) p-[calc(var(--px)*6)]"
+  >
+    <Stamp word="SHIPPED" />
+    <Stamp word="DONE" />
+    <Stamp word="FLAWLESS" tone="gold" />
+    {/* Over a skin tone, the way it sits on a face */}
+    <span className="bg-[#c58a62] p-[calc(var(--px)*3)]">
+      <Stamp word="DONE" />
+    </span>
+  </Pixels>
+);

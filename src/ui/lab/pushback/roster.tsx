@@ -29,6 +29,7 @@ import { Picker, type PickerItem } from './picker';
 import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
+import { Stamp, stampSize } from './stamp';
 import { ScreenTitle } from './text';
 import { useKeys } from './use-keys';
 import { CornerLegend, Window } from './window';
@@ -54,29 +55,45 @@ const FRAME = `0 0 0 var(--px) ${PALETTE.frameDim}, 0 0 0 calc(var(--px) * 2) ${
 /** The headshot is the head square less this on every side: 16 by 16 */
 const FACE_INSET = 4;
 
+/** The stamp over a beaten face sits this far above the headshot's bottom edge */
+const STAMP_BOTTOM = 1;
+
+/** DONE in red over a beaten face, FLAWLESS in gold, centred on it */
+const BeatenStamp = ({ flawless }: { flawless: boolean }) => {
+  const word = flawless ? 'FLAWLESS' : 'DONE';
+  const face = 24 - FACE_INSET * 2;
+  return (
+    <Stamp
+      word={word}
+      tone={flawless ? 'gold' : 'red'}
+      className="absolute"
+      style={{
+        left: px((face - stampSize(word).width) / 2),
+        bottom: px(STAMP_BOTTOM),
+      }}
+    />
+  );
+};
+
 /** The icon column: wide enough for a headshot and the glossary's printout */
 const ICON_WIDTH = 30;
 
 /**
- * One line of the run: the tick or star, an icon (the colleague's face,
- * the glossary's printout), the name and what is on the right
+ * One line of the run: an icon (the colleague's face, stamped once
+ * beaten; the glossary's printout), the name and what is on the right
  */
 const Row = ({
-  mark,
   markLabel,
   icon,
   aside,
   children,
 }: PropsWithChildren<{
-  mark?: string;
+  /** What the stamp on the icon says, for a screen reader */
   markLabel?: string;
   icon?: ReactNode;
   aside?: string;
 }>) => (
   <span className="flex items-center gap-[calc(var(--px)*3)]">
-    <span className="w-[1.2em] text-center text-(--pb-gold)" aria-hidden>
-      {mark}
-    </span>
     {markLabel && <span className="sr-only">{markLabel}, </span>}
     <span
       className="flex shrink-0 justify-center"
@@ -123,7 +140,6 @@ export const RosterScreen = ({
       onSelect: () => onPlay(index),
       label: (
         <Row
-          mark={beaten ? (beaten.flawless ? '★' : '✓') : undefined}
           markLabel={
             beaten
               ? beaten.flawless
@@ -132,8 +148,9 @@ export const RosterScreen = ({
               : undefined
           }
           icon={
-            // Locked, the Stakeholder is a silhouette in its frame
-            <span className="block" style={{ boxShadow: FRAME }}>
+            // Locked, the Stakeholder is a silhouette in its frame;
+            // beaten, the face is stamped, gold when flawless
+            <span className="relative block" style={{ boxShadow: FRAME }}>
               <span className={cn('block', locked && 'brightness-0')}>
                 <Portrait
                   sheet={character.sheet}
@@ -141,6 +158,7 @@ export const RosterScreen = ({
                   inset={FACE_INSET}
                 />
               </span>
+              {beaten && <BeatenStamp flawless={beaten.flawless} />}
             </span>
           }
           aside={locked ? 'locked' : tierLabel(slot.slot.tier)}

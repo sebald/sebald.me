@@ -8,7 +8,7 @@ import { Text } from '@/ui/text';
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { DemoDemo } from './demo-demo';
-import { PaletteDemo, PickerDemo, TextDemo } from './foundations';
+import { PaletteDemo, PickerDemo, StampDemo, TextDemo } from './foundations';
 import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
 import { LedgerDemo } from './ledger-demo';
@@ -56,6 +56,12 @@ export const Inventory = () => (
       blurb="The list the player moves through: the cursor, the loud item in gold, items the ghost has dimmed, a disabled one the cursor still stops on, a description box beside the window saying why. In a short window it scrolls on a rail (see Window)."
     >
       <PickerDemo />
+    </Section>
+    <Section
+      title="Stamp"
+      blurb="A rubber stamp in pixels (stamp.tsx), one component for every word: SHIPPED on a role the Stakeholder signed off (the select screen), DONE on a colleague beaten and FLAWLESS in gold on one beaten without losing an exchange (the roster). Tilted in steps between letters, worn on the frame, darkened inside so it reads over a face."
+    >
+      <StampDemo />
     </Section>
     <Section
       title="Ledger"

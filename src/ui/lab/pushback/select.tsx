@@ -14,7 +14,7 @@ import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage, px } from './stage';
-import { STAMP, Stamp } from './stamp';
+import { Stamp, stampSize } from './stamp';
 import { Heading, ScreenTitle } from './text';
 import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
@@ -195,9 +195,15 @@ export const SelectScreen = ({
                       the lower face */}
                   {stamped && (
                     <Stamp
+                      word="SHIPPED"
                       className="absolute"
                       style={{
-                        left: px((tile - PLACE.frame * 2 - STAMP.width) / 2),
+                        left: px(
+                          (tile -
+                            PLACE.frame * 2 -
+                            stampSize('SHIPPED').width) /
+                            2,
+                        ),
                         bottom: px(STAMP_BOTTOM),
                       }}
                     />
