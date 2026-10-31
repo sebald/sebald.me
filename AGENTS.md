@@ -59,6 +59,14 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - Words the voice gets wrong go into `scripts/narrate/pronunciations.json` (respelling or `[word](/phonemes/)`), then re-render
 - The player loads nothing until someone presses play (`preload="none"`), files are served statically so seeking uses range requests
 
+### Page Transitions
+
+- Client navigations pixelate the old page out and the new one in, through React's `<ViewTransition>` (`src/ui/page-transition.tsx`, styles in `src/css/transitions.css`)
+- Every page wraps its content in `<PageTransition>`, including new ones. It has to be in the page, not a layout: layouts stay mounted across navigations, so a boundary there never enters or exits
+- The pixelation is SVG filters (`#px-3` to `#px-26`, rendered once in the root layout by `PixelateFilters`); url() filters don't interpolate, so the keyframes step through the block sizes
+- No zoom on purpose: the snapshot is the page content, often taller than the screen, so a scale would pivot far below it. Animating the whole viewport instead means overriding React internals, avoid that
+- Reduced motion gets a 150ms crossfade
+
 ### Key Directories
 
 - `src/app/` - Next.js app router pages
