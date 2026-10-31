@@ -36,3 +36,7 @@ next-env.d.ts
 # narration script
 /scripts/narrate/.venv/
 __pycache__/
+
+# Pushback: the full-size Gemini renders stay on disk, the committed sources are recompressed copies
+src/assets/lab/pushback/sources/originals/
+src/assets/lab/pushback/sources/contact/

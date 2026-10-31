@@ -18,6 +18,12 @@
   text-box: trim-both cap alphabetic;
 }
 
+/* The lab's game stage stacks lines of text and wants normal leading back */
+[data-stage],
+[data-stage] * {
+  text-box: normal;
+}
+
 :root {
   interpolate-size: allow-keywords;
 }

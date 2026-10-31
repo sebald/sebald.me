@@ -75,29 +75,59 @@ if (!values.grid && !clearGrid)
     'No clear grid. Check preview.png, try --grid, or regenerate with a stricter prompt.',
   );
 
-// Grid phase: the offset where cell edges have the most gradient energy
-const px = new Float64Array(K);
-const py = new Float64Array(K);
+// Pitch and phase, to a two-hundredth of a pixel. Gemini's grid is seldom
+// a whole number of pixels (a 2752 px render drawn as 240 columns is
+// 11.47 px per cell), and a whole-pixel grid drifts a full cell every few
+// cells, which smears everything right of the first one. The score is the
+// gradient energy on the cell edges; the lag above (or `--grid`, which
+// may be fractional) says where to look.
+const rows = new Float64Array(h);
 for (let y = 1; y < h; y++)
-  for (let x = 1; x < w; x++) {
-    px[x % K] += Math.abs(grey(x, y) - grey(x - 1, y));
-    py[y % K] += Math.abs(grey(x, y) - grey(x, y - 1));
-  }
-const ox = px.indexOf(Math.max(...px));
-const oy = py.indexOf(Math.max(...py));
+  for (let x = 1; x < w; x++) rows[y] += Math.abs(grey(x, y) - grey(x, y - 1));
+const fit = (edges, n, around) => {
+  let best = { score: -1, pitch: around, phase: 0 };
+  for (let pitch = around - 0.6; pitch <= around + 0.6; pitch += 0.005)
+    for (let phase = 0; phase < pitch; phase += 0.25) {
+      let s = 0;
+      let k = 0;
+      for (let e = phase; e < n; e += pitch, k++)
+        s += edges[Math.round(e)] ?? 0;
+      s /= k;
+      if (s > best.score) best = { score: s, pitch, phase };
+    }
+  return best;
+};
+const around = values.grid ? Number(values.grid) : K;
+const fx = fit(profile, w, around);
+const fy = fit(rows, h, around);
+const px = Number(fx.pitch.toFixed(3));
+const py = Number(fy.pitch.toFixed(3));
+const ox = fx.phase;
+const oy = fy.phase;
 
 // One colour per cell: the most common colour (bucketed to 4 bits per
 // channel), averaged within its bucket. Averaging the whole cell would smear
-// one-pixel outlines.
-const cw = Math.floor((w - ox) / K);
-const ch = Math.floor((h - oy) / K);
+// one-pixel outlines. The outermost pixel on each side of a cell is left
+// out: it is the render's blur between two cells and votes for neither.
+const INSET = 1;
+const span = (origin, pitch, c) => {
+  const from = origin + c * pitch;
+  const to = from + pitch;
+  const a = Math.ceil(from + INSET);
+  const b = Math.floor(to - INSET) - 1;
+  return b >= a ? [a, b] : [Math.round(from), Math.round(to) - 1];
+};
+const cw = Math.floor((w - ox) / px);
+const ch = Math.floor((h - oy) / py);
 const out = Buffer.alloc(cw * ch * 3);
 for (let cy = 0; cy < ch; cy++)
   for (let cx = 0; cx < cw; cx++) {
     const buckets = new Map();
-    for (let dy = 0; dy < K; dy++)
-      for (let dx = 0; dx < K; dx++) {
-        const i = ((oy + cy * K + dy) * w + ox + cx * K + dx) * 3;
+    const [y0, y1] = span(oy, py, cy);
+    const [x0, x1] = span(ox, px, cx);
+    for (let y = y0; y <= y1; y++)
+      for (let x = x0; x <= x1; x++) {
+        const i = (y * w + x) * 3;
         const key =
           ((data[i] >> 4) << 8) |
           ((data[i + 1] >> 4) << 4) |
@@ -142,10 +172,12 @@ const native = await sharp(out, { raw: { width: cw, height: ch, channels: 3 } })
 await mkdir(outDir, { recursive: true });
 await sharp(native).toFile(`${outDir}/native.png`);
 await sharp(native)
-  .resize(crop.width * K * 2, crop.height * K * 2, { kernel: 'nearest' })
+  .resize(Math.round(crop.width * px * 2), Math.round(crop.height * py * 2), {
+    kernel: 'nearest',
+  })
   .png({ palette: true, colours, dither: 0 })
   .toFile(`${outDir}/preview.png`);
 
 console.log(
-  `native ${crop.width}x${crop.height}, phase ${ox},${oy}, ${colours} colours -> ${outDir}`,
+  `native ${crop.width}x${crop.height}, pitch ${px}x${py}, phase ${ox},${oy}, ${colours} colours -> ${outDir}`,
 );

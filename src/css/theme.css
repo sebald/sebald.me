@@ -81,4 +81,54 @@
   --animate-glitch-shift-slow: glitch-shift 0.4s infinite linear
     alternate-reverse;
   --animate-glitch-shift-fast: glitch-shift 0.3s infinite linear alternate;
+
+  /* Pushback: the arcade blink, half a second on, half off, no fade; how
+     low it goes is --blink-low (0.6 by default, 0 for a full blink) */
+  @keyframes arcade-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: var(--blink-low, 0.6);
+    }
+  }
+
+  --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
+
+  /* Pushback: a stamp coming down, large and faint to its place, then a
+     jolt as it lands */
+  @keyframes stamp-slam {
+    0% {
+      opacity: 0;
+      scale: 2.4;
+    }
+    60% {
+      opacity: 1;
+      scale: 1;
+    }
+    75% {
+      translate: var(--px, 2px) var(--px, 2px);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stamp-slam: stamp-slam 240ms ease-in both;
+
+  /* Pushback: a puff from under the stamp as it lands, out and gone in
+     three steps so it moves in whole pixels; held back until the landing */
+  @keyframes stamp-spark {
+    from {
+      opacity: 1;
+      translate: 0 0;
+    }
+    to {
+      opacity: 0;
+      translate: var(--spark-x) var(--spark-y);
+    }
+  }
+
+  --animate-stamp-spark: stamp-spark 150ms steps(3) 140ms both;
 }
