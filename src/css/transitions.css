@@ -1,0 +1,77 @@
+/*------------------*/
+/* Page Transitions */
+/*------------------*/
+
+/* Clicks during a transition reach the live page */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The old page breaks into coarser and coarser blocks while it fades, the
+   new one resolves out of them (see `PageTransition`). url() filters don't
+   interpolate, each keyframe holds one block size. */
+::view-transition-old(.page-pixel) {
+  animation:
+    450ms linear both pixelate-out,
+    450ms cubic-bezier(0.4, 0, 1, 1) both page-fade-out;
+}
+::view-transition-new(.page-pixel) {
+  animation:
+    450ms linear both pixelate-in,
+    450ms cubic-bezier(0, 0, 0.2, 1) both page-fade-in;
+}
+
+/* Reduced motion: no blocks, a short crossfade */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-pixel) {
+    animation: 150ms ease-out both page-fade-out;
+  }
+  ::view-transition-new(.page-pixel) {
+    animation: 150ms ease-out both page-fade-in;
+  }
+}
+
+@keyframes pixelate-out {
+  0% {
+    filter: none;
+  }
+  25% {
+    filter: url(#px-3);
+  }
+  50% {
+    filter: url(#px-6);
+  }
+  75% {
+    filter: url(#px-13);
+  }
+  100% {
+    filter: url(#px-26);
+  }
+}
+@keyframes pixelate-in {
+  0% {
+    filter: url(#px-26);
+  }
+  25% {
+    filter: url(#px-13);
+  }
+  50% {
+    filter: url(#px-6);
+  }
+  75% {
+    filter: url(#px-3);
+  }
+  100% {
+    filter: none;
+  }
+}
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}
