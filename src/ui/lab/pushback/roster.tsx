@@ -177,7 +177,7 @@ export const RosterScreen = ({
   }
   items.push({
     id: 'glossary',
-    divider: true,
+    apart: true,
     onSelect: () => setOpen(true),
     label: (
       <Row

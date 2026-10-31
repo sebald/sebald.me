@@ -95,6 +95,8 @@ export interface PickerItem {
   onStep?: (step: 1 | -1) => void;
   /** A rule above it: the first of a group apart from the rest */
   divider?: boolean;
+  /** Room above it, without the rule: apart from the rest, quieter */
+  apart?: boolean;
 }
 
 interface PickerProps {
@@ -324,6 +326,7 @@ export const Picker = ({
             className={cn(
               item.divider &&
                 'mt-[calc(var(--px)*2)] border-t border-(--pb-frame-dim) pt-[calc(var(--px)*2)]',
+              item.apart && 'mt-[calc(var(--px)*5)]',
             )}
           >
             <button

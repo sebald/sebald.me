@@ -128,7 +128,9 @@ idle cell, the select screen's portrait), the mouth (the lower face of
 the idle cell, pasted over the talk cell between words so only the mouth
 moves while the hand stays up; the talk head is aligned on the idle one
 first) and the eye of the lose cell (where the tears start, a third
-down the bowed head on its facing side). Check
+down the bowed head on its facing side, a guess; set it by hand in the
+script's `EYES` to the pixel right under the eye nearest the viewer, or
+under the lens for glasses). Check
 `sources/contact/<id>-features.png`: the head square should frame the
 head with a row to spare, the cyan patch the mouth and chin but not the
 eyes, the pink dot an eye of the lose cell.

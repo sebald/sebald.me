@@ -29,6 +29,22 @@ const MODEL_SHEETS = [
   'boss',
 ];
 const CELLS = { idle: 0, talk: 1, lose: 5 };
+/**
+ * The eye of the lose cell, set by hand where the guess below misses it:
+ * the pixel the tear falls from, under the eye nearest the viewer (under
+ * the lens for glasses), in cell pixels
+ */
+const EYES = {
+  'dev-bo': { x: 41, y: 37 },
+  'dev-lena': { x: 41, y: 47 },
+  'dev-sam': { x: 41, y: 48 },
+  'designer-ines': { x: 40, y: 49 },
+  'designer-kim': { x: 45, y: 53 },
+  'designer-theo': { x: 41, y: 49 },
+  'pm-jo': { x: 41, y: 48 },
+  'pm-nadia': { x: 40, y: 41 },
+  'pm-piet': { x: 41, y: 51 },
+};
 /** The portrait: a square this big, the top of the head a row under its top */
 const HEAD = 24;
 /** The face: these rows of the figure hold the eyes and the mouth */
@@ -144,9 +160,10 @@ for (const id of ids) {
   const talkMouth = mouth && { x: mouth.x + shift.x, y: mouth.y + shift.y };
 
   // Eye of the lose cell: the figure faces right, head bowed; the eye
-  // sits a third down the head, a few pixels in from its facing edge
+  // sits a third down the head, a few pixels in from its facing edge.
+  // A guess that often lands a pixel or two off, so `EYES` wins
   const loseSpan = headSpan(px, { ...cell, index: CELLS.lose }, lose, 8);
-  const eye = { x: loseSpan.x1 - 5, y: lose.y + 11 };
+  const eye = EYES[id] ?? { x: loseSpan.x1 - 5, y: lose.y + 11 };
 
   meta.features = { head, mouth, talkMouth, eye };
   await writeFile(jsonFile, `${JSON.stringify(meta, null, 2)}\n`);
