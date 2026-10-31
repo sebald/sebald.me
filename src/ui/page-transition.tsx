@@ -8,7 +8,7 @@ import { ViewTransition } from 'react';
 // (feMorphology). They can't be animated, the keyframes in
 // `transitions.css` step through them. Odd sizes grow the sampled pixel to
 // exactly the block.
-const BLOCKS = [3, 6, 13, 26];
+const BLOCKS = [3, 5, 9, 13];
 
 export const PixelateFilters = () => (
   <svg aria-hidden="true" className="absolute size-0">

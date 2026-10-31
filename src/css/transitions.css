@@ -53,24 +53,24 @@
     filter: url(#px-3);
   }
   50% {
-    filter: url(#px-6);
+    filter: url(#px-5);
   }
   75% {
-    filter: url(#px-13);
+    filter: url(#px-9);
   }
   100% {
-    filter: url(#px-26);
+    filter: url(#px-13);
   }
 }
 @keyframes pixelate-in {
   0% {
-    filter: url(#px-26);
-  }
-  25% {
     filter: url(#px-13);
   }
+  25% {
+    filter: url(#px-9);
+  }
   50% {
-    filter: url(#px-6);
+    filter: url(#px-5);
   }
   75% {
     filter: url(#px-3);
