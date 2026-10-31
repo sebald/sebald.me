@@ -116,4 +116,19 @@
   }
 
   --animate-stamp-slam: stamp-slam 240ms ease-in both;
+
+  /* Pushback: a puff from under the stamp as it lands, out and gone in
+     three steps so it moves in whole pixels; held back until the landing */
+  @keyframes stamp-spark {
+    from {
+      opacity: 1;
+      translate: 0 0;
+    }
+    to {
+      opacity: 0;
+      translate: var(--spark-x) var(--spark-y);
+    }
+  }
+
+  --animate-stamp-spark: stamp-spark 150ms steps(3) 140ms both;
 }

@@ -657,6 +657,7 @@ export const DuelScreen = ({
           <SlamStamp
             word={stamp.word}
             tone={stamp.tone}
+            sparks
             className="animate-stamp-slam motion-reduce:animate-none"
           />
         </div>

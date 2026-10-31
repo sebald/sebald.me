@@ -150,13 +150,22 @@ export interface StampProps {
 }
 
 /** Where a duel's stamp lands: how big its pixels are, and its turn */
-export const SLAM = { size: 4, long: 3, angle: -8 } as const;
+export const SLAM = { size: 5, long: 4, angle: -8 } as const;
+
+/**
+ * The thump as the stamp lands: a few puffs pushed out from under it,
+ * along its bottom and its two ends, not a burst. How many, how far past
+ * its edge they go in stage pixels, how big each is.
+ */
+const PUFFS = { count: 6, reach: 6, size: 2 } as const;
 
 export interface SlamStampProps extends StampProps {
   /** Stage pixels a stamp pixel; `SLAM.long` keeps a long word in the band */
   size?: number;
   /** Degrees, counter-clockwise negative */
   angle?: number;
+  /** A ring of sparks flying off its edge as it lands */
+  sparks?: boolean;
 }
 
 /**
@@ -169,11 +178,12 @@ export const SlamStamp = ({
   tone = 'red',
   size = word.length > 4 ? SLAM.long : SLAM.size,
   angle = SLAM.angle,
+  sparks = false,
   className,
   style,
 }: SlamStampProps) => {
   const { runs, width, height } = turn(word, size, angle);
-  return (
+  const stamp = (
     <svg
       aria-hidden
       viewBox={`0 0 ${width} ${height}`}
@@ -193,6 +203,40 @@ export const SlamStamp = ({
         />
       ))}
     </svg>
+  );
+  if (!sparks) return stamp;
+  return (
+    <span className="relative block">
+      {stamp}
+      {/* On the lower half of an ellipse round the stamp, from one end
+          under it to the other, each pushed out sideways more than down;
+          gone under reduced motion */}
+      {Array.from({ length: PUFFS.count }, (_, i) => {
+        const around = (i / (PUFFS.count - 1)) * Math.PI;
+        const x = Math.cos(around);
+        const y = Math.sin(around);
+        return (
+          <span
+            key={i}
+            aria-hidden
+            className="absolute animate-stamp-spark motion-reduce:hidden"
+            style={
+              {
+                left: px(Math.round(width / 2 + (x * width) / 2)),
+                top: px(Math.round(height / 2 + (y * height) / 2)),
+                width: px(PUFFS.size),
+                height: px(PUFFS.size),
+                // The stamp's ink with an ink edge, to read over a light wall
+                background: INK[tone],
+                boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
+                '--spark-x': px(Math.round(x * PUFFS.reach)),
+                '--spark-y': px(Math.round(y * PUFFS.reach * 0.4)),
+              } as CSSProperties
+            }
+          />
+        );
+      })}
+    </span>
   );
 };
 

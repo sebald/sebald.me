@@ -8,6 +8,7 @@ import { Text } from '@/ui/text';
 import { BurstDemo } from './burst-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { DemoDemo } from './demo-demo';
+import { EndDemo } from './end-demo';
 import { PaletteDemo, PickerDemo, StampDemo, TextDemo } from './foundations';
 import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
@@ -102,6 +103,12 @@ export const Inventory = () => (
       blurb="The burst that goes off between the duellists: pulsing while the phrase is thrown, popped when it is countered."
     >
       <BurstDemo />
+    </Section>
+    <Section
+      title="End of a duel"
+      blurb="A duel at its end, as the game plays it: after the beat the stamp comes down between the duellists (DONE, FLAWLESS in gold, REJECTED), the last lines play, then the window gives the verdict and the duel's numbers. Replay takes the next verdict in turn."
+    >
+      <EndDemo />
     </Section>
     <Section
       title="Bars"

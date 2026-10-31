@@ -302,10 +302,12 @@ describe('scriptFor', () => {
     assert.equal(steps.at(-1)?.kind, 'wait');
     const bark = steps.find(step => step.kind === 'line');
     assert.equal((bark as { text: string }).text, PLAYER_BARKS.pm.win[0]);
-    assert.deepEqual(posesFor(s, steps.at(-1)), {
-      player: 'win',
-      opponent: 'lose',
-    });
+    // Held from the beat through the bark to the wait
+    for (const step of steps)
+      assert.deepEqual(posesFor(s, step), {
+        player: 'win',
+        opponent: 'lose',
+      });
   });
 });
 

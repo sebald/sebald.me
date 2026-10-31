@@ -530,6 +530,14 @@ export const posesFor = (
 ): Record<Side, Pose> => {
   const idle: Record<Side, Pose> = { player: 'idle', opponent: 'idle' };
   if (!step) return idle;
+  // The end holds the win and the lose through its last lines: the loser
+  // is down before the stamp lands on the first of them
+  if (state.phase === 'end' && state.winner) {
+    return {
+      player: state.winner === 'player' ? 'win' : 'lose',
+      opponent: state.winner === 'opponent' ? 'win' : 'lose',
+    };
+  }
   if (step.kind === 'line') {
     const talk = { ...idle, [step.speaker]: 'talk' as Pose };
     // A mic drop is thrown in the taunt pose
@@ -550,12 +558,6 @@ export const posesFor = (
         opponent: winner === 'opponent' ? 'taunt' : 'flinch',
       };
     }
-  }
-  if (state.phase === 'end' && state.winner) {
-    return {
-      player: state.winner === 'player' ? 'win' : 'lose',
-      opponent: state.winner === 'opponent' ? 'win' : 'lose',
-    };
   }
   return idle;
 };
