@@ -8,7 +8,7 @@ import { Dialogue } from '../dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '../palette';
 import { Picker } from '../picker';
 import { Pixels } from '../stage';
-import { Stamp } from '../stamp';
+import { SlamStamp, Stamp } from '../stamp';
 import { Heading, Loud, Muted } from '../text';
 import { Legend } from '../window';
 import { Field, field } from './controls';
@@ -202,5 +202,9 @@ export const StampDemo = () => (
     <span className="bg-[#c58a62] p-[calc(var(--px)*3)]">
       <Stamp word="DONE" />
     </span>
+    {/* Large and turned, as it lands at the end of a duel */}
+    <SlamStamp word="DONE" />
+    <SlamStamp word="FLAWLESS" tone="gold" />
+    <SlamStamp word="REJECTED" />
   </Pixels>
 );

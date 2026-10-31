@@ -8,21 +8,28 @@ import { px } from './stage';
 /** The letters, three by five pixels each, `#` inked */
 const FONT: Record<string, string[]> = {
   A: ['.#.', '#.#', '###', '#.#', '#.#'],
+  C: ['###', '#..', '#..', '#..', '###'],
   D: ['##.', '#.#', '#.#', '#.#', '##.'],
   E: ['###', '#..', '##.', '#..', '###'],
   F: ['###', '#..', '##.', '#..', '#..'],
   H: ['#.#', '#.#', '###', '#.#', '#.#'],
   I: ['###', '.#.', '.#.', '.#.', '###'],
+  J: ['..#', '..#', '..#', '#.#', '###'],
   L: ['#..', '#..', '#..', '#..', '###'],
   N: ['###', '#.#', '#.#', '#.#', '#.#'],
   O: ['###', '#.#', '#.#', '#.#', '###'],
   P: ['##.', '#.#', '##.', '#..', '#..'],
+  R: ['##.', '#.#', '##.', '#.#', '#.#'],
   S: ['###', '#..', '###', '..#', '###'],
+  T: ['###', '.#.', '.#.', '.#.', '.#.'],
   W: ['#.#', '#.#', '###', '###', '#.#'],
 };
 
-/** What a stamp can say: a role shipped, a colleague beaten, beaten flawless */
-export type StampWord = 'SHIPPED' | 'DONE' | 'FLAWLESS';
+/**
+ * What a stamp can say: a role shipped, a colleague beaten, beaten
+ * flawless, a duel lost
+ */
+export type StampWord = 'SHIPPED' | 'DONE' | 'FLAWLESS' | 'REJECTED';
 
 /** The ink: red for a job done, gold for one done without a scratch */
 export type StampTone = 'red' | 'gold';
@@ -48,9 +55,9 @@ type Pixel = { x: number; y: number; part: 'ink' | 'air' };
  * stamp is, in a few pixels of the frame at the same places along any
  * word (never in the letters, so the word reads whole).
  */
-const draw = (word: string) => {
+const draw = (word: string, flat = false) => {
   const width = word.length * 4 - 1 + 4;
-  const rise = Math.floor((word.length - 1) / TILT);
+  const rise = flat ? 0 : Math.floor((word.length - 1) / TILT);
   const drop = (x: number) =>
     rise - Math.min(rise, Math.floor(Math.max(0, x - 2) / 4 / TILT));
   const worn = new Set([
@@ -82,9 +89,52 @@ const draw = (word: string) => {
   return { pixels, width, height: BODY + rise };
 };
 
+const WORDS = ['SHIPPED', 'DONE', 'FLAWLESS', 'REJECTED'] as const;
+
 const STAMPS = Object.fromEntries(
-  (['SHIPPED', 'DONE', 'FLAWLESS'] as const).map(word => [word, draw(word)]),
+  WORDS.map(word => [word, draw(word)]),
 ) as Record<StampWord, ReturnType<typeof draw>>;
+
+/** A run of pixels on a row, the same part: one rect instead of many */
+type Run = { x: number; y: number; width: number; part: Pixel['part'] };
+
+/**
+ * The flat stamp, each of its pixels `size` stage pixels, turned by
+ * `angle` degrees on the stage's own grid: every stage pixel takes the
+ * stamp pixel under its centre once turned back, so the edges step
+ * like drawn pixel art rather than blur. The stepped tilt of the small
+ * stamp breaks into blocks this large.
+ */
+const turn = (word: StampWord, size: number, angle: number) => {
+  const flat = draw(word, true);
+  const w = flat.width * size;
+  const h = flat.height * size;
+  const parts = new Map(flat.pixels.map(p => [`${p.x},${p.y}`, p.part]));
+  const rad = (angle * Math.PI) / 180;
+  const cos = Math.cos(rad);
+  const sin = Math.sin(rad);
+  const width = Math.ceil(Math.abs(w * cos) + Math.abs(h * sin));
+  const height = Math.ceil(Math.abs(w * sin) + Math.abs(h * cos));
+  const runs: Run[] = [];
+  for (let y = 0; y < height; y++) {
+    let run: Run | null = null;
+    for (let x = 0; x < width; x++) {
+      const dx = x + 0.5 - width / 2;
+      const dy = y + 0.5 - height / 2;
+      const sx = Math.floor((dx * cos + dy * sin + w / 2) / size);
+      const sy = Math.floor((-dx * sin + dy * cos + h / 2) / size);
+      const part = parts.get(`${sx},${sy}`);
+      if (run && run.part === part) {
+        run.width++;
+        continue;
+      }
+      if (run) runs.push(run);
+      run = part ? { x, y, width: 1, part } : null;
+    }
+    if (run) runs.push(run);
+  }
+  return { runs, width, height };
+};
 
 /** A stamp's size in stage pixels, to place it */
 export const stampSize = (word: StampWord) => ({
@@ -98,6 +148,53 @@ export interface StampProps {
   className?: string;
   style?: CSSProperties;
 }
+
+/** Where a duel's stamp lands: how big its pixels are, and its turn */
+export const SLAM = { size: 4, long: 3, angle: -8 } as const;
+
+export interface SlamStampProps extends StampProps {
+  /** Stage pixels a stamp pixel; `SLAM.long` keeps a long word in the band */
+  size?: number;
+  /** Degrees, counter-clockwise negative */
+  angle?: number;
+}
+
+/**
+ * The stamp large and turned on the stage's grid, flat rather than in
+ * the small one's steps: what lands on the stage at the end of a duel,
+ * the word then seen on the roster's face
+ */
+export const SlamStamp = ({
+  word,
+  tone = 'red',
+  size = word.length > 4 ? SLAM.long : SLAM.size,
+  angle = SLAM.angle,
+  className,
+  style,
+}: SlamStampProps) => {
+  const { runs, width, height } = turn(word, size, angle);
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${width} ${height}`}
+      shapeRendering="crispEdges"
+      className={cn('block', className)}
+      style={{ width: px(width), height: px(height), ...style }}
+    >
+      {runs.map(({ x, y, width: w, part }) => (
+        <rect
+          key={`${x}-${y}`}
+          x={x}
+          y={y}
+          width={w}
+          height={1}
+          fill={part === 'ink' ? INK[tone] : PALETTE.ink}
+          fillOpacity={part === 'ink' ? 1 : 0.7}
+        />
+      ))}
+    </svg>
+  );
+};
 
 /**
  * A rubber stamp: the word in a three by five pixel font in a frame,

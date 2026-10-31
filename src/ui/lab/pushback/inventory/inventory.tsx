@@ -60,7 +60,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Stamp"
-      blurb="A rubber stamp in pixels (stamp.tsx), one component for every word: SHIPPED on a role the Stakeholder signed off (the select screen), DONE on a colleague beaten and FLAWLESS in gold on one beaten without losing an exchange (the roster). Tilted in steps between letters, worn on the frame, darkened inside so it reads over a face."
+      blurb="A rubber stamp in pixels (stamp.tsx), one component for every word: SHIPPED on a role the Stakeholder signed off (the select screen), DONE on a colleague beaten and FLAWLESS in gold on one beaten without losing an exchange (the roster). Tilted in steps between letters, worn on the frame, darkened inside so it reads over a face. At the end of a duel it lands large between the duellists (SlamStamp), turned on the stage's grid: DONE, FLAWLESS, or REJECTED on a loss."
     >
       <StampDemo />
     </Section>

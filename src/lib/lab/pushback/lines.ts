@@ -559,6 +559,16 @@ export const ROLE_BLURBS: Record<Role, string> = {
   designer: 'Has opinions about your line height.',
 };
 
+/**
+ * The verdict over the end of a duel, the heading of its window: two or
+ * three words, the way a court calls it, picked in turn
+ */
+export const VERDICTS = {
+  win: ['Point taken.', 'Motion carried.', 'Fair point.', 'Ship it.'],
+  flawless: ['No notes.', 'Not a scratch.', 'Clean sweep.'],
+  lose: ['Overruled.', 'Back to drafts.', 'Parked for now.', 'Request denied.'],
+} as const;
+
 /** Every line that can appear in the dialogue box, for the length check */
 export const allLines = (): string[] => [
   ...[...PAIRS, ...CLOSERS].flatMap(pair => [pair.phrase, pair.counter]),
@@ -572,4 +582,5 @@ export const allLines = (): string[] => [
   ...Object.values(MENU_PROMPTS),
   ...BUDDY_BARKS,
   BUDDY_MISS_BARK,
+  ...Object.values(VERDICTS).flat(),
 ];

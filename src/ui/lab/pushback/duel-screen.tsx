@@ -32,6 +32,7 @@ import {
   type DuelAction,
   type DuelState,
   type Side,
+  isFlawless,
   reduce,
   showsHint,
   toLose,
@@ -41,6 +42,8 @@ import {
   BUDDY_MISS_BARK,
   HINT,
   MENU_PROMPTS,
+  VERDICTS,
+  inTurn,
   pairById,
 } from '@/lib/lab/pushback/lines';
 import { playerName } from '@/lib/lab/pushback/save';
@@ -70,10 +73,12 @@ import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
+import { Ledger } from './ledger';
 import { Picker, type PickerItem } from './picker';
 import { SilenceTimer } from './silence-timer';
 import { px } from './stage';
-import { Muted } from './text';
+import { SlamStamp, type StampWord } from './stamp';
+import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
@@ -83,6 +88,9 @@ import { Legend, Window } from './window';
 // ---------------
 /** The demo's label: its top, at the duellists' chests, under their faces */
 const DEMO_LABEL_Y = 68;
+
+/** Where the end of a duel's stamp lands: its centre, between the duellists */
+const STAMP_AT = { x: STAGE.width / 2, y: 64 } as const;
 
 const styles = {
   pause: cva({
@@ -580,9 +588,30 @@ export const DuelScreen = ({
       ]}
       touch="Tap a line"
     />
-  ) : step?.kind === 'line' || step?.kind === 'reveal' ? (
+  ) : step?.kind === 'line' ||
+    step?.kind === 'reveal' ||
+    step?.kind === 'wait' ? (
     <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
   ) : null;
+
+  // The end of the duel: after its beat, the stamp lands and stays
+  // through the last lines; the window then gives the verdict and the
+  // numbers. The demo has its own label where the stamp would go.
+  const won = state.winner === 'player';
+  const flawless = isFlawless(state) && state.setup.buddy !== true;
+  const ended =
+    state.phase === 'end' && step !== undefined && step.kind !== 'beat';
+  const stamp: { word: StampWord; tone: 'red' | 'gold' } = !won
+    ? { word: 'REJECTED', tone: 'red' }
+    : flawless
+      ? { word: 'FLAWLESS', tone: 'gold' }
+      : { word: 'DONE', tone: 'red' };
+  const verdict = inTurn(
+    VERDICTS[!won ? 'lose' : flawless ? 'flawless' : 'win'],
+    state.setup.encounter,
+  );
+  const { exchangesWon, exchangesLost, micDrops } = state.stats;
+  const learned = state.collected.length - state.setup.collected.length;
 
   return (
     <Frame
@@ -617,6 +646,21 @@ export const DuelScreen = ({
 
       {/* The arcade stamp over the room */}
       {auto && <DemoLabel y={DEMO_LABEL_Y} />}
+
+      {/* The duel's stamp, slammed down between the duellists */}
+      {ended && !auto && (
+        // Centred by its wrapper: the slam moves the stamp's own `translate`
+        <div
+          className="pointer-events-none absolute -translate-1/2"
+          style={{ left: px(STAMP_AT.x), top: px(STAMP_AT.y) }}
+        >
+          <SlamStamp
+            word={stamp.word}
+            tone={stamp.tone}
+            className="animate-stamp-slam motion-reduce:animate-none"
+          />
+        </div>
+      )}
 
       {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button
@@ -683,10 +727,28 @@ export const DuelScreen = ({
             </>
           )}
           {step?.kind === 'wait' && (
-            <Muted>
-              {state.winner === 'player' ? 'You won.' : 'You lost.'} Enter to
-              continue.
-            </Muted>
+            <>
+              <Heading
+                className={
+                  won
+                    ? 'tracking-[0.1em] text-(--pb-gold) uppercase'
+                    : 'tracking-[0.1em] text-(--pb-stamp) uppercase'
+                }
+              >
+                {verdict}
+              </Heading>
+              <Ledger
+                className="mt-[calc(var(--px)*3)] w-[24em]"
+                rows={[
+                  [
+                    'Exchanges won',
+                    `${exchangesWon}/${exchangesWon + exchangesLost}`,
+                  ],
+                  ['Mic drops', micDrops],
+                  ['Lines collected', learned > 0 ? `+${learned}` : 'none'],
+                ]}
+              />
+            </>
           )}
         </Window>
         {ghostShown && (

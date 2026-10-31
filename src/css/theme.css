@@ -95,4 +95,25 @@
   }
 
   --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
+
+  /* Pushback: a stamp coming down, large and faint to its place, then a
+     jolt as it lands */
+  @keyframes stamp-slam {
+    0% {
+      opacity: 0;
+      scale: 2.4;
+    }
+    60% {
+      opacity: 1;
+      scale: 1;
+    }
+    75% {
+      translate: var(--px, 2px) var(--px, 2px);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stamp-slam: stamp-slam 240ms ease-in both;
 }
