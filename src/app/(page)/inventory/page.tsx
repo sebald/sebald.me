@@ -11,6 +11,7 @@ import { Article } from '@/ui/layout/article';
 import { Link } from '@/ui/link';
 import { NarrationPlayer } from '@/ui/narration-player';
 import { PageToolbar } from '@/ui/page-toolbar';
+import { PageTransition } from '@/ui/page-transition';
 import { Text } from '@/ui/text';
 
 import { CodeExamples } from './code-examples';
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
 // Page
 // ---------------
 const InventoryPage = () => (
-  <>
+  <PageTransition>
     <PageToolbar />
     <Article>
       <Article.Header>
@@ -262,7 +263,7 @@ const InventoryPage = () => (
         </div>
       </Article.Content>
     </Article>
-  </>
+  </PageTransition>
 );
 
 export default InventoryPage;

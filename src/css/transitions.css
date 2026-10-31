@@ -1,0 +1,91 @@
+/*------------------*/
+/* Page Transitions */
+/*------------------*/
+
+/* Clicks during a transition reach the live page */
+::view-transition {
+  pointer-events: none;
+}
+
+/* Safari (26.5) ignores url() filters on the new page's snapshot, but still
+   shifts it by the filter's bounds, and breaks up the old one at large block
+   sizes. So it gets a plain crossfade. */
+::view-transition-old(.page-pixel) {
+  animation: 450ms cubic-bezier(0.4, 0, 1, 1) both page-fade-out;
+}
+::view-transition-new(.page-pixel) {
+  animation: 450ms cubic-bezier(0, 0, 0.2, 1) both page-fade-in;
+}
+
+/* Everywhere else the old page breaks into coarser and coarser blocks while
+   it fades, the new one resolves out of them (see `PageTransition`). url()
+   filters don't interpolate, each keyframe holds one block size. Only Safari
+   supports `hanging-punctuation`, so it stands in for "is Safari"; a browser
+   that adds it falls back to the crossfade, not to a broken transition. */
+@supports not (hanging-punctuation: first) {
+  ::view-transition-old(.page-pixel) {
+    animation:
+      450ms linear both pixelate-out,
+      450ms cubic-bezier(0.4, 0, 1, 1) both page-fade-out;
+  }
+  ::view-transition-new(.page-pixel) {
+    animation:
+      450ms linear both pixelate-in,
+      450ms cubic-bezier(0, 0, 0.2, 1) both page-fade-in;
+  }
+}
+
+/* Reduced motion: no blocks, a short crossfade */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-pixel) {
+    animation: 150ms ease-out both page-fade-out;
+  }
+  ::view-transition-new(.page-pixel) {
+    animation: 150ms ease-out both page-fade-in;
+  }
+}
+
+@keyframes pixelate-out {
+  0% {
+    filter: none;
+  }
+  25% {
+    filter: url(#px-3);
+  }
+  50% {
+    filter: url(#px-5);
+  }
+  75% {
+    filter: url(#px-9);
+  }
+  100% {
+    filter: url(#px-13);
+  }
+}
+@keyframes pixelate-in {
+  0% {
+    filter: url(#px-13);
+  }
+  25% {
+    filter: url(#px-9);
+  }
+  50% {
+    filter: url(#px-5);
+  }
+  75% {
+    filter: url(#px-3);
+  }
+  100% {
+    filter: none;
+  }
+}
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}

@@ -6,6 +6,7 @@ import { fontMono } from '@/css/fonts';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import '@/css/styles.css';
 import { Footer } from '@/ui/layout/footer';
+import { PixelateFilters } from '@/ui/page-transition';
 import { Toaster } from '@/ui/toast';
 import { OutboundLinkTracking } from '@/ui/tracking/outbound-link-tracking';
 
@@ -57,6 +58,7 @@ const Layout = async ({ children }: LayoutProps<'/'>) => (
           <Footer />
         </div>
       </Toaster>
+      <PixelateFilters />
       <Analytics />
       <OutboundLinkTracking />
     </body>
