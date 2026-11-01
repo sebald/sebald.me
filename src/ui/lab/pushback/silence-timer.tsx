@@ -127,8 +127,9 @@ export interface SilenceTimerProps {
  * pixel (`WATCH`), a red case so it is seen, the face white like a
  * meeting timer's. Light blue while a counter still counts as fast, so
  * it stands out from the gold of the window's text; once that half has
- * run out the whole watch blinks the way the demo label does, there and
- * gone, ember, then red for the last quarter. Under reduced motion it
+ * run out the watch blinks the way the demo label does, there and gone,
+ * the wedge staying so the time left can still be read, ember, then red
+ * for the last quarter. Under reduced motion it
  * does not blink. Position it from outside.
  */
 export const SilenceTimer = ({
@@ -142,44 +143,56 @@ export const SilenceTimer = ({
   // Something you notice, not only a colour: the fast half gone
   const blinking = share <= FAST && !still;
   const fill = colourOf(share);
-  return (
-    <svg
-      aria-hidden
-      viewBox={`0 0 ${WATCH[0]!.length} ${WATCH.length}`}
-      shapeRendering="crispEdges"
-      className={cn(
-        'block',
-        blinking &&
-          'animate-arcade-blink [--blink-low:0] motion-reduce:animate-none',
-        className,
-      )}
-      style={{
-        width: px(SILENCE_CLOCK.width),
-        height: px(SILENCE_CLOCK.height),
-        animationDuration: BLINK,
-        ...style,
-      }}
-    >
-      {PIXELS.map(({ x, y, cell, angle }) => (
+  const pixels = PIXELS.map(({ x, y, cell, angle }) => {
+    const face = cell === 'F' || cell === 'S';
+    const wedge = face && angle >= 1 - share;
+    const colour = !face
+      ? COLOURS[cell]
+      : wedge
+        ? cell === 'S'
+          ? fill.shade
+          : fill.main
+        : cell === 'S'
+          ? PALETTE.paperShade
+          : PALETTE.paper;
+    return { x, y, wedge, colour };
+  });
+  const rects = (wedge: boolean) =>
+    pixels
+      .filter(pixel => pixel.wedge === wedge)
+      .map(({ x, y, colour }) => (
         <rect
           key={`${x}-${y}`}
           x={x}
           y={y}
           width={1}
           height={1}
-          fill={
-            cell !== 'F' && cell !== 'S'
-              ? COLOURS[cell]
-              : angle >= 1 - share
-                ? cell === 'S'
-                  ? fill.shade
-                  : fill.main
-                : cell === 'S'
-                  ? PALETTE.paperShade
-                  : PALETTE.paper
-          }
+          fill={colour}
         />
-      ))}
+      ));
+  return (
+    <svg
+      aria-hidden
+      viewBox={`0 0 ${WATCH[0]!.length} ${WATCH.length}`}
+      shapeRendering="crispEdges"
+      className={cn('block', className)}
+      style={{
+        width: px(SILENCE_CLOCK.width),
+        height: px(SILENCE_CLOCK.height),
+        ...style,
+      }}
+    >
+      {/* The watch blinks, the time left on it stays */}
+      <g
+        className={cn(
+          blinking &&
+            'animate-arcade-blink [--blink-low:0] motion-reduce:animate-none',
+        )}
+        style={{ animationDuration: BLINK }}
+      >
+        {rects(false)}
+      </g>
+      <g>{rects(true)}</g>
     </svg>
   );
 };
