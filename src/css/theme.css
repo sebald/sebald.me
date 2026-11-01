@@ -131,4 +131,64 @@
   }
 
   --animate-stamp-spark: stamp-spark 150ms steps(3) 140ms both;
+
+  /* Pushback: the whole stage jolted as the stamp lands, in whole pixels,
+     smaller each time; held back until the landing */
+  @keyframes stage-shake {
+    0% {
+      translate: calc(var(--px, 2px) * -3) var(--px, 2px);
+    }
+    25% {
+      translate: calc(var(--px, 2px) * 2) calc(var(--px, 2px) * -2);
+    }
+    50% {
+      translate: calc(var(--px, 2px) * -1) var(--px, 2px);
+    }
+    75% {
+      translate: var(--px, 2px) 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stage-shake: stage-shake 200ms steps(1) 140ms both;
+
+  /* Pushback: the white flash of the deciding blow, one frame and gone */
+  @keyframes end-flash {
+    from {
+      opacity: 0.85;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  --animate-end-flash: end-flash 180ms steps(2) both;
+
+  /* Pushback: a glint sweeping across a flawless stamp once it has
+     landed, in stepped moves so it stays on the pixels */
+  @keyframes stamp-glint {
+    from {
+      background-position: 120% 0;
+    }
+    to {
+      background-position: -20% 0;
+    }
+  }
+
+  --animate-stamp-glint: stamp-glint 480ms steps(8) 360ms both;
+
+  /* Pushback: a sparkle by a flawless stamp, in and out in three steps */
+  @keyframes stamp-sparkle {
+    0%,
+    100% {
+      scale: 0;
+    }
+    50% {
+      scale: 1;
+    }
+  }
+
+  --animate-stamp-sparkle: stamp-sparkle 360ms steps(3) both;
 }

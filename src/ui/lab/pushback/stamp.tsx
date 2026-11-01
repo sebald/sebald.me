@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 
+import stamps from '@/assets/lab/pushback/sheets/stamps.png';
 import { cn } from '@/lib/styles.utils';
 
 import { PALETTE } from './palette';
@@ -18,7 +19,7 @@ const FONT: Record<string, string[]> = {
   L: ['#..', '#..', '#..', '#..', '###'],
   N: ['###', '#.#', '#.#', '#.#', '#.#'],
   O: ['###', '#.#', '#.#', '#.#', '###'],
-  P: ['##.', '#.#', '##.', '#..', '#..'],
+  P: ['###', '#.#', '###', '#..', '#..'],
   R: ['##.', '#.#', '##.', '#.#', '#.#'],
   S: ['###', '#..', '###', '..#', '###'],
   T: ['###', '.#.', '.#.', '.#.', '.#.'],
@@ -55,9 +56,9 @@ type Pixel = { x: number; y: number; part: 'ink' | 'air' };
  * stamp is, in a few pixels of the frame at the same places along any
  * word (never in the letters, so the word reads whole).
  */
-const draw = (word: string, flat = false) => {
+const draw = (word: string) => {
   const width = word.length * 4 - 1 + 4;
-  const rise = flat ? 0 : Math.floor((word.length - 1) / TILT);
+  const rise = Math.floor((word.length - 1) / TILT);
   const drop = (x: number) =>
     rise - Math.min(rise, Math.floor(Math.max(0, x - 2) / 4 / TILT));
   const worn = new Set([
@@ -95,47 +96,6 @@ const STAMPS = Object.fromEntries(
   WORDS.map(word => [word, draw(word)]),
 ) as Record<StampWord, ReturnType<typeof draw>>;
 
-/** A run of pixels on a row, the same part: one rect instead of many */
-type Run = { x: number; y: number; width: number; part: Pixel['part'] };
-
-/**
- * The flat stamp, each of its pixels `size` stage pixels, turned by
- * `angle` degrees on the stage's own grid: every stage pixel takes the
- * stamp pixel under its centre once turned back, so the edges step
- * like drawn pixel art rather than blur. The stepped tilt of the small
- * stamp breaks into blocks this large.
- */
-const turn = (word: StampWord, size: number, angle: number) => {
-  const flat = draw(word, true);
-  const w = flat.width * size;
-  const h = flat.height * size;
-  const parts = new Map(flat.pixels.map(p => [`${p.x},${p.y}`, p.part]));
-  const rad = (angle * Math.PI) / 180;
-  const cos = Math.cos(rad);
-  const sin = Math.sin(rad);
-  const width = Math.ceil(Math.abs(w * cos) + Math.abs(h * sin));
-  const height = Math.ceil(Math.abs(w * sin) + Math.abs(h * cos));
-  const runs: Run[] = [];
-  for (let y = 0; y < height; y++) {
-    let run: Run | null = null;
-    for (let x = 0; x < width; x++) {
-      const dx = x + 0.5 - width / 2;
-      const dy = y + 0.5 - height / 2;
-      const sx = Math.floor((dx * cos + dy * sin + w / 2) / size);
-      const sy = Math.floor((-dx * sin + dy * cos + h / 2) / size);
-      const part = parts.get(`${sx},${sy}`);
-      if (run && run.part === part) {
-        run.width++;
-        continue;
-      }
-      if (run) runs.push(run);
-      run = part ? { x, y, width: 1, part } : null;
-    }
-    if (run) runs.push(run);
-  }
-  return { runs, width, height };
-};
-
 /** A stamp's size in stage pixels, to place it */
 export const stampSize = (word: StampWord) => ({
   width: STAMPS[word].width,
@@ -149,8 +109,13 @@ export interface StampProps {
   style?: CSSProperties;
 }
 
-/** Where a duel's stamp lands: how big its pixels are, and its turn */
-export const SLAM = { size: 5, long: 4, angle: -8 } as const;
+/**
+ * The drawn stamps, one cell each in the order of `DRAWN`, cut from two
+ * Gemini renders (`sources/stamps-1.jpg` and `stamps-2.jpg`) at the
+ * cast's own pixel size and already turned
+ */
+const DRAWN: StampWord[] = ['DONE', 'FLAWLESS', 'REJECTED', 'SHIPPED'];
+const CELL = { width: 80, height: 52 } as const;
 
 /**
  * The thump as the stamp lands: a few puffs pushed out from under it,
@@ -159,83 +124,174 @@ export const SLAM = { size: 5, long: 4, angle: -8 } as const;
  */
 const PUFFS = { count: 6, reach: 6, size: 2 } as const;
 
+/** The glint's band: the spark's white, not quite opaque */
+const GLINT = 'rgb(255 253 242 / 0.85)';
+
+/**
+ * Where the sparkles go off on a flawless stamp's edge, as shares of
+ * its cell, and when, after the glint has started
+ */
+const SPARKLES = [
+  { x: 0.12, y: 0.42, delay: 420 },
+  { x: 0.86, y: 0.14, delay: 560 },
+  { x: 0.9, y: 0.6, delay: 700 },
+  { x: 0.24, y: 0.84, delay: 820 },
+] as const;
+
+/**
+ * A four-point sparkle, nine pixels across with its ink line: `*` the
+ * spark's white, `+` light gold, `#` ink, so it reads over a light wall
+ */
+const SPARKLE = [
+  '....#....',
+  '...#*#...',
+  '...#+#...',
+  '.###+###.',
+  '#*++*++*#',
+  '.###+###.',
+  '...#+#...',
+  '...#*#...',
+  '....#....',
+];
+
+const SPARKLE_FILL: Record<string, string> = {
+  '*': PALETTE.spark,
+  '+': PALETTE.goldLight,
+  '#': PALETTE.ink,
+};
+
+const Sparkle = ({ style }: { style: CSSProperties }) => (
+  <svg
+    aria-hidden
+    viewBox="0 0 9 9"
+    shapeRendering="crispEdges"
+    className="absolute -translate-1/2 animate-stamp-sparkle motion-reduce:hidden"
+    style={{ width: px(9), height: px(9), ...style }}
+  >
+    {SPARKLE.flatMap((row, y) =>
+      row
+        .split('')
+        .map((cell, x) =>
+          cell === '.' ? null : (
+            <rect
+              key={`${x}-${y}`}
+              x={x}
+              y={y}
+              width={1}
+              height={1}
+              fill={SPARKLE_FILL[cell]}
+            />
+          ),
+        ),
+    )}
+  </svg>
+);
+
 export interface SlamStampProps extends StampProps {
-  /** Stage pixels a stamp pixel; `SLAM.long` keeps a long word in the band */
-  size?: number;
-  /** Degrees, counter-clockwise negative */
-  angle?: number;
-  /** A ring of sparks flying off its edge as it lands */
+  /** A few puffs pushed out from under it as it lands */
   sparks?: boolean;
+  /** Stage pixels a drawn pixel */
+  scale?: number;
+  /** A glint across it and a few sparkles beside it once it has landed */
+  shine?: boolean;
 }
 
 /**
- * The stamp large and turned on the stage's grid, flat rather than in
- * the small one's steps: what lands on the stage at the end of a duel,
- * the word then seen on the roster's face
+ * The stamp large and drawn, turned the way it hits: what lands on the
+ * stage at the end of a duel, the word then seen on the roster's face,
+ * and the Stakeholder's call across the face on the result screen.
+ * `tone` is the puffs' ink; the stamp has its own.
  */
 export const SlamStamp = ({
   word,
   tone = 'red',
-  size = word.length > 4 ? SLAM.long : SLAM.size,
-  angle = SLAM.angle,
   sparks = false,
+  scale = 1,
+  shine = false,
   className,
   style,
 }: SlamStampProps) => {
-  const { runs, width, height } = turn(word, size, angle);
+  const width = CELL.width * scale;
+  const height = CELL.height * scale;
+  const cell = {
+    size: `${px(width * DRAWN.length)} ${px(height)}`,
+    position: `${px(-width * DRAWN.indexOf(word))} 0`,
+  };
   const stamp = (
-    <svg
+    <span
       aria-hidden
-      viewBox={`0 0 ${width} ${height}`}
-      shapeRendering="crispEdges"
-      className={cn('block', className)}
-      style={{ width: px(width), height: px(height), ...style }}
+      className={cn('relative block [image-rendering:pixelated]', className)}
+      style={{
+        width: px(width),
+        height: px(height),
+        backgroundImage: `url(${stamps.src})`,
+        backgroundSize: cell.size,
+        backgroundPosition: cell.position,
+        backgroundRepeat: 'no-repeat',
+        ...style,
+      }}
     >
-      {runs.map(({ x, y, width: w, part }) => (
-        <rect
-          key={`${x}-${y}`}
-          x={x}
-          y={y}
-          width={w}
-          height={1}
-          fill={part === 'ink' ? INK[tone] : PALETTE.ink}
-          fillOpacity={part === 'ink' ? 1 : 0.7}
+      {/* The glint: a pale band swept across, masked by the stamp itself
+          so it shows only where the stamp is */}
+      {shine && (
+        <span
+          className="absolute inset-0 animate-stamp-glint motion-reduce:hidden"
+          style={{
+            backgroundImage: `linear-gradient(110deg, transparent 42%, ${GLINT} 42% 47%, transparent 47% 51%, ${GLINT} 51% 53%, transparent 53%)`,
+            backgroundSize: '300% 100%',
+            maskImage: `url(${stamps.src})`,
+            maskSize: cell.size,
+            maskPosition: cell.position,
+            maskRepeat: 'no-repeat',
+          }}
         />
-      ))}
-    </svg>
+      )}
+    </span>
   );
-  if (!sparks) return stamp;
+  if (!sparks && !shine) return stamp;
   return (
     <span className="relative block">
       {stamp}
+      {shine &&
+        SPARKLES.map(({ x, y, delay }, i) => (
+          <Sparkle
+            key={i}
+            style={{
+              left: px(Math.round(x * width)),
+              top: px(Math.round(y * height)),
+              animationDelay: `${delay}ms`,
+            }}
+          />
+        ))}
       {/* On the lower half of an ellipse round the stamp, from one end
           under it to the other, each pushed out sideways more than down;
           gone under reduced motion */}
-      {Array.from({ length: PUFFS.count }, (_, i) => {
-        const around = (i / (PUFFS.count - 1)) * Math.PI;
-        const x = Math.cos(around);
-        const y = Math.sin(around);
-        return (
-          <span
-            key={i}
-            aria-hidden
-            className="absolute animate-stamp-spark motion-reduce:hidden"
-            style={
-              {
-                left: px(Math.round(width / 2 + (x * width) / 2)),
-                top: px(Math.round(height / 2 + (y * height) / 2)),
-                width: px(PUFFS.size),
-                height: px(PUFFS.size),
-                // The stamp's ink with an ink edge, to read over a light wall
-                background: INK[tone],
-                boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
-                '--spark-x': px(Math.round(x * PUFFS.reach)),
-                '--spark-y': px(Math.round(y * PUFFS.reach * 0.4)),
-              } as CSSProperties
-            }
-          />
-        );
-      })}
+      {sparks &&
+        Array.from({ length: PUFFS.count }, (_, i) => {
+          const around = (i / (PUFFS.count - 1)) * Math.PI;
+          const x = Math.cos(around);
+          const y = Math.sin(around);
+          return (
+            <span
+              key={i}
+              aria-hidden
+              className="absolute animate-stamp-spark motion-reduce:hidden"
+              style={
+                {
+                  left: px(Math.round(width / 2 + (x * width) / 2)),
+                  top: px(Math.round(height / 2 + (y * height) / 2)),
+                  width: px(PUFFS.size),
+                  height: px(PUFFS.size),
+                  // The stamp's ink with an ink edge, to read over a light wall
+                  background: INK[tone],
+                  boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
+                  '--spark-x': px(Math.round(x * PUFFS.reach)),
+                  '--spark-y': px(Math.round(y * PUFFS.reach * 0.4)),
+                } as CSSProperties
+              }
+            />
+          );
+        })}
     </span>
   );
 };

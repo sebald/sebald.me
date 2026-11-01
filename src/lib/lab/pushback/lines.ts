@@ -569,6 +569,15 @@ export const VERDICTS = {
   lose: ['Overruled.', 'Back to drafts.', 'Parked for now.', 'Request denied.'],
 } as const;
 
+/**
+ * The verdict over the run, the result screen's heading: the Stakeholder
+ * signing off or taking it offline, picked in turn by the duels played
+ */
+export const RUN_VERDICTS = {
+  shipped: ['Signed off.', 'Green light.', 'Approved as is.'],
+  offline: ["Let's circle back.", 'Not this quarter.', 'Deprioritised.'],
+} as const;
+
 /** Every line that can appear in the dialogue box, for the length check */
 export const allLines = (): string[] => [
   ...[...PAIRS, ...CLOSERS].flatMap(pair => [pair.phrase, pair.counter]),
@@ -583,4 +592,5 @@ export const allLines = (): string[] => [
   ...BUDDY_BARKS,
   BUDDY_MISS_BARK,
   ...Object.values(VERDICTS).flat(),
+  ...Object.values(RUN_VERDICTS).flat(),
 ];

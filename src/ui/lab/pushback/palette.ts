@@ -38,6 +38,9 @@ export const PALETTE = {
   // The stamp
   /** SHIPPED across the face of a role the Stakeholder signed off */
   stamp: '#d9483b',
+  /** Its ramp on the drawn stamps (`stamps.mjs` snaps them to it) */
+  stampLight: '#f58a6e',
+  stampShade: '#9e2a25',
 
   // Empty
   /** Empty ticks, pips and tracks, with their dots */

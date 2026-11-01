@@ -62,7 +62,7 @@ import {
   typingDuration,
   viewFor,
 } from '@/lib/lab/pushback/stage';
-import { cva } from '@/lib/styles.utils';
+import { cn, cva } from '@/lib/styles.utils';
 
 import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
@@ -91,6 +91,15 @@ const DEMO_LABEL_Y = 68;
 
 /** Where the end of a duel's stamp lands: its centre, between the duellists */
 const STAMP_AT = { x: STAGE.width / 2, y: 64 } as const;
+
+/** The stamp half as large again as it is drawn, to carry the stage */
+const STAMP_SCALE = 1.5;
+
+/**
+ * The hit-stop of the deciding blow: the stage holds its frame this long
+ * under a white flash before the end beat runs on (two of its 8 fps steps)
+ */
+const HOLD_MS = 250;
 
 const styles = {
   pause: cva({
@@ -613,15 +622,30 @@ export const DuelScreen = ({
   const { exchangesWon, exchangesLost, micDrops } = state.stats;
   const learned = state.collected.length - state.setup.collected.length;
 
+  // The deciding blow: the flash and the held frame as the end beat starts
+  const blow = state.phase === 'end' && step?.kind === 'beat' && !auto;
+  // (once a duel: the screen is mounted afresh for every duel)
+  const [released, setReleased] = useState(false);
+  const holding = blow && !reduced && !released;
+  useEffect(() => {
+    if (!holding) return;
+    const timer = setTimeout(() => setReleased(true), HOLD_MS);
+    return () => clearTimeout(timer);
+  }, [holding]);
+
   return (
     <Frame
       model={model}
       band={band}
       onStep={onStep}
-      paused={paused}
+      paused={paused || holding}
       label={`Pushback, duel against ${character.name}`}
       scale={scale}
-      className={className}
+      // The stage jolts as the stamp lands
+      className={cn(
+        ended && !auto && 'animate-stage-shake motion-reduce:animate-none',
+        className,
+      )}
     >
       <div ref={rootRef} aria-live="polite" className="sr-only">
         {announce}
@@ -647,6 +671,14 @@ export const DuelScreen = ({
       {/* The arcade stamp over the room */}
       {auto && <DemoLabel y={DEMO_LABEL_Y} />}
 
+      {/* The deciding blow's flash, over the room and the bars */}
+      {blow && !reduced && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 animate-end-flash bg-(--pb-spark)"
+        />
+      )}
+
       {/* The duel's stamp, slammed down between the duellists */}
       {ended && !auto && (
         // Centred by its wrapper: the slam moves the stamp's own `translate`
@@ -657,7 +689,9 @@ export const DuelScreen = ({
           <SlamStamp
             word={stamp.word}
             tone={stamp.tone}
+            scale={STAMP_SCALE}
             sparks
+            shine={flawless && won}
             className="animate-stamp-slam motion-reduce:animate-none"
           />
         </div>

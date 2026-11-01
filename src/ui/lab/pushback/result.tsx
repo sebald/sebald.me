@@ -3,7 +3,12 @@
 import { useMemo, useState } from 'react';
 
 import { LOOKS, MODES, MODE_LABELS } from '@/lib/lab/pushback/characters';
-import { type PairId, ROLE_LABELS } from '@/lib/lab/pushback/lines';
+import {
+  type PairId,
+  ROLE_LABELS,
+  RUN_VERDICTS,
+  inTurn,
+} from '@/lib/lab/pushback/lines';
 import {
   type SavedRun,
   formatScore,
@@ -17,6 +22,7 @@ import { Ledger, Meter } from './ledger';
 import { Picker } from './picker';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
+import { SlamStamp } from './stamp';
 import { Heading, Muted } from './text';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -40,8 +46,10 @@ const PORTRAIT_SCALE = 3;
  * stage: the face, the name and the role on the left, the result, the
  * score with the mode's factor and the run's numbers with dot leaders
  * on the right, and under a rule the glossary by pool,
- * a meter of the pool's twenty pairs each, so the gaps show. Copy puts
- * the text card on the clipboard.
+ * a meter of the pool's twenty pairs each, so the gaps show. The
+ * Stakeholder's call lands on the face as the duel's stamp does,
+ * SHIPPED or REJECTED, and the verdict heads the numbers in the duel
+ * end's letters. Copy puts the text card on the clipboard.
  */
 export const ResultScreen = ({
   run,
@@ -67,6 +75,10 @@ export const ResultScreen = ({
 
   const { panel } = LAYOUT;
   const name = LOOKS[run.role][run.look].name;
+  const verdict = inTurn(
+    RUN_VERDICTS[model.finished ? 'shipped' : 'offline'],
+    run.attempts,
+  );
 
   return (
     <Stage label="Pushback, result" scale={scale}>
@@ -92,7 +104,7 @@ export const ResultScreen = ({
         <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)]">
           <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)]">
             <span
-              className="block bg-(--pb-frame-inner)"
+              className="relative block bg-(--pb-frame-inner)"
               style={{
                 boxShadow: `0 0 0 ${px(2)} var(--pb-frame), 0 0 0 ${px(3)} var(--pb-ink)`,
               }}
@@ -101,6 +113,17 @@ export const ResultScreen = ({
                 sheet={PLAYER_SHEETS[run.role][run.look]}
                 scale={PORTRAIT_SCALE}
               />
+              {/* The Stakeholder's call across the face, centred on it by
+                  its wrapper (the slam moves the stamp's translate), a pixel
+                  up and left so the ink, not the shadow, sits in the middle */}
+              <div className="pointer-events-none absolute top-[calc(50%-var(--px))] left-[calc(50%-var(--px))] -translate-1/2">
+                <SlamStamp
+                  key={String(model.finished)}
+                  word={model.finished ? 'SHIPPED' : 'REJECTED'}
+                  sparks
+                  className="animate-stamp-slam motion-reduce:animate-none"
+                />
+              </div>
             </span>
             <div className="mt-[calc(var(--px)*2)] grid justify-items-center">
               <Heading>{name}</Heading>
@@ -108,9 +131,22 @@ export const ResultScreen = ({
             </div>
           </div>
           <div className="grid min-w-0 flex-1 content-start gap-[calc(var(--px)*5)]">
-            <Heading className="text-[1.15em] tracking-[0.1em] text-(--pb-gold) uppercase">
-              {model.finished ? 'Stakeholder beaten' : 'Taken offline'}
-            </Heading>
+            <div className="grid gap-[calc(var(--px)*1)]">
+              <Heading
+                className={
+                  model.finished
+                    ? 'text-[1.15em] tracking-[0.1em] text-(--pb-gold) uppercase'
+                    : 'text-[1.15em] tracking-[0.1em] text-(--pb-stamp) uppercase'
+                }
+              >
+                {verdict}
+              </Heading>
+              <Muted>
+                {model.finished
+                  ? 'Stakeholder beaten'
+                  : 'Stakeholder took it offline'}
+              </Muted>
+            </div>
             <div className="flex items-baseline gap-[1ch]">
               <span className="text-[1.8em] leading-none font-bold text-(--pb-heading) tabular-nums">
                 {formatScore(model.score)}

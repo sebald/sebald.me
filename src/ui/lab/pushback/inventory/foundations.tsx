@@ -23,7 +23,7 @@ const GROUPS: { title: string; keys: PaletteKey[] }[] = [
   { title: 'The player', keys: ['gold', 'goldLight', 'goldShade'] },
   { title: 'The opponent', keys: ['ember', 'emberLight', 'emberShade'] },
   { title: 'The clash', keys: ['spark'] },
-  { title: 'The stamp', keys: ['stamp'] },
+  { title: 'The stamp', keys: ['stamp', 'stampLight', 'stampShade'] },
   { title: 'Empty', keys: ['empty', 'emptyDots', 'steel'] },
   {
     title: 'The letters',
@@ -204,7 +204,8 @@ export const StampDemo = () => (
     </span>
     {/* Large and turned, as it lands at the end of a duel */}
     <SlamStamp word="DONE" />
-    <SlamStamp word="FLAWLESS" tone="gold" />
+    <SlamStamp word="FLAWLESS" tone="gold" shine />
     <SlamStamp word="REJECTED" />
+    <SlamStamp word="SHIPPED" />
   </Pixels>
 );
