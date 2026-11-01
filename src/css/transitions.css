@@ -1,0 +1,71 @@
+/*------------------*/
+/* Page Transitions */
+/*------------------*/
+
+@import './dissolve.css';
+
+/* One tile of the generated masks (`scripts/dissolve.mjs`), 32 cells wide.
+   Never narrower than 384px, so cells stay visible on phones. */
+:root {
+  --dissolve-tile: max(50vw, 384px);
+}
+
+/* Clicks during a transition reach the live page */
+::view-transition {
+  pointer-events: none;
+}
+
+/* The pages swap cell by cell (see `PageTransition`): a cell leaves the old
+   page, flashes through a band of colors behind it and then shows the new
+   page. The tile repeats down the page, so cells keep their size on pages
+   of any height. `step-end` holds every frame until the next one. The
+   images are one pixel per cell, `pixelated` keeps the cells hard-edged. */
+::view-transition-old(.page-dissolve-out),
+::view-transition-image-pair(.page-dissolve-out),
+::view-transition-new(.page-dissolve-in) {
+  image-rendering: pixelated;
+}
+::view-transition-old(.page-dissolve-out) {
+  mask-size:
+    var(--dissolve-tile) var(--dissolve-tile),
+    100% 100%;
+  mask-repeat: repeat, no-repeat;
+  mask-composite: exclude, add;
+  animation: 700ms step-end both dissolve-out;
+}
+::view-transition-image-pair(.page-dissolve-out) {
+  background-size: var(--dissolve-tile) var(--dissolve-tile);
+  animation: 700ms step-end both dissolve-band;
+}
+::view-transition-new(.page-dissolve-in) {
+  mask-size: var(--dissolve-tile) var(--dissolve-tile);
+  animation: 700ms step-end both dissolve-in;
+}
+
+/* Reduced motion: no cells, a short crossfade */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(.page-dissolve-out),
+  ::view-transition-new(.page-dissolve-in) {
+    mask: none;
+  }
+  ::view-transition-image-pair(.page-dissolve-out) {
+    animation: none;
+  }
+  ::view-transition-old(.page-dissolve-out) {
+    animation: 150ms ease-out both page-fade-out;
+  }
+  ::view-transition-new(.page-dissolve-in) {
+    animation: 150ms ease-out both page-fade-in;
+  }
+}
+
+@keyframes page-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes page-fade-in {
+  from {
+    opacity: 0;
+  }
+}

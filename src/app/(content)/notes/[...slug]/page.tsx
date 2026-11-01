@@ -15,6 +15,7 @@ import { NarrationPlayer } from '@/ui/narration-player';
 import { NoteEnd } from '@/ui/note-end';
 import { NoteMeta } from '@/ui/note-meta';
 import { PageToolbar } from '@/ui/page-toolbar';
+import { PageTransition } from '@/ui/page-transition';
 import { ReadingProgressTracking } from '@/ui/tracking/reading-progress-tracking';
 
 // Config
@@ -76,7 +77,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   });
 
   return (
-    <>
+    <PageTransition>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
@@ -121,7 +122,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
         newer={newer && { url: newer.url, title: newer.data.title }}
         older={older && { url: older.url, title: older.data.title }}
       />
-    </>
+    </PageTransition>
   );
 };
 

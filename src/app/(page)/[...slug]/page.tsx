@@ -6,6 +6,7 @@ import { miscSource } from '@/lib/source';
 import { Article } from '@/ui/layout/article';
 import { getMDXComponents } from '@/ui/mdx';
 import { PageToolbar } from '@/ui/page-toolbar';
+import { PageTransition } from '@/ui/page-transition';
 
 // Config
 // ---------------
@@ -44,7 +45,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
   const MDX = page.data.body;
 
   return (
-    <>
+    <PageTransition>
       <PageToolbar />
       <Article aria-labelledby={titleId}>
         <Article.Header>
@@ -56,7 +57,7 @@ const Page = async (props: PageProps<'/[...slug]'>) => {
           <MDX components={getMDXComponents()} />
         </Article.Content>
       </Article>
-    </>
+    </PageTransition>
   );
 };
 

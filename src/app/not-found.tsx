@@ -8,6 +8,7 @@ import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { PageToolbar } from '@/ui/page-toolbar';
+import { PageTransition } from '@/ui/page-transition';
 import { PixelImage } from '@/ui/pixel-image';
 import { Text } from '@/ui/text';
 
@@ -61,7 +62,7 @@ const NotFound = () => {
   const notes = sortByDate(notesSource.getPages()).slice(0, 3);
 
   return (
-    <>
+    <PageTransition>
       <PageToolbar />
       {/* One column at content width, so the scene can break out of it */}
       <div className="grid grid-cols-1 gap-16">
@@ -110,7 +111,7 @@ const NotFound = () => {
           </ul>
         </nav>
       </div>
-    </>
+    </PageTransition>
   );
 };
 

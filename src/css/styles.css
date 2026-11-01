@@ -3,6 +3,7 @@
 
 @import './theme.css';
 @import './prose.css';
+@import './transitions.css';
 
 ::selection {
   background-color: oklch(0.74 0.1 65 / 0.5);
