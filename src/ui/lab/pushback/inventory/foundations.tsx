@@ -8,7 +8,7 @@ import { Dialogue } from '../dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '../palette';
 import { Picker } from '../picker';
 import { Pixels } from '../stage';
-import { SlamStamp, Stamp } from '../stamp';
+import { Stamp } from '../stamp';
 import { Heading, Loud, Muted } from '../text';
 import { Legend } from '../window';
 import { Field, field } from './controls';
@@ -23,8 +23,8 @@ const GROUPS: { title: string; keys: PaletteKey[] }[] = [
   { title: 'The player', keys: ['gold', 'goldLight', 'goldShade'] },
   { title: 'The opponent', keys: ['ember', 'emberLight', 'emberShade'] },
   { title: 'The clash', keys: ['spark'] },
-  { title: 'The stamp', keys: ['stamp', 'stampLight', 'stampShade'] },
-  { title: 'Empty', keys: ['empty', 'emptyDots', 'steel'] },
+  { title: 'The stamp', keys: ['stamp'] },
+  { title: 'Empty', keys: ['empty', 'emptyDots', 'steel', 'steelLight'] },
   {
     title: 'The letters',
     keys: ['text', 'textBright', 'heading', 'muted', 'dim'],
@@ -202,10 +202,5 @@ export const StampDemo = () => (
     <span className="bg-[#c58a62] p-[calc(var(--px)*3)]">
       <Stamp word="DONE" />
     </span>
-    {/* Large and turned, as it lands at the end of a duel */}
-    <SlamStamp word="DONE" />
-    <SlamStamp word="FLAWLESS" tone="gold" shine />
-    <SlamStamp word="REJECTED" />
-    <SlamStamp word="SHIPPED" />
   </Pixels>
 );

@@ -351,16 +351,21 @@ export const closerFor = (state: DuelState): PairId => {
     .id;
 };
 
-/** The player gets the initiative: a hand, and a closer if full */
+/**
+ * The player gets the initiative: a hand, and a closer if full, which
+ * takes one of the hand's places, so the menu is never longer
+ */
 const playerAttacks = (state: DuelState): DuelState => {
   const rng = new Rng(state.rng);
-  const hand = drawHand(state.collected, state.spent, state.rules.hand, rng);
+  const closer =
+    state.momentum.player >= state.rules.momentum ? closerFor(state) : null;
+  const size = closer ? state.rules.hand - 1 : state.rules.hand;
+  const hand = drawHand(state.collected, state.spent, size, rng);
   return {
     ...state,
     phase: 'attack',
     hand,
-    closer:
-      state.momentum.player >= state.rules.momentum ? closerFor(state) : null,
+    closer,
     exchange: null,
     menu: [],
     silence: null,

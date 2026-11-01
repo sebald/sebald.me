@@ -1,6 +1,6 @@
 # Pushback: Gemini prompt pack
 
-Every image the game needs, one prompt each, ready to paste. Nineteen generations before rerolls: ten model sheets, the ghost, four scenes, the logo, the mic-drop burst, the two stamp sheets; the prop and head sheets below are no longer used in the game, but the prop sheet is attached to the logo prompts for the cup.
+Every image the game needs, one prompt each, ready to paste. Seventeen generations before rerolls: ten model sheets, the ghost, four scenes, the logo, the mic-drop burst; the prop and head sheets below are no longer used in the game, but the prop sheet is attached to the logo prompts for the cup.
 
 ## Before you start
 
@@ -1262,67 +1262,9 @@ colours, one outline, one shadow. No other words.
 
 What to check: the letters are legible at a quarter size; the three cells share one pixel size; the popped cell is still the same burst, not a different object; nothing touches the frame edge. The gold should be the player's HUD gold (#f2c14e) and the rim the ember (#f0a36f), close is fine.
 
-## Stamps (`stamps-1.jpg`, `stamps-2.jpg`)
+## Stamps (dropped)
 
-The rubber stamps that slam down at the end of a duel (`DONE`, `FLAWLESS`, `REJECTED`) and across the face on the result screen (`SHIPPED`, `REJECTED`). Drawn in code first, the 3 by 5 font blown up and turned on the grid; at that size it read as a different resolution from the mic drop beside it, and finer strokes in code only made it busier. Two renders in one chat, the large row first, the small one as a follow-up, so the style holds. The tiny stamps on the roster and the select screen stay in code.
-
-In the repo: `stamps-2.jpg` (DONE, FLAWLESS, REJECTED) and `stamps-1.jpg` (SHIPPED, REJECTED), both rolled at the large size, so no small row was needed; the tilt came out near eighteen degrees and the red crimson, which the colour pass fixes. Cut each like the burst (the plate inside the frame keys with the letters), join DONE, FLAWLESS, REJECTED and the first cell of the second into one 320 by 52 strip with sharp, then snap it to the palette:
-
-```bash
-node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/originals/stamps-2.jpeg a \
-  --cells 3 --cell 80x52 --anchor centre --specks 0 --out /tmp/stamps
-node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/originals/stamps-1.jpeg b \
-  --cells 2 --cell 80x52 --anchor centre --specks 0 --out /tmp/stamps
-# join a.png and the first 80 columns of b.png into /tmp/stamps/joined.png
-node .claude/skills/pixel-sprite/scripts/stamps.mjs \
-  /tmp/stamps/joined.png src/assets/lab/pushback/sheets/stamps.png
-```
-
-Attach: `HEADER`, the mic-drop burst sheet (`originals/micdrop-sheet.jpeg`, the lettering and the pixel size to match) and `DEV` (the pixel size of the cast).
-
-```text
-Draw a pixel-art sprite sheet in the style of the attached images: the
-same pixel size as the characters and the burst, the same hard-edged
-outlines, the same limited palette. Plain, flat, near-black background,
-nothing else in the frame. Three rubber stamp imprints in one row, left
-to right, with wide clear gaps between them, each tilted about eight
-degrees counter-clockwise, rising to the right, drawn as pixel art on
-the grid with clean stair steps along every edge.
-
-Each stamp is a rectangular frame with the word inside it in heavy,
-blocky pixel capitals, about nine pixels tall, letters two pixels thick,
-the frame two pixels thick with slightly rounded corners and two or
-three small worn notches along its edges that do not cut all the way
-through. The inside of the frame is a flat dark navy plate, clearly
-lighter than the background. The ink has a one-pixel black outline
-around the frame and around every letter, a one-pixel lighter highlight
-along the top edge of each stroke and a one-pixel darker shade along the
-bottom edge, and the whole stamp casts a hard one-pixel shadow down and
-to the right.
-
-Left: DONE in red ink (#d9483b, highlight #f58a6e, shade #9e2a25).
-Middle: FLAWLESS in gold ink (#f2c14e, highlight #fff1b8, shade
-#b8871f). Right: REJECTED in the same red as DONE. All three the same
-letter height, the same frame thickness, the same tilt, the same pixel
-size. No gradients, no glow, no blur, no ink splatter, no texture inside
-the letters: flat colours, one outline, one shadow. No other words.
-```
-
-Follow-up for the small row, in the same chat:
-
-```text
-Now draw a second sheet in exactly the same style, the same pixel size,
-the same colours, the same tilt: two smaller stamps in one row with wide
-gaps, the letters about five pixels tall and one pixel thick, the frame
-one pixel thick, keeping the one-pixel black outline and the shadow but
-no highlight or shade on such thin strokes. Left: SHIPPED in red.
-Right: REJECTED in red. Each about sixty pixels wide, so it fits across
-a face. Plain near-black background, nothing else.
-```
-
-What to check: every letter reads at a quarter size (the P of SHIPPED is not an F, the R of REJECTED is not a P); the three large stamps share one letter height and tilt; the plate inside the frame is lighter than the background, or the key eats it; nothing touches the frame edge. The large row should come out near 80 pixels wide for FLAWLESS and REJECTED on the cast's grid; much wider and the pixels came out too fine (use the half-resolution follow-up).
+Large rubber stamps for the end of a duel and the result screen were rolled here (DONE, FLAWLESS, REJECTED, SHIPPED, tilted, in a frame with a dark plate) and cut into a sheet at the cast's pixel size. They never read well over the wall at that size, with the plate or without it, and the end of a duel became a round call drawn in code instead (`round-call.tsx`). The prompt and the renders are in the git history.
 
 ## Follow-ups, in the same chat
 

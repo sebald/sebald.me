@@ -75,9 +75,9 @@ import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Ledger } from './ledger';
 import { Picker, type PickerItem } from './picker';
-import { SilenceTimer } from './silence-timer';
+import { RoundCall } from './round-call';
+import { SILENCE_ROW, SilenceTimer } from './silence-timer';
 import { px } from './stage';
-import { SlamStamp, type StampWord } from './stamp';
 import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
@@ -86,20 +86,21 @@ import { Legend, Window } from './window';
 
 // Styles
 // ---------------
-/** The demo's label: its top, at the duellists' chests, under their faces */
-const DEMO_LABEL_Y = 68;
 
-/** Where the end of a duel's stamp lands: its centre, between the duellists */
-const STAMP_AT = { x: STAGE.width / 2, y: 64 } as const;
-
-/** The stamp half as large again as it is drawn, to carry the stage */
-const STAMP_SCALE = 1.5;
+/** Where the round is called at the end of a duel, and the demo labelled: its top centre */
+const CALL_AT = { x: STAGE.width / 2, y: 44 } as const;
 
 /**
  * The hit-stop of the deciding blow: the stage holds its frame this long
  * under a white flash before the end beat runs on (two of its 8 fps steps)
  */
 const HOLD_MS = 250;
+
+/**
+ * The window's height in stage pixels, from the stage's bottom: its top
+ * two rows under the duellists' feet, a few rows more than the panel
+ */
+const WINDOW_HEIGHT = LAYOUT.panel.y + LAYOUT.panel.height - (LAYOUT.feet + 2);
 
 const styles = {
   pause: cva({
@@ -109,6 +110,7 @@ const styles = {
 
 // Screen
 // ---------------
+
 export interface DuelScreenProps {
   /** A duel at `intro`, or any state the workbench constructed */
   initial: DuelState;
@@ -526,15 +528,34 @@ export const DuelScreen = ({
 
   // Overlay
   // ---------------
-  const typed =
+  const typedLength =
     step?.kind === 'line'
       ? typingDone
-        ? step.text
-        : step.text.slice(0, typedChars(cursor.elapsed, step.text))
-      : '';
+        ? step.text.length
+        : typedChars(cursor.elapsed, step.text)
+      : 0;
+  // The rest of the line holds its room, so it never rewraps or grows
+  // the window as it types
+  const typed =
+    step?.kind === 'line' ? (
+      <>
+        {step.text.slice(0, typedLength)}
+        {typedLength < step.text.length && (
+          <span className="invisible">{step.text.slice(typedLength)}</span>
+        )}
+      </>
+    ) : null;
+
+  // The defence is one screen: the phrase types out in the window the
+  // counters already stand in, hidden until it has been said, so nothing
+  // moves when the menu opens
+  const asking =
+    state.phase === 'defend' &&
+    state.exchange !== null &&
+    (step?.kind === 'line' || step?.kind === 'menu');
 
   const menuItems: PickerItem[] = useMemo(() => {
-    if (step?.kind !== 'menu') return [];
+    if (step?.kind !== 'menu' && !asking) return [];
     if (state.phase === 'attack') {
       const items: PickerItem[] = state.hand.map(id => ({
         id,
@@ -564,7 +585,7 @@ export const DuelScreen = ({
       }));
     }
     return [];
-  }, [step?.kind, state, act, whisper]);
+  }, [step?.kind, asking, state, act, whisper]);
 
   const announce = useMemo(() => {
     if (!step) return '';
@@ -586,6 +607,34 @@ export const DuelScreen = ({
       : null;
   const timing = silenceWidth !== null && state.silence ? state.silence : null;
 
+  // The window's height: one for the lines and every menu that fits,
+  // its top clear of the duellists' feet, so nothing jumps from line to
+  // menu; a longer menu (hard mode, a mic drop) grows it smoothly, and
+  // the counters show once it has grown
+  const roomRef = useRef<HTMLDivElement>(null);
+  const heightRef = useRef<HTMLSpanElement>(null);
+  const rowRef = useRef<HTMLSpanElement>(null);
+  const [room, setRoom] = useState<{
+    need: number;
+    row: number;
+    fixed: number;
+  } | null>(null);
+  useEffect(() => {
+    const el = roomRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(() =>
+      setRoom({
+        need: el.offsetHeight,
+        row: rowRef.current?.offsetHeight ?? 0,
+        fixed: heightRef.current?.offsetHeight ?? 0,
+      }),
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+  const growing =
+    !reduced && room !== null && room.need - room.row > room.fixed + 1;
+
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
     <Legend keys={[['Any key', 'menu']]} touch="Tap for the menu" />
@@ -603,18 +652,12 @@ export const DuelScreen = ({
     <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
   ) : null;
 
-  // The end of the duel: after its beat, the stamp lands and stays
-  // through the last lines; the window then gives the verdict and the
-  // numbers. The demo has its own label where the stamp would go.
+  // The end of the duel: the deciding blow held under a flash, then the
+  // round called over the room, staying through the last lines; the
+  // window then gives the verdict and the numbers. The demo has its own
+  // label where the call would go.
   const won = state.winner === 'player';
   const flawless = isFlawless(state) && state.setup.buddy !== true;
-  const ended =
-    state.phase === 'end' && step !== undefined && step.kind !== 'beat';
-  const stamp: { word: StampWord; tone: 'red' | 'gold' } = !won
-    ? { word: 'REJECTED', tone: 'red' }
-    : flawless
-      ? { word: 'FLAWLESS', tone: 'gold' }
-      : { word: 'DONE', tone: 'red' };
   const verdict = inTurn(
     VERDICTS[!won ? 'lose' : flawless ? 'flawless' : 'win'],
     state.setup.encounter,
@@ -632,6 +675,91 @@ export const DuelScreen = ({
     const timer = setTimeout(() => setReleased(true), HOLD_MS);
     return () => clearTimeout(timer);
   }, [holding]);
+  const called =
+    state.phase === 'end' &&
+    !auto &&
+    (step?.kind !== 'beat' || released || reduced);
+
+  // What the window says; `sizing` for the unseen copy that measures it
+  const promptLine =
+    state.phase === 'attack' ? prompt(state) : showsHint(state) ? HINT : null;
+  const contents = (sizing: boolean) => (
+    <>
+      {step?.kind === 'line' && !asking && (
+        <Dialogue speaker={step.speaker}>{typed}</Dialogue>
+      )}
+      {step?.kind === 'reveal' && (
+        <>
+          <Dialogue speaker="player" muted>
+            {counterText(state.outcome?.picked ?? null)}
+          </Dialogue>
+          <Muted>The reply: {step.text}</Muted>
+        </>
+      )}
+      {(step?.kind === 'menu' || asking) && (
+        <>
+          {/* The phrase being answered, at full strength: it is what the
+              player reads to pick, and the question, so a defence needs
+              no prompt. Typed out first, then kept. */}
+          {asking && state.exchange && (
+            <Dialogue speaker="opponent">
+              {step?.kind === 'line'
+                ? typed
+                : phraseText(state.exchange.phrase)}
+            </Dialogue>
+          )}
+          <div
+            className={cn(
+              'flex min-h-0 flex-col',
+              !promptLine && 'mt-[calc(var(--px)*2)]',
+              step?.kind !== 'menu'
+                ? 'invisible'
+                : // A menu that grows the window shows once it has grown
+                  growing &&
+                    !sizing &&
+                    'animate-appear [animation-delay:200ms]',
+            )}
+          >
+            {/* The prompt sits above the options, with room on both sides */}
+            {promptLine && (
+              <Muted className="my-[calc(var(--px)*4)]">{promptLine}</Muted>
+            )}
+            <Picker
+              label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
+              items={menuItems}
+              active={!sizing && step?.kind === 'menu' && !paused && !auto}
+              // Tighter than the menus' rows, so six fit the window
+              className="gap-0 [&_button]:py-[0.1em]"
+            />
+          </div>
+        </>
+      )}
+      {step?.kind === 'wait' && (
+        <>
+          <Heading
+            className={
+              won
+                ? 'tracking-[0.1em] text-(--pb-gold) uppercase'
+                : 'tracking-[0.1em] text-(--pb-stamp) uppercase'
+            }
+          >
+            {verdict}
+          </Heading>
+          <Ledger
+            className="mt-[calc(var(--px)*3)] w-[24em]"
+            rows={[
+              [
+                'Exchanges won',
+                `${exchangesWon}/${exchangesWon + exchangesLost}`,
+              ],
+              ['Mic drops', micDrops],
+              ['Lines collected', learned > 0 ? `+${learned}` : 'none'],
+            ]}
+          />
+        </>
+      )}
+    </>
+  );
 
   return (
     <Frame
@@ -641,9 +769,11 @@ export const DuelScreen = ({
       paused={paused || holding}
       label={`Pushback, duel against ${character.name}`}
       scale={scale}
-      // The stage jolts as the stamp lands
+      // The stage jolts as the call lands
       className={cn(
-        ended && !auto && 'animate-stage-shake motion-reduce:animate-none',
+        called &&
+          (won ? 'animate-stage-shake' : 'animate-stage-thud') +
+            ' motion-reduce:animate-none',
         className,
       )}
     >
@@ -668,8 +798,8 @@ export const DuelScreen = ({
         still={reduced}
       />
 
-      {/* The arcade stamp over the room */}
-      {auto && <DemoLabel y={DEMO_LABEL_Y} />}
+      {/* The demo label over the room, where the round is called */}
+      {auto && <DemoLabel y={CALL_AT.y} />}
 
       {/* The deciding blow's flash, over the room and the bars */}
       {blow && !reduced && (
@@ -679,21 +809,14 @@ export const DuelScreen = ({
         />
       )}
 
-      {/* The duel's stamp, slammed down between the duellists */}
-      {ended && !auto && (
-        // Centred by its wrapper: the slam moves the stamp's own `translate`
+      {/* The round called over the room, between the duellists' heads;
+          centred by its wrapper, since the call moves its own `translate` */}
+      {called && (
         <div
-          className="pointer-events-none absolute -translate-1/2"
-          style={{ left: px(STAMP_AT.x), top: px(STAMP_AT.y) }}
+          className="pointer-events-none absolute -translate-x-1/2"
+          style={{ left: px(CALL_AT.x), top: px(CALL_AT.y) }}
         >
-          <SlamStamp
-            word={stamp.word}
-            tone={stamp.tone}
-            scale={STAMP_SCALE}
-            sparks
-            shine={flawless && won}
-            className="animate-stamp-slam motion-reduce:animate-none"
-          />
+          <RoundCall won={won} flawless={flawless} />
         </div>
       )}
 
@@ -709,83 +832,55 @@ export const DuelScreen = ({
       {/* The window and the ghost perched on its corner, which moves
           up with it when a long menu grows the window */}
       <div
-        className="absolute flex flex-col"
+        className="absolute flex flex-col transition-[height] duration-200 ease-out motion-reduce:transition-none"
         style={{
           left: px(LAYOUT.panel.x),
           right: px(LAYOUT.panel.x),
           bottom: px(STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height)),
-          minHeight: px(LAYOUT.panel.height),
+          // The silence bar's row always on top, so the body never moves
+          height: room
+            ? `calc(max(${px(WINDOW_HEIGHT)}, ${room.need - room.row}px) + ${room.row}px)`
+            : px(WINDOW_HEIGHT),
           // A long menu grows the window up over the room, never over the
           // bars: past that the list scrolls
           maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
         }}
       >
         <Window className="min-h-0 flex-1" legend={legend}>
-          {step?.kind === 'line' && (
-            <Dialogue speaker={step.speaker}>{typed}</Dialogue>
+          {/* The silence bar, growing in on top as the window rises by its
+              row, so nothing under it moves */}
+          {timing && (
+            <SilenceTimer
+              elapsed={timing.elapsed}
+              limit={timing.limit}
+              still={reduced}
+            />
           )}
-          {step?.kind === 'reveal' && (
-            <>
-              <Dialogue speaker="player" muted>
-                {counterText(state.outcome?.picked ?? null)}
-              </Dialogue>
-              <Muted>The reply: {step.text}</Muted>
-            </>
-          )}
-          {step?.kind === 'menu' && (
-            <>
-              {/* The silence bar, growing in at the window's top */}
-              {timing && (
-                <SilenceTimer
-                  elapsed={timing.elapsed}
-                  limit={timing.limit}
-                  still={reduced}
-                />
-              )}
-              {/* The phrase being answered, at full strength: it is what
-                the player reads to pick */}
-              {state.phase === 'defend' && state.exchange && (
-                <Dialogue speaker="opponent">
-                  {phraseText(state.exchange.phrase)}
-                </Dialogue>
-              )}
-              {/* The prompt sits above the options, with room on both sides */}
-              <Muted className="my-[calc(var(--px)*4)]">
-                {showsHint(state) ? HINT : prompt(state)}
-              </Muted>
-              <Picker
-                label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
-                items={menuItems}
-                active={!paused && !auto}
-                className="gap-0"
-              />
-            </>
-          )}
-          {step?.kind === 'wait' && (
-            <>
-              <Heading
-                className={
-                  won
-                    ? 'tracking-[0.1em] text-(--pb-gold) uppercase'
-                    : 'tracking-[0.1em] text-(--pb-stamp) uppercase'
-                }
-              >
-                {verdict}
-              </Heading>
-              <Ledger
-                className="mt-[calc(var(--px)*3)] w-[24em]"
-                rows={[
-                  [
-                    'Exchanges won',
-                    `${exchangesWon}/${exchangesWon + exchangesLost}`,
-                  ],
-                  ['Mic drops', micDrops],
-                  ['Lines collected', learned > 0 ? `+${learned}` : 'none'],
-                ]}
-              />
-            </>
-          )}
+          {contents(false)}
         </Window>
+        {/* The same window unseen at its natural height: what the shown
+            one grows to when this is more than its own */}
+        <div
+          ref={roomRef}
+          aria-hidden
+          className="invisible absolute inset-x-0 bottom-0 flex flex-col"
+        >
+          <span
+            ref={heightRef}
+            className="absolute"
+            style={{ height: px(WINDOW_HEIGHT) }}
+          />
+          <Window legend={legend}>
+            {timing && (
+              <span
+                ref={rowRef}
+                className="block shrink-0"
+                style={{ height: px(SILENCE_ROW) }}
+              />
+            )}
+            {contents(true)}
+          </Window>
+        </div>
         {ghostShown && (
           <span
             className="pointer-events-none absolute"

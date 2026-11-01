@@ -61,7 +61,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Stamp"
-      blurb="A rubber stamp in pixels (stamp.tsx), one component for every word: SHIPPED on a role the Stakeholder signed off (the select screen), DONE on a colleague beaten and FLAWLESS in gold on one beaten without losing an exchange (the roster). Tilted in steps between letters, worn on the frame, darkened inside so it reads over a face. The large ones are drawn (SlamStamp, from a Gemini sheet): DONE, FLAWLESS or REJECTED slammed down at the end of a duel, a glint and sparkles on FLAWLESS, SHIPPED or REJECTED across the face on the result screen."
+      blurb="A rubber stamp in pixels (stamp.tsx), one component for every word: SHIPPED on a role the Stakeholder signed off (the select screen), DONE on a colleague beaten and FLAWLESS in gold on one beaten without losing an exchange (the roster). Tilted in steps between letters, worn on the frame, darkened inside so it reads over a face."
     >
       <StampDemo />
     </Section>
@@ -106,7 +106,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="End of a duel"
-      blurb="A duel at its end, as the game plays it: after the beat the stamp comes down between the duellists (DONE, FLAWLESS in gold, REJECTED), the last lines play, then the window gives the verdict and the duel's numbers. Replay takes the next verdict in turn."
+      blurb="A duel at its end, as the game plays it: the deciding blow held under a flash, then the round called over the room (YOU WIN slamming in, FLAWLESS under it with sparkles, YOU LOSE dropping in and sagging), the last lines play, then the window gives the verdict and the duel's numbers. Replay takes the next verdict in turn."
     >
       <EndDemo />
     </Section>
@@ -118,13 +118,13 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Demo"
-      blurb="The attract mode as the title plays it after twenty seconds: the AI on both sides under the arcade stamp. Next demo, or any key, starts another."
+      blurb="The attract mode as the title plays it after twenty seconds: the AI on both sides under the demo label, in the round call's pixel letters. Next demo, or any key, starts another."
     >
       <DemoDemo />
     </Section>
     <Section
       title="Result"
-      blurb="The end of a run as a status screen: the face with the Stakeholder's stamp slammed across it (SHIPPED, or REJECTED when it was taken offline), the verdict, the numbers with dot leaders, the glossary by pool. Toggle Beaten to see the stamp land again."
+      blurb="The end of a run as a status screen: the face, the verdict, the numbers with dot leaders, the glossary by pool."
     >
       <ResultDemo />
     </Section>

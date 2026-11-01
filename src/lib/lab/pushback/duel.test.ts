@@ -252,6 +252,11 @@ describe('the mic drop', () => {
     assert.equal(dropped.momentum.player, 1);
   });
 
+  it("takes one of the hand's places, so the menu is no longer", () => {
+    const s = full();
+    assert.equal(s.hand.length + 1, RULES.hand);
+  });
+
   it('a phrase from the hand at full momentum is not a mic drop', () => {
     const s = full();
     const thrown = throwFirst(s);

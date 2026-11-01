@@ -38,9 +38,6 @@ export const PALETTE = {
   // The stamp
   /** SHIPPED across the face of a role the Stakeholder signed off */
   stamp: '#d9483b',
-  /** Its ramp on the drawn stamps (`stamps.mjs` snaps them to it) */
-  stampLight: '#f58a6e',
-  stampShade: '#9e2a25',
 
   // Empty
   /** Empty ticks, pips and tracks, with their dots */
@@ -48,6 +45,8 @@ export const PALETTE = {
   emptyDots: '#19224f',
   /** The marker on the centre tick, the rail's thumb */
   steel: '#8a92b8',
+  /** The lit top row of YOU LOSE, in steel */
+  steelLight: '#d5d9e6',
 
   // The letters
   /** Body text in the windows */

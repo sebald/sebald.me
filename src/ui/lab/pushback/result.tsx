@@ -22,7 +22,6 @@ import { Ledger, Meter } from './ledger';
 import { Picker } from './picker';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
-import { SlamStamp } from './stamp';
 import { Heading, Muted } from './text';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -47,9 +46,8 @@ const PORTRAIT_SCALE = 3;
  * score with the mode's factor and the run's numbers with dot leaders
  * on the right, and under a rule the glossary by pool,
  * a meter of the pool's twenty pairs each, so the gaps show. The
- * Stakeholder's call lands on the face as the duel's stamp does,
- * SHIPPED or REJECTED, and the verdict heads the numbers in the duel
- * end's letters. Copy puts the text card on the clipboard.
+ * verdict heads the numbers in the duel end's letters. Copy puts the
+ * text card on the clipboard.
  */
 export const ResultScreen = ({
   run,
@@ -104,7 +102,7 @@ export const ResultScreen = ({
         <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)]">
           <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)]">
             <span
-              className="relative block bg-(--pb-frame-inner)"
+              className="block bg-(--pb-frame-inner)"
               style={{
                 boxShadow: `0 0 0 ${px(2)} var(--pb-frame), 0 0 0 ${px(3)} var(--pb-ink)`,
               }}
@@ -113,17 +111,6 @@ export const ResultScreen = ({
                 sheet={PLAYER_SHEETS[run.role][run.look]}
                 scale={PORTRAIT_SCALE}
               />
-              {/* The Stakeholder's call across the face, centred on it by
-                  its wrapper (the slam moves the stamp's translate), a pixel
-                  up and left so the ink, not the shadow, sits in the middle */}
-              <div className="pointer-events-none absolute top-[calc(50%-var(--px))] left-[calc(50%-var(--px))] -translate-1/2">
-                <SlamStamp
-                  key={String(model.finished)}
-                  word={model.finished ? 'SHIPPED' : 'REJECTED'}
-                  sparks
-                  className="animate-stamp-slam motion-reduce:animate-none"
-                />
-              </div>
             </span>
             <div className="mt-[calc(var(--px)*2)] grid justify-items-center">
               <Heading>{name}</Heading>

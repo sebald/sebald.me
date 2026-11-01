@@ -96,43 +96,56 @@
 
   --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
 
-  /* Pushback: a stamp coming down, large and faint to its place, then a
-     jolt as it lands */
-  @keyframes stamp-slam {
-    0% {
-      opacity: 0;
-      scale: 2.4;
-    }
-    60% {
-      opacity: 1;
-      scale: 1;
-    }
-    75% {
-      translate: var(--px, 2px) var(--px, 2px);
-    }
-    100% {
-      translate: 0 0;
-    }
-  }
-
-  --animate-stamp-slam: stamp-slam 240ms ease-in both;
-
-  /* Pushback: a puff from under the stamp as it lands, out and gone in
-     three steps so it moves in whole pixels; held back until the landing */
-  @keyframes stamp-spark {
+  /* Pushback: YOU WIN slamming in from three times its size, in five
+     steps, so it lands in near-whole pixels */
+  @keyframes call-slam {
     from {
-      opacity: 1;
-      translate: 0 0;
+      scale: 3;
     }
     to {
-      opacity: 0;
-      translate: var(--spark-x) var(--spark-y);
+      scale: 1;
     }
   }
 
-  --animate-stamp-spark: stamp-spark 150ms steps(3) 140ms both;
+  --animate-call-slam: call-slam 160ms steps(5) both;
 
-  /* Pushback: the whole stage jolted as the stamp lands, in whole pixels,
+  /* Pushback: YOU LOSE dropping in from above the stage, faster as it
+     falls */
+  @keyframes call-drop {
+    from {
+      translate: 0 calc(var(--px, 2px) * -110);
+    }
+    to {
+      translate: 0 0;
+    }
+  }
+
+  --animate-call-drop: call-drop 380ms ease-in both;
+
+  /* Pushback: a letter of YOU LOSE sagging by `--sag`, a pixel at a time;
+     each letter's delay is set inline */
+  @keyframes call-sag {
+    to {
+      translate: 0 var(--sag);
+    }
+  }
+
+  --animate-call-sag: call-sag 240ms steps(4) both;
+
+  /* Pushback: something shown at once after its delay, set inline: a
+     letter of the flawless line, a menu once its window has grown */
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  --animate-appear: appear 10ms steps(1) both;
+
+  /* Pushback: the whole stage jolted as YOU WIN lands, in whole pixels,
      smaller each time; held back until the landing */
   @keyframes stage-shake {
     0% {
@@ -152,7 +165,19 @@
     }
   }
 
-  --animate-stage-shake: stage-shake 200ms steps(1) 140ms both;
+  --animate-stage-shake: stage-shake 200ms steps(1) 160ms both;
+
+  /* Pushback: the stage knocked down a pixel as YOU LOSE lands */
+  @keyframes stage-thud {
+    0% {
+      translate: 0 var(--px, 2px);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stage-thud: stage-thud 120ms steps(1) 380ms both;
 
   /* Pushback: the white flash of the deciding blow, one frame and gone */
   @keyframes end-flash {
@@ -166,21 +191,8 @@
 
   --animate-end-flash: end-flash 180ms steps(2) both;
 
-  /* Pushback: a glint sweeping across a flawless stamp once it has
-     landed, in stepped moves so it stays on the pixels */
-  @keyframes stamp-glint {
-    from {
-      background-position: 120% 0;
-    }
-    to {
-      background-position: -20% 0;
-    }
-  }
-
-  --animate-stamp-glint: stamp-glint 480ms steps(8) 360ms both;
-
-  /* Pushback: a sparkle by a flawless stamp, in and out in three steps */
-  @keyframes stamp-sparkle {
+  /* Pushback: a sparkle by a flawless call, in and out in three steps */
+  @keyframes call-sparkle {
     0%,
     100% {
       scale: 0;
@@ -190,5 +202,5 @@
     }
   }
 
-  --animate-stamp-sparkle: stamp-sparkle 360ms steps(3) both;
+  --animate-call-sparkle: call-sparkle 360ms steps(3) both;
 }

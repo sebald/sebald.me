@@ -26,6 +26,9 @@ const BLINK_MS = 250;
  */
 const ROW = { height: 6, gap: 4, line: 3 } as const;
 
+/** The stage pixels the row adds to the window, with the room under it */
+export const SILENCE_ROW = ROW.height + ROW.gap;
+
 /**
  * The "…" bubble at the row's left, the silence the line measures: paper
  * in ink with three dots, a tail at its bottom left. `p` paper, `#` ink,
@@ -119,9 +122,10 @@ export interface SilenceTimerProps {
  * both ends toward the middle, its ends fading out in two dither steps.
  * Gold while a counter still counts as fast, a flash when that half runs
  * out, ember after it, and the last quarter red and blinking while the
- * bubble's dots go out one at a time. It grows in when the menu opens;
- * the window stands on the stage's bottom, so its top edge rises and the
- * phrase and the options stay where they are. Under reduced motion it is
+ * bubble's dots go out one at a time. It grows in when the menu opens,
+ * empty, and shows once it has grown; the window stands on the stage's
+ * bottom, so its top edge rises and the phrase and the options stay
+ * where they are. Under reduced motion it is
  * there at once and does not blink.
  */
 export const SilenceTimer = ({
@@ -149,13 +153,21 @@ export const SilenceTimer = ({
   return (
     <div
       aria-hidden
-      className="shrink-0 overflow-hidden transition-[height,margin] duration-150 ease-out motion-reduce:transition-none"
+      className="shrink-0 overflow-hidden transition-[height,margin] duration-200 ease-out motion-reduce:transition-none"
       style={{
         height: open ? px(ROW.height) : 0,
         marginBottom: open ? px(ROW.gap) : 0,
       }}
     >
-      <div className="flex items-center" style={{ gap: px(3) }}>
+      {/* Shown once the row has grown, so the window opens first */}
+      <div
+        className="flex items-center transition-opacity duration-0 motion-reduce:transition-none"
+        style={{
+          gap: px(3),
+          opacity: open ? 1 : 0,
+          transitionDelay: open && !still ? '200ms' : '0ms',
+        }}
+      >
         <Bubble lit={lit} />
         <span
           className="relative block flex-1"

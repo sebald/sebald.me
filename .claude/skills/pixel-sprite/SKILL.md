@@ -60,13 +60,6 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   src/assets/lab/pushback/sources/originals/micdrop-sheet.jpeg micdrop \
   --cells 3 --cell 96x96 --anchor centre --specks 0
 
-# The drawn stamps: two renders cut at 80x52, four cells joined into one
-# strip (DONE, FLAWLESS, REJECTED, SHIPPED), then snapped to the palette's
-# ink, plate, shadow and stamp or gold ramp; the full recipe is under
-# Stamps in docs/plans/pushback-prompts.md
-node .claude/skills/pixel-sprite/scripts/stamps.mjs \
-  /tmp/stamps/joined.png src/assets/lab/pushback/sheets/stamps.png
-
 ```
 
 What it does, in order:

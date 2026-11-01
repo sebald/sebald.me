@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 
-import stamps from '@/assets/lab/pushback/sheets/stamps.png';
 import { cn } from '@/lib/styles.utils';
 
 import { PALETTE } from './palette';
@@ -9,28 +8,21 @@ import { px } from './stage';
 /** The letters, three by five pixels each, `#` inked */
 const FONT: Record<string, string[]> = {
   A: ['.#.', '#.#', '###', '#.#', '#.#'],
-  C: ['###', '#..', '#..', '#..', '###'],
   D: ['##.', '#.#', '#.#', '#.#', '##.'],
   E: ['###', '#..', '##.', '#..', '###'],
   F: ['###', '#..', '##.', '#..', '#..'],
   H: ['#.#', '#.#', '###', '#.#', '#.#'],
   I: ['###', '.#.', '.#.', '.#.', '###'],
-  J: ['..#', '..#', '..#', '#.#', '###'],
   L: ['#..', '#..', '#..', '#..', '###'],
   N: ['###', '#.#', '#.#', '#.#', '#.#'],
   O: ['###', '#.#', '#.#', '#.#', '###'],
   P: ['###', '#.#', '###', '#..', '#..'],
-  R: ['##.', '#.#', '##.', '#.#', '#.#'],
   S: ['###', '#..', '###', '..#', '###'],
-  T: ['###', '.#.', '.#.', '.#.', '.#.'],
   W: ['#.#', '#.#', '###', '###', '#.#'],
 };
 
-/**
- * What a stamp can say: a role shipped, a colleague beaten, beaten
- * flawless, a duel lost
- */
-export type StampWord = 'SHIPPED' | 'DONE' | 'FLAWLESS' | 'REJECTED';
+/** What a stamp can say: a role shipped, a colleague beaten, beaten flawless */
+export type StampWord = 'SHIPPED' | 'DONE' | 'FLAWLESS';
 
 /** The ink: red for a job done, gold for one done without a scratch */
 export type StampTone = 'red' | 'gold';
@@ -90,7 +82,7 @@ const draw = (word: string) => {
   return { pixels, width, height: BODY + rise };
 };
 
-const WORDS = ['SHIPPED', 'DONE', 'FLAWLESS', 'REJECTED'] as const;
+const WORDS = ['SHIPPED', 'DONE', 'FLAWLESS'] as const;
 
 const STAMPS = Object.fromEntries(
   WORDS.map(word => [word, draw(word)]),
@@ -108,193 +100,6 @@ export interface StampProps {
   className?: string;
   style?: CSSProperties;
 }
-
-/**
- * The drawn stamps, one cell each in the order of `DRAWN`, cut from two
- * Gemini renders (`sources/stamps-1.jpg` and `stamps-2.jpg`) at the
- * cast's own pixel size and already turned
- */
-const DRAWN: StampWord[] = ['DONE', 'FLAWLESS', 'REJECTED', 'SHIPPED'];
-const CELL = { width: 80, height: 52 } as const;
-
-/**
- * The thump as the stamp lands: a few puffs pushed out from under it,
- * along its bottom and its two ends, not a burst. How many, how far past
- * its edge they go in stage pixels, how big each is.
- */
-const PUFFS = { count: 6, reach: 6, size: 2 } as const;
-
-/** The glint's band: the spark's white, not quite opaque */
-const GLINT = 'rgb(255 253 242 / 0.85)';
-
-/**
- * Where the sparkles go off on a flawless stamp's edge, as shares of
- * its cell, and when, after the glint has started
- */
-const SPARKLES = [
-  { x: 0.12, y: 0.42, delay: 420 },
-  { x: 0.86, y: 0.14, delay: 560 },
-  { x: 0.9, y: 0.6, delay: 700 },
-  { x: 0.24, y: 0.84, delay: 820 },
-] as const;
-
-/**
- * A four-point sparkle, nine pixels across with its ink line: `*` the
- * spark's white, `+` light gold, `#` ink, so it reads over a light wall
- */
-const SPARKLE = [
-  '....#....',
-  '...#*#...',
-  '...#+#...',
-  '.###+###.',
-  '#*++*++*#',
-  '.###+###.',
-  '...#+#...',
-  '...#*#...',
-  '....#....',
-];
-
-const SPARKLE_FILL: Record<string, string> = {
-  '*': PALETTE.spark,
-  '+': PALETTE.goldLight,
-  '#': PALETTE.ink,
-};
-
-const Sparkle = ({ style }: { style: CSSProperties }) => (
-  <svg
-    aria-hidden
-    viewBox="0 0 9 9"
-    shapeRendering="crispEdges"
-    className="absolute -translate-1/2 animate-stamp-sparkle motion-reduce:hidden"
-    style={{ width: px(9), height: px(9), ...style }}
-  >
-    {SPARKLE.flatMap((row, y) =>
-      row
-        .split('')
-        .map((cell, x) =>
-          cell === '.' ? null : (
-            <rect
-              key={`${x}-${y}`}
-              x={x}
-              y={y}
-              width={1}
-              height={1}
-              fill={SPARKLE_FILL[cell]}
-            />
-          ),
-        ),
-    )}
-  </svg>
-);
-
-export interface SlamStampProps extends StampProps {
-  /** A few puffs pushed out from under it as it lands */
-  sparks?: boolean;
-  /** Stage pixels a drawn pixel */
-  scale?: number;
-  /** A glint across it and a few sparkles beside it once it has landed */
-  shine?: boolean;
-}
-
-/**
- * The stamp large and drawn, turned the way it hits: what lands on the
- * stage at the end of a duel, the word then seen on the roster's face,
- * and the Stakeholder's call across the face on the result screen.
- * `tone` is the puffs' ink; the stamp has its own.
- */
-export const SlamStamp = ({
-  word,
-  tone = 'red',
-  sparks = false,
-  scale = 1,
-  shine = false,
-  className,
-  style,
-}: SlamStampProps) => {
-  const width = CELL.width * scale;
-  const height = CELL.height * scale;
-  const cell = {
-    size: `${px(width * DRAWN.length)} ${px(height)}`,
-    position: `${px(-width * DRAWN.indexOf(word))} 0`,
-  };
-  const stamp = (
-    <span
-      aria-hidden
-      className={cn('relative block [image-rendering:pixelated]', className)}
-      style={{
-        width: px(width),
-        height: px(height),
-        backgroundImage: `url(${stamps.src})`,
-        backgroundSize: cell.size,
-        backgroundPosition: cell.position,
-        backgroundRepeat: 'no-repeat',
-        ...style,
-      }}
-    >
-      {/* The glint: a pale band swept across, masked by the stamp itself
-          so it shows only where the stamp is */}
-      {shine && (
-        <span
-          className="absolute inset-0 animate-stamp-glint motion-reduce:hidden"
-          style={{
-            backgroundImage: `linear-gradient(110deg, transparent 42%, ${GLINT} 42% 47%, transparent 47% 51%, ${GLINT} 51% 53%, transparent 53%)`,
-            backgroundSize: '300% 100%',
-            maskImage: `url(${stamps.src})`,
-            maskSize: cell.size,
-            maskPosition: cell.position,
-            maskRepeat: 'no-repeat',
-          }}
-        />
-      )}
-    </span>
-  );
-  if (!sparks && !shine) return stamp;
-  return (
-    <span className="relative block">
-      {stamp}
-      {shine &&
-        SPARKLES.map(({ x, y, delay }, i) => (
-          <Sparkle
-            key={i}
-            style={{
-              left: px(Math.round(x * width)),
-              top: px(Math.round(y * height)),
-              animationDelay: `${delay}ms`,
-            }}
-          />
-        ))}
-      {/* On the lower half of an ellipse round the stamp, from one end
-          under it to the other, each pushed out sideways more than down;
-          gone under reduced motion */}
-      {sparks &&
-        Array.from({ length: PUFFS.count }, (_, i) => {
-          const around = (i / (PUFFS.count - 1)) * Math.PI;
-          const x = Math.cos(around);
-          const y = Math.sin(around);
-          return (
-            <span
-              key={i}
-              aria-hidden
-              className="absolute animate-stamp-spark motion-reduce:hidden"
-              style={
-                {
-                  left: px(Math.round(width / 2 + (x * width) / 2)),
-                  top: px(Math.round(height / 2 + (y * height) / 2)),
-                  width: px(PUFFS.size),
-                  height: px(PUFFS.size),
-                  // The stamp's ink with an ink edge, to read over a light wall
-                  background: INK[tone],
-                  boxShadow: `0 0 0 var(--px) ${PALETTE.ink}`,
-                  '--spark-x': px(Math.round(x * PUFFS.reach)),
-                  '--spark-y': px(Math.round(y * PUFFS.reach * 0.4)),
-                } as CSSProperties
-              }
-            />
-          );
-        })}
-    </span>
-  );
-};
 
 /**
  * A rubber stamp: the word in a three by five pixel font in a frame,
