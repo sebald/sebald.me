@@ -32,12 +32,20 @@ export const PALETTE = {
   ember: '#f0a36f',
   emberLight: '#ffd6b8',
   emberShade: '#b86a35',
+  /** The time left on the stopwatch, while a counter still counts as fast */
+  time: '#6ec3f2',
+  timeShade: '#3d8fc9',
   /** Where the two beams of the scale meet */
   spark: '#fffdf2',
 
   // The stamp
   /** SHIPPED across the face of a role the Stakeholder signed off */
   stamp: '#d9483b',
+  /** The red lit and in shadow, the stopwatch's case and the last quarter at its sunk edge */
+  stampLight: '#f07a68',
+  stampShade: '#9a2c24',
+  /** The rim inside the stopwatch's case */
+  stampRim: '#5e1a16',
 
   // Empty
   /** Empty ticks, pips and tracks, with their dots */

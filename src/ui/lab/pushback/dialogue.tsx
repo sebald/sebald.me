@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { CSSProperties, PropsWithChildren } from 'react';
 
 import type { Side } from '@/lib/lab/pushback/duel';
 import { cva } from '@/lib/styles.utils';
@@ -22,6 +22,7 @@ export interface DialogueProps extends PropsWithChildren {
   /** A line that is over: the phrase being answered, the reply shown */
   muted?: boolean;
   className?: string;
+  style?: CSSProperties;
 }
 
 /** One line of the duel, with its speaker's mark */
@@ -29,9 +30,10 @@ export const Dialogue = ({
   speaker,
   muted,
   className,
+  style,
   children,
 }: DialogueProps) => (
-  <p className={styles.line({ muted, className })}>
+  <p className={styles.line({ muted, className })} style={style}>
     <span className={styles.speaker({ side: speaker })} aria-hidden />
     <span>{children}</span>
   </p>

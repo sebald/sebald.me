@@ -7,9 +7,8 @@ import { LAYOUT } from '@/lib/lab/pushback/stage';
 
 import { Dialogue } from '../dialogue';
 import { Picker } from '../picker';
-import { SilenceTimer } from '../silence-timer';
-import { Pixels } from '../stage';
-import { Muted } from '../text';
+import { SILENCE_CLOCK, SilenceTimer } from '../silence-timer';
+import { Pixels, px } from '../stage';
 import { useClock } from '../use-clock';
 import { Legend, Window } from '../window';
 import { Field, field } from './controls';
@@ -17,14 +16,14 @@ import { Field, field } from './controls';
 /** A normal-mode menu of five runs about thirteen seconds */
 const LIMIT = 13_000;
 
-/** A beat with the fuse burnt out before it lights again */
+/** A beat with the time run out before it starts again */
 const REST = 1_500;
 
 /**
- * The silence bar in the duel's window: it grows in and burns on a loop,
- * or holds at the point the slider picks, so each phase can be looked at
- * (gold while a counter counts as fast, the flash at the half, ember,
- * red)
+ * The silence bar in the duel's window, the stopwatch in its corner: it
+ * runs on a loop, or holds at the point the slider picks, so each phase
+ * can be looked at (light blue while a counter counts as fast, blinking
+ * from the half on, ember, red)
  */
 export const TimerDemo = () => {
   const [scale, setScale] = useState(3);
@@ -113,13 +112,19 @@ export const TimerDemo = () => {
               elapsed={elapsed}
               limit={LIMIT}
               still={still}
+              className="absolute"
+              style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
             />
           )}
-          <Dialogue speaker="opponent">{pair.phrase}</Dialogue>
-          <Muted className="my-[calc(var(--px)*4)]">Pick your counter.</Muted>
+          <Dialogue
+            speaker="opponent"
+            style={{ paddingRight: px(SILENCE_CLOCK.width + 4) }}
+          >
+            {pair.phrase}
+          </Dialogue>
           <Picker
             label="Counters"
-            className="gap-0"
+            className="mt-[calc(var(--px)*2)] gap-0 [&_button]:py-[0.1em]"
             items={options.map(p => ({
               id: p.id,
               label: p.counter,

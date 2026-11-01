@@ -76,7 +76,7 @@ import { Hud } from './hud';
 import { Ledger } from './ledger';
 import { Picker, type PickerItem } from './picker';
 import { RoundCall } from './round-call';
-import { SILENCE_ROW, SilenceTimer } from './silence-timer';
+import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { px } from './stage';
 import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
@@ -613,10 +613,8 @@ export const DuelScreen = ({
   // the counters show once it has grown
   const roomRef = useRef<HTMLDivElement>(null);
   const heightRef = useRef<HTMLSpanElement>(null);
-  const rowRef = useRef<HTMLSpanElement>(null);
   const [room, setRoom] = useState<{
     need: number;
-    row: number;
     fixed: number;
   } | null>(null);
   useEffect(() => {
@@ -625,15 +623,13 @@ export const DuelScreen = ({
     const observer = new ResizeObserver(() =>
       setRoom({
         need: el.offsetHeight,
-        row: rowRef.current?.offsetHeight ?? 0,
         fixed: heightRef.current?.offsetHeight ?? 0,
       }),
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
-  const growing =
-    !reduced && room !== null && room.need - room.row > room.fixed + 1;
+  const growing = !reduced && room !== null && room.need > room.fixed + 1;
 
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
@@ -702,7 +698,11 @@ export const DuelScreen = ({
               player reads to pick, and the question, so a defence needs
               no prompt. Typed out first, then kept. */}
           {asking && state.exchange && (
-            <Dialogue speaker="opponent">
+            <Dialogue
+              speaker="opponent"
+              // Clear of the stopwatch in the corner
+              style={{ paddingRight: px(SILENCE_CLOCK.width + 4) }}
+            >
               {step?.kind === 'line'
                 ? typed
                 : phraseText(state.exchange.phrase)}
@@ -837,9 +837,8 @@ export const DuelScreen = ({
           left: px(LAYOUT.panel.x),
           right: px(LAYOUT.panel.x),
           bottom: px(STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height)),
-          // The silence bar's row always on top, so the body never moves
           height: room
-            ? `calc(max(${px(WINDOW_HEIGHT)}, ${room.need - room.row}px) + ${room.row}px)`
+            ? `max(${px(WINDOW_HEIGHT)}, ${room.need}px)`
             : px(WINDOW_HEIGHT),
           // A long menu grows the window up over the room, never over the
           // bars: past that the list scrolls
@@ -847,13 +846,15 @@ export const DuelScreen = ({
         }}
       >
         <Window className="min-h-0 flex-1" legend={legend}>
-          {/* The silence bar, growing in on top as the window rises by its
-              row, so nothing under it moves */}
+          {/* The silence bar: a stopwatch in the corner, beside the
+              phrase being answered */}
           {timing && (
             <SilenceTimer
               elapsed={timing.elapsed}
               limit={timing.limit}
               still={reduced}
+              className="absolute"
+              style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
             />
           )}
           {contents(false)}
@@ -870,16 +871,7 @@ export const DuelScreen = ({
             className="absolute"
             style={{ height: px(WINDOW_HEIGHT) }}
           />
-          <Window legend={legend}>
-            {timing && (
-              <span
-                ref={rowRef}
-                className="block shrink-0"
-                style={{ height: px(SILENCE_ROW) }}
-              />
-            )}
-            {contents(true)}
-          </Window>
+          <Window legend={legend}>{contents(true)}</Window>
         </div>
         {ghostShown && (
           <span

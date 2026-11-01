@@ -1,220 +1,185 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import type { CSSProperties } from 'react';
+
+import { cn } from '@/lib/styles.utils';
 
 import { PALETTE } from './palette';
 import { px } from './stage';
-import { useClock } from './use-clock';
 
 /**
- * The phases, as the share of the time left: gold while a counter still
- * counts as fast (the first half, the momentum's colour), then ember,
- * then red and blinking for the last quarter
+ * The phases, as the share of the time left: light blue while a counter
+ * still counts as fast (the first half), then ember, then red for the
+ * last quarter
  */
 const FAST = 0.5;
 const LATE = 0.25;
 
-/** How long the line flashes when the fast half runs out */
-const FLASH_MS = 300;
-
-/** The late blink */
-const BLINK_MS = 250;
+/** The blink once the fast half is gone: there, gone, a beat each */
+const BLINK = '0.5s';
 
 /**
- * The row's height in stage pixels (the bubble's), the room under it to
- * the phrase, and the line's height inside it
+ * The stopwatch, pixel for pixel (at `DOT`), in an ink outline (`K`) like the
+ * characters' but darker, so it holds against the window's blue: a wide
+ * gold crown on a short stem (`Y` lit, `W` its glint, `G` gold, `O`
+ * shade), a red case so it is seen at once, lit on the upper left like
+ * the window's frame (`L` lit, `C` case, `D` shade) with a dark rim inside
+ * (`R`), and the white face (`F`) sunk in it, its top and left edge in the
+ * rim's shadow (`S`), where the time left is a wedge. On the face the
+ * hand at twelve (`H`) on its pin (`P`), and dots for the hours (`T`) at
+ * twelve, three, six and nine; past the one at six a counter no longer
+ * counts as fast.
  */
-const ROW = { height: 6, gap: 4, line: 3 } as const;
-
-/** The stage pixels the row adds to the window, with the room under it */
-export const SILENCE_ROW = ROW.height + ROW.gap;
-
-/**
- * The "…" bubble at the row's left, the silence the line measures: paper
- * in ink with three dots, a tail at its bottom left. `p` paper, `#` ink,
- * `1` to `3` the dots, which go out one at a time in the last quarter.
- */
-const BUBBLE = [
-  '.#######.',
-  '#ppppppp#',
-  '#p1p2p3p#',
-  '#ppppppp#',
-  '.#p#####.',
-  '.##......',
+const WATCH = [
+  '.......KKKKK.......',
+  '......KYWGGGK......',
+  '......KOOGGGK......',
+  '.......KOOOK.......',
+  '........KOK........',
+  '.......KKKKK.......',
+  '.....KKLLLLLKK.....',
+  '....KLLRRRRRCCK....',
+  '...KLRRSSSSSRRCK...',
+  '..KLRSSFFTFFSFRCK..',
+  '.KLRSFFFFFFFFFFRCK.',
+  '.KLRSFFFFHFFFFFRCK.',
+  'KLRSFFFFFHFFFFFFRDK',
+  'KLRSFFFFFHFFFFFFRDK',
+  'KLRSTFFFHPFFFFTFRDK',
+  'KLRSFFFFFFFFFFFFRDK',
+  'KLRSFFFFFFFFFFFFRDK',
+  '.KCRSFFFFFFFFFFRDK.',
+  '.KCRFFFFFFFFFFFRDK.',
+  '..KCRFFFFTFFFFRDK..',
+  '...KCRRFFFFFRRDK...',
+  '....KCCRRRRRDDK....',
+  '.....KKDDDDDKK.....',
 ];
 
 /**
- * The line's ends fade out in two dither steps, the way the windows'
- * light fades under the frame: for each of the three columns from the
- * end, the rows that are lit
+ * A pixel of the watch in stage pixels: finer than the stage's grid, the
+ * way the faces in the bars are drawn, two screen pixels at 3x
  */
-const FADE: [column: number, rows: number[]][] = [
-  [0, [1]],
-  [1, [0, 2]],
-  [2, [0, 1]],
-];
+const DOT = 2 / 3;
 
-/** One pixel of dither in a colour, every other column */
-const dots = (colour: string) =>
-  `repeating-linear-gradient(90deg, ${colour} 0 var(--px), transparent var(--px) calc(var(--px) * 2))`;
+/** The stopwatch's box in stage pixels, for the room kept beside it */
+export const SILENCE_CLOCK = {
+  width: WATCH[0]!.length * DOT,
+  height: WATCH.length * DOT,
+} as const;
 
-interface Colours {
-  /** The line's top row, its middle row, its dithered bottom row */
-  rows: [string, string, string];
-}
+/** The face's centre, the pin */
+const PIN = { x: 9, y: 14 } as const;
 
-/** Gold, the flash, ember, red */
-const colours = (share: number, flash: boolean): Colours => {
-  if (flash)
-    return { rows: [PALETTE.spark, PALETTE.spark, PALETTE.emberLight] };
-  if (share > FAST)
-    return { rows: [PALETTE.gold, PALETTE.gold, PALETTE.goldShade] };
-  if (share > LATE)
-    return { rows: [PALETTE.ember, PALETTE.ember, PALETTE.emberShade] };
-  return { rows: [PALETTE.stamp, PALETTE.stamp, PALETTE.stamp] };
+const COLOURS: Record<string, string> = {
+  K: PALETTE.bg,
+  Y: PALETTE.goldLight,
+  W: PALETTE.spark,
+  G: PALETTE.gold,
+  O: PALETTE.goldShade,
+  L: PALETTE.stampLight,
+  C: PALETTE.stamp,
+  D: PALETTE.stampShade,
+  R: PALETTE.stampRim,
+  H: PALETTE.ink,
+  P: PALETTE.ink,
+  T: PALETTE.ink,
 };
 
-/** The bubble, its dots lit as far as `lit` (3 to 0) */
-const Bubble = ({ lit }: { lit: number }) => (
-  <svg
-    viewBox={`0 0 ${BUBBLE[0]!.length} ${BUBBLE.length}`}
-    shapeRendering="crispEdges"
-    className="block shrink-0"
-    style={{ width: px(BUBBLE[0]!.length), height: px(BUBBLE.length) }}
-  >
-    {BUBBLE.flatMap((row, y) =>
-      row.split('').map((cell, x) => {
-        if (cell === '.') return null;
-        const dot = Number(cell);
-        const fill =
-          cell === '#'
-            ? PALETTE.ink
-            : dot > 0
-              ? dot <= lit
-                ? PALETTE.ink
-                : PALETTE.paperShade
-              : PALETTE.paper;
-        return (
-          <rect
-            key={`${x}-${y}`}
-            x={x}
-            y={y}
-            width={1}
-            height={1}
-            fill={fill}
-          />
-        );
-      }),
-    )}
-  </svg>
+/** The map's pixels, each face pixel with its angle clockwise from twelve */
+const PIXELS = WATCH.flatMap((row, y) =>
+  [...row].flatMap((cell, x) =>
+    cell === '.'
+      ? []
+      : [
+          {
+            x,
+            y,
+            cell,
+            angle: (Math.atan2(x - PIN.x, PIN.y - y) / (Math.PI * 2) + 1) % 1,
+          },
+        ],
+  ),
 );
+
+/** Light blue, ember, red, and each in the rim's shadow */
+const colourOf = (share: number) =>
+  share > FAST
+    ? { main: PALETTE.time, shade: PALETTE.timeShade }
+    : share > LATE
+      ? { main: PALETTE.ember, shade: PALETTE.emberShade }
+      : { main: PALETTE.stamp, shade: PALETTE.stampShade };
 
 export interface SilenceTimerProps {
   elapsed: number;
   limit: number;
-  /** No blink, no growing in */
+  /** No blink */
   still?: boolean;
+  className?: string;
+  style?: CSSProperties;
 }
 
 /**
- * The silence bar, a row at the top of the dialogue window while the
- * defender picks a counter: a "…" bubble and a line burning back from
- * both ends toward the middle, its ends fading out in two dither steps.
- * Gold while a counter still counts as fast, a flash when that half runs
- * out, ember after it, and the last quarter red and blinking while the
- * bubble's dots go out one at a time. It grows in when the menu opens,
- * empty, and shows once it has grown; the window stands on the stage's
- * bottom, so its top edge rises and the phrase and the options stay
- * where they are. Under reduced motion it is
- * there at once and does not blink.
+ * The silence bar as a stopwatch in the dialogue window's top right
+ * corner while the defender picks a counter, the meeting timer of the
+ * office: the time left a wedge shrinking clockwise from twelve, so the
+ * fast half is gone when it passes the dot at six. Drawn pixel for
+ * pixel (`WATCH`), a red case so it is seen, the face white like a
+ * meeting timer's. Light blue while a counter still counts as fast, so
+ * it stands out from the gold of the window's text; once that half has
+ * run out the whole watch blinks the way the demo label does, there and
+ * gone, ember, then red for the last quarter. Under reduced motion it
+ * does not blink. Position it from outside.
  */
 export const SilenceTimer = ({
   elapsed,
   limit,
   still = false,
+  className,
+  style,
 }: SilenceTimerProps) => {
   const share = Math.max(0, Math.min(1, 1 - elapsed / limit));
-  const late = share <= LATE;
-  // A moment you notice, not only a colour: the fast half running out
-  const sinceFast = elapsed - limit * (1 - FAST);
-  const flash = sinceFast >= 0 && sinceFast < FLASH_MS;
-  const clock = useClock(late && !still);
-  const off = late && !still && Math.floor(clock / BLINK_MS) % 2 === 1;
-  const { rows } = colours(share, flash);
-  const lit = share > LATE ? 3 : Math.ceil((share / LATE) * 3);
-
-  // Grown in on the frame after it mounts, so the height transitions
-  const [open, setOpen] = useState(still);
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => setOpen(true));
-    return () => cancelAnimationFrame(frame);
-  }, []);
-
+  // Something you notice, not only a colour: the fast half gone
+  const blinking = share <= FAST && !still;
+  const fill = colourOf(share);
   return (
-    <div
+    <svg
       aria-hidden
-      className="shrink-0 overflow-hidden transition-[height,margin] duration-200 ease-out motion-reduce:transition-none"
+      viewBox={`0 0 ${WATCH[0]!.length} ${WATCH.length}`}
+      shapeRendering="crispEdges"
+      className={cn(
+        'block',
+        blinking &&
+          'animate-arcade-blink [--blink-low:0] motion-reduce:animate-none',
+        className,
+      )}
       style={{
-        height: open ? px(ROW.height) : 0,
-        marginBottom: open ? px(ROW.gap) : 0,
+        width: px(SILENCE_CLOCK.width),
+        height: px(SILENCE_CLOCK.height),
+        animationDuration: BLINK,
+        ...style,
       }}
     >
-      {/* Shown once the row has grown, so the window opens first */}
-      <div
-        className="flex items-center transition-opacity duration-0 motion-reduce:transition-none"
-        style={{
-          gap: px(3),
-          opacity: open ? 1 : 0,
-          transitionDelay: open && !still ? '200ms' : '0ms',
-        }}
-      >
-        <Bubble lit={lit} />
-        <span
-          className="relative block flex-1"
-          style={{ height: px(ROW.line) }}
-        >
-          {/* The time left, centred, rounded to two pixels so both ends
-              burn back together */}
-          <span
-            className="absolute inset-y-0 left-1/2 -translate-x-1/2"
-            style={{
-              width: `round(down, ${share * 100}%, calc(var(--px) * 2))`,
-              opacity: off ? 0.35 : 1,
-            }}
-          >
-            {rows.map((colour, row) => (
-              <span
-                key={row}
-                className="absolute"
-                style={{
-                  left: px(3),
-                  right: px(3),
-                  top: px(row),
-                  height: px(1),
-                  background: row === 2 ? dots(colour) : colour,
-                }}
-              />
-            ))}
-            {(['left', 'right'] as const).flatMap(end =>
-              FADE.flatMap(([column, lit]) =>
-                lit.map(row => (
-                  <span
-                    key={`${end}-${column}-${row}`}
-                    className="absolute"
-                    style={{
-                      [end]: px(column),
-                      top: px(row),
-                      width: px(1),
-                      height: px(1),
-                      background: rows[row],
-                    }}
-                  />
-                )),
-              ),
-            )}
-          </span>
-        </span>
-      </div>
-    </div>
+      {PIXELS.map(({ x, y, cell, angle }) => (
+        <rect
+          key={`${x}-${y}`}
+          x={x}
+          y={y}
+          width={1}
+          height={1}
+          fill={
+            cell !== 'F' && cell !== 'S'
+              ? COLOURS[cell]
+              : angle >= 1 - share
+                ? cell === 'S'
+                  ? fill.shade
+                  : fill.main
+                : cell === 'S'
+                  ? PALETTE.paperShade
+                  : PALETTE.paper
+          }
+        />
+      ))}
+    </svg>
   );
 };

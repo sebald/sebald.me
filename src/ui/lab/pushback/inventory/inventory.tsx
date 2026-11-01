@@ -79,7 +79,7 @@ export const Inventory = () => (
     </Section>
     <Section
       title="Timer"
-      blurb="The silence bar (silence-timer.tsx): a row that grows in at the top of the dialogue window while the player picks a counter, a … bubble and a line burning back from both ends, its ends faded in dither steps. Gold while a counter still counts as fast, a flash when that half is gone, ember after it, red and blinking for the last quarter while the bubble's dots go out. Play it or hold it with the slider."
+      blurb="The silence bar (silence-timer.tsx): a red stopwatch in the dialogue window's top right corner while the player picks a counter, beside the phrase, the time left a wedge shrinking clockwise from twelve; past the dot at six a counter no longer counts as fast. Light blue while fast; once the fast half is gone the whole watch blinks like the demo label, ember, then red for the last quarter. Play it or hold it with the slider."
     >
       <TimerDemo />
     </Section>
