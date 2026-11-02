@@ -68,7 +68,7 @@ const HOW_TO = [
   'Every exchange you win pushes the shared scale your way. Three steps past the middle and the duel is yours.',
   'Win on your own throw, or counter fast, and your momentum grows. Full, a gold line appears: the mic drop, worth two steps.',
   'Their phrases are collected as you counter them. What you pick up answers the next colleague, and the boss.',
-  'Easy: a ghost helps and nothing rushes you. Normal: a bar times you from the second colleague on. Hard: less time, longer menus, double score.',
+  'Easy: a ghost helps and nothing rushes you. Normal: a bar times you from the second colleague on. Hard: less time, longer menus, double score. M mutes the sound, anywhere.',
 ] as const;
 
 /** The usual line, because the cast is nine office archetypes and nobody in particular */
@@ -87,7 +87,7 @@ const HowTo = ({ legend }: { legend: ReactNode }) => (
       <ol className="m-0 mt-[calc(var(--px)*3)] grid list-none gap-[calc(var(--px)*2.5)] p-0 leading-[1.4]">
         {HOW_TO.map((line, i) => (
           <li key={i} className="flex gap-[1ch]">
-            <span className="text-(--pb-gold)">{i + 1}.</span>
+            <span className="shrink-0 text-(--pb-gold)">{i + 1}.</span>
             <span>{line}</span>
           </li>
         ))}
@@ -355,7 +355,7 @@ export const TitleScreen = ({
           Continue
           {running && (
             <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-              {ROLE_LABELS[running.role]} · {running.beaten}/{running.slots}
+              {running.beaten}/{running.slots}
             </span>
           )}
         </span>
@@ -449,7 +449,7 @@ export const TitleScreen = ({
         >
           <Picker
             label="Title menu"
-            className="w-[15em]"
+            className="w-[10em]"
             items={items}
             initial={returned ?? (running ? 'continue' : 'start')}
             active={!asking && !browsing}

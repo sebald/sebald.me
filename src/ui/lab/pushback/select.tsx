@@ -8,6 +8,7 @@ import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
 import { LAYOUT } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { effect } from './audio/engine';
 import { Character } from './character';
 import { PALETTE } from './palette';
 import { Portrait } from './portrait';
@@ -97,15 +98,21 @@ export const SelectScreen = ({
   const clock = useClock();
   const lit = Math.floor(clock / 250) % 2 === 0;
 
-  const move = (dc: number, dr: number) =>
+  const move = (dc: number, dr: number) => {
+    effect('cursor');
     setCursor(({ column, row }) => ({
       column: (column + dc + ROLES.length) % ROLES.length,
       row: (row + dr + 2) % 2,
     }));
+  };
 
   useKeys(
-    useMemo(
-      () => ({
+    useMemo(() => {
+      const play = () => {
+        effect('confirm');
+        onConfirm(role, look);
+      };
+      return {
         ArrowLeft: () => move(-1, 0),
         a: () => move(-1, 0),
         ArrowRight: () => move(1, 0),
@@ -114,12 +121,14 @@ export const SelectScreen = ({
         w: () => move(0, -1),
         ArrowDown: () => move(0, 1),
         s: () => move(0, 1),
-        Enter: () => onConfirm(role, look),
-        ' ': () => onConfirm(role, look),
-        Escape: onBack,
-      }),
-      [role, look, onConfirm, onBack],
-    ),
+        Enter: play,
+        ' ': play,
+        Escape: () => {
+          effect('cancel');
+          onBack();
+        },
+      };
+    }, [role, look, onConfirm, onBack]),
   );
 
   const head = SHEETS[sheet].meta.features?.head.width ?? 24;
@@ -181,6 +190,8 @@ export const SelectScreen = ({
                     boxShadow: `0 0 0 ${px(PLACE.frame)} ${frame}, 0 0 0 ${px(PLACE.frame + 1)} ${PALETTE.ink}`,
                   }}
                   onClick={() => {
+                    // The picker's sounds: a confirm to play, the cursor to move
+                    effect(active ? 'confirm' : 'cursor');
                     if (active) onConfirm(r, l);
                     else setCursor({ column, row });
                   }}
@@ -247,6 +258,7 @@ export const SelectScreen = ({
           ['←→', 'role'],
           ['↑↓', 'look'],
           ['Enter', 'play'],
+          ['M', 'sound'],
         ]}
         touch="Tap the face again to play"
       />

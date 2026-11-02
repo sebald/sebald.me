@@ -194,6 +194,7 @@ export const RosterScreen = ({
           ['↑↓', 'choose'],
           ['Enter', 'play'],
           ['Esc', 'back'],
+          ['M', 'sound'],
         ]}
         touch="Tap a colleague to play"
       />
