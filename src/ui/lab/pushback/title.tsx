@@ -12,13 +12,21 @@ import {
 import logo from '@/assets/lab/pushback/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '@/lib/lab/pushback/attract';
 import type { Mode } from '@/lib/lab/pushback/characters';
-import { ROLE_LABELS, type Role } from '@/lib/lab/pushback/lines';
+import {
+  PAIRS,
+  type PairId,
+  ROLES,
+  ROLE_LABELS,
+  type Role,
+  poolPairs,
+} from '@/lib/lab/pushback/lines';
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
 import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
 import { Room } from './frame';
+import { Glossary } from './glossary';
 import { Options, type SaveSummary } from './options';
 import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
@@ -42,6 +50,8 @@ interface TitleScreenProps {
   running?: { role: Role; beaten: number; slots: number };
   /** What is in the save, for what the options' Erase save deletes */
   save: SaveSummary;
+  /** Every pair collected in any run, for the glossary */
+  glossary: readonly PairId[];
   /** Delete everything but the mode, from the options */
   onErase: () => void;
   /** Nobody has touched anything for a while: play the demo */
@@ -235,12 +245,15 @@ export const TitleScreen = ({
   save,
   onErase,
   onAttract,
+  glossary,
 }: TitleScreenProps) => {
   const [open, setOpen] = useState(menu);
   // How it works, from the menu; Enter, Escape or a tap goes back
   const [reading, setReading] = useState(false);
   // The options, from the menu; Escape or Back goes back
   const [setting, setSetting] = useState(false);
+  // The glossary, from the menu; Tab, Escape or its close goes back
+  const [browsing, setBrowsing] = useState(false);
   // Start over a run in play asks first
   const [asking, setAsking] = useState(false);
   // The item the cursor goes back to, once the menu is shown again
@@ -248,6 +261,10 @@ export const TitleScreen = ({
   const closeHowTo = useCallback(() => {
     setReading(false);
     setReturned('how');
+  }, []);
+  const closeGlossary = useCallback(() => {
+    setBrowsing(false);
+    setReturned('glossary');
   }, []);
   const closeOptions = useCallback(() => {
     setSetting(false);
@@ -302,6 +319,8 @@ export const TitleScreen = ({
 
   // Start always works; with a run in play it asks first. Continue is
   // under it, off without a run, and the cursor starts on it with one.
+  // The glossary is here and not in a run because it outlives the runs.
+  const collected = poolPairs(glossary).length;
   const items: PickerItem[] = [
     {
       id: 'start',
@@ -325,6 +344,23 @@ export const TitleScreen = ({
         ? undefined
         : 'No run in progress yet. Start one and pick a role.',
       onSelect: onContinue,
+    },
+    {
+      id: 'glossary',
+      label: (
+        <span className="flex items-center gap-[1ch]">
+          Glossary
+          <span className="ml-auto text-[0.8em] text-(--pb-muted)">
+            {collected}/{PAIRS.length}
+          </span>
+        </span>
+      ),
+      disabled: collected === 0,
+      note:
+        collected === 0
+          ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
+          : undefined,
+      onSelect: () => setBrowsing(true),
     },
     { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
     { id: 'options', label: 'Options', onSelect: () => setSetting(true) },
@@ -387,7 +423,7 @@ export const TitleScreen = ({
             className="w-[15em]"
             items={items}
             initial={returned ?? (running ? 'continue' : 'start')}
-            active={!asking}
+            active={!asking && !browsing}
           />
         </Window>
       ) : (
@@ -407,7 +443,14 @@ export const TitleScreen = ({
           {FICTION}
         </p>
       )}
-      {!reading && !setting && <SpeakerButton />}
+      {!reading && !setting && !browsing && <SpeakerButton />}
+      {browsing && (
+        <Glossary
+          glossary={glossary}
+          role={running?.role ?? ROLES[0]!}
+          onClose={closeGlossary}
+        />
+      )}
       {asking && running && (
         <Confirm
           title={`Abandon your run as ${ROLE_LABELS[running.role]}?`}

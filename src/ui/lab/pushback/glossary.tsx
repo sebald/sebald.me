@@ -77,13 +77,13 @@ const Entry = ({
 interface GlossaryProps {
   /** The save's glossary, across runs */
   glossary: readonly PairId[];
-  /** The tab it opens on: the run's role */
+  /** The tab it opens on: the role of the run in play, if any */
   role: Role;
   onClose: () => void;
 }
 
 /**
- * The glossary as a dialog over the roster: a tab per pool, each pair
+ * The glossary as a dialog over the title's menu: a tab per pool, each pair
  * the player has met at the size the duel shows it, the role's closers
  * at the end under a rule and a Mic drops heading. Left and right
  * switch the pool, up and down scroll, Tab or Escape close it.

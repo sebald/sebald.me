@@ -118,6 +118,7 @@ export const Pushback = () => {
             shipped: Object.keys(save.shipped).length,
             lines: poolPairs(save.glossary).length,
           }}
+          glossary={save.glossary}
           onErase={() => setSave(resetSave)}
           onAttract={toAttract}
         />
@@ -142,7 +143,6 @@ export const Pushback = () => {
       return (
         <RosterScreen
           run={run}
-          glossary={save.glossary}
           onPlay={index => setScreen({ name: 'duel', index, seed: Date.now() })}
           onResult={() => setScreen({ name: 'result' })}
           onBack={toTitle}

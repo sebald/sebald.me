@@ -1,20 +1,9 @@
 'use client';
 
-import {
-  type PropsWithChildren,
-  type ReactNode,
-  useMemo,
-  useState,
-} from 'react';
+import { type PropsWithChildren, type ReactNode, useMemo } from 'react';
 
-import glossaryIcon from '@/assets/lab/pushback/sheets/glossary.png';
 import { bossIndex, characterById } from '@/lib/lab/pushback/characters';
-import {
-  PAIRS,
-  type PairId,
-  ROLE_LABELS,
-  poolPairs,
-} from '@/lib/lab/pushback/lines';
+import { ROLE_LABELS } from '@/lib/lab/pushback/lines';
 import {
   type RunState,
   bossUnlocked,
@@ -23,7 +12,6 @@ import {
 } from '@/lib/lab/pushback/run';
 import { cn } from '@/lib/styles.utils';
 
-import { Glossary } from './glossary';
 import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
 import { Portrait } from './portrait';
@@ -39,8 +27,6 @@ const LIST_TOP = 40;
 
 interface RosterScreenProps {
   run: RunState;
-  /** The save's glossary, across runs */
-  glossary: readonly PairId[];
   onPlay: (index: number) => void;
   onResult: () => void;
   onBack: () => void;
@@ -75,12 +61,12 @@ const BeatenStamp = ({ flawless }: { flawless: boolean }) => {
   );
 };
 
-/** The icon column: wide enough for a headshot and the glossary's printout */
+/** The icon column, round the headshot */
 const ICON_WIDTH = 30;
 
 /**
  * One line of the run: an icon (the colleague's face, stamped once
- * beaten; the glossary's printout), the name and what is on the right
+ * beaten), the name and what is on the right
  */
 const Row = ({
   markLabel,
@@ -108,24 +94,18 @@ const Row = ({
 
 /**
  * The run as a roster: the colleagues in order with ticks and stars in
- * one window as large as the list, the glossary as its last line, and
- * the glossary itself (every pair the player has collected, by pool)
- * as a dialog over it, on that line or on Tab.
+ * one window as large as the list. Only this run: the glossary, which
+ * outlives the runs, is on the title's menu.
  */
 export const RosterScreen = ({
   run,
-  glossary,
   onPlay,
   onResult,
   onBack,
 }: RosterScreenProps) => {
-  const [open, setOpen] = useState(false);
   const next = nextSlot(run);
 
-  useKeys(
-    useMemo(() => ({ Tab: () => setOpen(true), Escape: onBack }), [onBack]),
-    !open,
-  );
+  useKeys(useMemo(() => ({ Escape: onBack }), [onBack]));
 
   const items: PickerItem[] = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
@@ -175,29 +155,6 @@ export const RosterScreen = ({
       onSelect: onResult,
     });
   }
-  items.push({
-    id: 'glossary',
-    apart: true,
-    onSelect: () => setOpen(true),
-    label: (
-      <Row
-        icon={
-          <span
-            aria-hidden
-            className="block bg-cover [image-rendering:pixelated]"
-            style={{
-              width: px(glossaryIcon.width),
-              height: px(glossaryIcon.height),
-              backgroundImage: `url(${glossaryIcon.src})`,
-            }}
-          />
-        }
-        aside={`${poolPairs(glossary).length}/${PAIRS.length}`}
-      >
-        Glossary
-      </Row>
-    ),
-  });
 
   return (
     <Stage label="Pushback, roster">
@@ -222,7 +179,6 @@ export const RosterScreen = ({
             label="Opponents in run order"
             initial={next >= 0 ? String(next) : 'result'}
             items={items}
-            active={!open}
             className="gap-0"
           />
         </Window>
@@ -232,19 +188,10 @@ export const RosterScreen = ({
         keys={[
           ['↑↓', 'choose'],
           ['Enter', 'play'],
-          ['Tab', 'glossary'],
           ['Esc', 'back'],
         ]}
         touch="Tap a colleague to play"
       />
-
-      {open && (
-        <Glossary
-          glossary={glossary}
-          role={run.role}
-          onClose={() => setOpen(false)}
-        />
-      )}
     </Stage>
   );
 };

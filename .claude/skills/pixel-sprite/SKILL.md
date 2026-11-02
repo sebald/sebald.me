@@ -46,14 +46,6 @@ rm src/assets/lab/pushback/sheets/logo.json
 # the measure): cut with one cell more, then drop the first cell from the
 # PNG and the JSON
 
-# The glossary's icon: the rolled printout from the prop sheet, cropped
-# out of the original (sharp, extract left 355, top 540, 380 by 400) to
-# `originals/glossary-sheet.png`, then one centred cell; trimmed to its
-# art (29 by 30) like the logo, and the JSON dropped
-node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/originals/glossary-sheet.png glossary \
-  --cells 1 --cell 40x40 --anchor centre --specks 0
-
 # The mic-drop burst: three cells (the burst, its big beat, popped), the
 # letters inside key with it
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
