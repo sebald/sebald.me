@@ -96,16 +96,6 @@ const HowTo = ({ legend }: { legend: ReactNode }) => (
   </div>
 );
 
-/** The pool with the most phrases not collected yet, the first on a tie */
-const mostBlanks = (glossary: readonly PairId[]): Role => {
-  const blanks = (role: Role) =>
-    PAIRS.filter(pair => pair.role === role && !glossary.includes(pair.id))
-      .length;
-  return ROLES.reduce((most, role) =>
-    blanks(role) > blanks(most) ? role : most,
-  );
-};
-
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
 const LOGO_NATIVE = { width: 226, height: 77 } as const;
 
@@ -356,9 +346,6 @@ export const TitleScreen = ({
     {
       id: 'start',
       label: 'Start',
-      note: running
-        ? `A new run with a role of your pick. Your run as ${ROLE_LABELS[running.role]} ends there, so it asks first.`
-        : 'Pick a role and talk your way past your colleagues, one meeting at a time.',
       onSelect: () => (running ? setAsking(true) : onStart()),
     },
     {
@@ -375,11 +362,7 @@ export const TitleScreen = ({
       ),
       disabled: !running,
       note: running
-        ? `Back to your run as ${ROLE_LABELS[running.role]}: ${
-            running.beaten === running.slots - 1
-              ? 'every colleague beaten, only the Stakeholder left.'
-              : `${running.beaten} of ${running.slots - 1} colleagues beaten, then the Stakeholder.`
-          }`
+        ? undefined
         : 'No run in progress yet. Start one and pick a role.',
       onSelect: onContinue,
     },
@@ -397,21 +380,17 @@ export const TitleScreen = ({
       note:
         collected === 0
           ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
-          : collected === PAIRS.length
-            ? `All ${PAIRS.length} phrases countered, across every run. Nothing left to find.`
-            : `${collected} of ${PAIRS.length} phrases countered, across every run. ${ROLE_LABELS[mostBlanks(glossary)]} has the most blanks.`,
+          : undefined,
       onSelect: () => setBrowsing(true),
     },
     {
       id: 'how',
       label: 'How to play',
-      note: 'Phrases, counters and the silence, in one window.',
       onSelect: () => setReading(true),
     },
     {
       id: 'options',
       label: 'Options',
-      note: 'The mode, the music and the effects, and erasing the save.',
       onSelect: () => setSetting(true),
     },
   ];

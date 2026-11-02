@@ -116,15 +116,7 @@ export const RosterScreen = ({
       disabled: !canPlay(run, index),
       note: locked
         ? 'Beat the three colleagues first. The Stakeholder only sees you after.'
-        : beaten
-          ? beaten.flawless
-            ? 'Beaten without losing an exchange. Play again for the lines you missed.'
-            : 'Beaten. Play again for a flawless win and the lines you missed.'
-          : run.lost.includes(index)
-            ? 'Lost before. Go again, the run goes on.'
-            : slot.slot.tier === 'boss'
-              ? 'The Stakeholder signs off on your role, or does not. Lose and you go again.'
-              : 'Not met yet. Counter what they say before the silence runs out.',
+        : undefined,
       onSelect: () => onPlay(index),
       label: (
         <Row
@@ -160,7 +152,6 @@ export const RosterScreen = ({
     items.push({
       id: 'result',
       label: <Row>Result card</Row>,
-      note: 'The run on one card: the verdict, the numbers and the glossary.',
       onSelect: onResult,
     });
   }

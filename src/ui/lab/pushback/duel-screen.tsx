@@ -77,6 +77,7 @@ import {
 import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
+import { Confirm } from './confirm';
 import { DemoLabel } from './demo-label';
 import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
@@ -220,6 +221,8 @@ export const DuelScreen = ({
     atStart(scriptKey(initial)),
   );
   const [paused, setPaused] = useState(false);
+  // Leaving from the pause asks first
+  const [leaving, setLeaving] = useState(false);
   const [clock, setClock] = useState(0);
   // The exchange the buddy's whisper started on, for the miss line and
   // for sending it away afterwards
@@ -388,7 +391,7 @@ export const DuelScreen = ({
       }),
       [paused, step?.kind, confirm],
     ),
-    !auto,
+    !auto && !leaving,
     true,
   );
 
@@ -1001,7 +1004,17 @@ export const DuelScreen = ({
         )}
       </div>
 
-      {paused && (
+      {paused && leaving && (
+        <Confirm
+          title="Leave the duel?"
+          confirm="Leave"
+          onCancel={() => setLeaving(false)}
+          onConfirm={onBack}
+        >
+          Back to the roster. The duel counts as neither a win nor a loss.
+        </Confirm>
+      )}
+      {paused && !leaving && (
         <div className={styles.pause()}>
           <Window
             className="w-[60%]"
@@ -1014,15 +1027,12 @@ export const DuelScreen = ({
                 {
                   id: 'resume',
                   label: 'Resume',
-                  note: 'Back into the meeting, where it stopped.',
                   onSelect: () => setPaused(false),
                 },
                 {
                   id: 'back',
                   label: 'Back to the roster',
-                  back: true,
-                  note: 'Leaves the duel. It counts as neither a win nor a loss.',
-                  onSelect: onBack,
+                  onSelect: () => setLeaving(true),
                 },
               ]}
             />

@@ -26,12 +26,10 @@ const MODE_NOTES: Record<Mode, string> = {
   hard: 'Less time and longer menus to pick from. The score counts double.',
 };
 
-/** What the sound switches do, or why they are off */
+/** The mute key, said once, and why the sound switches are off */
 const SOUND_NOTES = {
-  music:
-    'Mega Drive music: dark synthwave on the title, a relaxed funk in the duels. M mutes everything, anywhere.',
-  effects:
-    'Chip sounds for the menus, the typing, the hits and the stopwatch. M mutes everything, anywhere.',
+  music: undefined,
+  effects: 'M mutes everything, anywhere.',
   none: 'This browser cannot play sound here.',
 } as const;
 
@@ -188,7 +186,6 @@ export const Options = ({
       label: 'Back',
       back: true,
       apart: true,
-      note: 'Back to the title.',
       onSelect: onClose,
     },
   ];
