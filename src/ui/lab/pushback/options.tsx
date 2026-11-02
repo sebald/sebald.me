@@ -176,7 +176,7 @@ export const Options = ({
     {
       id: 'erase',
       label: 'Erase save',
-      divider: true,
+      apart: true,
       disabled: !progress,
       note: progress
         ? 'Deletes all progress and starts the game fresh. The mode stays.'
@@ -187,7 +187,7 @@ export const Options = ({
       id: 'back',
       label: 'Back',
       back: true,
-      divider: true,
+      apart: true,
       note: 'Back to the title.',
       onSelect: onClose,
     },

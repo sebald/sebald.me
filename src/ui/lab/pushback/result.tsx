@@ -44,7 +44,7 @@ const PORTRAIT_SCALE = 3;
  * The end of a run as an RPG status screen, one window filling the
  * stage: the face, the name and the role on the left, the result, the
  * score with the mode's factor and the run's numbers with dot leaders
- * on the right, and under a rule the glossary by pool,
+ * on the right, and below, apart, the glossary by pool,
  * a meter of the pool's twenty pairs each, so the gaps show. The
  * verdict heads the numbers in the duel end's letters. Copy puts the
  * text card on the clipboard.
@@ -146,12 +146,7 @@ export const ResultScreen = ({
           </div>
         </div>
 
-        <div
-          aria-hidden
-          className="mx-[calc(var(--px)*2)] my-[calc(var(--px)*7)] h-(--px) bg-(--pb-frame-dim)"
-        />
-
-        <div className="px-[calc(var(--px)*2)]">
+        <div className="mt-[calc(var(--px)*12)] px-[calc(var(--px)*2)]">
           <dl className="m-0 grid grid-cols-[auto_auto_1fr_auto] items-center gap-x-[calc(var(--px)*5)] gap-y-[calc(var(--px)*2)]">
             <div className="contents">
               <dt className="col-span-2 mb-[calc(var(--px)*1)] font-semibold text-(--pb-heading)">

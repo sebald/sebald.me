@@ -85,7 +85,7 @@ interface GlossaryProps {
 /**
  * The glossary as a dialog over the title's menu: a tab per pool, each pair
  * the player has met at the size the duel shows it, the role's closers
- * at the end under a rule and a Mic drops heading. Left and right
+ * at the end, apart, under a Mic drops heading. Left and right
  * switch the pool, up and down scroll, Tab or Escape close it.
  */
 export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
@@ -204,11 +204,11 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
                   />
                 ))}
               </ol>
-              {/* The pool's three closers, under a rule and their own
+              {/* The pool's three closers, apart under their own
                   heading, in gold */}
               <section
                 aria-labelledby="glossary-mic-drops"
-                className="mt-[calc(var(--px)*6)] border-t border-(--pb-frame-dim) pt-[calc(var(--px)*6)]"
+                className="mt-[calc(var(--px)*10)]"
               >
                 <Heading
                   level={3}
