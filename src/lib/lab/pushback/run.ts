@@ -76,10 +76,15 @@ export const bossUnlocked = (state: RunState): boolean =>
     .slice(0, bossIndex(state.run))
     .every((_, index) => state.beaten[index]);
 
+/**
+ * A slot is open once the one before it is beaten, so the run goes in
+ * order (the first duel is the tutorial, the ramp follows the tiers);
+ * a beaten slot stays open for a replay
+ */
 export const canPlay = (state: RunState, index: number): boolean =>
   index >= 0 &&
   index < state.run.slots.length &&
-  (index !== bossIndex(state.run) || bossUnlocked(state));
+  (Boolean(state.beaten[index]) || index === nextSlot(state));
 
 /** How a duel at this slot starts, which sets the opponent's pick order */
 export const attemptFor = (state: RunState, index: number): Attempt => {

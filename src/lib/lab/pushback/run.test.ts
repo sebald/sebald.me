@@ -51,6 +51,8 @@ describe('a run', () => {
     assert.equal(nextSlot(run), 0);
     assert.ok(!bossUnlocked(run));
     assert.ok(!canPlay(run, bossIndex(run.run)));
+    assert.ok(canPlay(run, 0));
+    assert.ok(!canPlay(run, 1));
     assert.equal(attemptFor(run, 0), 'first');
     assert.ok(duelSetupFor(run, 0, { seed: 1, silence: true }).tutorial);
   });
@@ -65,6 +67,10 @@ describe('a run', () => {
     assert.equal(attemptFor(run, 0), 'replay');
     assert.ok(run.beaten[0]);
     assert.equal(nextSlot(run), 1);
+    // In order: the next opens, the beaten one stays open, the rest wait
+    assert.ok(canPlay(run, 0));
+    assert.ok(canPlay(run, 1));
+    assert.ok(!canPlay(run, 2));
   });
 
   it('keeps what the duel collected and adds up the stats', () => {

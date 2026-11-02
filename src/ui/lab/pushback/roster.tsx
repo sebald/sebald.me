@@ -114,9 +114,12 @@ export const RosterScreen = ({
     return {
       id: String(index),
       disabled: !canPlay(run, index),
+      // In order: the one waiting names who is up first
       note: locked
         ? 'Beat the three colleagues first. The Stakeholder only sees you after.'
-        : undefined,
+        : !canPlay(run, index) && next >= 0
+          ? `One at a time: beat ${characterById(run.run.slots[next]!.character).name} first.`
+          : undefined,
       onSelect: () => onPlay(index),
       label: (
         <Row
@@ -128,10 +131,12 @@ export const RosterScreen = ({
               : undefined
           }
           icon={
-            // Locked, the Stakeholder is a silhouette in its frame;
+            // Locked, the Stakeholder is a faded face in its frame;
             // beaten, the face is stamped, gold when flawless
             <span className="relative block" style={{ boxShadow: FRAME }}>
-              <span className={cn('block', locked && 'brightness-0')}>
+              <span
+                className={cn('block', locked && 'brightness-50 grayscale')}
+              >
                 <Portrait
                   sheet={character.sheet}
                   scale={1}
