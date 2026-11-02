@@ -12,6 +12,7 @@ import {
 } from '@/lib/lab/pushback/run';
 import { cn } from '@/lib/styles.utils';
 
+import { effect } from './audio/engine';
 import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
 import { Portrait } from './portrait';
@@ -105,7 +106,17 @@ export const RosterScreen = ({
 }: RosterScreenProps) => {
   const next = nextSlot(run);
 
-  useKeys(useMemo(() => ({ Escape: onBack }), [onBack]));
+  useKeys(
+    useMemo(
+      () => ({
+        Escape: () => {
+          effect('cancel');
+          onBack();
+        },
+      }),
+      [onBack],
+    ),
+  );
 
   const items: PickerItem[] = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
