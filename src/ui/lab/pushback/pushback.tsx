@@ -24,7 +24,7 @@ import { ResultScreen } from './result';
 import { RosterScreen } from './roster';
 import { SelectScreen } from './select';
 import { TitleScreen } from './title';
-import { useMusic, useSoundArm } from './use-sound';
+import { useMusic, useMuteKey, useSoundArm } from './use-sound';
 
 type Screen =
   /** `menu`: open on the menu, skipping the splash (back from the demo) */
@@ -46,6 +46,7 @@ export const Pushback = () => {
   // little quieter under the demo, which is still the title; the duel
   // picks its own
   useSoundArm();
+  useMuteKey();
   useMusic(
     screen.name === 'duel'
       ? undefined

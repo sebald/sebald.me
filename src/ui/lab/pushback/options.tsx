@@ -29,8 +29,9 @@ const MODE_NOTES: Record<Mode, string> = {
 /** What the sound switches do, or why they are off */
 const SOUND_NOTES = {
   music:
-    'Mega Drive music: dark synthwave on the title, a relaxed funk in the duels.',
-  effects: 'Chip sounds for the menus, the typing, the hits and the stopwatch.',
+    'Mega Drive music: dark synthwave on the title, a relaxed funk in the duels. M mutes everything, anywhere.',
+  effects:
+    'Chip sounds for the menus, the typing, the hits and the stopwatch. M mutes everything, anywhere.',
   none: 'This browser cannot play sound here.',
 } as const;
 

@@ -114,6 +114,21 @@ export const setSettings = (next: SoundSettings) => {
   apply();
 };
 
+/** The switches as they were before the last mute, to come back to */
+let unmuted: SoundSettings | null = null;
+
+/**
+ * Mute or unmute: anything on turns all off, remembering what was on;
+ * all off turns back on what was, or both. The speaker and the M key.
+ */
+export const toggleSound = () => {
+  const current = getSettings();
+  const on = current.music || current.effects;
+  if (on) unmuted = current;
+  setSettings(on ? DEFAULT_SOUND : (unmuted ?? { music: true, effects: true }));
+  if (!on && getSettings().effects) effect('confirm');
+};
+
 /** A gated reverb's impulse: a short flat burst cut off hard */
 const gatedImpulse = (ctx: AudioContext) => {
   const length = Math.floor(ctx.sampleRate * 0.2);

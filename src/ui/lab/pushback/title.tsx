@@ -23,7 +23,7 @@ import {
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
-import { canPlay, effect, setSettings } from './audio/engine';
+import { canPlay, effect, toggleSound } from './audio/engine';
 import { Confirm } from './confirm';
 import { Room } from './frame';
 import { Glossary } from './glossary';
@@ -96,6 +96,16 @@ const HowTo = ({ legend }: { legend: ReactNode }) => (
   </div>
 );
 
+/** The pool with the most phrases not collected yet, the first on a tie */
+const mostBlanks = (glossary: readonly PairId[]): Role => {
+  const blanks = (role: Role) =>
+    PAIRS.filter(pair => pair.role === role && !glossary.includes(pair.id))
+      .length;
+  return ROLES.reduce((most, role) =>
+    blanks(role) > blanks(most) ? role : most,
+  );
+};
+
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
 const LOGO_NATIVE = { width: 226, height: 77 } as const;
 
@@ -137,34 +147,61 @@ const VIEW = {
 } as const;
 
 /**
- * The speaker, pixel for pixel: `#` the cone, `+` the waves when the
- * sound is on, `x` the cross when it is off
+ * The speaker, pixel for pixel (at `SPEAKER_DOT`), in yellow so it is
+ * found on the dark room: a box and a cone in an ink outline (`K`), lit
+ * on top (`Y`), gold (`G`), in shade below (`O`), and beside it two
+ * waves (`W`), or a red cross (`X`) when the sound is off
  */
 const SPEAKER = {
   on: [
-    '....#......+..',
-    '...##...+...+.',
-    '####..+..+...+',
-    '####..+..+...+',
-    '####..+..+...+',
-    '...##...+...+.',
-    '....#......+..',
+    '.........K......',
+    '........KK...W..',
+    '.......KYK....W.',
+    '......KYYK.W...W',
+    'KKKKKKYYGK..W..W',
+    'KYYYYKYGGK..W..W',
+    'KGGGGKGGGK..W..W',
+    'KOOOOKGOOK..W..W',
+    'KKKKKKOOOK..W..W',
+    '......KOOK.W...W',
+    '.......KOK....W.',
+    '........KK...W..',
+    '.........K......',
   ],
   off: [
-    '....#.........',
-    '...##...x...x.',
-    '####.....x.x..',
-    '####......x...',
-    '####.....x.x..',
-    '...##...x...x.',
-    '....#.........',
+    '.........K......',
+    '........KK......',
+    '.......KYK......',
+    '......KYYK......',
+    'KKKKKKYYGK.X...X',
+    'KYYYYKYGGK..X.X.',
+    'KGGGGKGGGK...X..',
+    'KOOOOKGOOK..X.X.',
+    'KKKKKKOOOK.X...X',
+    '......KOOK......',
+    '.......KOK......',
+    '........KK......',
+    '.........K......',
   ],
 } as const;
+
+/** A pixel of the speaker in stage pixels, as fine as the stopwatch's */
+const SPEAKER_DOT = 2 / 3;
+
+const SPEAKER_COLOURS: Record<string, string> = {
+  K: PALETTE.bg,
+  Y: PALETTE.goldLight,
+  G: PALETTE.gold,
+  O: PALETTE.goldShade,
+  W: PALETTE.goldLight,
+  X: PALETTE.stamp,
+};
 
 /**
  * The sound in a corner of the title: a speaker that turns the music and
  * the effects on or off together (Options has each on its own). A tap
- * on it is the gesture the browser needs before anything can play.
+ * on it is the gesture the browser needs before anything can play. M
+ * does the same on every screen (`useMuteKey`).
  */
 const SpeakerButton = () => {
   const sound = useSoundSettings();
@@ -173,22 +210,22 @@ const SpeakerButton = () => {
   return (
     <button
       type="button"
-      aria-label="Sound"
+      aria-label="Sound (M)"
       aria-pressed={on}
-      className="absolute top-[calc(var(--px)*5)] right-[calc(var(--px)*5)] z-10 cursor-pointer p-[calc(var(--px)*2)] text-(--pb-text-bright) outline-none hover:text-white focus-visible:ui-focus"
+      className="absolute top-[calc(var(--px)*5)] right-[calc(var(--px)*5)] z-10 cursor-pointer p-[calc(var(--px)*2)] outline-none hover:brightness-125 focus-visible:ui-focus"
       // Not a tap that opens the menu or resets the demo's clock
       onPointerDown={event => event.stopPropagation()}
-      onClick={() => {
-        setSettings({ music: !on, effects: !on });
-        if (!on) effect('confirm');
-      }}
+      onClick={toggleSound}
     >
       <svg
         aria-hidden
-        viewBox="0 0 14 7"
+        viewBox={`0 0 ${SPEAKER.on[0].length} ${SPEAKER.on.length}`}
         shapeRendering="crispEdges"
         className="block"
-        style={{ width: px(14), height: px(7) }}
+        style={{
+          width: px(SPEAKER.on[0].length * SPEAKER_DOT),
+          height: px(SPEAKER.on.length * SPEAKER_DOT),
+        }}
       >
         {SPEAKER[on ? 'on' : 'off'].flatMap((row, y) =>
           [...row].map((cell, x) =>
@@ -199,13 +236,7 @@ const SpeakerButton = () => {
                 y={y}
                 width={1}
                 height={1}
-                fill={
-                  cell === '#'
-                    ? 'currentColor'
-                    : cell === '+'
-                      ? PALETTE.gold
-                      : PALETTE.stamp
-                }
+                fill={SPEAKER_COLOURS[cell]}
               />
             ),
           ),
@@ -344,7 +375,11 @@ export const TitleScreen = ({
       ),
       disabled: !running,
       note: running
-        ? `Back to your run as ${ROLE_LABELS[running.role]}, where you left it.`
+        ? `Back to your run as ${ROLE_LABELS[running.role]}: ${
+            running.beaten === running.slots - 1
+              ? 'every colleague beaten, only the Stakeholder left.'
+              : `${running.beaten} of ${running.slots - 1} colleagues beaten, then the Stakeholder.`
+          }`
         : 'No run in progress yet. Start one and pick a role.',
       onSelect: onContinue,
     },
@@ -362,7 +397,9 @@ export const TitleScreen = ({
       note:
         collected === 0
           ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
-          : 'Every phrase you countered and its answer, by role, from every run.',
+          : collected === PAIRS.length
+            ? `All ${PAIRS.length} phrases countered, across every run. Nothing left to find.`
+            : `${collected} of ${PAIRS.length} phrases countered, across every run. ${ROLE_LABELS[mostBlanks(glossary)]} has the most blanks.`,
       onSelect: () => setBrowsing(true),
     },
     {
