@@ -329,7 +329,7 @@ export const BOSS_SLOT: Slot = {
  * second strict.
  */
 export const SLOTS: readonly Slot[] = [
-  { tier: 1, accuracy: 0.6, sure: 0.8, menu: 4, decoys: 'any', silence: false },
+  { tier: 1, accuracy: 0.6, sure: 0.8, menu: 3, decoys: 'any', silence: false },
   { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: true },
   { tier: 3, accuracy: 0.85, menu: 6, decoys: 'any', silence: true },
   BOSS_SLOT,

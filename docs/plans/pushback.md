@@ -53,7 +53,7 @@ For the AI as defender the menu size makes no difference, so a player's mic drop
 ### The exchange, step by step
 
 1. Attacker steps forward, line types out at 25 characters per second (tap or Space to complete instantly), then holds long enough to be read once more before the next step; the poses of a resolved exchange hold a second and a half.
-2. Defender gets a menu of counters in random order: the one that answers the phrase plus decoys. Menu size and decoy source depend on the duel's tier (see Opponents): four options from any pool in the first duel, six from the same pool in the last two. From tier 2 on the silence bar runs under the menu (see below).
+2. Defender gets a menu of counters in random order: the one that answers the phrase plus decoys. Menu size and decoy source depend on the duel's tier (see Opponents): three options from any pool in the first duel, six from the same pool in the last two. From tier 2 on the silence bar runs under the menu (see below).
 3. Match: the counter wins, the attacker flinches (a flash, then a second of the figure flickering in and out every frame, the arcade mark of a landed hit), the defender gets the initiative and pushes the scale a step. Miss: the defender flinches, the attacker keeps the initiative and pushes a step (two on a mic drop). On a player miss the right counter is shown for one beat before the flinch, so a lost exchange still teaches the pair.
 4. The scale at an edge ends the duel with win and lose poses and one bark each.
 
@@ -111,7 +111,7 @@ It is there for players who are here for the jokes rather than the memory test a
 
 ### First duel
 
-The first duel is the tutorial whoever walks in: four options from any pool, no silence bar, and on the first exchange the dialogue box shows the hint `Pick the reply that answers it`. Nothing else explains the game; the title screen's three lines and the bars do the rest.
+The first duel is the tutorial whoever walks in: three options from any pool, no silence bar, and on the first exchange the dialogue box shows the hint `Pick the reply that answers it`. Nothing else explains the game; the title screen's three lines and the bars do the rest.
 
 ### Difficulty knobs
 
@@ -164,7 +164,7 @@ A run is four slots: three colleagues and the Stakeholder. Each run draws one of
 
 | Slot | Role in the run     | Tier | Menu | Decoys from | Silence bar | Outside its repertoire | Inside it | Mic drop  |
 | ---- | ------------------- | ---- | ---- | ----------- | ----------- | ---------------------- | --------- | --------- |
-| 1    | Own role            | 1    | 4    | any pool    | off         | 60 %                   | 80 %      | never     |
+| 1    | Own role            | 1    | 3    | any pool    | off         | 60 %                   | 80 %      | never     |
 | 2    | First foreign role  | 2    | 5    | any pool    | on          | 70 %                   | 100 %     | at once   |
 | 3    | Second foreign role | 3    | 6    | any pool    | on          | 85 %                   | 100 %     | to finish |
 | 4    | The Stakeholder     | Boss | 6    | all pools   | on          | 100 %                  | 100 %     | never     |
