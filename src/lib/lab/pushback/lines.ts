@@ -105,7 +105,7 @@ export const PAIRS: readonly Pair[] = [
     ],
     [
       'I need a quick win for the steering meeting.',
-      'Quick wins are why the backlog is full of slow losses.',
+      'Quick wins are why the product is full of slow losses.',
     ],
     [
       "It's all in the ticket.",
@@ -306,7 +306,7 @@ export const BOSS_PAIRS: readonly BossPair[] = [
   },
   {
     id: 'boss-6',
-    phrase: 'My nephew says the whole app looks dated.',
+    phrase: 'My nephew thinks we need a rebrand.',
     answeredBy: 'des-1',
   },
   {

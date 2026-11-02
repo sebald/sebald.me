@@ -1,8 +1,8 @@
 # Pushback: Lines Review
 
-Every line in the game `for the pushback-spec branch`, grouped by role, so we can go through one role at a time. Source files: `src/lib/lab/pushback/lines.ts` (pairs, boss, barks) and `characters.ts` (intros). The Note column holds my suggestion; empty means keep as is. All lines are under the 70-character limit (longest is 63).
+Every line in the game `for the pushback-spec branch`, grouped by role, so we can go through one role at a time. Source files: `src/lib/lab/pushback/lines.ts` (pairs, boss, barks) and `characters.ts` (intros). The Note column holds my suggestion; empty means keep as is. All lines are under the 70-character limit (longest is 63); `lines.test.ts` checks it.
 
-Two things across all pools to keep in mind while reading: counters that share an opening or a punchline are hard to tell apart as decoys, and "Then …" opens five counters (pm-5, dev-1, dev-2, dev-9, dev-15).
+Two things across all pools to keep in mind while reading: counters that share an opening or a punchline are hard to tell apart as decoys; the test checks the openings within a pool.
 
 ## How the lines should sound
 
@@ -37,7 +37,7 @@ Pairs (thrown by PM opponents)
 | pm-4  | Let's ship the MVP and iterate.                           | Iterate is a big word for “leave it like that”.             |                      |
 | pm-5  | It's low-hanging fruit.                                   | If it's that low, why has nobody picked it in three years?  |                      |
 | pm-6  | The competition already has this. We're falling behind!   | They also have a support forum. Have a read.                | Boss answer (boss-2) |
-| pm-7  | I need a quick win for the steering meeting.              | Quick wins are why the backlog is full of slow losses.      |                      |
+| pm-7  | I need a quick win for the steering meeting.              | Quick wins are why the product is full of slow losses.      |                      |
 | pm-8  | It's all in the ticket.                                   | The ticket is one line long. And a screenshot.              |                      |
 | pm-9  | Let's park that in the backlog.                           | The backlog is where ideas go to die. With a ticket number. |                      |
 | pm-10 | Just a ballpark. I won't hold you to it.                  | The last ballpark is in a customer contract.                |                      |
@@ -166,12 +166,12 @@ New Designer pairs
 
 Player barks (Designer)
 
-| When                | Line                                                                                                                                                                                       | Note         |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------ |
-| Win                 | (1) Shipped. Pixel-perfect. (2) That's going in my portfolio. (3) Nailed it. On the grid. (4) Design review: approved. By me.                                                              | Add variants |
-| Lose                | (1) I'll take it back to the moodboard. (2) I'll go stare at some kerning. (3) Fine. Make the logo bigger. (4) I'll be in the corner, adjusting a shadow. (5) Fine. Ship it in Comic Sans. | Add variants |
-| Ending (boss loses) | Fine. Put it in the next steering deck. I used to draw those.                                                                                                                              |              |
-| Role blurb          | Has opinions about your line height.                                                                                                                                                       |              |
+| When                | Line                                                                                                                                                                                       | Note                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| Win                 | (1) Shipped. Pixel-perfect. (2) That's going in my portfolio. (3) Nailed it. On the grid. (4) Design review: approved. By me.                                                              | Done (picked in turn) |
+| Lose                | (1) I'll take it back to the moodboard. (2) I'll go stare at some kerning. (3) Fine. Make the logo bigger. (4) I'll be in the corner, adjusting a shadow. (5) Fine. Ship it in Comic Sans. | Done (picked in turn) |
+| Ending (boss loses) | Fine. Put it in the next steering deck. I used to draw those.                                                                                                                              |                       |
+| Role blurb          | Has opinions about your line height.                                                                                                                                                       |                       |
 
 ## Stakeholder
 
@@ -186,7 +186,7 @@ The mapping is now balanced (four answers from each pool), so no role gets an ea
 | boss-3  | Can't we just call it a feature?                         | dev-2: Lovely. Put it on the pricing page.                     | Done |
 | boss-4  | Have you tried unplugging it? That always works at home. | dev-4: Twice. Now it's off for good.                           |      |
 | boss-5  | Put it on my to-do list. I'll get to it.                 | dev-8: Your TODOs are old enough to have TODOs.                |      |
-| boss-6  | My nephew says the whole app looks dated.                | des-1: The brand changed twice while you were saying that.     |      |
+| boss-6  | My nephew thinks we need a rebrand.                      | des-1: The brand changed twice while you were saying that.     |      |
 | boss-7  | I was told this was a small change.                      | pm-16: Small changes are how big outages introduce themselves. |      |
 | boss-8  | This is non-negotiable for the launch.                   | pm-12: So were the last nine. The launch moved. Twice.         |      |
 | boss-9  | I was told all the tests pass.                           | dev-12: The tests test that the tests pass.                    |      |
@@ -221,14 +221,30 @@ Boss barks
 
 ## Shared
 
-| Where                                  | Line                                                         | Note                                         |
-| -------------------------------------- | ------------------------------------------------------------ | -------------------------------------------- |
-| Fallback (silence bar runs out)        | Uh… that's a good point.                                     |                                              |
-| Hint, first exchange                   | Pick the reply that answers it.                              | Missing full stop; the menu prompts have one |
-| Menu prompt, attack                    | Your turn. Pick a phrase to throw.                           |                                              |
-| Menu prompt, defend                    | Pick your counter.                                           |                                              |
-| Buddy 1                                | Let me help you, new hire.                                   |                                              |
-| Buddy 2                                | I had this one on my second day.                             |                                              |
-| Buddy 3                                | Read it again. Slowly. I have time. I have nothing but time. |                                              |
-| Buddy 4                                | I'm not haunting you. I'm onboarding you.                    |                                              |
-| Buddy, player misses after the whisper | I dimmed them. I literally dimmed them.                      |                                              |
+| Where                                  | Line                                                         | Note |
+| -------------------------------------- | ------------------------------------------------------------ | ---- |
+| Fallback (silence bar runs out)        | Uh… that's a good point.                                     |      |
+| Hint, first exchange                   | Pick the reply that answers it.                              |      |
+| Menu prompt, attack                    | Your turn. Pick a phrase to throw.                           |      |
+| Menu prompt, mic drop on offer         | Full momentum. The gold line drops the mic.                  |      |
+| Menu prompt, defend                    | Pick your counter.                                           |      |
+| Buddy 1                                | Let me help you, new hire.                                   |      |
+| Buddy 2                                | I had this one on my second day.                             |      |
+| Buddy 3                                | Read it again. Slowly. I have time. I have nothing but time. |      |
+| Buddy 4                                | I'm not haunting you. I'm onboarding you.                    |      |
+| Buddy, player misses after the whisper | I dimmed them. I literally dimmed them.                      |      |
+
+Verdicts (the heading of the window at the end of a duel, picked in turn)
+
+| When     | Line                                                                       | Note |
+| -------- | -------------------------------------------------------------------------- | ---- |
+| Win      | (1) Point taken. (2) Motion carried. (3) Fair point. (4) Ship it.          |      |
+| Flawless | (1) No notes. (2) Not a scratch. (3) Clean sweep.                          |      |
+| Lose     | (1) Overruled. (2) Back to drafts. (3) Parked for now. (4) Request denied. |      |
+
+Run verdicts (the result screen's heading, picked in turn)
+
+| When                  | Line                                                            | Note |
+| --------------------- | --------------------------------------------------------------- | ---- |
+| Shipped (boss beaten) | (1) Signed off. (2) Green light. (3) Approved as is.            |      |
+| Offline (boss won)    | (1) Let's circle back. (2) Not this quarter. (3) Deprioritised. |      |
