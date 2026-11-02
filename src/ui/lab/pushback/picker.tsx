@@ -195,7 +195,9 @@ interface NotePlace {
 /**
  * Where the description box goes, in stage pixels: beside the window the
  * list sits in, reaching a little over its frame, at the current row's
- * height; on the right, or on the left where the right has no room, and
+ * height; on the right, or on the left where the right has no room. A
+ * window that fills the stage (the result card) has no room on either
+ * side: there it goes beside the list itself, inside the window, and is
  * kept on the stage either way. Rendered into the stage itself, over
  * everything, so no window it sits in can cut it off.
  */
@@ -221,15 +223,24 @@ const useNotePlace = (
         : section;
     const frame = row.closest<HTMLElement>('[data-window]') ?? row;
     const origin = root.getBoundingClientRect();
-    const box = frame.getBoundingClientRect();
     const line = row.getBoundingClientRect();
     const toStage = (n: number) => Math.round(n / scale);
     const max = STAGE.width - NOTE.margin - NOTE.width;
-    const onRight = toStage(box.right - origin.left) - NOTE.overlap;
-    const onLeft = toStage(box.left - origin.left) + NOTE.overlap - NOTE.width;
+    const beside = (box: DOMRect, overlap: number) => {
+      const onRight = toStage(box.right - origin.left) - overlap;
+      const onLeft = toStage(box.left - origin.left) + overlap - NOTE.width;
+      return onRight <= max
+        ? onRight
+        : onLeft >= NOTE.margin
+          ? onLeft
+          : undefined;
+    };
     setPlace({
       root,
-      left: onRight <= max ? onRight : onLeft >= NOTE.margin ? onLeft : max,
+      left:
+        beside(frame.getBoundingClientRect(), NOTE.overlap) ??
+        beside(listRef.current!.getBoundingClientRect(), -NOTE.margin) ??
+        max,
       top: Math.max(NOTE.margin, toStage(line.top - origin.top) - 4),
     });
   }, [listRef, index, scrollTop, scale]);

@@ -325,6 +325,9 @@ export const TitleScreen = ({
     {
       id: 'start',
       label: 'Start',
+      note: running
+        ? `A new run with a role of your pick. Your run as ${ROLE_LABELS[running.role]} ends there, so it asks first.`
+        : 'Pick a role and talk your way past your colleagues, one meeting at a time.',
       onSelect: () => (running ? setAsking(true) : onStart()),
     },
     {
@@ -341,7 +344,7 @@ export const TitleScreen = ({
       ),
       disabled: !running,
       note: running
-        ? undefined
+        ? `Back to your run as ${ROLE_LABELS[running.role]}, where you left it.`
         : 'No run in progress yet. Start one and pick a role.',
       onSelect: onContinue,
     },
@@ -359,11 +362,21 @@ export const TitleScreen = ({
       note:
         collected === 0
           ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
-          : undefined,
+          : 'Every phrase you countered and its answer, by role, from every run.',
       onSelect: () => setBrowsing(true),
     },
-    { id: 'how', label: 'How to play', onSelect: () => setReading(true) },
-    { id: 'options', label: 'Options', onSelect: () => setSetting(true) },
+    {
+      id: 'how',
+      label: 'How to play',
+      note: 'Phrases, counters and the silence, in one window.',
+      onSelect: () => setReading(true),
+    },
+    {
+      id: 'options',
+      label: 'Options',
+      note: 'The mode, the music and the effects, and erasing the save.',
+      onSelect: () => setSetting(true),
+    },
   ];
 
   return (

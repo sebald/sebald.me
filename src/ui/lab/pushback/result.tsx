@@ -190,15 +190,24 @@ export const ResultScreen = ({
               {
                 id: 'copy',
                 label: copied ? 'Copied' : 'Copy result',
+                note: 'This card as text, to paste wherever you brag.',
                 onSelect: copy,
               },
               ...(onNewRun
-                ? [{ id: 'new', label: 'New run', onSelect: onNewRun }]
+                ? [
+                    {
+                      id: 'new',
+                      label: 'New run',
+                      note: 'Pick a role and start over. The glossary stays.',
+                      onSelect: onNewRun,
+                    },
+                  ]
                 : []),
               {
                 id: 'back',
                 label: 'Back to the roster',
                 back: true,
+                note: 'Back to the run, to replay a colleague.',
                 onSelect: onBack,
               },
             ]}

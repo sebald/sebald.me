@@ -1014,12 +1014,14 @@ export const DuelScreen = ({
                 {
                   id: 'resume',
                   label: 'Resume',
+                  note: 'Back into the meeting, where it stopped.',
                   onSelect: () => setPaused(false),
                 },
                 {
                   id: 'back',
                   label: 'Back to the roster',
                   back: true,
+                  note: 'Leaves the duel. It counts as neither a win nor a loss.',
                   onSelect: onBack,
                 },
               ]}
