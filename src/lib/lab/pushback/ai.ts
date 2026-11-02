@@ -59,7 +59,8 @@ export const buildMenu = (
 /**
  * Whether the opponent answers a phrase correctly: what is in its
  * repertoire (its own pool and what it knows; the boss knows it all) it
- * answers every time, the rest with the slot's accuracy, and `fatigue`
+ * answers every time (or with `sure`, a slot's `sure`), the rest with
+ * the slot's accuracy, and `fatigue`
  * (the rules' rate times the exchanges so far) comes off both.
  */
 export const aiAnswers = (
@@ -68,9 +69,10 @@ export const aiAnswers = (
   accuracy: number,
   rng: Rng,
   fatigue = 0,
+  sure = 1,
 ): boolean => {
   const known = repertoire === 'all' || repertoire.includes(phrase);
-  return rng.chance((known ? 1 : accuracy) - fatigue);
+  return rng.chance((known ? sure : accuracy) - fatigue);
 };
 
 /** A wrong counter from the phrase's pool in the deck, for the opponent's miss */
@@ -117,8 +119,10 @@ export const aiPick = (
 };
 
 /**
- * Whether the opponent drops the mic now: tiers 1 and 2 as soon as it
- * can, tier 3 holds it until the hit would end the duel.
+ * Whether the opponent drops the mic now: tier 1 never (the first
+ * colleague is where the player learns the duel, a mic drop there is a
+ * wall), tier 2 as soon as it can, tier 3 holds it until the hit would
+ * end the duel.
  */
 export const aiDropsMic = (
   tier: Tier,
@@ -129,7 +133,9 @@ export const aiDropsMic = (
     worth: number;
   },
 ): boolean =>
-  options.momentumFull && (tier !== 3 || options.worth >= options.remaining);
+  tier !== 1 &&
+  options.momentumFull &&
+  (tier !== 3 || options.worth >= options.remaining);
 
 /**
  * The opponent's closer when it drops the mic: one of its role's three

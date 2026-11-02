@@ -311,8 +311,9 @@ describe('the mic drop', () => {
   });
 
   it('by the opponent grows the menu and moves the scale two either way', () => {
-    // Tier 1 drops as soon as full: let the opponent win two exchanges
-    const strong: Slot = { ...weak, accuracy: 1 };
+    // Tier 2 drops as soon as full (tier 1 never does): let the
+    // opponent win two exchanges
+    const strong: Slot = { ...weak, tier: 2, accuracy: 1 };
     let s = next(right(begin({ slot: strong, rules: { ...RULES, reach: 9 } })));
     s = next(throwFirst(s)); // countered: opponent momentum 1
     s = next(wrong(s)); // landed: 2, the next throw drops the mic

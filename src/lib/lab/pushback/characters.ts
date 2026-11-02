@@ -300,8 +300,10 @@ export type Tier = 1 | 2 | 3 | 'boss';
 
 export interface Slot {
   tier: Tier;
-  /** AI accuracy on foreign pools before fatigue; its own pool starts at 1 */
+  /** AI accuracy on foreign pools before fatigue; its own pool starts at `sure` */
   accuracy: number;
+  /** AI accuracy on its own pool before fatigue, 1 if not given */
+  sure?: number;
   /** Counter options on defence */
   menu: number;
   /** Where the decoys come from */
@@ -327,7 +329,7 @@ export const BOSS_SLOT: Slot = {
  * second strict.
  */
 export const SLOTS: readonly Slot[] = [
-  { tier: 1, accuracy: 0.6, menu: 4, decoys: 'any', silence: false },
+  { tier: 1, accuracy: 0.6, sure: 0.8, menu: 4, decoys: 'any', silence: false },
   { tier: 2, accuracy: 0.7, menu: 5, decoys: 'any', silence: true },
   { tier: 3, accuracy: 0.85, menu: 6, decoys: 'any', silence: true },
   BOSS_SLOT,

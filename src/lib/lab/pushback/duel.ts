@@ -526,6 +526,7 @@ const playerThrows = (state: DuelState, phrase: PairId): DuelState => {
     slot.accuracy,
     rng,
     state.rules.fatigue * state.exchanges,
+    slot.sure,
   );
   const picked = answered ? phrase : aiWrongCounter(phrase, rng, deck);
   return {

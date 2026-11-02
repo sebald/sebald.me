@@ -65,6 +65,14 @@ describe('aiAnswers', () => {
     assert.ok(right > 1100 && right < 1300, `${right}`);
   });
 
+  it('answers its repertoire with `sure` where the slot gives one', () => {
+    const r = rng(13);
+    let right = 0;
+    for (let i = 0; i < 2000; i++)
+      if (aiAnswers('dev-3', pool, 0, r, 0, 0.8)) right++;
+    assert.ok(right > 1500 && right < 1700, `${right}`);
+  });
+
   it('tires: fatigue comes off the repertoire and the foreign pools alike', () => {
     for (let seed = 0; seed < 50; seed++) {
       assert.ok(aiAnswers('dev-3', pool, 0, rng(seed), 0));
@@ -134,8 +142,12 @@ describe('aiPick', () => {
 describe('aiDropsMic', () => {
   const base = { momentumFull: true, remaining: 3, worth: 2 };
 
-  it('tiers 1 and 2 drop as soon as the bar is full', () => {
-    assert.ok(aiDropsMic(1, base));
+  it('tier 1 never drops it', () => {
+    assert.ok(!aiDropsMic(1, base));
+    assert.ok(!aiDropsMic(1, { ...base, remaining: 2 }));
+  });
+
+  it('tier 2 drops as soon as the bar is full', () => {
     assert.ok(aiDropsMic(2, base));
     assert.ok(!aiDropsMic(2, { ...base, momentumFull: false }));
   });

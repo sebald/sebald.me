@@ -162,16 +162,16 @@ Every regular pair is borrowed by at most one character and fifteen of the twent
 
 A run is four slots: three colleagues and the Stakeholder. Each run draws one of the three characters per role at random, seeded per run, the own role first and the two foreign roles in random order. No face shows twice: the draw skips any character on the player's own sheet or on a sheet the run already has (`drawRun`, `bossIndex`). The six characters not drawn are out of office this run and rotate in on the next one, which is the discovery a short run lives on: nine colleagues for three chairs. The slot table applies by position:
 
-| Slot | Role in the run     | Tier | Menu | Decoys from | Silence bar | Outside its repertoire |
-| ---- | ------------------- | ---- | ---- | ----------- | ----------- | ---------------------- |
-| 1    | Own role            | 1    | 4    | any pool    | off         | 60 %                   |
-| 2    | First foreign role  | 2    | 5    | any pool    | on          | 70 %                   |
-| 3    | Second foreign role | 3    | 6    | any pool    | on          | 85 %                   |
-| 4    | The Stakeholder     | Boss | 6    | all pools   | on          | 100 %                  |
+| Slot | Role in the run     | Tier | Menu | Decoys from | Silence bar | Outside its repertoire | Inside it | Mic drop  |
+| ---- | ------------------- | ---- | ---- | ----------- | ----------- | ---------------------- | --------- | --------- |
+| 1    | Own role            | 1    | 4    | any pool    | off         | 60 %                   | 80 %      | never     |
+| 2    | First foreign role  | 2    | 5    | any pool    | on          | 70 %                   | 100 %     | at once   |
+| 3    | Second foreign role | 3    | 6    | any pool    | on          | 85 %                   | 100 %     | to finish |
+| 4    | The Stakeholder     | Boss | 6    | all pools   | on          | 100 %                  | 100 %     | never     |
 
 "Decoys from" is where the wrong counters in the player's defence menu are drawn from, within the deck: any pool means the wrong answers are obviously from another conversation, same pool means they all sound like plausible replies. Every slot keeps the obvious decoys, because with one encounter per role the player meets each foreign pool for the first time in its duel; the third slot is harder through the bar and the opponent's accuracy, not through tricky decoys. ("Same pool" and "two pools" stay in the data as steps for a later ramp.) A mic drop sets the menu to eight whatever the slot. "Outside its repertoire" is the AI's accuracy on phrases it has not got; its repertoire it answers every time.
 
-With these numbers the simulation's modelled player (recalls a collected pair 90 % of the time) wins a first attempt at 92, 64, 57 and 93 % across the slots, a retry at 90 % and up, and plays five duels per run; it reaches the boss with 17 to 18 of the deck's 24 pairs. The own-role duel is the warm-up, the two foreign ones are the dips, and the boss moves with how well the player knows the lines: it never attacks wrongly, so the finale is a memory test of the deck, which is why hard mode exists.
+With these numbers the simulation's modelled player (recalls a collected pair 90 % of the time) wins a first attempt at 95, 65, 60 and 90 % across the slots, a retry at 90 % and up, and plays five duels per run; it reaches the boss with 17 to 18 of the deck's 24 pairs. The own-role duel is the warm-up, the two foreign ones are the dips, and the boss moves with how well the player knows the lines: it never attacks wrongly, so the finale is a memory test of the deck, which is why hard mode exists.
 
 The ramp is fixed and the faces and lines are random, which is the point: the first duel is always the tutorial whoever walks in, and the run never opens with a silence bar. A run is about five minutes, and the next one has other colleagues and other lines.
 
@@ -200,7 +200,7 @@ No twist about who the Stakeholder is. "The stakeholder was the CEO" is what eve
 
 ### AI behaviour
 
-On attack: pick a random phrase from the opponent's pool, no repeats within a duel until all are used, then any. The pick order depends on the attempt: on a first attempt at a slot, and on a replay of a beaten slot, uncollected pairs first (collecting); on a retry after a loss, alternate collected and uncollected, collected first (the earned retry). Within each group the pick is random. With full momentum, slots at tier 1 and 2 drop the mic at once, tier 3 holds it until the hit would end the duel; a mic drop throws one of the opponent's role's three closers, unthrown ones first. On defence: own pool always right; foreign pools right with the slot's accuracy, otherwise a random wrong counter from the phrase's pool. The Stakeholder never guesses and never attacks with a mic drop (every boss phrase is already worth a miss).
+On attack: pick a random phrase from the opponent's pool, no repeats within a duel until all are used, then any. The pick order depends on the attempt: on a first attempt at a slot, and on a replay of a beaten slot, uncollected pairs first (collecting); on a retry after a loss, alternate collected and uncollected, collected first (the earned retry). Within each group the pick is random. The first colleague (tier 1) never drops the mic: it is where the player learns the duel, and a mic drop there is a wall. With full momentum, tier 2 drops it at once, tier 3 holds it until the hit would end the duel; a mic drop throws one of the opponent's role's three closers, unthrown ones first. On defence: own pool always right, except the first colleague's, right 80 % of the time (`sure`): it shares the player's role, so every phrase in the player's hand is its own and the accuracy never applies, and without a crack in its own pool the warm-up was won only on fatigue; foreign pools right with the slot's accuracy, otherwise a random wrong counter from the phrase's pool. The Stakeholder never guesses and never attacks with a mic drop (every boss phrase is already worth a miss).
 
 ## Backgrounds
 
