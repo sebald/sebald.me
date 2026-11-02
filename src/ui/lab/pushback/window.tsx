@@ -179,9 +179,12 @@ export const Legend = ({ keys, touch }: LegendProps) => {
   );
 };
 
-/** The legend on its own, in the stage's bottom right corner */
+/**
+ * The legend on its own, in the stage's bottom right corner; held
+ * upright, centred over the bar of controls
+ */
 export const CornerLegend = (props: LegendProps) => (
-  <div className="absolute right-3 bottom-2 text-right text-[0.75em] text-(--pb-dim)">
+  <div className="absolute right-3 bottom-2 text-right text-[0.75em] text-(--pb-dim) tall:inset-x-3 tall:bottom-[calc(var(--pb-bar)+var(--px)*3)] tall:text-center">
     <Legend {...props} />
   </div>
 );

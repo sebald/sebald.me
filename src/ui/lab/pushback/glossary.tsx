@@ -15,7 +15,7 @@ import { cva } from '@/lib/styles.utils';
 
 import { Dialogue } from './dialogue';
 import { ScrollRail, overflows, useScroll } from './picker';
-import { px } from './stage';
+import { px, useStage } from './stage';
 import { Heading, Muted } from './text';
 import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
@@ -90,6 +90,7 @@ interface GlossaryProps {
  */
 export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
   const collected = useMemo(() => new Set(glossary), [glossary]);
+  const { tall } = useStage();
   const [pool, setPool] = useState(role);
   const listRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -135,7 +136,7 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
     `${poolOf(r).filter(pair => collected.has(pair.id)).length}/${poolOf(r).length}`;
 
   return (
-    <div className="absolute inset-0 bg-(--pb-ink)/75">
+    <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) bg-(--pb-ink)/75">
       {/* A tap outside the window closes it */}
       <button
         type="button"
@@ -162,7 +163,8 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
                 ['↑↓', 'scroll'],
                 ['Esc', 'close'],
               ]}
-              touch="Tap outside to close"
+              // Held upright the window fills the stage: the bar's Back
+              touch={tall ? 'Back closes it' : 'Tap outside to close'}
             />
           }
         >

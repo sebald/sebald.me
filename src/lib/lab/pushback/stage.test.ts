@@ -29,6 +29,7 @@ import {
   typedChars,
   typingDuration,
   fitFor,
+  tallFor,
   scaleBeam,
   viewFor,
 } from './stage';
@@ -59,6 +60,25 @@ describe('scaleFor', () => {
     const short = fitFor(1200, 400);
     assert.equal(short.crop, 60);
     assert.ok(Math.abs(short.scale - 400 / 154) < 1e-9);
+  });
+
+  it('fills an upright window: the width sets the scale, the height the rows', () => {
+    // iPhone 17 in Safari: 402 by 714, no whole thirds above the minimum
+    const phone = tallFor(402, 714, 3, 3);
+    assert.ok(Math.abs(phone.scale - 402 / 320) < 1e-9);
+    assert.equal(phone.rows, Math.floor(714 / (402 / 320)));
+    // 17 Pro Max: 440 wide snaps to 4/3
+    assert.equal(tallFor(440, 796, 3, 3).scale, 4 / 3);
+    assert.equal(tallFor(440, 796, 3, 3).rows, 597);
+    // Never above the maximum, never fewer rows than the stage
+    assert.equal(tallFor(1200, 1600).scale, 3);
+    assert.equal(tallFor(400, 200).rows, 214);
+  });
+
+  it('keeps tall text at 16 px or more', () => {
+    assert.equal(fontSizeFor(1.25), 14);
+    assert.equal(fontSizeFor(1.25, true), 16);
+    assert.equal(fontSizeFor(3, true), 16);
   });
 
   it('never goes above the maximum', () => {

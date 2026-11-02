@@ -16,8 +16,10 @@ import {
   resultModel,
 } from '@/lib/lab/pushback/save';
 import { PLAYER_SHEETS } from '@/lib/lab/pushback/sprites';
-import { LAYOUT, STAGE } from '@/lib/lab/pushback/stage';
+import { LAYOUT } from '@/lib/lab/pushback/stage';
 
+import { effect } from './audio/engine';
+import { Controls } from './controls';
 import { Ledger, Meter } from './ledger';
 import { Picker } from './picker';
 import { Portrait } from './portrait';
@@ -86,7 +88,8 @@ export const ResultScreen = ({
           left: px(panel.x),
           top: px(panel.x),
           width: px(panel.width),
-          height: px(STAGE.height - panel.x * 2),
+          // Held upright, down to the bar of controls
+          bottom: `calc(var(--pb-bar) + ${px(panel.x)})`,
         }}
         legend={
           <Legend
@@ -99,7 +102,7 @@ export const ResultScreen = ({
           />
         }
       >
-        <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)]">
+        <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)] tall:flex-col tall:gap-[calc(var(--px)*6)]">
           <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)]">
             <span
               className="block bg-(--pb-frame-inner)"
@@ -165,7 +168,8 @@ export const ResultScreen = ({
                 <dd className="m-0 text-(--pb-heading) tabular-nums">
                   {pool.collected}/{pool.total}
                 </dd>
-                <dd className="m-0 text-right">
+                {/* Held upright, under the row: four columns do not fit */}
+                <dd className="m-0 text-right tall:col-span-full tall:-mt-[calc(var(--px)*2)]">
                   <Muted className="text-[0.85em]">
                     {pool.missed === 0
                       ? 'none missed'
@@ -180,7 +184,7 @@ export const ResultScreen = ({
         <div className="mt-auto flex justify-end px-[calc(var(--px)*2)] pt-[calc(var(--px)*4)]">
           <Picker
             label="Result"
-            className="w-[14em]"
+            className="w-[14em] tall:w-full"
             items={[
               {
                 id: 'copy',
@@ -200,6 +204,15 @@ export const ResultScreen = ({
           />
         </div>
       </Window>
+      <Controls
+        escape={{
+          kind: 'back',
+          onPress: () => {
+            effect('cancel');
+            onBack();
+          },
+        }}
+      />
     </Stage>
   );
 };

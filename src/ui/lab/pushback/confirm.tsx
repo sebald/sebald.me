@@ -34,10 +34,10 @@ export const Confirm = ({
     <div
       role="alertdialog"
       aria-label={title}
-      className="absolute inset-0 z-10 flex items-center justify-center bg-(--pb-bg)/80"
+      className="absolute inset-x-0 top-0 bottom-(--pb-bar) z-10 flex items-center justify-center bg-(--pb-bg)/80"
     >
       <Window
-        className="w-[70%]"
+        className="w-[70%] tall:w-[90%]"
         legend={
           <Legend
             keys={[

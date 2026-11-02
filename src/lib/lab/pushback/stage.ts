@@ -153,6 +153,26 @@ export const fitFor = (
 };
 
 /**
+ * The tall stage, for a window held upright: the full 320 columns across
+ * the window's width, at whatever scale that takes (`crispScale` snaps it
+ * where it can), and as many rows as the height holds, never fewer than
+ * the stage's own 214. The room band stays on top; what is under it
+ * grows into the extra rows.
+ */
+export const tallFor = (
+  width: number,
+  height: number,
+  max = 3,
+  dpr = 1,
+): { scale: number; rows: number } => {
+  const scale = crispScale(Math.min(max, width / STAGE.width), dpr);
+  return {
+    scale,
+    rows: Math.max(STAGE.height, Math.floor(height / scale + 1e-6)),
+  };
+};
+
+/**
  * The scale snapped down so that a stage pixel is a whole number of
  * device pixels: in halves on a 2x screen, in thirds on a 3x one. Then
  * nothing is ever resampled, whatever the window. A 1x screen keeps the
@@ -181,9 +201,13 @@ export const crisp = (scale: number, dpr: number): boolean => {
 export const backingFor = (scale: number, dpr: number): number =>
   crisp(scale, dpr) ? Math.round(scale * dpr) : BACKING;
 
-/** The overlay's font size at a scale: 16 px at 3x, never below 14 px */
-export const fontSizeFor = (scale: number): number =>
-  Math.max(14, Math.round((16 * scale) / 3));
+/**
+ * The overlay's font size at a scale: 16 px at 3x, never below 14 px.
+ * The tall stage sets its text by the reader, not by the art: 16 px at
+ * least, whatever the scale.
+ */
+export const fontSizeFor = (scale: number, tall = false): number =>
+  Math.max(tall ? 16 : 14, Math.round((16 * scale) / 3));
 
 export interface Rect {
   x: number;

@@ -32,6 +32,8 @@ const pickerStyles = {
       'cursor-pointer transition-colors duration-100',
       'outline-none focus-visible:ui-focus',
       'aria-disabled:cursor-default',
+      // Held upright, a row is a thumb's height
+      'tall:min-h-11',
     ],
     variants: {
       selected: {
@@ -188,6 +190,7 @@ interface NotePlace {
   root: HTMLElement;
   left: number;
   top: number;
+  width: number;
 }
 
 /**
@@ -204,7 +207,7 @@ const useNotePlace = (
   index: number,
   scrollTop: number,
 ): NotePlace | null => {
-  const { scale } = useStage();
+  const { scale, tall } = useStage();
   const [place, setPlace] = useState<NotePlace | null>(null);
   useLayoutEffect(() => {
     const row = listRef.current?.children[index] as HTMLElement | undefined;
@@ -223,6 +226,18 @@ const useNotePlace = (
     const origin = root.getBoundingClientRect();
     const line = row.getBoundingClientRect();
     const toStage = (n: number) => Math.round(n / scale);
+    // Held upright the window is as wide as the stage: the box goes
+    // under it, as wide as it
+    if (tall) {
+      const box = frame.getBoundingClientRect();
+      setPlace({
+        root,
+        left: toStage(box.left - origin.left),
+        top: toStage(box.bottom - origin.top) + NOTE.margin,
+        width: toStage(box.width),
+      });
+      return;
+    }
     const max = STAGE.width - NOTE.margin - NOTE.width;
     const beside = (box: DOMRect, overlap: number) => {
       const onRight = toStage(box.right - origin.left) - overlap;
@@ -240,8 +255,9 @@ const useNotePlace = (
         beside(listRef.current!.getBoundingClientRect(), -NOTE.margin) ??
         max,
       top: Math.max(NOTE.margin, toStage(line.top - origin.top) - 4),
+      width: NOTE.width,
     });
-  }, [listRef, index, scrollTop, scale]);
+  }, [listRef, index, scrollTop, scale, tall]);
   return index < 0 ? null : place;
 };
 
@@ -407,7 +423,7 @@ export const Picker = ({
             style={{
               left: `calc(var(--px) * ${place.left})`,
               top: `calc(var(--px) * ${place.top})`,
-              width: `calc(var(--px) * ${NOTE.width})`,
+              width: `calc(var(--px) * ${place.width})`,
             }}
           >
             <p aria-live="polite" className="m-0">

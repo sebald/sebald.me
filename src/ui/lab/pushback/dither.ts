@@ -35,3 +35,11 @@ export const edgeMask = (rows: number, edge: number) =>
       Math.min(1, (Math.min(y, rows - 1 - y) + 0.5) / edge),
     ),
   );
+
+/** Full down to the last `edge` of `rows` rows, which fade out downward */
+export const endMask = (rows: number, edge: number) =>
+  mask(
+    Array.from({ length: rows }, (_, y) =>
+      Math.min(1, (rows - y - 0.5) / edge),
+    ),
+  );

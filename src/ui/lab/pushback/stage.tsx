@@ -9,6 +9,12 @@ import { cn, cva } from '@/lib/styles.utils';
 import { paletteVars } from './palette';
 import { type StageScale, useScale } from './use-scale';
 
+/**
+ * The tall stage's bar of controls along the bottom, in CSS pixels
+ * (`Controls`); screens keep clear of it through `--pb-bar`, 0 elsewhere
+ */
+export const TALL_BAR = 52;
+
 /** A length in stage pixels, for inline styles: `px(3)` is three of them */
 export const px = (n: number) => `calc(var(--px) * ${n})`;
 
@@ -18,7 +24,9 @@ export const px = (n: number) => `calc(var(--px) * ${n})`;
 const StageContext = createContext<StageScale>({
   scale: 3,
   crop: 0,
-  portrait: false,
+  tall: false,
+  rows: STAGE.height,
+  turn: false,
   crisp: true,
   backing: BACKING,
 });
@@ -65,10 +73,13 @@ const styles = {
       'relative overflow-hidden outline-none',
       'bg-(--pb-bg) text-(--pb-text)',
       'select-none',
+      // A game, not a page: no double-tap zoom, no tap flash, no
+      // long-press menu on a face
+      'touch-manipulation [-webkit-tap-highlight-color:transparent] [-webkit-touch-callout:none]',
     ],
   }),
-  portrait: cva({
-    base: 'bg-(--pb-bg) p-6 text-center font-mono text-sm text-(--pb-text)',
+  turn: cva({
+    base: 'grid min-h-[60svh] place-content-center gap-2 bg-(--pb-bg) p-6 text-center font-mono text-sm text-(--pb-text)',
   }),
   center: cva({
     base: 'absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center',
@@ -90,9 +101,12 @@ interface StageProps extends PropsWithChildren {
 }
 
 /**
- * The scaled stage every screen sits in: 480 by 270 times a whole number,
- * breaking out of the page column to the viewport's centre. Everything
- * inside positions in native pixels through `--px` and sizes text in em.
+ * The scaled stage every screen sits in: 320 by 214 times its scale,
+ * breaking out of the page column to the viewport's centre. Held
+ * upright it is tall instead: the window's width and the height of its
+ * small viewport, `rows` stage pixels down (`data-layout="tall"`, the
+ * `tall:` variant), with the text at 16 px or more. Everything inside
+ * positions in native pixels through `--px` and sizes text in em.
  */
 export const Stage = ({
   children,
@@ -102,7 +116,7 @@ export const Stage = ({
   crop: cropProp = 0,
 }: StageProps) => {
   const measured = useScale(fixed);
-  const { scale, portrait } = measured;
+  const { scale, tall, rows, turn } = measured;
   const crop = cropProp === 'fit' ? measured.crop : cropProp;
   const ref = useRef<HTMLElement>(null);
   // Focusing the game (a tap on it, or focus arriving from the page)
@@ -119,27 +133,29 @@ export const Stage = ({
     const active = document.activeElement;
     if (!active || !ref.current?.contains(active)) ref.current?.focus();
   };
-  if (portrait && !fixed) {
+  if (turn && !fixed) {
     return (
       <section
         data-stage
         aria-label={label}
-        className={styles.portrait()}
+        className={styles.turn()}
         style={paletteVars}
       >
-        Turn your phone sideways: the stage needs 360 pixels.
+        <p className="m-0 text-(--pb-gold)">Turn your phone upright.</p>
+        <p className="m-0 text-(--pb-muted)">The meeting will wait.</p>
       </section>
     );
   }
   const width = STAGE.width * scale;
-  const height = (STAGE.height - crop) * scale;
+  const height = (tall ? rows : STAGE.height - crop) * scale;
   const style: CSSProperties = {
     ...paletteVars,
     width,
     height,
     marginInline: `calc(50% - ${width / 2}px)`,
-    fontSize: fontSizeFor(scale),
+    fontSize: fontSizeFor(scale, tall),
     ['--px' as string]: `${scale}px`,
+    ['--pb-bar' as string]: `${tall ? TALL_BAR : 0}px`,
   };
   return (
     // `data-stage`: styles.css gives the stage normal leading back (the site
@@ -150,6 +166,7 @@ export const Stage = ({
     <section
       ref={ref}
       data-stage
+      data-layout={tall ? 'tall' : undefined}
       tabIndex={-1}
       aria-label={label ?? 'Pushback'}
       className={styles.root({ className })}
@@ -161,7 +178,10 @@ export const Stage = ({
       <StageContext.Provider value={measured}>
         <div
           className="absolute inset-x-0"
-          style={{ top: -crop * scale, height: STAGE.height * scale }}
+          style={{
+            top: -crop * scale,
+            height: (tall ? rows : STAGE.height) * scale,
+          }}
         >
           {children}
         </div>

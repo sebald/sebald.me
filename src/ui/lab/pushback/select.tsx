@@ -10,6 +10,7 @@ import { cn, cva } from '@/lib/styles.utils';
 
 import { effect } from './audio/engine';
 import { Character } from './character';
+import { Controls } from './controls';
 import { PALETTE } from './palette';
 import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
@@ -19,6 +20,7 @@ import { Stamp, stampSize } from './stamp';
 import { Heading, ScreenTitle } from './text';
 import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
+import { useScale } from './use-scale';
 import { CornerLegend } from './window';
 
 /** The portrait is the sheet's head square at twice its pixels */
@@ -45,6 +47,20 @@ const PLACE = {
   column: { x: 198, width: 112 },
   /** The figure's feet, this far below the grid's top */
   feet: 104,
+} as const;
+
+/**
+ * Held upright: the grid centred under the title, the chosen one
+ * standing under it with their name and line under their feet
+ */
+const TALL_PLACE = {
+  ...PLACE,
+  // Under the title, which is taller at the tall stage's text size
+  grid: { ...PLACE.grid, x: 72, y: 52 },
+  column: { x: 24, width: 272 },
+  feet: 262,
+  /** The name and line, this far below the grid's top */
+  caption: 268,
 } as const;
 
 const styles = {
@@ -131,11 +147,13 @@ export const SelectScreen = ({
     }, [role, look, onConfirm, onBack]),
   );
 
+  const { tall } = useScale();
+  const place = tall ? TALL_PLACE : PLACE;
   const head = SHEETS[sheet].meta.features?.head.width ?? 24;
-  const tile = head * PORTRAIT_SCALE + PLACE.frame * 2;
+  const tile = head * PORTRAIT_SCALE + place.frame * 2;
   const step = {
-    x: tile + PLACE.grid.gap.column,
-    y: tile + PLACE.grid.gap.row,
+    x: tile + place.grid.gap.column,
+    y: tile + place.grid.gap.row,
   };
 
   return (
@@ -156,9 +174,9 @@ export const SelectScreen = ({
             <span
               className={styles.role({ active: r === role })}
               style={{
-                left: px(PLACE.grid.x + column * step.x),
+                left: px(place.grid.x + column * step.x),
                 width: px(tile),
-                top: px(PLACE.grid.y + 2 * step.y + 2),
+                top: px(place.grid.y + 2 * step.y + 2),
               }}
             >
               {ROLE_LABELS[r]}
@@ -185,9 +203,9 @@ export const SelectScreen = ({
                     .join(', ')}
                   className={cn(styles.tile(), 'absolute')}
                   style={{
-                    left: px(PLACE.grid.x + column * step.x + PLACE.frame),
-                    top: px(PLACE.grid.y + row * step.y + PLACE.frame),
-                    boxShadow: `0 0 0 ${px(PLACE.frame)} ${frame}, 0 0 0 ${px(PLACE.frame + 1)} ${PALETTE.ink}`,
+                    left: px(place.grid.x + column * step.x + place.frame),
+                    top: px(place.grid.y + row * step.y + place.frame),
+                    boxShadow: `0 0 0 ${px(place.frame)} ${frame}, 0 0 0 ${px(place.frame + 1)} ${PALETTE.ink}`,
                   }}
                   onClick={() => {
                     // The picker's sounds: a confirm to play, the cursor to move
@@ -211,7 +229,7 @@ export const SelectScreen = ({
                       style={{
                         left: px(
                           (tile -
-                            PLACE.frame * 2 -
+                            place.frame * 2 -
                             stampSize('SHIPPED').width) /
                             2,
                         ),
@@ -230,15 +248,15 @@ export const SelectScreen = ({
       <Character
         key={sheet}
         sheet={sheet}
-        x={PLACE.column.x + (PLACE.column.width - LAYOUT.cell.width) / 2}
-        feet={PLACE.grid.y + PLACE.feet}
+        x={place.column.x + (place.column.width - LAYOUT.cell.width) / 2}
+        feet={place.grid.y + place.feet}
       />
       <div
         className="absolute text-center"
         style={{
-          left: px(PLACE.column.x),
-          width: px(PLACE.column.width),
-          top: px(PLACE.grid.y + 2 * step.y + 2),
+          left: px(place.column.x),
+          width: px(place.column.width),
+          top: px(place.grid.y + (tall ? TALL_PLACE.caption : 2 * step.y + 2)),
         }}
       >
         <Heading level={3} className="text-[0.85em]">
@@ -261,6 +279,15 @@ export const SelectScreen = ({
           ['M', 'sound'],
         ]}
         touch="Tap the face again to play"
+      />
+      <Controls
+        escape={{
+          kind: 'back',
+          onPress: () => {
+            effect('cancel');
+            onBack();
+          },
+        }}
       />
     </Stage>
   );

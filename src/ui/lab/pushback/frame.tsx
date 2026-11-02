@@ -260,7 +260,9 @@ const FrameBody = ({
         aria-hidden
         width={STAGE.width * backing}
         height={STAGE.height * backing}
-        className="pointer-events-none absolute inset-0 h-full w-full"
+        // The stage's own 214 rows: a tall stage's extra rows are its ground
+        className="pointer-events-none absolute inset-x-0 top-0 w-full"
+        style={{ height: `calc(var(--px) * ${STAGE.height})` }}
       />
       {/* The room mirrored onto the ground, behind the window */}
       <Reflection

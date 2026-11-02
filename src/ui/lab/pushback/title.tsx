@@ -23,18 +23,19 @@ import {
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
-import { canPlay, effect, toggleSound } from './audio/engine';
+import { effect } from './audio/engine';
 import { Confirm } from './confirm';
+import { Controls } from './controls';
+import { endMask } from './dither';
 import { Room } from './frame';
 import { Glossary } from './glossary';
 import { Options, type SaveSummary } from './options';
-import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
-import { Stage, px } from './stage';
+import { Stage, TALL_BAR, px } from './stage';
 import { Heading, Loud } from './text';
 import { useInputKind } from './use-input-kind';
 import { useKeys } from './use-keys';
-import { useSoundSettings } from './use-sound';
+import { useScale } from './use-scale';
 import { Legend, Window } from './window';
 
 interface TitleScreenProps {
@@ -81,7 +82,7 @@ const FICTION =
  * full text size, centred, growing both ways where the lines wrap.
  */
 const HowTo = ({ legend }: { legend: ReactNode }) => (
-  <div className="absolute inset-0 flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
+  <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
     <Window className="w-full" legend={legend}>
       <Heading>How it works</Heading>
       <ol className="m-0 mt-[calc(var(--px)*3)] grid list-none gap-[calc(var(--px)*2.5)] p-0 leading-[1.4]">
@@ -120,6 +121,13 @@ const CALL = { top: LOGO_TOP.splash + LOGO.height + 4, height: 22 } as const;
 /** The menu's window, under the logo */
 const MENU_TOP = LOGO_TOP.menu + LOGO.height + 6;
 
+/**
+ * Held upright, the room is a header the logo sits in, both staying put
+ * when the menu opens: the menu's window goes under the room, over the
+ * rows where it fades into the dark
+ */
+const TALL = { logo: 52, menu: STAGE.height - 18, fade: 48 } as const;
+
 /** The corner office's room inside its padded render */
 const OFFICE = roomBox('office');
 
@@ -135,106 +143,6 @@ const VIEW = {
   x: OFFICE.x + OFFICE.width / 2 - STAGE.width / ROOM_SCALE / 2,
   y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
 } as const;
-
-/**
- * The speaker, pixel for pixel (at `SPEAKER_DOT`), in yellow so it is
- * found on the dark room: a box and a cone in an ink outline (`K`), lit
- * on top (`Y`), gold (`G`), in shade below (`O`), and beside it two
- * waves (`W`), or a red cross (`X`) when the sound is off
- */
-const SPEAKER = {
-  on: [
-    '.........K......',
-    '........KK...W..',
-    '.......KYK....W.',
-    '......KYYK.W...W',
-    'KKKKKKYYGK..W..W',
-    'KYYYYKYGGK..W..W',
-    'KGGGGKGGGK..W..W',
-    'KOOOOKGOOK..W..W',
-    'KKKKKKOOOK..W..W',
-    '......KOOK.W...W',
-    '.......KOK....W.',
-    '........KK...W..',
-    '.........K......',
-  ],
-  off: [
-    '.........K......',
-    '........KK......',
-    '.......KYK......',
-    '......KYYK......',
-    'KKKKKKYYGK.X...X',
-    'KYYYYKYGGK..X.X.',
-    'KGGGGKGGGK...X..',
-    'KOOOOKGOOK..X.X.',
-    'KKKKKKOOOK.X...X',
-    '......KOOK......',
-    '.......KOK......',
-    '........KK......',
-    '.........K......',
-  ],
-} as const;
-
-/** A pixel of the speaker in stage pixels, as fine as the stopwatch's */
-const SPEAKER_DOT = 2 / 3;
-
-const SPEAKER_COLOURS: Record<string, string> = {
-  K: PALETTE.bg,
-  Y: PALETTE.goldLight,
-  G: PALETTE.gold,
-  O: PALETTE.goldShade,
-  W: PALETTE.goldLight,
-  X: PALETTE.stamp,
-};
-
-/**
- * The sound in a corner of the title: a speaker that turns the music and
- * the effects on or off together (Options has each on its own). A tap
- * on it is the gesture the browser needs before anything can play. M
- * does the same on every screen (`useMuteKey`).
- */
-const SpeakerButton = () => {
-  const sound = useSoundSettings();
-  const on = sound.music || sound.effects;
-  if (!canPlay()) return null;
-  return (
-    <button
-      type="button"
-      aria-label="Sound (M)"
-      aria-pressed={on}
-      className="absolute top-[calc(var(--px)*5)] right-[calc(var(--px)*5)] z-10 cursor-pointer p-[calc(var(--px)*2)] outline-none hover:brightness-125 focus-visible:ui-focus"
-      // Not a tap that opens the menu or resets the demo's clock
-      onPointerDown={event => event.stopPropagation()}
-      onClick={toggleSound}
-    >
-      <svg
-        aria-hidden
-        viewBox={`0 0 ${SPEAKER.on[0].length} ${SPEAKER.on.length}`}
-        shapeRendering="crispEdges"
-        className="block"
-        style={{
-          width: px(SPEAKER.on[0].length * SPEAKER_DOT),
-          height: px(SPEAKER.on.length * SPEAKER_DOT),
-        }}
-      >
-        {SPEAKER[on ? 'on' : 'off'].flatMap((row, y) =>
-          [...row].map((cell, x) =>
-            cell === '.' ? null : (
-              <rect
-                key={`${x}-${y}`}
-                x={x}
-                y={y}
-                width={1}
-                height={1}
-                fill={SPEAKER_COLOURS[cell]}
-              />
-            ),
-          ),
-        )}
-      </svg>
-    </button>
-  );
-};
 
 /** Keys that only modify: not a press that opens the menu */
 const MODIFIERS = new Set([
@@ -295,12 +203,21 @@ export const TitleScreen = ({
     useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
     reading,
   );
+  // On the click, not the press: the menu comes back under the finger,
+  // and the rest of the tap would land on it. Listening starts after the
+  // tap that opened it.
   useEffect(() => {
     if (!reading) return;
-    window.addEventListener('pointerdown', closeHowTo);
-    return () => window.removeEventListener('pointerdown', closeHowTo);
+    const start = setTimeout(() =>
+      window.addEventListener('click', closeHowTo),
+    );
+    return () => {
+      clearTimeout(start);
+      window.removeEventListener('click', closeHowTo);
+    };
   }, [reading, closeHowTo]);
   const kind = useInputKind();
+  const { tall } = useScale();
 
   // Attract mode: a key or a tap resets the clock, silence starts the demo
   useEffect(() => {
@@ -319,7 +236,8 @@ export const TitleScreen = ({
     };
   }, [onAttract]);
 
-  // The splash: any key or a tap opens the menu
+  // The splash: any key or a tap opens the menu, on the tap's click: on
+  // the press, its click would land on the menu opening under the finger
   useEffect(() => {
     if (open) return;
     const go = () => setOpen(true);
@@ -329,12 +247,11 @@ export const TitleScreen = ({
       effect('confirm');
       go();
     };
-    const onPointer = go;
     window.addEventListener('keydown', onKey);
-    window.addEventListener('pointerdown', onPointer);
+    window.addEventListener('click', go);
     return () => {
       window.removeEventListener('keydown', onKey);
-      window.removeEventListener('pointerdown', onPointer);
+      window.removeEventListener('click', go);
     };
   }, [open]);
 
@@ -397,8 +314,20 @@ export const TitleScreen = ({
 
   return (
     <Stage label="Pushback, title">
-      {/* The corner office at night, the whole stage, dimmed a little */}
-      <div aria-hidden className="absolute inset-0 overflow-hidden">
+      {/* The corner office at night, the whole stage, dimmed a little;
+          held upright, the stage's first 214 rows, fading into the dark */}
+      <div
+        aria-hidden
+        className="absolute inset-x-0 top-0 overflow-hidden"
+        style={{
+          height: px(STAGE.height),
+          ...(tall && {
+            maskImage: endMask(STAGE.height, TALL.fade),
+            maskSize: `${px(4)} ${px(STAGE.height)}`,
+            maskRepeat: 'repeat-x',
+          }),
+        }}
+      >
         <Room scene="office" view={VIEW} scale={ROOM_SCALE} />
         <div className="absolute inset-0 bg-(--pb-bg)/15" />
       </div>
@@ -406,7 +335,9 @@ export const TitleScreen = ({
         className={cn(
           'absolute left-1/2 m-0 -translate-x-1/2 transition-[top] duration-500 ease-out motion-reduce:transition-none',
         )}
-        style={{ top: px(open ? LOGO_TOP.menu : LOGO_TOP.splash) }}
+        style={{
+          top: px(tall ? TALL.logo : open ? LOGO_TOP.menu : LOGO_TOP.splash),
+        }}
       >
         <NextImage
           src={logo}
@@ -436,7 +367,7 @@ export const TitleScreen = ({
       ) : open ? (
         <Window
           className="absolute left-1/2 -translate-x-1/2"
-          style={{ top: px(MENU_TOP) }}
+          style={{ top: px(tall ? TALL.menu : MENU_TOP) }}
           legend={
             <Legend
               keys={[
@@ -449,7 +380,7 @@ export const TitleScreen = ({
         >
           <Picker
             label="Title menu"
-            className="w-[10em]"
+            className="w-[10em] tall:w-[14em]"
             items={items}
             initial={returned ?? (running ? 'continue' : 'start')}
             active={!asking && !browsing}
@@ -460,7 +391,10 @@ export const TitleScreen = ({
         <p
           aria-live="polite"
           className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
-          style={{ top: px(CALL.top), height: px(CALL.height) }}
+          style={{
+            top: px(tall ? TALL.logo + LOGO.height + 4 : CALL.top),
+            height: px(CALL.height),
+          }}
         >
           <Loud className="font-bold tracking-[0.15em] uppercase">
             {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
@@ -468,11 +402,35 @@ export const TitleScreen = ({
         </p>
       )}
       {!reading && !setting && (
-        <p className="absolute inset-x-0 bottom-[calc(var(--px)*4)] m-0 text-center text-[0.7em] text-balance text-(--pb-text)">
+        <p
+          className="absolute inset-x-0 m-0 px-[calc(var(--px)*6)] text-center text-[0.7em] text-balance text-(--pb-text)"
+          style={{
+            bottom: tall ? `calc(${TALL_BAR}px + var(--px) * 6)` : px(4),
+          }}
+        >
           {FICTION}
         </p>
       )}
-      {!reading && !setting && !browsing && <SpeakerButton />}
+      {/* The sound: the speaker in the corner, or the bar held upright,
+          which stays under what is open and has its Back */}
+      {(tall || (!reading && !setting && !browsing)) && (
+        <Controls
+          speaker="always"
+          escape={
+            reading || setting || browsing
+              ? {
+                  kind: 'back',
+                  onPress: () => {
+                    effect('cancel');
+                    if (reading) closeHowTo();
+                    else if (setting) closeOptions();
+                    else closeGlossary();
+                  },
+                }
+              : undefined
+          }
+        />
+      )}
       {browsing && (
         <Glossary
           glossary={glossary}

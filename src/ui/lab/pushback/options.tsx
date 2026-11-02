@@ -191,7 +191,7 @@ export const Options = ({
   ];
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-(--pb-bg)/60">
+    <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/60">
       <Window
         className="w-[19em]"
         legend={

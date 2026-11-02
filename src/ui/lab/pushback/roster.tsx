@@ -1,6 +1,11 @@
 'use client';
 
-import { type PropsWithChildren, type ReactNode, useMemo } from 'react';
+import {
+  type PropsWithChildren,
+  type ReactNode,
+  useCallback,
+  useMemo,
+} from 'react';
 
 import { bossIndex, characterById } from '@/lib/lab/pushback/characters';
 import { ROLE_LABELS } from '@/lib/lab/pushback/lines';
@@ -13,6 +18,7 @@ import {
 import { cn } from '@/lib/styles.utils';
 
 import { effect } from './audio/engine';
+import { Controls } from './controls';
 import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
 import { Portrait } from './portrait';
@@ -106,17 +112,11 @@ export const RosterScreen = ({
 }: RosterScreenProps) => {
   const next = nextSlot(run);
 
-  useKeys(
-    useMemo(
-      () => ({
-        Escape: () => {
-          effect('cancel');
-          onBack();
-        },
-      }),
-      [onBack],
-    ),
-  );
+  const back = useCallback(() => {
+    effect('cancel');
+    onBack();
+  }, [onBack]);
+  useKeys(useMemo(() => ({ Escape: back }), [back]));
 
   const items: PickerItem[] = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
@@ -188,9 +188,12 @@ export const RosterScreen = ({
       {/* The run, centred, the window as large as the list */}
       <div
         className="absolute inset-x-0 flex items-center justify-center"
-        style={{ top: px(LIST_TOP), bottom: px(14) }}
+        style={{
+          top: px(LIST_TOP),
+          bottom: `calc(var(--pb-bar) + ${px(14)})`,
+        }}
       >
-        <Window className="max-h-full text-[1.15em]" style={{ width: px(180) }}>
+        <Window className="max-h-full w-[calc(var(--px)*180)] text-[1.15em] tall:w-[calc(var(--px)*296)] tall:text-[1em]">
           <Picker
             label="Opponents in run order"
             initial={next >= 0 ? String(next) : 'result'}
@@ -209,6 +212,7 @@ export const RosterScreen = ({
         ]}
         touch="Tap a colleague to play"
       />
+      <Controls escape={{ kind: 'back', onPress: back }} />
     </Stage>
   );
 };

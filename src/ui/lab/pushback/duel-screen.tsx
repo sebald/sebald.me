@@ -73,11 +73,13 @@ import {
   setMomentum,
   setPaused as setMusicPaused,
   speak,
+  toggleSound,
 } from './audio/engine';
 import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
 import { Confirm } from './confirm';
+import { Controls } from './controls';
 import { DemoLabel } from './demo-label';
 import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
@@ -93,7 +95,7 @@ import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
-import { useMusic } from './use-sound';
+import { useMusic, useSoundSettings } from './use-sound';
 import { Legend, Window } from './window';
 
 // Styles
@@ -116,7 +118,9 @@ const WINDOW_HEIGHT = LAYOUT.panel.y + LAYOUT.panel.height - (LAYOUT.feet + 2);
 
 const styles = {
   pause: cva({
-    base: ['absolute inset-0 flex items-center justify-center bg-(--pb-bg)/80'],
+    base: [
+      'absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/80',
+    ],
   }),
 };
 
@@ -233,8 +237,10 @@ export const DuelScreen = ({
     leaving: boolean;
   } | null>(null);
   const reduced = reducedMotion ?? prefersReducedMotion();
-  // The ceiling rows a short window crops: the HUD and the names move down
-  const { crop } = useScale(scale);
+  // The ceiling rows a short window crops: the HUD and the names move down.
+  // Held upright the window fills the rows under the room instead.
+  const { crop, tall } = useScale(scale);
+  const sound = useSoundSettings();
 
   const stateRef = useRef(state);
   const clockRef = useRef(clock);
@@ -350,15 +356,16 @@ export const DuelScreen = ({
     [steps, cursor, reduced, advance, act, auto, onEnd],
   );
 
-  // Attract mode: any key or tap leaves the demo, for the title's menu
+  // Attract mode: any key or tap leaves the demo, for the title's menu;
+  // a tap on its click, so the rest of it does not land on that menu
   useEffect(() => {
     if (!auto) return;
     const leave = () => onBack();
     window.addEventListener('keydown', leave);
-    window.addEventListener('pointerdown', leave);
+    window.addEventListener('click', leave);
     return () => {
       window.removeEventListener('keydown', leave);
-      window.removeEventListener('pointerdown', leave);
+      window.removeEventListener('click', leave);
     };
   }, [auto, onBack]);
 
@@ -822,7 +829,7 @@ export const DuelScreen = ({
               items={menuItems}
               active={!sizing && step?.kind === 'menu' && !paused && !auto}
               // Tighter than the menus' rows, so six fit the window
-              className="gap-0 [&_button]:py-[0.1em]"
+              className="gap-0 tall:gap-1 [&_button]:py-[0.1em]"
             />
           </div>
         </>
@@ -926,17 +933,30 @@ export const DuelScreen = ({
           up with it when a long menu grows the window */}
       <div
         className="absolute flex flex-col transition-[height] duration-200 ease-out motion-reduce:transition-none"
-        style={{
-          left: px(LAYOUT.panel.x),
-          right: px(LAYOUT.panel.x),
-          bottom: px(STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height)),
-          height: room
-            ? `max(${px(WINDOW_HEIGHT)}, ${room.need}px)`
-            : px(WINDOW_HEIGHT),
-          // A long menu grows the window up over the room, never over the
-          // bars: past that the list scrolls
-          maxHeight: px(STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud),
-        }}
+        style={
+          tall
+            ? {
+                left: px(LAYOUT.panel.x),
+                right: px(LAYOUT.panel.x),
+                top: px(LAYOUT.panel.y),
+                bottom: 'calc(var(--pb-bar) + var(--px) * 3)',
+              }
+            : {
+                left: px(LAYOUT.panel.x),
+                right: px(LAYOUT.panel.x),
+                bottom: px(
+                  STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height),
+                ),
+                height: room
+                  ? `max(${px(WINDOW_HEIGHT)}, ${room.need}px)`
+                  : px(WINDOW_HEIGHT),
+                // A long menu grows the window up over the room, never
+                // over the bars: past that the list scrolls
+                maxHeight: px(
+                  STAGE.height - LAYOUT.panel.x - crop - LAYOUT.hud,
+                ),
+              }
+        }
       >
         <Window className="min-h-0 flex-1" legend={legend}>
           {/* The silence bar: a stopwatch in the corner, beside the
@@ -1004,6 +1024,24 @@ export const DuelScreen = ({
         )}
       </div>
 
+      {/* Escape and M for touch: Pause under the beam on a wide stage, the
+          bar held upright; nothing to pause in the demo */}
+      <Controls
+        escape={
+          auto || paused
+            ? undefined
+            : {
+                kind: 'pause',
+                onPress: () => {
+                  effect('confirm');
+                  setPaused(true);
+                },
+              }
+        }
+        centreAt={crop + LAYOUT.names.y - 1}
+        speaker="none"
+      />
+
       {paused && leaving && (
         <Confirm
           title="Leave the duel?"
@@ -1028,6 +1066,19 @@ export const DuelScreen = ({
                   id: 'resume',
                   label: 'Resume',
                   onSelect: () => setPaused(false),
+                },
+                {
+                  // The touch version of M, and where a player looks for it
+                  id: 'sound',
+                  label: (
+                    <span className="flex items-center gap-[1ch]">
+                      Sound
+                      <span className="ml-auto text-(--pb-muted)">
+                        {sound.music || sound.effects ? 'On' : 'Off'}
+                      </span>
+                    </span>
+                  ),
+                  onSelect: toggleSound,
                 },
                 {
                   id: 'back',
