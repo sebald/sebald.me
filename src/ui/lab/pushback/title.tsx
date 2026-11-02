@@ -16,14 +16,17 @@ import { ROLE_LABELS, type Role } from '@/lib/lab/pushback/lines';
 import { STAGE, roomBox } from '@/lib/lab/pushback/stage';
 import { cn } from '@/lib/styles.utils';
 
+import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
 import { Room } from './frame';
 import { Options, type SaveSummary } from './options';
+import { PALETTE } from './palette';
 import { Picker, type PickerItem } from './picker';
 import { Stage, px } from './stage';
 import { Heading, Loud } from './text';
 import { useInputKind } from './use-input-kind';
 import { useKeys } from './use-keys';
+import { useSoundSettings } from './use-sound';
 import { Legend, Window } from './window';
 
 interface TitleScreenProps {
@@ -123,6 +126,85 @@ const VIEW = {
   y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
 } as const;
 
+/**
+ * The speaker, pixel for pixel: `#` the cone, `+` the waves when the
+ * sound is on, `x` the cross when it is off
+ */
+const SPEAKER = {
+  on: [
+    '....#......+..',
+    '...##...+...+.',
+    '####..+..+...+',
+    '####..+..+...+',
+    '####..+..+...+',
+    '...##...+...+.',
+    '....#......+..',
+  ],
+  off: [
+    '....#.........',
+    '...##...x...x.',
+    '####.....x.x..',
+    '####......x...',
+    '####.....x.x..',
+    '...##...x...x.',
+    '....#.........',
+  ],
+} as const;
+
+/**
+ * The sound in a corner of the title: a speaker that turns the music and
+ * the effects on or off together (Options has each on its own). A tap
+ * on it is the gesture the browser needs before anything can play.
+ */
+const SpeakerButton = () => {
+  const sound = useSoundSettings();
+  const on = sound.music || sound.effects;
+  if (!canPlay()) return null;
+  return (
+    <button
+      type="button"
+      aria-label="Sound"
+      aria-pressed={on}
+      className="absolute top-[calc(var(--px)*5)] right-[calc(var(--px)*5)] z-10 cursor-pointer p-[calc(var(--px)*2)] text-(--pb-text-bright) outline-none hover:text-white focus-visible:ui-focus"
+      // Not a tap that opens the menu or resets the demo's clock
+      onPointerDown={event => event.stopPropagation()}
+      onClick={() => {
+        setSettings({ music: !on, effects: !on });
+        if (!on) effect('confirm');
+      }}
+    >
+      <svg
+        aria-hidden
+        viewBox="0 0 14 7"
+        shapeRendering="crispEdges"
+        className="block"
+        style={{ width: px(14), height: px(7) }}
+      >
+        {SPEAKER[on ? 'on' : 'off'].flatMap((row, y) =>
+          [...row].map((cell, x) =>
+            cell === '.' ? null : (
+              <rect
+                key={`${x}-${y}`}
+                x={x}
+                y={y}
+                width={1}
+                height={1}
+                fill={
+                  cell === '#'
+                    ? 'currentColor'
+                    : cell === '+'
+                      ? PALETTE.gold
+                      : PALETTE.stamp
+                }
+              />
+            ),
+          ),
+        )}
+      </svg>
+    </button>
+  );
+};
+
 /** Keys that only modify: not a press that opens the menu */
 const MODIFIERS = new Set([
   'Shift',
@@ -206,6 +288,7 @@ export const TitleScreen = ({
     const onKey = (event: KeyboardEvent) => {
       if (MODIFIERS.has(event.key)) return;
       event.preventDefault();
+      effect('confirm');
       go();
     };
     const onPointer = go;
@@ -324,6 +407,7 @@ export const TitleScreen = ({
           {FICTION}
         </p>
       )}
+      {!reading && !setting && <SpeakerButton />}
       {asking && running && (
         <Confirm
           title={`Abandon your run as ${ROLE_LABELS[running.role]}?`}

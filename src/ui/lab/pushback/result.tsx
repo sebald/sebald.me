@@ -195,7 +195,12 @@ export const ResultScreen = ({
               ...(onNewRun
                 ? [{ id: 'new', label: 'New run', onSelect: onNewRun }]
                 : []),
-              { id: 'back', label: 'Back to the roster', onSelect: onBack },
+              {
+                id: 'back',
+                label: 'Back to the roster',
+                back: true,
+                onSelect: onBack,
+              },
             ]}
           />
         </div>

@@ -1,9 +1,10 @@
 'use client';
 
-import type { CSSProperties } from 'react';
+import { type CSSProperties, useEffect } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
+import { effect } from './audio/engine';
 import { PALETTE } from './palette';
 import { px } from './stage';
 
@@ -16,7 +17,7 @@ const FAST = 0.5;
 const LATE = 0.25;
 
 /** The blink once the fast half is gone: there, gone, a beat each */
-const BLINK = '0.5s';
+const BLINK_MS = 500;
 
 /**
  * The stopwatch, pixel for pixel (at `DOT`), in an ink outline (`K`) like the
@@ -115,6 +116,11 @@ export interface SilenceTimerProps {
   limit: number;
   /** No blink */
   still?: boolean;
+  /**
+   * Sound: a ping when the fast half runs out, then a tick with every
+   * blink (and with the blink's beat under reduced motion)
+   */
+  ticking?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -136,12 +142,19 @@ export const SilenceTimer = ({
   elapsed,
   limit,
   still = false,
+  ticking = false,
   className,
   style,
 }: SilenceTimerProps) => {
   const share = Math.max(0, Math.min(1, 1 - elapsed / limit));
   // Something you notice, not only a colour: the fast half gone
   const blinking = share <= FAST && !still;
+  // Which blink it is on since the fast half ran out, -1 before
+  const beat =
+    share <= FAST ? Math.floor((elapsed - limit * (1 - FAST)) / BLINK_MS) : -1;
+  useEffect(() => {
+    if (ticking && beat >= 0) effect(beat === 0 ? 'flash' : 'tick');
+  }, [ticking, beat]);
   const fill = colourOf(share);
   const pixels = PIXELS.map(({ x, y, cell, angle }) => {
     const face = cell === 'F' || cell === 'S';
@@ -188,7 +201,7 @@ export const SilenceTimer = ({
           blinking &&
             'animate-arcade-blink [--blink-low:0] motion-reduce:animate-none',
         )}
-        style={{ animationDuration: BLINK }}
+        style={{ animationDuration: `${BLINK_MS}ms` }}
       >
         {rects(false)}
       </g>

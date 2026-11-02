@@ -11,10 +11,12 @@ import {
 import { ROLE_LABELS, type Role } from '@/lib/lab/pushback/lines';
 import { cn } from '@/lib/styles.utils';
 
+import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
 import { Picker, type PickerItem } from './picker';
 import { Heading } from './text';
 import { useKeys } from './use-keys';
+import { useSoundSettings } from './use-sound';
 import { Legend, Window } from './window';
 
 /** What each mode changes, under the list while the cursor is on the mode */
@@ -23,6 +25,14 @@ const MODE_NOTES: Record<Mode, string> = {
   normal: 'No ghost. From the second colleague on, a bar times every answer.',
   hard: 'Less time and longer menus to pick from. The score counts double.',
 };
+
+/** What the sound switches do, or why they are off */
+const SOUND_NOTES = {
+  music:
+    'Mega Drive music: dark synthwave on the title, a relaxed funk in the duels.',
+  effects: 'Chip sounds for the menus, the typing, the hits and the stopwatch.',
+  none: 'This browser cannot play sound here.',
+} as const;
 
 /** What is in the save, for what Erase save says it deletes */
 export interface SaveSummary {
@@ -72,9 +82,27 @@ interface OptionsProps {
   onClose: () => void;
 }
 
+/** A setting's value between its arrows: dim at the end it cannot go past */
+const Setting = ({
+  children,
+  first,
+  last,
+}: {
+  children: React.ReactNode;
+  first: boolean;
+  last: boolean;
+}) => (
+  <span className="ml-auto flex items-center gap-[calc(var(--px)*2)]">
+    <Step left more={!first} />
+    <span className="w-[6ch] text-center">{children}</span>
+    <Step left={false} more={!last} />
+  </span>
+);
+
 /**
- * The settings, away from the title menu: the mode and erasing the
- * save, off while there is nothing to erase. Under the list, a line says
+ * The settings, away from the title menu: the mode, the music and the
+ * effects (off by default, and off where the browser cannot play), and
+ * erasing the save, off while there is nothing to erase. Under the list, a line says
  * what the item the cursor is on does (the mode: what it changes). What
  * throws something away asks first and says what goes.
  */
@@ -101,17 +129,40 @@ export const Options = ({
     else onMode(target);
   };
 
+  // The sound switches: Enter or a tap flips one, left is off and right
+  // is on; turning effects on says so with the confirm sound
+  const sound = useSoundSettings();
+  const playable = canPlay();
+  const flip = (key: 'music' | 'effects', on: boolean) => {
+    if (sound[key] === on) return;
+    setSettings({ ...sound, [key]: on });
+    if (key === 'effects' && on) effect('confirm');
+  };
+  const switchItem = (key: 'music' | 'effects', label: string): PickerItem => ({
+    id: key,
+    label: (
+      <span className="flex items-center gap-[1ch]">
+        {label}
+        <Setting first={!sound[key]} last={sound[key]}>
+          {sound[key] ? 'On' : 'Off'}
+        </Setting>
+      </span>
+    ),
+    disabled: !playable,
+    note: playable ? SOUND_NOTES[key] : SOUND_NOTES.none,
+    onSelect: () => flip(key, !sound[key]),
+    onStep: step => flip(key, step === 1),
+  });
+
   const items: PickerItem[] = [
     {
       id: 'mode',
       label: (
         <span className="flex items-center gap-[1ch]">
           Mode
-          <span className="ml-auto flex items-center gap-[calc(var(--px)*2)]">
-            <Step left more={mode !== 'easy'} />
-            <span className="w-[6ch] text-center">{MODE_LABELS[mode]}</span>
-            <Step left={false} more={mode !== 'hard'} />
-          </span>
+          <Setting first={mode === 'easy'} last={mode === 'hard'}>
+            {MODE_LABELS[mode]}
+          </Setting>
         </span>
       ),
       note: MODE_NOTES[mode],
@@ -119,6 +170,8 @@ export const Options = ({
       onSelect: () => switchTo(nextMode(mode)),
       onStep: step => switchTo(stepMode(mode, step)),
     },
+    switchItem('music', 'Music'),
+    switchItem('effects', 'Effects'),
     {
       id: 'erase',
       label: 'Erase save',
@@ -132,6 +185,7 @@ export const Options = ({
     {
       id: 'back',
       label: 'Back',
+      back: true,
       divider: true,
       note: 'Back to the title.',
       onSelect: onClose,

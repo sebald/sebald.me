@@ -64,6 +64,16 @@ import {
 } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import type { BlipVoice } from './audio/effects';
+import {
+  cut,
+  effect,
+  getSettings,
+  music,
+  setMomentum,
+  setPaused as setMusicPaused,
+  speak,
+} from './audio/engine';
 import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
@@ -82,6 +92,7 @@ import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
+import { useMusic } from './use-sound';
 import { Legend, Window } from './window';
 
 // Styles
@@ -367,7 +378,10 @@ export const DuelScreen = ({
   useKeys(
     useMemo(
       () => ({
-        Escape: () => setPaused(p => !p),
+        Escape: () => {
+          effect(paused ? 'cancel' : 'confirm');
+          setPaused(!paused);
+        },
         ...(paused || step?.kind === 'menu'
           ? {}
           : { Enter: confirm, ' ': confirm }),
@@ -375,6 +389,7 @@ export const DuelScreen = ({
       [paused, step?.kind, confirm],
     ),
     !auto,
+    true,
   );
 
   // The onboarding buddy
@@ -676,6 +691,81 @@ export const DuelScreen = ({
     !auto &&
     (step?.kind !== 'beat' || released || reduced);
 
+  // Sound
+  // ---------------
+  // The duel's music, the boss's for the boss, momentum bringing in its
+  // layers and the pause turning it down. The deciding blow cuts it for
+  // the hit-stop; the round's jingle plays with the call, or with the
+  // music off the stinger. The demo leaves the title's music playing and
+  // makes no sound of its own.
+  useMusic(
+    auto || state.phase === 'end' ? undefined : state.boss ? 'boss' : 'duel',
+  );
+  useEffect(() => {
+    if (!auto) setMomentum(state.momentum.player);
+  }, [auto, state.momentum.player]);
+  useEffect(() => {
+    if (auto) return;
+    setMusicPaused(paused);
+    return () => setMusicPaused(false);
+  }, [auto, paused]);
+  useEffect(() => {
+    if (!blow) return;
+    cut();
+    effect('hit');
+  }, [blow]);
+  useEffect(() => {
+    if (!called) return;
+    if (getSettings().music) music(won ? 'win' : 'lose');
+    else effect(won ? 'win' : 'lose');
+  }, [called, won]);
+  // A hit when the loser flinches, a sparkle on top for a fast counter
+  // against the stopwatch
+  const flinching =
+    !auto &&
+    state.phase === 'resolve' &&
+    state.outcome !== null &&
+    (step?.kind === 'reveal' || step?.kind === 'beat');
+  const fastCounter =
+    state.outcome?.fast === true &&
+    state.outcome.winner === 'player' &&
+    state.exchange?.by === 'opponent' &&
+    state.setup.slot.silence !== null;
+  useEffect(() => {
+    if (!flinching) return;
+    effect('hit');
+    if (fastCounter) effect('fast');
+  }, [flinching, fastCounter, state.exchanges]);
+  // The mic drop as it is said
+  const micDropSaid =
+    !auto && burstShown && step?.kind === 'line' && step.speaker === thrower;
+  useEffect(() => {
+    if (micDropSaid) effect('micDrop');
+  }, [micDropSaid, state.exchanges]);
+  // A blip for what each step of the typing adds, in the speaker's voice
+  const opponentVoice: BlipVoice =
+    character.role === 'boss' ? 'boss' : character.role;
+  const voice: BlipVoice | null =
+    step?.kind === 'line'
+      ? step.speaker === 'player'
+        ? state.setup.role
+        : opponentVoice
+      : null;
+  const lineId = `${key}:${cursor.index}`;
+  const spokenRef = useRef({ id: '', length: 0 });
+  useEffect(() => {
+    if (auto || !voice || step?.kind !== 'line') return;
+    const spoken = spokenRef.current;
+    const from = spoken.id === lineId ? spoken.length : 0;
+    spokenRef.current = { id: lineId, length: typedLength };
+    if (typedLength > from) speak(voice, step.text.slice(from, typedLength));
+  }, [auto, voice, step, lineId, typedLength]);
+  // The ghost, as its bubble appears
+  const ghostSpeaks = !auto && Boolean(bubble);
+  useEffect(() => {
+    if (ghostSpeaks && ghostLine) speak('ghost', ghostLine);
+  }, [ghostSpeaks, ghostLine]);
+
   // What the window says; `sizing` for the unseen copy that measures it
   const promptLine =
     state.phase === 'attack' ? prompt(state) : showsHint(state) ? HINT : null;
@@ -853,6 +943,7 @@ export const DuelScreen = ({
               elapsed={timing.elapsed}
               limit={timing.limit}
               still={reduced}
+              ticking={!auto}
               className="absolute"
               style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
             />
@@ -925,7 +1016,12 @@ export const DuelScreen = ({
                   label: 'Resume',
                   onSelect: () => setPaused(false),
                 },
-                { id: 'back', label: 'Back to the roster', onSelect: onBack },
+                {
+                  id: 'back',
+                  label: 'Back to the roster',
+                  back: true,
+                  onSelect: onBack,
+                },
               ]}
             />
           </Window>

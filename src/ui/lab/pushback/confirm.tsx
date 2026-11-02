@@ -57,7 +57,7 @@ export const Confirm = ({
             className="mt-[calc(var(--px)*2)]"
             initial="cancel"
             items={[
-              { id: 'cancel', label: 'Cancel', onSelect: onCancel },
+              { id: 'cancel', label: 'Cancel', back: true, onSelect: onCancel },
               { id: 'confirm', label: confirm, onSelect: onConfirm },
             ]}
           />

@@ -16,6 +16,7 @@ import { LedgerDemo } from './ledger-demo';
 import { ResultDemo } from './result-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
+import { SoundDemo } from './sound-demo';
 import { TimerDemo } from './timer-demo';
 import { WindowDemo } from './window-demo';
 
@@ -82,6 +83,12 @@ export const Inventory = () => (
       blurb="The silence bar (silence-timer.tsx): a red stopwatch in the dialogue window's top right corner while the player picks a counter, beside the phrase, the time left a wedge shrinking clockwise from twelve; past the dot at six a counter no longer counts as fast. Light blue while fast; once the fast half is gone the whole watch blinks like the demo label, ember, then red for the last quarter. Play it or hold it with the slider."
     >
       <TimerDemo />
+    </Section>
+    <Section
+      title="Sound"
+      blurb="The soundtrack and the effects (audio/), whatever the game's switches say. Six pieces in C minor on a Mega Drive's chip: the title, the duel with its momentum layers, the boss, the two jingles and the result. The effects are NES chip; the text blip has a voice per role. Nothing plays before a click."
+    >
+      <SoundDemo />
     </Section>
     <Section
       title="Character"

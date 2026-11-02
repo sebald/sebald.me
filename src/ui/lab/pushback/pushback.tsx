@@ -24,6 +24,7 @@ import { ResultScreen } from './result';
 import { RosterScreen } from './roster';
 import { SelectScreen } from './select';
 import { TitleScreen } from './title';
+import { useMusic, useSoundArm } from './use-sound';
 
 type Screen =
   /** `menu`: open on the menu, skipping the splash (back from the demo) */
@@ -40,6 +41,19 @@ export const Pushback = () => {
   const [screen, setScreen] = useState<Screen>({ name: 'title' });
 
   useEffect(() => writeSave(save), [save]);
+
+  // The title's music through the menus, the select and the roster, a
+  // little quieter under the demo, which is still the title; the duel
+  // picks its own
+  useSoundArm();
+  useMusic(
+    screen.name === 'duel'
+      ? undefined
+      : screen.name === 'result'
+        ? 'result'
+        : 'title',
+    screen.name === 'attract',
+  );
 
   const toRoster = useCallback(() => setScreen({ name: 'roster' }), []);
   const toTitle = useCallback(() => setScreen({ name: 'title' }), []);

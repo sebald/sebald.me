@@ -12,6 +12,7 @@ import { createPortal } from 'react-dom';
 import { STAGE } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { effect } from './audio/engine';
 import { useStage } from './stage';
 import { Loud } from './text';
 import { Window } from './window';
@@ -93,6 +94,8 @@ export interface PickerItem {
   onSelect: () => void;
   /** Left and right on it, for an item that is a setting (the mode) */
   onStep?: (step: 1 | -1) => void;
+  /** It leaves (Back, Cancel): it sounds like stepping back, not like confirming */
+  back?: boolean;
   /** A rule above it: the first of a group apart from the rest */
   divider?: boolean;
   /** Room above it, without the rule: apart from the rest, quieter */
@@ -233,6 +236,16 @@ const useNotePlace = (
   return index < 0 ? null : place;
 };
 
+/** Pick an item, with its sound: a bump for one that is off */
+const choose = (item: PickerItem) => {
+  if (item.disabled) {
+    effect('bump');
+    return;
+  }
+  effect(item.back ? 'cancel' : 'confirm');
+  item.onSelect();
+};
+
 /**
  * A list the player moves through with the arrow keys (or W/S), confirms
  * with Enter or Space, and taps on touch. Disabled items are skipped;
@@ -261,8 +274,10 @@ export const Picker = ({
   useEffect(() => {
     if (!active) return;
     // Disabled items are stops too, so their note can say why
-    const move = (step: number) =>
+    const move = (step: number) => {
+      effect('cursor');
       setIndex(previous => (previous + step + items.length) % items.length);
+    };
     const onKey = (event: KeyboardEvent) => {
       switch (event.key) {
         case 'ArrowDown':
@@ -282,6 +297,7 @@ export const Picker = ({
           const item = items[current];
           if (item?.onStep && !item.disabled) {
             event.preventDefault();
+            effect('cursor');
             item.onStep(
               event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1,
             );
@@ -291,9 +307,9 @@ export const Picker = ({
         case 'Enter':
         case ' ': {
           const item = items[current];
-          if (item && !item.disabled) {
+          if (item) {
             event.preventDefault();
-            item.onSelect();
+            choose(item);
           }
           break;
         }
@@ -340,7 +356,7 @@ export const Picker = ({
               onPointerEnter={() => setIndex(i)}
               onClick={() => {
                 setIndex(i);
-                if (!item.disabled) item.onSelect();
+                choose(item);
               }}
             >
               {/* The cursor: a pixel triangle on the stage's grid */}
