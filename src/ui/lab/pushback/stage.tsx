@@ -100,6 +100,11 @@ interface StageProps extends PropsWithChildren {
    * window takes off (the duel's frame)
    */
   crop?: number | 'fit';
+  /**
+   * Held upright, stage pixels to move everything but the bar down by,
+   * so a screen's group sits centred in the rows it does not need
+   */
+  lift?: number;
 }
 
 /**
@@ -116,10 +121,12 @@ export const Stage = ({
   label,
   scale: fixed,
   crop: cropProp = 0,
+  lift: liftProp = 0,
 }: StageProps) => {
   const measured = useScale(fixed);
   const { scale, tall, rows, turn } = measured;
   const crop = cropProp === 'fit' ? measured.crop : cropProp;
+  const lift = tall ? liftProp : 0;
   const ref = useRef<HTMLElement>(null);
   // Focusing the game (a tap on it, or focus arriving from the page)
   // centres the stage in the viewport
@@ -185,13 +192,15 @@ export const Stage = ({
       onFocus={onFocus}
       onPointerDown={onPointerDown}
     >
-      {/* The full stage, its top rows above the section when cropped */}
+      {/* The full stage, its top rows above the section when cropped;
+          lifted, it starts lower and ends at the same bottom (the bar) */}
       <StageContext.Provider value={measured}>
         <div
-          className="absolute inset-x-0"
+          // A lift settles smoothly
+          className="absolute inset-x-0 transition-[top,height] duration-300 ease-out motion-reduce:transition-none"
           style={{
-            top: -crop * scale,
-            height: (tall ? rows : STAGE.height) * scale,
+            top: (lift - crop) * scale,
+            height: (tall ? rows - lift : STAGE.height) * scale,
           }}
         >
           {children}

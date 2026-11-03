@@ -90,7 +90,7 @@ import { Ledger } from './ledger';
 import { Picker, type PickerItem } from './picker';
 import { RoundCall } from './round-call';
 import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
-import { px } from './stage';
+import { TALL_BAR, px } from './stage';
 import { Heading, Muted } from './text';
 import { prefersReducedMotion } from './use-clock';
 import { useKeys } from './use-keys';
@@ -115,6 +115,25 @@ const HOLD_MS = 250;
  * two rows under the duellists' feet, a few rows more than the panel
  */
 const WINDOW_HEIGHT = LAYOUT.panel.y + LAYOUT.panel.height - (LAYOUT.feet + 2);
+
+/**
+ * Held upright: the window's top, a little air under the room, and the
+ * least it is tall in CSS pixels, enough for a phrase and most menus, so
+ * it keeps its size from line to menu; a longer menu grows it to the bar
+ */
+const TALL_TOP = LAYOUT.band + 6;
+const TALL_WINDOW = 380;
+
+/**
+ * Held upright, the rows the room and the window move down by: the two
+ * centred in what the bar leaves, for a window `height` CSS pixels tall,
+ * when there is more room than they need
+ */
+const tallLift = (rows: number, scale: number, height: number) =>
+  Math.max(
+    0,
+    Math.floor((rows - (TALL_BAR + height) / scale - TALL_TOP - 3) / 2),
+  );
 
 const styles = {
   pause: cva({
@@ -238,8 +257,8 @@ export const DuelScreen = ({
   } | null>(null);
   const reduced = reducedMotion ?? prefersReducedMotion();
   // The ceiling rows a short window crops: the HUD and the names move down.
-  // Held upright the window fills the rows under the room instead.
-  const { crop, tall } = useScale(scale);
+  // Held upright the room and the window sit centred instead (`tallLift`).
+  const { crop, tall, rows, scale: shownScale } = useScale(scale);
   const sound = useSoundSettings();
 
   const stateRef = useRef(state);
@@ -655,6 +674,12 @@ export const DuelScreen = ({
     return () => observer.disconnect();
   }, []);
   const growing = !reduced && room !== null && room.need > room.fixed + 1;
+  // Held upright, the tallest the window has needed this duel: the room
+  // and the window centre on that, so they settle once (on the first long
+  // menu) instead of moving with every one (set while rendering, React's
+  // way to follow a value)
+  const [tallest, setTallest] = useState(TALL_WINDOW);
+  if (room && room.need > tallest) setTallest(room.need);
 
   // The control hints along the window's bottom edge: only what works now
   const legend = auto ? (
@@ -815,7 +840,7 @@ export const DuelScreen = ({
               'flex min-h-0 flex-col',
               // Held upright, more air between the phrase and the answers
               !promptLine &&
-                'mt-[calc(var(--px)*2)] tall:mt-[calc(var(--px)*12)]',
+                'mt-[calc(var(--px)*2)] tall:mt-[calc(var(--px)*12+8px)]',
               step?.kind !== 'menu'
                 ? 'invisible'
                 : // A menu that grows the window shows once it has grown
@@ -826,7 +851,7 @@ export const DuelScreen = ({
           >
             {/* The prompt sits above the options, with room on both sides */}
             {promptLine && (
-              <Muted className="my-[calc(var(--px)*4)] tall:mt-[calc(var(--px)*8)] tall:mb-[calc(var(--px)*10)]">
+              <Muted className="my-[calc(var(--px)*4)] tall:mt-[calc(var(--px)*8+8px)] tall:mb-[calc(var(--px)*10)]">
                 {promptLine}
               </Muted>
             )}
@@ -834,9 +859,10 @@ export const DuelScreen = ({
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
               active={!sizing && step?.kind === 'menu' && !paused && !auto}
-              // Tighter than the menus' rows, so six fit the window; a
-              // longer one scrolls, with the rail beside it
-              className="gap-0 tall:gap-1 [&_button]:py-[0.1em] tall:[&_button]:leading-[1.2]"
+              // Tighter than the menus' rows, so six fit the window; held
+              // upright a row is a thumb's height or more, and a longer
+              // list scrolls, with the rail beside it
+              className="gap-0 tall:gap-1 [&_button]:py-[0.1em] tall:[&_button]:py-[0.25em] tall:[&_button]:leading-[1.2]"
             />
           </div>
         </>
@@ -876,6 +902,7 @@ export const DuelScreen = ({
       paused={paused || holding}
       label={`Pushback, duel against ${character.name}`}
       scale={scale}
+      lift={tall ? tallLift(rows, shownScale, tallest) : 0}
       // The stage jolts as the call lands
       className={cn(
         called &&
@@ -945,8 +972,11 @@ export const DuelScreen = ({
             ? {
                 left: px(LAYOUT.panel.x),
                 right: px(LAYOUT.panel.x),
-                top: px(LAYOUT.panel.y),
-                bottom: 'calc(var(--pb-bar) + var(--px) * 3)',
+                top: px(TALL_TOP),
+                height: room
+                  ? `max(${tallest}px, ${room.need}px)`
+                  : TALL_WINDOW,
+                maxHeight: `calc(100% - ${px(TALL_TOP + 3)} - var(--pb-bar))`,
               }
             : {
                 left: px(LAYOUT.panel.x),
