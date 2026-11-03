@@ -21,7 +21,7 @@ import { Heading, ScreenTitle } from './text';
 import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
-import { CornerLegend } from './window';
+import { CornerLegend, Window } from './window';
 
 /**
  * The portrait is the sheet's head square at twice its pixels; held
@@ -64,8 +64,8 @@ const TALL_PLACE = {
   column: { x: 24, width: 272 },
   /** The name and line, this far below the grid's top */
   caption: 186,
-  /** The group's height, the line's two rows of text included */
-  height: 240,
+  /** The group's height: the line's two rows of text and the button */
+  height: 290,
   /** The title's rows, and the legend's over the bar */
   above: 44,
   below: 18,
@@ -300,6 +300,22 @@ export const SelectScreen = ({
         <p className="m-0 mt-[calc(var(--px)*2)] text-[0.75em] leading-snug text-balance text-(--pb-text)">
           {LOOKS[role][look].quip}
         </p>
+        {/* Held upright a tap only chooses a face: this plays it, where a
+            second tap on the face would not be found */}
+        {tall && (
+          <Window className="mx-auto mt-[calc(var(--px)*8)] w-fit">
+            <button
+              type="button"
+              className="min-h-11 cursor-pointer px-4 font-semibold tracking-[0.1em] text-(--pb-gold) uppercase outline-none focus-visible:ui-focus active:text-(--pb-gold-light)"
+              onClick={() => {
+                effect('confirm');
+                onConfirm(role, look);
+              }}
+            >
+              Play as {LOOKS[role][look].name}
+            </button>
+          </Window>
+        )}
       </div>
 
       <CornerLegend
@@ -309,7 +325,7 @@ export const SelectScreen = ({
           ['Enter', 'play'],
           ['M', 'sound'],
         ]}
-        touch="Tap the face again to play"
+        touch={tall ? 'Tap a face to choose' : 'Tap the face again to play'}
       />
       <Controls
         escape={{

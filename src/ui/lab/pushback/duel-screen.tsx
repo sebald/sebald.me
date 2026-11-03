@@ -789,7 +789,9 @@ export const DuelScreen = ({
           <Dialogue speaker="player" muted>
             {counterText(state.outcome?.picked ?? null)}
           </Dialogue>
-          <Muted>The reply: {step.text}</Muted>
+          <Muted className="tall:mt-[calc(var(--px)*5)]">
+            The reply: {step.text}
+          </Muted>
         </>
       )}
       {(step?.kind === 'menu' || asking) && (
@@ -811,7 +813,9 @@ export const DuelScreen = ({
           <div
             className={cn(
               'flex min-h-0 flex-col',
-              !promptLine && 'mt-[calc(var(--px)*2)]',
+              // Held upright, more air between the phrase and the answers
+              !promptLine &&
+                'mt-[calc(var(--px)*2)] tall:mt-[calc(var(--px)*6)]',
               step?.kind !== 'menu'
                 ? 'invisible'
                 : // A menu that grows the window shows once it has grown
@@ -822,7 +826,9 @@ export const DuelScreen = ({
           >
             {/* The prompt sits above the options, with room on both sides */}
             {promptLine && (
-              <Muted className="my-[calc(var(--px)*4)]">{promptLine}</Muted>
+              <Muted className="my-[calc(var(--px)*4)] tall:my-[calc(var(--px)*7)]">
+                {promptLine}
+              </Muted>
             )}
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
@@ -846,7 +852,7 @@ export const DuelScreen = ({
             {verdict}
           </Heading>
           <Ledger
-            className="mt-[calc(var(--px)*3)] w-[24em] tall:w-full"
+            className="mt-[calc(var(--px)*3)] w-[24em] tall:mt-[calc(var(--px)*6)] tall:w-full"
             rows={[
               [
                 'Exchanges won',
