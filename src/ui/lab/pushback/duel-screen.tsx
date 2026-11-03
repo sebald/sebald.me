@@ -815,7 +815,7 @@ export const DuelScreen = ({
               'flex min-h-0 flex-col',
               // Held upright, more air between the phrase and the answers
               !promptLine &&
-                'mt-[calc(var(--px)*2)] tall:mt-[calc(var(--px)*6)]',
+                'mt-[calc(var(--px)*2)] tall:mt-[calc(var(--px)*12)]',
               step?.kind !== 'menu'
                 ? 'invisible'
                 : // A menu that grows the window shows once it has grown
@@ -826,7 +826,7 @@ export const DuelScreen = ({
           >
             {/* The prompt sits above the options, with room on both sides */}
             {promptLine && (
-              <Muted className="my-[calc(var(--px)*4)] tall:my-[calc(var(--px)*7)]">
+              <Muted className="my-[calc(var(--px)*4)] tall:mt-[calc(var(--px)*8)] tall:mb-[calc(var(--px)*10)]">
                 {promptLine}
               </Muted>
             )}
@@ -835,7 +835,7 @@ export const DuelScreen = ({
               items={menuItems}
               active={!sizing && step?.kind === 'menu' && !paused && !auto}
               // Tighter than the menus' rows, so six fit the window
-              className="gap-0 tall:gap-1 [&_button]:py-[0.1em]"
+              className="gap-0 tall:gap-2 [&_button]:py-[0.1em] tall:[&_button]:py-[0.35em]"
             />
           </div>
         </>

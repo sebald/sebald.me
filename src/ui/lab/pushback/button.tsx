@@ -23,6 +23,9 @@ const NOTCH = [
   '0 calc(100% - var(--px))',
 ].join(', ');
 
+/** `NOTCH` as a `clip-path` */
+export const notched = `polygon(${NOTCH})`;
+
 const styles = {
   root: cva({
     base: [
@@ -58,7 +61,7 @@ export const Button = ({
   <button
     type="button"
     className={styles.root({ className })}
-    style={{ clipPath: `polygon(${NOTCH})` }}
+    style={{ clipPath: notched }}
     {...props}
   >
     <span className={styles.side()}>
