@@ -9,6 +9,7 @@ import { LAYOUT } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { effect } from './audio/engine';
+import { Button } from './button';
 import { Character } from './character';
 import { Controls } from './controls';
 import { PALETTE } from './palette';
@@ -21,7 +22,7 @@ import { Heading, ScreenTitle } from './text';
 import { useClock } from './use-clock';
 import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
-import { CornerLegend, Window } from './window';
+import { CornerLegend } from './window';
 
 /**
  * The portrait is the sheet's head square at twice its pixels; held
@@ -303,18 +304,15 @@ export const SelectScreen = ({
         {/* Held upright a tap only chooses a face: this plays it, where a
             second tap on the face would not be found */}
         {tall && (
-          <Window className="mx-auto mt-[calc(var(--px)*8)] w-fit">
-            <button
-              type="button"
-              className="min-h-11 cursor-pointer px-4 font-semibold tracking-[0.1em] text-(--pb-gold) uppercase outline-none focus-visible:ui-focus active:text-(--pb-gold-light)"
-              onClick={() => {
-                effect('confirm');
-                onConfirm(role, look);
-              }}
-            >
-              Play as {LOOKS[role][look].name}
-            </button>
-          </Window>
+          <Button
+            className="mx-auto mt-[calc(var(--px)*8)] block w-fit"
+            onClick={() => {
+              effect('confirm');
+              onConfirm(role, look);
+            }}
+          >
+            Start
+          </Button>
         )}
       </div>
 
