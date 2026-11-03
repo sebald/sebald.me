@@ -15,7 +15,7 @@ import { PALETTE } from './palette';
 import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
-import { Stage, px } from './stage';
+import { Stage, TALL_BAR, px } from './stage';
 import { Stamp, stampSize } from './stamp';
 import { Heading, ScreenTitle } from './text';
 import { useClock } from './use-clock';
@@ -23,8 +23,11 @@ import { useKeys } from './use-keys';
 import { useScale } from './use-scale';
 import { CornerLegend } from './window';
 
-/** The portrait is the sheet's head square at twice its pixels */
-const PORTRAIT_SCALE = 2;
+/**
+ * The portrait is the sheet's head square at twice its pixels; held
+ * upright, at three times, with the room the standing figure leaves
+ */
+const PORTRAIT_SCALE = { wide: 2, tall: 3 } as const;
 
 /** The stamp sits this far above the tile's bottom edge, over the chin */
 const STAMP_BOTTOM = 6;
@@ -50,18 +53,38 @@ const PLACE = {
 } as const;
 
 /**
- * Held upright: the grid centred under the title, the chosen one
- * standing under it with their name and line under their feet
+ * Held upright: no standing figure, the faces larger instead, the grid
+ * centred across the stage and the name and line under it, the whole
+ * group centred in the rows between the title and the legend over the
+ * bar (`tallTop`)
  */
 const TALL_PLACE = {
   ...PLACE,
-  // Under the title, which is taller at the tall stage's text size
-  grid: { ...PLACE.grid, x: 72, y: 52 },
+  grid: { ...PLACE.grid, x: 36, y: 0 },
   column: { x: 24, width: 272 },
-  feet: 262,
   /** The name and line, this far below the grid's top */
-  caption: 268,
+  caption: 186,
+  /** The group's height, the line's two rows of text included */
+  height: 240,
+  /** The title's rows, and the legend's over the bar */
+  above: 44,
+  below: 18,
 } as const;
+
+/** Where the tall group starts: centred in what the title and bar leave */
+const tallTop = (rows: number, scale: number) =>
+  Math.max(
+    TALL_PLACE.above,
+    Math.round(
+      TALL_PLACE.above +
+        (rows -
+          TALL_BAR / scale -
+          TALL_PLACE.below -
+          TALL_PLACE.above -
+          TALL_PLACE.height) /
+          2,
+    ),
+  );
 
 const styles = {
   tile: cva({
@@ -147,10 +170,16 @@ export const SelectScreen = ({
     }, [role, look, onConfirm, onBack]),
   );
 
-  const { tall } = useScale();
-  const place = tall ? TALL_PLACE : PLACE;
+  const { tall, rows, scale } = useScale();
+  const place = tall
+    ? {
+        ...TALL_PLACE,
+        grid: { ...TALL_PLACE.grid, y: tallTop(rows, scale) },
+      }
+    : PLACE;
+  const portraitScale = PORTRAIT_SCALE[tall ? 'tall' : 'wide'];
   const head = SHEETS[sheet].meta.features?.head.width ?? 24;
-  const tile = head * PORTRAIT_SCALE + place.frame * 2;
+  const tile = head * portraitScale + place.frame * 2;
   const step = {
     x: tile + place.grid.gap.column,
     y: tile + place.grid.gap.row,
@@ -217,7 +246,7 @@ export const SelectScreen = ({
                   <span className={styles.face({ active })}>
                     <Portrait
                       sheet={PLAYER_SHEETS[r][l]}
-                      scale={PORTRAIT_SCALE}
+                      scale={portraitScale}
                     />
                   </span>
                   {/* The look that shipped the role: the stamp across
@@ -244,13 +273,15 @@ export const SelectScreen = ({
         ))}
       </div>
 
-      {/* The chosen one, standing */}
-      <Character
-        key={sheet}
-        sheet={sheet}
-        x={place.column.x + (place.column.width - LAYOUT.cell.width) / 2}
-        feet={place.grid.y + place.feet}
-      />
+      {/* The chosen one, standing; held upright the faces are enough */}
+      {!tall && (
+        <Character
+          key={sheet}
+          sheet={sheet}
+          x={place.column.x + (place.column.width - LAYOUT.cell.width) / 2}
+          feet={place.grid.y + place.feet}
+        />
+      )}
       <div
         className="absolute text-center"
         style={{

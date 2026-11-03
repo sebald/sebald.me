@@ -846,7 +846,7 @@ export const DuelScreen = ({
             {verdict}
           </Heading>
           <Ledger
-            className="mt-[calc(var(--px)*3)] w-[24em]"
+            className="mt-[calc(var(--px)*3)] w-[24em] tall:w-full"
             rows={[
               [
                 'Exchanges won',

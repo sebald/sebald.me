@@ -143,7 +143,7 @@ export const Window = ({ legend, className, style, children }: WindowProps) => (
       />
     ))}
     <div
-      className="relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) p-[calc(var(--px)*3+4px)] leading-[1.35] text-(--pb-text)"
+      className="relative flex min-h-0 flex-1 flex-col bg-(--pb-fill) p-[calc(var(--px)*3+4px)] leading-[1.35] text-(--pb-text) tall:p-[calc(var(--px)*3+7px)]"
       style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...DITHER }}
     >
       {children}

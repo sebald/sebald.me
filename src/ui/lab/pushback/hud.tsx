@@ -14,6 +14,8 @@ const styles = {
   name: cva({
     base: [
       'font-semibold tracking-wide uppercase',
+      // Held upright the text is set for reading: the names step back
+      'tall:text-[0.72em]',
       'bg-(--pb-ink)/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
       'shadow-[0_0_0_var(--px)_var(--pb-ink)]',
     ],

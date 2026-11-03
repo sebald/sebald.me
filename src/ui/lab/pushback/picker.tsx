@@ -29,6 +29,7 @@ const pickerStyles = {
   item: cva({
     base: [
       'flex w-full items-center gap-[calc(var(--px)*3)] px-[calc(var(--px)*2)] py-[0.15em] text-left',
+      'tall:gap-[calc(var(--px)*3+3px)]',
       'cursor-pointer transition-colors duration-100',
       'outline-none focus-visible:ui-focus',
       'aria-disabled:cursor-default',

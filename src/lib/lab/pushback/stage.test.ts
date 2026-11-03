@@ -75,10 +75,10 @@ describe('scaleFor', () => {
     assert.equal(tallFor(400, 200).rows, 214);
   });
 
-  it('keeps tall text at 16 px or more', () => {
+  it('keeps tall text at 17 px or more', () => {
     assert.equal(fontSizeFor(1.25), 14);
-    assert.equal(fontSizeFor(1.25, true), 16);
-    assert.equal(fontSizeFor(3, true), 16);
+    assert.equal(fontSizeFor(1.25, true), 17);
+    assert.equal(fontSizeFor(3, true), 17);
   });
 
   it('never goes above the maximum', () => {

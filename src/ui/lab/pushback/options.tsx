@@ -193,7 +193,7 @@ export const Options = ({
   return (
     <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/60">
       <Window
-        className="w-[19em]"
+        className="w-[19em] tall:w-[90%]"
         legend={
           <Legend
             keys={[

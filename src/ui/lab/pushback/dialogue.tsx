@@ -5,7 +5,8 @@ import { cva } from '@/lib/styles.utils';
 
 const styles = {
   line: cva({
-    base: 'flex items-start gap-[calc(var(--px)*3)]',
+    // Held upright, a little more air between the mark and the words
+    base: 'flex items-start gap-[calc(var(--px)*3)] tall:gap-[calc(var(--px)*3+3px)]',
     variants: { muted: { true: 'text-(--pb-muted)' } },
   }),
   speaker: cva({

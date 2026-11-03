@@ -203,11 +203,11 @@ export const backingFor = (scale: number, dpr: number): number =>
 
 /**
  * The overlay's font size at a scale: 16 px at 3x, never below 14 px.
- * The tall stage sets its text by the reader, not by the art: 16 px at
- * least, whatever the scale.
+ * The tall stage sets its text by the reader, not by the art: 17 px at
+ * least, whatever the scale, since a phone held upright has the room.
  */
 export const fontSizeFor = (scale: number, tall = false): number =>
-  Math.max(tall ? 16 : 14, Math.round((16 * scale) / 3));
+  Math.max(tall ? 17 : 14, Math.round((16 * scale) / 3));
 
 export interface Rect {
   x: number;
