@@ -4,24 +4,7 @@ import type { ButtonHTMLAttributes } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 
-/**
- * A corner cut one stage pixel deep, so the ink outline reads as a pixel
- * shape and not a CSS box
- */
-const NOTCH = [
-  '0 var(--px)',
-  'var(--px) var(--px)',
-  'var(--px) 0',
-  'calc(100% - var(--px)) 0',
-  'calc(100% - var(--px)) var(--px)',
-  '100% var(--px)',
-  '100% calc(100% - var(--px))',
-  'calc(100% - var(--px)) calc(100% - var(--px))',
-  'calc(100% - var(--px)) 100%',
-  'var(--px) 100%',
-  'var(--px) calc(100% - var(--px))',
-  '0 calc(100% - var(--px))',
-].join(', ');
+import { CORNERS, rounded } from './window';
 
 const styles = {
   root: cva({
@@ -58,10 +41,11 @@ export const Button = ({
   <button
     type="button"
     className={styles.root({ className })}
-    style={{ clipPath: `polygon(${NOTCH})` }}
+    // The window's rounded corners: the ink outline, the cap one ring in
+    style={{ clipPath: rounded(CORNERS[0]!) }}
     {...props}
   >
-    <span className={styles.side()}>
+    <span className={styles.side()} style={{ clipPath: rounded(CORNERS[1]!) }}>
       <span className={styles.face()}>{children}</span>
     </span>
   </button>

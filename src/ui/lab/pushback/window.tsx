@@ -13,7 +13,7 @@ import { useInputKind } from './use-input-kind';
  * each ring inside one step smaller, so the corner curves the same way
  * through every layer and the fill's own corner is square.
  */
-const CORNERS = [[3, 1, 1], [2, 1], [1]];
+export const CORNERS = [[3, 1, 1], [2, 1], [1]];
 
 /** The window's rings, from the outside in, one stage pixel each */
 const RINGS = [PALETTE.ink, PALETTE.frame, PALETTE.frameInner];
@@ -23,7 +23,7 @@ const RINGS = [PALETTE.ink, PALETTE.frame, PALETTE.frameInner];
  * clockwise: each corner's steps as offsets from that corner, mirrored
  * onto it, in the order the outline passes them
  */
-const rounded = (steps: number[]) => {
+export const rounded = (steps: number[]) => {
   // From the left edge up to the top edge, round the top left corner,
   // the bottom row's step first
   const topLeft = [
