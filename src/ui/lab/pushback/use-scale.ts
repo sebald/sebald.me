@@ -6,7 +6,9 @@ import {
   STAGE,
   backingFor,
   crisp,
+  crispScale,
   fitFor,
+  scaleFor,
   tallFor,
 } from '@/lib/lab/pushback/stage';
 
@@ -109,17 +111,29 @@ export const useScale = (fixed?: number): StageScale => {
         });
         return;
       }
-      const fit = fitFor(
-        window.innerWidth - STAGE_GUTTER * 2,
-        window.innerHeight - STAGE_GUTTER * 2,
-        3,
-        dpr,
-      );
+      // Fullscreen, the stage has the screen to itself: no gutter, and no
+      // page to scroll, so all of it fits, uncropped; a phone on its side
+      // can play
+      const full = document.fullscreenElement !== null;
+      const fit = full
+        ? {
+            scale: crispScale(
+              scaleFor(window.innerWidth, window.innerHeight, 3),
+              dpr,
+            ),
+            crop: 0,
+          }
+        : fitFor(
+            window.innerWidth - STAGE_GUTTER * 2,
+            window.innerHeight - STAGE_GUTTER * 2,
+            3,
+            dpr,
+          );
       settle(Math.max(MIN_SCALE, fit.scale), {
         crop: fit.crop,
         tall: false,
         rows: STAGE.height,
-        turn: sideways.matches,
+        turn: sideways.matches && !full,
       });
     };
     // A media query that stops matching when the ratio changes; it fires
@@ -139,7 +153,9 @@ export const useScale = (fixed?: number): StageScale => {
     window.addEventListener('resize', measure);
     upright.addEventListener('change', measure);
     sideways.addEventListener('change', measure);
+    document.addEventListener('fullscreenchange', measure);
     return () => {
+      document.removeEventListener('fullscreenchange', measure);
       window.removeEventListener('resize', measure);
       upright.removeEventListener('change', measure);
       sideways.removeEventListener('change', measure);

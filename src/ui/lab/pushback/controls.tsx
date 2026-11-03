@@ -5,6 +5,7 @@ import type { MouseEvent, PointerEvent } from 'react';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { canPlay, toggleSound } from './audio/engine';
+import { canFullscreen, toggleFullscreen, useFullscreen } from './fullscreen';
 import { PALETTE } from './palette';
 import { TALL_BAR, px, useStage } from './stage';
 import { useInputKind } from './use-input-kind';
@@ -72,6 +73,37 @@ const ICONS = {
     'KGGK..KGGK',
     'KOOK..KOOK',
     'KKKK..KKKK',
+  ],
+  // Four corners pointing out, and pointing in to leave
+  fullscreen: [
+    'KKKKK...KKKKK',
+    'KYYYK...KYYYK',
+    'KYKKK...KKKYK',
+    'KYK.......KYK',
+    'KKK.......KKK',
+    '.............',
+    '.............',
+    '.............',
+    'KKK.......KKK',
+    'KGK.......KGK',
+    'KGKKK...KKKGK',
+    'KOOOK...KOOOK',
+    'KKKKK...KKKKK',
+  ],
+  exitFullscreen: [
+    '..KYK...KYK..',
+    '..KYK...KYK..',
+    'KKKYK...KYKKK',
+    'YYYYK...KYYYY',
+    'KKKKK...KKKKK',
+    '.............',
+    '.............',
+    '.............',
+    'KKKKK...KKKKK',
+    'GGGGK...KGGGG',
+    'KKKGK...KGKKK',
+    '..KOK...KOK..',
+    '..KOK...KOK..',
   ],
 } as const;
 
@@ -216,6 +248,7 @@ export const Controls = ({
   const kind = useInputKind();
   const sound = useSoundSettings();
   const on = sound.music || sound.effects;
+  const full = useFullscreen();
 
   if (tall) {
     return (
@@ -234,19 +267,36 @@ export const Controls = ({
         ) : (
           <span />
         )}
-        {canPlay() && (
-          <button
-            type="button"
-            aria-label="Sound (M)"
-            aria-pressed={on}
-            className={styles.barButton()}
-            onPointerDown={keep}
-            onClick={only(toggleSound)}
-          >
-            {on ? 'Sound on' : 'Sound off'}
-            <PixelIcon icon={on ? 'soundOn' : 'soundOff'} dot={1.5} />
-          </button>
-        )}
+        <span className="flex items-center">
+          {canFullscreen() && (
+            <button
+              type="button"
+              aria-label={full ? 'Leave fullscreen' : 'Fullscreen'}
+              aria-pressed={full}
+              className={styles.barButton()}
+              onPointerDown={keep}
+              onClick={only(toggleFullscreen)}
+            >
+              <PixelIcon
+                icon={full ? 'exitFullscreen' : 'fullscreen'}
+                dot={1.5}
+              />
+            </button>
+          )}
+          {canPlay() && (
+            <button
+              type="button"
+              aria-label="Sound (M)"
+              aria-pressed={on}
+              className={styles.barButton()}
+              onPointerDown={keep}
+              onClick={only(toggleSound)}
+            >
+              {on ? 'Sound on' : 'Sound off'}
+              <PixelIcon icon={on ? 'soundOn' : 'soundOff'} dot={1.5} />
+            </button>
+          )}
+        </span>
       </div>
     );
   }

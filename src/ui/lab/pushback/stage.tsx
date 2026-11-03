@@ -6,6 +6,8 @@ import { createContext, useContext, useRef } from 'react';
 import { BACKING, STAGE, fontSizeFor } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
+import { Button } from './button';
+import { canFullscreen, toggleFullscreen } from './fullscreen';
 import { paletteVars } from './palette';
 import { type StageScale, useScale } from './use-scale';
 
@@ -139,10 +141,19 @@ export const Stage = ({
         data-stage
         aria-label={label}
         className={styles.turn()}
-        style={paletteVars}
+        style={{ ...paletteVars, ['--px' as string]: '2px' }}
       >
         <p className="m-0 text-(--pb-gold)">Turn your phone upright.</p>
-        <p className="m-0 text-(--pb-muted)">The meeting will wait.</p>
+        <p className="m-0 text-(--pb-muted)">
+          {canFullscreen()
+            ? 'Or have the screen to itself, sideways.'
+            : 'The meeting will wait.'}
+        </p>
+        {canFullscreen() && (
+          <Button className="mx-auto mt-4 w-fit" onClick={toggleFullscreen}>
+            Play fullscreen
+          </Button>
+        )}
       </section>
     );
   }

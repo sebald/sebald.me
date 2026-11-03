@@ -15,6 +15,7 @@ import { cn, cva } from '@/lib/styles.utils';
 import { effect } from './audio/engine';
 import { useStage } from './stage';
 import { Loud } from './text';
+import { useInputKind } from './use-input-kind';
 import { Window } from './window';
 
 const pickerStyles = {
@@ -353,6 +354,10 @@ export const Picker = ({
   }, [current, overflow]);
 
   const note = active ? items[current]?.note : undefined;
+  // Under a finger there is no cursor to move, and a marked row would read
+  // as chosen already: only the row a description is about is marked
+  const touch = useInputKind() === 'touch';
+  const marked = (i: number) => i === current && (!touch || Boolean(note));
   const place = useNotePlace(listRef, note ? current : -1, scroll.top);
 
   const list = (
@@ -372,7 +377,7 @@ export const Picker = ({
               aria-disabled={item.disabled || undefined}
               aria-current={i === current ? 'true' : undefined}
               className={pickerStyles.item({
-                selected: i === current,
+                selected: marked(i),
                 accent: item.accent,
               })}
               onPointerEnter={() => setIndex(i)}
@@ -387,7 +392,7 @@ export const Picker = ({
                 className={cn(
                   'h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] shrink-0 bg-current',
                   '[clip-path:polygon(0_0,100%_50%,0_100%)]',
-                  i === current ? 'opacity-100' : 'opacity-0',
+                  marked(i) ? 'opacity-100' : 'opacity-0',
                 )}
               />
               <span

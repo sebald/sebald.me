@@ -2,6 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
+import { PALETTE } from './palette';
 import { Stage } from './stage';
 import { Muted } from './text';
 
@@ -22,4 +23,17 @@ const Pushback = dynamic(
   },
 );
 
-export const Game = () => <Pushback />;
+/**
+ * The game, in the element that goes fullscreen: the stage centred on
+ * the dark ground, every screen inside it
+ */
+export const Game = () => (
+  <div
+    // The fullscreen element (`fullscreen.ts`)
+    data-pushback-root
+    className="[&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:justify-center [&:fullscreen]:overflow-y-auto [&:fullscreen]:bg-(--pb-bg)"
+    style={{ ['--pb-bg' as string]: PALETTE.bg }}
+  >
+    <Pushback />
+  </div>
+);
