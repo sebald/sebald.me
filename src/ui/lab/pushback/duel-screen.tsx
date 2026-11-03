@@ -834,8 +834,9 @@ export const DuelScreen = ({
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
               items={menuItems}
               active={!sizing && step?.kind === 'menu' && !paused && !auto}
-              // Tighter than the menus' rows, so six fit the window
-              className="gap-0 tall:gap-2 [&_button]:py-[0.1em] tall:[&_button]:py-[0.35em]"
+              // Tighter than the menus' rows, so six fit the window; a
+              // longer one scrolls, with the rail beside it
+              className="gap-0 tall:gap-1 [&_button]:py-[0.1em] tall:[&_button]:leading-[1.2]"
             />
           </div>
         </>

@@ -13,10 +13,8 @@ import { STAGE } from '@/lib/lab/pushback/stage';
 import { cn, cva } from '@/lib/styles.utils';
 
 import { effect } from './audio/engine';
-import { notched } from './button';
 import { useStage } from './stage';
 import { Loud } from './text';
-import { useInputKind } from './use-input-kind';
 import { Window } from './window';
 
 const pickerStyles = {
@@ -45,20 +43,6 @@ const pickerStyles = {
       },
       accent: {
         true: 'text-(--pb-gold) hover:text-(--pb-gold-light)',
-      },
-      // Held upright under a finger, each row is a plate to tap: there is
-      // no cursor to move, so none is drawn and no row is the current one
-      plate: {
-        true: [
-          'px-[calc(var(--px)*4)] py-[0.35em]',
-          'bg-(--pb-ink)/45 shadow-[inset_0_0_0_var(--px)_var(--pb-frame-dim)]',
-          'active:bg-(--pb-ink)/70 active:text-(--pb-gold-light) active:shadow-[inset_0_0_0_var(--px)_var(--pb-gold)]',
-        ],
-      },
-      // The plate whose description is showing, in the frame of the
-      // description's window, so the box below says which row it is about
-      described: {
-        true: 'text-white shadow-[inset_0_0_0_var(--px)_var(--pb-frame)]',
       },
     },
     compoundVariants: [
@@ -311,9 +295,6 @@ export const Picker = ({
   const current = Math.min(index, items.length - 1);
   const listRef = useRef<HTMLUListElement>(null);
   const scroll = useScroll(listRef, items.length);
-  const { tall } = useStage();
-  const kind = useInputKind();
-  const plate = tall && kind === 'touch';
   const overflow = overflows(scroll);
 
   useEffect(() => {
@@ -391,12 +372,9 @@ export const Picker = ({
               aria-disabled={item.disabled || undefined}
               aria-current={i === current ? 'true' : undefined}
               className={pickerStyles.item({
-                selected: !plate && i === current,
+                selected: i === current,
                 accent: item.accent,
-                plate,
-                described: plate && Boolean(note) && i === current,
               })}
-              style={plate ? { clipPath: notched } : undefined}
               onPointerEnter={() => setIndex(i)}
               onClick={() => {
                 setIndex(i);
@@ -404,16 +382,14 @@ export const Picker = ({
               }}
             >
               {/* The cursor: a pixel triangle on the stage's grid */}
-              {!plate && (
-                <span
-                  aria-hidden
-                  className={cn(
-                    'h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] shrink-0 bg-current',
-                    '[clip-path:polygon(0_0,100%_50%,0_100%)]',
-                    i === current ? 'opacity-100' : 'opacity-0',
-                  )}
-                />
-              )}
+              <span
+                aria-hidden
+                className={cn(
+                  'h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] shrink-0 bg-current',
+                  '[clip-path:polygon(0_0,100%_50%,0_100%)]',
+                  i === current ? 'opacity-100' : 'opacity-0',
+                )}
+              />
               <span
                 className={cn(
                   'min-w-0 flex-1 transition-opacity duration-500',
