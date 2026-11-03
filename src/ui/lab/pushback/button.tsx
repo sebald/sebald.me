@@ -4,6 +4,7 @@ import type { ButtonHTMLAttributes, CSSProperties } from 'react';
 
 import { cva } from '@/lib/styles.utils';
 
+import { useStage } from './stage';
 import { CORNERS, rounded } from './window';
 
 // Tones
@@ -150,6 +151,9 @@ const styles = {
 
 // Button
 // ---------------
+/** The finest a button's pixel gets, in CSS pixels: as the inventory shows it */
+const MIN_PIXEL = 3;
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /** How it is cut (`LOOKS`): the key by default, the outline beside it */
   look?: ButtonLook;
@@ -172,8 +176,13 @@ export const Button = ({
   ...props
 }: ButtonProps) => {
   const cut: Look = LOOKS[look];
+  // Its own pixel, never finer than 3 CSS pixels: on a phone's tall
+  // stage a stage pixel is barely more than one, and the ink, the
+  // stepped corners and the side would thin to nothing
+  const { scale } = useStage();
   const vars = {
     ...TONES[toneName],
+    '--px': `${Math.max(scale, MIN_PIXEL)}px`,
     '--b-ring': cut.ring,
     '--b-ring-pad': p(cut.ringPad),
     '--b-lip': p(cut.lip),
