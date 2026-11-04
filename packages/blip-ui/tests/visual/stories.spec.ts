@@ -1,10 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 /**
- * Every story, screenshotted at the scales a game shows it: 3x (a
- * desktop) and 1x (the tall stage on a phone). The list comes from the
- * built Storybook's index, so a new story is covered without touching
- * this file. Tag a story `no-vrt` to leave it out.
+ * Every story, screenshotted the ways a game shows it: wide at 3x (a
+ * desktop) and 1x, and tall at 1x on a phone held upright, where rows
+ * grow to a thumb's height and the controls move into a bar. The list
+ * comes from the built Storybook's index, so a new story is covered
+ * without touching this file. Tag a story `no-vrt` to leave it out.
  */
 interface Entry {
   id: string;
@@ -12,7 +13,27 @@ interface Entry {
   tags?: string[];
 }
 
-const SCALES = [3, 1];
+const SHOTS = [
+  {
+    name: '3x',
+    scale: 3,
+    layout: 'wide',
+    viewport: { width: 960, height: 600 },
+  },
+  {
+    name: '1x',
+    scale: 1,
+    layout: 'wide',
+    viewport: { width: 960, height: 600 },
+  },
+  // A phone upright, the size the layout fixes were made for
+  {
+    name: 'tall',
+    scale: 1,
+    layout: 'tall',
+    viewport: { width: 402, height: 714 },
+  },
+] as const;
 
 test('stories', async ({ page, baseURL }) => {
   const index = (await (await fetch(`${baseURL}/index.json`)).json()) as {
@@ -23,19 +44,20 @@ test('stories', async ({ page, baseURL }) => {
   );
   expect(stories.length).toBeGreaterThan(0);
   // One test for every screenshot: give each its own time, not 30s for all
-  test.setTimeout(stories.length * SCALES.length * 15_000);
+  test.setTimeout(stories.length * SHOTS.length * 15_000);
 
-  for (const { id } of stories) {
-    for (const scale of SCALES) {
-      await test.step(`${id} at ${scale}x`, async () => {
+  for (const shot of SHOTS) {
+    await page.setViewportSize(shot.viewport);
+    for (const { id } of stories) {
+      await test.step(`${id} ${shot.name}`, async () => {
         await page.goto(
-          `/iframe.html?id=${id}&viewMode=story&globals=scale:${scale}`,
+          `/iframe.html?id=${id}&viewMode=story&globals=scale:${shot.scale};layout:${shot.layout}`,
         );
         await page.locator('#storybook-root > *').first().waitFor();
         await page.evaluate(() => document.fonts.ready);
         await expect
           .soft(page.locator('#storybook-root'))
-          .toHaveScreenshot(`${id}-${scale}x.png`);
+          .toHaveScreenshot(`${id}-${shot.name}.png`);
       });
     }
   }
