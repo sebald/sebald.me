@@ -7,8 +7,8 @@ Every image the game needs, one prompt each, ready to paste. Seventeen generatio
 - Pick **16:9** in Gemini (currently 2752 by 1536). Switch the visible watermark off in the settings if the account allows it; `snap.mjs` can patch it out otherwise.
 - **Attach the references named under each prompt** to the same message. The reference is the strongest lever on pixel size and style; the words only back it up.
   - `HEADER` = `.claude/skills/pixel-header/references/where-the-map-ends.png` (style and pixel look).
-  - `DEV` = `src/assets/lab/pushback/sources/dev-sam-sheet.jpg` (Sam's model sheet, the hoodie character). Every character and prop sheet attaches it so scale and pixel size match across the cast.
-- Save each result under the file name given, in `src/assets/lab/pushback/sources/`. Keep the originals; they are the reference for every later fix.
+  - `DEV` = `packages/pushback/src/assets/sources/dev-sam-sheet.jpg` (Sam's model sheet, the hoodie character). Every character and prop sheet attaches it so scale and pixel size match across the cast.
+- Save each result under the file name given, in `packages/pushback/src/assets/sources/`. Keep the originals; they are the reference for every later fix.
 - Gemini currently renders 16:9 at 2752 by 1536. Those sheets snap at an 11 px grid to figures about 82 px tall (Jo 83, Ravi 82), 8 percent taller than the Dev sheet's 76 from its 1376 px render, and inside the 70 to 85 range. Generate every remaining sheet at the same size so the rest of the cast matches Jo and Ravi, Sam included (his prompt redraws him at that size).
 - Gemini draws a soft shadow under the feet whatever the prompt says; `sheet.mjs` keys it out with the background, nothing to reroll for.
 - One chat per image. Fixes go into the same chat as follow-ups (last section), so Gemini keeps the character.
@@ -440,7 +440,7 @@ No text, letters, numbers, logos, UI, borders, frames or signatures.
 
 Reroll on: any resemblance to the attached hoodie character, the bob changing length or colour between cells, a figure taller than the attached sheet (blazers tempt Gemini into drawing bigger), a logo on the mug, the blazer turning into a suit jacket with a tie.
 
-**Third roll, the ruler prompt.** Attach only Jo's sheet (`src/assets/lab/pushback/sources/pm-jo-sheet.jpg`), in a fresh chat. Jo's idle figure is redrawn at the left of the row as the ruler and Nadia's six cells follow at the same height; the cutter crops Jo off afterwards (`sheet.mjs … --cells 7`, then the first cell is dropped). Seven figures in one row is tight at this pixel size, so the prompt says to close the gaps rather than shrink the pixels; if Gemini shrinks them anyway the figures come out tall again and it is a reroll.
+**Third roll, the ruler prompt.** Attach only Jo's sheet (`packages/pushback/src/assets/sources/pm-jo-sheet.jpg`), in a fresh chat. Jo's idle figure is redrawn at the left of the row as the ruler and Nadia's six cells follow at the same height; the cutter crops Jo off afterwards (`sheet.mjs … --cells 7`, then the first cell is dropped). Seven figures in one row is tight at this pixel size, so the prompt says to close the gaps rather than shrink the pixels; if Gemini shrinks them anyway the figures come out tall again and it is a reroll.
 
 ```text
 The attached image is a pixel-art character model sheet from a 1990s
@@ -694,7 +694,7 @@ Reroll on: legs or feet, a glow or halo (the canvas adds the translucency), a fi
 
 ## Scenes
 
-Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach two images to every scene prompt, in this order: `HEADER` for the style, and `SCALE` = `src/assets/lab/pushback/sources/scale-reference.png` for the size of the people. `SCALE` is a plain two-tone room at the render's 16:9 with two idle figures standing on the game's floor line (row 230 of 270) at the size the game draws them, and grey blocks at the furniture sizes the prompts name (a desk with a monitor on it, a chair seat, a table, a door outline), blown up to Gemini's render size with hard edges (`scale-ref2.mjs` in the session notes drew it; the figures are the idle cells of Jo and Sam, the blocks are 40, 24, 28, 40 and 120 pixels tall). The prompts say the second image is the yardstick and nothing else. Do not attach a model sheet: its figures fill more than half the image and Gemini draws the furniture for giants.
+Four backgrounds at 480 by 270 native pixels, so the prompt asks for a scene about 480 pixels wide, finer than the note headers (about 330). Attach two images to every scene prompt, in this order: `HEADER` for the style, and `SCALE` = `packages/pushback/src/assets/sources/scale-reference.png` for the size of the people. `SCALE` is a plain two-tone room at the render's 16:9 with two idle figures standing on the game's floor line (row 230 of 270) at the size the game draws them, and grey blocks at the furniture sizes the prompts name (a desk with a monitor on it, a chair seat, a table, a door outline), blown up to Gemini's render size with hard edges (`scale-ref2.mjs` in the session notes drew it; the figures are the idle cells of Jo and Sam, the blocks are 40, 24, 28, 40 and 120 pixels tall). The prompts say the second image is the yardstick and nothing else. Do not attach a model sheet: its figures fill more than half the image and Gemini draws the furniture for giants.
 
 Why: the first four renders were drawn for people twice the game's size, and the second round, with the figures alone as the reference and the heights in words, still 1.4 times (desks 56 pixels tall for a 40 hip, the studio printer as tall as a person), so the third round puts the heights into the reference as blocks. With the figures on the stands the inventory's scene viewer put the floor and the meeting room at 0.65 and the studio and the office at 0.5, and a render scaled down that far neither fills the 480 by 270 nor keeps its pixel grid, so they are regenerated rather than resampled. The old renders stay in `originals/` for reference.
 
@@ -1293,4 +1293,4 @@ Gemini edits can shift other pixels, so compare the follow-up against the first 
 
 ## After the download
 
-For each file: drop it into `src/assets/lab/pushback/sources/` under the name above and tell me. I snap it, cut the sheets, run the validator, review the contact prints and either fix the pixels in code or hand back a follow-up prompt for the same chat. Scenes get their loop scripts in package 4, sheets their swap tables in package 5.
+For each file: drop it into `packages/pushback/src/assets/sources/` under the name above and tell me. I snap it, cut the sheets, run the validator, review the contact prints and either fix the pixels in code or hand back a follow-up prompt for the same chat. Scenes get their loop scripts in package 4, sheets their swap tables in package 5.

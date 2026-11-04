@@ -1,13 +1,12 @@
 'use client';
 
+import type { Look } from '@sebald/pushback/lib/characters';
+import { PAIRS, ROLES, type Role } from '@sebald/pushback/lib/lines';
+import { createRunState } from '@sebald/pushback/lib/run';
+import type { SavedRun } from '@sebald/pushback/lib/save';
+import { ResultScreen } from '@sebald/pushback/ui/result';
 import { useMemo, useState } from 'react';
 
-import type { Look } from '@/lib/lab/pushback/characters';
-import { PAIRS, ROLES, type Role } from '@/lib/lab/pushback/lines';
-import { createRunState } from '@/lib/lab/pushback/run';
-import type { SavedRun } from '@/lib/lab/pushback/save';
-
-import { ResultScreen } from '../result';
 import { Field, field } from './controls';
 
 /** A run that reached the Stakeholder, with made-up numbers and a glossary */

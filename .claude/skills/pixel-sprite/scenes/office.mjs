@@ -5,8 +5,8 @@
 // 480x270 scene.
 //
 //   node .claude/skills/pixel-sprite/scenes/office.mjs \
-//     src/assets/lab/pushback/scenes/office/native.png \
-//     src/assets/lab/pushback/scenes/office
+//     packages/pushback/src/assets/scenes/office/native.png \
+//     packages/pushback/src/assets/scenes/office
 
 import {
   hash,

@@ -1,9 +1,9 @@
 'use client';
 
+import { BURST_CELLS, Burst } from '@sebald/pushback/ui/burst';
+import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { BURST_CELLS, Burst } from '../burst';
-import { Pixels } from '../stage';
 import { Field, Floor, field } from './controls';
 
 /** The three cells of the burst, and the pulse */

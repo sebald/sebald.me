@@ -4,8 +4,8 @@
 // draught. Coordinates are native pixels of the padded 480x270 scene.
 //
 //   node .claude/skills/pixel-sprite/scenes/studio.mjs \
-//     src/assets/lab/pushback/scenes/studio/native.png \
-//     src/assets/lab/pushback/scenes/studio
+//     packages/pushback/src/assets/scenes/studio/native.png \
+//     packages/pushback/src/assets/scenes/studio
 
 import {
   hash,

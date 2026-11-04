@@ -1,6 +1,6 @@
 # Pushback: Lines Review
 
-Every line in the game `for the pushback-spec branch`, grouped by role, so we can go through one role at a time. Source files: `src/lib/lab/pushback/lines.ts` (pairs, boss, barks) and `characters.ts` (intros). The Note column holds my suggestion; empty means keep as is. All lines are under the 70-character limit (longest is 63); `lines.test.ts` checks it.
+Every line in the game `for the pushback-spec branch`, grouped by role, so we can go through one role at a time. Source files: `packages/pushback/src/lib/lines.ts` (pairs, boss, barks) and `characters.ts` (intros). The Note column holds my suggestion; empty means keep as is. All lines are under the 70-character limit (longest is 63); `lines.test.ts` checks it.
 
 Two things across all pools to keep in mind while reading: counters that share an opening or a punchline are hard to tell apart as decoys; the test checks the openings within a pool.
 

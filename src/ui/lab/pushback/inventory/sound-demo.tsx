@@ -1,19 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-
-import { type Cue, DUEL_LAYERS, MUSIC } from '@/lib/lab/pushback/audio/music';
-import { compile } from '@/lib/lab/pushback/audio/notes';
-import { cn } from '@/lib/styles.utils';
-
-import type { BlipVoice, Effect } from '../audio/effects';
+import { type Cue, DUEL_LAYERS, MUSIC } from '@sebald/pushback/lib/audio/music';
+import { compile } from '@sebald/pushback/lib/audio/notes';
+import type { BlipVoice, Effect } from '@sebald/pushback/ui/audio/effects';
 import {
   auditionMusic,
   effect,
   setMomentum,
   speak,
   unlock,
-} from '../audio/engine';
+} from '@sebald/pushback/ui/audio/engine';
+import { useEffect, useState } from 'react';
+
+import { cn } from '@/lib/styles.utils';
+
 import { field } from './controls';
 
 const CUES = Object.keys(MUSIC) as Cue[];

@@ -18,7 +18,7 @@ const sharp = createRequire(require.resolve('next/package.json'))('sharp');
  * as is. Kept with the scenes, where the game reads it too: the title
  * fits the room's picture, not the padded render, to the stage.
  */
-export { default as ROOM_FACTORS } from '../../../../src/assets/lab/pushback/scenes/rooms.json' with { type: 'json' };
+export { default as ROOM_FACTORS } from '../../../../packages/pushback/src/assets/scenes/rooms.json' with { type: 'json' };
 
 /** The factor a room takes unless the scenes say otherwise */
 export const ROOM_FACTOR = 0.8;

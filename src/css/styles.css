@@ -4,6 +4,9 @@
 @import './theme.css';
 @import './prose.css';
 
+/* The lab's game: its classes, variants and motion */
+@import '@sebald/pushback/styles.css';
+
 ::selection {
   background-color: oklch(0.74 0.1 65 / 0.5);
   color: var(--color-mist-50);
@@ -16,12 +19,6 @@
 * {
   min-width: 0;
   text-box: trim-both cap alphabetic;
-}
-
-/* The lab's game stage stacks lines of text and wants normal leading back */
-[data-stage],
-[data-stage] * {
-  text-box: normal;
 }
 
 :root {

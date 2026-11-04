@@ -1,16 +1,15 @@
 'use client';
 
+import { PAIRS } from '@sebald/pushback/lib/lines';
+import { LAYOUT } from '@sebald/pushback/lib/stage';
+import { Dialogue } from '@sebald/pushback/ui/dialogue';
+import { Picker } from '@sebald/pushback/ui/picker';
+import { SILENCE_CLOCK, SilenceTimer } from '@sebald/pushback/ui/silence-timer';
+import { Pixels, px } from '@sebald/pushback/ui/stage';
+import { useClock } from '@sebald/pushback/ui/use-clock';
+import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
-import { PAIRS } from '@/lib/lab/pushback/lines';
-import { LAYOUT } from '@/lib/lab/pushback/stage';
-
-import { Dialogue } from '../dialogue';
-import { Picker } from '../picker';
-import { SILENCE_CLOCK, SilenceTimer } from '../silence-timer';
-import { Pixels, px } from '../stage';
-import { useClock } from '../use-clock';
-import { Legend, Window } from '../window';
 import { Field, field } from './controls';
 
 /** A normal-mode menu of five runs about thirteen seconds */

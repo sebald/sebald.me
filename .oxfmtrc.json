@@ -29,6 +29,7 @@
     "stylesheet": "./src/css/styles.css"
   },
   "ignorePatterns": [
+    "**/node_modules/**",
     "node_modules/",
     ".next/",
     ".source/",

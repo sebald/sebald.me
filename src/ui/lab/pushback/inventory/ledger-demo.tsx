@@ -1,7 +1,7 @@
 'use client';
 
-import { Ledger, Meter } from '../ledger';
-import { Pixels } from '../stage';
+import { Ledger, Meter } from '@sebald/pushback/ui/ledger';
+import { Pixels } from '@sebald/pushback/ui/stage';
 
 /** The ledger and the meter on the window's fill, at 3x */
 export const LedgerDemo = () => (

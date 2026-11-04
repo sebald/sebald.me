@@ -1,16 +1,20 @@
 'use client';
 
+import { CLOSERS, MENU_PROMPTS, PAIRS } from '@sebald/pushback/lib/lines';
+import {
+  LAYOUT,
+  MAX_CROP,
+  STAGE,
+  typedChars,
+} from '@sebald/pushback/lib/stage';
+import { Dialogue } from '@sebald/pushback/ui/dialogue';
+import { Picker } from '@sebald/pushback/ui/picker';
+import { Pixels } from '@sebald/pushback/ui/stage';
+import { Muted } from '@sebald/pushback/ui/text';
+import { useClock } from '@sebald/pushback/ui/use-clock';
+import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
-import { CLOSERS, MENU_PROMPTS, PAIRS } from '@/lib/lab/pushback/lines';
-import { LAYOUT, MAX_CROP, STAGE, typedChars } from '@/lib/lab/pushback/stage';
-
-import { Dialogue } from '../dialogue';
-import { Picker } from '../picker';
-import { Pixels } from '../stage';
-import { Muted } from '../text';
-import { useClock } from '../use-clock';
-import { Legend, Window } from '../window';
 import { Field, field } from './controls';
 
 const LINE = PAIRS[0]!.phrase;

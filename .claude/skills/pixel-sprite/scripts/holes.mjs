@@ -33,7 +33,7 @@ const { positionals, values } = parseArgs({
     feet: { type: 'string', default: '12' },
     sheets: {
       type: 'string',
-      default: join(ROOT, 'src/assets/lab/pushback/sheets'),
+      default: join(ROOT, 'packages/pushback/src/assets/sheets'),
     },
   },
 });

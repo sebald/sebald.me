@@ -1,11 +1,10 @@
 'use client';
 
+import { LAYOUT, STAGE } from '@sebald/pushback/lib/stage';
+import { Hud } from '@sebald/pushback/ui/hud';
+import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { LAYOUT, STAGE } from '@/lib/lab/pushback/stage';
-
-import { Hud } from '../hud';
-import { Pixels } from '../stage';
 import { Field, field } from './controls';
 
 /** The bars with every number on a control, over a flat band */

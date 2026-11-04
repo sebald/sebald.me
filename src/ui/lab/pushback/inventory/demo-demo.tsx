@@ -1,11 +1,10 @@
 'use client';
 
+import { demoFor } from '@sebald/pushback/lib/attract';
+import { createDuel } from '@sebald/pushback/lib/duel';
+import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
 import { useState } from 'react';
 
-import { demoFor } from '@/lib/lab/pushback/attract';
-import { createDuel } from '@/lib/lab/pushback/duel';
-
-import { DuelScreen } from '../duel-screen';
 import { field } from './controls';
 
 /**

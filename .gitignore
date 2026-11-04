@@ -1,5 +1,5 @@
 # deps
-/node_modules
+node_modules/
 
 # generated content
 .source
@@ -38,5 +38,5 @@ next-env.d.ts
 __pycache__/
 
 # Pushback: the full-size Gemini renders stay on disk, the committed sources are recompressed copies
-src/assets/lab/pushback/sources/originals/
-src/assets/lab/pushback/sources/contact/
+packages/pushback/src/assets/sources/originals/
+packages/pushback/src/assets/sources/contact/

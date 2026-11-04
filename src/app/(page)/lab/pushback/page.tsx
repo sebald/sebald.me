@@ -1,8 +1,8 @@
+import { Game } from '@sebald/pushback';
 import type { Metadata } from 'next';
 
 import { labEntry } from '@/lib/lab';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
-import { Game } from '@/ui/lab/pushback/game';
 import { PageToolbar } from '@/ui/page-toolbar';
 
 // Config

@@ -1,12 +1,11 @@
 'use client';
 
+import { SHEET_IDS, type SheetId } from '@sebald/pushback/lib/sprites';
+import { type Pose } from '@sebald/pushback/lib/stage';
+import { Character } from '@sebald/pushback/ui/character';
+import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { SHEET_IDS, type SheetId } from '@/lib/lab/pushback/sprites';
-import { type Pose } from '@/lib/lab/pushback/stage';
-
-import { Character } from '../character';
-import { Pixels } from '../stage';
 import { Field, Floor, field } from './controls';
 
 const POSES: Pose[] = ['idle', 'talk', 'taunt', 'flinch', 'win', 'lose'];

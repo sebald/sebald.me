@@ -66,6 +66,14 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - `src/ui/` - React components using CVA for variants
 - `src/css/` - Tailwind styles and theme tokens (`theme.css` defines color system)
 - `content/` - MDX content files
+- `packages/` - pnpm workspace packages, consumed as source (no build step; Next compiles them)
+
+### Packages
+
+- `packages/pushback` (`@sebald/pushback`): the lab's game, mounted at `/lab/pushback`. Its logic in `src/lib`, its UI in `src/ui`, its art in `src/assets`
+- Independent of the site: no `@/` imports (its own `tsc` run, `pnpm --filter @sebald/pushback typecheck`, fails on one), its own `cn`/`cva` copy, and its own CSS (`src/styles.css`: the `tall:`/`touch:` variants, `pb-focus`, the stage's leading, the game's keyframes), which `src/css/styles.css` imports
+- The site imports `Game` from the package root and the inventory's pieces by subpath (`@sebald/pushback/ui/<module>`, `@sebald/pushback/lib/<module>`). The inventory itself (`src/ui/lab/pushback/inventory`) stays in the site, as the game's workbench
+- `pnpm test` runs the packages' tests too
 
 ### Content Frontmatter (notes)
 

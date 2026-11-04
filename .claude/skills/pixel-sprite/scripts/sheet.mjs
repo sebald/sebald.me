@@ -57,11 +57,11 @@ const { positionals, values } = parseArgs({
     split: { type: 'string' },
     contact: {
       type: 'string',
-      default: join(ROOT, 'src/assets/lab/pushback/sources/contact'),
+      default: join(ROOT, 'packages/pushback/src/assets/sources/contact'),
     },
     out: {
       type: 'string',
-      default: join(ROOT, 'src/assets/lab/pushback/sheets'),
+      default: join(ROOT, 'packages/pushback/src/assets/sheets'),
     },
   },
 });

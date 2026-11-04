@@ -1,6 +1,6 @@
 ---
 name: pixel-sprite
-description: Scenes and sprites for the Pushback game (`/lab/pushback`) in the blog's pixel-art style. Snap a Gemini scene render to the 480x270 stage and animate it (`scripts/scene.mjs`, `scenes/*.mjs`), or cut a Gemini model sheet, item sheet or the ghost sheet into cells, keyed and palette-locked, and review the contact print (`scripts/sheet.mjs`). Use when the user drops a Pushback render into `src/assets/lab/pushback/sources/`, asks for a sheet or scene to be cut, snapped, checked or rerolled, or types `/pixel-sprite`.
+description: Scenes and sprites for the Pushback game (`/lab/pushback`) in the blog's pixel-art style. Snap a Gemini scene render to the 480x270 stage and animate it (`scripts/scene.mjs`, `scenes/*.mjs`), or cut a Gemini model sheet, item sheet or the ghost sheet into cells, keyed and palette-locked, and review the contact print (`scripts/sheet.mjs`). Use when the user drops a Pushback render into `packages/pushback/src/assets/sources/`, asks for a sheet or scene to be cut, snapped, checked or rerolled, or types `/pixel-sprite`.
 ---
 
 # Pixel sprite
@@ -12,7 +12,7 @@ the contact prints are reviewed by eye. The spec is `docs/plans/pushback.md`
 ("Art and animation"); the pixel-header skill holds the shared `snap.mjs`
 and `loop.mjs`.
 
-Renders go to `src/assets/lab/pushback/sources/<id>.jpg` (recompressed,
+Renders go to `packages/pushback/src/assets/sources/<id>.jpg` (recompressed,
 committed) with the Gemini original in `sources/originals/` (ignored).
 Everything the game imports is built from them: `scenes/<slug>/` and
 `sheets/<id>.png` + `<id>.json`. Contact prints land in `sources/contact/`
@@ -25,21 +25,21 @@ One command per sheet. Run from the repo root.
 ```bash
 # A model sheet: six poses (idle, talk, taunt, flinch, win, lose)
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/dev-sam-sheet.jpg dev-sam --cells 6
+  packages/pushback/src/assets/sources/dev-sam-sheet.jpg dev-sam --cells 6
 
 # The ghost: three cells (hover, hover, point), Gemini draws it person
 # sized and it floats at the shoulder about half that
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.5
+  packages/pushback/src/assets/sources/ghost-sheet.jpg ghost --cells 3 --scale 0.5
 
 # The logo: one cell the size of the whole render, centred, keyed, then
 # trimmed to its art (the title reads the PNG's size from `LOGO`); the
 # JSON it writes is not needed. 24 colours: the cup, the duck and the
 # note need more than the two words did
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/originals/logo-c.jpeg logo \
+  packages/pushback/src/assets/sources/originals/logo-c.jpeg logo \
   --cells 1 --cell 240x134 --anchor centre --specks 0 --colours 24
-rm src/assets/lab/pushback/sheets/logo.json
+rm packages/pushback/src/assets/sheets/logo.json
 # then trim the transparent margin with sharp and put the size in title.tsx
 
 # A sheet with a ruler figure (Nadia's third roll has Jo at the left as
@@ -49,7 +49,7 @@ rm src/assets/lab/pushback/sheets/logo.json
 # The mic-drop burst: three cells (the burst, its big beat, popped), the
 # letters inside key with it
 node .claude/skills/pixel-sprite/scripts/sheet.mjs \
-  src/assets/lab/pushback/sources/originals/micdrop-sheet.jpeg micdrop \
+  packages/pushback/src/assets/sources/originals/micdrop-sheet.jpeg micdrop \
   --cells 3 --cell 96x96 --anchor centre --specks 0
 
 ```
@@ -151,9 +151,9 @@ Then check the sprite in motion in the inventory (`/lab/pushback/inventory`,
 
 ## The cast and the sheets
 
-The nine colleagues are not drawn one by one: `src/lib/lab/pushback/
+The nine colleagues are not drawn one by one: `packages/pushback/src/lib/
 characters.ts` gives each a `sheet` (one of its role's two looks) and the
-browser builds the sprite from it as it is (`src/ui/lab/pushback/sheets.ts`).
+browser builds the sprite from it as it is (`packages/pushback/src/ui/sheets.ts`).
 Sprites keep the colours Gemini drew; never recolour a sheet in code.
 Hue-based tints caught skin and hair next to the garment and left pixels
 see-through, so they were taken out; pasting an item into the hand looked
@@ -165,9 +165,9 @@ sheet together.
 
 ```bash
 node .claude/skills/pixel-sprite/scripts/scene.mjs \
-  src/assets/lab/pushback/sources/scene-floor.jpg src/assets/lab/pushback/scenes/floor
+  packages/pushback/src/assets/sources/scene-floor.jpg packages/pushback/src/assets/scenes/floor
 node .claude/skills/pixel-sprite/scenes/floor.mjs \
-  src/assets/lab/pushback/scenes/floor/native.png src/assets/lab/pushback/scenes/floor
+  packages/pushback/src/assets/scenes/floor/native.png packages/pushback/src/assets/scenes/floor
 ```
 
 `scene.mjs` snaps the render (480 columns of 5.735 px on a 2752 px render,
@@ -189,7 +189,7 @@ first frame's palette, and padded to the stage with the render's corner
 colour (never in the window). The loop scripts and `native.png` stay in
 the render's own pixels; only `scene.webp`, `scene-1x.webp` and
 `poster.png` are smaller. Each scene's factor is in
-`src/assets/lab/pushback/scenes/rooms.json`, which the loop scripts
+`packages/pushback/src/assets/scenes/rooms.json`, which the loop scripts
 and the game both read (the title fits the room's picture inside the
 padded render to the stage; a test checks every `scene-1x.webp`
 against it). The corner office and the studio take 0.76, their desks, chairs and doors came the largest. A fresh render that fits the cast gets the

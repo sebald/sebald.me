@@ -1,7 +1,5 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-
 import {
   BOSS_SLOT,
   CHARACTERS,
@@ -18,18 +16,19 @@ import {
   drawDeck,
   repertoireFor,
   type SceneId,
-} from '@/lib/lab/pushback/characters';
+} from '@sebald/pushback/lib/characters';
 import {
   type DuelSetup,
   type DuelState,
   closerFor,
   createDuel,
   reduce,
-} from '@/lib/lab/pushback/duel';
-import { type Role, ROLES, deckPool } from '@/lib/lab/pushback/lines';
-import { Rng, seedRng } from '@/lib/lab/pushback/random';
+} from '@sebald/pushback/lib/duel';
+import { type Role, ROLES, deckPool } from '@sebald/pushback/lib/lines';
+import { Rng, seedRng } from '@sebald/pushback/lib/random';
+import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
+import { useMemo, useState } from 'react';
 
-import { DuelScreen } from '../duel-screen';
 import { Field, field } from './controls';
 
 // Options

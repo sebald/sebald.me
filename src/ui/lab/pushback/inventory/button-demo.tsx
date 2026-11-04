@@ -1,9 +1,14 @@
 'use client';
 
+import {
+  Button,
+  type ButtonLook,
+  LOOKS,
+  TONES,
+} from '@sebald/pushback/ui/button';
+import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Button, type ButtonLook, LOOKS, TONES } from '../button';
-import { Pixels } from '../stage';
 import { Field, field } from './controls';
 
 /** What the buttons say, one word a tone, after the sheets */

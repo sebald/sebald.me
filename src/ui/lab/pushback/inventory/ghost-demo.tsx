@@ -1,13 +1,12 @@
 'use client';
 
+import { GHOST_ANIM_MS, ghostEnter } from '@sebald/pushback/lib/buddy';
+import { Bubble } from '@sebald/pushback/ui/bubble';
+import { Ghost } from '@sebald/pushback/ui/ghost';
+import { Pixels } from '@sebald/pushback/ui/stage';
+import { useClock } from '@sebald/pushback/ui/use-clock';
 import { useState } from 'react';
 
-import { GHOST_ANIM_MS, ghostEnter } from '@/lib/lab/pushback/buddy';
-
-import { Bubble } from '../bubble';
-import { Ghost } from '../ghost';
-import { Pixels } from '../stage';
-import { useClock } from '../use-clock';
 import { Field, Floor, field } from './controls';
 
 /** The ghost hovering, pointing, and going through its black hole */

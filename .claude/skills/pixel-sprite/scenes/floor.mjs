@@ -5,8 +5,8 @@
 // 480x270 scene.
 //
 //   node .claude/skills/pixel-sprite/scenes/floor.mjs \
-//     src/assets/lab/pushback/scenes/floor/native.png \
-//     src/assets/lab/pushback/scenes/floor
+//     packages/pushback/src/assets/scenes/floor/native.png \
+//     packages/pushback/src/assets/scenes/floor
 
 import {
   hash,

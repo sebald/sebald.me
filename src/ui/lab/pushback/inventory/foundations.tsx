@@ -1,16 +1,15 @@
 'use client';
 
+import { PAIRS } from '@sebald/pushback/lib/lines';
+import { Dialogue } from '@sebald/pushback/ui/dialogue';
+import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
+import { Picker } from '@sebald/pushback/ui/picker';
+import { Pixels } from '@sebald/pushback/ui/stage';
+import { Stamp } from '@sebald/pushback/ui/stamp';
+import { Heading, Loud, Muted } from '@sebald/pushback/ui/text';
+import { Legend } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
-import { PAIRS } from '@/lib/lab/pushback/lines';
-
-import { Dialogue } from '../dialogue';
-import { PALETTE, type PaletteKey, pbVar } from '../palette';
-import { Picker } from '../picker';
-import { Pixels } from '../stage';
-import { Stamp } from '../stamp';
-import { Heading, Loud, Muted } from '../text';
-import { Legend } from '../window';
 import { Field, field } from './controls';
 
 /** The palette by what it is for */

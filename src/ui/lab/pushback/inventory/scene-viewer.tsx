@@ -1,23 +1,22 @@
 'use client';
 
-import NextImage from 'next/image';
-import { useState } from 'react';
-
 import {
   CHARACTERS,
   LOOKS,
   type SceneId,
   STANDS,
   SCENE_OF,
-} from '@/lib/lab/pushback/characters';
-import { ROLES } from '@/lib/lab/pushback/lines';
-import { PLAYER_SHEETS, type SheetId } from '@/lib/lab/pushback/sprites';
-import { LAYOUT, SCENE, STAGE, viewFor } from '@/lib/lab/pushback/stage';
-import { cn } from '@/lib/styles.utils';
+} from '@sebald/pushback/lib/characters';
+import { ROLES } from '@sebald/pushback/lib/lines';
+import { PLAYER_SHEETS, type SheetId } from '@sebald/pushback/lib/sprites';
+import { LAYOUT, SCENE, STAGE, viewFor } from '@sebald/pushback/lib/stage';
+import { Character } from '@sebald/pushback/ui/character';
+import { SCENE_ASSETS, loopFor } from '@sebald/pushback/ui/scenes';
+import { Pixels } from '@sebald/pushback/ui/stage';
+import NextImage from 'next/image';
+import { useState } from 'react';
 
-import { Character } from '../character';
-import { SCENE_ASSETS, loopFor } from '../scenes';
-import { Pixels } from '../stage';
+import { cn } from '@/lib/styles.utils';
 
 const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
 

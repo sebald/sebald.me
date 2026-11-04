@@ -4,8 +4,8 @@
 // of the padded 480x270 scene.
 //
 //   node .claude/skills/pixel-sprite/scenes/meeting.mjs \
-//     src/assets/lab/pushback/scenes/meeting/native.png \
-//     src/assets/lab/pushback/scenes/meeting
+//     packages/pushback/src/assets/scenes/meeting/native.png \
+//     packages/pushback/src/assets/scenes/meeting
 
 import {
   hash,
