@@ -14,8 +14,8 @@ const Stage = ({ children }: { children: ReactNode }) => {
       {...pixels}
       className="bg-(--bui-ground)"
       style={{
-        width: `calc(var(--px) * ${pixels.tall ? 120 : 320})`,
-        height: `calc(var(--px) * ${pixels.tall ? 200 : 140})`,
+        width: `calc(var(--px) * 320)`,
+        height: `calc(var(--px) * ${pixels.tall ? 400 : 140})`,
       }}
     >
       <p className="m-0 p-3 text-(--bui-text)">

@@ -14,7 +14,7 @@ const meta = {
     onValueChange: { control: false },
   },
   render: args => (
-    <Tabs {...args} className="w-[calc(var(--px)*160)] max-w-full">
+    <Tabs {...args} className="w-[calc(var(--px)*160)] max-w-full tall:w-full">
       <TabList aria-label="Roles">
         <Tab value="dev">
           Dev <span className="text-[0.8em] opacity-70">3/9</span>

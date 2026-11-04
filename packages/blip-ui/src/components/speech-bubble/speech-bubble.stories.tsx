@@ -30,7 +30,7 @@ const meta = {
   },
   decorators: [
     Story => (
-      <div className="w-[calc(var(--px)*160)] max-w-full py-[calc(var(--px)*8)]">
+      <div className="w-[calc(var(--px)*160)] max-w-full py-[calc(var(--px)*8)] tall:w-full">
         <Story />
       </div>
     ),
@@ -76,7 +76,7 @@ export const Overview: Story = {
 export const AboveSpeaker: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-[calc(var(--px)*160)] max-w-full justify-items-end gap-[calc(var(--px)*6)]">
+    <div className="grid w-[calc(var(--px)*160)] max-w-full justify-items-end gap-[calc(var(--px)*6)] tall:w-full">
       <div className="mr-[calc(var(--px)*6)] size-[calc(var(--px)*16)] bg-(--bui-secondary)" />
       <SpeechBubble className="w-full" offset={14}>
         Let’s take this offline.

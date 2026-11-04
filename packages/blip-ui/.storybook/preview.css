@@ -13,3 +13,10 @@ body {
 .docs-story {
   background: var(--bui-ground);
 }
+
+/* A story as wide as it needs: an overview wider than a phone grows the
+   root instead of being cut at its edge (and the visual tests shoot it whole) */
+#storybook-root {
+  width: max-content;
+  min-width: 100%;
+}

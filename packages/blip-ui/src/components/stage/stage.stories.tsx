@@ -18,9 +18,6 @@ const meta = {
   title: 'Components/Stage',
   component: Stage,
   args: {
-    // Fixed so it does not fit the Storybook frame; unset, it fits the
-    // viewport (see Fitted)
-    scale: 2,
     width: 320,
     height: 214,
     lift: 0,
@@ -62,10 +59,13 @@ const Title = () => (
   </Stage.Center>
 );
 
-/** The stage at a fixed scale, `scale` through the controls */
+/**
+ * The stage at a fixed scale: the toolbar's, unless `scale` is set in the
+ * controls. Unset in a game, it fits the viewport (see Fitted)
+ */
 export const Default: Story = {
-  render: args => (
-    <Stage {...args}>
+  render: (args, { globals }) => (
+    <Stage {...args} scale={args.scale ?? Number(globals.scale ?? 3)}>
       <Title />
     </Stage>
   ),

@@ -33,20 +33,22 @@ const meta = {
     },
     stageWidth: { control: 'number' },
   },
-  decorators: [
-    Story => (
-      <div className="w-[calc(var(--px)*120)] max-w-full">
-        <Story />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof Picker>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Arrow keys or W/S move, Enter or Space picks, a tap picks */
-export const Default: Story = {};
+export const Default: Story = {
+  // A menu's width on the stage: 120 stage pixels, all of it upright
+  decorators: [
+    Story => (
+      <div className="w-[calc(var(--px)*120)] max-w-full tall:w-full">
+        <Story />
+      </div>
+    ),
+  ],
+};
 
 /** A stage of its own, in stage pixels: the description box is placed on it */
 const Stage = ({
@@ -113,7 +115,7 @@ const COLUMNS: { name: string; items: PickerItem[] }[] = [
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[repeat(4,calc(var(--px)*36))] gap-x-[calc(var(--px)*4)] gap-y-2">
+    <div className="grid w-fit grid-cols-[repeat(4,max-content)] gap-x-[calc(var(--px)*6)] gap-y-2">
       {COLUMNS.map(({ name }) => (
         <span key={name} className="text-[0.75em] text-(--bui-dim)">
           {name}
@@ -163,11 +165,13 @@ const WINDOW_ITEMS: PickerItem[] = [
 export const InAWindow: Story = {
   name: 'In a window',
   parameters: { controls: { disable: true } },
-  render: () => (
-    <Stage width={320} height={110}>
-      <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)]">
+  // Upright the rows are a thumb's height and the note goes under the
+  // window: more rows, the full width
+  render: (_, { globals }) => (
+    <Stage width={320} height={globals.layout === 'tall' ? 300 : 110}>
+      <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
         <Window
-          className="w-[19em]"
+          className="w-[19em] tall:w-full"
           legend={
             <Legend
               keys={[
@@ -203,7 +207,7 @@ export const ScrollingList: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <Stage width={160} height={110}>
-      <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)]">
+      <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)] tall:left-0 tall:h-[calc(var(--px)*160)] tall:w-full">
         <Picker label="Colleagues" items={LONG} />
       </Window>
     </Stage>

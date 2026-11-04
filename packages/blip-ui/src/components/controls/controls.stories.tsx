@@ -66,7 +66,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   decorators: [
     Story => (
-      <div className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] max-w-full overflow-hidden border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)">
+      <div className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] max-w-full overflow-hidden border border-dashed border-(--bui-frame-dim) bg-(--bui-ground) tall:h-[480px] tall:w-[320px]">
         <Story />
       </div>
     ),
@@ -87,9 +87,14 @@ export const Default: Story = {
 /** Both layouts side by side: the corners of the wide stage, the tall bar */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="flex items-start gap-8">
-      <div className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)">
+  // Held upright there are no corners, only the bar: the wide frame
+  // would turn tall with everything around it
+  render: (_, { globals }) => (
+    <div className="flex flex-wrap items-start gap-8">
+      <div
+        hidden={globals.layout === 'tall'}
+        className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
+      >
         <Controls show="always" {...Buttons({})} />
       </div>
       <Pixels

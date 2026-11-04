@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 /**
  * Every story, screenshotted the ways a game shows it: wide at 3x (a
- * desktop) and 1x, and tall at 1x on a phone held upright, where rows
+ * desktop) and 1x, and tall on a phone held upright, where rows
  * grow to a thumb's height and the controls move into a bar. The list
  * comes from the built Storybook's index, so a new story is covered
  * without touching this file. Tag a story `no-vrt` to leave it out.
@@ -29,7 +29,8 @@ const SHOTS = [
   // A phone upright, the size the layout fixes were made for
   {
     name: 'tall',
-    scale: 1,
+    // The stage across a 402px phone: 402 / 320
+    scale: 402 / 320,
     layout: 'tall',
     viewport: { width: 402, height: 714 },
   },

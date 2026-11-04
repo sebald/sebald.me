@@ -39,7 +39,7 @@ export const LoudStory: Story = {
 export const ScreenTitleStory: Story = {
   name: 'ScreenTitle',
   render: ({ children }) => (
-    <div className="relative h-[calc(var(--px)*40)]">
+    <div className="relative h-[calc(var(--px)*8+4.5em)]">
       <ScreenTitle blurb="Whose side are you on today?">{children}</ScreenTitle>
     </div>
   ),
