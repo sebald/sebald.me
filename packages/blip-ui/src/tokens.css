@@ -84,9 +84,21 @@
   /* The finest a control's pixel gets, in CSS pixels */
   --bui-min-px: 3px;
 
+  /* The stage pixel, never finer than --bui-min-px: the unit of every
+     padding, gap and margin, and of the controls and readouts (buttons,
+     meters, the stopwatch, icons). Art on the stage's grid (a window's
+     frame, bitmap letters, a stamp, a bubble's tail) stays in --px.
+     Set again on every stage below, where --px is. */
+  --bui-px: max(var(--px, 3px), var(--bui-min-px));
+
   /* Held upright, the bar of controls along the bottom (0 elsewhere) */
   --bui-bar: 0px;
 
   /* One step of the stage's clock: 8 frames a second */
   --bui-tick: 125ms;
+}
+
+/* A stage sets --px on itself: the floored pixel follows it there */
+:where([data-stage]) {
+  --bui-px: max(var(--px, 3px), var(--bui-min-px));
 }

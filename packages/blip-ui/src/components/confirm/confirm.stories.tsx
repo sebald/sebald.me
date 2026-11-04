@@ -6,7 +6,7 @@ import { Confirm } from './confirm';
 
 const noop = () => {};
 
-/** A stage to cover, in stage pixels */
+/** A stage to cover, in stage pixels; at least as big in em as its text needs (text has a floor, so at 1x it needs more room than the stage pixels give) */
 const Stage = ({ children }: { children: ReactNode }) => {
   const pixels = usePixels();
   return (
@@ -14,8 +14,8 @@ const Stage = ({ children }: { children: ReactNode }) => {
       {...pixels}
       className="bg-(--bui-ground)"
       style={{
-        width: `calc(var(--px) * 320)`,
-        height: `calc(var(--px) * ${pixels.tall ? 400 : 140})`,
+        width: `max(calc(var(--px) * 320), 30em)`,
+        height: `max(calc(var(--px) * ${pixels.tall ? 400 : 140}), 14em)`,
       }}
     >
       <p className="m-0 p-3 text-(--bui-text)">

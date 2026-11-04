@@ -174,7 +174,7 @@ export const InAWindow: Story = {
     <Stage
       width={320}
       height={globals.layout === 'tall' ? 300 : 110}
-      fit={{ width: 32, height: 13 }}
+      fit={{ width: 34, height: 14 }}
     >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
         <Window

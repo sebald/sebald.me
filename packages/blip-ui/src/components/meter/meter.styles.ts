@@ -2,11 +2,12 @@ import { cva } from '../../utils/styles';
 
 /**
  * The meter's parts. The tone sets the lit cells' ramp through `--m-*`
- * variables, so the parts' classes stay the same.
+ * variables, so the parts' classes stay the same. A readout: drawn in
+ * `--bui-px`, never finer than `--bui-min-px`, so a phone keeps it legible.
  */
 export const meter = {
   root: cva({
-    base: 'inline-flex items-center gap-[calc(var(--px)*2)] p-(--px) align-middle',
+    base: 'inline-flex items-center gap-[calc(var(--bui-px)*2)] p-(--bui-px) align-middle',
     variants: {
       tone: {
         /** The player's side, the main pool */
@@ -34,22 +35,22 @@ export const meter = {
       state: {
         /** A light top row, the colour, a shaded bottom row */
         lit: [
-          'shadow-[0_0_0_var(--px)_var(--bui-ink)]',
-          'bg-[linear-gradient(to_bottom,var(--m-light)_0_var(--px),var(--m-mid)_var(--px)_calc(100%-var(--px)),var(--m-shade)_calc(100%-var(--px))_100%)]',
+          'shadow-[0_0_0_var(--bui-px)_var(--bui-ink)]',
+          'bg-[linear-gradient(to_bottom,var(--m-light)_0_var(--bui-px),var(--m-mid)_var(--bui-px)_calc(100%-var(--bui-px)),var(--m-shade)_calc(100%-var(--bui-px))_100%)]',
         ],
         /** All over in the light colour: a full bar blinking */
-        bright: 'bg-(--m-light) shadow-[0_0_0_var(--px)_var(--bui-ink)]',
+        bright: 'bg-(--m-light) shadow-[0_0_0_var(--bui-px)_var(--bui-ink)]',
         /** Dark, a rim in the dots' colour inside the ink, a checker of dots */
         empty:
-          'bg-(--bui-empty) shadow-[0_0_0_var(--px)_var(--bui-ink),inset_0_0_0_var(--px)_var(--bui-empty-dots)]',
+          'bg-(--bui-empty) shadow-[0_0_0_var(--bui-px)_var(--bui-ink),inset_0_0_0_var(--bui-px)_var(--bui-empty-dots)]',
       },
     },
   }),
   dots: cva({
     base: [
-      'absolute inset-(--px)',
+      'absolute inset-(--bui-px)',
       'bg-[repeating-conic-gradient(var(--bui-empty-dots)_0_25%,transparent_0_50%)]',
-      'bg-size-[calc(var(--px)*2)_calc(var(--px)*2)]',
+      'bg-size-[calc(var(--bui-px)*2)_calc(var(--bui-px)*2)]',
     ],
   }),
 };

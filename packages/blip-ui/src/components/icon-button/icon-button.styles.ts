@@ -8,12 +8,12 @@ export const iconButton = cva({
   base: [
     'flex min-h-11 min-w-11 cursor-pointer items-center justify-center outline-none',
     'focus-visible:bui-focus',
-    'disabled:cursor-default disabled:opacity-50 disabled:saturate-0',
+    'disabled:cursor-default disabled:bui-disabled',
   ],
   variants: {
     variant: {
       /** Icon only, in a corner of the wide stage */
-      corner: 'p-[calc(var(--px)*2)] hover:brightness-125',
+      corner: 'p-[calc(var(--bui-px)*2)] hover:brightness-125',
       /** In the bar along the bottom, with its label beside the icon */
       bar: 'gap-2 px-3 text-[0.85em] text-(--bui-muted) active:text-(--bui-text-bright)',
     },

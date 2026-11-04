@@ -1,0 +1,207 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { ReactNode } from 'react';
+
+import { Button } from '../components/button/button';
+import { Controls } from '../components/controls/controls';
+import { Dialogue } from '../components/dialogue/dialogue';
+import { IconButton, IconToggle } from '../components/icon-button/icon-button';
+import { Ledger } from '../components/ledger/ledger';
+import { Meter } from '../components/meter/meter';
+import { Picker, type PickerItem } from '../components/picker/picker';
+import { Setting } from '../components/setting/setting';
+import { SpeechBubble } from '../components/speech-bubble/speech-bubble';
+import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
+import { Heading, Muted, ScreenTitle } from '../components/text/text';
+import { Timer } from '../components/timer/timer';
+import { Legend, Window } from '../components/window/window';
+import { Pixels, usePixels } from '../providers/pixels';
+
+const noop = () => {};
+
+/** The tall stage's bar of controls, in CSS pixels */
+const BAR = 52;
+
+/**
+ * A whole stage, 320 stage pixels wide: 180 high on the wide layout, a
+ * phone's height upright with the bar of controls along the bottom
+ */
+const Stage = ({ children }: { children: ReactNode }) => {
+  const pixels = usePixels();
+  return (
+    <Pixels
+      {...pixels}
+      className="relative overflow-hidden bg-(--bui-ground) text-(--bui-text)"
+      style={{
+        width: 'calc(var(--px) * 320)',
+        height: `calc(var(--px) * ${pixels.tall ? 500 : 180})`,
+        ['--bui-bar' as string]: `${pixels.tall ? BAR : 0}px`,
+      }}
+    >
+      {children}
+      <Controls
+        show="always"
+        start={
+          <IconButton
+            icon="back"
+            aria-label="Back"
+            label="Back"
+            variant={pixels.tall ? 'bar' : 'corner'}
+          />
+        }
+        end={
+          <IconToggle
+            icon="soundOff"
+            pressedIcon="soundOn"
+            aria-label="Sound"
+            label="Sound off"
+            pressedLabel="Sound on"
+            pressed
+            onPressedChange={noop}
+            variant={pixels.tall ? 'bar' : 'corner'}
+          />
+        }
+      />
+    </Pixels>
+  );
+};
+
+const meta = {
+  title: 'Compositions/Together',
+  parameters: { controls: { disable: true } },
+  decorators: [
+    Story => (
+      <Stage>
+        <Story />
+      </Stage>
+    ),
+  ],
+} satisfies Meta;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+const MENU: PickerItem[] = [
+  { id: 'start', label: 'Start the run', accent: true, onSelect: noop },
+  {
+    id: 'music',
+    label: (
+      <span className="flex w-full">
+        Music
+        <Setting>On</Setting>
+      </span>
+    ),
+    onStep: noop,
+    onSelect: noop,
+  },
+  {
+    id: 'hard',
+    label: 'Hard mode',
+    disabled: true,
+    note: 'Beat the Stakeholder first.',
+    onSelect: noop,
+  },
+  { id: 'back', label: 'Back', back: true, apart: true, onSelect: noop },
+];
+
+/**
+ * A menu screen: the title along the top, a window with a heading, a
+ * picker with a setting and a disabled item, its legend, and the
+ * buttons under it
+ */
+export const Menu: Story = {
+  render: () => (
+    <>
+      <ScreenTitle blurb="Whose side are you on today?">
+        Pick a role
+      </ScreenTitle>
+      <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)]">
+        <Window
+          legend={
+            <Legend
+              keys={[
+                ['↑↓', 'choose'],
+                ['Enter', 'confirm'],
+              ]}
+              touch="Tap a line"
+            />
+          }
+        >
+          <Heading>Developer</Heading>
+          <Muted className="mb-[calc(var(--px)*3)]">
+            Ships on Friday. Regrets nothing.
+          </Muted>
+          <Picker items={MENU} label="Menu" active={false} />
+        </Window>
+        <div className="flex justify-center gap-[calc(var(--px)*4)]">
+          <Button variant="secondary" size="small">
+            Cancel
+          </Button>
+          <Button size="small">Play</Button>
+        </div>
+      </div>
+    </>
+  ),
+};
+
+/**
+ * A duel: who says what in a window, the other side's bubble, the
+ * pools as a ledger of meters, the clock, and the tabs of a log
+ */
+export const Duel: Story = {
+  render: () => (
+    <>
+      <SpeechBubble
+        side="bottom"
+        align="start"
+        className="absolute top-[calc(var(--px)*12)] left-[calc(var(--px)*16)] w-[calc(var(--px)*120)] tall:top-[calc(var(--px)*16)]"
+      >
+        Can we circle back on that after lunch?
+      </SpeechBubble>
+      <Timer
+        duration={10000}
+        remaining={4000}
+        paused
+        className="absolute top-[calc(var(--px)*14)] right-[calc(var(--px)*16)] tall:top-[calc(var(--px)*18)]"
+      />
+      <div className="absolute inset-x-[calc(var(--px)*16)] bottom-[calc(var(--px)*12)] grid grid-cols-[3fr_2fr] gap-[calc(var(--px)*6)] tall:bottom-[calc(var(--bui-bar)+var(--px)*12)] tall:grid-cols-1">
+        <Window>
+          <div className="grid gap-[calc(var(--px)*3)]">
+            <Dialogue tone="secondary" muted>
+              We need this by Monday.
+            </Dialogue>
+            <Dialogue>Monday, as in next quarter?</Dialogue>
+          </div>
+        </Window>
+        <Window>
+          <Tabs defaultValue="pools">
+            <TabList>
+              <Tab value="pools">Pools</Tab>
+              <Tab value="log">Log</Tab>
+            </TabList>
+            <TabPanel value="pools">
+              <Ledger
+                rows={[
+                  [
+                    'Momentum',
+                    <Meter key="m" aria-label="Momentum" value={3} max={5} />,
+                  ],
+                  [
+                    'Patience',
+                    <Meter
+                      key="p"
+                      aria-label="Patience"
+                      value={1}
+                      max={5}
+                      tone="danger"
+                    />,
+                  ],
+                ]}
+              />
+            </TabPanel>
+            <TabPanel value="log">Nothing yet.</TabPanel>
+          </Tabs>
+        </Window>
+      </div>
+    </>
+  ),
+};

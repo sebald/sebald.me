@@ -1,8 +1,8 @@
 import { cva } from '../../utils/styles';
 
 export const ledger = {
-  root: cva({ base: 'm-0 grid gap-[calc(var(--px)*1.5)]' }),
-  row: cva({ base: 'flex items-baseline gap-[calc(var(--px)*2)]' }),
+  root: cva({ base: 'm-0 grid gap-[calc(var(--bui-px)*2)]' }),
+  row: cva({ base: 'flex items-baseline gap-[calc(var(--bui-px)*2)]' }),
   label: cva({ base: 'm-0 shrink-0' }),
   // A pixel dot every three stage pixels, on the baseline
   leader: cva({

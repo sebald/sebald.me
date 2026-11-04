@@ -50,10 +50,14 @@ screen can be touched.
 
 ## The pixel
 
-The button draws in the stage's pixel (`--px`), but never finer than
+The button draws in `--bui-px`: the stage's pixel, but never finer than
 `--bui-min-px` (3 CSS pixels). On a phone's tall stage a stage pixel is
-barely more than one CSS pixel, and the ink, the steps and the side would
+barely more than one CSS pixel, and the ink, the steps and the bevel would
 thin to nothing. Switch the toolbar's scale to 1x to see it hold.
+
+A key is lit like the icons: a light row along its top and a shade row
+along its bottom, one pixel each, so the label sits in the middle.
+Pressed, the two swap and nothing moves.
 
 ## Accessibility
 

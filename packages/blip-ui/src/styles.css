@@ -17,6 +17,12 @@
   outline-color: var(--bui-focus);
 }
 
+/* What can't be used right now, everywhere in the kit: faded and grey */
+@utility bui-disabled {
+  opacity: 0.4;
+  filter: saturate(0);
+}
+
 /* A stage stacks lines of text and wants normal leading, whatever the
    page around it trims */
 [data-stage],

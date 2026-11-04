@@ -285,7 +285,7 @@ export const Picker = ({
           {items.map((item, i) => (
             <li
               key={item.id}
-              className={cn(item.apart && 'mt-[calc(var(--px)*5)]')}
+              className={cn(item.apart && 'mt-[calc(var(--bui-px)*4)]')}
             >
               <button
                 type="button"

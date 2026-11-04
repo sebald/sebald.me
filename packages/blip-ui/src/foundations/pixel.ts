@@ -5,6 +5,19 @@
  */
 export const UNIT = '--px';
 
+/**
+ * The stage pixel never finer than `--bui-min-px` (3 CSS pixels): the
+ * unit of spacing, and of controls and readouts, which a phone's tall
+ * stage would otherwise thin to nothing. `px(n, FLOOR)` for inline styles.
+ */
+export const FLOOR = '--bui-px';
+
+/**
+ * The spacing scale, in `FLOOR` pixels: every padding, gap and margin in
+ * the kit is one of these (`uniformity.test.ts` checks the styles)
+ */
+export const SPACE = [1, 2, 3, 4, 6, 8] as const;
+
 /** A length in pixels of the unit, for inline styles: `px(3)` is three */
 export const px = (n: number, unit: string = UNIT) =>
   n === 0 ? '0px' : `calc(var(${unit}) * ${n})`;

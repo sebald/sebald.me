@@ -43,6 +43,6 @@ bottom right corner; held upright, it centres over the bar of controls.
 
 ## The pixel
 
-The padding is three stage pixels plus a few CSS pixels (more on the tall
-layout), because on a phone's tall stage a stage pixel is too fine to keep
-the text off the frame.
+The frame is drawn in stage pixels; the padding inside it is 4 `--bui-px`,
+the stage pixel never finer than 3 CSS pixels, because on a phone's tall
+stage a stage pixel is too fine to keep the text off the frame.

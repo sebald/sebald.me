@@ -44,7 +44,9 @@ space. The text is upper-cased; any other character is left blank.
 ## Size
 
 `scale` is stage pixels per letter pixel (2 by default). The word is
-`6 × letters − 1` letter pixels wide.
+`6 × letters − 1` letter pixels wide: at 2, a title of 26 characters fills
+the 320 stage pixels of a stage, so keep titles shorter. The font has A to
+Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
 
 <Canvas of={BitmapTextStories.Title} />
 

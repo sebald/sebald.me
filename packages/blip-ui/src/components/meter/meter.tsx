@@ -1,6 +1,6 @@
 import type { HTMLAttributes } from 'react';
 
-import { px } from '../../foundations/pixel';
+import { FLOOR, px } from '../../foundations/pixel';
 import type { VariantProps } from '../../utils/styles';
 import { meter } from './meter.styles';
 
@@ -68,7 +68,10 @@ export const Meter = ({
             className={meter.cell({
               state: on ? (bright ? 'bright' : 'lit') : 'empty',
             })}
-            style={{ width: px(cell.width), height: px(cell.height) }}
+            style={{
+              width: px(cell.width, FLOOR),
+              height: px(cell.height, FLOOR),
+            }}
           >
             {!on && <span className={meter.dots()} />}
           </span>

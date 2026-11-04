@@ -15,7 +15,7 @@ export {
   endMask,
   fadeMask,
 } from './foundations/dither';
-export { UNIT, px } from './foundations/pixel';
+export { FLOOR, SPACE, UNIT, px } from './foundations/pixel';
 export {
   BACKING,
   MAX_CROP,

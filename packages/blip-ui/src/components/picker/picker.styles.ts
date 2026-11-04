@@ -5,15 +5,14 @@ export const picker = {
   root: cva({ base: 'flex min-h-0' }),
   menu: cva({
     base: [
-      'grid min-h-0 flex-1 content-start gap-1 overflow-y-auto',
+      'grid min-h-0 flex-1 content-start gap-(--bui-px) overflow-y-auto',
       // The native scrollbar is off: the pixel one beside it shows the rest
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
     ],
   }),
   item: cva({
     base: [
-      'flex w-full items-center gap-[calc(var(--px)*3)] px-[calc(var(--px)*2)] py-[0.15em] text-left',
-      'tall:gap-[calc(var(--px)*3+3px)]',
+      'flex w-full items-center gap-[calc(var(--bui-px)*3)] px-[calc(var(--bui-px)*2)] py-(--bui-px) text-left',
       'cursor-pointer transition-colors duration-100',
       'outline-none focus-visible:bui-focus',
       'aria-disabled:cursor-default',
@@ -38,21 +37,21 @@ export const picker = {
     ],
     defaultVariants: { selected: false },
   }),
-  /** The cursor: a pixel triangle on the stage's grid */
+  /** The cursor: a pixel triangle, in `--bui-px` like every control */
   cursor: cva({
-    base: 'h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] shrink-0 bg-current [clip-path:polygon(0_0,100%_50%,0_100%)]',
+    base: 'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bg-current [clip-path:polygon(0_0,100%_50%,0_100%)]',
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
     base: 'min-w-0 flex-1 transition-opacity duration-500',
-    variants: { disabled: { true: 'opacity-40' } },
+    variants: { disabled: { true: 'bui-disabled' } },
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
-    base: 'ml-[calc(var(--px)*2)] flex w-[calc(var(--px)*5)] shrink-0 flex-col items-center',
+    base: 'ml-[calc(var(--bui-px)*2)] flex w-[calc(var(--bui-px)*5)] shrink-0 flex-col items-center',
   }),
   arrow: cva({
-    base: 'h-[calc(var(--px)*3)] w-[calc(var(--px)*5)] shrink-0',
+    base: 'h-[calc(var(--bui-px)*3)] w-[calc(var(--bui-px)*5)] shrink-0',
     variants: {
       up: {
         true: '[clip-path:polygon(50%_0,100%_100%,0_100%)]',
@@ -65,11 +64,11 @@ export const picker = {
     },
   }),
   track: cva({
-    base: 'relative my-(--px) w-(--px) flex-1 bg-(--bui-empty-dots)',
+    base: 'relative my-(--bui-px) w-(--bui-px) flex-1 bg-(--bui-empty-dots)',
   }),
   thumb: cva({ base: 'absolute inset-x-0 bg-(--bui-neutral)' }),
   /** The description box beside the menu's window */
   note: cva({
-    base: 'pointer-events-none absolute z-20 text-[0.8em] leading-[1.35] text-balance',
+    base: 'pointer-events-none absolute z-20 text-[0.85em] leading-[1.35] text-balance',
   }),
 };

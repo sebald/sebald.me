@@ -9,8 +9,18 @@ Pushback is its first game.
 
 ## Principles
 
-- **The grid is law.** Every length is a whole number of stage pixels
-  (`--px`). A component never invents a CSS pixel value of its own.
+- **The grid is law.** Every length is a whole number of stage pixels. Art
+  on the stage's grid (a window's frame, bitmap letters, a stamp) counts in
+  `--px`. Spacing, the controls and the readouts (buttons, meters, the
+  stopwatch, icons) count in `--bui-px`, the stage pixel never finer than
+  `--bui-min-px`, so a phone's tall stage doesn't thin them to nothing. A
+  component never invents a CSS pixel value of its own; only the touch
+  parts are sized in CSS pixels, for a thumb.
+- **One scale each.** Every padding, gap and margin is 1, 2, 3, 4, 6 or 8
+  `--bui-px` (`SPACE`). Text is 0.75em (a legend), 0.85em (small: a note, a
+  blurb, a small button), 1em, or 2em. Anything that can't be used right
+  now looks the same everywhere (`bui-disabled`: faded and grey). A test
+  (`foundations/uniformity.test.ts`) fails on a style from outside them.
 - **Intent, not colour.** Components ask for roles (`primary`, `neutral`,
   `danger`); a game's theme decides what colour a role is.
 - **Every input is equal.** Keys, touch and the pointer each play the whole

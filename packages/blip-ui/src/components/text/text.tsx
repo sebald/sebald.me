@@ -1,6 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { px } from '../../foundations/pixel';
+import { BitmapText } from '../bitmap-text/bitmap-text';
 import { text as styles } from './text.styles';
 
 interface TextProps extends PropsWithChildren {
@@ -31,15 +32,19 @@ export const Heading = ({
 /** Where a screen's title sits: its top, in stage pixels */
 const TITLE_TOP = 8;
 
-export interface ScreenTitleProps extends PropsWithChildren {
+export interface ScreenTitleProps {
+  /** The title: letters, digits and marks from `BITMAP_GLYPHS`, in capitals */
+  children: string;
   /** A muted line under it saying what the screen is for */
   blurb?: string;
   className?: string;
 }
 
 /**
- * A menu screen's title, centred along the stage's top in capitals in
- * the primary colour, with an optional line under it
+ * A menu screen's title, centred along the stage's top in the bitmap
+ * letters (`BitmapText`), in the primary colour, with an optional line
+ * under it. The heading itself is there for assistive technology; the
+ * letters are drawn over it.
  */
 export const ScreenTitle = ({
   blurb,
@@ -51,7 +56,8 @@ export const ScreenTitle = ({
     style={{ top: px(TITLE_TOP) }}
   >
     <h2 className={styles.titleText()}>{children}</h2>
-    {blurb && <Muted className="text-[0.8em]">{blurb}</Muted>}
+    <BitmapText>{children}</BitmapText>
+    {blurb && <Muted className="text-[0.85em]">{blurb}</Muted>}
   </header>
 );
 

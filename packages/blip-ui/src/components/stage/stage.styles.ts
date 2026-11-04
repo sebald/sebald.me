@@ -24,6 +24,6 @@ export const stage = {
     base: 'absolute inset-x-0 transition-[top,height] duration-300 ease-out motion-reduce:transition-none',
   }),
   center: cva({
-    base: 'absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center',
+    base: 'absolute inset-0 flex flex-col items-center justify-center gap-[calc(var(--bui-px)*4)] p-[calc(var(--bui-px)*8)] text-center',
   }),
 };

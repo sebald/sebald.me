@@ -1,8 +1,8 @@
-import { px } from '../../foundations/pixel';
+import { FLOOR, px } from '../../foundations/pixel';
 import { cn } from '../../utils/styles';
 import { ICONS, ICON_COLOURS, type IconName } from './icons';
 
-/** A pixel of an icon in stage pixels, as fine as a stopwatch's */
+/** A pixel of an icon in `FLOOR` pixels (never finer than `--bui-min-px`), as fine as a stopwatch's */
 export const DOT = 2 / 3;
 
 export interface PixelIconProps {
@@ -24,7 +24,7 @@ export interface PixelIconProps {
 export const PixelIcon = ({ icon, dot, className }: PixelIconProps) => {
   const rows = ICONS[icon];
   const size = (n: number) =>
-    dot === undefined ? px(n * DOT) : `${Math.round(n * dot)}px`;
+    dot === undefined ? px(n * DOT, FLOOR) : `${Math.round(n * dot)}px`;
   return (
     <svg
       aria-hidden

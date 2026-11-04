@@ -7,11 +7,10 @@ import { cva } from '../../utils/styles';
 export const text = {
   heading: cva({ base: 'm-0 font-semibold text-(--bui-heading)' }),
   title: cva({
-    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-(--px) text-center',
+    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-[calc(var(--bui-px)*2)] text-center',
   }),
-  titleText: cva({
-    base: 'm-0 text-[2em] font-semibold tracking-[0.1em] text-(--bui-primary) uppercase',
-  }),
+  // The heading under the bitmap letters, for assistive technology
+  titleText: cva({ base: 'sr-only' }),
   muted: cva({ base: 'm-0 text-(--bui-muted)' }),
   loud: cva({
     base: [

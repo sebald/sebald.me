@@ -2,8 +2,7 @@ import { cva } from '../../utils/styles';
 
 export const dialogue = {
   line: cva({
-    // Held upright, a little more air between the mark and the words
-    base: 'm-0 flex items-start gap-[calc(var(--px)*3)] tall:gap-[calc(var(--px)*3+3px)]',
+    base: 'm-0 flex items-start gap-[calc(var(--bui-px)*3)]',
     variants: { muted: { true: 'text-(--bui-muted)' } },
   }),
   mark: cva({

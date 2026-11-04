@@ -14,13 +14,16 @@ const meta = {
     onValueChange: { control: false },
   },
   render: args => (
-    <Tabs {...args} className="w-[calc(var(--px)*160)] max-w-full tall:w-full">
+    <Tabs
+      {...args}
+      className="w-[max(calc(var(--px)*160),24em)] max-w-full tall:w-full"
+    >
       <TabList aria-label="Roles">
         <Tab value="dev">
-          Dev <span className="text-[0.8em] opacity-70">3/9</span>
+          Dev <span className="text-[0.85em] text-(--bui-muted)">3/9</span>
         </Tab>
         <Tab value="pm">
-          PM <span className="text-[0.8em] opacity-70">0/9</span>
+          PM <span className="text-[0.85em] text-(--bui-muted)">0/9</span>
         </Tab>
         <Tab value="design">Design</Tab>
         <Tab value="locked" disabled>

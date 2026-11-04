@@ -39,8 +39,11 @@ export const LoudStory: Story = {
 export const ScreenTitleStory: Story = {
   name: 'ScreenTitle',
   render: ({ children }) => (
-    <div className="relative h-[calc(var(--px)*8+4.5em)]">
-      <ScreenTitle blurb="Whose side are you on today?">{children}</ScreenTitle>
+    // Its top, the bitmap letters (18 stage pixels) and the blurb under them
+    <div className="relative h-[calc(var(--px)*26+var(--bui-px)*2+1.5em)]">
+      <ScreenTitle blurb="Whose side are you on today?">
+        {String(children)}
+      </ScreenTitle>
     </div>
   ),
   args: { children: 'Pick a role' },

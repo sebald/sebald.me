@@ -2,7 +2,7 @@
 
 import { useEffect, type CSSProperties, type SVGAttributes } from 'react';
 
-import { px } from '../../foundations/pixel';
+import { FLOOR, px } from '../../foundations/pixel';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { timer } from './timer.styles';
@@ -47,7 +47,7 @@ const WATCH = [
   '.....KKDDDDDKK.....',
 ];
 
-/** A pixel of the watch in stage pixels, finer than the stage's grid */
+/** A pixel of the watch in `FLOOR` pixels, finer than the stage's grid: a readout, kept legible on a phone */
 const DOT = 2 / 3;
 
 /** The watch's box in stage pixels, for the room kept beside it */
@@ -203,8 +203,8 @@ export const Timer = ({
       shapeRendering="crispEdges"
       className={cn(timer.root(), className)}
       style={{
-        width: px(TIMER_SIZE.width),
-        height: px(TIMER_SIZE.height),
+        width: px(TIMER_SIZE.width, FLOOR),
+        height: px(TIMER_SIZE.height, FLOOR),
         ...style,
       }}
       {...props}
