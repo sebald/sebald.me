@@ -22,6 +22,8 @@ test('stories', async ({ page, baseURL }) => {
     entry => entry.type === 'story' && !entry.tags?.includes('no-vrt'),
   );
   expect(stories.length).toBeGreaterThan(0);
+  // One test for every screenshot: give each its own time, not 30s for all
+  test.setTimeout(stories.length * SCALES.length * 15_000);
 
   for (const { id } of stories) {
     for (const scale of SCALES) {
