@@ -1,10 +1,10 @@
 'use client';
 
+import { Button } from '@sebald/dither-ui';
 import type { CSSProperties, FocusEvent, PropsWithChildren } from 'react';
 import { createContext, useContext, useRef } from 'react';
 
 import { BACKING, STAGE, fontSizeFor } from '../lib/stage';
-import { Button } from './button';
 import { canFullscreen, toggleFullscreen } from './fullscreen';
 import { paletteVars } from './palette';
 import { cn, cva } from './styles.utils';

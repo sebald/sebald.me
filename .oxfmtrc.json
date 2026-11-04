@@ -38,6 +38,8 @@
     ".git/",
     ".DS_Store",
     "*.log",
-    "src/ui/logo-dither.ts"
+    "src/ui/logo-dither.ts",
+    "**/storybook-static/**",
+    "**/playwright-report/**"
   ]
 }

@@ -1,0 +1,13 @@
+/*
+ * Dither UI's styles, for the host's Tailwind entry to import after
+ * `tailwindcss`: the tokens, the classes in the kit's files and its
+ * utilities.
+ */
+@source './';
+@import './tokens.css';
+
+/* The keyboard's focus ring */
+@utility dui-focus {
+  @apply outline-2 outline-offset-2 outline-solid;
+  outline-color: var(--dui-focus);
+}

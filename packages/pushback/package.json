@@ -27,6 +27,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sebald/dither-ui": "workspace:*",
     "cva": "1.0.0-beta.12",
     "tailwind-merge": "3.7.0"
   },

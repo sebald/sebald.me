@@ -6,7 +6,6 @@ import { Headline } from '@/ui/headline';
 import { Text } from '@/ui/text';
 
 import { BurstDemo } from './burst-demo';
-import { ButtonDemo } from './button-demo';
 import { Cast, CharacterPlayground } from './character-playground';
 import { DemoDemo } from './demo-demo';
 import { EndDemo } from './end-demo';
@@ -60,12 +59,6 @@ export const Inventory = () => (
       blurb="The list the player moves through: the cursor, the loud item in gold, items the ghost has dimmed, a disabled one the cursor still stops on, a description box beside the window saying why. In a short window it scrolls on a rail (see Window)."
     >
       <PickerDemo />
-    </Section>
-    <Section
-      title="Button"
-      blurb="The pixel button (button.tsx), for the actions a touch screen cannot reach otherwise, in the ink line and the stepped corners every window has: the key for the main action (Start on the tall role picker), the outline for a quieter one beside it. In each of the palette's tones; press one to see it go down."
-    >
-      <ButtonDemo />
     </Section>
     <Section
       title="Stamp"

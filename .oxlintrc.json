@@ -93,6 +93,8 @@
     "out/**",
     "build/**",
     "next-env.d.ts",
-    ".source/**"
+    ".source/**",
+    "**/storybook-static/**",
+    "**/playwright-report/**"
   ]
 }

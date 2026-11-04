@@ -27,6 +27,10 @@ next-env.d.ts
 # playwright
 /playwright-report/
 /test-results/
+packages/*/playwright-report/
+packages/*/test-results/
+# storybook
+storybook-static/
 # playwright mcp output
 /.playwright-mcp/
 

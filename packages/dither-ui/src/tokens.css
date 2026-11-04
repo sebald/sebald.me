@@ -1,0 +1,35 @@
+/*
+ * Dither UI's tokens: the roles every component reads, as CSS variables.
+ * These are the defaults, a night palette; a game sets its own values
+ * for the same names on its stage (or any element around the kit).
+ * `:where` keeps them at zero specificity, so any theme wins.
+ */
+:where(:root) {
+  /* Ground and outline */
+  --dui-ground: #07080d;
+  --dui-ink: #0b0d16;
+
+  /* Primary: the main action */
+  --dui-primary: #f2c14e;
+  --dui-primary-light: #fff1b8;
+  --dui-primary-shade: #b8871f;
+  --dui-primary-foreground: #0b0d16;
+
+  /* Neutral: the quieter actions */
+  --dui-neutral: #8a92b8;
+  --dui-neutral-light: #d5d9e6;
+  --dui-neutral-shade: #5c6488;
+  --dui-neutral-foreground: #0b0d16;
+
+  /* Danger: what can't be undone */
+  --dui-danger: #d9483b;
+  --dui-danger-light: #f07a68;
+  --dui-danger-shade: #9a2c24;
+  --dui-danger-foreground: #fffdf2;
+
+  /* The keyboard's focus ring */
+  --dui-focus: oklch(0.74 0.1 65 / 0.8);
+
+  /* The finest a control's pixel gets, in CSS pixels */
+  --dui-min-px: 3px;
+}

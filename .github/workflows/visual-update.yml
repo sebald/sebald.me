@@ -1,7 +1,8 @@
 name: Update Visual Baselines
 
 # Regenerates the screenshot baselines in the same image the visual
-# regression tests run in and commits them to the branch. Alternative to
+# regression tests run in, the site's and Dither UI's stories, and commits
+# them to the branch. Alternative to
 # `pnpm vrt:update` without Docker: `pnpm vrt:update:ci` starts it and
 # approves the pull request checks for the bot commit (GitHub holds runs
 # triggered by GITHUB_TOKEN pushes for approval).
@@ -42,17 +43,20 @@ jobs:
       - name: Update baselines
         run: pnpm exec playwright test --update-snapshots
 
+      - name: Update Dither UI baselines
+        run: pnpm exec playwright test --config packages/dither-ui/playwright.config.ts --update-snapshots
+
       - name: Commit and push
         run: |
           # The checkout is owned by a different user than the container's
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           # `git status`, not `git diff`: a new test's baselines are untracked
-          if [ -z "$(git status --porcelain -- tests/visual/__screenshots__)" ]; then
+          if [ -z "$(git status --porcelain -- tests/visual/__screenshots__ packages/dither-ui/tests/visual/__screenshots__)" ]; then
             echo "Baselines are up to date"
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898810+github-actions[bot]@users.noreply.github.com'
-          git add tests/visual/__screenshots__
+          git add tests/visual/__screenshots__ packages/dither-ui/tests/visual/__screenshots__
           git commit -m 'test: update VRT baselines'
           git push

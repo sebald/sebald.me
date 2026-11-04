@@ -1,55 +1,14 @@
 'use client';
 
+import { CORNERS, rounded } from '@sebald/dither-ui';
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
 import { PALETTE } from './palette';
 import { cn } from './styles.utils';
 import { useInputKind } from './use-input-kind';
 
-/**
- * The rounded corner as a pixel staircase: how far in each row from the
- * corner starts, top row first. The ink outline takes the outermost,
- * each ring inside one step smaller, so the corner curves the same way
- * through every layer and the fill's own corner is square.
- */
-export const CORNERS = [[3, 1, 1], [2, 1], [1]];
-
 /** The window's rings, from the outside in, one stage pixel each */
 const RINGS = [PALETTE.ink, PALETTE.frame, PALETTE.frameInner];
-
-/**
- * A `clip-path` with the staircase at all four corners, walked
- * clockwise: each corner's steps as offsets from that corner, mirrored
- * onto it, in the order the outline passes them
- */
-export const rounded = (steps: number[]) => {
-  // From the left edge up to the top edge, round the top left corner,
-  // the bottom row's step first
-  const topLeft = [
-    [0, steps.length],
-    ...steps
-      .map((indent, row) => [
-        [indent, row + 1],
-        [indent, row],
-      ])
-      .reverse()
-      .flat(),
-  ];
-  const at = (n: number, from: 'start' | 'end') =>
-    from === 'start'
-      ? `calc(var(--px) * ${n})`
-      : `calc(100% - var(--px) * ${n})`;
-  const place = (x: 'start' | 'end', y: 'start' | 'end', reverse: boolean) =>
-    (reverse ? [...topLeft].reverse() : topLeft).map(
-      ([dx, dy]) => `${at(dx!, x)} ${at(dy!, y)}`,
-    );
-  return `polygon(${[
-    ...place('start', 'start', false),
-    ...place('end', 'start', true),
-    ...place('end', 'end', false),
-    ...place('start', 'end', true),
-  ].join(', ')})`;
-};
 
 /**
  * The dithered gradient of the fill, in stage pixels: a solid row of the

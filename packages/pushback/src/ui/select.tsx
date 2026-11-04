@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@sebald/dither-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, type Look } from '../lib/characters';
@@ -7,7 +8,6 @@ import { ROLE_LABELS, ROLES, type Role } from '../lib/lines';
 import { PLAYER_SHEETS } from '../lib/sprites';
 import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
-import { Button } from './button';
 import { Character } from './character';
 import { Controls } from './controls';
 import { PALETTE } from './palette';

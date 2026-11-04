@@ -147,3 +147,21 @@
 
   --animate-call-sparkle: call-sparkle 360ms steps(3) both;
 }
+
+/* Pushback's values for Dither UI's roles, on every stage */
+[data-stage] {
+  --dui-ground: var(--pb-bg);
+  --dui-ink: var(--pb-ink);
+  --dui-primary: var(--pb-gold);
+  --dui-primary-light: var(--pb-gold-light);
+  --dui-primary-shade: var(--pb-gold-shade);
+  --dui-primary-foreground: var(--pb-ink);
+  --dui-neutral: var(--pb-steel);
+  --dui-neutral-light: var(--pb-steel-light);
+  --dui-neutral-shade: var(--pb-dim);
+  --dui-neutral-foreground: var(--pb-ink);
+  --dui-danger: var(--pb-stamp);
+  --dui-danger-light: var(--pb-stamp-light);
+  --dui-danger-shade: var(--pb-stamp-shade);
+  --dui-danger-foreground: var(--pb-spark);
+}
