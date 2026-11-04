@@ -1,0 +1,35 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TextStories from './text.stories';
+
+<Meta of={TextStories} />
+
+# Text
+
+The letters by role, so every screen says the same thing the same way.
+Sizes are in em, because the stage sizes its text from its scale; set
+them from the screen, never in CSS pixels.
+
+| Role          | Colour          | Use                                                      |
+| ------------- | --------------- | -------------------------------------------------------- |
+| `Heading`     | `--bui-heading` | The title inside a window, a name                        |
+| `Muted`       | `--bui-muted`   | A prompt over options, a blurb, a hint                   |
+| `Loud`        | `--bui-primary` | The one line that matters most right now, blinking       |
+| `ScreenTitle` | `--bui-primary` | A menu screen's title along the stage's top, in capitals |
+
+<Canvas of={TextStories.HeadingStory} />
+<Canvas of={TextStories.MutedStory} />
+<Canvas of={TextStories.LoudStory} />
+<Canvas of={TextStories.ScreenTitleStory} />
+
+## Usage
+
+- **Do** use one `Loud` at a time. Two blinking lines compete.
+- **Do** keep a screen title to a few words; the blurb says the rest.
+- **Don't** colour text yourself. If a role is missing, it's a token to add.
+
+## Motion
+
+`Loud` blinks half a second on and half off, with no fade, and stays
+steady under reduced motion. `--blink-low` sets how far it dims (0.6 by
+default, 0 for a full blink).

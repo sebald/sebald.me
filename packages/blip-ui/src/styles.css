@@ -1,0 +1,42 @@
+/*
+ * Blip UI's styles, for the host's Tailwind entry to import after
+ * `tailwindcss`: the tokens, the classes in the kit's files, its
+ * variants, utilities and motion.
+ */
+@source './';
+@import './tokens.css';
+
+/* Inside a stage held upright, which is tall (`Pixels`, `data-layout`) */
+@custom-variant tall (&:where([data-layout=tall] *));
+/* A touch screen without a mouse */
+@custom-variant touch (@media (hover: none) and (pointer: coarse));
+
+/* The keyboard's focus ring */
+@utility bui-focus {
+  @apply outline-2 outline-offset-2 outline-solid;
+  outline-color: var(--bui-focus);
+}
+
+/* A stage stacks lines of text and wants normal leading, whatever the
+   page around it trims */
+[data-stage],
+[data-stage] * {
+  text-box: normal;
+}
+
+/* The kit's motion: stepped, in whole pixels where it moves */
+@theme {
+  /* The arcade blink, half a second on, half off, no fade; how low it
+     goes is --blink-low (0.6 by default, 0 for a full blink) */
+  @keyframes bui-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: var(--blink-low, 0.6);
+    }
+  }
+
+  --animate-bui-blink: bui-blink 1s steps(1) infinite;
+}

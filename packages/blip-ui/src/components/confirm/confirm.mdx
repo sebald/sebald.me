@@ -1,0 +1,39 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as ConfirmStories from './confirm.stories';
+
+<Meta of={ConfirmStories} />
+
+# Confirm
+
+Asks before something that can't be undone: erasing a save, restarting a
+run. The stage is dimmed, a quiet window says what it costs, and two
+options follow, the safe one first and selected.
+
+<Canvas of={ConfirmStories.Default} />
+<Controls of={ConfirmStories.Default} />
+
+## Anatomy
+
+1. **Scrim**, the stage dimmed (`--bui-scrim`), down to the bar of controls
+   (`--bui-bar`)
+2. **Window** with the title, the cost and a Legend
+3. **Picker** with the safe option first, then the one that does it
+
+## Usage
+
+- **Do** say what goes: _This deletes your run and 2 shipped roles._
+- **Do** name the action in the confirm option (_Erase save_), not _OK_.
+- **Do** place it inside the stage, over the menu it came from, and turn
+  that menu's Picker `active` off while it is open.
+- **Don't** confirm what can be undone.
+
+## Input
+
+- Up and down choose, Enter or a tap confirms
+- Escape cancels
+
+## Accessibility
+
+- `role="alertdialog"`, named by the title
+- The Picker is the one active list, so the keys work without focus

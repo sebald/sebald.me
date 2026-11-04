@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as ButtonStories from './button.stories';
+
+<Meta of={ButtonStories} />
+
+# Button
+
+A pixel button, for the actions a screen offers outside its menus: Start
+under the role picker, Play fullscreen on the turn screen. Lists of
+choices are a Picker, not a column of buttons.
+
+<Canvas of={ButtonStories.Default} />
+<Controls of={ButtonStories.Default} />
+
+## Anatomy
+
+1. **Ink**, the outline every sprite and window has, with the window's
+   stepped corners (`[3, 1, 1]`)
+2. **Ring**, one step in: the key's side, or the outline's frame
+3. **Face**, with a light edge along its top on the key
+
+## Variants
+
+| Variant       | Looks like                                          | When to use                                                         |
+| ------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
+| `primary`     | A key on its side, in the primary colour            | The one action the screen is for. One per screen                    |
+| `secondary`   | A frame in the neutral colour, filled while pressed | Beside a primary: back, options, cancel                             |
+| `destructive` | The key in the danger colour                        | What can't be undone: quitting a run, resetting progress. Ask first |
+
+<Canvas of={ButtonStories.Overview} />
+
+## Sizes
+
+`default` is 44 CSS pixels tall at least, a thumb's height (WCAG 2.5.5).
+`small` is for dense menus where a pointer aims; don't use it where the
+screen can be touched.
+
+## Usage
+
+- **Do** give a screen one primary button. Pair it with a secondary for the
+  way back.
+- **Do** start the label with a verb, or name what starts: _Start_, _Retry_,
+  _Play fullscreen_.
+- **Don't** use buttons for a list of choices. That's a Picker, with a
+  cursor and the keys.
+- **Don't** put two primary buttons side by side.
+
+<Canvas of={ButtonStories.Pair} />
+
+## The pixel
+
+The button draws in the stage's pixel (`--px`), but never finer than
+`--bui-min-px` (3 CSS pixels). On a phone's tall stage a stage pixel is
+barely more than one CSS pixel, and the ink, the steps and the side would
+thin to nothing. Switch the toolbar's scale to 1x to see it hold.
+
+## Accessibility
+
+- A native `<button>`, `type="button"` unless set otherwise
+- The focus ring shows for the keyboard only (`:focus-visible`)
+- Disabled buttons fade and lose their colour; prefer explaining why
+  something is locked next to it

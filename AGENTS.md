@@ -22,10 +22,10 @@ pnpm narrate          # Render narrations of changed notes (Python, see Narratio
 pnpm narrate:check    # Fail if a note's narration is missing or outdated
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
-pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Dither UI's too
-pnpm storybook        # Dither UI's Storybook (port 6006)
-pnpm vrt:dither-ui       # Visual regression tests of Dither UI's stories (Docker)
-pnpm vrt:dither-ui:update # Regenerate Dither UI's baselines (Docker)
+pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Blip UI's too
+pnpm storybook        # Blip UI's Storybook (port 6006)
+pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
+pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
 CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
@@ -73,10 +73,10 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 
 ### Packages
 
-- `packages/dither-ui` (`@sebald/dither-ui`): Dither UI, the design system for the lab's pixel games. Tokens are CSS variables only (`src/tokens.css`, `--dui-*` roles with defaults); a game sets its values for the same names on its stage. Components take `variant`, `size` and a `className` merged last, with their styles in a `*.styles.ts` next to them (cva). No game data, no assets, no `next/*`
-- Dither UI's docs are its Storybook (`packages/dither-ui/.storybook`, Vite): a story file and an MDX page with the guidelines per component. Its visual regression tests (`packages/dither-ui/tests/visual`) screenshot every story from the built Storybook's index at 3x and 1x, in the same Docker image as the site's; a story tagged `no-vrt` is left out. The "Dither UI Visual Regression" workflow runs them on pull requests that touch the kit
-- `packages/pushback` (`@sebald/pushback`): the lab's game, built on Dither (its `styles.css` maps the palette onto Dither UI's roles), mounted at `/lab/pushback`. Its logic in `src/lib`, its UI in `src/ui`, its art in `src/assets`
-- Independent of the site: no `@/` imports (its own `tsc` run, `pnpm --filter @sebald/pushback typecheck`, fails on one), its own `cn`/`cva` copy, and its own CSS (`src/styles.css`: the `tall:`/`touch:` variants, `pb-focus`, the stage's leading, the game's keyframes), which `src/css/styles.css` imports after Dither UI's
+- `packages/blip-ui` (`@sebald/blip-ui`): Blip UI, the design system for the lab's pixel games. Tokens are CSS variables only (`src/tokens.css`, `--bui-*` roles with defaults); a game sets its values for the same names on its stage. Components take `variant`, `size` (with defaults) and a `className` merged last, with their styles in a `*.styles.ts` next to them (cva). Colours only through `--bui-*` tokens, lengths in stage pixels (`--px`), text in em; sounds through `useFeedback()` (the game decides what plays), the scale through `usePixels()`. Base UI is the headless layer where a primitive fits (Tabs) No game data, no assets, no `next/*`
+- Blip UI's docs are its Storybook (`packages/blip-ui/.storybook`, Vite): per component a story file and an MDX page with the guidelines. Stories: one `Default` whose args are the props' defaults, one `Overview` with every variant × size and state side by side (what the visual tests cover), and otherwise only compositions; never a story per variant or size. Its visual regression tests (`packages/blip-ui/tests/visual`) screenshot every story from the built Storybook's index at 3x and 1x, in the same Docker image as the site's; a story tagged `no-vrt` is left out. The "Blip UI Visual Regression" workflow runs them on pull requests that touch the kit
+- `packages/pushback` (`@sebald/pushback`): the lab's game, built on Dither (its `styles.css` maps the palette onto Blip UI's roles), mounted at `/lab/pushback`. Its logic in `src/lib`, its UI in `src/ui`, its art in `src/assets`
+- Independent of the site: no `@/` imports (its own `tsc` run, `pnpm --filter @sebald/pushback typecheck`, fails on one), its own `cn`/`cva` copy, and its own CSS (`src/styles.css`: the `tall:`/`touch:` variants, `pb-focus`, the stage's leading, the game's keyframes), which `src/css/styles.css` imports after Blip UI's
 - The site imports `Game` from the package root and the inventory's pieces by subpath (`@sebald/pushback/ui/<module>`, `@sebald/pushback/lib/<module>`). The inventory itself (`src/ui/lab/pushback/inventory`) stays in the site, as the game's workbench
 - `pnpm test` runs the packages' tests too
 

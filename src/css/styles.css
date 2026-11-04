@@ -4,8 +4,8 @@
 @import './theme.css';
 @import './prose.css';
 
-/* The lab's design system (Dither UI) and its game: their classes, tokens, variants and motion */
-@import '@sebald/dither-ui/styles.css';
+/* The lab's design system (Blip UI) and its game: their classes, tokens, variants and motion */
+@import '@sebald/blip-ui/styles.css';
 @import '@sebald/pushback/styles.css';
 
 ::selection {

@@ -1,0 +1,90 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Meter } from './meter';
+
+const meta = {
+  title: 'Components/Meter',
+  component: Meter,
+  args: {
+    value: 3,
+    max: 5,
+    tone: 'primary',
+    bright: false,
+    'aria-label': 'Momentum',
+  },
+  argTypes: {
+    value: { control: { type: 'number', min: 0, max: 12, step: 1 } },
+    max: { control: { type: 'number', min: 1, max: 12, step: 1 } },
+    tone: {
+      control: 'inline-radio',
+      options: ['primary', 'secondary', 'neutral', 'info', 'danger'],
+      table: { defaultValue: { summary: 'primary' } },
+    },
+    bright: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } },
+    },
+    cell: {
+      control: 'object',
+      table: { defaultValue: { summary: '{ width: 4, height: 6 }' } },
+    },
+  },
+} satisfies Meta<typeof Meter>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/** Every prop through the controls */
+export const Default: Story = {};
+
+const TONES = ['primary', 'secondary', 'neutral', 'info', 'danger'] as const;
+const STATES = [
+  { name: 'empty', value: 0, bright: false },
+  { name: 'partial', value: 3, bright: false },
+  { name: 'full', value: 5, bright: false },
+  { name: 'bright', value: 5, bright: true },
+] as const;
+
+/** Every tone in every state, and other cell sizes, side by side */
+export const Overview: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="grid w-fit grid-cols-[auto_repeat(4,auto)] items-center gap-x-6 gap-y-3">
+      <span />
+      {STATES.map(state => (
+        <span key={state.name} className="text-[0.75em] text-(--bui-dim)">
+          {state.name}
+        </span>
+      ))}
+      {TONES.flatMap(tone => [
+        <span key={tone} className="text-[0.75em] text-(--bui-dim)">
+          {tone}
+        </span>,
+        ...STATES.map(state => (
+          <Meter
+            key={`${tone}-${state.name}`}
+            aria-label={`${tone} ${state.name}`}
+            tone={tone}
+            max={5}
+            value={state.value}
+            bright={state.bright}
+          />
+        )),
+      ])}
+      <span className="text-[0.75em] text-(--bui-dim)">cells</span>
+      <Meter
+        aria-label="Small cells"
+        value={4}
+        max={8}
+        cell={{ width: 3, height: 4 }}
+      />
+      <Meter
+        aria-label="Large cells"
+        value={4}
+        max={8}
+        cell={{ width: 6, height: 9 }}
+        className="col-span-3"
+      />
+    </div>
+  ),
+};

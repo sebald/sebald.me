@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@sebald/dither-ui';
+import { Button } from '@sebald/blip-ui';
 import type { CSSProperties, FocusEvent, PropsWithChildren } from 'react';
 import { createContext, useContext, useRef } from 'react';
 

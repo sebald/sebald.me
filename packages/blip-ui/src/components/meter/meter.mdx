@@ -1,0 +1,57 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as MeterStories from './meter.stories';
+
+<Meta of={MeterStories} />
+
+# Meter
+
+A row of boxes, some lit and the rest empty: how much of a pool is
+collected. Momentum beside a name, a score towards a goal. Whole cells
+only; for a value that runs smoothly, draw a bar instead.
+
+<Canvas of={MeterStories.Default} />
+<Controls of={MeterStories.Default} />
+
+## Anatomy
+
+1. **Ink**, a line one pixel wide around every cell
+2. **Lit cell**, a light top row, the tone's colour, a shaded bottom row
+3. **Empty cell**, dark, with a rim in the dots' colour and a checker of
+   dots, so the slot shows
+4. **Gap**, two pixels between cells
+
+## Tones
+
+| Tone        | When to use                                  |
+| ----------- | -------------------------------------------- |
+| `primary`   | The player's pool, the main one              |
+| `secondary` | The other side's pool                        |
+| `neutral`   | A quiet pool that is not a side              |
+| `info`      | Time                                         |
+| `danger`    | A pool that is bad when it fills or runs low |
+
+`bright` lights every cell in the tone's light colour. Toggle it on a timer
+for a full meter that blinks.
+
+<Canvas of={MeterStories.Overview} />
+
+## Cell size
+
+`cell` is one box in stage pixels, 4 by 6 by default.
+
+<Canvas of={MeterStories.Overview} />
+
+## Usage
+
+- **Do** keep `max` small, ten at most; more cells stop reading as boxes.
+- **Do** put the name next to the meter, and give the meter an `aria-label`.
+- **Don't** pass fractions. The value is rounded to a whole cell.
+- **Don't** rely on the tone alone: the lit count is what carries the value.
+
+## Accessibility
+
+- `role="meter"` with `aria-valuemin`, `aria-valuemax` and `aria-valuenow`,
+  and `aria-valuetext` like "3 of 5"
+- The cells are hidden from assistive technology
+- Not focusable: it only shows a value

@@ -148,20 +148,20 @@
   --animate-call-sparkle: call-sparkle 360ms steps(3) both;
 }
 
-/* Pushback's values for Dither UI's roles, on every stage */
+/* Pushback's values for Blip UI's roles, on every stage */
 [data-stage] {
-  --dui-ground: var(--pb-bg);
-  --dui-ink: var(--pb-ink);
-  --dui-primary: var(--pb-gold);
-  --dui-primary-light: var(--pb-gold-light);
-  --dui-primary-shade: var(--pb-gold-shade);
-  --dui-primary-foreground: var(--pb-ink);
-  --dui-neutral: var(--pb-steel);
-  --dui-neutral-light: var(--pb-steel-light);
-  --dui-neutral-shade: var(--pb-dim);
-  --dui-neutral-foreground: var(--pb-ink);
-  --dui-danger: var(--pb-stamp);
-  --dui-danger-light: var(--pb-stamp-light);
-  --dui-danger-shade: var(--pb-stamp-shade);
-  --dui-danger-foreground: var(--pb-spark);
+  --bui-ground: var(--pb-bg);
+  --bui-ink: var(--pb-ink);
+  --bui-primary: var(--pb-gold);
+  --bui-primary-light: var(--pb-gold-light);
+  --bui-primary-shade: var(--pb-gold-shade);
+  --bui-primary-foreground: var(--pb-ink);
+  --bui-neutral: var(--pb-steel);
+  --bui-neutral-light: var(--pb-steel-light);
+  --bui-neutral-shade: var(--pb-dim);
+  --bui-neutral-foreground: var(--pb-ink);
+  --bui-danger: var(--pb-stamp);
+  --bui-danger-light: var(--pb-stamp-light);
+  --bui-danger-shade: var(--pb-stamp-shade);
+  --bui-danger-foreground: var(--pb-spark);
 }

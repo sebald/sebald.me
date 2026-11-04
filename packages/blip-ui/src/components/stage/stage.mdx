@@ -1,0 +1,69 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as StageStories from './stage.stories';
+
+<Meta of={StageStories} />
+
+# Stage
+
+The scaled pixel grid a game lives in: its native size (320 by 214 by
+default) times a scale, centred in the window. Everything inside positions
+in stage pixels (`--px`) and sizes text in em. It fits itself to the
+viewport, goes tall on a phone held upright, and tells the pieces inside
+through `usePixels()`.
+
+<Canvas of={StageStories.Default} />
+<Controls of={StageStories.Default} />
+
+## Anatomy
+
+1. **Section**, `width` by `height` times the scale, in the ground colour
+2. **Layer**, the full grid inside it: moved up by `crop`, down by `lift`
+3. **Turned screen**, instead of all of it on a phone held sideways (`turned`)
+
+## Fitting the viewport
+
+Without `scale` the stage measures the window (`Fitted` shows it; the
+others pin the scale so they do not fight Storybook's frame):
+
+| Window                  | Stage                                                                      |
+| ----------------------- | -------------------------------------------------------------------------- |
+| Wide                    | 3x where it fits with a 24 px gutter, else what the width or height allows |
+| Dense screen            | The scale snaps to whole device pixels (`crispScale`), never under 1.1x    |
+| Short                   | `crop="fit"` takes up to 60 rows of ceiling off the top before it shrinks  |
+| Held upright (portrait) | Tall: the window's width, the height of the small viewport, `rows` rows    |
+| Fullscreen              | No gutter, all of it fits                                                  |
+| Phone on its side       | `turned`, if given, else the stage                                         |
+
+The pure maths is `scaleFor`, `fitFor`, `tallFor`, `crispScale`, `crisp`,
+`backingFor` and `fontSizeFor` in `foundations/scale`, all taking the native
+size.
+
+## What it provides
+
+`usePixels()` gives `scale`, `tall`, `rows`, `crop`, `crisp`, `backing` (the
+scale to draw a canvas at) and `turn`. The stage sets `--px`, `--bui-bar`
+(the tall bar's height, `bar` CSS pixels, else 0) and the font size, and
+`data-layout="tall"` for the `tall:` variant.
+
+## Usage
+
+- **Do** give a game one stage, with every screen inside.
+- **Do** fill `turned` with the ask to turn the phone, and a fullscreen
+  button if the game has one.
+- **Do** use `lift` on the tall stage to centre a group in the rows it does
+  not need.
+- **Don't** set sizes in CSS pixels inside it, except for touch targets.
+- **Don't** use `scale` in a game: it is for docs and workbenches (a fixed
+  stage is never tall and never turned).
+
+## Input
+
+Focusing the stage, or tapping it, centres it in the viewport. It has no
+keys of its own: a game binds them with `useKeys`.
+
+## Accessibility
+
+- A `<section>` named by `label`
+- It takes focus from a tap (`tabIndex={-1}`) so the page does not scroll
+  away from the game

@@ -4,7 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.28.6",
   "dependencies": {
-    "@sebald/dither-ui": "workspace:*",
+    "@sebald/blip-ui": "workspace:*",
     "@sebald/pushback": "workspace:*",
     "@base-ui/react": "1.9.0",
     "@phosphor-icons/react": "2.1.10",
@@ -60,9 +60,9 @@
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots",
     "vrt:update:ci": "./scripts/vrt-update-ci.sh",
-    "storybook": "pnpm --filter @sebald/dither-ui storybook",
-    "build-storybook": "pnpm --filter @sebald/dither-ui build-storybook",
-    "vrt:dither-ui": "./scripts/vrt.sh --config packages/dither-ui/playwright.config.ts",
-    "vrt:dither-ui:update": "./scripts/vrt.sh --config packages/dither-ui/playwright.config.ts --update-snapshots"
+    "storybook": "pnpm --filter @sebald/blip-ui storybook",
+    "build-storybook": "pnpm --filter @sebald/blip-ui build-storybook",
+    "vrt:blip-ui": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts",
+    "vrt:blip-ui:update": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts --update-snapshots"
   }
 }

@@ -1,0 +1,48 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as WindowStories from './window.stories';
+
+<Meta of={WindowStories} />
+
+# Window
+
+The quiet window every text sits in: the opponent's line, the menus, the
+results, a picker's description box. It grows with what is in it; the
+screen positions and sizes it.
+
+<Canvas of={WindowStories.Default} />
+<Controls of={WindowStories.Default} />
+
+## Anatomy
+
+1. **Ink**, the outline, with the stepped corners `[3, 1, 1]`
+2. **Frame**, a pale ring one step in (`--bui-frame`)
+3. **Inner ring**, dark, one more step in (`--bui-frame-inner`)
+4. **Fill**, `--bui-surface` with a dithered gradient: a lit row under the
+   frame fading in halves, quarters and eighths of dots, the same in shade
+   up from the bottom
+5. **Legend**, optional, the control hints along the bottom edge
+
+## Usage
+
+- **Do** put all text that the player reads on the stage in a window, so it
+  stays readable over any scene.
+- **Do** give a window that takes input a legend that names the keys.
+- **Don't** nest windows. A description box sits beside its window, not in it.
+- **Don't** clip what's inside: the content is never cut at a corner, so
+  keep it inside the padding.
+
+## Legend
+
+`Legend` shows what works right now: the keys while the player uses keys,
+one line for touch after a tap. `CornerLegend` puts it in the stage's
+bottom right corner; held upright, it centres over the bar of controls.
+
+<Canvas of={WindowStories.WithLegend} />
+<Canvas of={WindowStories.Corner} />
+
+## The pixel
+
+The padding is three stage pixels plus a few CSS pixels (more on the tall
+layout), because on a phone's tall stage a stage pixel is too fine to keep
+the text off the frame.

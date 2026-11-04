@@ -14,9 +14,9 @@ importers:
       '@phosphor-icons/react':
         specifier: 2.1.10
         version: 2.1.10(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
-      '@sebald/dither-ui':
+      '@sebald/blip-ui':
         specifier: workspace:*
-        version: link:packages/dither-ui
+        version: link:packages/blip-ui
       '@sebald/pushback':
         specifier: workspace:*
         version: link:packages/pushback
@@ -112,8 +112,11 @@ importers:
         specifier: 5.1.0
         version: 5.1.0
 
-  packages/dither-ui:
+  packages/blip-ui:
     dependencies:
+      '@base-ui/react':
+        specifier: 1.9.0
+        version: 1.9.0(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       cva:
         specifier: 1.0.0-beta.12
         version: 1.0.0-beta.12(typescript@7.0.2)
@@ -169,9 +172,9 @@ importers:
 
   packages/pushback:
     dependencies:
-      '@sebald/dither-ui':
+      '@sebald/blip-ui':
         specifier: workspace:*
-        version: link:../dither-ui
+        version: link:../blip-ui
       cva:
         specifier: 1.0.0-beta.12
         version: 1.0.0-beta.12(typescript@7.0.2)

@@ -1,0 +1,37 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as LedgerStories from './ledger.stories';
+
+<Meta of={LedgerStories} />
+
+# Ledger
+
+Rows of a label and a value with a dot leader between them, like an arcade
+score table or a status screen. Use it for a few numbers the player reads
+across: results, stats, an inventory of counts.
+
+<Canvas of={LedgerStories.Default} />
+<Controls of={LedgerStories.Default} />
+
+## Anatomy
+
+1. **Label**, on the left
+2. **Leader**, a pixel dot every three stage pixels on the baseline
+3. **Value**, on the right, in the heading colour with tabular figures
+
+The ledger fills the width it is given. The leader takes what the label and
+the value leave, six pixels at least.
+
+## Usage
+
+- **Do** keep labels short, one line each.
+- **Do** put numbers in values; tabular figures keep them aligned.
+- **Don't** use it for data with several columns. That is a table.
+
+<Canvas of={LedgerStories.WithMeter} />
+
+## Accessibility
+
+A description list (`dl`) with a `dt` and a `dd` per row, because each row
+is a term and one value. A table would announce columns and headers that
+are not there. The leader is hidden from assistive technology.

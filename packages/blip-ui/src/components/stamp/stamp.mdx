@@ -1,0 +1,52 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as StampStories from './stamp.stories';
+
+<Meta of={StampStories} />
+
+# Stamp
+
+A rubber stamp: a word in a small three by five pixel font, in a frame,
+tilted up in steps and worn in a few pixels of the frame. Use it to mark
+something done on top of an image or a card, like SHIPPED or DONE.
+
+<Canvas of={StampStories.Default} />
+<Controls of={StampStories.Default} />
+
+## Anatomy
+
+1. **Frame**, one pixel line, worn in five places that stay the same along
+   any word
+2. **Word**, letters 3 by 5 pixels, one pixel apart, never worn
+3. **Inside**, darkened (`--bui-ink` at 70%) so the word reads over a face
+4. **Tilt**, the stamp rises a pixel every three letters, in the air between
+   two letters so none is broken
+
+## Letters
+
+The font has these letters: `A D E F H I L N O P S W` and the space. The
+word is upper-cased; any other character is left blank, so check the word
+reads before you ship it. `stampSize(word)` gives its size in stage pixels,
+to place it.
+
+## Variants
+
+| Tone      | Ink             | When to use                            |
+| --------- | --------------- | -------------------------------------- |
+| `danger`  | `--bui-danger`  | A job done: the usual stamp            |
+| `primary` | `--bui-primary` | A job done without a scratch, the best |
+
+<Canvas of={StampStories.Overview} />
+
+<Canvas of={StampStories.OnAFace} />
+
+## Usage
+
+- **Do** position it from outside (absolute, or in a grid). It has no
+  position of its own.
+- **Do** keep words short: the stamp is `4 × letters + 3` pixels wide.
+- **Don't** use it as the only place a result is said. It is decorative.
+
+## Accessibility
+
+- `aria-hidden`: the stamp repeats what the screen says in text

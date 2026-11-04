@@ -1,0 +1,92 @@
+/*
+ * Blip UI's tokens: the roles every component reads, as CSS variables
+ * and nothing else. These are the defaults, a night palette; a game sets
+ * its own values for the same names on its stage (or any element around
+ * the kit). `:where` keeps them at zero specificity, so any theme wins.
+ *
+ * Every accent role is a ramp: the face, a light along its top, a shade
+ * under it, and the letters on it (`-foreground`). No component mixes a
+ * colour of its own; pixel art wants opaque, quantised colours.
+ */
+:where(:root) {
+  /* Ground and outline: the stage behind everything, the ink line round
+     every sprite and window */
+  --bui-ground: #07080d;
+  --bui-ink: #0b0d16;
+
+  /* Surface: the window's fill, lit under its frame, shaded at the
+     bottom; the frame's rings from the outside in */
+  --bui-surface: #131829;
+  --bui-surface-light: #232b4a;
+  --bui-surface-shade: #0a0d1a;
+  --bui-frame: #b7b09d;
+  --bui-frame-dim: #4a5066;
+  --bui-frame-inner: #1c2236;
+
+  /* Text: body, a line to pick, the one picked, headings, prompts, legends */
+  --bui-text: #c9c4b4;
+  --bui-text-bright: #d6d1c2;
+  --bui-text-selected: #ffffff;
+  --bui-heading: #f3eedc;
+  --bui-muted: #8a92b8;
+  --bui-dim: #5c6488;
+
+  /* Empty: an unlit cell, the dots on it, a scroll track */
+  --bui-empty: #0f1433;
+  --bui-empty-dots: #19224f;
+
+  /* Paper: what a speech bubble is cut from */
+  --bui-paper: #f6f3e8;
+  --bui-paper-shade: #cfc9b6;
+  --bui-paper-foreground: #0b0d16;
+
+  /* Primary: the main action, the player's side, the loud line */
+  --bui-primary: #f2c14e;
+  --bui-primary-light: #fff1b8;
+  --bui-primary-shade: #b8871f;
+  --bui-primary-foreground: #0b0d16;
+
+  /* Secondary: the other side, a second accent */
+  --bui-secondary: #f0a36f;
+  --bui-secondary-light: #ffd6b8;
+  --bui-secondary-shade: #b86a35;
+  --bui-secondary-foreground: #0b0d16;
+
+  /* Neutral: the quieter actions, a scroll thumb */
+  --bui-neutral: #8a92b8;
+  --bui-neutral-light: #d5d9e6;
+  --bui-neutral-shade: #5c6488;
+  --bui-neutral-foreground: #0b0d16;
+
+  /* Info: time, a clock running out */
+  --bui-info: #6ec3f2;
+  --bui-info-light: #b7e1f8;
+  --bui-info-shade: #3d8fc9;
+  --bui-info-foreground: #0b0d16;
+
+  /* Danger: what can't be undone, a stamp, the last seconds */
+  --bui-danger: #d9483b;
+  --bui-danger-light: #f07a68;
+  --bui-danger-shade: #9a2c24;
+  --bui-danger-foreground: #fffdf2;
+  /* The darkest red: the rim inside a stopwatch's case */
+  --bui-danger-rim: #5e1a16;
+
+  /* A spark: the hottest highlight, a flash */
+  --bui-spark: #fffdf2;
+
+  /* The ground behind an overlay, the stage dimmed */
+  --bui-scrim: rgb(7 8 13 / 0.8);
+
+  /* The keyboard's focus ring */
+  --bui-focus: oklch(0.74 0.1 65 / 0.8);
+
+  /* The finest a control's pixel gets, in CSS pixels */
+  --bui-min-px: 3px;
+
+  /* Held upright, the bar of controls along the bottom (0 elsewhere) */
+  --bui-bar: 0px;
+
+  /* One step of the stage's clock: 8 frames a second */
+  --bui-tick: 125ms;
+}

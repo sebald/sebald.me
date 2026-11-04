@@ -1,6 +1,6 @@
 'use client';
 
-import { CORNERS, rounded } from '@sebald/dither-ui';
+import { CORNERS, rounded } from '@sebald/blip-ui';
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
 import { PALETTE } from './palette';

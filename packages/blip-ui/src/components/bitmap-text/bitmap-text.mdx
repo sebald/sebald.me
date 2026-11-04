@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as BitmapTextStories from './bitmap-text.stories';
+
+<Meta of={BitmapTextStories} />
+
+# BitmapText
+
+Text in a five by seven pixel font, drawn like the logo: an ink line round
+each letter, a hard drop to the lower right, the top row lit and the bottom
+two shaded. Use it for a title or a call that should feel like part of the
+art. Running text is plain text, not BitmapText.
+
+<Canvas of={BitmapTextStories.Default} />
+<Controls of={BitmapTextStories.Default} />
+
+## Anatomy
+
+1. **Ink line**, one pixel round every letter pixel
+2. **Drop**, the ink line again, two pixels down and to the right (`shadow`)
+3. **Letter**, the top row in the tone's light, the bottom two in its shade,
+   the rest in its main colour
+
+## Letters
+
+The font has these letters: `A D E F I L M N O P R S T U W Y` and the
+space. The text is upper-cased; any other character is left blank.
+
+## Variants
+
+`tone` picks the accent ramp the letters take their three colours from.
+
+| Tone        | Ramp                                              |
+| ----------- | ------------------------------------------------- |
+| `primary`   | The primary colour: the winning, loud call        |
+| `secondary` | The secondary colour                              |
+| `neutral`   | Quiet: a loss, something that is over             |
+| `info`      | The info colour                                   |
+| `danger`    | The danger colour                                 |
+| `spark`     | White-hot, shaded in the primary: a flawless line |
+
+<Canvas of={BitmapTextStories.Overview} />
+
+## Size
+
+`scale` is stage pixels per letter pixel (2 by default). The word is
+`6 × letters − 1` letter pixels wide.
+
+<Canvas of={BitmapTextStories.Title} />
+
+## Usage
+
+- **Do** keep it to a word or two.
+- **Do** use `neutral` for the bad news and `primary` for the good.
+- **Don't** set a paragraph in it.
+- **Don't** animate it here: slam, drop and sparkle are for the screen that
+  uses it.
+
+## Accessibility
+
+- `aria-hidden`, since an SVG made of rectangles has no text. Put the same
+  words in text for assistive technology (a visually hidden element, or the
+  region's label)

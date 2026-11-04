@@ -1,0 +1,47 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TabsStories from './tabs.stories';
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+A row of tabs and the panel each one shows, for a screen with pages: a
+glossary by role, a codex by chapter. Built on Base UI's Tabs, with the
+game's pixel look.
+
+<Canvas of={TabsStories.Default} />
+<Controls of={TabsStories.Default} />
+
+## Anatomy
+
+1. **TabList**, the centred row
+2. **Tab**, a label with a stage-pixel underline; the active one is in the
+   primary colour
+3. **TabPanel**, what the tab shows
+
+<Canvas of={TabsStories.Overview} />
+
+## Usage
+
+- **Do** give each `Tab` a `value` and the `TabPanel` the same one.
+- **Do** name the list with `aria-label`.
+- **Do** turn on `keys` on a screen where nothing else uses left and right.
+- **Don't** use tabs for steps in a flow. They are pages that can be
+  visited in any order.
+
+## Input
+
+- Click or tap a tab
+- Left and right (or Home and End) on a focused tab, as Base UI does
+- With `keys`, left and right (or A and D) switch from anywhere and wrap
+  around
+
+## Sound
+
+`move` when the active tab changes.
+
+## Accessibility
+
+Base UI provides `tablist`, `tab` and `tabpanel`, with `aria-selected`,
+`aria-controls` and a roving tab stop.

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@sebald/dither-ui';
+import { Button } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, type Look } from '../lib/characters';
