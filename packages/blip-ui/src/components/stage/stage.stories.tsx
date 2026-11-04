@@ -39,13 +39,6 @@ const meta = {
     crop: { control: 'number', table: { defaultValue: { summary: '0' } } },
     turned: { control: false },
   },
-  decorators: [
-    Story => (
-      <div className="w-[calc(var(--px)*320)] max-w-none">
-        <Story />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof Stage>;
 
 export default meta;
@@ -64,6 +57,14 @@ const Title = () => (
  * controls. Unset in a game, it fits the viewport (see Fitted)
  */
 export const Default: Story = {
+  // In a column of the stage's width, as in a page
+  decorators: [
+    Story => (
+      <div className="w-[calc(var(--px)*320)] max-w-none">
+        <Story />
+      </div>
+    ),
+  ],
   render: (args, { globals }) => (
     <Stage {...args} scale={args.scale ?? Number(globals.scale ?? 3)}>
       <Title />
@@ -80,7 +81,6 @@ export const Default: Story = {
  */
 export const Fitted: Story = {
   parameters: { controls: { disable: true }, layout: 'fullscreen' },
-  decorators: [Story => <Story />],
   render: () => (
     <Stage
       label="Stage"

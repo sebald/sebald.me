@@ -54,10 +54,13 @@ export const Default: Story = {
 const Stage = ({
   width,
   height,
+  fit,
   children,
 }: {
   width: number;
   height: number;
+  /** At least this big, in em: text has a floor, so at 1x it needs more room than the stage pixels give */
+  fit?: { width: number; height: number };
   children: ReactNode;
 }) => {
   const pixels = usePixels();
@@ -66,8 +69,8 @@ const Stage = ({
       {...pixels}
       className="bg-(--bui-ground)"
       style={{
-        width: `calc(var(--px) * ${width})`,
-        height: `calc(var(--px) * ${height})`,
+        width: `max(calc(var(--px) * ${width}), ${fit?.width ?? 0}em)`,
+        height: `max(calc(var(--px) * ${height}), ${fit?.height ?? 0}em)`,
       }}
     >
       {children}
@@ -168,7 +171,11 @@ export const InAWindow: Story = {
   // Upright the rows are a thumb's height and the note goes under the
   // window: more rows, the full width
   render: (_, { globals }) => (
-    <Stage width={320} height={globals.layout === 'tall' ? 300 : 110}>
+    <Stage
+      width={320}
+      height={globals.layout === 'tall' ? 300 : 110}
+      fit={{ width: 32, height: 13 }}
+    >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
         <Window
           className="w-[19em] tall:w-full"
@@ -205,9 +212,13 @@ const LONG: PickerItem[] = Array.from({ length: 12 }, (_, i) =>
 export const ScrollingList: Story = {
   name: 'Scrolling list',
   parameters: { controls: { disable: true } },
-  render: () => (
-    <Stage width={160} height={110}>
-      <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)] tall:left-0 tall:h-[calc(var(--px)*160)] tall:w-full">
+  // Upright the window spans the stage and shows more rows
+  render: (_, { globals }) => (
+    <Stage
+      width={globals.layout === 'tall' ? 320 : 160}
+      height={globals.layout === 'tall' ? 172 : 110}
+    >
+      <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)] tall:inset-x-[calc(var(--px)*6)] tall:h-[calc(var(--px)*160)] tall:w-auto">
         <Picker label="Colleagues" items={LONG} />
       </Window>
     </Stage>
