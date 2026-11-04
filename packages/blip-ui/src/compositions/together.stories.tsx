@@ -67,6 +67,10 @@ const Stage = ({ children }: { children: ReactNode }) => {
 
 const meta = {
   title: 'Compositions/Together',
+  // A whole stage at 1x has no room for its words (text has a floor, the
+  // stage's 320 pixels don't grow): the game's problem to solve, not a
+  // look to keep as a baseline
+  tags: ['no-vrt-1x'],
   parameters: { controls: { disable: true } },
   decorators: [
     Story => (
