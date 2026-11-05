@@ -143,9 +143,7 @@ const WINDOW_ITEMS: PickerItem[] = [
     label: (
       <span className="flex items-center gap-[1ch]">
         Mode
-        <Setting>
-          Easy
-        </Setting>
+        <Setting>Easy</Setting>
       </span>
     ),
     note: 'A ghost helps you and nothing rushes you.',
