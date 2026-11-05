@@ -81,12 +81,7 @@ export { Button, type ButtonProps } from './components/button/button';
 export { Ledger, type LedgerProps } from './components/ledger/ledger';
 export { Meter, type MeterProps } from './components/meter/meter';
 export { Timer, TIMER_SIZE, type TimerProps } from './components/timer/timer';
-export {
-  ControlGroup,
-  type ControlGroupProps,
-  Controls,
-  type ControlsProps,
-} from './components/controls/controls';
+export { Controls, type ControlsProps } from './components/controls/controls';
 export {
   IconButton,
   type IconButtonProps,

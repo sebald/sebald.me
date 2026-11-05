@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Button } from '../components/button/button';
-import { ControlGroup, Controls } from '../components/controls/controls';
+import { Controls } from '../components/controls/controls';
 import { IconButton, IconToggle } from '../components/icon-button/icon-button';
 import { Ledger } from '../components/ledger/ledger';
 import { Line } from '../components/line/line';
@@ -43,20 +43,17 @@ const Stage = ({ children }: { children: ReactNode }) => {
     >
       {children}
       <Controls show="always">
-        <ControlGroup side="start">
-          <IconButton icon="back" aria-label="Back" label="Back" />
-        </ControlGroup>
-        <ControlGroup side="end">
-          <IconToggle
-            icon="soundOff"
-            pressedIcon="soundOn"
-            aria-label="Sound"
-            label="Sound off"
-            pressedLabel="Sound on"
-            pressed
-            onPressedChange={noop}
-          />
-        </ControlGroup>
+        <IconButton slot="leave" icon="back" aria-label="Back" label="Back" />
+
+        <IconToggle
+          icon="soundOff"
+          pressedIcon="soundOn"
+          aria-label="Sound"
+          label="Sound off"
+          pressedLabel="Sound on"
+          pressed
+          onPressedChange={noop}
+        />
       </Controls>
     </Pixels>
   );

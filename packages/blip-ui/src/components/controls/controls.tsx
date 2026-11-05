@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, createContext, useContext } from 'react';
+import { type ReactNode, createContext } from 'react';
 
 import { useInputKind } from '../../hooks/use-input-kind';
 import { usePixels } from '../../providers/pixels';
@@ -16,7 +16,10 @@ type Layout = 'bar' | 'corner';
 export const ControlsLayout = createContext<Layout>('corner');
 
 export interface ControlsProps {
-  /** The `ControlGroup`s, a start and an end */
+  /**
+   * Its buttons (`IconButton`, `IconToggle`), each with the `slot` it
+   * fills: `leave` (Back, Pause) or `system` (the sound, fullscreen)
+   */
   children: ReactNode;
   /**
    * On the wide stage: show the corners for touch only (the keyboard has
@@ -28,11 +31,12 @@ export interface ControlsProps {
 }
 
 /**
- * The touch versions of a game's keys, in two `ControlGroup`s. On the
- * tall stage a bar along the bottom, `--bui-bar` tall and sized for a
- * thumb; on a wide stage, for touch, small pixel buttons in the top
- * corners. The buttons in it (`IconButton`, `IconToggle`) take their look
- * from where they are.
+ * The touch versions of a game's keys. Each button says what it is by
+ * its `slot`, and Controls places it: what leaves (`leave`: Back, Pause)
+ * at the start, the game's switches (`system`: the sound, fullscreen) at
+ * the end. On the tall stage a bar along the bottom, `--bui-bar` tall and
+ * sized for a thumb; on a wide stage, for touch, small pixel buttons in
+ * the top corners. The buttons take their look from where they are.
  *
  * Controls knows no keys. The game binds Esc and M (see `useKeys`) and
  * its buttons call the same actions.
@@ -56,35 +60,5 @@ export const Controls = ({
         {children}
       </div>
     </ControlsLayout>
-  );
-};
-
-export interface ControlGroupProps {
-  /**
-   * Which end: `start` the top left corner or the bar's left, for Back or
-   * Pause; `end` the top right corner or the bar's right, for the sound
-   * and fullscreen
-   */
-  side: 'start' | 'end';
-  /** Its buttons, side by side; two or three at most */
-  children: ReactNode;
-  className?: string;
-}
-
-/** A group of the controls at one end, placed by `Controls` */
-export const ControlGroup = ({
-  side,
-  children,
-  className,
-}: ControlGroupProps) => {
-  const layout = useContext(ControlsLayout);
-  return (
-    <span
-      data-slot="control-group"
-      data-side={side}
-      className={controls.group({ layout, side, className })}
-    >
-      {children}
-    </span>
   );
 };

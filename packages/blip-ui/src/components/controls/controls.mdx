@@ -8,20 +8,21 @@ import * as ControlsStories from './controls.stories';
 
 The touch versions of a game's keys. On the tall stage (a phone held
 upright) a bar along the bottom, `--bui-bar` tall; on the wide stage small
-pixel buttons in the corners. It knows no buttons of its own: you put them
-in two `ControlGroup`s, and the same JSX works in both layouts. The buttons
-take their look from it, so they have no layout prop.
+pixel buttons in the corners. It knows no buttons of its own: each button
+says what it is with its `slot`, and Controls places it, so the same JSX
+works in both layouts. The buttons take their look from it, so they have
+no layout prop.
 
 <Canvas of={ControlsStories.Default} />
 <Controls of={ControlsStories.Default} />
 
 ## Anatomy
 
-1. **ControlGroup `side="start"`**, the top left corner, or the left of the
-   bar: Back or Pause
-2. **ControlGroup `side="end"`**, the top right corner, or the right of the
-   bar: sound, fullscreen; on the bar the labels come first, the icons at
-   the edge
+1. **`slot="leave"`**, what leaves the screen (Back, Pause): the top left
+   corner, or the left of the bar
+2. **`slot="system"`**, the game's switches (the sound, fullscreen), the
+   default: the top right corner, or the right of the bar, where the labels
+   come first and the icons sit at the edge
 3. **Bar**, along the bottom of the tall stage, with a line above it
 
 <Canvas of={ControlsStories.Overview} />
@@ -39,35 +40,34 @@ is 0.
 
 ## Usage
 
-- **Do** put `IconButton`s and `IconToggle`s in the groups, with a
-  `label`: the bar shows it, a corner shows the icon alone.
+- **Do** give each button its `slot`, `leave` for what leaves the screen;
+  the rest are `system`. Where they go is Controls' rule, not the screen's.
+- **Do** give each button a `label`: the bar shows it, a corner shows the
+  icon alone.
 - **Do** keep the keys in the game. Controls has none: bind Esc and M with
   `useKeys` and have the buttons call the same actions.
-- **Don't** put more than two or three buttons in a group.
+- **Don't** put more than two or three buttons in a slot.
 
 ```tsx
 useKeys({ Escape: back, m: toggleSound });
 
 <Controls>
-  <ControlGroup side="start">
-    <IconButton
-      icon="back"
-      label="Back"
-      aria-label="Back (Esc)"
-      onClick={back}
-    />
-  </ControlGroup>
-  <ControlGroup side="end">
-    <IconToggle
-      icon="soundOff"
-      pressedIcon="soundOn"
-      label="Sound off"
-      pressedLabel="Sound on"
-      aria-label="Sound (M)"
-      pressed={sound}
-      onPressedChange={toggleSound}
-    />
-  </ControlGroup>
+  <IconButton
+    slot="leave"
+    icon="back"
+    label="Back"
+    aria-label="Back (Esc)"
+    onClick={back}
+  />
+  <IconToggle
+    icon="soundOff"
+    pressedIcon="soundOn"
+    label="Sound off"
+    pressedLabel="Sound on"
+    aria-label="Sound (M)"
+    pressed={sound}
+    onPressedChange={toggleSound}
+  />
 </Controls>;
 ```
 

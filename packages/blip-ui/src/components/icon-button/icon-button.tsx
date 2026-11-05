@@ -22,8 +22,14 @@ const keep = (event: PointerEvent) => event.stopPropagation();
 
 export interface IconButtonProps extends Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
-  'aria-label'
+  'aria-label' | 'slot'
 > {
+  /**
+   * What it is, for `Controls` to place it: `leave` (Back, Pause) goes to
+   * the start, `system` (the sound, fullscreen) to the end
+   * @default 'system'
+   */
+  slot?: 'leave' | 'system';
   /** What the button does, for assistive technology (and a hint of its key) */
   'aria-label': string;
   /** Which icon, by name */
@@ -40,11 +46,12 @@ export interface IconButtonProps extends Omit<
  * touch. A tap stays with it (`pointerdown` and `click` do not bubble).
  * Its look follows where it is: in the tall stage's bar it shows its
  * label and a bigger icon, in a corner (or on its own) the icon alone.
- * Put it in a `ControlGroup`.
+ * Put it in `Controls`, with the `slot` it fills.
  */
 export const IconButton = ({
   icon,
   label,
+  slot = 'system',
   className,
   onClick,
   children,
@@ -56,6 +63,7 @@ export const IconButton = ({
     <button
       type="button"
       data-slot="icon-button"
+      slot={slot}
       className={iconButton({ layout, className })}
       onPointerDown={keep}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {

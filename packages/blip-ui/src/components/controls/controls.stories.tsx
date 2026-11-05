@@ -2,32 +2,29 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Pixels } from '../../providers/pixels';
 import { IconButton, IconToggle } from '../icon-button/icon-button';
-import { ControlGroup, Controls } from './controls';
+import { Controls } from './controls';
 
 /** The usual two groups: Back at the start, fullscreen and the sound at the end */
 const Groups = () => (
   <>
-    <ControlGroup side="start">
-      <IconButton icon="back" label="Back" aria-label="Back (Esc)" />
-    </ControlGroup>
-    <ControlGroup side="end">
-      <IconToggle
-        pressed={false}
-        icon="fullscreen"
-        pressedIcon="exitFullscreen"
-        aria-label="Fullscreen"
-        onPressedChange={() => {}}
-      />
-      <IconToggle
-        pressed
-        icon="soundOff"
-        pressedIcon="soundOn"
-        label="Sound off"
-        pressedLabel="Sound on"
-        aria-label="Sound (M)"
-        onPressedChange={() => {}}
-      />
-    </ControlGroup>
+    <IconButton slot="leave" icon="back" label="Back" aria-label="Back (Esc)" />
+
+    <IconToggle
+      pressed={false}
+      icon="fullscreen"
+      pressedIcon="exitFullscreen"
+      aria-label="Fullscreen"
+      onPressedChange={() => {}}
+    />
+    <IconToggle
+      pressed
+      icon="soundOff"
+      pressedIcon="soundOn"
+      label="Sound off"
+      pressedLabel="Sound on"
+      aria-label="Sound (M)"
+      onPressedChange={() => {}}
+    />
   </>
 );
 

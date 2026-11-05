@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
 import { Pixels } from '../../providers/pixels';
-import { ControlGroup, Controls } from '../controls/controls';
+import { Controls } from '../controls/controls';
 import { ICONS, type IconName } from '../pixel-icon/icons';
 import { IconButton, IconToggle } from './icon-button';
 
@@ -31,10 +31,17 @@ const Label = ({ children }: { children: string }) => (
   <span className="text-[0.75em] text-(--bui-dim)">{children}</span>
 );
 
-/** A button and a toggle in each state, and a disabled one, in the same group */
+/** A button and a disabled one at the start, a toggle off and on at the end */
 const States = () => (
-  <ControlGroup side="start">
-    <IconButton icon="back" label="Back" aria-label="Back" />
+  <>
+    <IconButton slot="leave" icon="back" label="Back" aria-label="Back" />
+    <IconButton
+      slot="leave"
+      icon="pause"
+      label="Pause"
+      aria-label="Pause"
+      disabled
+    />
     <IconToggle
       pressed={false}
       icon="soundOff"
@@ -53,8 +60,7 @@ const States = () => (
       aria-label="Sound"
       onPressedChange={() => {}}
     />
-    <IconButton icon="pause" label="Pause" aria-label="Pause" disabled />
-  </ControlGroup>
+  </>
 );
 
 /**

@@ -79,6 +79,12 @@ Learned from React Aria and Marigold, which do the same with slots.
   styles: a window's body puts a legend along its bottom edge
   (`*:data-[slot=legend]:mt-auto`), the stage puts one in its corner. So
   the same `<Legend>` works anywhere, and a new parent adds its own rule.
+- **A named slot says what a child is, not where it goes.** Where the
+  parent has places for different kinds of children, the child names its
+  kind with `slot` and the parent decides the place:
+  `<IconButton slot="leave">` goes where `Controls` puts what leaves the
+  screen (the start), the rest to the end. The rule lives in one parent,
+  not in every screen.
 - **Context for what a child must know to behave.** Where CSS can't do it,
   the parent tells its children through context, never through a prop the
   caller has to repeat: `Controls` tells its buttons whether they are on
