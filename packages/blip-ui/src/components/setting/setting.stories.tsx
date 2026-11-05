@@ -14,6 +14,13 @@ const meta = {
     },
     last: { control: 'boolean', table: { defaultValue: { summary: 'false' } } },
   },
+} satisfies Meta<typeof Setting>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/** In a row as a Picker item shows it: the setting's name, its value at the end */
+export const Default: Story = {
   decorators: [
     Story => (
       <div className="flex w-[calc(var(--px)*80)] items-center gap-[1ch] text-(--bui-text-bright)">
@@ -22,12 +29,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Setting>;
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Default: Story = {};
+};
 
 /** A choice, which goes round with both arrows lit, and a range at its min and its max, where the arrow it cannot follow is dim */
 export const Overview: Story = {
@@ -36,12 +38,13 @@ export const Overview: Story = {
     <div className="grid w-[calc(var(--px)*80)] gap-2 text-(--bui-text-bright)">
       {(
         [
-          ['choice', 'Normal', false, false],
-          ['min', '0', true, false],
-          ['max', '10', false, true],
+          ['Mode', 'choice', 'Normal', false, false],
+          ['Volume', 'min', '0', true, false],
+          ['Volume', 'max', '10', false, true],
         ] as const
-      ).map(([kind, value, first, last]) => (
+      ).map(([name, kind, value, first, last]) => (
         <div key={kind} className="flex items-center gap-[1ch]">
+          {name}
           <span className="text-[0.75em] text-(--bui-dim)">{kind}</span>
           <Setting first={first} last={last}>
             {value}
