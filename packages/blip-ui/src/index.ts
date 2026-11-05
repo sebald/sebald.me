@@ -104,8 +104,12 @@ export { useScale } from './components/stage/use-scale';
 export { Confirm, type ConfirmProps } from './components/confirm/confirm';
 export {
   Picker,
-  type PickerItem,
+  PickerGroup,
+  PickerItem,
+  type PickerItemProps,
   type PickerProps,
+  PickerSetting,
+  type PickerSettingProps,
   ScrollRail,
 } from './components/picker/picker';
 export {

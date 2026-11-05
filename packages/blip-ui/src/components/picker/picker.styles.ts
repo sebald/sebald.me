@@ -8,7 +8,15 @@ export const picker = {
       'grid min-h-0 flex-1 content-start gap-(--bui-px) overflow-y-auto',
       // The native scrollbar is off: the pixel one beside it shows the rest
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+      // A group after other items: room above it
+      '*:data-[slot=picker-group]:not-first:mt-[calc(var(--bui-px)*4)]',
     ],
+  }),
+  /** A group's items, spaced as the menu's */
+  group: cva({ base: 'grid gap-(--bui-px)' }),
+  /** A setting's row: its name, the value at the end */
+  setting: cva({
+    base: 'flex w-full items-center gap-[calc(var(--bui-px)*4)]',
   }),
   item: cva({
     base: [
@@ -24,18 +32,22 @@ export const picker = {
         true: 'text-(--bui-text-selected)',
         false: 'text-(--bui-text-bright) hover:text-(--bui-text-selected)',
       },
-      accent: {
-        true: 'text-(--bui-primary) hover:text-(--bui-primary-light)',
+      variant: {
+        default: '',
+        /** The loud one */
+        accent: 'text-(--bui-primary) hover:text-(--bui-primary-light)',
+        /** It leaves: looks like any item, sounds like stepping back */
+        back: '',
       },
     },
     compoundVariants: [
       {
         selected: true,
-        accent: true,
+        variant: 'accent',
         className: 'text-(--bui-primary-light)',
       },
     ],
-    defaultVariants: { selected: false },
+    defaultVariants: { selected: false, variant: 'default' },
   }),
   /** The cursor: a pixel triangle, in `--bui-px` like every control */
   cursor: cva({

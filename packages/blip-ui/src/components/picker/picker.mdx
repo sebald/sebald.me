@@ -9,7 +9,23 @@ import * as PickerStories from './picker.stories';
 A list the player moves through with a cursor: the title menu, options,
 the choices in a duel. It is always open and always listening, so one
 picker at a time is `active`. Lists of choices are a Picker, not a column
-of buttons.
+of buttons. It is built from its parts, so the JSX reads like the menu:
+
+```tsx
+<Picker label="Options">
+  <PickerSetting id="mode" value="Normal" onStep={step}>
+    Mode
+  </PickerSetting>
+  <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
+    Hard mode
+  </PickerItem>
+  <PickerGroup>
+    <PickerItem id="back" variant="back" onSelect={close}>
+      Back
+    </PickerItem>
+  </PickerGroup>
+</Picker>
+```
 
 <Canvas of={PickerStories.Default} />
 <Controls of={PickerStories.Default} />
@@ -22,21 +38,25 @@ of buttons.
    more, and a track with the view's place on it
 4. **Note**, a small window beside the list's own, at the current row
 
-## States
+## Parts
 
-An item can be selected (the cursor is on it), accent, disabled or dimmed.
+| Part            | What it is                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `PickerItem`    | Something to pick                                                                           |
+| `PickerSetting` | A setting: its name and its value between the step arrows; left and right step it (Setting) |
+| `PickerGroup`   | Items that belong together, with room above them                                            |
+
+## Variants and states
 
 <Canvas of={PickerStories.Overview} />
 
-| Item option | Effect                                                                  |
-| ----------- | ----------------------------------------------------------------------- |
-| `accent`    | The loud one: primary colour, blinking (steady under reduced motion)    |
-| `disabled`  | Dimmed and reachable, but it bumps when picked. Give it a `note` why    |
-| `dim`       | A label opacity from 0 to 1, for a wrong choice you don't want to hide  |
-| `note`      | What it does, or why it is off, in a window beside the list             |
-| `onStep`    | Left and right on the row, for a setting (see Setting)                  |
-| `back`      | It leaves: Back or Cancel sound like stepping back, not like confirming |
-| `apart`     | Room above it, the first of a group                                     |
+| Prop               | Effect                                                                         |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `variant="accent"` | The loud one: primary colour, blinking (steady under reduced motion)           |
+| `variant="back"`   | It leaves: Back or Cancel, which sound like stepping back, not like confirming |
+| `disabled`         | Dimmed and reachable, but it bumps when picked. Give it a `note` why           |
+| `ruledOut`         | From 0 to 1, how far a hint has ruled it out: it fades, still there to pick    |
+| `note`             | What it does, or why it is off, in a window beside the list                    |
 
 ## Compositions
 
@@ -66,7 +86,7 @@ layout it goes under the window, as wide as it.
 ## Input
 
 - Up and down, or W and S, move; the list wraps
-- Left and right, or A and D, step an item that has `onStep`
+- Left and right, or A and D, step a `PickerSetting`
 - Enter or Space picks the current item
 - Hovering a row moves the cursor; a click or tap picks it
 - Under a finger there is no cursor: only a row with a note is marked

@@ -3,7 +3,7 @@
 import { type ReactNode, useMemo } from 'react';
 
 import { useKeys } from '../../hooks/use-keys';
-import { Picker } from '../picker/picker';
+import { Picker, PickerItem } from '../picker/picker';
 import { Heading, Text } from '../text/text';
 import { Legend, Window } from '../window/window';
 import { confirm as styles } from './confirm.styles';
@@ -51,15 +51,14 @@ export const Confirm = ({
         <div className={styles.body()}>
           <Heading>{title}</Heading>
           <Text className="text-balance">{children}</Text>
-          <Picker
-            label={title}
-            className={styles.picker()}
-            initial="cancel"
-            items={[
-              { id: 'cancel', label: cancel, back: true, onSelect: onCancel },
-              { id: 'confirm', label: confirm, onSelect: onConfirm },
-            ]}
-          />
+          <Picker label={title} className={styles.picker()} initial="cancel">
+            <PickerItem id="cancel" variant="back" onSelect={onCancel}>
+              {cancel}
+            </PickerItem>
+            <PickerItem id="confirm" onSelect={onConfirm}>
+              {confirm}
+            </PickerItem>
+          </Picker>
         </div>
         <Legend
           keys={[

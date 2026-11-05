@@ -7,8 +7,12 @@ import { IconButton, IconToggle } from '../components/icon-button/icon-button';
 import { Ledger } from '../components/ledger/ledger';
 import { Line } from '../components/line/line';
 import { Meter } from '../components/meter/meter';
-import { Picker, type PickerItem } from '../components/picker/picker';
-import { Setting } from '../components/setting/setting';
+import {
+  Picker,
+  PickerGroup,
+  PickerItem,
+  PickerSetting,
+} from '../components/picker/picker';
 import { SpeechBubble } from '../components/speech-bubble/speech-bubble';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
 import { Heading, ScreenTitle, Text } from '../components/text/text';
@@ -80,29 +84,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const MENU: PickerItem[] = [
-  { id: 'start', label: 'Start the run', accent: true, onSelect: noop },
-  {
-    id: 'music',
-    label: (
-      <span className="flex w-full">
-        Music
-        <Setting>On</Setting>
-      </span>
-    ),
-    onStep: noop,
-    onSelect: noop,
-  },
-  {
-    id: 'hard',
-    label: 'Hard mode',
-    disabled: true,
-    note: 'Beat the Stakeholder first.',
-    onSelect: noop,
-  },
-  { id: 'back', label: 'Back', back: true, apart: true, onSelect: noop },
-];
-
 /**
  * A menu screen: the title along the top, a window with a heading, a
  * picker with a setting and a disabled item, its legend, and the
@@ -120,7 +101,27 @@ export const Menu: Story = {
           <Text className="mb-[calc(var(--px)*3)]">
             Ships on Friday. Regrets nothing.
           </Text>
-          <Picker items={MENU} label="Menu" active={false} />
+          <Picker label="Menu" active={false}>
+            <PickerItem id="start" variant="accent" onSelect={noop}>
+              Start the run
+            </PickerItem>
+            <PickerSetting id="music" value="On" onStep={noop}>
+              Music
+            </PickerSetting>
+            <PickerItem
+              id="hard"
+              disabled
+              note="Beat the Stakeholder first."
+              onSelect={noop}
+            >
+              Hard mode
+            </PickerItem>
+            <PickerGroup>
+              <PickerItem id="back" variant="back" onSelect={noop}>
+                Back
+              </PickerItem>
+            </PickerGroup>
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],

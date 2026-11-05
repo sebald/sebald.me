@@ -88,9 +88,12 @@ Learned from React Aria and Marigold, which do the same with slots.
 
 ## Lists of items
 
-Prefer children over arrays of data: a menu built from `<PickerItem>`s
-reads like the screen it makes, and each item's kind is its `variant`.
-(The `Picker` still takes `items`; moving it is planned.)
+Children over arrays of data: a menu built from `<PickerItem>`s reads like
+the screen it makes, and each item's kind is its `variant` (`accent`,
+`back`). An item registers itself with its list through context, and the
+list takes the order from the DOM, so items work inside groups and inside
+a screen's own components. What belongs to an item, its description box,
+the item renders itself.
 
 ## Checked by tests
 

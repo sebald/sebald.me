@@ -2,29 +2,18 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
-import { Setting } from '../setting/setting';
 import { Heading } from '../text/text';
 import { Legend, Window } from '../window/window';
-import { Picker, type PickerItem } from './picker';
+import { Picker, PickerGroup, PickerItem, PickerSetting } from './picker';
 
 const noop = () => {};
-
-const ITEMS: PickerItem[] = [
-  { id: 'start', label: 'Start the meeting', onSelect: noop },
-  { id: 'agenda', label: 'Read the agenda', onSelect: noop },
-  { id: 'leave', label: 'Leave', back: true, onSelect: noop },
-];
 
 const meta = {
   title: 'Components/Picker',
   component: Picker,
-  args: {
-    items: ITEMS,
-    label: 'Menu',
-    active: true,
-  },
+  args: { label: 'Menu', active: true, children: null },
   argTypes: {
-    items: { control: 'object' },
+    children: { control: false },
     label: { control: 'text' },
     initial: { control: 'text' },
     active: {
@@ -48,6 +37,19 @@ export const Default: Story = {
       </div>
     ),
   ],
+  render: args => (
+    <Picker {...args}>
+      <PickerItem id="start" onSelect={noop}>
+        Start the meeting
+      </PickerItem>
+      <PickerItem id="agenda" onSelect={noop}>
+        Read the agenda
+      </PickerItem>
+      <PickerItem id="leave" variant="back" onSelect={noop}>
+        Leave
+      </PickerItem>
+    </Picker>
+  ),
 };
 
 /** A stage of its own, in stage pixels: the description box is placed on it */
@@ -78,86 +80,54 @@ const Stage = ({
   );
 };
 
-const dim = (id: string, label: string, extra?: Partial<PickerItem>) => ({
-  id,
-  label,
-  onSelect: noop,
-  ...extra,
-});
+/** Two items with the same props, the cursor on the first */
+const Pair = ({
+  name,
+  ...props
+}: {
+  name: string;
+  variant?: 'accent' | 'back';
+  disabled?: boolean;
+  ruledOut?: number;
+}) => (
+  <Picker label={name} initial="a" active={false}>
+    <PickerItem id="a" onSelect={noop} {...props}>
+      Selected
+    </PickerItem>
+    <PickerItem id="b" onSelect={noop} {...props}>
+      Idle
+    </PickerItem>
+  </Picker>
+);
 
-const COLUMNS: { name: string; items: PickerItem[] }[] = [
-  {
-    name: 'default',
-    items: [dim('a', 'Selected'), dim('b', 'Idle')],
-  },
-  {
-    name: 'accent',
-    items: [
-      dim('a', 'Selected', { accent: true }),
-      dim('b', 'Idle', { accent: true }),
-    ],
-  },
-  {
-    name: 'disabled',
-    items: [
-      dim('a', 'Selected', { disabled: true }),
-      dim('b', 'Idle', { disabled: true }),
-    ],
-  },
-  {
-    name: 'dimmed',
-    items: [dim('a', 'Selected', { dim: 0.5 }), dim('b', 'Idle', { dim: 0.5 })],
-  },
-];
+const COLUMNS = [
+  { name: 'default' },
+  { name: 'accent', variant: 'accent' },
+  { name: 'back', variant: 'back' },
+  { name: 'disabled', disabled: true },
+  { name: 'ruled out', ruledOut: 0.66 },
+] as const;
 
 /**
- * An item in every state: selected (the cursor is on it) and idle, in
- * its colours as is, accent, disabled and dimmed. Selected is the first
- * line of each list
+ * An item in every variant and state: selected (the cursor is on it)
+ * and idle, as is, accent, back, disabled and ruled out by a hint.
+ * Selected is the first line of each list
  */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[repeat(4,max-content)] gap-x-[calc(var(--px)*6)] gap-y-2">
+    <div className="grid w-fit grid-cols-[repeat(5,max-content)] gap-x-[calc(var(--px)*6)] gap-y-2">
       {COLUMNS.map(({ name }) => (
         <span key={name} className="text-[0.75em] text-(--bui-dim)">
           {name}
         </span>
       ))}
-      {COLUMNS.map(({ name, items }) => (
-        <Picker
-          key={name}
-          label={name}
-          items={items}
-          initial="a"
-          active={false}
-        />
+      {COLUMNS.map(column => (
+        <Pair key={column.name} {...column} />
       ))}
     </div>
   ),
 };
-
-const WINDOW_ITEMS: PickerItem[] = [
-  {
-    id: 'mode',
-    label: (
-      <span className="flex items-center gap-[1ch]">
-        Mode
-        <Setting>Easy</Setting>
-      </span>
-    ),
-    note: 'A ghost helps you and nothing rushes you.',
-    onSelect: noop,
-    onStep: noop,
-  },
-  dim('music', 'Music', { note: 'M mutes everything, anywhere.' }),
-  dim('erase', 'Erase save', {
-    apart: true,
-    disabled: true,
-    note: 'Nothing saved yet.',
-  }),
-  dim('back', 'Back', { apart: true, back: true }),
-];
 
 /**
  * The usual place of a picker: a title, the list and the keys in a
@@ -177,11 +147,38 @@ export const InAWindow: Story = {
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
         <Window className="w-[19em] tall:w-full">
           <Heading>Options</Heading>
-          <Picker
-            label="Options"
-            className="mt-[calc(var(--px)*3)]"
-            items={WINDOW_ITEMS}
-          />
+          <Picker label="Options" className="mt-[calc(var(--px)*3)]">
+            <PickerSetting
+              id="mode"
+              value="Easy"
+              note="A ghost helps you and nothing rushes you."
+              onStep={noop}
+            >
+              Mode
+            </PickerSetting>
+            <PickerItem
+              id="music"
+              note="M mutes everything, anywhere."
+              onSelect={noop}
+            >
+              Music
+            </PickerItem>
+            <PickerGroup>
+              <PickerItem
+                id="erase"
+                disabled
+                note="Nothing saved yet."
+                onSelect={noop}
+              >
+                Erase save
+              </PickerItem>
+            </PickerGroup>
+            <PickerGroup>
+              <PickerItem id="back" variant="back" onSelect={noop}>
+                Back
+              </PickerItem>
+            </PickerGroup>
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],
@@ -194,10 +191,6 @@ export const InAWindow: Story = {
     </Stage>
   ),
 };
-
-const LONG: PickerItem[] = Array.from({ length: 12 }, (_, i) =>
-  dim(`item-${i}`, `Colleague ${i + 1}`),
-);
 
 /**
  * More items than fit: the list scrolls with the cursor and a pixel rail
@@ -213,7 +206,13 @@ export const ScrollingList: Story = {
       height={globals.layout === 'tall' ? 172 : 110}
     >
       <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)] tall:inset-x-[calc(var(--px)*6)] tall:h-[calc(var(--px)*160)] tall:w-auto">
-        <Picker label="Colleagues" items={LONG} />
+        <Picker label="Colleagues">
+          {Array.from({ length: 12 }, (_, i) => (
+            <PickerItem key={i} id={`item-${i}`} onSelect={noop}>
+              Colleague {i + 1}
+            </PickerItem>
+          ))}
+        </Picker>
       </Window>
     </Stage>
   ),

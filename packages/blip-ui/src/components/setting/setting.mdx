@@ -7,8 +7,8 @@ import * as SettingStories from './setting.stories';
 # Setting
 
 A value between two step arrows, for a menu row that is a setting: Mode
-◀ Normal ▶. It shows the value; the keys that change it are the Picker's
-`onStep`.
+◀ Normal ▶. It shows the value; in a Picker, `PickerSetting` draws it and takes
+the keys.
 
 <Canvas of={SettingStories.Default} />
 <Controls of={SettingStories.Default} />
@@ -23,7 +23,8 @@ A value between two step arrows, for a menu row that is a setting: Mode
 
 ## Usage
 
-- **Do** put it in the label of a Picker item that has `onStep`.
+- **Do** use `PickerSetting` in a Picker: it draws the Setting and takes
+  the keys.
 - **Do** use it on every menu row that is a setting, even one of two
   values (On and Off), so they all read and work alike.
 - **Do** let a choice go round: left from the first value goes to the

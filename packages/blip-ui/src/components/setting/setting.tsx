@@ -27,8 +27,8 @@ export interface SettingProps {
 
 /**
  * A setting's value between its step arrows, pushed to the row's end.
- * It only shows the value: the keys are the Picker's `onStep` (or your
- * own handlers). Put it inside a Picker item's label.
+ * It only shows the value: in a Picker, `PickerSetting` draws it and
+ * takes the keys; elsewhere bring your own handlers.
  */
 export const Setting = ({
   children,
