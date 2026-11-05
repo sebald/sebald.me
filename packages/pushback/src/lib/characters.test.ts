@@ -131,10 +131,10 @@ describe('cast', () => {
 });
 
 describe('stepMode', () => {
-  it('steps left and right through the modes, stopping at the ends', () => {
+  it('steps left and right through the modes, round past the ends', () => {
     assert.equal(stepMode('normal', 1), 'hard');
     assert.equal(stepMode('normal', -1), 'easy');
-    assert.equal(stepMode('hard', 1), 'hard');
-    assert.equal(stepMode('easy', -1), 'easy');
+    assert.equal(stepMode('hard', 1), 'easy');
+    assert.equal(stepMode('easy', -1), 'hard');
   });
 });

@@ -8,7 +8,9 @@ import { cva } from '../../utils/styles';
  *
  * A key is lit like the icons: a light row along its top, a shade row
  * along its bottom, the same thickness, so the label sits in the middle.
- * Pressed, the two swap and nothing moves.
+ * Pressed, the whole face goes a step darker with the shade along its
+ * top, and nothing moves: a swap of the two rows alone was too small a
+ * change for a click's tenth of a second and read as a blink.
  *
  * The pixel is `--bui-px`, the stage's never finer than `--bui-min-px`:
  * on a phone's tall stage a stage pixel is barely more than one CSS
@@ -30,7 +32,7 @@ export const button = {
           '[--b-text:var(--bui-primary-foreground)] [--b-text-down:var(--bui-primary-foreground)]',
           '[--b-pad:0px]',
           '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
-          '[--b-down:inset_0_var(--b-px)_0_var(--b-shade),inset_0_calc(var(--b-px)*-1)_0_var(--b-light)]',
+          '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
         ],
         /** A quieter one beside it: a frame, filled while pressed */
         secondary: [
@@ -45,7 +47,7 @@ export const button = {
           '[--b-text:var(--bui-danger-foreground)] [--b-text-down:var(--bui-danger-foreground)]',
           '[--b-pad:0px]',
           '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
-          '[--b-down:inset_0_var(--b-px)_0_var(--b-shade),inset_0_calc(var(--b-px)*-1)_0_var(--b-light)]',
+          '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
         ],
       },
       size: {
@@ -63,9 +65,11 @@ export const button = {
   ring: cva({ base: 'block bg-(--b-ring,transparent) p-(--b-pad)' }),
   face: cva({
     base: [
-      'flex min-h-(--b-height) items-center justify-center px-(--b-inline)',
+      // Less the ring, so the outline and the key come out one size
+      '[--b-x:calc(var(--b-inline)-var(--b-pad))] min-h-[calc(var(--b-height)-var(--b-pad)*2)] px-(--b-x)',
+      'flex items-center justify-center',
       'bg-(--b-face) text-(--b-text) shadow-(--b-rest)',
-      'group-enabled:group-hover:brightness-110',
+      'group-enabled:group-hover:brightness-110 group-enabled:group-active:brightness-100',
       'group-enabled:group-active:bg-(--b-face-down,var(--b-face)) group-enabled:group-active:text-(--b-text-down) group-enabled:group-active:shadow-(--b-down)',
       'font-semibold tracking-[0.12em] uppercase',
     ],

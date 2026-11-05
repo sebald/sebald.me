@@ -15,16 +15,23 @@ A value between two step arrows, for a menu row that is a setting: Mode
 
 ## Anatomy
 
-1. **Left step**, a pixel triangle, dim at the first value
+1. **Left step**, a pixel triangle, dim only at a range's first value
 2. **Value**, centred in six characters so the arrows stay put
-3. **Right step**, dim at the last value
+3. **Right step**, dim only at a range's last value
 
 <Canvas of={SettingStories.Overview} />
 
 ## Usage
 
 - **Do** put it in the label of a Picker item that has `onStep`.
-- **Do** set `first` and `last` so the arrows show where the values end.
+- **Do** use it on every menu row that is a setting, even one of two
+  values (On and Off), so they all read and work alike.
+- **Do** let a choice go round: left from the first value goes to the
+  last, both arrows lit (Mode, Music On/Off). Leave `first` and `last`
+  unset.
+- **Do** stop a range at its ends: a volume or a brightness has a min and
+  a max, and 10 jumping to 0 would be a surprise. Set `first` and `last`
+  so the arrow at an end dims.
 - **Don't** use it alone: it has no keys or click of its own.
 
 ## Accessibility

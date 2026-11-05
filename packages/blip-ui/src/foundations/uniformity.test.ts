@@ -60,7 +60,7 @@ const SPACING =
   /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/;
 
 /** The button's own lengths, each made of `--bui-px` */
-const BUTTON_VARS = ['(--b-px)', '(--b-pad)', '(--b-inline)'];
+const BUTTON_VARS = ['(--b-px)', '(--b-pad)', '(--b-inline)', '(--b-x)'];
 
 const spacingOk = (value: string) => {
   if (value === '0' || value === 'auto') return true;

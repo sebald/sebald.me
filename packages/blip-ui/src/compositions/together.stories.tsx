@@ -67,9 +67,12 @@ const Stage = ({ children }: { children: ReactNode }) => {
 
 const meta = {
   title: 'Compositions/Together',
-  // A whole stage at 1x has no room for its words (text has a floor, the
-  // stage's 320 pixels don't grow): the game's problem to solve, not a
-  // look to keep as a baseline
+  // Not an exception, a placeholder: a whole stage at 1x has no room for
+  // its words (text has a floor, the stage's 320 pixels don't grow), and
+  // a baseline of that would keep the cut-off menu as the expected look.
+  // The game can get that small (MIN_SCALE 1.1), so its step to Blip UI
+  // settles it (the spec's build plan, package 6: a higher floor or text
+  // that shrinks); then this tag comes off and the 1x shot keeps it fixed
   tags: ['no-vrt-1x'],
   parameters: { controls: { disable: true } },
   decorators: [

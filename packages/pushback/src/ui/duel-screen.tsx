@@ -78,6 +78,7 @@ import { Hud } from './hud';
 import { Ledger } from './ledger';
 import { Picker, type PickerItem } from './picker';
 import { RoundCall } from './round-call';
+import { Setting } from './setting';
 import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
@@ -1100,12 +1101,13 @@ export const DuelScreen = ({
                   label: (
                     <span className="flex items-center gap-[1ch]">
                       Sound
-                      <span className="ml-auto text-(--pb-muted)">
+                      <Setting>
                         {sound.music || sound.effects ? 'On' : 'Off'}
-                      </span>
+                      </Setting>
                     </span>
                   ),
                   onSelect: toggleSound,
+                  onStep: toggleSound,
                 },
                 {
                   id: 'back',

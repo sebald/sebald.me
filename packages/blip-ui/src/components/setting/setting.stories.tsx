@@ -29,22 +29,20 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-/** In the middle of its values, at the first and at the last: the arrow it cannot follow is dim */
+/** A choice, which goes round with both arrows lit, and a range at its min and its max, where the arrow it cannot follow is dim */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="grid w-[calc(var(--px)*80)] gap-2 text-(--bui-text-bright)">
       {(
         [
-          ['Normal', false, false],
-          ['Easy', true, false],
-          ['Hard', false, true],
+          ['choice', 'Normal', false, false],
+          ['min', '0', true, false],
+          ['max', '10', false, true],
         ] as const
-      ).map(([value, first, last]) => (
-        <div key={value} className="flex items-center gap-[1ch]">
-          <span className="text-[0.75em] text-(--bui-dim)">
-            {first ? 'first' : last ? 'last' : 'middle'}
-          </span>
+      ).map(([kind, value, first, last]) => (
+        <div key={kind} className="flex items-center gap-[1ch]">
+          <span className="text-[0.75em] text-(--bui-dim)">{kind}</span>
           <Setting first={first} last={last}>
             {value}
           </Setting>

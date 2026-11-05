@@ -18,9 +18,9 @@ export const Step = ({ left = false, more = true, className }: StepProps) => (
 export interface SettingProps {
   /** The value shown between the arrows */
   children: ReactNode;
-  /** At the first value: the left arrow is dim */
+  /** A range at its first value: the left arrow is dim. A choice goes round and leaves it unset */
   first?: boolean;
-  /** At the last value: the right arrow is dim */
+  /** A range at its last value: the right arrow is dim. A choice leaves it unset */
   last?: boolean;
   className?: string;
 }

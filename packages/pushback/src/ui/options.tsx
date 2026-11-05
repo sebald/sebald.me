@@ -7,7 +7,7 @@ import { ROLE_LABELS, type Role } from '../lib/lines';
 import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
 import { Picker, type PickerItem } from './picker';
-import { cn } from './styles.utils';
+import { Setting } from './setting';
 import { Heading } from './text';
 import { useKeys } from './use-keys';
 import { useSoundSettings } from './use-sound';
@@ -52,20 +52,6 @@ const list = (parts: string[]) =>
     ? (parts[0] ?? '')
     : `${parts.slice(0, -1).join(', ')} and ${parts.at(-1)}`;
 
-/** Left or right of the mode: a pixel triangle, dim at the end it cannot go past */
-const Step = ({ left, more }: { left: boolean; more: boolean }) => (
-  <span
-    aria-hidden
-    className={cn(
-      'inline-block h-[calc(var(--px)*5)] w-[calc(var(--px)*3)] bg-current',
-      left
-        ? '[clip-path:polygon(100%_0,0_50%,100%_100%)]'
-        : '[clip-path:polygon(0_0,100%_50%,0_100%)]',
-      more ? 'opacity-100' : 'opacity-25',
-    )}
-  />
-);
-
 interface OptionsProps {
   mode: Mode;
   onMode: (mode: Mode) => void;
@@ -74,23 +60,6 @@ interface OptionsProps {
   onErase: () => void;
   onClose: () => void;
 }
-
-/** A setting's value between its arrows: dim at the end it cannot go past */
-const Setting = ({
-  children,
-  first,
-  last,
-}: {
-  children: React.ReactNode;
-  first: boolean;
-  last: boolean;
-}) => (
-  <span className="ml-auto flex items-center gap-[calc(var(--px)*2)]">
-    <Step left more={!first} />
-    <span className="w-[6ch] text-center">{children}</span>
-    <Step left={false} more={!last} />
-  </span>
-);
 
 /**
  * The settings, away from the title menu: the mode, the music and the
@@ -122,8 +91,9 @@ export const Options = ({
     else onMode(target);
   };
 
-  // The sound switches: Enter or a tap flips one, left is off and right
-  // is on; turning effects on says so with the confirm sound
+  // The sound switches: Enter, a tap, left or right flips one (a choice
+  // goes round, it has no ends); turning effects on says so with the
+  // confirm sound
   const sound = useSoundSettings();
   const playable = canPlay();
   const flip = (key: 'music' | 'effects', on: boolean) => {
@@ -136,15 +106,13 @@ export const Options = ({
     label: (
       <span className="flex items-center gap-[1ch]">
         {label}
-        <Setting first={!sound[key]} last={sound[key]}>
-          {sound[key] ? 'On' : 'Off'}
-        </Setting>
+        <Setting>{sound[key] ? 'On' : 'Off'}</Setting>
       </span>
     ),
     disabled: !playable,
     note: playable ? SOUND_NOTES[key] : SOUND_NOTES.none,
     onSelect: () => flip(key, !sound[key]),
-    onStep: step => flip(key, step === 1),
+    onStep: () => flip(key, !sound[key]),
   });
 
   const items: PickerItem[] = [
@@ -153,13 +121,12 @@ export const Options = ({
       label: (
         <span className="flex items-center gap-[1ch]">
           Mode
-          <Setting first={mode === 'easy'} last={mode === 'hard'}>
-            {MODE_LABELS[mode]}
-          </Setting>
+          <Setting>{MODE_LABELS[mode]}</Setting>
         </span>
       ),
       note: MODE_NOTES[mode],
-      // Enter or a tap goes round; left and right stop at the ends
+      // Enter or a tap goes round, and so do left and right: a choice has
+      // no ends (a range would, like a volume)
       onSelect: () => switchTo(nextMode(mode)),
       onStep: step => switchTo(stepMode(mode, step)),
     },
