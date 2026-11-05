@@ -11,7 +11,6 @@ const meta = {
   },
   argTypes: {
     children: { control: 'text' },
-    legend: { control: false },
   },
   decorators: [
     Story => (
@@ -29,8 +28,9 @@ export const Default: Story = {};
 
 /** With the control hints along the bottom: the keys, or the one line for touch */
 export const WithLegend: Story = {
-  args: {
-    legend: (
+  render: args => (
+    <Window {...args}>
+      {args.children}
       <Legend
         keys={[
           ['↑↓', 'choose'],
@@ -38,8 +38,8 @@ export const WithLegend: Story = {
         ]}
         touch="Tap a line"
       />
-    ),
-  },
+    </Window>
+  ),
 };
 
 /** The legend on its own, in a stage's bottom right corner */

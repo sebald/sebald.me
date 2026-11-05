@@ -177,23 +177,19 @@ export const InAWindow: Story = {
       fit={{ width: 34, height: 14 }}
     >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
-        <Window
-          className="w-[19em] tall:w-full"
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
-        >
+        <Window className="w-[19em] tall:w-full">
           <Heading>Options</Heading>
           <Picker
             label="Options"
             className="mt-[calc(var(--px)*3)]"
             items={WINDOW_ITEMS}
+          />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
           />
         </Window>
       </div>

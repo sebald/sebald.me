@@ -10,8 +10,14 @@ export const CORNERS = [[3, 1, 1], [2, 1], [1]] as const;
  * A `clip-path` with the staircase at all four corners, walked clockwise:
  * each corner's steps as offsets from that corner, mirrored onto it, in
  * the order the outline passes them. Lengths are in `unit` (`--px`).
+ * With `top`, only the top two are rounded and the bottom stays square,
+ * for a part that stands on something (a tab on a window).
  */
-export const rounded = (steps: readonly number[], unit = '--px') => {
+export const rounded = (
+  steps: readonly number[],
+  unit = '--px',
+  edges: 'all' | 'top' = 'all',
+) => {
   // From the left edge up to the top edge, round the top left corner,
   // the bottom row's step first
   const topLeft = [
@@ -35,7 +41,8 @@ export const rounded = (steps: readonly number[], unit = '--px') => {
   return `polygon(${[
     ...place('start', 'start', false),
     ...place('end', 'start', true),
-    ...place('end', 'end', false),
-    ...place('start', 'end', true),
+    ...(edges === 'all'
+      ? [...place('end', 'end', false), ...place('start', 'end', true)]
+      : ['100% 100%', '0 100%']),
   ].join(', ')})`;
 };

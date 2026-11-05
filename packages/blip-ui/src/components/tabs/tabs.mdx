@@ -15,17 +15,50 @@ game's pixel look.
 
 ## Anatomy
 
-1. **TabList**, the centred row
-2. **Tab**, a label with a stage-pixel underline; the active one is in the
-   primary colour
-3. **TabPanel**, what the tab shows
+1. **TabList**, the row: centred over the panel (`plain`), or hung from
+   the window's top left with an arrow at each end (`window`)
+2. **Tab**, a label with a stage-pixel underline in the primary colour
+   when active (`plain`); on a window, a folder tab drawn in the window's
+   layers (ink, frame, inner line), dimmer while idle
+3. **TabPanel**, what the tab shows; with `window`, it is the window
 
 <Canvas of={TabsStories.Overview} />
+
+## On a window
+
+`variant="window"` on `Tabs` makes the set a window with pages: each
+`TabPanel` is drawn as the window, and the tabs hang from its top left.
+The idle tabs stand on its top edge; the current one reaches over the
+edge and opens into the window, with no line between them: the window's
+frame and inner line turn up into the tab's. All the labels sit on one
+line, and the arrows centre on them. A `Legend` last in a panel sits
+along its bottom edge, as in a `Window`.
+
+```tsx
+<Tabs variant="window" defaultValue="pm">
+  <TabList aria-label="Pools">
+    <Tab value="pm">PM</Tab>
+    <Tab value="dev">Dev</Tab>
+  </TabList>
+  <TabPanel value="pm">
+    …
+    <Legend keys={[['←→', 'pool']]} touch="Tap a tab" />
+  </TabPanel>
+</Tabs>
+```
+
+Only the current panel is shown, so a panel sizes the window: give the
+set a fixed size from outside when the pages differ in length.
+
+<Canvas of={TabsStories.OnAWindow} />
 
 ## Usage
 
 - **Do** give each `Tab` a `value` and the `TabPanel` the same one.
 - **Do** name the list with `aria-label`.
+- **Do** use `variant="window"` for a window with pages, not a `Window`
+  with tabs put on it.
+- **Do** keep `plain` for tabs with no window under them.
 - **Do** turn on `keys` on a screen where nothing else uses left and right.
 - **Don't** use tabs for steps in a flow. They are pages that can be
   visited in any order.
@@ -36,6 +69,8 @@ game's pixel look.
 - Left and right (or Home and End) on a focused tab, as Base UI does
 - With `keys`, left and right (or A and D) switch from anywhere and wrap
   around
+- On a window, the arrows at the row's ends switch too, round past the
+  ends (for a pointer; they are not in the tab order, the keys do that)
 
 ## Sound
 

@@ -21,13 +21,16 @@ screen positions and sizes it.
 4. **Fill**, `--bui-surface` with a dithered gradient: a lit row under the
    frame fading in halves, quarters and eighths of dots, the same in shade
    up from the bottom
-5. **Legend**, optional, the control hints along the bottom edge
+5. **Legend**, optional, the control hints along the bottom edge: a
+   `Legend` as the window's last child
 
 ## Usage
 
 - **Do** put all text that the player reads on the stage in a window, so it
   stays readable over any scene.
 - **Do** give a window that takes input a legend that names the keys.
+- **Do** use Tabs with `variant="window"` for a window with pages, not a
+  Window with tabs put on it.
 - **Don't** nest windows. A description box sits beside its window, not in it.
 - **Don't** clip what's inside: the content is never cut at a corner, so
   keep it inside the padding.
@@ -35,7 +38,8 @@ screen positions and sizes it.
 ## Legend
 
 `Legend` shows what works right now: the keys while the player uses keys,
-one line for touch after a tap. `CornerLegend` puts it in the stage's
+one line for touch after a tap. Put it last in the window, as a child: it
+sits along the bottom edge by itself. `CornerLegend` puts it in the stage's
 bottom right corner; held upright, it centres over the bar of controls.
 
 <Canvas of={WindowStories.WithLegend} />

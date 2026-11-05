@@ -46,19 +46,7 @@ export const Confirm = ({
       aria-label={title}
       className={styles.root({ className })}
     >
-      <Window
-        className={styles.window()}
-        legend={
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-              ['Esc', 'cancel'],
-            ]}
-            touch="Tap a line"
-          />
-        }
-      >
+      <Window className={styles.window()}>
         <div className={styles.body()}>
           <Heading>{title}</Heading>
           <Muted className="text-balance">{children}</Muted>
@@ -72,6 +60,14 @@ export const Confirm = ({
             ]}
           />
         </div>
+        <Legend
+          keys={[
+            ['↑↓', 'choose'],
+            ['Enter', 'confirm'],
+            ['Esc', 'cancel'],
+          ]}
+          touch="Tap a line"
+        />
       </Window>
     </div>
   );

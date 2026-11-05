@@ -122,22 +122,19 @@ export const Menu: Story = {
         Pick a role
       </ScreenTitle>
       <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)]">
-        <Window
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
-        >
+        <Window>
           <Heading>Developer</Heading>
           <Muted className="mb-[calc(var(--px)*3)]">
             Ships on Friday. Regrets nothing.
           </Muted>
           <Picker items={MENU} label="Menu" active={false} />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
+          />
         </Window>
         <div className="flex justify-center gap-[calc(var(--px)*4)]">
           <Button variant="secondary" size="small">
@@ -179,35 +176,33 @@ export const Duel: Story = {
             <Dialogue>Monday, as in next quarter?</Dialogue>
           </div>
         </Window>
-        <Window>
-          <Tabs defaultValue="pools">
-            <TabList>
-              <Tab value="pools">Pools</Tab>
-              <Tab value="log">Log</Tab>
-            </TabList>
-            <TabPanel value="pools">
-              <Ledger
-                rows={[
-                  [
-                    'Momentum',
-                    <Meter key="m" aria-label="Momentum" value={3} max={5} />,
-                  ],
-                  [
-                    'Patience',
-                    <Meter
-                      key="p"
-                      aria-label="Patience"
-                      value={1}
-                      max={5}
-                      tone="danger"
-                    />,
-                  ],
-                ]}
-              />
-            </TabPanel>
-            <TabPanel value="log">Nothing yet.</TabPanel>
-          </Tabs>
-        </Window>
+        <Tabs variant="window" defaultValue="pools">
+          <TabList aria-label="Duel">
+            <Tab value="pools">Pools</Tab>
+            <Tab value="log">Log</Tab>
+          </TabList>
+          <TabPanel value="pools">
+            <Ledger
+              rows={[
+                [
+                  'Momentum',
+                  <Meter key="m" aria-label="Momentum" value={3} max={5} />,
+                ],
+                [
+                  'Patience',
+                  <Meter
+                    key="p"
+                    aria-label="Patience"
+                    value={1}
+                    max={5}
+                    tone="danger"
+                  />,
+                ],
+              ]}
+            />
+          </TabPanel>
+          <TabPanel value="log">Nothing yet.</TabPanel>
+        </Tabs>
       </div>
     </>
   ),

@@ -59,12 +59,24 @@ const allowed = ({ file, utility }: { file: string; utility: string }) =>
 const SPACING =
   /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/;
 
-/** The button's own lengths, each made of `--bui-px` */
-const BUTTON_VARS = ['(--b-px)', '(--b-pad)', '(--b-inline)', '(--b-x)'];
+/**
+ * A part's own lengths, each made of the stage's pixels: the button's
+ * (`--b-*`, of `--bui-px`) and the window tabs' (`--t-*`, the rings in
+ * `--px` as the window's, the label's box in `--bui-px`)
+ */
+const PART_VARS = [
+  '(--b-px)',
+  '(--b-pad)',
+  '(--b-inline)',
+  '(--b-x)',
+  '(--t-ring)',
+  '(--t-over)',
+  '(--t-inline)',
+];
 
 const spacingOk = (value: string) => {
   if (value === '0' || value === 'auto') return true;
-  if (value === '(--bui-px)' || BUTTON_VARS.includes(value)) return true;
+  if (value === '(--bui-px)' || PART_VARS.includes(value)) return true;
   const n = /^\[calc\(var\(--bui-px\)\*(\d+)\)\]$/.exec(value)?.[1];
   return n !== undefined && (SPACE as readonly number[]).includes(Number(n));
 };
