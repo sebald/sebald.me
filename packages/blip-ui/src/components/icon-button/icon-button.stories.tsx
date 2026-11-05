@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
-import { Pixels } from '../../providers/pixels';
+import { Pixels, usePixels } from '../../providers/pixels';
 import { Controls } from '../controls/controls';
 import { ICONS, type IconName } from '../pixel-icon/icons';
 import { IconButton, IconToggle } from './icon-button';
@@ -63,6 +63,22 @@ const States = () => (
   </>
 );
 
+/** The wide stage's top at the story's scale, also on a phone: the corners, never the bar */
+const Corner = () => {
+  const { scale } = usePixels();
+  return (
+    <Pixels
+      scale={scale}
+      tall={false}
+      className="relative h-[calc(var(--px)*24)] w-[calc(var(--px)*120)] max-w-full"
+    >
+      <Controls show="always">
+        <States />
+      </Controls>
+    </Pixels>
+  );
+};
+
 /**
  * Where it is sets its look, the JSX the same: in a corner of the wide
  * stage the icon alone, in the tall stage's bar the icon and its label;
@@ -73,11 +89,7 @@ export const Overview: Story = {
   render: () => (
     <div className="grid w-fit gap-y-3">
       <Label>corner</Label>
-      <div className="relative h-[calc(var(--px)*24)] w-[calc(var(--px)*120)]">
-        <Controls show="always">
-          <States />
-        </Controls>
-      </div>
+      <Corner />
       <Label>bar</Label>
       <Pixels
         scale={1}
