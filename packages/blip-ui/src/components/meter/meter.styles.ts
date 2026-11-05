@@ -38,13 +38,15 @@ export const meter = {
           'shadow-[0_0_0_var(--bui-px)_var(--bui-ink)]',
           'bg-[linear-gradient(to_bottom,var(--m-light)_0_var(--bui-px),var(--m-mid)_var(--bui-px)_calc(100%-var(--bui-px)),var(--m-shade)_calc(100%-var(--bui-px))_100%)]',
         ],
-        /** All over in the light colour: a full bar blinking */
-        bright: 'bg-(--m-light) shadow-[0_0_0_var(--bui-px)_var(--bui-ink)]',
         /** Dark, a rim in the dots' colour inside the ink, a checker of dots */
         empty:
           'bg-(--bui-empty) shadow-[0_0_0_var(--bui-px)_var(--bui-ink),inset_0_0_0_var(--bui-px)_var(--bui-empty-dots)]',
       },
     },
+  }),
+  /** Over a lit cell: its light, all over, on and off at the arcade rhythm */
+  flash: cva({
+    base: 'absolute inset-0 bg-(--m-light) [--blink-low:0] animate-bui-blink motion-reduce:hidden',
   }),
   dots: cva({
     base: [

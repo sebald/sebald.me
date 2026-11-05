@@ -139,6 +139,7 @@ export const Stage = ({
       data-layout={tall ? 'tall' : undefined}
       tabIndex={-1}
       aria-label={label}
+      data-slot="stage"
       className={stage.root({ className })}
       style={style}
       onFocus={onFocus}

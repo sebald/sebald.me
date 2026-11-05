@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Muted } from '../text/text';
+import { Text } from '../text/text';
 import { Legend } from '../window/window';
 import { Tab, TabList, TabPanel, Tabs } from './tabs';
 
@@ -32,13 +32,13 @@ const meta = {
         </Tab>
       </TabList>
       <TabPanel value="dev">
-        <Muted>Dev: it works on my machine.</Muted>
+        <Text>Dev: it works on my machine.</Text>
       </TabPanel>
       <TabPanel value="pm">
-        <Muted>PM: let&apos;s take this offline.</Muted>
+        <Text>PM: let&apos;s take this offline.</Text>
       </TabPanel>
       <TabPanel value="design">
-        <Muted>Design: can you make the logo bigger?</Muted>
+        <Text>Design: can you make the logo bigger?</Text>
       </TabPanel>
     </Tabs>
   ),
@@ -73,7 +73,7 @@ export const Overview: Story = {
           </Tab>
         </TabList>
         <TabPanel value="a">
-          <Muted>The active tab opens into the window.</Muted>
+          <Text>The active tab opens into the window.</Text>
         </TabPanel>
       </Tabs>
     </div>
@@ -111,15 +111,15 @@ export const OnAWindow: Story = {
           </Tab>
         </TabList>
         <TabPanel value="pm">
-          <Muted>PM: let&apos;s take this offline.</Muted>
+          <Text>PM: let&apos;s take this offline.</Text>
           {legend}
         </TabPanel>
         <TabPanel value="dev">
-          <Muted>Dev: it works on my machine.</Muted>
+          <Text>Dev: it works on my machine.</Text>
           {legend}
         </TabPanel>
         <TabPanel value="design">
-          <Muted>Design: can you make the logo bigger?</Muted>
+          <Text>Design: can you make the logo bigger?</Text>
           {legend}
         </TabPanel>
       </Tabs>

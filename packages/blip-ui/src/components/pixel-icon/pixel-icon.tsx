@@ -28,6 +28,7 @@ export const PixelIcon = ({ icon, dot, className }: PixelIconProps) => {
   return (
     <svg
       aria-hidden
+      data-slot="pixel-icon"
       viewBox={`0 0 ${rows[0].length} ${rows.length}`}
       shapeRendering="crispEdges"
       className={cn('block shrink-0', className)}

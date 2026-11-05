@@ -25,10 +25,12 @@ export interface MeterProps extends Omit<
    */
   cell?: { width: number; height: number };
   /**
-   * Every lit cell in the light colour, for a full meter blinking
+   * Blink the lit cells, between their colour and its light, at the
+   * arcade rhythm: a full pool asking to be used. Steady under reduced
+   * motion
    * @default false
    */
-  bright?: boolean;
+  blink?: boolean;
 }
 
 /**
@@ -42,7 +44,7 @@ export const Meter = ({
   max,
   variant,
   cell = { width: 4, height: 6 },
-  bright = false,
+  blink = false,
   className,
   ...props
 }: MeterProps) => {
@@ -52,6 +54,7 @@ export const Meter = ({
     <span
       // oxlint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="meter"
+      data-slot="meter"
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={lit}
@@ -66,7 +69,7 @@ export const Meter = ({
             key={i}
             aria-hidden
             className={meter.cell({
-              state: on ? (bright ? 'bright' : 'lit') : 'empty',
+              state: on ? 'lit' : 'empty',
             })}
             style={{
               width: px(cell.width, FLOOR),
@@ -74,6 +77,7 @@ export const Meter = ({
             }}
           >
             {!on && <span className={meter.dots()} />}
+            {on && blink && <span className={meter.flash()} />}
           </span>
         );
       })}

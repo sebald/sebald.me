@@ -11,7 +11,7 @@ import { Picker, type PickerItem } from '../components/picker/picker';
 import { Setting } from '../components/setting/setting';
 import { SpeechBubble } from '../components/speech-bubble/speech-bubble';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
-import { Heading, Muted, ScreenTitle } from '../components/text/text';
+import { Heading, ScreenTitle, Text } from '../components/text/text';
 import { Timer } from '../components/timer/timer';
 import { Legend, Window } from '../components/window/window';
 import { Pixels, usePixels } from '../providers/pixels';
@@ -117,9 +117,9 @@ export const Menu: Story = {
       <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)]">
         <Window>
           <Heading>Developer</Heading>
-          <Muted className="mb-[calc(var(--px)*3)]">
+          <Text className="mb-[calc(var(--px)*3)]">
             Ships on Friday. Regrets nothing.
-          </Muted>
+          </Text>
           <Picker items={MENU} label="Menu" active={false} />
           <Legend
             keys={[

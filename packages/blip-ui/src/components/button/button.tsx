@@ -43,6 +43,7 @@ export const Button = ({
   return (
     <button
       type="button"
+      data-slot="button"
       className={button.root({ variant, size, className })}
       style={{ clipPath: rounded(CORNERS[0], '--b-px'), ...style }}
       {...props}

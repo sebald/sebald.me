@@ -11,11 +11,19 @@ export const text = {
   }),
   // The heading under the bitmap letters, for assistive technology
   titleText: cva({ base: 'sr-only' }),
-  muted: cva({ base: 'm-0 text-(--bui-muted)' }),
-  loud: cva({
-    base: [
-      'font-semibold text-(--bui-primary)',
-      'animate-bui-blink motion-reduce:animate-none',
-    ],
+  text: cva({
+    base: 'm-0',
+    variants: {
+      variant: {
+        /** A quieter paragraph: a prompt, a blurb, a hint */
+        hint: 'text-(--bui-muted)',
+        /** The call to act, blinking */
+        call: [
+          'font-semibold text-(--bui-primary)',
+          'animate-bui-blink motion-reduce:animate-none',
+        ],
+      },
+    },
+    defaultVariants: { variant: 'hint' },
   }),
 };

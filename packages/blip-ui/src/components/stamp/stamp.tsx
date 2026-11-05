@@ -116,6 +116,7 @@ export const Stamp = ({
       aria-hidden
       viewBox={`0 0 ${width} ${height}`}
       shapeRendering="crispEdges"
+      data-slot="stamp"
       className={stamp.root({ variant, className })}
       style={{ width: px(width), height: px(height), ...style }}
       {...props}

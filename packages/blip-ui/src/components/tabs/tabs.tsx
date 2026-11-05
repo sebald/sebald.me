@@ -93,6 +93,7 @@ export const Tabs = ({
   return (
     <BaseTabs.Root
       ref={ref}
+      data-slot="tabs"
       className={styles.root({ className })}
       onValueChange={value => {
         play('move');
@@ -118,6 +119,7 @@ export const TabList = ({ className, ...props }: TabListProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const list = (
     <BaseTabs.List
+      data-slot="tab-list"
       className={styles.list({
         on,
         className: on === 'plain' ? className : undefined,
@@ -175,12 +177,20 @@ export const Tab = ({ className, children, ...props }: TabProps) => {
   const on = useContext(VariantContext);
   if (on === 'plain')
     return (
-      <BaseTabs.Tab className={cn(styles.tab({ on }), className)} {...props}>
+      <BaseTabs.Tab
+        data-slot="tab"
+        className={cn(styles.tab({ on }), className)}
+        {...props}
+      >
         {children}
       </BaseTabs.Tab>
     );
   return (
-    <BaseTabs.Tab className={cn(styles.tab({ on }), className)} {...props}>
+    <BaseTabs.Tab
+      data-slot="tab"
+      className={cn(styles.tab({ on }), className)}
+      {...props}
+    >
       {RINGS.map((colour, i) => (
         <span
           key={colour}
@@ -220,12 +230,20 @@ export const TabPanel = ({ className, children, ...props }: TabPanelProps) => {
   const on = useContext(VariantContext);
   if (on === 'plain')
     return (
-      <BaseTabs.Panel className={styles.panel({ className })} {...props}>
+      <BaseTabs.Panel
+        data-slot="tab-panel"
+        className={styles.panel({ className })}
+        {...props}
+      >
         {children}
       </BaseTabs.Panel>
     );
   return (
-    <BaseTabs.Panel className={styles.panel({ on })} {...props}>
+    <BaseTabs.Panel
+      data-slot="tab-panel"
+      className={styles.panel({ on })}
+      {...props}
+    >
       <WindowFrame className={cn('min-h-0 flex-1', className)}>
         {children}
       </WindowFrame>

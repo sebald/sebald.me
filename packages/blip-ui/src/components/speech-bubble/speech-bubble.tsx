@@ -48,7 +48,12 @@ export const SpeechBubble = ({
   // The tail's rows count from its tip, at the top or the bottom edge
   const along = align === 'end' ? 'right' : 'left';
   return (
-    <p className={speechBubble.root({ className })} style={style} {...props}>
+    <p
+      data-slot="speech-bubble"
+      className={speechBubble.root({ className })}
+      style={style}
+      {...props}
+    >
       <span
         aria-hidden
         className={speechBubble.ink()}

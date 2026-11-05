@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { usePixels } from '../../providers/pixels';
 import { Button } from '../button/button';
-import { Heading, Muted } from '../text/text';
+import { Heading, Text } from '../text/text';
 import { Stage } from './stage';
 
 const Readout = () => {
   const { scale, tall, rows, crop, crisp, backing } = usePixels();
   return (
-    <Muted className="absolute bottom-3 left-3">
+    <Text className="absolute bottom-3 left-3">
       {`${scale}x, ${rows} rows, ${tall ? 'tall' : 'wide'}, crop ${crop}, backing ${backing}${crisp ? ', crisp' : ''}`}
-    </Muted>
+    </Text>
   );
 };
 

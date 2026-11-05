@@ -201,6 +201,7 @@ export const Timer = ({
       data-phase={phase}
       viewBox={`0 0 ${WATCH[0]!.length} ${WATCH.length}`}
       shapeRendering="crispEdges"
+      data-slot="timer"
       className={cn(timer.root(), className)}
       style={{
         width: px(TIMER_SIZE.width, FLOOR),

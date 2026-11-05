@@ -28,7 +28,7 @@ export const Line = ({
   children,
   ...props
 }: LineProps) => (
-  <p className={line.line({ past, className })} {...props}>
+  <p data-slot="line" className={line.line({ past, className })} {...props}>
     <span className={line.mark({ variant })} aria-hidden />
     <span>{children}</span>
   </p>

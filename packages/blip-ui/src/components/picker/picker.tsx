@@ -15,7 +15,7 @@ import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { type Feedback, useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
 import { cn } from '../../utils/styles';
-import { Loud } from '../text/text';
+import { Text } from '../text/text';
 import { Window } from '../window/window';
 import { picker as styles } from './picker.styles';
 
@@ -130,7 +130,7 @@ const useNotePlace = (
       setPlace(null);
       return;
     }
-    const frame = row.closest<HTMLElement>('[data-window]') ?? row;
+    const frame = row.closest<HTMLElement>('[data-slot=window]') ?? row;
     const origin = root.getBoundingClientRect();
     const line = row.getBoundingClientRect();
     const toStage = (n: number) => Math.round(n / scale);
@@ -276,7 +276,7 @@ export const Picker = ({
 
   return (
     <>
-      <div className={styles.root()}>
+      <div data-slot="picker" className={styles.root()}>
         <ul
           ref={listRef}
           className={styles.menu({ className })}
@@ -313,7 +313,9 @@ export const Picker = ({
                 >
                   {/* The loud one blinks; the cursor beside it does not */}
                   {item.accent ? (
-                    <Loud className="text-inherit">{item.label}</Loud>
+                    <Text variant="call" className="text-inherit">
+                      {item.label}
+                    </Text>
                   ) : (
                     item.label
                   )}

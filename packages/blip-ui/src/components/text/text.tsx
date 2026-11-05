@@ -4,12 +4,12 @@ import { px } from '../../foundations/pixel';
 import { BitmapText } from '../bitmap-text/bitmap-text';
 import { text as styles } from './text.styles';
 
-interface TextProps extends PropsWithChildren {
+interface BaseProps extends PropsWithChildren {
   className?: string;
   style?: CSSProperties;
 }
 
-export interface HeadingProps extends TextProps {
+export interface HeadingProps extends BaseProps {
   /** The heading level; the stage's own title is the page's h1 */
   level?: 2 | 3;
 }
@@ -23,7 +23,11 @@ export const Heading = ({
 }: HeadingProps) => {
   const Tag = `h${level}` as const;
   return (
-    <Tag className={styles.heading({ className })} style={style}>
+    <Tag
+      data-slot="heading"
+      className={styles.heading({ className })}
+      style={style}
+    >
       {children}
     </Tag>
   );
@@ -35,7 +39,7 @@ const TITLE_TOP = 8;
 export interface ScreenTitleProps {
   /** The title: letters, digits and marks from `BITMAP_GLYPHS`, in capitals */
   children: string;
-  /** A muted line under it saying what the screen is for */
+  /** A hint under it saying what the screen is for */
   blurb?: string;
   className?: string;
 }
@@ -52,29 +56,43 @@ export const ScreenTitle = ({
   children,
 }: ScreenTitleProps) => (
   <header
+    data-slot="screen-title"
     className={styles.title({ className })}
     style={{ top: px(TITLE_TOP) }}
   >
     <h2 className={styles.titleText()}>{children}</h2>
     <BitmapText>{children}</BitmapText>
-    {blurb && <Muted className="text-[0.85em]">{blurb}</Muted>}
+    {blurb && <Text className="text-[0.85em]">{blurb}</Text>}
   </header>
 );
 
-/** A muted line: a prompt over the options, a blurb, a hint */
-export const Muted = ({ className, style, children }: TextProps) => (
-  <p className={styles.muted({ className })} style={style}>
-    {children}
-  </p>
-);
+export interface TextProps extends BaseProps {
+  /**
+   * What the line is for: `hint`, a quieter paragraph (a prompt over the
+   * options, a blurb, a hint); `call`, the call to act right now, inline,
+   * bold, in the primary colour and blinking at the arcade rhythm (half a
+   * second on, half off, no fade; steady under reduced motion; how low it
+   * goes is `--blink-low`, 0.6 by default)
+   * @default 'hint'
+   */
+  variant?: 'hint' | 'call';
+}
 
-/**
- * The loud line: in the primary colour, blinking at the arcade rhythm,
- * half a second on and half off, no fade (steady under reduced motion).
- * How low it goes is `--blink-low`, 0.6 by default.
- */
-export const Loud = ({ className, style, children }: TextProps) => (
-  <span className={styles.loud({ className })} style={style}>
-    {children}
-  </span>
-);
+/** A line of text by what it is for: a hint, or the call to act */
+export const Text = ({
+  variant = 'hint',
+  className,
+  style,
+  children,
+}: TextProps) => {
+  const Tag = variant === 'call' ? 'span' : 'p';
+  return (
+    <Tag
+      data-slot="text"
+      className={styles.text({ variant, className })}
+      style={style}
+    >
+      {children}
+    </Tag>
+  );
+};

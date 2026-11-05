@@ -18,7 +18,7 @@ export interface LedgerProps extends Omit<
  * its one value; a table would promise columns to compare.
  */
 export const Ledger = ({ rows, className, ...props }: LedgerProps) => (
-  <dl className={ledger.root({ className })} {...props}>
+  <dl data-slot="ledger" className={ledger.root({ className })} {...props}>
     {rows.map(([label, value], i) => (
       <div key={i} className={ledger.row()}>
         <dt className={ledger.label()}>{label}</dt>

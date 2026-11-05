@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Stage } from '../stage/stage';
-import { Muted } from '../text/text';
+import { Text } from '../text/text';
 import { Legend, Window } from './window';
 
 const meta = {
@@ -48,7 +48,7 @@ export const OnTheStage: Story = {
   parameters: { controls: { disable: true } },
   render: (_, { globals }) => (
     <Stage scale={Number(globals.scale) || 3} width={200} height={60}>
-      <Muted className="p-3">The stage</Muted>
+      <Text className="p-3">The stage</Text>
       <Legend keys={[['Enter', 'start']]} touch="Tap to start" />
     </Stage>
   ),

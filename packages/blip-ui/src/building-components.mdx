@@ -1,0 +1,99 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Building components" />
+
+# Building components
+
+How the kit's components are made and what their props mean, so a new one
+fits the rest without a review to tell it how. The JSX says what something
+does; how it looks follows from that.
+
+## A component is what it does
+
+- **Name it by what it does or is**, never by how it looks or where it
+  sits: `Line` (a line of a conversation), `Text`, `Tabs`, not `Muted`,
+  `Loud` or `CornerLegend`.
+- **A new component only for new behaviour.** Different state, logic,
+  semantics or keys make a new component: `Heading` (it is in the page's
+  outline), `ScreenTitle` (drawn in the bitmap letters), `IconToggle` (it
+  has a pressed state). A different look of the same thing is a `variant`
+  of it: a hint and a call to act are both `Text`.
+- **It owns its behaviour.** What it does over time, it does itself: a
+  `Meter` blinks with `blink`, a `Timer` counts down from `remaining`; the
+  game doesn't toggle a look on a timer of its own.
+
+## Props
+
+| Prop                  | Means                                                                                    | Example                                               |
+| --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `variant`             | The kind of thing by its use. It implies the rules: `primary` is the one a screen is for | `Button variant="destructive"`, `Text variant="call"` |
+| `size`                | How much room it takes                                                                   | `Button size="small"`                                 |
+| A state, as a boolean | Named for the state, never for the look                                                  | `disabled`, `pressed`, `past`, `blink`                |
+| Content               | `children`, the words or the parts                                                       | `<Tab value="pm">PM</Tab>`                            |
+
+- **`variant` and `size` only**, with defaults, and the default is the
+  common case. No `tone`, `kind`, `type` or `on`. A variant names a use,
+  not a colour (`secondary` is the other side, not "ember") and never a
+  place (no `variant="bar"`).
+- **No raw style values as props.** No opacity, colour or pixel offset:
+  name what it is for and let the component decide the value.
+- **No booleans that change the structure.** If a prop would render other
+  parts or other logic, it is another component, or parts you compose.
+- **Every component takes `className`**, merged last, for the one-off
+  placement on a screen; never to restyle it into something else.
+
+## Composition
+
+- **Children, not props, for parts.** A part is a child in the JSX, never
+  JSX passed through a prop (`legend={…}`, `tabs={…}`, `start={…}`):
+
+  ```tsx
+  <Tabs variant="window" defaultValue="pm">
+    <TabList aria-label="Pools">
+      <Tab value="pm">PM</Tab>
+    </TabList>
+    <TabPanel value="pm">
+      …
+      <Legend keys={[['←→', 'pool']]} touch="Tap a tab" />
+    </TabPanel>
+  </Tabs>
+  ```
+
+- **Compound components share state through context.** The root holds the
+  state and the choice that concerns all parts (`Tabs`' value and
+  variant); the parts read it and take no prop for it.
+- **The look is shared by internal parts, not by exported styles.** A tab's
+  panel is drawn by the same `WindowFrame` as a `Window`. Style objects are
+  not part of the kit's API.
+
+## Placement: the parent places, the child marks itself
+
+Learned from React Aria and Marigold, which do the same with slots.
+
+- **Every component marks its root** with `data-slot="<name>"`
+  (`data-slot="legend"`, `"icon-button"`). A test fails on one that
+  doesn't.
+- **A child places nothing.** It has its own look (a legend is small and
+  dim), never its position in one parent.
+- **The parent places and styles its children by their slot**, in its own
+  styles: a window's body puts a legend along its bottom edge
+  (`*:data-[slot=legend]:mt-auto`), the stage puts one in its corner. So
+  the same `<Legend>` works anywhere, and a new parent adds its own rule.
+- **Context for what a child must know to behave.** Where CSS can't do it,
+  the parent tells its children through context, never through a prop the
+  caller has to repeat: `Controls` tells its buttons whether they are on
+  the bar (label and a thumb-sized icon) or in a corner.
+- **State as data attributes**, which the styles read: Base UI's
+  `data-active` on a tab, `data-layout` on the controls.
+
+## Lists of items
+
+Prefer children over arrays of data: a menu built from `<PickerItem>`s
+reads like the screen it makes, and each item's kind is its `variant`.
+(The `Picker` still takes `items`; moving it is planned.)
+
+## Checked by tests
+
+`foundations/uniformity.test.ts` fails on spacing outside `SPACE`, a text
+size outside the scale, an opacity of its own instead of `bui-disabled`,
+and a component root without its `data-slot`.

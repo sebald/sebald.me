@@ -36,7 +36,7 @@ export const Setting = ({
   last = false,
   className,
 }: SettingProps) => (
-  <span className={styles.root({ className })}>
+  <span data-slot="setting" className={styles.root({ className })}>
     <Step left more={!first} />
     <span className={styles.value()}>{children}</span>
     <Step more={!last} />

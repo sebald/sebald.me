@@ -9,7 +9,7 @@ const meta = {
     value: 3,
     max: 5,
     variant: 'primary',
-    bright: false,
+    blink: false,
     'aria-label': 'Momentum',
   },
   argTypes: {
@@ -20,7 +20,7 @@ const meta = {
       options: ['primary', 'secondary', 'neutral', 'info', 'danger'],
       table: { defaultValue: { summary: 'primary' } },
     },
-    bright: {
+    blink: {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
     },
@@ -39,10 +39,10 @@ export const Default: Story = {};
 
 const VARIANTS = ['primary', 'secondary', 'neutral', 'info', 'danger'] as const;
 const STATES = [
-  { name: 'empty', value: 0, bright: false },
-  { name: 'partial', value: 3, bright: false },
-  { name: 'full', value: 5, bright: false },
-  { name: 'bright', value: 5, bright: true },
+  { name: 'empty', value: 0, blink: false },
+  { name: 'partial', value: 3, blink: false },
+  { name: 'full', value: 5, blink: false },
+  { name: 'blinking', value: 5, blink: true },
 ] as const;
 
 /** Every variant in every state, and other cell sizes, side by side */
@@ -67,7 +67,7 @@ export const Overview: Story = {
             variant={variant}
             max={5}
             value={state.value}
-            bright={state.bright}
+            blink={state.blink}
           />
         )),
       ])}

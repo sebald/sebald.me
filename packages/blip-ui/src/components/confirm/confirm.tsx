@@ -4,7 +4,7 @@ import { type ReactNode, useMemo } from 'react';
 
 import { useKeys } from '../../hooks/use-keys';
 import { Picker } from '../picker/picker';
-import { Heading, Muted } from '../text/text';
+import { Heading, Text } from '../text/text';
 import { Legend, Window } from '../window/window';
 import { confirm as styles } from './confirm.styles';
 
@@ -43,13 +43,14 @@ export const Confirm = ({
   return (
     <div
       role="alertdialog"
+      data-slot="confirm"
       aria-label={title}
       className={styles.root({ className })}
     >
       <Window className={styles.window()}>
         <div className={styles.body()}>
           <Heading>{title}</Heading>
-          <Muted className="text-balance">{children}</Muted>
+          <Text className="text-balance">{children}</Text>
           <Picker
             label={title}
             className={styles.picker()}

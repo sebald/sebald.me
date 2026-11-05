@@ -78,7 +78,6 @@ export {
   stampSize,
 } from './components/stamp/stamp';
 export { Button, type ButtonProps } from './components/button/button';
-export { button as buttonStyles } from './components/button/button.styles';
 export { Ledger, type LedgerProps } from './components/ledger/ledger';
 export { Meter, type MeterProps } from './components/meter/meter';
 export { Timer, TIMER_SIZE, type TimerProps } from './components/timer/timer';
@@ -109,7 +108,6 @@ export {
   type PickerProps,
   ScrollRail,
 } from './components/picker/picker';
-export { picker as pickerStyles } from './components/picker/picker.styles';
 export {
   Setting,
   type SettingProps,
@@ -129,10 +127,10 @@ export {
 export {
   Heading,
   type HeadingProps,
-  Loud,
-  Muted,
   ScreenTitle,
   type ScreenTitleProps,
+  Text,
+  type TextProps,
 } from './components/text/text';
 export {
   Legend,

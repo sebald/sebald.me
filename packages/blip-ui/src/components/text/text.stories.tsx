@@ -1,50 +1,49 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Heading, Loud, Muted, ScreenTitle } from './text';
+import { Heading, ScreenTitle, Text } from './text';
 
 const meta = {
   title: 'Components/Text',
-  component: Heading,
-  args: { children: 'Your run as the PM', level: 2 },
+  component: Text,
+  args: { children: 'Pick your counter.', variant: 'hint' },
   argTypes: {
-    level: {
+    variant: {
       control: 'inline-radio',
-      options: [2, 3],
-      table: { defaultValue: { summary: '2' } },
+      options: ['hint', 'call'],
+      table: { defaultValue: { summary: 'hint' } },
     },
     children: { control: 'text' },
   },
-} satisfies Meta<typeof Heading>;
+} satisfies Meta<typeof Text>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const HeadingStory: Story = { name: 'Heading' };
+/** A line through the controls */
+export const Default: Story = {};
 
-/** A muted line: a prompt, a blurb, a hint */
-export const MutedStory: Story = {
-  name: 'Muted',
-  render: ({ children }) => <Muted>{children}</Muted>,
-  args: { children: 'Pick your counter.' },
-};
+const Label = ({ children }: { children: string }) => (
+  <span className="text-[0.75em] text-(--bui-dim)">{children}</span>
+);
 
-/** The loud line, blinking at the arcade rhythm */
-export const LoudStory: Story = {
-  name: 'Loud',
-  render: ({ children }) => <Loud>{children}</Loud>,
-  args: { children: "I haven't said no since 2015." },
-};
-
-/** A menu screen's title along the stage's top */
-export const ScreenTitleStory: Story = {
-  name: 'ScreenTitle',
-  render: ({ children }) => (
-    // Its top, the bitmap letters (18 stage pixels) and the blurb under them
-    <div className="relative h-[calc(var(--px)*26+var(--bui-px)*2+1.5em)]">
-      <ScreenTitle blurb="Whose side are you on today?">
-        {String(children)}
-      </ScreenTitle>
+/** The letters by role side by side: a heading, both variants of Text, a screen's title */
+export const Overview: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="grid w-[calc(var(--px)*260)] max-w-full grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-3">
+      <Label>Heading</Label>
+      <Heading>Your run as the PM</Heading>
+      <Label>hint</Label>
+      <Text>Pick your counter.</Text>
+      <Label>call</Label>
+      <Text variant="call">Press Enter to play</Text>
+      <Label>ScreenTitle</Label>
+      {/* Its top, the bitmap letters (18 stage pixels) and the blurb under them */}
+      <div className="relative h-[calc(var(--px)*26+var(--bui-px)*2+1.5em)]">
+        <ScreenTitle blurb="Whose side are you on today?">
+          Pick a role
+        </ScreenTitle>
+      </div>
     </div>
   ),
-  args: { children: 'Pick a role' },
 };

@@ -143,7 +143,7 @@ const WINDOW_ITEMS: PickerItem[] = [
     label: (
       <span className="flex items-center gap-[1ch]">
         Mode
-        <Setting first last={false}>
+        <Setting>
           Easy
         </Setting>
       </span>

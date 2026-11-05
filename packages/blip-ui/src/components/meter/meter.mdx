@@ -31,8 +31,9 @@ only; for a value that runs smoothly, draw a bar instead.
 | `info`      | Time                                         |
 | `danger`    | A pool that is bad when it fills or runs low |
 
-`bright` lights every cell in the variant's light colour. Toggle it on a timer
-for a full meter that blinks.
+`blink` blinks the lit cells between their colour and its light, at the
+arcade rhythm, for a full pool asking to be used. The meter runs it
+itself, and holds it steady under reduced motion.
 
 <Canvas of={MeterStories.Overview} />
 

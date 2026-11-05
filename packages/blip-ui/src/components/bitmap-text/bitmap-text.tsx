@@ -113,6 +113,7 @@ export const BitmapText = ({
       aria-hidden
       viewBox={`0 0 ${width} ${height}`}
       shapeRendering="crispEdges"
+      data-slot="bitmap-text"
       className={bitmapText.root({ variant, className })}
       style={{ width: px(width), height: px(height), ...style }}
       {...props}

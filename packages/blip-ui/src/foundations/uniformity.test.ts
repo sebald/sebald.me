@@ -142,3 +142,15 @@ describe('the kit’s styles', () => {
     );
   });
 });
+
+describe('the kit’s components', () => {
+  it('mark their root with their name, so a parent can place them', () => {
+    const unmarked = readdirSync(ROOT).filter(
+      name =>
+        !readFileSync(join(ROOT, name, `${name}.tsx`), 'utf8').includes(
+          `data-slot="${name}"`,
+        ),
+    );
+    assert.deepEqual(unmarked, [], 'each root has data-slot="<component>"');
+  });
+});

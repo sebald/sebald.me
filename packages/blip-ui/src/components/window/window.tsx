@@ -54,8 +54,8 @@ export interface WindowProps extends PropsWithChildren {
  * goes to its bottom edge by itself.
  */
 export const WindowFrame = ({ className, style, children }: WindowProps) => (
-  // `data-window`: what a picker's description box sits beside
-  <div data-window className={styles.root({ className })} style={style}>
+  // `data-slot="window"`: also what a picker's description box sits beside
+  <div data-slot="window" className={styles.root({ className })} style={style}>
     {/* The rings; the content is not clipped, so nothing is cut at a corner */}
     {RINGS.map((colour, i) => (
       <span
