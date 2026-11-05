@@ -38,12 +38,13 @@ screen positions and sizes it.
 ## Legend
 
 `Legend` shows what works right now: the keys while the player uses keys,
-one line for touch after a tap. Put it last in the window, as a child: it
-sits along the bottom edge by itself. `CornerLegend` puts it in the stage's
-bottom right corner; held upright, it centres over the bar of controls.
+one line for touch after a tap. It places nothing itself; its parent does
+(`data-slot="legend"`). Last in a window it sits along the bottom edge,
+right aligned. On the stage itself it sits in the bottom right corner, and
+held upright it centres over the bar of controls.
 
 <Canvas of={WindowStories.WithLegend} />
-<Canvas of={WindowStories.Corner} />
+<Canvas of={WindowStories.OnTheStage} />
 
 ## The pixel
 

@@ -5,10 +5,10 @@ import { BitmapText } from './bitmap-text';
 const meta = {
   title: 'Components/BitmapText',
   component: BitmapText,
-  args: { children: 'YOU WIN', tone: 'primary', scale: 2, shadow: true },
+  args: { children: 'YOU WIN', variant: 'primary', scale: 2, shadow: true },
   argTypes: {
     children: { control: 'text' },
-    tone: {
+    variant: {
       control: 'select',
       options: ['primary', 'secondary', 'neutral', 'info', 'danger', 'spark'],
       table: { defaultValue: { summary: 'primary' } },
@@ -30,7 +30,7 @@ type Story = StoryObj<typeof meta>;
 /** One word through the controls */
 export const Default: Story = {};
 
-const TONES = [
+const VARIANTS = [
   'primary',
   'secondary',
   'neutral',
@@ -39,7 +39,7 @@ const TONES = [
   'spark',
 ] as const;
 
-/** Every tone, with its drop and without */
+/** Every variant, with its drop and without */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -50,14 +50,14 @@ export const Overview: Story = {
           {col}
         </span>
       ))}
-      {TONES.flatMap(tone => [
-        <span key={tone} className="text-[0.75em] text-(--bui-dim)">
-          {tone}
+      {VARIANTS.flatMap(variant => [
+        <span key={variant} className="text-[0.75em] text-(--bui-dim)">
+          {variant}
         </span>,
-        <BitmapText key={`${tone}-s`} tone={tone}>
+        <BitmapText key={`${variant}-s`} variant={variant}>
           YOU WIN
         </BitmapText>,
-        <BitmapText key={`${tone}-n`} tone={tone} shadow={false}>
+        <BitmapText key={`${variant}-n`} variant={variant} shadow={false}>
           YOU WIN
         </BitmapText>,
       ])}
@@ -71,7 +71,7 @@ export const Title: Story = {
   render: () => (
     <div className="grid w-fit justify-items-center gap-[calc(var(--px)*4)]">
       <BitmapText scale={4}>ROADMAP</BitmapText>
-      <BitmapText scale={2} tone="spark">
+      <BitmapText scale={2} variant="spark">
         FLAWLESS
       </BitmapText>
     </div>

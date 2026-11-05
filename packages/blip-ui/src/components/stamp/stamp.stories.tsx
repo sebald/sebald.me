@@ -5,10 +5,10 @@ import { Stamp } from './stamp';
 const meta = {
   title: 'Components/Stamp',
   component: Stamp,
-  args: { word: 'SHIPPED', tone: 'danger' },
+  args: { word: 'SHIPPED', variant: 'danger' },
   argTypes: {
     word: { control: 'text' },
-    tone: {
+    variant: {
       control: 'inline-radio',
       options: ['danger', 'primary'],
       table: { defaultValue: { summary: 'danger' } },
@@ -22,10 +22,10 @@ type Story = StoryObj<typeof meta>;
 /** One stamp through the controls */
 export const Default: Story = {};
 
-const TONES = ['danger', 'primary'] as const;
+const VARIANTS = ['danger', 'primary'] as const;
 const WORDS = ['DONE', 'SHIPPED', 'FLAWLESS'] as const;
 
-/** Every tone on a few words: the tilt grows with the word's length */
+/** Every variant on a few words: the tilt grows with the word's length */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -36,12 +36,12 @@ export const Overview: Story = {
           {word.length} letters
         </span>
       ))}
-      {TONES.flatMap(tone => [
-        <span key={tone} className="text-[0.75em] text-(--bui-dim)">
-          {tone}
+      {VARIANTS.flatMap(variant => [
+        <span key={variant} className="text-[0.75em] text-(--bui-dim)">
+          {variant}
         </span>,
         ...WORDS.map(word => (
-          <Stamp key={`${tone}-${word}`} word={word} tone={tone} />
+          <Stamp key={`${variant}-${word}`} word={word} variant={variant} />
         )),
       ])}
     </div>

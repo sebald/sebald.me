@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
 
+import { Pixels } from '../../providers/pixels';
+import { ControlGroup, Controls } from '../controls/controls';
 import { ICONS, type IconName } from '../pixel-icon/icons';
 import { IconButton, IconToggle } from './icon-button';
 
@@ -10,19 +12,11 @@ const meta = {
   args: {
     icon: 'back',
     'aria-label': 'Back (Esc)',
-    variant: 'corner',
     label: 'Back',
-    labelFirst: false,
     disabled: false,
   },
   argTypes: {
     icon: { control: 'select', options: Object.keys(ICONS) as IconName[] },
-    variant: {
-      control: 'inline-radio',
-      options: ['corner', 'bar'],
-      table: { defaultValue: { summary: 'corner' } },
-    },
-    labelFirst: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
 } satisfies Meta<typeof IconButton>;
@@ -30,66 +24,65 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** One button through the controls; the label shows on the bar variant */
+/** One button on its own, as in a corner: the icon alone; the label shows in the tall stage's bar */
 export const Default: Story = {};
 
 const Label = ({ children }: { children: string }) => (
   <span className="text-[0.75em] text-(--bui-dim)">{children}</span>
 );
 
+/** A button and a toggle in each state, and a disabled one, in the same group */
+const States = () => (
+  <ControlGroup side="start">
+    <IconButton icon="back" label="Back" aria-label="Back" />
+    <IconToggle
+      pressed={false}
+      icon="soundOff"
+      pressedIcon="soundOn"
+      label="Sound off"
+      pressedLabel="Sound on"
+      aria-label="Sound"
+      onPressedChange={() => {}}
+    />
+    <IconToggle
+      pressed
+      icon="soundOff"
+      pressedIcon="soundOn"
+      label="Sound off"
+      pressedLabel="Sound on"
+      aria-label="Sound"
+      onPressedChange={() => {}}
+    />
+    <IconButton icon="pause" label="Pause" aria-label="Pause" disabled />
+  </ControlGroup>
+);
+
 /**
- * Both variants, as a button and as a toggle in each state, and disabled:
- * the one place they are side by side (and what the visual tests compare)
+ * Where it is sets its look, the JSX the same: in a corner of the wide
+ * stage the icon alone, in the tall stage's bar the icon and its label;
+ * a button, a toggle off and on, and disabled
  */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[auto_repeat(4,auto)] items-center gap-x-6 gap-y-3">
-      <span />
-      <Label>button</Label>
-      <Label>toggle off</Label>
-      <Label>toggle on</Label>
-      <Label>disabled</Label>
-      {(['corner', 'bar'] as const).flatMap(variant => [
-        <Label key={variant}>{variant}</Label>,
-        <IconButton
-          key={`${variant}-button`}
-          variant={variant}
-          icon="back"
-          label="Back"
-          aria-label="Back"
-        />,
-        <IconToggle
-          key={`${variant}-off`}
-          variant={variant}
-          pressed={false}
-          icon="soundOff"
-          pressedIcon="soundOn"
-          label="Sound off"
-          pressedLabel="Sound on"
-          aria-label="Sound"
-          onPressedChange={() => {}}
-        />,
-        <IconToggle
-          key={`${variant}-on`}
-          variant={variant}
-          pressed
-          icon="soundOff"
-          pressedIcon="soundOn"
-          label="Sound off"
-          pressedLabel="Sound on"
-          aria-label="Sound"
-          onPressedChange={() => {}}
-        />,
-        <IconButton
-          key={`${variant}-disabled`}
-          variant={variant}
-          icon="pause"
-          label="Pause"
-          aria-label="Pause"
-          disabled
-        />,
-      ])}
+    <div className="grid w-fit gap-y-3">
+      <Label>corner</Label>
+      <div className="relative h-[calc(var(--px)*24)] w-[calc(var(--px)*120)]">
+        <Controls show="always">
+          <States />
+        </Controls>
+      </div>
+      <Label>bar</Label>
+      <Pixels
+        scale={1}
+        tall
+        className="relative h-[60px] w-[480px]"
+        style={{ ['--bui-bar' as string]: '52px' }}
+      >
+        <Controls>
+          <States />
+        </Controls>
+      </Pixels>
     </div>
   ),
 };

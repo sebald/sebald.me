@@ -2,52 +2,41 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Pixels } from '../../providers/pixels';
 import { IconButton, IconToggle } from '../icon-button/icon-button';
-import { Controls } from './controls';
+import { ControlGroup, Controls } from './controls';
 
-const Buttons = ({ bar }: { bar?: boolean }) => {
-  const variant = bar ? 'bar' : 'corner';
-  return {
-    start: (
-      <IconButton
-        variant={variant}
-        icon="back"
-        label="Back"
-        aria-label="Back (Esc)"
+/** The usual two groups: Back at the start, fullscreen and the sound at the end */
+const Groups = () => (
+  <>
+    <ControlGroup side="start">
+      <IconButton icon="back" label="Back" aria-label="Back (Esc)" />
+    </ControlGroup>
+    <ControlGroup side="end">
+      <IconToggle
+        pressed={false}
+        icon="fullscreen"
+        pressedIcon="exitFullscreen"
+        aria-label="Fullscreen"
+        onPressedChange={() => {}}
       />
-    ),
-    end: (
-      <>
-        <IconToggle
-          variant={variant}
-          pressed={false}
-          icon="fullscreen"
-          pressedIcon="exitFullscreen"
-          aria-label="Fullscreen"
-          onPressedChange={() => {}}
-        />
-        <IconToggle
-          variant={variant}
-          pressed
-          icon="soundOff"
-          pressedIcon="soundOn"
-          label="Sound off"
-          pressedLabel="Sound on"
-          aria-label="Sound (M)"
-          onPressedChange={() => {}}
-        />
-      </>
-    ),
-  };
-};
+      <IconToggle
+        pressed
+        icon="soundOff"
+        pressedIcon="soundOn"
+        label="Sound off"
+        pressedLabel="Sound on"
+        aria-label="Sound (M)"
+        onPressedChange={() => {}}
+      />
+    </ControlGroup>
+  </>
+);
 
 const meta = {
   title: 'Components/Controls',
   component: Controls,
-  args: { show: 'always' },
+  args: { show: 'always', children: null },
   argTypes: {
-    start: { control: false },
-    end: { control: false },
-    startAt: { control: { type: 'number', min: 0, max: 100 } },
+    children: { control: false },
     show: {
       control: 'inline-radio',
       options: ['touch', 'always'],
@@ -71,20 +60,21 @@ export const Default: Story = {
       </div>
     ),
   ],
-  render: (args, { globals }) => {
-    const bar = globals.layout === 'tall';
-    return (
-      <div
-        className="contents"
-        style={{ ['--bui-bar' as string]: bar ? '52px' : '0px' }}
-      >
-        <Controls {...args} {...Buttons({ bar })} />
-      </div>
-    );
-  },
+  render: (args, { globals }) => (
+    <div
+      className="contents"
+      style={{
+        ['--bui-bar' as string]: globals.layout === 'tall' ? '52px' : '0px',
+      }}
+    >
+      <Controls {...args}>
+        <Groups />
+      </Controls>
+    </div>
+  ),
 };
 
-/** Both layouts side by side: the corners of the wide stage, the tall bar */
+/** Both layouts side by side: the corners of the wide stage, the tall bar; the same JSX in each */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   // Held upright there are no corners, only the bar: the wide frame
@@ -95,15 +85,19 @@ export const Overview: Story = {
         hidden={globals.layout === 'tall'}
         className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
       >
-        <Controls show="always" {...Buttons({})} />
+        <Controls show="always">
+          <Groups />
+        </Controls>
       </div>
       <Pixels
         scale={1}
         tall
-        className="h-[480px] w-[320px] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
+        className="relative h-[480px] w-[320px] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
         style={{ ['--bui-bar' as string]: '52px' }}
       >
-        <Controls {...Buttons({ bar: true })} />
+        <Controls>
+          <Groups />
+        </Controls>
       </Pixels>
     </div>
   ),

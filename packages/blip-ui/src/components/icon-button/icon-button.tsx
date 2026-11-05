@@ -1,18 +1,17 @@
 'use client';
 
-import type {
-  ButtonHTMLAttributes,
-  MouseEvent,
-  PointerEvent,
-  ReactNode,
+import {
+  type ButtonHTMLAttributes,
+  type MouseEvent,
+  type PointerEvent,
+  type ReactNode,
+  useContext,
 } from 'react';
 
-import type { VariantProps } from '../../utils/styles';
+import { ControlsLayout } from '../controls/controls';
 import { type IconName } from '../pixel-icon/icons';
 import { PixelIcon } from '../pixel-icon/pixel-icon';
 import { iconButton } from './icon-button.styles';
-
-type Variants = VariantProps<typeof iconButton>;
 
 /** CSS pixels per icon pixel on the bar, where a thumb sets the size */
 const BAR_DOT = 1.5;
@@ -30,38 +29,34 @@ export interface IconButtonProps extends Omit<
   /** Which icon, by name */
   icon: IconName;
   /**
-   * `corner` is the icon alone in a corner of the wide stage, `bar` sits in
-   * the tall stage's bar and shows its `label`
-   * @default 'corner'
+   * Text beside the icon on the tall stage's bar; in a corner the icon
+   * stands alone and the `aria-label` names it
    */
-  variant?: NonNullable<Variants['variant']>;
-  /** Text beside the icon on the bar; the corner never shows it */
   label?: ReactNode;
-  /** Put the label before the icon, like the sound button on the bar */
-  labelFirst?: boolean;
 }
 
 /**
  * A round of the controls: an icon in a button at least 44 CSS pixels to
  * touch. A tap stays with it (`pointerdown` and `click` do not bubble).
- * Place it with `className` and `style`, or put it in `Controls`.
+ * Its look follows where it is: in the tall stage's bar it shows its
+ * label and a bigger icon, in a corner (or on its own) the icon alone.
+ * Put it in a `ControlGroup`.
  */
 export const IconButton = ({
   icon,
-  variant,
   label,
-  labelFirst = false,
   className,
   onClick,
   children,
   ...props
 }: IconButtonProps) => {
-  const bar = variant === 'bar';
-  const shown = bar ? label : null;
+  const layout = useContext(ControlsLayout);
+  const bar = layout === 'bar';
   return (
     <button
       type="button"
-      className={iconButton({ variant, className })}
+      data-slot="icon-button"
+      className={iconButton({ layout, className })}
       onPointerDown={keep}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
@@ -69,9 +64,8 @@ export const IconButton = ({
       }}
       {...props}
     >
-      {labelFirst && shown}
       <PixelIcon icon={icon} dot={bar ? BAR_DOT : undefined} />
-      {!labelFirst && shown}
+      {bar && label}
       {children}
     </button>
   );

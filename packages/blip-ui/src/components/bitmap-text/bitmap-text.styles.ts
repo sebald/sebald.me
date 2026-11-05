@@ -3,14 +3,14 @@ import { cva } from '../../utils/styles';
 /**
  * The ramp is three variables the letters read: the top row lit
  * (`--t-light`), the middle rows (`--t-main`), the bottom two shaded
- * (`--t-shade`). A tone fills them from an accent's ramp.
+ * (`--t-shade`). A variant fills them from an accent's ramp.
  */
 export const bitmapText = {
   root: cva({
     base: 'block overflow-visible',
     variants: {
       /** The colour ramp of the letters */
-      tone: {
+      variant: {
         primary:
           '[--t-main:var(--bui-primary)] [--t-light:var(--bui-primary-light)] [--t-shade:var(--bui-primary-shade)]',
         secondary:
@@ -25,7 +25,7 @@ export const bitmapText = {
           '[--t-main:var(--bui-spark)] [--t-light:var(--bui-spark)] [--t-shade:var(--bui-primary)]',
       },
     },
-    defaultVariants: { tone: 'primary' },
+    defaultVariants: { variant: 'primary' },
   }),
   ink: cva({ base: 'fill-(--bui-ink)' }),
   letter: cva({

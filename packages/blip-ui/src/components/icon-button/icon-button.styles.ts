@@ -11,12 +11,13 @@ export const iconButton = cva({
     'disabled:cursor-default disabled:bui-disabled',
   ],
   variants: {
-    variant: {
+    /** Where it is, from `Controls`: never set by hand */
+    layout: {
       /** Icon only, in a corner of the wide stage */
       corner: 'p-[calc(var(--bui-px)*2)] hover:brightness-125',
       /** In the bar along the bottom, with its label beside the icon */
-      bar: 'gap-2 px-3 text-[0.85em] text-(--bui-muted) active:text-(--bui-text-bright)',
+      bar: 'gap-2 px-3 text-[0.85em] whitespace-nowrap text-(--bui-muted) active:text-(--bui-text-bright)',
     },
   },
-  defaultVariants: { variant: 'corner' },
+  defaultVariants: { layout: 'corner' },
 });

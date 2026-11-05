@@ -8,16 +8,11 @@ export const window = {
     base: [
       'relative flex min-h-0 flex-1 flex-col bg-(--bui-surface) leading-[1.35] text-(--bui-text)',
       'p-[calc(var(--bui-px)*4)]',
+      // A legend in it: along the bottom edge, right aligned
+      '*:data-[slot=legend]:mt-auto *:data-[slot=legend]:pt-[calc(var(--bui-px)*2)] *:data-[slot=legend]:text-right',
     ],
   }),
-  legend: cva({
-    base: 'mt-auto pt-[calc(var(--bui-px)*2)] text-right text-[0.75em] text-(--bui-dim)',
-  }),
+  /** The legend's own look; where it sits is its parent's (a window's body, the stage) */
+  legend: cva({ base: 'text-[0.75em] text-(--bui-dim)' }),
   key: cva({ base: 'text-(--bui-muted)' }),
-  corner: cva({
-    base: [
-      'absolute right-[calc(var(--bui-px)*4)] bottom-[calc(var(--bui-px)*3)] text-right text-[0.75em] text-(--bui-dim)',
-      'tall:inset-x-[calc(var(--bui-px)*4)] tall:bottom-[calc(var(--bui-bar)+var(--bui-px)*3)] tall:text-center',
-    ],
-  }),
 };

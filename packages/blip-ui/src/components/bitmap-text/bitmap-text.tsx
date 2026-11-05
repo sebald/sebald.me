@@ -71,7 +71,7 @@ export interface BitmapTextProps extends Omit<
    * The colour ramp: the top row lit, the bottom two shaded
    * @default 'primary'
    */
-  tone?: NonNullable<Variants['tone']>;
+  variant?: NonNullable<Variants['variant']>;
   /**
    * Stage pixels a letter pixel
    * @default 2
@@ -92,7 +92,7 @@ export interface BitmapTextProps extends Omit<
  */
 export const BitmapText = ({
   children,
-  tone,
+  variant,
   scale = 2,
   shadow = true,
   className,
@@ -113,7 +113,7 @@ export const BitmapText = ({
       aria-hidden
       viewBox={`0 0 ${width} ${height}`}
       shapeRendering="crispEdges"
-      className={bitmapText.root({ tone, className })}
+      className={bitmapText.root({ variant, className })}
       style={{ width: px(width), height: px(height), ...style }}
       {...props}
     >

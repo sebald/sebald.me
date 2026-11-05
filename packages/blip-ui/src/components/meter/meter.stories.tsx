@@ -8,14 +8,14 @@ const meta = {
   args: {
     value: 3,
     max: 5,
-    tone: 'primary',
+    variant: 'primary',
     bright: false,
     'aria-label': 'Momentum',
   },
   argTypes: {
     value: { control: { type: 'number', min: 0, max: 12, step: 1 } },
     max: { control: { type: 'number', min: 1, max: 12, step: 1 } },
-    tone: {
+    variant: {
       control: 'inline-radio',
       options: ['primary', 'secondary', 'neutral', 'info', 'danger'],
       table: { defaultValue: { summary: 'primary' } },
@@ -37,7 +37,7 @@ type Story = StoryObj<typeof meta>;
 /** Every prop through the controls */
 export const Default: Story = {};
 
-const TONES = ['primary', 'secondary', 'neutral', 'info', 'danger'] as const;
+const VARIANTS = ['primary', 'secondary', 'neutral', 'info', 'danger'] as const;
 const STATES = [
   { name: 'empty', value: 0, bright: false },
   { name: 'partial', value: 3, bright: false },
@@ -45,7 +45,7 @@ const STATES = [
   { name: 'bright', value: 5, bright: true },
 ] as const;
 
-/** Every tone in every state, and other cell sizes, side by side */
+/** Every variant in every state, and other cell sizes, side by side */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -56,15 +56,15 @@ export const Overview: Story = {
           {state.name}
         </span>
       ))}
-      {TONES.flatMap(tone => [
-        <span key={tone} className="text-[0.75em] text-(--bui-dim)">
-          {tone}
+      {VARIANTS.flatMap(variant => [
+        <span key={variant} className="text-[0.75em] text-(--bui-dim)">
+          {variant}
         </span>,
         ...STATES.map(state => (
           <Meter
-            key={`${tone}-${state.name}`}
-            aria-label={`${tone} ${state.name}`}
-            tone={tone}
+            key={`${variant}-${state.name}`}
+            aria-label={`${variant} ${state.name}`}
+            variant={variant}
             max={5}
             value={state.value}
             bright={state.bright}

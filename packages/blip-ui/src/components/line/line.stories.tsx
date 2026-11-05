@@ -1,23 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Dialogue } from './dialogue';
+import { Line } from './line';
 
 const meta = {
-  title: 'Components/Dialogue',
-  component: Dialogue,
+  title: 'Components/Line',
+  component: Line,
   args: {
     children: "Let's circle back on this.",
-    tone: 'primary',
-    muted: false,
+    variant: 'primary',
+    past: false,
   },
   argTypes: {
     children: { control: 'text' },
-    tone: {
+    variant: {
       control: 'inline-radio',
       options: ['primary', 'secondary'],
       table: { defaultValue: { summary: 'primary' } },
     },
-    muted: {
+    past: {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
     },
@@ -29,7 +29,7 @@ const meta = {
       </div>
     ),
   ],
-} satisfies Meta<typeof Dialogue>;
+} satisfies Meta<typeof Line>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -37,43 +37,43 @@ type Story = StoryObj<typeof meta>;
 /** One line through the controls */
 export const Default: Story = {};
 
-const TONES = ['primary', 'secondary'] as const;
+const VARIANTS = ['primary', 'secondary'] as const;
 
-/** Every tone, live and muted, side by side */
+/** Every variant, live and past, side by side */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="grid w-[calc(var(--px)*260)] max-w-full grid-cols-[auto_1fr_1fr] items-start gap-x-6 gap-y-3">
       <span />
-      {['live', 'muted'].map(col => (
+      {['live', 'past'].map(col => (
         <span key={col} className="text-[0.75em] text-(--bui-dim)">
           {col}
         </span>
       ))}
-      {TONES.flatMap(tone => [
-        <span key={tone} className="text-[0.75em] text-(--bui-dim)">
-          {tone}
+      {VARIANTS.flatMap(variant => [
+        <span key={variant} className="text-[0.75em] text-(--bui-dim)">
+          {variant}
         </span>,
-        <Dialogue key={`${tone}-live`} tone={tone}>
+        <Line key={`${variant}-live`} variant={variant}>
           Synergy is key.
-        </Dialogue>,
-        <Dialogue key={`${tone}-muted`} tone={tone} muted>
+        </Line>,
+        <Line key={`${variant}-past`} variant={variant} past>
           Synergy is key.
-        </Dialogue>,
+        </Line>,
       ])}
     </div>
   ),
 };
 
-/** An exchange: the line being answered is muted, the reply is live */
+/** An exchange: the line being answered is past, the reply is live */
 export const Exchange: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="grid w-[calc(var(--px)*200)] max-w-full gap-3">
-      <Dialogue tone="secondary" muted>
+      <Line variant="secondary" past>
         Let’s take this offline.
-      </Dialogue>
-      <Dialogue tone="primary">Offline is where ideas go to die.</Dialogue>
+      </Line>
+      <Line variant="primary">Offline is where ideas go to die.</Line>
     </div>
   ),
 };

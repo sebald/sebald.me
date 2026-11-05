@@ -94,7 +94,7 @@ export interface StampProps extends Omit<
    * The ink: `danger` for a job done, `primary` for one done without a scratch
    * @default 'danger'
    */
-  tone?: NonNullable<Variants['tone']>;
+  variant?: NonNullable<Variants['variant']>;
 }
 
 /**
@@ -105,7 +105,7 @@ export interface StampProps extends Omit<
  */
 export const Stamp = ({
   word,
-  tone,
+  variant,
   className,
   style,
   ...props
@@ -116,7 +116,7 @@ export const Stamp = ({
       aria-hidden
       viewBox={`0 0 ${width} ${height}`}
       shapeRendering="crispEdges"
-      className={stamp.root({ tone, className })}
+      className={stamp.root({ variant, className })}
       style={{ width: px(width), height: px(height), ...style }}
       {...props}
     >

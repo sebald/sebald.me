@@ -5,12 +5,12 @@ export const stamp = {
     base: 'block',
     variants: {
       /** The ink: the danger colour for a job done, the primary for one done without a scratch */
-      tone: {
+      variant: {
         danger: 'text-(--bui-danger)',
         primary: 'text-(--bui-primary)',
       },
     },
-    defaultVariants: { tone: 'danger' },
+    defaultVariants: { variant: 'danger' },
   }),
   // The frame and the letters
   ink: cva({ base: 'fill-current' }),

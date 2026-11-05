@@ -37,7 +37,7 @@ export const WithMeter: Story = {
       ['Momentum', <Meter key="m" aria-label="Momentum" value={3} max={5} />],
       [
         'Focus',
-        <Meter key="f" aria-label="Focus" value={2} max={5} tone="info" />,
+        <Meter key="f" aria-label="Focus" value={2} max={5} variant="info" />,
       ],
       ['Score', '4,200'],
     ],

@@ -18,7 +18,7 @@ export interface MeterProps extends Omit<
    * The lit cells' colour ramp
    * @default 'primary'
    */
-  tone?: NonNullable<Variants['tone']>;
+  variant?: NonNullable<Variants['variant']>;
   /**
    * One cell, in stage pixels
    * @default { width: 4, height: 6 }
@@ -40,7 +40,7 @@ export interface MeterProps extends Omit<
 export const Meter = ({
   value,
   max,
-  tone,
+  variant,
   cell = { width: 4, height: 6 },
   bright = false,
   className,
@@ -56,7 +56,7 @@ export const Meter = ({
       aria-valuemax={max}
       aria-valuenow={lit}
       aria-valuetext={`${lit} of ${max}`}
-      className={meter.root({ tone, className })}
+      className={meter.root({ variant, className })}
       {...props}
     >
       {Array.from({ length: max }, (_, i) => {

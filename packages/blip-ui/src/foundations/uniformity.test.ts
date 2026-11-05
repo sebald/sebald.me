@@ -25,11 +25,13 @@ const classes = readdirSync(ROOT, { recursive: true, encoding: 'utf8' })
     ]
       .flatMap(match => (match[1] ?? match[2] ?? match[3]!).split(/\s+/))
       .filter(Boolean)
-      // Only the utility, without its variants (`tall:`, `group-active:`)
+      // Only the utility, without its variants (`tall:`, `group-active:`,
+      // a parent's `*:data-[slot=legend]:`): what follows the last colon
+      // outside brackets
       .map(token => ({
         file,
         token,
-        utility: token.replace(/^(?:[^[(]*?:)+/, ''),
+        utility: token.split(/:(?![^[(]*[\])])/).at(-1)!,
       })),
   );
 
@@ -47,8 +49,10 @@ const ALLOWED: Record<string, string> = {
   'stage/stage.styles.ts p-6': 'outside the stage',
   'stage/stage.styles.ts text-sm': 'outside the stage',
   // Set against the letters: the speaker's mark and a ledger's dots on the baseline
-  'dialogue/dialogue.styles.ts mt-[0.4em]': 'on the text',
+  'line/line.styles.ts mt-[0.4em]': 'on the text',
   'ledger/ledger.styles.ts mb-[0.3em]': 'on the text',
+  // Art on the grid: neighbouring window tabs share their ink column
+  'tabs/tabs.styles.ts -ml-(--px)': 'art',
   // The darkened inside of a stamp, not a disabled state
   'stamp/stamp.styles.ts opacity-70': 'art',
 };

@@ -20,12 +20,15 @@ off (sound, fullscreen). They stand alone in a corner or sit in
 2. **Label**, beside the icon on the bar only
 3. **Target**, 44 by 44 CSS pixels at least, larger than the icon
 
-## Variants
+## Where it is
 
-| Variant  | Looks like                              | When to use                                      |
-| -------- | --------------------------------------- | ------------------------------------------------ |
-| `corner` | The icon alone, brighter on hover       | A corner of the wide stage                       |
-| `bar`    | Icon and label in the muted text colour | The tall stage's bar along the bottom (Controls) |
+It has no variant: where it is sets its look, so the same JSX works in
+both layouts.
+
+| Where                             | Looks like                              |
+| --------------------------------- | --------------------------------------- |
+| A corner of the wide stage, alone | The icon alone, brighter on hover       |
+| The tall stage's bar (`Controls`) | Icon and label in the muted text colour |
 
 <Canvas of={IconButtonStories.Overview} />
 

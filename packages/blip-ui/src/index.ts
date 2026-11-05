@@ -65,7 +65,7 @@ export {
   BitmapText,
   type BitmapTextProps,
 } from './components/bitmap-text/bitmap-text';
-export { Dialogue, type DialogueProps } from './components/dialogue/dialogue';
+export { Line, type LineProps } from './components/line/line';
 export {
   SpeechBubble,
   type SpeechBubbleProps,
@@ -82,7 +82,12 @@ export { button as buttonStyles } from './components/button/button.styles';
 export { Ledger, type LedgerProps } from './components/ledger/ledger';
 export { Meter, type MeterProps } from './components/meter/meter';
 export { Timer, TIMER_SIZE, type TimerProps } from './components/timer/timer';
-export { Controls, type ControlsProps } from './components/controls/controls';
+export {
+  ControlGroup,
+  type ControlGroupProps,
+  Controls,
+  type ControlsProps,
+} from './components/controls/controls';
 export {
   IconButton,
   type IconButtonProps,
@@ -130,7 +135,6 @@ export {
   type ScreenTitleProps,
 } from './components/text/text';
 export {
-  CornerLegend,
   Legend,
   type LegendProps,
   Window,

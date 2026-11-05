@@ -8,26 +8,30 @@ import * as ControlsStories from './controls.stories';
 
 The touch versions of a game's keys. On the tall stage (a phone held
 upright) a bar along the bottom, `--bui-bar` tall; on the wide stage small
-pixel buttons in the corners. It knows no buttons of its own: you pass them
-as `start` and `end`.
+pixel buttons in the corners. It knows no buttons of its own: you put them
+in two `ControlGroup`s, and the same JSX works in both layouts. The buttons
+take their look from it, so they have no layout prop.
 
 <Canvas of={ControlsStories.Default} />
 <Controls of={ControlsStories.Default} />
 
 ## Anatomy
 
-1. **Start**, the top left corner, or the left of the bar: Back or Pause
-2. **End**, the top right corner, or the right of the bar: sound, fullscreen
+1. **ControlGroup `side="start"`**, the top left corner, or the left of the
+   bar: Back or Pause
+2. **ControlGroup `side="end"`**, the top right corner, or the right of the
+   bar: sound, fullscreen; on the bar the labels come first, the icons at
+   the edge
 3. **Bar**, along the bottom of the tall stage, with a line above it
 
 <Canvas of={ControlsStories.Overview} />
 
 ## Layouts
 
-| Layout | Where                                                 | Shown                           |
-| ------ | ----------------------------------------------------- | ------------------------------- |
-| Wide   | Corners, 5 stage pixels in. `startAt` centres `start` | For touch (`show="touch"`)      |
-| Tall   | A bar of `--bui-bar` along the bottom of the stage    | Always, it is the touch control |
+| Layout | Where                                              | Shown                           |
+| ------ | -------------------------------------------------- | ------------------------------- |
+| Wide   | Corners, 5 stage pixels in                         | For touch (`show="touch"`)      |
+| Tall   | A bar of `--bui-bar` along the bottom of the stage | Always, it is the touch control |
 
 On the tall stage the `Stage` writes `--bui-bar` (its `bar` prop, 52 CSS
 pixels), so screens keep clear of it: pad by `var(--bui-bar)`. Elsewhere it
@@ -35,39 +39,36 @@ is 0.
 
 ## Usage
 
-- **Do** pass `IconButton`s and `IconToggle`s, with `variant="bar"` on the
-  bar. Choose the variant from `usePixels().tall`.
+- **Do** put `IconButton`s and `IconToggle`s in the groups, with a
+  `label`: the bar shows it, a corner shows the icon alone.
 - **Do** keep the keys in the game. Controls has none: bind Esc and M with
   `useKeys` and have the buttons call the same actions.
-- **Don't** put more than two or three buttons in a slot.
+- **Don't** put more than two or three buttons in a group.
 
 ```tsx
-const { tall } = usePixels();
-const variant = tall ? 'bar' : 'corner';
-
 useKeys({ Escape: back, m: toggleSound });
 
-<Controls
-  start={
+<Controls>
+  <ControlGroup side="start">
     <IconButton
-      variant={variant}
       icon="back"
       label="Back"
       aria-label="Back (Esc)"
       onClick={back}
     />
-  }
-  end={
+  </ControlGroup>
+  <ControlGroup side="end">
     <IconToggle
-      variant={variant}
       icon="soundOff"
       pressedIcon="soundOn"
+      label="Sound off"
+      pressedLabel="Sound on"
       aria-label="Sound (M)"
       pressed={sound}
       onPressedChange={toggleSound}
     />
-  }
-/>;
+  </ControlGroup>
+</Controls>;
 ```
 
 ## Input

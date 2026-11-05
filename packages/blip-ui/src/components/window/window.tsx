@@ -111,21 +111,13 @@ const Hints = ({ keys, touch }: Omit<LegendProps, 'className'>) => {
 };
 
 /**
- * The control hints of what it is in: put it last in a window (or a
- * tab's panel) and it sits along the bottom edge, right aligned
+ * The control hints of what it is in. It places nothing itself: last in
+ * a window (or a tab's panel) it sits along the bottom edge, right
+ * aligned; on the stage itself, in its bottom right corner, and held
+ * upright centred over the bar of controls
  */
 export const Legend = ({ className, ...props }: LegendProps) => (
-  <div className={styles.legend({ className })}>
-    <Hints {...props} />
-  </div>
-);
-
-/**
- * The legend on its own, in the stage's bottom right corner; held
- * upright, centred over the bar of controls
- */
-export const CornerLegend = ({ className, ...props }: LegendProps) => (
-  <div className={styles.corner({ className })}>
+  <div data-slot="legend" className={styles.legend({ className })}>
     <Hints {...props} />
   </div>
 );

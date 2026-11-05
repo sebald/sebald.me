@@ -2,10 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Button } from '../components/button/button';
-import { Controls } from '../components/controls/controls';
-import { Dialogue } from '../components/dialogue/dialogue';
+import { ControlGroup, Controls } from '../components/controls/controls';
 import { IconButton, IconToggle } from '../components/icon-button/icon-button';
 import { Ledger } from '../components/ledger/ledger';
+import { Line } from '../components/line/line';
 import { Meter } from '../components/meter/meter';
 import { Picker, type PickerItem } from '../components/picker/picker';
 import { Setting } from '../components/setting/setting';
@@ -38,17 +38,11 @@ const Stage = ({ children }: { children: ReactNode }) => {
       }}
     >
       {children}
-      <Controls
-        show="always"
-        start={
-          <IconButton
-            icon="back"
-            aria-label="Back"
-            label="Back"
-            variant={pixels.tall ? 'bar' : 'corner'}
-          />
-        }
-        end={
+      <Controls show="always">
+        <ControlGroup side="start">
+          <IconButton icon="back" aria-label="Back" label="Back" />
+        </ControlGroup>
+        <ControlGroup side="end">
           <IconToggle
             icon="soundOff"
             pressedIcon="soundOn"
@@ -57,10 +51,9 @@ const Stage = ({ children }: { children: ReactNode }) => {
             pressedLabel="Sound on"
             pressed
             onPressedChange={noop}
-            variant={pixels.tall ? 'bar' : 'corner'}
           />
-        }
-      />
+        </ControlGroup>
+      </Controls>
     </Pixels>
   );
 };
@@ -170,10 +163,10 @@ export const Duel: Story = {
       <div className="absolute inset-x-[calc(var(--px)*16)] bottom-[calc(var(--px)*12)] grid grid-cols-[3fr_2fr] gap-[calc(var(--px)*6)] tall:bottom-[calc(var(--bui-bar)+var(--px)*12)] tall:grid-cols-1">
         <Window>
           <div className="grid gap-[calc(var(--px)*3)]">
-            <Dialogue tone="secondary" muted>
+            <Line variant="secondary" past>
               We need this by Monday.
-            </Dialogue>
-            <Dialogue>Monday, as in next quarter?</Dialogue>
+            </Line>
+            <Line>Monday, as in next quarter?</Line>
           </div>
         </Window>
         <Tabs variant="window" defaultValue="pools">
@@ -195,7 +188,7 @@ export const Duel: Story = {
                     aria-label="Patience"
                     value={1}
                     max={5}
-                    tone="danger"
+                    variant="danger"
                   />,
                 ],
               ]}

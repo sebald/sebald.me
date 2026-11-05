@@ -1,7 +1,7 @@
 import { cva } from '../../utils/styles';
 
 /**
- * The meter's parts. The tone sets the lit cells' ramp through `--m-*`
+ * The meter's parts. The variant sets the lit cells' ramp through `--m-*`
  * variables, so the parts' classes stay the same. A readout: drawn in
  * `--bui-px`, never finer than `--bui-min-px`, so a phone keeps it legible.
  */
@@ -9,7 +9,7 @@ export const meter = {
   root: cva({
     base: 'inline-flex items-center gap-[calc(var(--bui-px)*2)] p-(--bui-px) align-middle',
     variants: {
-      tone: {
+      variant: {
         /** The player's side, the main pool */
         primary:
           '[--m-light:var(--bui-primary-light)] [--m-mid:var(--bui-primary)] [--m-shade:var(--bui-primary-shade)]',
@@ -26,7 +26,7 @@ export const meter = {
           '[--m-light:var(--bui-danger-light)] [--m-mid:var(--bui-danger)] [--m-shade:var(--bui-danger-shade)]',
       },
     },
-    defaultVariants: { tone: 'primary' },
+    defaultVariants: { variant: 'primary' },
   }),
   // An ink line a pixel wide around every cell
   cell: cva({

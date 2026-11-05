@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Stage } from '../stage/stage';
 import { Muted } from '../text/text';
-import { CornerLegend, Legend, Window } from './window';
+import { Legend, Window } from './window';
 
 const meta = {
   title: 'Components/Window',
@@ -42,13 +43,13 @@ export const WithLegend: Story = {
   ),
 };
 
-/** The legend on its own, in a stage's bottom right corner */
-export const Corner: Story = {
+/** The same legend on the stage itself: the stage puts it in its bottom right corner */
+export const OnTheStage: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="relative h-[calc(var(--px)*60)] w-[calc(var(--px)*200)] max-w-full border border-dashed border-(--bui-frame-dim)">
+  render: (_, { globals }) => (
+    <Stage scale={Number(globals.scale) || 3} width={200} height={60}>
       <Muted className="p-3">The stage</Muted>
-      <CornerLegend keys={[['Enter', 'start']]} touch="Tap to start" />
-    </div>
+      <Legend keys={[['Enter', 'start']]} touch="Tap to start" />
+    </Stage>
   ),
 };
