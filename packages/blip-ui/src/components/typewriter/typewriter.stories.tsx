@@ -47,17 +47,17 @@ const POINTS = [
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-[calc(var(--px)*260)] max-w-full grid-cols-[auto_1fr] items-start gap-x-6 gap-y-3">
-      {POINTS.flatMap(({ name, typed }) => [
-        <span key={name} className="text-[0.75em] text-(--bui-dim)">
-          {name}
-        </span>,
-        <Window key={`${name}-line`}>
-          <Line>
-            <Typewriter typed={typed}>{LINE}</Typewriter>
-          </Line>
-        </Window>,
-      ])}
+    <div className="grid w-[calc(var(--px)*260)] max-w-full gap-4">
+      {POINTS.map(({ name, typed }) => (
+        <div key={name} className="grid gap-1">
+          <span className="text-[0.75em] text-(--bui-dim)">{name}</span>
+          <Window>
+            <Line>
+              <Typewriter typed={typed}>{LINE}</Typewriter>
+            </Line>
+          </Window>
+        </div>
+      ))}
     </div>
   ),
 };
