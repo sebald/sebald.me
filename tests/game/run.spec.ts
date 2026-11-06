@@ -3,8 +3,10 @@ import {
   current,
   expect,
   playDuel,
+  press,
   said,
   screen,
+  settle,
   test,
   toMenu,
   toRoster,
@@ -90,8 +92,8 @@ test.describe('a run', () => {
       // On to the first choice: what was said, and what is on offer
       const offer = screen(page).getByRole('list').getByRole('button');
       for (let i = 0; i < 20 && (await offer.count()) === 0; i++) {
-        await page.keyboard.press('Enter');
-        await page.clock.runFor(700);
+        await press(page, 'Enter');
+        await settle(page, 700);
       }
       firsts.push(
         [

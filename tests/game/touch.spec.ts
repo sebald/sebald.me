@@ -1,4 +1,4 @@
-import { expect, open, screen, test } from './game';
+import { expect, open, screen, settle, test } from './game';
 
 test.describe('on a phone, by touch', () => {
   test.skip(({ isMobile }) => !isMobile, 'a phone held upright');
@@ -28,7 +28,7 @@ test.describe('on a phone, by touch', () => {
     // A tap anywhere on the stage goes on with the duel
     const line = await screen(page).locator('p').first().textContent();
     await screen(page).tap();
-    await page.clock.runFor(700);
+    await settle(page, 700);
     await expect(screen(page).locator('p').first()).not.toHaveText(line!);
   });
 

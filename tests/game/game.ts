@@ -28,7 +28,16 @@ export const test = base.extend<{ errors: string[] }>({
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
       page.on('console', message => {
-        if (message.type() === 'error') errors.push(message.text());
+        // A failed load is reported with its address below
+        if (
+          message.type() === 'error' &&
+          !message.text().startsWith('Failed to load resource')
+        )
+          errors.push(message.text());
+      });
+      page.on('response', response => {
+        if (response.status() >= 400)
+          errors.push(`${response.status()} ${response.url()}`);
       });
       await run(errors);
       expect(errors, 'no errors in the console').toEqual([]);
@@ -36,6 +45,11 @@ export const test = base.extend<{ errors: string[] }>({
     { auto: true },
   ],
   page: async ({ page }, run) => {
+    // Vercel's analytics script is served on Vercel only; a build
+    // elsewhere asks for it and gets a 404
+    await page.route('**/_vercel/**', route =>
+      route.fulfill({ status: 200, contentType: 'text/javascript', body: '' }),
+    );
     // The demo's picks and the sound's noise use Math.random: seed it too
     await page.addInitScript(() => {
       let state = 0x2f6b3a1d;
