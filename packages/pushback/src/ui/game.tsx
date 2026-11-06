@@ -1,6 +1,6 @@
 'use client';
 
-import { FeedbackProvider, Text } from '@sebald/blip-ui';
+import { Announcer, FeedbackProvider, Text } from '@sebald/blip-ui';
 import dynamic from 'next/dynamic';
 
 import { PALETTE } from './palette';
@@ -27,7 +27,7 @@ const Pushback = dynamic(
 /**
  * The game, in the element that goes fullscreen: the stage centred on
  * the dark ground, every screen inside it, Blip UI's parts sounding as
- * the game does
+ * the game does and speaking through one live region
  */
 export const Game = () => (
   <div
@@ -37,7 +37,11 @@ export const Game = () => (
     style={{ ['--pb-bg' as string]: PALETTE.bg }}
   >
     <FeedbackProvider play={feedback}>
-      <Pushback />
+      {/* One live region for every screen: each renders its own stage,
+          and a screen speaks from outside it (the duel's narration) */}
+      <Announcer>
+        <Pushback />
+      </Announcer>
     </FeedbackProvider>
   </div>
 );

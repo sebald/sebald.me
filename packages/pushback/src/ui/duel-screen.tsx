@@ -20,6 +20,7 @@ import {
   Typewriter,
   Window,
   prefersReducedMotion,
+  useAnnounce,
   useAnyKey,
   useKeys,
   useScale,
@@ -273,7 +274,7 @@ export const DuelScreen = ({
 
   // Centre the stage in the viewport when the duel starts, so the panel
   // is never below the fold
-  const rootRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     if (scale !== undefined) return;
     // After the stage has measured itself and taken its size
@@ -640,6 +641,12 @@ export const DuelScreen = ({
     }
     return barsLabel(state, 'player');
   }, [step, state, character.name]);
+  // Said through the stage's live region; again on resume, since the
+  // pause menu spoke over it
+  const say = useAnnounce();
+  useEffect(() => {
+    if (announce && !paused) say(announce);
+  }, [announce, paused, say]);
 
   const silenceWidth =
     state.phase === 'defend' && state.silence && step?.kind === 'menu'
@@ -913,10 +920,6 @@ export const DuelScreen = ({
         className,
       )}
     >
-      <div ref={rootRef} aria-live="polite" className="sr-only">
-        {announce}
-      </div>
-
       {/* The bars, at the top of what is shown when the ceiling is cropped;
           through a resolve line they show the state before it */}
       <Hud
@@ -958,6 +961,7 @@ export const DuelScreen = ({
 
       {/* Tap the stage to skip typing or move on; the panel is for the menus */}
       <button
+        ref={rootRef}
         type="button"
         aria-label="Continue"
         tabIndex={-1}

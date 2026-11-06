@@ -8,19 +8,14 @@ import {
   PickerItem,
   Text,
   Window,
+  useAnnounce,
   useAnyKey,
+  useIdle,
   useInputKind,
-  useKeys,
   useScale,
 } from '@sebald/blip-ui';
 import NextImage from 'next/image';
-import {
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { type ReactNode, useCallback, useEffect, useState } from 'react';
 
 import logo from '../assets/sheets/logo.png';
 import { ATTRACT_AFTER_MS } from '../lib/attract';
@@ -195,42 +190,24 @@ export const TitleScreen = ({
     setSetting(false);
     setReturned('options');
   }, []);
-  useKeys(
-    useMemo(() => ({ Enter: closeHowTo, Escape: closeHowTo }), [closeHowTo]),
-    reading,
-  );
-  // On the click, not the press: the menu comes back under the finger,
-  // and the rest of the tap would land on it. Listening starts after the
-  // tap that opened it.
-  useEffect(() => {
-    if (!reading) return;
-    const start = setTimeout(() =>
-      window.addEventListener('click', closeHowTo),
-    );
-    return () => {
-      clearTimeout(start);
-      window.removeEventListener('click', closeHowTo);
-    };
-  }, [reading, closeHowTo]);
+  // Any key or a tap goes back (on the tap's click, so the rest of it
+  // does not land on the menu that comes back under the finger; not the
+  // press that opened it)
+  useAnyKey(() => {
+    effect('cancel');
+    closeHowTo();
+  }, reading);
   const kind = useInputKind();
+  // The call to play, said on the splash as well as blinking
+  const call = kind === 'touch' ? 'Tap to play' : 'Press Enter to play';
+  const say = useAnnounce();
+  useEffect(() => {
+    if (!open) say(call);
+  }, [open, call, say]);
   const { tall } = useScale();
 
   // Attract mode: a key or a tap resets the clock, silence starts the demo
-  useEffect(() => {
-    if (!onAttract) return;
-    let timer = setTimeout(onAttract, ATTRACT_AFTER_MS);
-    const reset = () => {
-      clearTimeout(timer);
-      timer = setTimeout(onAttract, ATTRACT_AFTER_MS);
-    };
-    window.addEventListener('keydown', reset);
-    window.addEventListener('pointerdown', reset);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener('keydown', reset);
-      window.removeEventListener('pointerdown', reset);
-    };
-  }, [onAttract]);
+  useIdle(ATTRACT_AFTER_MS, () => onAttract?.(), Boolean(onAttract));
 
   // The splash: any key or a tap opens the menu (Blip UI's any key: on
   // the tap's click, and not the key that brought the title up)
@@ -367,7 +344,6 @@ export const TitleScreen = ({
       ) : (
         /* The arcade call to play, under the logo: a full blink, nothing between on and off */
         <p
-          aria-live="polite"
           className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
           style={{
             top: px(tall ? TALL.logo + LOGO.height + 4 : CALL.top),
@@ -378,7 +354,7 @@ export const TitleScreen = ({
             variant="call"
             className="font-bold tracking-[0.15em] uppercase"
           >
-            {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
+            {call}
           </Text>
         </p>
       )}
