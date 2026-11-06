@@ -1,21 +1,20 @@
 'use client';
 
 import {
-  Heading,
+  Confirm,
+  Dialog,
   Legend,
   Picker,
   PickerGroup,
   PickerItem,
   PickerSetting,
-  Window,
-  useKeys,
+  Title,
 } from '@sebald/blip-ui';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { MODE_LABELS, type Mode, nextMode, stepMode } from '../lib/characters';
 import { ROLE_LABELS, type Role } from '../lib/lines';
 import { canPlay, effect, setSettings } from './audio/engine';
-import { Confirm } from './confirm';
 import { useSoundSettings } from './use-sound';
 
 /** What each mode changes, under the list while the cursor is on the mode */
@@ -84,11 +83,6 @@ export const Options = ({
   const cancel = () => setAsking(null);
   const progress = save.running !== undefined || losses(save).length > 0;
 
-  useKeys(
-    useMemo(() => ({ Escape: onClose }), [onClose]),
-    asking === null,
-  );
-
   // A mode switch with something at stake asks first
   const switchTo = (target: Mode) => {
     if (target === mode) return;
@@ -121,56 +115,51 @@ export const Options = ({
   );
 
   return (
-    <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60">
-      <Window className="w-[19em] tall:w-[90%]">
-        <Heading>Options</Heading>
-        <Picker
-          label="Options"
-          className="mt-[calc(var(--px)*3)]"
-          active={asking === null}
+    // Escape or a tap outside closes it, as Back does
+    <Dialog open onOpenChange={open => !open && onClose()} className="w-[19em]">
+      <Title>Options</Title>
+      <Picker label="Options" active={asking === null}>
+        <PickerSetting
+          id="mode"
+          value={MODE_LABELS[mode]}
+          note={MODE_NOTES[mode]}
+          // Enter or a tap goes round, and so do left and right: a choice
+          // has no ends (a range would, like a volume)
+          onSelect={() => switchTo(nextMode(mode))}
+          onStep={step => switchTo(stepMode(mode, step))}
         >
-          <PickerSetting
-            id="mode"
-            value={MODE_LABELS[mode]}
-            note={MODE_NOTES[mode]}
-            // Enter or a tap goes round, and so do left and right: a choice
-            // has no ends (a range would, like a volume)
-            onSelect={() => switchTo(nextMode(mode))}
-            onStep={step => switchTo(stepMode(mode, step))}
+          Mode
+        </PickerSetting>
+        {soundSwitch('music', 'Music')}
+        {soundSwitch('effects', 'Effects')}
+        <PickerGroup>
+          <PickerItem
+            id="erase"
+            disabled={!progress}
+            note={
+              progress
+                ? 'Deletes all progress and starts the game fresh. The mode stays.'
+                : 'Nothing saved yet: no run, no shipped roles, no collected lines.'
+            }
+            onSelect={() => setAsking('erase')}
           >
-            Mode
-          </PickerSetting>
-          {soundSwitch('music', 'Music')}
-          {soundSwitch('effects', 'Effects')}
-          <PickerGroup>
-            <PickerItem
-              id="erase"
-              disabled={!progress}
-              note={
-                progress
-                  ? 'Deletes all progress and starts the game fresh. The mode stays.'
-                  : 'Nothing saved yet: no run, no shipped roles, no collected lines.'
-              }
-              onSelect={() => setAsking('erase')}
-            >
-              Erase save
-            </PickerItem>
-          </PickerGroup>
-          <PickerGroup>
-            <PickerItem id="back" variant="back" onSelect={onClose}>
-              Back
-            </PickerItem>
-          </PickerGroup>
-        </Picker>
-        <Legend
-          keys={[
-            ['↑↓', 'choose'],
-            ['Enter', 'confirm'],
-            ['Esc', 'back'],
-          ]}
-          touch="Tap a line"
-        />
-      </Window>
+            Erase save
+          </PickerItem>
+        </PickerGroup>
+        <PickerGroup>
+          <PickerItem id="back" variant="back" onSelect={onClose}>
+            Back
+          </PickerItem>
+        </PickerGroup>
+      </Picker>
+      <Legend
+        keys={[
+          ['↑↓', 'choose'],
+          ['Enter', 'confirm'],
+          ['Esc', 'back'],
+        ]}
+        touch="Tap a line"
+      />
 
       {asking === 'erase' && (
         <Confirm
@@ -199,6 +188,6 @@ export const Options = ({
           {list(losses(save))} go.
         </Confirm>
       )}
-    </div>
+    </Dialog>
   );
 };

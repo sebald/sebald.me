@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Confirm,
   Heading,
   Legend,
   Picker,
@@ -34,7 +35,6 @@ import {
 } from '../lib/lines';
 import { STAGE, roomBox } from '../lib/stage';
 import { effect } from './audio/engine';
-import { Confirm } from './confirm';
 import { Controls } from './controls';
 import { endMask } from './dither';
 import { Room } from './frame';

@@ -11,7 +11,8 @@ export const dialog = {
     variants: {
       size: {
         /** A question, a few settings */
-        default: 'w-[70%] tall:w-[90%]',
+        /** Held upright, all of the stage inside its margin */
+        default: 'w-[70%] tall:w-full',
         /** A lot to read: as wide as the stage lets it */
         large: 'w-full',
       },

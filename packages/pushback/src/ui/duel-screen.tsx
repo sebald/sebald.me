@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Confirm,
   Heading,
   Legend,
   Text,
@@ -80,7 +81,6 @@ import {
 import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
-import { Confirm } from './confirm';
 import { Controls } from './controls';
 import { DemoLabel } from './demo-label';
 import { Dialogue } from './dialogue';

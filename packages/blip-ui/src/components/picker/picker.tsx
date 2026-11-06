@@ -69,7 +69,7 @@ interface NotePlace {
  * that fills the stage has no room on either side: there it goes beside
  * the list itself, inside the window, and is kept on the stage either
  * way. Rendered into the stage itself, over everything, so no window it
- * sits in can cut it off.
+ * sits in can cut it off; in a dialog, into the dialog, over its scrim.
  */
 const useNotePlace = (
   rowRef: RefObject<HTMLElement | null>,
@@ -81,7 +81,10 @@ const useNotePlace = (
   const [place, setPlace] = useState<NotePlace | null>(null);
   useLayoutEffect(() => {
     const row = shown ? rowRef.current : null;
-    const root = row?.closest<HTMLElement>('[data-stage]');
+    // Over the stage, or over a dialog's scrim when the menu is in one
+    const root =
+      row?.closest<HTMLElement>('[data-slot=dialog]') ??
+      row?.closest<HTMLElement>('[data-stage]');
     if (!row || !root) {
       setPlace(null);
       return;

@@ -93,9 +93,7 @@ test.describe('screens', { tag: '@screens' }, () => {
     await press(page, 'Escape');
     await choose(page, 'Options');
     await choose(page, 'Erase save');
-    await expect(
-      page.getByRole('alertdialog').or(page.getByRole('dialog')),
-    ).toBeVisible();
+    await expect(page.getByRole('alertdialog')).toBeVisible();
     await shot(page, 'options-erase');
   });
 });

@@ -163,7 +163,7 @@ test.describe('a run', () => {
     await page.keyboard.press('Enter');
     await choose(page, 'Options');
     await choose(page, 'Erase save');
-    const ask = page.getByRole('alertdialog').or(page.getByRole('dialog'));
+    const ask = page.getByRole('alertdialog');
     await expect(ask).toBeVisible();
     // The keys start on the safe answer, in the question, not the menu under it
     await expect(ask.locator('[aria-current=true]')).toHaveText(/cancel|keep/i);
