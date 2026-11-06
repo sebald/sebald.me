@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeys } from '@sebald/blip-ui';
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -20,7 +21,6 @@ import { Stage, px } from './stage';
 import { Stamp, stampSize } from './stamp';
 import { cn } from './styles.utils';
 import { ScreenTitle } from './text';
-import { useKeys } from './use-keys';
 import { CornerLegend, Window } from './window';
 
 /** The run window is centred between here, under the title and its line, and the legend */
@@ -184,7 +184,7 @@ export const RosterScreen = ({
         className="absolute inset-x-0 flex items-center justify-center"
         style={{
           top: px(LIST_TOP),
-          bottom: `calc(var(--pb-bar) + ${px(14)})`,
+          bottom: `calc(var(--bui-bar) + ${px(14)})`,
         }}
       >
         <Window className="max-h-full w-[calc(var(--px)*180)] text-[1.15em] tall:w-[calc(var(--px)*296)] tall:text-[1em]">

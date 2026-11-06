@@ -1,9 +1,10 @@
 'use client';
 
+import { useInputKind } from '@sebald/blip-ui';
+
 import { GOLD, SIZE, SPARK, Word } from './round-call';
 import { px } from './stage';
 import { cn } from './styles.utils';
-import { useInputKind } from './use-input-kind';
 
 interface DemoLabelProps {
   /** Where its top sits on the stage */

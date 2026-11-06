@@ -1,5 +1,6 @@
 'use client';
 
+import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useRef } from 'react';
 
 import { FRAME_MS } from '../lib/stage';
@@ -8,8 +9,6 @@ import { BURST_KEY, SHEETS, useSprites } from './sheets';
 import { cn } from './styles.utils';
 
 const BURST_KEYS = [BURST_KEY] as const;
-import { useStage } from './stage';
-import { useClock } from './use-clock';
 
 /** The burst sheet's cells */
 export const BURST_CELLS = { small: 0, big: 1, popped: 2 } as const;
@@ -38,7 +37,7 @@ export const Burst = ({
   className,
 }: BurstProps) => {
   // (the list is a constant, so the sprites hook sees the same keys)
-  const { backing } = useStage();
+  const { backing } = usePixels();
   const sprite = useSprites(BURST_KEYS)[BURST_KEY];
   const clock = useClock(pulse);
   const shown = pulse

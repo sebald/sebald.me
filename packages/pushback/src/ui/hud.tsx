@@ -1,5 +1,7 @@
 'use client';
 
+import { useClock } from '@sebald/blip-ui';
+
 import type { Side } from '../lib/duel';
 import type { SheetId } from '../lib/sprites';
 import { LAYOUT, STAGE, bob, scaleBeam } from '../lib/stage';
@@ -7,7 +9,6 @@ import { PALETTE } from './palette';
 import { Portrait } from './portrait';
 import { px } from './stage';
 import { cn, cva } from './styles.utils';
-import { useClock } from './use-clock';
 
 const styles = {
   name: cva({

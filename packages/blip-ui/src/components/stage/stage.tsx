@@ -22,6 +22,12 @@ export const TALL_BAR = 52;
 
 export interface StageProps extends PropsWithChildren {
   className?: string;
+  /**
+   * Inline styles for the stage (and for what shows when it is turned):
+   * a game's own variables, its palette. The stage's size and scale win
+   * over them
+   */
+  style?: CSSProperties;
   /** The stage's name for assistive technology */
   label?: string;
   /**
@@ -77,6 +83,7 @@ export interface StageProps extends PropsWithChildren {
 export const Stage = ({
   children,
   className,
+  style: styleProp,
   label,
   width: nativeWidth = NATIVE.width,
   height: nativeHeight = NATIVE.height,
@@ -115,7 +122,7 @@ export const Stage = ({
         data-stage
         aria-label={label}
         className={stage.turned()}
-        style={{ ['--px' as string]: '2px' }}
+        style={{ ...styleProp, ['--px' as string]: '2px' }}
       >
         {turned}
       </section>
@@ -123,6 +130,7 @@ export const Stage = ({
   }
   const widthPx = nativeWidth * scale;
   const style: CSSProperties = {
+    ...styleProp,
     width: widthPx,
     height: (tall ? rows : nativeHeight - crop) * scale,
     marginInline: `calc(50% - ${widthPx / 2}px)`,

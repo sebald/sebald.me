@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeys } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { MODE_LABELS, type Mode, nextMode, stepMode } from '../lib/characters';
@@ -9,7 +10,6 @@ import { Confirm } from './confirm';
 import { Picker, type PickerItem } from './picker';
 import { Setting } from './setting';
 import { Heading } from './text';
-import { useKeys } from './use-keys';
 import { useSoundSettings } from './use-sound';
 import { Legend, Window } from './window';
 
@@ -152,7 +152,7 @@ export const Options = ({
   ];
 
   return (
-    <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/60">
+    <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60">
       <Window
         className="w-[19em] tall:w-[90%]"
         legend={

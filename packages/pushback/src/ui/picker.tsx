@@ -1,5 +1,6 @@
 'use client';
 
+import { useInputKind, useKeydown, usePixels } from '@sebald/blip-ui';
 import {
   type RefObject,
   useEffect,
@@ -11,10 +12,8 @@ import { createPortal } from 'react-dom';
 
 import { STAGE } from '../lib/stage';
 import { effect } from './audio/engine';
-import { useStage } from './stage';
 import { cn, cva } from './styles.utils';
 import { Loud } from './text';
-import { useInputKind } from './use-input-kind';
 import { Window } from './window';
 
 const pickerStyles = {
@@ -208,7 +207,7 @@ const useNotePlace = (
   index: number,
   scrollTop: number,
 ): NotePlace | null => {
-  const { scale, tall } = useStage();
+  const { scale, tall } = usePixels();
   const [place, setPlace] = useState<NotePlace | null>(null);
   useLayoutEffect(() => {
     const row = listRef.current?.children[index] as HTMLElement | undefined;
@@ -297,53 +296,48 @@ export const Picker = ({
   const scroll = useScroll(listRef, items.length);
   const overflow = overflows(scroll);
 
-  useEffect(() => {
-    if (!active) return;
+  // Blip UI's keys: in the capture phase, as the screens' (`useKeys`),
+  // so a key that opens the next screen does not reach its menu too
+  useKeydown(event => {
     // Disabled items are stops too, so their note can say why
     const move = (step: number) => {
       effect('cursor');
       setIndex(previous => (previous + step + items.length) % items.length);
     };
-    const onKey = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'ArrowDown':
-        case 's':
+    switch (event.key) {
+      case 'ArrowDown':
+      case 's':
+        event.preventDefault();
+        move(1);
+        break;
+      case 'ArrowUp':
+      case 'w':
+        event.preventDefault();
+        move(-1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'a':
+      case 'd': {
+        const item = items[current];
+        if (item?.onStep && !item.disabled) {
           event.preventDefault();
-          move(1);
-          break;
-        case 'ArrowUp':
-        case 'w':
-          event.preventDefault();
-          move(-1);
-          break;
-        case 'ArrowLeft':
-        case 'ArrowRight':
-        case 'a':
-        case 'd': {
-          const item = items[current];
-          if (item?.onStep && !item.disabled) {
-            event.preventDefault();
-            effect('cursor');
-            item.onStep(
-              event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1,
-            );
-          }
-          break;
+          effect('cursor');
+          item.onStep(event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1);
         }
-        case 'Enter':
-        case ' ': {
-          const item = items[current];
-          if (item) {
-            event.preventDefault();
-            choose(item);
-          }
-          break;
-        }
+        break;
       }
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [active, items, current]);
+      case 'Enter':
+      case ' ': {
+        const item = items[current];
+        if (item) {
+          event.preventDefault();
+          choose(item);
+        }
+        break;
+      }
+    }
+  }, active);
 
   // The current item stays in view; only a list that scrolls is moved,
   // so a short list never scrolls the page

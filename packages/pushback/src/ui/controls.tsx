@@ -1,13 +1,18 @@
 'use client';
 
+import {
+  canFullscreen,
+  toggleFullscreen,
+  useFullscreen,
+  useInputKind,
+  usePixels,
+} from '@sebald/blip-ui';
 import type { MouseEvent, PointerEvent } from 'react';
 
 import { canPlay, toggleSound } from './audio/engine';
-import { canFullscreen, toggleFullscreen, useFullscreen } from './fullscreen';
 import { PALETTE } from './palette';
-import { TALL_BAR, px, useStage } from './stage';
+import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
-import { useInputKind } from './use-input-kind';
 import { useSoundSettings } from './use-sound';
 
 /**
@@ -243,7 +248,7 @@ export const Controls = ({
   centreAt,
   speaker = 'touch',
 }: ControlsProps) => {
-  const { tall } = useStage();
+  const { tall } = usePixels();
   const kind = useInputKind();
   const sound = useSoundSettings();
   const on = sound.music || sound.effects;

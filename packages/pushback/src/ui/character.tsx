@@ -1,5 +1,6 @@
 'use client';
 
+import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { Side } from '../lib/duel';
@@ -13,9 +14,7 @@ import {
 import { LAYOUT, type Pose, breathFrame, poseOffset } from '../lib/stage';
 import { drawCell, drawTear } from './draw';
 import { useSprites } from './sheets';
-import { useStage } from './stage';
 import { cn } from './styles.utils';
-import { useClock } from './use-clock';
 
 /** Placeholder colours, until the sprite is built */
 const PLACEHOLDER: Record<Side, { body: string; head: string; light: string }> =
@@ -69,7 +68,7 @@ export const Character = ({
   side = 'player',
   className,
 }: CharacterProps) => {
-  const { backing } = useStage();
+  const { backing } = usePixels();
   const sprite = useSprites(useMemo(() => [sheet], [sheet]))[sheet];
   const clock = useClock(!still);
   // When the pose changed, so its animation starts from its first frame

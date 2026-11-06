@@ -1,5 +1,6 @@
 'use client';
 
+import { useAnyKey, useInputKind, useKeys, useScale } from '@sebald/blip-ui';
 import NextImage from 'next/image';
 import {
   type ReactNode,
@@ -32,9 +33,6 @@ import { Picker, type PickerItem } from './picker';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
 import { Heading, Loud } from './text';
-import { useInputKind } from './use-input-kind';
-import { useKeys } from './use-keys';
-import { useScale } from './use-scale';
 import { Legend, Window } from './window';
 
 interface TitleScreenProps {
@@ -81,7 +79,7 @@ const FICTION =
  * full text size, centred, growing both ways where the lines wrap.
  */
 const HowTo = ({ legend }: { legend: ReactNode }) => (
-  <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
+  <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
     <Window className="w-full" legend={legend}>
       <Heading>How it works</Heading>
       <ol className="m-0 mt-[calc(var(--px)*3)] grid list-none gap-[calc(var(--px)*2.5)] p-0 leading-[1.4]">
@@ -142,16 +140,6 @@ const VIEW = {
   x: OFFICE.x + OFFICE.width / 2 - STAGE.width / ROOM_SCALE / 2,
   y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
 } as const;
-
-/** Keys that only modify: not a press that opens the menu */
-const MODIFIERS = new Set([
-  'Shift',
-  'Control',
-  'Alt',
-  'Meta',
-  'CapsLock',
-  'Tab',
-]);
 
 /**
  * The start screen: the corner office at night fills the whole stage,
@@ -235,24 +223,12 @@ export const TitleScreen = ({
     };
   }, [onAttract]);
 
-  // The splash: any key or a tap opens the menu, on the tap's click: on
-  // the press, its click would land on the menu opening under the finger
-  useEffect(() => {
-    if (open) return;
-    const go = () => setOpen(true);
-    const onKey = (event: KeyboardEvent) => {
-      if (MODIFIERS.has(event.key)) return;
-      event.preventDefault();
-      effect('confirm');
-      go();
-    };
-    window.addEventListener('keydown', onKey);
-    window.addEventListener('click', go);
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      window.removeEventListener('click', go);
-    };
-  }, [open]);
+  // The splash: any key or a tap opens the menu (Blip UI's any key: on
+  // the tap's click, and not the key that brought the title up)
+  useAnyKey(() => {
+    effect('confirm');
+    setOpen(true);
+  }, !open);
 
   // Start always works; with a run in play it asks first. Continue is
   // under it, off without a run, and the cursor starts on it with one.

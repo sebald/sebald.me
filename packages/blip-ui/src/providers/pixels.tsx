@@ -3,6 +3,7 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
 import { createContext, useContext, useState } from 'react';
 
+import { useScale } from '../components/stage/use-scale';
 import { BACKING, NATIVE, fontSizeFor as fontSize } from '../foundations/scale';
 import { cn } from '../utils/styles';
 import { Announcer } from './announcer';
@@ -70,8 +71,10 @@ export interface PixelsProps extends PropsWithChildren {
 /**
  * The pixel unit for everything inside: sets `--px` to the scale, the
  * text size from it, and the tall layout, and tells the pieces through
- * `usePixels`. A game's stage is one; on its own it serves docs and
- * embeds. `data-stage` gives the text normal leading back.
+ * `usePixels`, with what the scale is on this screen (`crisp`, and the
+ * `backing` a canvas is drawn at). A game's stage is one; on its own it
+ * serves docs and embeds. `data-stage` gives the text normal leading
+ * back.
  */
 export const Pixels = ({
   scale = 3,
@@ -81,8 +84,9 @@ export const Pixels = ({
   children,
 }: PixelsProps) => {
   const [root, setRoot] = useState<HTMLElement | null>(null);
+  const measured = useScale(scale);
   return (
-    <PixelsContext.Provider value={{ ...DEFAULT_PIXELS, scale, tall }}>
+    <PixelsContext.Provider value={{ ...measured, tall }}>
       <div
         ref={setRoot}
         data-stage

@@ -1,11 +1,10 @@
 'use client';
 
-import { CORNERS, rounded } from '@sebald/blip-ui';
+import { CORNERS, rounded, useInputKind } from '@sebald/blip-ui';
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 
 import { PALETTE } from './palette';
 import { cn } from './styles.utils';
-import { useInputKind } from './use-input-kind';
 
 /** The window's rings, from the outside in, one stage pixel each */
 const RINGS = [PALETTE.ink, PALETTE.frame, PALETTE.frameInner];
@@ -142,7 +141,7 @@ export const Legend = ({ keys, touch }: LegendProps) => {
  * upright, centred over the bar of controls
  */
 export const CornerLegend = (props: LegendProps) => (
-  <div className="absolute right-3 bottom-2 text-right text-[0.75em] text-(--pb-dim) tall:inset-x-3 tall:bottom-[calc(var(--pb-bar)+var(--px)*3)] tall:text-center">
+  <div className="absolute right-3 bottom-2 text-right text-[0.75em] text-(--pb-dim) tall:inset-x-3 tall:bottom-[calc(var(--bui-bar)+var(--px)*3)] tall:text-center">
     <Legend {...props} />
   </div>
 );

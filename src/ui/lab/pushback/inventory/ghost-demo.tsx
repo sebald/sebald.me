@@ -1,10 +1,10 @@
 'use client';
 
+import { useClock } from '@sebald/blip-ui';
 import { GHOST_ANIM_MS, ghostEnter } from '@sebald/pushback/lib/buddy';
 import { Bubble } from '@sebald/pushback/ui/bubble';
 import { Ghost } from '@sebald/pushback/ui/ghost';
 import { Pixels } from '@sebald/pushback/ui/stage';
-import { useClock } from '@sebald/pushback/ui/use-clock';
 import { useState } from 'react';
 
 import { Field, Floor, field } from './controls';

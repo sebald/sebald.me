@@ -1,5 +1,6 @@
 'use client';
 
+import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useRef } from 'react';
 
 import { GHOST } from '../lib/buddy';
@@ -11,8 +12,6 @@ import { GHOST_KEY, useSprites } from './sheets';
 import { cn } from './styles.utils';
 
 const GHOST_KEYS = [GHOST_KEY] as const;
-import { useStage } from './stage';
-import { useClock } from './use-clock';
 
 export interface GhostProps {
   /** Stage x of its cell's left edge on the feet line; in the flow without it */
@@ -40,7 +39,7 @@ export const Ghost = ({
   still = false,
   className,
 }: GhostProps) => {
-  const { backing } = useStage();
+  const { backing } = usePixels();
   const sprite = useSprites(GHOST_KEYS)[GHOST_KEY];
   const clock = useClock(!still);
   const canvasRef = useRef<HTMLCanvasElement>(null);

@@ -1,5 +1,6 @@
 'use client';
 
+import { usePixels } from '@sebald/blip-ui';
 import NextImage from 'next/image';
 import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -9,7 +10,7 @@ import { FRAME_MS, LAYOUT, SCENE, STAGE } from '../lib/stage';
 import { fadeMask } from './dither';
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
-import { Stage, useStage } from './stage';
+import { Stage } from './stage';
 import { cn } from './styles.utils';
 
 /** The loop of a scene to show at this stage's pixels, and its key */
@@ -42,7 +43,7 @@ interface RoomProps {
  * with `overflow-hidden`.
  */
 export const Room = ({ scene, view, scale = 1, onLoad }: RoomProps) => {
-  const stage = useStage();
+  const stage = usePixels();
   const crisp = stage.crisp && scale === 1;
   const { assets, loop, key } = sceneLoop(scene, crisp);
   const [loaded, setLoaded] = useState<string | null>(null);
@@ -198,7 +199,7 @@ const FrameBody = ({
   paused = false,
   children,
 }: FrameBodyProps) => {
-  const { crisp, backing } = useStage();
+  const { crisp, backing } = usePixels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const modelRef = useRef(model);
   const stepRef = useRef(onStep);

@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@sebald/blip-ui';
+import { Button, useClock, useKeys, useScale } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, type Look } from '../lib/characters';
@@ -18,9 +18,6 @@ import { Stage, TALL_BAR, px } from './stage';
 import { Stamp, stampSize } from './stamp';
 import { cn, cva } from './styles.utils';
 import { Heading, ScreenTitle } from './text';
-import { useClock } from './use-clock';
-import { useKeys } from './use-keys';
-import { useScale } from './use-scale';
 import { CornerLegend } from './window';
 
 /**

@@ -182,4 +182,29 @@ test.describe('a run', () => {
       screen(page).getByRole('button', { name: 'Erase save' }),
     ).toBeDisabled();
   });
+
+  test('the glossary: the arrows switch the pool, after a click on one too', async ({
+    page,
+  }) => {
+    await toRoster(page);
+    await press(page, 'Enter');
+    await playDuel(page);
+    await press(page, 'Escape');
+    await press(page, 'Enter');
+    await choose(page, /^Glossary/);
+    const pool = (name: string) =>
+      screen(page).getByRole('tab', { name: new RegExp(`^${name}`) });
+    await expect(pool('PM')).toHaveAttribute('aria-selected', 'true');
+    await press(page, 'ArrowRight');
+    await expect(pool('Dev')).toHaveAttribute('aria-selected', 'true');
+    // A click puts the focus on the tab; the arrows still switch
+    await pool('Designer').click();
+    await expect(pool('Designer')).toHaveAttribute('aria-selected', 'true');
+    await press(page, 'ArrowLeft');
+    await expect(pool('Dev')).toHaveAttribute('aria-selected', 'true');
+    await press(page, 'Escape');
+    await expect(
+      screen(page).getByRole('list', { name: 'Title menu' }),
+    ).toBeVisible();
+  });
 });

@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeys } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, MODES, MODE_LABELS } from '../lib/characters';
@@ -19,7 +20,6 @@ import { Picker } from './picker';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
 import { Heading, Muted } from './text';
-import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
 
 interface ResultScreenProps {
@@ -83,7 +83,7 @@ export const ResultScreen = ({
           top: px(panel.x),
           width: px(panel.width),
           // Held upright, down to the bar of controls
-          bottom: `calc(var(--pb-bar) + ${px(panel.x)})`,
+          bottom: `calc(var(--bui-bar) + ${px(panel.x)})`,
         }}
         legend={
           <Legend

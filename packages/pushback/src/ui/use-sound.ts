@@ -1,17 +1,33 @@
 'use client';
 
+import type { Feedback, FeedbackEvent } from '@sebald/blip-ui';
 import { useEffect, useSyncExternalStore } from 'react';
 
 import type { Cue } from '../lib/audio/music';
 import { DEFAULT_SOUND } from '../lib/audio/settings';
+import type { Effect } from './audio/effects';
 import {
   arm,
   canPlay,
+  effect,
   getSettings,
   music,
   subscribe,
   toggleSound,
 } from './audio/engine';
+
+/** The game's sound for each of Blip UI's (`FeedbackProvider`) */
+const FEEDBACK: Record<FeedbackEvent, Effect> = {
+  move: 'cursor',
+  confirm: 'confirm',
+  back: 'cancel',
+  bump: 'bump',
+  tick: 'tick',
+  ping: 'flash',
+};
+
+/** What Blip UI's parts play, in the game's sounds */
+export const feedback: Feedback = event => effect(FEEDBACK[event]);
 
 /** The sound switches, live */
 export const useSoundSettings = () =>

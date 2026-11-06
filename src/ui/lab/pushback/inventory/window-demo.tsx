@@ -1,17 +1,12 @@
 'use client';
 
+import { MAX_CROP, useClock } from '@sebald/blip-ui';
 import { CLOSERS, MENU_PROMPTS, PAIRS } from '@sebald/pushback/lib/lines';
-import {
-  LAYOUT,
-  MAX_CROP,
-  STAGE,
-  typedChars,
-} from '@sebald/pushback/lib/stage';
+import { LAYOUT, STAGE, typedChars } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { Picker } from '@sebald/pushback/ui/picker';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { Muted } from '@sebald/pushback/ui/text';
-import { useClock } from '@sebald/pushback/ui/use-clock';
 import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 

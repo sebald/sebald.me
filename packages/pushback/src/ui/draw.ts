@@ -1,3 +1,5 @@
+import { BACKING } from '@sebald/blip-ui';
+
 /**
  * The frame's canvas: the room band (a flat colour until the loop under
  * the canvas has loaded) and the panel's ground. The duellists and the
@@ -6,7 +8,7 @@
  * (`Hud`, `Window`, see the screen).
  */
 import type { SceneId } from '../lib/characters';
-import { BACKING, BREATH, LAYOUT, STAGE } from '../lib/stage';
+import { BREATH, LAYOUT, STAGE } from '../lib/stage';
 import { PALETTE } from './palette';
 import type { Sprite } from './sheets';
 

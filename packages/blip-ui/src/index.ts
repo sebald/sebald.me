@@ -57,7 +57,12 @@ export {
 } from './hooks/fullscreen';
 export { TICK_MS, prefersReducedMotion, useClock } from './hooks/use-clock';
 export { type InputKind, useInputKind } from './hooks/use-input-kind';
-export { KeyLayerContext, useKeyLayer, useOnTop } from './hooks/key-layer';
+export {
+  KeyLayerContext,
+  useKeydown,
+  useKeyLayer,
+  useOnTop,
+} from './hooks/key-layer';
 export { useAnyKey } from './hooks/use-any-key';
 export { useIdle } from './hooks/use-idle';
 export { useKeys } from './hooks/use-keys';

@@ -1,10 +1,10 @@
 'use client';
 
+import { useKeys } from '@sebald/blip-ui';
 import { useMemo } from 'react';
 
 import { Picker } from './picker';
 import { Heading, Muted } from './text';
-import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
 
 export interface ConfirmProps {
@@ -34,7 +34,7 @@ export const Confirm = ({
     <div
       role="alertdialog"
       aria-label={title}
-      className="absolute inset-x-0 top-0 bottom-(--pb-bar) z-10 flex items-center justify-center bg-(--pb-bg)/80"
+      className="absolute inset-x-0 top-0 bottom-(--bui-bar) z-10 flex items-center justify-center bg-(--pb-bg)/80"
     >
       <Window
         className="w-[70%] tall:w-[90%]"

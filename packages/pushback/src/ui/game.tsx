@@ -1,10 +1,12 @@
 'use client';
 
+import { FeedbackProvider } from '@sebald/blip-ui';
 import dynamic from 'next/dynamic';
 
 import { PALETTE } from './palette';
 import { Stage } from './stage';
 import { Muted } from './text';
+import { feedback } from './use-sound';
 
 // The game reads `localStorage` and `matchMedia` on mount and later draws
 // into a canvas, none of which exists on the server, so it is client-only.
@@ -25,15 +27,18 @@ const Pushback = dynamic(
 
 /**
  * The game, in the element that goes fullscreen: the stage centred on
- * the dark ground, every screen inside it
+ * the dark ground, every screen inside it, Blip UI's parts sounding as
+ * the game does
  */
 export const Game = () => (
   <div
-    // The fullscreen element (`fullscreen.ts`)
-    data-pushback-root
+    // The element that goes fullscreen (Blip UI's `toggleFullscreen`)
+    data-fullscreen-root
     className="[&:fullscreen]:flex [&:fullscreen]:flex-col [&:fullscreen]:justify-center [&:fullscreen]:overflow-y-auto [&:fullscreen]:bg-(--pb-bg)"
     style={{ ['--pb-bg' as string]: PALETTE.bg }}
   >
-    <Pushback />
+    <FeedbackProvider play={feedback}>
+      <Pushback />
+    </FeedbackProvider>
   </div>
 );

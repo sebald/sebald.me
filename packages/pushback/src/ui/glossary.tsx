@@ -1,5 +1,6 @@
 'use client';
 
+import { useKeys, usePixels } from '@sebald/blip-ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -13,10 +14,9 @@ import {
 } from '../lib/lines';
 import { Dialogue } from './dialogue';
 import { ScrollRail, overflows, useScroll } from './picker';
-import { px, useStage } from './stage';
+import { px } from './stage';
 import { cva } from './styles.utils';
 import { Heading, Muted } from './text';
-import { useKeys } from './use-keys';
 import { Legend, Window } from './window';
 
 /** How far one press of up or down scrolls: a share of what shows */
@@ -89,7 +89,7 @@ interface GlossaryProps {
  */
 export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
   const collected = useMemo(() => new Set(glossary), [glossary]);
-  const { tall } = useStage();
+  const { tall } = usePixels();
   const [pool, setPool] = useState(role);
   const listRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -135,7 +135,7 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
     `${poolOf(r).filter(pair => collected.has(pair.id)).length}/${poolOf(r).length}`;
 
   return (
-    <div className="absolute inset-x-0 top-0 bottom-(--pb-bar) bg-(--pb-ink)/75">
+    <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) bg-(--pb-ink)/75">
       {/* A tap outside the window closes it */}
       <button
         type="button"
@@ -179,6 +179,10 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
                 role="tab"
                 aria-selected={r === pool}
                 className={styles.tab({ active: r === pool })}
+                // A click leaves the focus where it was: on a tab, the arrows
+                // would be the tab list's (Blip UI's keys leave them to it),
+                // and this one moves with the screen's arrows only
+                onMouseDown={event => event.preventDefault()}
                 onClick={() => setPool(r)}
               >
                 {ROLE_LABELS[r]}{' '}

@@ -1,12 +1,12 @@
 'use client';
 
+import { useClock } from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { Picker } from '@sebald/pushback/ui/picker';
 import { SILENCE_CLOCK, SilenceTimer } from '@sebald/pushback/ui/silence-timer';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
-import { useClock } from '@sebald/pushback/ui/use-clock';
 import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 

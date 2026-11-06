@@ -1,6 +1,12 @@
 'use client';
 
 import {
+  prefersReducedMotion,
+  useAnyKey,
+  useKeys,
+  useScale,
+} from '@sebald/blip-ui';
+import {
   useCallback,
   useEffect,
   useLayoutEffect,
@@ -83,9 +89,6 @@ import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
 import { Heading, Muted } from './text';
-import { prefersReducedMotion } from './use-clock';
-import { useKeys } from './use-keys';
-import { useScale } from './use-scale';
 import { useMusic, useSoundSettings } from './use-sound';
 import { Legend, Window } from './window';
 
@@ -129,7 +132,7 @@ const tallLift = (rows: number, scale: number, height: number) =>
 const styles = {
   pause: cva({
     base: [
-      'absolute inset-x-0 top-0 bottom-(--pb-bar) flex items-center justify-center bg-(--pb-bg)/80',
+      'absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/80',
     ],
   }),
 };
@@ -368,16 +371,7 @@ export const DuelScreen = ({
 
   // Attract mode: any key or tap leaves the demo, for the title's menu;
   // a tap on its click, so the rest of it does not land on that menu
-  useEffect(() => {
-    if (!auto) return;
-    const leave = () => onBack();
-    window.addEventListener('keydown', leave);
-    window.addEventListener('click', leave);
-    return () => {
-      window.removeEventListener('keydown', leave);
-      window.removeEventListener('click', leave);
-    };
-  }, [auto, onBack]);
+  useAnyKey(onBack, auto);
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -967,7 +961,7 @@ export const DuelScreen = ({
                 height: room
                   ? `max(${tallest}px, ${room.need}px)`
                   : TALL_WINDOW,
-                maxHeight: `calc(100% - ${px(TALL_TOP + 3)} - var(--pb-bar))`,
+                maxHeight: `calc(100% - ${px(TALL_TOP + 3)} - var(--bui-bar))`,
               }
             : {
                 left: px(LAYOUT.panel.x),
