@@ -35,6 +35,9 @@ does; how it looks follows from that.
   common case. No `tone`, `kind`, `type` or `on`. A variant names a use,
   not a colour (`secondary` is the other side, not "ember") and never a
   place (no `variant="bar"`).
+- **A variant only when something needs it.** No look for "maybe
+  later": `Tabs` have one look, the window's, until a screen needs tabs
+  without a window. One look is less to keep consistent.
 - **No raw style values as props.** No opacity, colour or pixel offset:
   name what it is for and let the component decide the value.
 - **No booleans that change the structure.** If a prop would render other
@@ -48,7 +51,7 @@ does; how it looks follows from that.
   JSX passed through a prop (`legend={…}`, `tabs={…}`, `start={…}`):
 
   ```tsx
-  <Tabs variant="window" defaultValue="pm">
+  <Tabs defaultValue="pm">
     <TabList aria-label="Pools">
       <Tab value="pm">PM</Tab>
     </TabList>
@@ -60,8 +63,7 @@ does; how it looks follows from that.
   ```
 
 - **Compound components share state through context.** The root holds the
-  state and the choice that concerns all parts (`Tabs`' value and
-  variant); the parts read it and take no prop for it.
+  state that concerns all parts (`Tabs`' value); the parts read it and take no prop for it.
 - **The look is shared by internal parts, not by exported styles.** A tab's
   panel is drawn by the same `WindowFrame` as a `Window`. Style objects are
   not part of the kit's API.

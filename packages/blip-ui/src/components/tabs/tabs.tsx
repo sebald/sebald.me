@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs as BaseTabs } from '@base-ui/react/tabs';
-import { createContext, useContext, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
 import { useFeedback } from '../../providers/feedback';
@@ -26,11 +26,6 @@ const stepTab = (root: Element | null, by: number) => {
   return true;
 };
 
-type Variant = 'plain' | 'window';
-
-/** The set's look, for its list, tabs and panels */
-const VariantContext = createContext<Variant>('plain');
-
 export interface TabsProps extends Omit<
   BaseTabs.Root.Props,
   'className' | 'render' | 'onValueChange'
@@ -47,25 +42,18 @@ export interface TabsProps extends Omit<
    * @default false
    */
   keys?: boolean;
-  /**
-   * `plain`, text tabs over the panel; `window`, a window with pages: the
-   * panel is the window, the tabs hang from its top left as folder tabs,
-   * with arrows that switch them
-   * @default 'plain'
-   */
-  variant?: Variant;
   className?: string;
 }
 
 /**
- * Tabs for a screen with pages: a row of tabs, the active one underlined
- * in the primary colour, and a panel under it. Built on Base UI's Tabs
- * (roles, focus, arrow keys); `keys` adds the game's global left and
- * right.
+ * A window with pages: the panel is the window, and the tabs hang from
+ * its top left as folder tabs, drawn in the window's layers; the current
+ * one opens into it. Arrows at the row's ends switch them. Built on Base
+ * UI's Tabs (roles, focus, arrow keys); `keys` adds the game's global
+ * left and right.
  */
 export const Tabs = ({
   keys = false,
-  variant = 'plain',
   className,
   onValueChange,
   children,
@@ -101,7 +89,7 @@ export const Tabs = ({
       }}
       {...props}
     >
-      <VariantContext value={variant}>{children}</VariantContext>
+      {children}
     </BaseTabs.Root>
   );
 };
@@ -115,19 +103,10 @@ export interface TabListProps extends Omit<
 
 /** The row of tabs; give it an accessible name with `aria-label` */
 export const TabList = ({ className, ...props }: TabListProps) => {
-  const on = useContext(VariantContext);
   const ref = useRef<HTMLDivElement>(null);
   const list = (
-    <BaseTabs.List
-      data-slot="tab-list"
-      className={styles.list({
-        on,
-        className: on === 'plain' ? className : undefined,
-      })}
-      {...props}
-    />
+    <BaseTabs.List data-slot="tab-list" className={styles.list()} {...props} />
   );
-  if (on === 'plain') return list;
   // For a pointer; the keys switch the tabs already
   const arrow = (by: -1 | 1) => (
     <button
@@ -173,47 +152,34 @@ const foot = (side: 'left' | 'right') => ({
 });
 
 /** One tab; its `value` names the `TabPanel` it shows */
-export const Tab = ({ className, children, ...props }: TabProps) => {
-  const on = useContext(VariantContext);
-  if (on === 'plain')
-    return (
-      <BaseTabs.Tab
-        data-slot="tab"
-        className={cn(styles.tab({ on }), className)}
-        {...props}
-      >
-        {children}
-      </BaseTabs.Tab>
-    );
-  return (
-    <BaseTabs.Tab
-      data-slot="tab"
-      className={cn(styles.tab({ on }), className)}
-      {...props}
-    >
-      {RINGS.map((colour, i) => (
-        <span
-          key={colour}
-          aria-hidden
-          className={styles.ring()}
-          style={{
-            inset: `calc(var(--px) * ${i}) calc(var(--px) * ${i}) 0`,
-            backgroundColor: colour,
-            clipPath: rounded(CORNERS[i]!, '--px', 'top'),
-          }}
-        />
-      ))}
+export const Tab = ({ className, children, ...props }: TabProps) => (
+  <BaseTabs.Tab
+    data-slot="tab"
+    className={cn(styles.tab(), className)}
+    {...props}
+  >
+    {RINGS.map((colour, i) => (
       <span
+        key={colour}
         aria-hidden
-        className={styles.face()}
-        style={{ inset: 'var(--t-ring) var(--t-ring) 0' }}
+        className={styles.ring()}
+        style={{
+          inset: `calc(var(--px) * ${i}) calc(var(--px) * ${i}) 0`,
+          backgroundColor: colour,
+          clipPath: rounded(CORNERS[i]!, '--px', 'top'),
+        }}
       />
-      <span aria-hidden className={styles.foot()} style={foot('left')} />
-      <span aria-hidden className={styles.foot()} style={foot('right')} />
-      <span className={styles.label()}>{children}</span>
-    </BaseTabs.Tab>
-  );
-};
+    ))}
+    <span
+      aria-hidden
+      className={styles.face()}
+      style={{ inset: 'var(--t-ring) var(--t-ring) 0' }}
+    />
+    <span aria-hidden className={styles.foot()} style={foot('left')} />
+    <span aria-hidden className={styles.foot()} style={foot('right')} />
+    <span className={styles.label()}>{children}</span>
+  </BaseTabs.Tab>
+);
 
 export interface TabPanelProps extends Omit<
   BaseTabs.Panel.Props,
@@ -223,30 +189,13 @@ export interface TabPanelProps extends Omit<
 }
 
 /**
- * What a tab shows, by the same `value`. In a `window` set it is the
- * window: a `Legend` last in it sits along the window's bottom edge
+ * What a tab shows, by the same `value`: the window itself. A `Legend`
+ * last in it sits along its bottom edge
  */
-export const TabPanel = ({ className, children, ...props }: TabPanelProps) => {
-  const on = useContext(VariantContext);
-  if (on === 'plain')
-    return (
-      <BaseTabs.Panel
-        data-slot="tab-panel"
-        className={styles.panel({ className })}
-        {...props}
-      >
-        {children}
-      </BaseTabs.Panel>
-    );
-  return (
-    <BaseTabs.Panel
-      data-slot="tab-panel"
-      className={styles.panel({ on })}
-      {...props}
-    >
-      <WindowFrame className={cn('min-h-0 flex-1', className)}>
-        {children}
-      </WindowFrame>
-    </BaseTabs.Panel>
-  );
-};
+export const TabPanel = ({ className, children, ...props }: TabPanelProps) => (
+  <BaseTabs.Panel data-slot="tab-panel" className={styles.panel()} {...props}>
+    <WindowFrame className={cn('min-h-0 flex-1', className)}>
+      {children}
+    </WindowFrame>
+  </BaseTabs.Panel>
+);

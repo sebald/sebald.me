@@ -167,7 +167,7 @@ export const Duel: Story = {
             <Line>Monday, as in next quarter?</Line>
           </div>
         </Window>
-        <Tabs variant="window" defaultValue="pools">
+        <Tabs defaultValue="pools">
           <TabList aria-label="Duel">
             <Tab value="pools">Pools</Tab>
             <Tab value="log">Log</Tab>
