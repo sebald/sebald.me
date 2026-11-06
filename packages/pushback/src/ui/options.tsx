@@ -1,14 +1,21 @@
 'use client';
 
-import { Heading, Legend, Window, useKeys } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Picker,
+  PickerGroup,
+  PickerItem,
+  PickerSetting,
+  Window,
+  useKeys,
+} from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { MODE_LABELS, type Mode, nextMode, stepMode } from '../lib/characters';
 import { ROLE_LABELS, type Role } from '../lib/lines';
 import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
-import { Picker, type PickerItem } from './picker';
-import { Setting } from './setting';
 import { useSoundSettings } from './use-sound';
 
 /** What each mode changes, under the list while the cursor is on the mode */
@@ -99,55 +106,19 @@ export const Options = ({
     setSettings({ ...sound, [key]: on });
     if (key === 'effects' && on) effect('confirm');
   };
-  const switchItem = (key: 'music' | 'effects', label: string): PickerItem => ({
-    id: key,
-    label: (
-      <span className="flex items-center gap-[1ch]">
-        {label}
-        <Setting>{sound[key] ? 'On' : 'Off'}</Setting>
-      </span>
-    ),
-    disabled: !playable,
-    note: playable ? SOUND_NOTES[key] : SOUND_NOTES.none,
-    onSelect: () => flip(key, !sound[key]),
-    onStep: () => flip(key, !sound[key]),
-  });
-
-  const items: PickerItem[] = [
-    {
-      id: 'mode',
-      label: (
-        <span className="flex items-center gap-[1ch]">
-          Mode
-          <Setting>{MODE_LABELS[mode]}</Setting>
-        </span>
-      ),
-      note: MODE_NOTES[mode],
-      // Enter or a tap goes round, and so do left and right: a choice has
-      // no ends (a range would, like a volume)
-      onSelect: () => switchTo(nextMode(mode)),
-      onStep: step => switchTo(stepMode(mode, step)),
-    },
-    switchItem('music', 'Music'),
-    switchItem('effects', 'Effects'),
-    {
-      id: 'erase',
-      label: 'Erase save',
-      apart: true,
-      disabled: !progress,
-      note: progress
-        ? 'Deletes all progress and starts the game fresh. The mode stays.'
-        : 'Nothing saved yet: no run, no shipped roles, no collected lines.',
-      onSelect: () => setAsking('erase'),
-    },
-    {
-      id: 'back',
-      label: 'Back',
-      back: true,
-      apart: true,
-      onSelect: onClose,
-    },
-  ];
+  /** A sound switch: Enter, a tap, left or right flips it */
+  const soundSwitch = (key: 'music' | 'effects', label: string) => (
+    <PickerSetting
+      id={key}
+      value={sound[key] ? 'On' : 'Off'}
+      disabled={!playable}
+      note={playable ? SOUND_NOTES[key] : SOUND_NOTES.none}
+      onSelect={() => flip(key, !sound[key])}
+      onStep={() => flip(key, !sound[key])}
+    >
+      {label}
+    </PickerSetting>
+  );
 
   return (
     <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60">
@@ -156,9 +127,41 @@ export const Options = ({
         <Picker
           label="Options"
           className="mt-[calc(var(--px)*3)]"
-          items={items}
           active={asking === null}
-        />
+        >
+          <PickerSetting
+            id="mode"
+            value={MODE_LABELS[mode]}
+            note={MODE_NOTES[mode]}
+            // Enter or a tap goes round, and so do left and right: a choice
+            // has no ends (a range would, like a volume)
+            onSelect={() => switchTo(nextMode(mode))}
+            onStep={step => switchTo(stepMode(mode, step))}
+          >
+            Mode
+          </PickerSetting>
+          {soundSwitch('music', 'Music')}
+          {soundSwitch('effects', 'Effects')}
+          <PickerGroup>
+            <PickerItem
+              id="erase"
+              disabled={!progress}
+              note={
+                progress
+                  ? 'Deletes all progress and starts the game fresh. The mode stays.'
+                  : 'Nothing saved yet: no run, no shipped roles, no collected lines.'
+              }
+              onSelect={() => setAsking('erase')}
+            >
+              Erase save
+            </PickerItem>
+          </PickerGroup>
+          <PickerGroup>
+            <PickerItem id="back" variant="back" onSelect={onClose}>
+              Back
+            </PickerItem>
+          </PickerGroup>
+        </Picker>
         <Legend
           keys={[
             ['↑↓', 'choose'],

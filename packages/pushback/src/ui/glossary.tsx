@@ -3,10 +3,13 @@
 import {
   Heading,
   Legend,
+  ScrollRail,
   Text,
   Window,
+  overflows,
   useKeys,
   usePixels,
+  useScroll,
 } from '@sebald/blip-ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -20,7 +23,6 @@ import {
   poolOf,
 } from '../lib/lines';
 import { Dialogue } from './dialogue';
-import { ScrollRail, overflows, useScroll } from './picker';
 import { px } from './stage';
 import { cva } from './styles.utils';
 

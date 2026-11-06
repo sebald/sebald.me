@@ -5,7 +5,7 @@ import {
   BUDDY_STEPS,
   BUDDY_WINDOW_MS,
   buddyLine,
-  buddyOpacity,
+  buddyRuledOut,
   buddyStep,
 } from './buddy';
 import { BUDDY_BARKS } from './lines';
@@ -35,13 +35,13 @@ describe('buddyStep', () => {
   });
 });
 
-describe('buddyOpacity', () => {
-  it('drops from full to a quarter and clamps', () => {
-    assert.equal(buddyOpacity(0), 1);
-    assert.ok(buddyOpacity(1) < 1 && buddyOpacity(2) < buddyOpacity(1));
-    assert.equal(buddyOpacity(BUDDY_STEPS), 0.25);
-    assert.equal(buddyOpacity(99), 0.25);
-    assert.equal(buddyOpacity(-1), 1);
+describe('buddyRuledOut', () => {
+  it('rules out in steps from nothing to all, and clamps', () => {
+    assert.equal(buddyRuledOut(0), 0);
+    assert.ok(buddyRuledOut(1) > 0 && buddyRuledOut(2) > buddyRuledOut(1));
+    assert.equal(buddyRuledOut(BUDDY_STEPS), 1);
+    assert.equal(buddyRuledOut(99), 1);
+    assert.equal(buddyRuledOut(-1), 0);
   });
 });
 

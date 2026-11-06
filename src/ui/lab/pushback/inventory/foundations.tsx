@@ -1,10 +1,9 @@
 'use client';
 
-import { Heading, Legend, Text } from '@sebald/blip-ui';
+import { Heading, Legend, Picker, PickerItem, Text } from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
-import { Picker } from '@sebald/pushback/ui/picker';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { Stamp } from '@sebald/pushback/ui/stamp';
 import { useState } from 'react';
@@ -159,31 +158,33 @@ export const PickerDemo = () => {
         scale={3}
         className="w-fit bg-(--pb-fill) p-[calc(var(--px)*6)] leading-[1.35] text-(--pb-text)"
       >
-        <Picker
-          label="Picker demo"
-          className="gap-0"
-          items={[
-            ...pairs.map((pair, i) => ({
-              id: pair.id,
-              label: pair.counter,
-              dim: dim && i !== 1 ? 0.25 : undefined,
-              onSelect: () => setPicked(pair.counter),
-            })),
-            {
-              id: 'loud',
-              label: 'The loud one: a closer on offer',
-              accent: true,
-              onSelect: () => setPicked('the closer'),
-            },
-            {
-              id: 'off',
-              label: 'A disabled item',
-              note: 'Off, and this box says why: the cursor stops on it, Enter does nothing.',
-              disabled: true,
-              onSelect: () => {},
-            },
-          ]}
-        />
+        <Picker label="Picker demo" className="gap-0">
+          {pairs.map((pair, i) => (
+            <PickerItem
+              key={pair.id}
+              id={pair.id}
+              ruledOut={dim && i !== 1 ? 1 : 0}
+              onSelect={() => setPicked(pair.counter)}
+            >
+              {pair.counter}
+            </PickerItem>
+          ))}
+          <PickerItem
+            id="loud"
+            variant="accent"
+            onSelect={() => setPicked('the closer')}
+          >
+            The loud one: a closer on offer
+          </PickerItem>
+          <PickerItem
+            id="off"
+            disabled
+            note="Off, and this box says why: the cursor stops on it, Enter does nothing."
+            onSelect={() => {}}
+          >
+            A disabled item
+          </PickerItem>
+        </Picker>
       </Pixels>
     </div>
   );

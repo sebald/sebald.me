@@ -1,10 +1,9 @@
 'use client';
 
-import { Legend, Window, useClock } from '@sebald/blip-ui';
+import { Legend, Picker, PickerItem, Window, useClock } from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
-import { Picker } from '@sebald/pushback/ui/picker';
 import { SILENCE_CLOCK, SilenceTimer } from '@sebald/pushback/ui/silence-timer';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
@@ -112,12 +111,13 @@ export const TimerDemo = () => {
           <Picker
             label="Counters"
             className="mt-[calc(var(--px)*2)] gap-0 [&_button]:py-[0.1em]"
-            items={options.map(p => ({
-              id: p.id,
-              label: p.counter,
-              onSelect: () => {},
-            }))}
-          />
+          >
+            {options.map(p => (
+              <PickerItem key={p.id} id={p.id} onSelect={() => {}}>
+                {p.counter}
+              </PickerItem>
+            ))}
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],

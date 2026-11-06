@@ -1,10 +1,17 @@
 'use client';
 
-import { Legend, MAX_CROP, Text, Window, useClock } from '@sebald/blip-ui';
+import {
+  Legend,
+  MAX_CROP,
+  Picker,
+  PickerItem,
+  Text,
+  Window,
+  useClock,
+} from '@sebald/blip-ui';
 import { CLOSERS, MENU_PROMPTS, PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT, STAGE, typedChars } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
-import { Picker } from '@sebald/pushback/ui/picker';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
@@ -60,15 +67,17 @@ export const WindowDemo = () => {
         >
           <Dialogue speaker="opponent">{LINE}</Dialogue>
           <Text className="my-[calc(var(--px)*4)]">Pick your counter.</Text>
-          <Picker
-            label="Counters"
-            className="gap-0"
-            items={options.map(pair => ({
-              id: pair.id,
-              label: pair.counter,
-              onSelect: () => setPicked(pair.counter),
-            }))}
-          />
+          <Picker label="Counters" className="gap-0">
+            {options.map(pair => (
+              <PickerItem
+                key={pair.id}
+                id={pair.id}
+                onSelect={() => setPicked(pair.counter)}
+              >
+                {pair.counter}
+              </PickerItem>
+            ))}
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],
@@ -84,23 +93,24 @@ export const WindowDemo = () => {
           }}
         >
           <Text className="my-[calc(var(--px)*4)]">{MENU_PROMPTS.micDrop}</Text>
-          <Picker
-            label="Your phrases"
-            className="gap-0"
-            items={[
-              ...hand.map(pair => ({
-                id: pair.id,
-                label: pair.phrase,
-                onSelect: () => setPicked(pair.phrase),
-              })),
-              {
-                id: closer.id,
-                label: closer.phrase,
-                accent: true,
-                onSelect: () => setPicked(`${closer.phrase} (mic drop)`),
-              },
-            ]}
-          />
+          <Picker label="Your phrases" className="gap-0">
+            {hand.map(pair => (
+              <PickerItem
+                key={pair.id}
+                id={pair.id}
+                onSelect={() => setPicked(pair.phrase)}
+              >
+                {pair.phrase}
+              </PickerItem>
+            ))}
+            <PickerItem
+              id={closer.id}
+              variant="accent"
+              onSelect={() => setPicked(`${closer.phrase} (mic drop)`)}
+            >
+              {closer.phrase}
+            </PickerItem>
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],
@@ -121,15 +131,17 @@ export const WindowDemo = () => {
             Pick your counter. (Ten options in a short window: the list scrolls
             on its rail.)
           </Text>
-          <Picker
-            label="Counters, many"
-            className="gap-0"
-            items={many.map(pair => ({
-              id: pair.id,
-              label: pair.counter,
-              onSelect: () => setPicked(pair.counter),
-            }))}
-          />
+          <Picker label="Counters, many" className="gap-0">
+            {many.map(pair => (
+              <PickerItem
+                key={pair.id}
+                id={pair.id}
+                onSelect={() => setPicked(pair.counter)}
+              >
+                {pair.counter}
+              </PickerItem>
+            ))}
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],

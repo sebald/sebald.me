@@ -1,6 +1,13 @@
 'use client';
 
-import { Legend, ScreenTitle, Window, useKeys } from '@sebald/blip-ui';
+import {
+  Legend,
+  Picker,
+  PickerItem,
+  ScreenTitle,
+  Window,
+  useKeys,
+} from '@sebald/blip-ui';
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -14,7 +21,6 @@ import { type RunState, bossUnlocked, canPlay, nextSlot } from '../lib/run';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
 import { PALETTE } from './palette';
-import { Picker, type PickerItem } from './picker';
 import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
@@ -110,21 +116,25 @@ export const RosterScreen = ({
   }, [onBack]);
   useKeys(useMemo(() => ({ Escape: back }), [back]));
 
-  const items: PickerItem[] = run.run.slots.map((slot, index) => {
+  const items = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
     const beaten = run.beaten[index];
     const locked = index === bossIndex(run.run) && !bossUnlocked(run);
-    return {
-      id: String(index),
-      disabled: !canPlay(run, index),
-      // In order: the one waiting names who is up first
-      note: locked
-        ? 'Beat the three colleagues first. The Stakeholder only sees you after.'
-        : !canPlay(run, index) && next >= 0
-          ? `One at a time: beat ${characterById(run.run.slots[next]!.character).name} first.`
-          : undefined,
-      onSelect: () => onPlay(index),
-      label: (
+    return (
+      <PickerItem
+        key={index}
+        id={String(index)}
+        disabled={!canPlay(run, index)}
+        // In order: the one waiting names who is up first
+        note={
+          locked
+            ? 'Beat the three colleagues first. The Stakeholder only sees you after.'
+            : !canPlay(run, index) && next >= 0
+              ? `One at a time: beat ${characterById(run.run.slots[next]!.character).name} first.`
+              : undefined
+        }
+        onSelect={() => onPlay(index)}
+      >
         <Row
           markLabel={
             beaten
@@ -153,16 +163,9 @@ export const RosterScreen = ({
         >
           {character.name}
         </Row>
-      ),
-    };
+      </PickerItem>
+    );
   });
-  if (run.finished) {
-    items.push({
-      id: 'result',
-      label: <Row>Result card</Row>,
-      onSelect: onResult,
-    });
-  }
 
   return (
     <Stage label="Pushback, roster">
@@ -189,9 +192,15 @@ export const RosterScreen = ({
           <Picker
             label="Opponents in run order"
             initial={next >= 0 ? String(next) : 'result'}
-            items={items}
             className="gap-0"
-          />
+          >
+            {items}
+            {run.finished && (
+              <PickerItem id="result" onSelect={onResult}>
+                <Row>Result card</Row>
+              </PickerItem>
+            )}
+          </Picker>
         </Window>
       </div>
 

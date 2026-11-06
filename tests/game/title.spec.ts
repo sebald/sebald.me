@@ -1,4 +1,13 @@
-import { choose, current, expect, open, screen, test, toMenu } from './game';
+import {
+  choose,
+  current,
+  expect,
+  open,
+  said,
+  screen,
+  test,
+  toMenu,
+} from './game';
 
 test.describe('the title', () => {
   test.skip(({ isMobile }) => isMobile, 'played by keys');
@@ -24,9 +33,13 @@ test.describe('the title', () => {
     await toMenu(page);
     await page.keyboard.press('ArrowDown');
     await expect(current(page)).toHaveText('Continue');
+    // Shown beside the menu, and said
     await expect(
-      screen(page).getByText('No run in progress yet.', { exact: false }),
+      screen(page)
+        .getByText('No run in progress yet.', { exact: false })
+        .first(),
     ).toBeVisible();
+    await expect(said(page)).toContainText('No run in progress yet.');
     await page.keyboard.press('ArrowUp');
     await expect(current(page)).toHaveText('Start');
     // Round past the top to the bottom

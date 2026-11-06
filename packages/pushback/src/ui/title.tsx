@@ -3,6 +3,8 @@
 import {
   Heading,
   Legend,
+  Picker,
+  PickerItem,
   Text,
   Window,
   useAnyKey,
@@ -38,7 +40,6 @@ import { endMask } from './dither';
 import { Room } from './frame';
 import { Glossary } from './glossary';
 import { Options, type SaveSummary } from './options';
-import { Picker, type PickerItem } from './picker';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
 
@@ -242,58 +243,6 @@ export const TitleScreen = ({
   // under it, off without a run, and the cursor starts on it with one.
   // The glossary is here and not in a run because it outlives the runs.
   const collected = poolPairs(glossary).length;
-  const items: PickerItem[] = [
-    {
-      id: 'start',
-      label: 'Start',
-      onSelect: () => (running ? setAsking(true) : onStart()),
-    },
-    {
-      id: 'continue',
-      label: (
-        <span className="flex items-center gap-[1ch]">
-          Continue
-          {running && (
-            <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-              {running.beaten}/{running.slots}
-            </span>
-          )}
-        </span>
-      ),
-      disabled: !running,
-      note: running
-        ? undefined
-        : 'No run in progress yet. Start one and pick a role.',
-      onSelect: onContinue,
-    },
-    {
-      id: 'glossary',
-      label: (
-        <span className="flex items-center gap-[1ch]">
-          Glossary
-          <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-            {collected}/{PAIRS.length}
-          </span>
-        </span>
-      ),
-      disabled: collected === 0,
-      note:
-        collected === 0
-          ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
-          : undefined,
-      onSelect: () => setBrowsing(true),
-    },
-    {
-      id: 'how',
-      label: 'How to play',
-      onSelect: () => setReading(true),
-    },
-    {
-      id: 'options',
-      label: 'Options',
-      onSelect: () => setSetting(true),
-    },
-  ];
 
   return (
     <Stage label="Pushback, title">
@@ -355,10 +304,58 @@ export const TitleScreen = ({
           <Picker
             label="Title menu"
             className="w-[10em] tall:w-[14em]"
-            items={items}
             initial={returned ?? (running ? 'continue' : 'start')}
             active={!asking && !browsing}
-          />
+          >
+            <PickerItem
+              id="start"
+              onSelect={() => (running ? setAsking(true) : onStart())}
+            >
+              Start
+            </PickerItem>
+            <PickerItem
+              id="continue"
+              disabled={!running}
+              note={
+                running
+                  ? undefined
+                  : 'No run in progress yet. Start one and pick a role.'
+              }
+              onSelect={onContinue}
+            >
+              <span className="flex items-center gap-[1ch]">
+                Continue
+                {running && (
+                  <span className="ml-auto text-[0.8em] text-(--pb-muted)">
+                    {running.beaten}/{running.slots}
+                  </span>
+                )}
+              </span>
+            </PickerItem>
+            <PickerItem
+              id="glossary"
+              disabled={collected === 0}
+              note={
+                collected === 0
+                  ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
+                  : undefined
+              }
+              onSelect={() => setBrowsing(true)}
+            >
+              <span className="flex items-center gap-[1ch]">
+                Glossary
+                <span className="ml-auto text-[0.8em] text-(--pb-muted)">
+                  {collected}/{PAIRS.length}
+                </span>
+              </span>
+            </PickerItem>
+            <PickerItem id="how" onSelect={() => setReading(true)}>
+              How to play
+            </PickerItem>
+            <PickerItem id="options" onSelect={() => setSetting(true)}>
+              Options
+            </PickerItem>
+          </Picker>
           <Legend
             keys={[
               ['↑↓', 'choose'],

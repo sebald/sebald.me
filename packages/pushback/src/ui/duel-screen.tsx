@@ -5,6 +5,9 @@ import {
   Legend,
   Text,
   Window,
+  Picker,
+  PickerItem,
+  PickerSetting,
   prefersReducedMotion,
   useAnyKey,
   useKeys,
@@ -24,7 +27,7 @@ import { DEMO_ACCURACY, DEMO_END_MS, DEMO_PICK_MS } from '../lib/attract';
 import {
   GHOST,
   buddyLine,
-  buddyOpacity,
+  buddyRuledOut,
   buddyStep,
   ghostEnter,
 } from '../lib/buddy';
@@ -86,9 +89,7 @@ import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
 import { Ledger } from './ledger';
-import { Picker, type PickerItem } from './picker';
 import { RoundCall } from './round-call';
-import { Setting } from './setting';
 import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
@@ -585,38 +586,51 @@ export const DuelScreen = ({
     state.exchange !== null &&
     (step?.kind === 'line' || step?.kind === 'menu');
 
-  const menuItems: PickerItem[] = useMemo(() => {
-    if (step?.kind !== 'menu' && !asking) return [];
+  // What the menu offers: the hand on attack (the closer on offer under
+  // it, in gold: throwing it drops the mic), the counters on defence (the
+  // ghost ruling out the wrong ones as it whispers)
+  const menu = (() => {
+    if (step?.kind !== 'menu' && !asking) return null;
     if (state.phase === 'attack') {
-      const items: PickerItem[] = state.hand.map(id => ({
-        id,
-        label: pairById(id).phrase,
-        onSelect: () => act({ type: 'throw', phrase: id }),
-      }));
-      // The closer on offer stands under the hand, in gold: throwing it
-      // drops the mic
       const { closer } = state;
-      if (closer) {
-        items.push({
-          id: closer,
-          label: pairById(closer).phrase,
-          accent: true,
-          onSelect: () => act({ type: 'throw', phrase: closer }),
-        });
-      }
-      return items;
+      return (
+        <>
+          {state.hand.map(id => (
+            <PickerItem
+              key={id}
+              id={id}
+              onSelect={() => act({ type: 'throw', phrase: id })}
+            >
+              {pairById(id).phrase}
+            </PickerItem>
+          ))}
+          {closer && (
+            <PickerItem
+              id={closer}
+              variant="accent"
+              onSelect={() => act({ type: 'throw', phrase: closer })}
+            >
+              {pairById(closer).phrase}
+            </PickerItem>
+          )}
+        </>
+      );
     }
     if (state.phase === 'defend') {
       const answer = state.exchange?.answer;
-      return state.menu.map(id => ({
-        id,
-        label: pairById(id).counter,
-        dim: whisper > 0 && id !== answer ? buddyOpacity(whisper) : undefined,
-        onSelect: () => act({ type: 'counter', phrase: id }),
-      }));
+      return state.menu.map(id => (
+        <PickerItem
+          key={id}
+          id={id}
+          ruledOut={id !== answer ? buddyRuledOut(whisper) : 0}
+          onSelect={() => act({ type: 'counter', phrase: id })}
+        >
+          {pairById(id).counter}
+        </PickerItem>
+      ));
     }
-    return [];
-  }, [step?.kind, asking, state, act, whisper]);
+    return null;
+  })();
 
   const announce = useMemo(() => {
     if (!step) return '';
@@ -844,13 +858,14 @@ export const DuelScreen = ({
             )}
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
-              items={menuItems}
               active={!sizing && step?.kind === 'menu' && !paused && !auto}
               // Tighter than the menus' rows, so six fit the window; held
               // upright a row is a thumb's height or more, and a longer
               // list scrolls, with the rail beside it
               className="gap-0 tall:gap-1 [&_button]:py-[0.1em] tall:[&_button]:py-[0.25em] tall:[&_button]:leading-[1.2]"
-            />
+            >
+              {menu}
+            </Picker>
           </div>
         </>
       )}
@@ -1084,35 +1099,23 @@ export const DuelScreen = ({
         <div className={styles.pause()}>
           <Window className="w-[60%]">
             <Text className="mb-[calc(var(--px)*3)] text-center">Paused</Text>
-            <Picker
-              label="Pause"
-              items={[
-                {
-                  id: 'resume',
-                  label: 'Resume',
-                  onSelect: () => setPaused(false),
-                },
-                {
-                  // The touch version of M, and where a player looks for it
-                  id: 'sound',
-                  label: (
-                    <span className="flex items-center gap-[1ch]">
-                      Sound
-                      <Setting>
-                        {sound.music || sound.effects ? 'On' : 'Off'}
-                      </Setting>
-                    </span>
-                  ),
-                  onSelect: toggleSound,
-                  onStep: toggleSound,
-                },
-                {
-                  id: 'back',
-                  label: 'Back to the roster',
-                  onSelect: () => setLeaving(true),
-                },
-              ]}
-            />
+            <Picker label="Pause">
+              <PickerItem id="resume" onSelect={() => setPaused(false)}>
+                Resume
+              </PickerItem>
+              {/* The touch version of M, and where a player looks for it */}
+              <PickerSetting
+                id="sound"
+                value={sound.music || sound.effects ? 'On' : 'Off'}
+                onSelect={toggleSound}
+                onStep={toggleSound}
+              >
+                Sound
+              </PickerSetting>
+              <PickerItem id="back" onSelect={() => setLeaving(true)}>
+                Back to the roster
+              </PickerItem>
+            </Picker>
             <Legend keys={[['Esc', 'resume']]} touch="Tap Resume" />
           </Window>
         </div>

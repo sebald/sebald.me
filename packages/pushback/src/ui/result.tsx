@@ -1,6 +1,14 @@
 'use client';
 
-import { Heading, Legend, Text, Window, useKeys } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Picker,
+  PickerItem,
+  Text,
+  Window,
+  useKeys,
+} from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, MODES, MODE_LABELS } from '../lib/characters';
@@ -16,7 +24,6 @@ import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
 import { Ledger, Meter } from './ledger';
-import { Picker } from './picker';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
 
@@ -164,26 +171,19 @@ export const ResultScreen = ({
         </div>
 
         <div className="mt-auto flex justify-end px-[calc(var(--px)*2)] pt-[calc(var(--px)*4)]">
-          <Picker
-            label="Result"
-            className="w-[14em] tall:w-full"
-            items={[
-              {
-                id: 'copy',
-                label: copied ? 'Copied' : 'Copy result',
-                onSelect: copy,
-              },
-              ...(onNewRun
-                ? [{ id: 'new', label: 'New run', onSelect: onNewRun }]
-                : []),
-              {
-                id: 'back',
-                label: 'Back to the roster',
-                back: true,
-                onSelect: onBack,
-              },
-            ]}
-          />
+          <Picker label="Result" className="w-[14em] tall:w-full">
+            <PickerItem id="copy" onSelect={copy}>
+              {copied ? 'Copied' : 'Copy result'}
+            </PickerItem>
+            {onNewRun && (
+              <PickerItem id="new" onSelect={onNewRun}>
+                New run
+              </PickerItem>
+            )}
+            <PickerItem id="back" variant="back" onSelect={onBack}>
+              Back to the roster
+            </PickerItem>
+          </Picker>
         </div>
         <Legend
           keys={[

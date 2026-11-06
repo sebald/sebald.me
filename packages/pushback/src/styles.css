@@ -160,6 +160,8 @@
   --bui-frame-inner: var(--pb-frame-inner);
   --bui-text: var(--pb-text);
   --bui-text-bright: var(--pb-text-bright);
+  /* The item the cursor is on, warm against the white-ish rest */
+  --bui-text-selected: var(--pb-gold-light);
   --bui-heading: var(--pb-heading);
   --bui-muted: var(--pb-muted);
   --bui-dim: var(--pb-dim);

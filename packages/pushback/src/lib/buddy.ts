@@ -46,9 +46,12 @@ export const ghostEnter = (elapsed: number): number => {
   return 1 - (1 - t) ** 2;
 };
 
-/** Opacity of a wrong counter at a step, in three visible drops */
-export const buddyOpacity = (step: number): number =>
-  [1, 0.7, 0.45, 0.25][Math.max(0, Math.min(BUDDY_STEPS, step))]!;
+/**
+ * How far a wrong counter is ruled out at a step, 0 to 1, in three
+ * visible drops (Blip UI's `ruledOut` fades it to a quarter at 1)
+ */
+export const buddyRuledOut = (step: number): number =>
+  Math.max(0, Math.min(BUDDY_STEPS, step)) / BUDDY_STEPS;
 
 /**
  * The ghost's line for an appearance: the barks in turn from a start

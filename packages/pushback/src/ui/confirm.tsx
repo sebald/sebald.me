@@ -1,9 +1,15 @@
 'use client';
 
-import { Heading, Legend, Text, Window, useKeys } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Picker,
+  PickerItem,
+  Text,
+  Window,
+  useKeys,
+} from '@sebald/blip-ui';
 import { useMemo } from 'react';
-
-import { Picker } from './picker';
 
 export interface ConfirmProps {
   title: string;
@@ -42,11 +48,14 @@ export const Confirm = ({
             label={title}
             className="mt-[calc(var(--px)*2)]"
             initial="cancel"
-            items={[
-              { id: 'cancel', label: 'Cancel', back: true, onSelect: onCancel },
-              { id: 'confirm', label: confirm, onSelect: onConfirm },
-            ]}
-          />
+          >
+            <PickerItem id="cancel" variant="back" onSelect={onCancel}>
+              Cancel
+            </PickerItem>
+            <PickerItem id="confirm" onSelect={onConfirm}>
+              {confirm}
+            </PickerItem>
+          </Picker>
         </div>
         <Legend
           keys={[
