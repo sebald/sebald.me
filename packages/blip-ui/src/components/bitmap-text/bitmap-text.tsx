@@ -73,36 +73,35 @@ export interface BitmapTextProps extends Omit<
    */
   variant?: NonNullable<Variants['variant']>;
   /**
-   * Stage pixels a letter pixel
-   * @default 2
+   * How big: `default` for a line (two stage pixels a letter pixel),
+   * `large` for the word a screen is about (five)
+   * @default 'default'
    */
-  scale?: number;
-  /**
-   * A hard drop down and to the right of the ink line
-   * @default true
-   */
-  shadow?: boolean;
+  size?: keyof typeof SIZES;
 }
+
+/** Stage pixels a letter pixel, by size */
+const SIZES = { default: 2, large: 5 } as const;
 
 /**
  * Text in a five by seven pixel font, the way the logo's letters are
- * drawn: each letter pixel `scale` stage pixels, an ink line round it, an
- * optional hard drop down and to the right, the top row lit and the
+ * drawn: each letter pixel two or five stage pixels, an ink line round it,
+ * a hard drop down and to the right, the top row lit and the
  * bottom two shaded. Decorative (`aria-hidden`): say it in text too.
  */
 export const BitmapText = ({
   children,
   variant,
-  scale = 2,
-  shadow = true,
+  size = 'default',
   className,
   style,
   ...props
 }: BitmapTextProps) => {
+  const scale = SIZES[size];
   const chars = [...children.toUpperCase()];
   // Room round the word for its ink line (one pixel) and its drop (two)
   const before = 1;
-  const after = shadow ? 3 : 1;
+  const after = 3;
   const columns = chars.length * (GLYPH.width + GLYPH.gap) - GLYPH.gap;
   const width = columns * scale + before + after;
   const height = GLYPH.height * scale + before + after;
@@ -128,17 +127,16 @@ export const BitmapText = ({
         return (
           <g key={i}>
             {/* The drop, then the ink line, then the letter */}
-            {shadow &&
-              at.map(({ x, y }) => (
-                <rect
-                  key={`d${x}-${y}`}
-                  x={x + 2}
-                  y={y + 2}
-                  width={scale + 1}
-                  height={scale + 1}
-                  className={bitmapText.ink()}
-                />
-              ))}
+            {at.map(({ x, y }) => (
+              <rect
+                key={`d${x}-${y}`}
+                x={x + 2}
+                y={y + 2}
+                width={scale + 1}
+                height={scale + 1}
+                className={bitmapText.ink()}
+              />
+            ))}
             {at.map(({ x, y }) => (
               <rect
                 key={`o${x}-${y}`}

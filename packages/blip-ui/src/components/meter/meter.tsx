@@ -6,6 +6,9 @@ import { meter } from './meter.styles';
 
 type Variants = VariantProps<typeof meter.root>;
 
+/** One cell, in stage pixels */
+const CELL = { width: 4, height: 6 } as const;
+
 export interface MeterProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
   'children'
@@ -19,11 +22,6 @@ export interface MeterProps extends Omit<
    * @default 'primary'
    */
   variant?: NonNullable<Variants['variant']>;
-  /**
-   * One cell, in stage pixels
-   * @default { width: 4, height: 6 }
-   */
-  cell?: { width: number; height: number };
   /**
    * Blink the lit cells, between their colour and its light, at the
    * arcade rhythm: a full pool asking to be used. Steady under reduced
@@ -43,7 +41,6 @@ export const Meter = ({
   value,
   max,
   variant,
-  cell = { width: 4, height: 6 },
   blink = false,
   className,
   ...props
@@ -72,8 +69,8 @@ export const Meter = ({
               state: on ? 'lit' : 'empty',
             })}
             style={{
-              width: px(cell.width, FLOOR),
-              height: px(cell.height, FLOOR),
+              width: px(CELL.width, FLOOR),
+              height: px(CELL.height, FLOOR),
             }}
           >
             {!on && <span className={meter.dots()} />}

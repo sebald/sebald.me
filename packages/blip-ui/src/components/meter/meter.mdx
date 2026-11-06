@@ -21,27 +21,19 @@ only; for a value that runs smoothly, draw a bar instead.
    dots, so the slot shows
 4. **Gap**, two pixels between cells
 
-## Tones
+A cell is 4 by 6 in `--bui-px`: a readout, so on a phone's tall stage it
+keeps its size instead of thinning with the stage pixel.
 
-| Variant     | When to use                                  |
-| ----------- | -------------------------------------------- |
-| `primary`   | The player's pool, the main one              |
-| `secondary` | The other side's pool                        |
-| `neutral`   | A quiet pool that is not a side              |
-| `info`      | Time                                         |
-| `danger`    | A pool that is bad when it fills or runs low |
+## Variants
+
+| Variant     | When to use                     |
+| ----------- | ------------------------------- |
+| `primary`   | The player's pool, the main one |
+| `secondary` | The other side's pool           |
 
 `blink` blinks the lit cells between their colour and its light, at the
 arcade rhythm, for a full pool asking to be used. The meter runs it
 itself, and holds it steady under reduced motion.
-
-<Canvas of={MeterStories.Overview} />
-
-## Cell size
-
-`cell` is one box in `--bui-px`, 4 by 6 by default: a readout, so on a
-phone's tall stage it keeps its size instead of thinning with the stage
-pixel.
 
 <Canvas of={MeterStories.Overview} />
 
@@ -51,6 +43,7 @@ pixel.
 - **Do** put the name next to the meter, and give the meter an `aria-label`.
 - **Don't** pass fractions. The value is rounded to a whole cell.
 - **Don't** rely on the variant alone: the lit count is what carries the value.
+- **Don't** add a colour for a new kind of pool before a screen needs it.
 
 ## Accessibility
 

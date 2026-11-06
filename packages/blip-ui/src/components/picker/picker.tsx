@@ -76,7 +76,6 @@ const useNotePlace = (
   listRef: RefObject<HTMLUListElement | null>,
   shown: boolean,
   scrollTop: number,
-  stageWidth?: number,
 ): NotePlace | null => {
   const { scale, tall } = usePixels();
   const [place, setPlace] = useState<NotePlace | null>(null);
@@ -103,7 +102,7 @@ const useNotePlace = (
       });
       return;
     }
-    const width = stageWidth ?? toStage(origin.width);
+    const width = toStage(origin.width);
     const max = width - NOTE.margin - NOTE.width;
     const beside = (box: DOMRect, overlap: number) => {
       const onRight = toStage(box.right - origin.left) - overlap;
@@ -124,7 +123,7 @@ const useNotePlace = (
       top: Math.max(NOTE.margin, toStage(line.top - origin.top) - 4),
       width: NOTE.width,
     });
-  }, [rowRef, listRef, shown, scrollTop, scale, tall, stageWidth]);
+  }, [rowRef, listRef, shown, scrollTop, scale, tall]);
   return shown ? place : null;
 };
 
@@ -146,7 +145,6 @@ interface PickerContextValue {
   touch: boolean;
   overflow: boolean;
   scrollTop: number;
-  stageWidth?: number;
   listRef: RefObject<HTMLUListElement | null>;
 }
 
@@ -180,11 +178,6 @@ export interface PickerProps {
   active?: boolean;
   /** The list's accessible name */
   label: string;
-  /**
-   * The stage's width in stage pixels, for placing the description box;
-   * measured from the stage when not given
-   */
-  stageWidth?: number;
   /** On the list itself */
   className?: string;
 }
@@ -203,7 +196,6 @@ export const Picker = ({
   initial,
   active = true,
   label,
-  stageWidth,
   className,
 }: PickerProps) => {
   const play = useFeedback();
@@ -296,7 +288,6 @@ export const Picker = ({
         touch,
         overflow,
         scrollTop: scroll.top,
-        stageWidth,
         listRef,
       }}
     >
@@ -392,7 +383,6 @@ const Row = ({
     picker.listRef,
     shownNote,
     picker.scrollTop,
-    picker.stageWidth,
   );
   // Under a finger there is no cursor to move, and a marked row would read
   // as chosen already: only the row a description is about is marked

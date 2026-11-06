@@ -1,30 +1,35 @@
+'use client';
+
+import { useContext } from 'react';
+
 import { FLOOR, px } from '../../foundations/pixel';
 import { cn } from '../../utils/styles';
+import { ControlsLayout } from '../controls/controls';
 import { ICONS, ICON_COLOURS, type IconName } from './icons';
 
 /** A pixel of an icon in `FLOOR` pixels (never finer than `--bui-min-px`), as fine as a stopwatch's */
 export const DOT = 2 / 3;
 
+/** CSS pixels per icon pixel on the tall stage's bar, where a thumb sets the size */
+const BAR_DOT = 1.5;
+
 export interface PixelIconProps {
   /** Which icon, by name (`ICONS`) */
   icon: IconName;
-  /**
-   * CSS pixels per icon pixel, for a bar sized for a thumb (the tall
-   * stage's); without it an icon pixel is `DOT` of a stage pixel
-   */
-  dot?: number;
   className?: string;
 }
 
 /**
- * A pixel-art icon at the stage's pixels, or at a size in CSS pixels where
- * the controls are sized for a thumb. Decorative: the button around it
- * carries the name.
+ * A pixel-art icon at the stage's pixels: an icon pixel is `DOT` of a
+ * stage pixel. On the tall stage's bar of controls, where a thumb sets the
+ * size, it is 1.5 CSS pixels instead; the bar tells it. Decorative: the
+ * button around it carries the name.
  */
-export const PixelIcon = ({ icon, dot, className }: PixelIconProps) => {
+export const PixelIcon = ({ icon, className }: PixelIconProps) => {
   const rows = ICONS[icon];
+  const bar = useContext(ControlsLayout) === 'bar';
   const size = (n: number) =>
-    dot === undefined ? px(n * DOT, FLOOR) : `${Math.round(n * dot)}px`;
+    bar ? `${Math.round(n * BAR_DOT)}px` : px(n * DOT, FLOOR);
   return (
     <svg
       aria-hidden

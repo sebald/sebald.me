@@ -2,12 +2,9 @@ import type { HTMLAttributes, ReactNode } from 'react';
 
 import { ledger } from './ledger.styles';
 
-export interface LedgerProps extends Omit<
-  HTMLAttributes<HTMLDListElement>,
-  'children'
-> {
-  /** Label on the left, value on the right */
-  rows: [label: ReactNode, value: ReactNode][];
+export interface LedgerProps extends HTMLAttributes<HTMLDListElement> {
+  /** The rows, `LedgerRow`s */
+  children: ReactNode;
 }
 
 /**
@@ -17,14 +14,25 @@ export interface LedgerProps extends Omit<
  * to its number. A description list (`dl`), since each row is a term and
  * its one value; a table would promise columns to compare.
  */
-export const Ledger = ({ rows, className, ...props }: LedgerProps) => (
+export const Ledger = ({ className, children, ...props }: LedgerProps) => (
   <dl data-slot="ledger" className={ledger.root({ className })} {...props}>
-    {rows.map(([label, value], i) => (
-      <div key={i} className={ledger.row()}>
-        <dt className={ledger.label()}>{label}</dt>
-        <span aria-hidden className={ledger.leader()} />
-        <dd className={ledger.value()}>{value}</dd>
-      </div>
-    ))}
+    {children}
   </dl>
+);
+
+export interface LedgerRowProps {
+  /** What is counted, on the left */
+  label: ReactNode;
+  /** Its value, on the right: a number, a `Meter` */
+  children: ReactNode;
+  className?: string;
+}
+
+/** One row of a Ledger: the label, the leader, the value */
+export const LedgerRow = ({ label, className, children }: LedgerRowProps) => (
+  <div data-slot="ledger-row" className={ledger.row({ className })}>
+    <dt className={ledger.label()}>{label}</dt>
+    <span aria-hidden className={ledger.leader()} />
+    <dd className={ledger.value()}>{children}</dd>
+  </div>
 );

@@ -82,7 +82,12 @@ export {
   stampSize,
 } from './components/stamp/stamp';
 export { Button, type ButtonProps } from './components/button/button';
-export { Ledger, type LedgerProps } from './components/ledger/ledger';
+export {
+  Ledger,
+  type LedgerProps,
+  LedgerRow,
+  type LedgerRowProps,
+} from './components/ledger/ledger';
 export { Meter, type MeterProps } from './components/meter/meter';
 export { Timer, TIMER_SIZE, type TimerProps } from './components/timer/timer';
 export { Controls, type ControlsProps } from './components/controls/controls';

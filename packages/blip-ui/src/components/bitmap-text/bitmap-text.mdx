@@ -17,7 +17,7 @@ art. Running text is plain text, not BitmapText.
 ## Anatomy
 
 1. **Ink line**, one pixel round every letter pixel
-2. **Drop**, the ink line again, two pixels down and to the right (`shadow`)
+2. **Drop**, the ink line again, two pixels down and to the right
 3. **Letter**, the top row in the variant's light, the bottom two in its shade,
    the rest in its main colour
 
@@ -30,22 +30,20 @@ space. The text is upper-cased; any other character is left blank.
 
 `variant` picks the accent ramp the letters take their three colours from.
 
-| Variant     | Ramp                                              |
-| ----------- | ------------------------------------------------- |
-| `primary`   | The primary colour: the winning, loud call        |
-| `secondary` | The secondary colour                              |
-| `neutral`   | Quiet: a loss, something that is over             |
-| `info`      | The info colour                                   |
-| `danger`    | The danger colour                                 |
-| `spark`     | White-hot, shaded in the primary: a flawless line |
+| Variant   | Ramp                                              |
+| --------- | ------------------------------------------------- |
+| `primary` | The primary colour: the winning, loud call        |
+| `neutral` | Quiet: a loss, something that is over             |
+| `spark`   | White-hot, shaded in the primary: a flawless line |
 
 <Canvas of={BitmapTextStories.Overview} />
 
 ## Size
 
-`scale` is stage pixels per letter pixel (2 by default). The word is
-`6 × letters − 1` letter pixels wide: at 2, a title of 26 characters fills
-the 320 stage pixels of a stage, so keep titles shorter. The font has A to
+`size` is `default` for a line, two stage pixels a letter pixel, or
+`large` for the word a screen is about (a round's result), five. The word
+is `6 × letters − 1` letter pixels wide: by default a title of 26
+characters fills the 320 stage pixels of a stage, large one of 10. The font has A to
 Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
 
 <Canvas of={BitmapTextStories.Title} />

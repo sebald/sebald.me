@@ -13,9 +13,6 @@ import { type IconName } from '../pixel-icon/icons';
 import { PixelIcon } from '../pixel-icon/pixel-icon';
 import { iconButton } from './icon-button.styles';
 
-/** CSS pixels per icon pixel on the bar, where a thumb sets the size */
-const BAR_DOT = 1.5;
-
 // A tap on a control is not a tap that opens a menu, moves a duel on or
 // leaves a demo: it stays with the control
 const keep = (event: PointerEvent) => event.stopPropagation();
@@ -72,7 +69,7 @@ export const IconButton = ({
       }}
       {...props}
     >
-      <PixelIcon icon={icon} dot={bar ? BAR_DOT : undefined} />
+      <PixelIcon icon={icon} />
       {bar && label}
       {children}
     </button>

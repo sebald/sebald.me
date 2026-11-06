@@ -4,7 +4,7 @@ import type { ReactNode } from 'react';
 import { Button } from '../components/button/button';
 import { Controls } from '../components/controls/controls';
 import { IconButton, IconToggle } from '../components/icon-button/icon-button';
-import { Ledger } from '../components/ledger/ledger';
+import { Ledger, LedgerRow } from '../components/ledger/ledger';
 import { Line } from '../components/line/line';
 import { Meter } from '../components/meter/meter';
 import {
@@ -173,24 +173,19 @@ export const Duel: Story = {
             <Tab value="log">Log</Tab>
           </TabList>
           <TabPanel value="pools">
-            <Ledger
-              rows={[
-                [
-                  'Momentum',
-                  <Meter key="m" aria-label="Momentum" value={3} max={5} />,
-                ],
-                [
-                  'Patience',
-                  <Meter
-                    key="p"
-                    aria-label="Patience"
-                    value={1}
-                    max={5}
-                    variant="danger"
-                  />,
-                ],
-              ]}
-            />
+            <Ledger>
+              <LedgerRow label="Momentum">
+                <Meter aria-label="Momentum" value={3} max={5} />
+              </LedgerRow>
+              <LedgerRow label="Their momentum">
+                <Meter
+                  aria-label="Their momentum"
+                  value={1}
+                  max={5}
+                  variant="secondary"
+                />
+              </LedgerRow>
+            </Ledger>
           </TabPanel>
           <TabPanel value="log">Nothing yet.</TabPanel>
         </Tabs>

@@ -17,16 +17,12 @@ const meta = {
     max: { control: { type: 'number', min: 1, max: 12, step: 1 } },
     variant: {
       control: 'inline-radio',
-      options: ['primary', 'secondary', 'neutral', 'info', 'danger'],
+      options: ['primary', 'secondary'],
       table: { defaultValue: { summary: 'primary' } },
     },
     blink: {
       control: 'boolean',
       table: { defaultValue: { summary: 'false' } },
-    },
-    cell: {
-      control: 'object',
-      table: { defaultValue: { summary: '{ width: 4, height: 6 }' } },
     },
   },
 } satisfies Meta<typeof Meter>;
@@ -37,7 +33,7 @@ type Story = StoryObj<typeof meta>;
 /** Every prop through the controls */
 export const Default: Story = {};
 
-const VARIANTS = ['primary', 'secondary', 'neutral', 'info', 'danger'] as const;
+const VARIANTS = ['primary', 'secondary'] as const;
 const STATES = [
   { name: 'empty', value: 0, blink: false },
   { name: 'partial', value: 3, blink: false },
@@ -45,7 +41,7 @@ const STATES = [
   { name: 'blinking', value: 5, blink: true },
 ] as const;
 
-/** Every variant in every state, and other cell sizes, side by side */
+/** Every variant in every state, side by side */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -71,20 +67,6 @@ export const Overview: Story = {
           />
         )),
       ])}
-      <span className="text-[0.75em] text-(--bui-dim)">cells</span>
-      <Meter
-        aria-label="Small cells"
-        value={4}
-        max={8}
-        cell={{ width: 3, height: 4 }}
-      />
-      <Meter
-        aria-label="Large cells"
-        value={4}
-        max={8}
-        cell={{ width: 6, height: 9 }}
-        className="col-span-3"
-      />
     </div>
   ),
 };

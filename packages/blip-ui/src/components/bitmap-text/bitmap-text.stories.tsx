@@ -5,21 +5,18 @@ import { BitmapText } from './bitmap-text';
 const meta = {
   title: 'Components/BitmapText',
   component: BitmapText,
-  args: { children: 'YOU WIN', variant: 'primary', scale: 2, shadow: true },
+  args: { children: 'YOU WIN', variant: 'primary', size: 'default' },
   argTypes: {
     children: { control: 'text' },
     variant: {
-      control: 'select',
-      options: ['primary', 'secondary', 'neutral', 'info', 'danger', 'spark'],
+      control: 'inline-radio',
+      options: ['primary', 'neutral', 'spark'],
       table: { defaultValue: { summary: 'primary' } },
     },
-    scale: {
-      control: { type: 'number', min: 1, max: 6 },
-      table: { defaultValue: { summary: '2' } },
-    },
-    shadow: {
-      control: 'boolean',
-      table: { defaultValue: { summary: 'true' } },
+    size: {
+      control: 'inline-radio',
+      options: ['default', 'large'],
+      table: { defaultValue: { summary: 'default' } },
     },
   },
 } satisfies Meta<typeof BitmapText>;
@@ -30,22 +27,15 @@ type Story = StoryObj<typeof meta>;
 /** One word through the controls */
 export const Default: Story = {};
 
-const VARIANTS = [
-  'primary',
-  'secondary',
-  'neutral',
-  'info',
-  'danger',
-  'spark',
-] as const;
+const VARIANTS = ['primary', 'neutral', 'spark'] as const;
 
-/** Every variant, with its drop and without */
+/** Every variant at both sizes */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="grid w-fit grid-cols-[auto_repeat(2,auto)] items-center gap-x-8 gap-y-4">
       <span />
-      {['shadow', 'no shadow'].map(col => (
+      {['default', 'large'].map(col => (
         <span key={col} className="text-[0.75em] text-(--bui-dim)">
           {col}
         </span>
@@ -54,10 +44,10 @@ export const Overview: Story = {
         <span key={variant} className="text-[0.75em] text-(--bui-dim)">
           {variant}
         </span>,
-        <BitmapText key={`${variant}-s`} variant={variant}>
+        <BitmapText key={`${variant}-d`} variant={variant}>
           YOU WIN
         </BitmapText>,
-        <BitmapText key={`${variant}-n`} variant={variant} shadow={false}>
+        <BitmapText key={`${variant}-l`} variant={variant} size="large">
           YOU WIN
         </BitmapText>,
       ])}
@@ -65,15 +55,13 @@ export const Overview: Story = {
   ),
 };
 
-/** A title and a line under it, at two sizes */
+/** A result and the line under it */
 export const Title: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
     <div className="grid w-fit justify-items-center gap-[calc(var(--px)*4)]">
-      <BitmapText scale={4}>ROADMAP</BitmapText>
-      <BitmapText scale={2} variant="spark">
-        FLAWLESS
-      </BitmapText>
+      <BitmapText size="large">YOU WIN</BitmapText>
+      <BitmapText variant="spark">FLAWLESS</BitmapText>
     </div>
   ),
 };

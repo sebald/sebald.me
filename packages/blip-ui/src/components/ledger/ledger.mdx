@@ -11,13 +11,24 @@ score table or a status screen. Use it for a few numbers the player reads
 across: results, stats, an inventory of counts.
 
 <Canvas of={LedgerStories.Default} />
-<Controls of={LedgerStories.Default} />
+
+```tsx
+<Ledger>
+  <LedgerRow label="Meetings won">12</LedgerRow>
+  <LedgerRow label="Momentum">
+    <Meter aria-label="Momentum" value={3} max={5} />
+  </LedgerRow>
+</Ledger>
+```
 
 ## Anatomy
 
-1. **Label**, on the left
+Each `LedgerRow` is a row:
+
+1. **Label**, on the left (`label`)
 2. **Leader**, a pixel dot every three stage pixels on the baseline
 3. **Value**, on the right, in the heading colour with tabular figures
+   (its children)
 
 The ledger fills the width it is given. The leader takes what the label and
 the value leave, six pixels at least.

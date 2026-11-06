@@ -13,13 +13,9 @@ export const bitmapText = {
       variant: {
         primary:
           '[--t-main:var(--bui-primary)] [--t-light:var(--bui-primary-light)] [--t-shade:var(--bui-primary-shade)]',
-        secondary:
-          '[--t-main:var(--bui-secondary)] [--t-light:var(--bui-secondary-light)] [--t-shade:var(--bui-secondary-shade)]',
+        /** Quiet: a loss, something that is over */
         neutral:
           '[--t-main:var(--bui-neutral)] [--t-light:var(--bui-neutral-light)] [--t-shade:var(--bui-neutral-shade)]',
-        info: '[--t-main:var(--bui-info)] [--t-light:var(--bui-info-light)] [--t-shade:var(--bui-info-shade)]',
-        danger:
-          '[--t-main:var(--bui-danger)] [--t-light:var(--bui-danger-light)] [--t-shade:var(--bui-danger-shade)]',
         /** White-hot, shaded in the primary colour */
         spark:
           '[--t-main:var(--bui-spark)] [--t-light:var(--bui-spark)] [--t-shade:var(--bui-primary)]',

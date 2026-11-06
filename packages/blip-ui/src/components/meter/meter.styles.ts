@@ -16,14 +16,6 @@ export const meter = {
         /** The other side */
         secondary:
           '[--m-light:var(--bui-secondary-light)] [--m-mid:var(--bui-secondary)] [--m-shade:var(--bui-secondary-shade)]',
-        /** A quiet pool */
-        neutral:
-          '[--m-light:var(--bui-neutral-light)] [--m-mid:var(--bui-neutral)] [--m-shade:var(--bui-neutral-shade)]',
-        /** Time */
-        info: '[--m-light:var(--bui-info-light)] [--m-mid:var(--bui-info)] [--m-shade:var(--bui-info-shade)]',
-        /** What runs low or is dangerous */
-        danger:
-          '[--m-light:var(--bui-danger-light)] [--m-mid:var(--bui-danger)] [--m-shade:var(--bui-danger-shade)]',
       },
     },
     defaultVariants: { variant: 'primary' },

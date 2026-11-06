@@ -20,7 +20,6 @@ const meta = {
       control: 'boolean',
       table: { defaultValue: { summary: 'true' } },
     },
-    stageWidth: { control: 'number' },
   },
 } satisfies Meta<typeof Picker>;
 
