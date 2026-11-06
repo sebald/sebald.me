@@ -1,7 +1,7 @@
 'use client';
 
 import type { CSSProperties, PropsWithChildren } from 'react';
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import { BACKING, NATIVE, fontSizeFor as fontSize } from '../foundations/scale';
 import { cn } from '../utils/styles';
@@ -42,6 +42,19 @@ export const PixelsContext = createContext<PixelsValue>(DEFAULT_PIXELS);
 /** The scale and layout of the pixels around a piece (3x, wide, outside any) */
 export const usePixels = () => useContext(PixelsContext);
 
+/**
+ * The stage element a piece is in (`Stage`'s or `Pixels`' root), for
+ * what is rendered over the stage itself: a dialog, a picker's note.
+ * `null` on the stage's first render, before it is there; `undefined`
+ * outside any stage.
+ */
+export const StageContext = createContext<HTMLElement | null | undefined>(
+  undefined,
+);
+
+/** The stage element a piece is in: `null` until it is there, `undefined` outside any */
+export const useStage = () => useContext(StageContext);
+
 /** The text size at a scale: 16px at 3x, never under 14 (17 held upright) */
 export const fontSizeFor = fontSize;
 
@@ -66,19 +79,25 @@ export const Pixels = ({
   className,
   style,
   children,
-}: PixelsProps) => (
-  <PixelsContext.Provider value={{ ...DEFAULT_PIXELS, scale, tall }}>
-    <div
-      data-stage
-      data-layout={tall ? 'tall' : undefined}
-      className={cn('relative', className)}
-      style={{
-        ['--px' as string]: `${scale}px`,
-        fontSize: fontSizeFor(scale, tall),
-        ...style,
-      }}
-    >
-      <Announcer>{children}</Announcer>
-    </div>
-  </PixelsContext.Provider>
-);
+}: PixelsProps) => {
+  const [root, setRoot] = useState<HTMLElement | null>(null);
+  return (
+    <PixelsContext.Provider value={{ ...DEFAULT_PIXELS, scale, tall }}>
+      <div
+        ref={setRoot}
+        data-stage
+        data-layout={tall ? 'tall' : undefined}
+        className={cn('relative', className)}
+        style={{
+          ['--px' as string]: `${scale}px`,
+          fontSize: fontSizeFor(scale, tall),
+          ...style,
+        }}
+      >
+        <StageContext value={root}>
+          <Announcer>{children}</Announcer>
+        </StageContext>
+      </div>
+    </PixelsContext.Provider>
+  );
+};

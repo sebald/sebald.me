@@ -6,11 +6,11 @@ import type {
   PropsWithChildren,
   ReactNode,
 } from 'react';
-import { useRef } from 'react';
+import { useState } from 'react';
 
 import { NATIVE, fontSizeFor } from '../../foundations/scale';
 import { Announcer } from '../../providers/announcer';
-import { PixelsContext } from '../../providers/pixels';
+import { PixelsContext, StageContext } from '../../providers/pixels';
 import { stage } from './stage.styles';
 import { useScale } from './use-scale';
 
@@ -93,20 +93,21 @@ export const Stage = ({
   const { scale, tall, rows, turn } = measured;
   const crop = cropProp === 'fit' ? measured.crop : cropProp;
   const lift = tall ? liftProp : 0;
-  const ref = useRef<HTMLElement>(null);
+  // The section, for the focus and for what renders into the stage
+  const [root, setRoot] = useState<HTMLElement | null>(null);
   // Focusing the game (a tap on it, or focus arriving from the page)
   // centres the stage in the viewport
   const centre = () =>
-    ref.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    root?.scrollIntoView({ block: 'center', behavior: 'smooth' });
   const onFocus = (event: FocusEvent<HTMLElement>) => {
     if (fixed) return;
     const from = event.relatedTarget as Node | null;
-    if (!from || !ref.current?.contains(from)) centre();
+    if (!from || !root?.contains(from)) centre();
   };
   const onPointerDown = () => {
     if (fixed) return;
     const active = document.activeElement;
-    if (!active || !ref.current?.contains(active)) ref.current?.focus();
+    if (!active || !root?.contains(active)) root?.focus();
   };
   if (turn && !fixed && turned) {
     return (
@@ -135,7 +136,7 @@ export const Stage = ({
     // focus; a game is keyboard and touch playable through its menus.
     // oxlint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
     <section
-      ref={ref}
+      ref={setRoot}
       data-stage
       data-layout={tall ? 'tall' : undefined}
       tabIndex={-1}
@@ -149,17 +150,19 @@ export const Stage = ({
       {/* The full stage, its top rows above the section when cropped;
           lifted, it starts lower and ends at the same bottom (the bar) */}
       <PixelsContext.Provider value={measured}>
-        <Announcer>
-          <div
-            className={stage.layer()}
-            style={{
-              top: (lift - crop) * scale,
-              height: (tall ? rows - lift : nativeHeight) * scale,
-            }}
-          >
-            {children}
-          </div>
-        </Announcer>
+        <StageContext value={root}>
+          <Announcer>
+            <div
+              className={stage.layer()}
+              style={{
+                top: (lift - crop) * scale,
+                height: (tall ? rows - lift : nativeHeight) * scale,
+              }}
+            >
+              {children}
+            </div>
+          </Announcer>
+        </StageContext>
       </PixelsContext.Provider>
     </section>
   );

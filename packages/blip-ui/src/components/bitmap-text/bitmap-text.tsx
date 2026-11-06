@@ -83,6 +83,10 @@ export interface BitmapTextProps extends Omit<
 /** Stage pixels a letter pixel, by size */
 const SIZES = { default: 2, large: 5 } as const;
 
+/** Room round the word: its ink line (one pixel) all round, its drop (two) below and right */
+const INK = 1;
+const ROOM = INK * 2 + 2;
+
 /**
  * Text in a five by seven pixel font, the way the logo's letters are
  * drawn: each letter pixel two or five stage pixels, an ink line round it,
@@ -99,12 +103,9 @@ export const BitmapText = ({
 }: BitmapTextProps) => {
   const scale = SIZES[size];
   const chars = [...children.toUpperCase()];
-  // Room round the word for its ink line (one pixel) and its drop (two)
-  const before = 1;
-  const after = 3;
   const columns = chars.length * (GLYPH.width + GLYPH.gap) - GLYPH.gap;
-  const width = columns * scale + before + after;
-  const height = GLYPH.height * scale + before + after;
+  const width = columns * scale + ROOM;
+  const height = GLYPH.height * scale + ROOM;
   const row = (y: number) =>
     y === 0 ? 'light' : y >= GLYPH.height - 2 ? 'shade' : 'main';
   return (
@@ -118,10 +119,10 @@ export const BitmapText = ({
       {...props}
     >
       {chars.map((char, i) => {
-        const left = before + i * (GLYPH.width + GLYPH.gap) * scale;
+        const left = INK + i * (GLYPH.width + GLYPH.gap) * scale;
         const at = lit(glyphOf(FONT, char)).map(({ x, y }) => ({
           x: left + x * scale,
-          y: before + y * scale,
+          y: INK + y * scale,
           row: y,
         }));
         return (

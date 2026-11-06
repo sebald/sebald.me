@@ -146,13 +146,11 @@ describe('the kit’s styles', () => {
 describe('the kit’s components', () => {
   it('mark their root with their name, so a parent can place them', () => {
     // Whose root is another of the kit's components, marked by that one
-    const COMPOSED: Record<string, string> = {
-      confirm: 'a Dialog',
-      parts: 'Title, Content and Actions, each marked by its name',
-    };
+    // (Confirm's is a Dialog), or parts each marked by its own name
+    const COMPOSED = new Set(['confirm', 'parts']);
     const unmarked = readdirSync(ROOT).filter(
       name =>
-        !(name in COMPOSED) &&
+        !COMPOSED.has(name) &&
         !readFileSync(join(ROOT, name, `${name}.tsx`), 'utf8').includes(
           `data-slot="${name}"`,
         ),

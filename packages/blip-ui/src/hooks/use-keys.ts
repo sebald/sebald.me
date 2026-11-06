@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import { useFeedback } from '../providers/feedback';
-import { focusTakes, useOnTop } from './key-layer';
+import { useKeydown } from './key-layer';
 
 /**
  * Key handlers for a screen, by `event.key`; active while mounted and
@@ -17,21 +15,11 @@ export const useKeys = (
   quiet = false,
 ) => {
   const play = useFeedback();
-  const onTop = useOnTop();
-  useEffect(() => {
-    if (!active) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (!onTop() || focusTakes(event)) return;
-      const handler = handlers[event.key];
-      if (handler) {
-        event.preventDefault();
-        if (event.key === 'Escape' && !quiet) play('back');
-        handler(event);
-      }
-    };
-    // In the capture phase: a dialog's popup stops the arrow keys on their
-    // way up, and the keys are the top layer's wherever the focus is
-    window.addEventListener('keydown', onKey, true);
-    return () => window.removeEventListener('keydown', onKey, true);
-  }, [handlers, active, quiet, play, onTop]);
+  useKeydown(event => {
+    const handler = handlers[event.key];
+    if (!handler) return;
+    event.preventDefault();
+    if (event.key === 'Escape' && !quiet) play('back');
+    handler(event);
+  }, active);
 };

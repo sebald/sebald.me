@@ -1,10 +1,11 @@
 'use client';
 
 import { Dialog as BaseDialog } from '@base-ui/react/dialog';
-import { type ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import { type ReactNode, useRef, useState } from 'react';
 
 import { KeyLayerContext, useKeyLayer } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
+import { useStage } from '../../providers/pixels';
 import type { VariantProps } from '../../utils/styles';
 import { PartsContext, type PartsValue } from '../parts/parts';
 import { WindowFrame } from '../window/window';
@@ -71,63 +72,49 @@ export const Dialog = ({
   const layer = useKeyLayer(shown);
   const popup = useRef<HTMLDivElement>(null);
 
-  // The stage it covers, found from where it is placed
-  const anchor = useRef<HTMLSpanElement>(null);
-  const [stage, setStage] = useState<HTMLElement | null>(null);
-  useLayoutEffect(() => {
-    // Only the DOM knows which stage it is in, and only after a render;
-    // once, before the frame is painted
-    // oxlint-disable-next-line react/set-state-in-effect
-    setStage(
-      anchor.current?.closest<HTMLElement>('[data-stage]') ?? document.body,
-    );
-  }, []);
+  // The stage it covers (once it is there); outside any, the page
+  const stage = useStage();
 
   return (
-    <>
-      <span ref={anchor} hidden />
-      <BaseDialog.Root
-        open={shown}
-        // Modal: the focus stays in it, and a tap anywhere else (a corner
-        // control) only closes it; the page holds still while it is open
-        modal
-        disablePointerDismissal={role === 'alertdialog'}
-        onOpenChange={(next, details) => {
-          if (
-            !next &&
-            (details.reason === 'escape-key' ||
-              details.reason === 'outside-press')
-          )
-            play('back');
-          setInner(next);
-          onOpenChange?.(next);
-        }}
-      >
-        {stage && (
-          <BaseDialog.Portal
-            container={stage}
-            data-slot="dialog"
-            className={styles.root()}
+    <BaseDialog.Root
+      open={shown}
+      // Modal: the focus stays in it, and a tap anywhere else (a corner
+      // control) only closes it; the page holds still while it is open
+      modal
+      disablePointerDismissal={role === 'alertdialog'}
+      onOpenChange={(next, details) => {
+        if (
+          !next &&
+          (details.reason === 'escape-key' ||
+            details.reason === 'outside-press')
+        )
+          play('back');
+        setInner(next);
+        onOpenChange?.(next);
+      }}
+    >
+      {stage !== null && (
+        <BaseDialog.Portal
+          container={stage}
+          data-slot="dialog"
+          className={styles.root()}
+        >
+          <BaseDialog.Popup
+            ref={popup}
+            role={role}
+            // On the window, not its first button: the keys pick, so a
+            // focus ring on an item would only be a second cursor
+            initialFocus={popup}
+            className={styles.popup({ size, className })}
           >
-            <BaseDialog.Popup
-              ref={popup}
-              role={role}
-              // On the window, not its first button: the keys pick, so a
-              // focus ring on an item would only be a second cursor
-              initialFocus={popup}
-              className={styles.popup({ size, className })}
-            >
-              <KeyLayerContext value={layer}>
-                <PartsContext value={PARTS}>
-                  <WindowFrame bodyClassName={styles.body()}>
-                    {children}
-                  </WindowFrame>
-                </PartsContext>
-              </KeyLayerContext>
-            </BaseDialog.Popup>
-          </BaseDialog.Portal>
-        )}
-      </BaseDialog.Root>
-    </>
+            <KeyLayerContext value={layer}>
+              <PartsContext value={PARTS}>
+                <WindowFrame>{children}</WindowFrame>
+              </PartsContext>
+            </KeyLayerContext>
+          </BaseDialog.Popup>
+        </BaseDialog.Portal>
+      )}
+    </BaseDialog.Root>
   );
 };

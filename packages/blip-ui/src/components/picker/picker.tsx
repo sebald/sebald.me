@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { focusTakes, useOnTop } from '../../hooks/key-layer';
+import { useKeydown } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
@@ -205,7 +205,6 @@ export const Picker = ({
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
-  const onTop = useOnTop();
 
   /** The items' ids in the order the list shows them */
   const order = () =>
@@ -227,8 +226,7 @@ export const Picker = ({
     if (first !== undefined) setCurrent(first);
   }, [children, current, entries]);
 
-  useEffect(() => {
-    if (!active) return;
+  useKeydown(event => {
     const move = (step: number) => {
       const ids = order();
       if (!ids.length) return;
@@ -236,8 +234,7 @@ export const Picker = ({
       const at = current === undefined ? -1 : ids.indexOf(current);
       setCurrent(ids[(at + step + ids.length) % ids.length]);
     };
-    const onKey = (event: KeyboardEvent) => {
-      if (!onTop() || focusTakes(event)) return;
+    {
       const entry = current === undefined ? undefined : entries.get(current);
       switch (event.key) {
         case 'ArrowDown':
@@ -270,12 +267,8 @@ export const Picker = ({
           }
           break;
       }
-    };
-    // In the capture phase: a dialog's popup stops the arrow keys on their
-    // way up, and the keys are the top layer's wherever the focus is
-    window.addEventListener('keydown', onKey, true);
-    return () => window.removeEventListener('keydown', onKey, true);
-  }, [active, current, entries, play, onTop]);
+    }
+  }, active);
 
   return (
     <PickerContext

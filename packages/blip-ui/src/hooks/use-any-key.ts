@@ -2,7 +2,7 @@
 
 import { useEffect, useEffectEvent } from 'react';
 
-import { useOnTop } from './key-layer';
+import { focusTakes, useOnTop } from './key-layer';
 
 /** Keys that only modify or move the focus: not a press */
 const MODIFIERS = new Set([
@@ -29,7 +29,7 @@ export const useAnyKey = (onPress: () => void, active = true) => {
   useEffect(() => {
     if (!active) return;
     const onKey = (event: KeyboardEvent) => {
-      if (MODIFIERS.has(event.key) || !onTop()) return;
+      if (MODIFIERS.has(event.key) || !onTop() || focusTakes(event)) return;
       event.preventDefault();
       press();
     };

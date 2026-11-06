@@ -4,6 +4,8 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
+  useEffectEvent,
   useLayoutEffect,
   useState,
 } from 'react';
@@ -91,4 +93,27 @@ export const focusTakes = (event: KeyboardEvent) => {
     (way !== 'column' && ROW.has(event.key)) ||
     (way !== 'row' && COLUMN.has(event.key))
   );
+};
+
+/**
+ * The kit's one way to listen for keys: `onKey` hears a key while
+ * `active`, only on its layer, and never one the focus handles itself.
+ * In the capture phase: a dialog's popup stops the arrow keys on their
+ * way up, and the keys are the top layer's wherever the focus is. The
+ * latest `onKey` hears it, without listening anew on a render.
+ */
+export const useKeydown = (
+  onKey: (event: KeyboardEvent) => void,
+  active = true,
+) => {
+  const onTop = useOnTop();
+  const handle = useEffectEvent(onKey);
+  useEffect(() => {
+    if (!active) return;
+    const listener = (event: KeyboardEvent) => {
+      if (onTop() && !focusTakes(event)) handle(event);
+    };
+    window.addEventListener('keydown', listener, true);
+    return () => window.removeEventListener('keydown', listener, true);
+  }, [active, onTop]);
 };

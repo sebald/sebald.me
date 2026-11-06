@@ -12,19 +12,14 @@ import { parts as styles } from './parts.styles';
 /**
  * What a container tells the parts in it, only what they can't know
  * themselves: the element that draws a title or the content there (a
- * Dialog's are its name and description) and the heading level. Where
+ * Dialog's are its name and description). Where
  * a part sits is not in here: the container places it by its slot.
  */
 export interface PartsValue {
-  /** Draws a title here; a heading of `level` when not given */
+  /** Draws a title here; an `h2` when not given */
   title?: ElementType;
   /** Draws the content here; a `div` when not given */
   content?: ElementType;
-  /**
-   * The heading level of a title here
-   * @default 2
-   */
-  level?: 2 | 3;
 }
 
 /** The parts' context; a container that wires its parts provides it */
@@ -40,8 +35,7 @@ export interface PartProps {
  * Outside any, a heading
  */
 export const Title = ({ className, children }: PartProps) => {
-  const { title, level = 2 } = useContext(PartsContext) ?? {};
-  const Tag: ElementType = title ?? `h${level}`;
+  const Tag: ElementType = useContext(PartsContext)?.title ?? 'h2';
   return (
     <Tag data-slot="title" className={styles.title({ className })}>
       {children}
@@ -54,8 +48,7 @@ export const Title = ({ className, children }: PartProps) => {
  * the caller's, so a Title in it is a heading, not the container's name
  */
 export const Content = ({ className, children }: PartProps) => {
-  const { content } = useContext(PartsContext) ?? {};
-  const Tag: ElementType = content ?? 'div';
+  const Tag: ElementType = useContext(PartsContext)?.content ?? 'div';
   return (
     <Tag data-slot="content" className={styles.content({ className })}>
       <PartsContext value={null}>{children}</PartsContext>

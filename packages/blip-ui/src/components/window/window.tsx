@@ -53,15 +53,7 @@ export interface WindowProps extends PropsWithChildren {
  * corners in pixel steps. Not exported from the kit. A `Legend` in it
  * goes to its bottom edge by itself.
  */
-export const WindowFrame = ({
-  className,
-  bodyClassName,
-  style,
-  children,
-}: WindowProps & {
-  /** For a part that is a window and places its own parts in the body (a Dialog) */
-  bodyClassName?: string;
-}) => (
+export const WindowFrame = ({ className, style, children }: WindowProps) => (
   // `data-slot="window"`: also what a picker's description box sits beside
   <div data-slot="window" className={styles.root({ className })} style={style}>
     {/* The rings; the content is not clipped, so nothing is cut at a corner */}
@@ -77,8 +69,10 @@ export const WindowFrame = ({
         }}
       />
     ))}
+    {/* `window-body`: where a container that is a window places its parts */}
     <div
-      className={styles.body({ className: bodyClassName })}
+      data-slot="window-body"
+      className={styles.body()}
       style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...FILL }}
     >
       {children}

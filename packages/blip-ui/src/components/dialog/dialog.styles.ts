@@ -6,7 +6,8 @@ export const dialog = {
     base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-40 flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
   }),
   popup: cva({
-    base: 'outline-none',
+    // What can be done, centred under what it says
+    base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center',
     variants: {
       size: {
         /** A question, a few settings */
@@ -17,6 +18,4 @@ export const dialog = {
     },
     defaultVariants: { size: 'default' },
   }),
-  /** What can be done, centred under what it says */
-  body: cva({ base: '*:data-[slot=actions]:justify-center' }),
 };

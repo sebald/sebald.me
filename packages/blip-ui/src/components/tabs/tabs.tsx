@@ -1,10 +1,10 @@
 'use client';
 
 import { Tabs as BaseTabs } from '@base-ui/react/tabs';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
-import { focusTakes, useOnTop } from '../../hooks/key-layer';
+import { useKeydown } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { Step } from '../setting/setting';
@@ -25,6 +25,14 @@ const stepTab = (root: Element | null, by: number) => {
   if (!next) return false;
   next.click();
   return true;
+};
+
+/** The keys that switch the tab, and which way */
+const STEPS: Record<string, -1 | 1> = {
+  ArrowLeft: -1,
+  a: -1,
+  ArrowRight: 1,
+  d: 1,
 };
 
 export interface TabsProps extends Omit<
@@ -62,25 +70,10 @@ export const Tabs = ({
 }: TabsProps) => {
   const play = useFeedback();
   const ref = useRef<HTMLDivElement>(null);
-  const onTop = useOnTop();
-  useEffect(() => {
-    if (!keys) return;
-    const onKey = (event: KeyboardEvent) => {
-      const by =
-        event.key === 'ArrowLeft' || event.key === 'a'
-          ? -1
-          : event.key === 'ArrowRight' || event.key === 'd'
-            ? 1
-            : 0;
-      // A focused tab handles the arrows itself
-      if (!by || !onTop() || focusTakes(event)) return;
-      if (stepTab(ref.current, by)) event.preventDefault();
-    };
-    // In the capture phase: a dialog's popup stops the arrow keys on their
-    // way up, and the keys are the top layer's wherever the focus is
-    window.addEventListener('keydown', onKey, true);
-    return () => window.removeEventListener('keydown', onKey, true);
-  }, [keys, onTop]);
+  useKeydown(event => {
+    const by = STEPS[event.key];
+    if (by && stepTab(ref.current, by)) event.preventDefault();
+  }, keys);
   return (
     <BaseTabs.Root
       ref={ref}
@@ -107,9 +100,6 @@ export interface TabListProps extends Omit<
 /** The row of tabs; give it an accessible name with `aria-label` */
 export const TabList = ({ className, ...props }: TabListProps) => {
   const ref = useRef<HTMLDivElement>(null);
-  const list = (
-    <BaseTabs.List data-slot="tab-list" className={styles.list()} {...props} />
-  );
   // For a pointer; the keys switch the tabs already
   const arrow = (by: -1 | 1) => (
     <button
@@ -125,7 +115,11 @@ export const TabList = ({ className, ...props }: TabListProps) => {
   return (
     <div ref={ref} className={styles.row({ className })}>
       {arrow(-1)}
-      {list}
+      <BaseTabs.List
+        data-slot="tab-list"
+        className={styles.list()}
+        {...props}
+      />
       {arrow(1)}
     </div>
   );
@@ -158,7 +152,7 @@ const foot = (side: 'left' | 'right') => ({
 export const Tab = ({ className, children, ...props }: TabProps) => (
   <BaseTabs.Tab
     data-slot="tab"
-    className={cn(styles.tab(), className)}
+    className={styles.tab({ className })}
     {...props}
   >
     {RINGS.map((colour, i) => (
