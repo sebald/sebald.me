@@ -20,7 +20,7 @@ import {
  */
 
 /** A duel's seed is the time it starts at: a fixed time plays the same duels */
-const START = new Date('2026-01-01T10:00:00Z');
+export const START = new Date('2026-01-01T10:00:00Z');
 
 export const test = base.extend<{ errors: string[] }>({
   errors: [
@@ -49,6 +49,17 @@ export const test = base.extend<{ errors: string[] }>({
     });
     // Fake timers to step through a duel, and a time that stands still:
     // a run's opponents and a duel's lines are seeded by it
+    // Every change to the page, counted, so a test can wait until it rests
+    await page.addInitScript(() => {
+      const counter = window as unknown as { __changes: number };
+      counter.__changes = 0;
+      new MutationObserver(() => counter.__changes++).observe(document, {
+        subtree: true,
+        childList: true,
+        attributes: true,
+        characterData: true,
+      });
+    });
     await page.clock.install({ time: START });
     await page.clock.setFixedTime(START);
     await run(page);
@@ -57,6 +68,48 @@ export const test = base.extend<{ errors: string[] }>({
 
 export { expect };
 
+/**
+ * A key, then a moment for what it starts (a screen's entrance, a
+ * listener that waits a task): the time runs on by itself in the flows,
+ * and only by this when a test holds the clock still (`holdClock`)
+ */
+export const press = async (page: Page, key: string) => {
+  await page.keyboard.press(key);
+  await settle(page);
+};
+
+/** Until the page has stopped changing for a real moment: React has rendered */
+const rest = async (page: Page) => {
+  const changes = () =>
+    page.evaluate(() => (window as unknown as { __changes: number }).__changes);
+  let before = -1;
+  for (let i = 0; i < 50; i++) {
+    const now = await changes();
+    if (now === before) return;
+    before = now;
+    await page.waitForTimeout(40);
+  }
+};
+
+/**
+ * React renders what changed, then `ms` of the game's time, then React
+ * renders what that time did: an animation starts from when its screen
+ * mounts, so with the clock held (`holdClock`) every run sees the same
+ * frames, however fast the server is
+ */
+export const settle = async (page: Page, ms = 250) => {
+  await rest(page);
+  await page.clock.runFor(ms);
+  await rest(page);
+};
+
+/**
+ * Hold the clock still from here on: only `press` and `runFor` move it,
+ * so every run sees the same frame of what animates (for screenshots)
+ */
+export const holdClock = (page: Page) =>
+  page.clock.pauseAt(new Date(START.getTime() + 1000));
+
 /** The game's current screen: the region named "Pushback, …" */
 export const screen = (page: Page): Locator =>
   page.getByRole('region', { name: /^Pushback, / });
@@ -64,6 +117,7 @@ export const screen = (page: Page): Locator =>
 /** Open the game and wait for its title */
 export const open = async (page: Page) => {
   await page.goto('/lab/pushback');
+  await settle(page, 500);
   await expect(screen(page)).toHaveAccessibleName('Pushback, title');
 };
 
@@ -75,23 +129,30 @@ export const said = (page: Page) =>
 export const current = (page: Page) =>
   screen(page).locator('[aria-current=true]').first();
 
-/** Move down the menu to the item named `name` and pick it */
+/**
+ * Move down the menu that holds the item named `name` to it and pick it.
+ * The menu's own current item: a window over a list (the pause over the
+ * duel's replies) has one of its own.
+ */
 export const choose = async (page: Page, name: string | RegExp) => {
   const item = screen(page).getByRole('button', { name });
   await expect(item).toBeEnabled();
+  const label = (await item.textContent())!.trim();
+  const on = item
+    .locator('xpath=ancestor::*[@role="list" or self::ul][1]')
+    .locator('[aria-current=true]');
   for (let i = 0; i < 12; i++) {
-    const on = await current(page).textContent();
-    if (on && (await item.textContent())?.trim() === on.trim()) break;
-    await page.keyboard.press('ArrowDown');
+    if ((await on.textContent())?.trim() === label) break;
+    await press(page, 'ArrowDown');
   }
-  await expect(current(page)).toHaveText((await item.textContent())!.trim());
-  await page.keyboard.press('Enter');
+  await expect(on).toHaveText(label);
+  await press(page, 'Enter');
 };
 
 /** From the title's splash to the menu */
 export const toMenu = async (page: Page) => {
   await open(page);
-  await page.keyboard.press('Enter');
+  await press(page, 'Enter');
   await expect(
     screen(page).getByRole('list', { name: 'Title menu' }),
   ).toBeVisible();
@@ -102,7 +163,7 @@ export const toRoster = async (page: Page) => {
   await toMenu(page);
   await choose(page, 'Start');
   await expect(screen(page)).toHaveAccessibleName('Pushback, pick a role');
-  await page.keyboard.press('Enter');
+  await press(page, 'Enter');
   await expect(screen(page)).toHaveAccessibleName('Pushback, roster');
 };
 
@@ -140,11 +201,11 @@ export const playDuel = async (page: Page, { wrong = false } = {}) => {
       for (let step = 0; step < 8; step++) {
         const on = (await current(page).textContent())?.trim();
         if (wrong ? on !== counter : on === counter) break;
-        await page.keyboard.press('ArrowDown');
+        await press(page, 'ArrowDown');
       }
     }
     await page.keyboard.press('Enter');
-    await page.clock.runFor(700);
+    await settle(page, 700);
   }
   throw new Error('the duel did not end in 300 presses');
 };

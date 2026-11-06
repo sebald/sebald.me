@@ -64,6 +64,8 @@
     "storybook": "pnpm --filter @sebald/blip-ui storybook",
     "build-storybook": "pnpm --filter @sebald/blip-ui build-storybook",
     "vrt:blip-ui": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts",
+    "vrt:game": "./scripts/vrt.sh --config playwright.game.config.ts",
+    "vrt:game:update": "./scripts/vrt.sh --config playwright.game.config.ts --update-snapshots",
     "vrt:blip-ui:update": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts --update-snapshots"
   }
 }
