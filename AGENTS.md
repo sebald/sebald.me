@@ -20,6 +20,7 @@ pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
 pnpm narrate          # Render narrations of changed notes (Python, see Narration)
 pnpm narrate:check    # Fail if a note's narration is missing or outdated
+pnpm test:game        # The game played through its screens (Playwright, against the dev server)
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
 pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Blip UI's too
@@ -29,6 +30,13 @@ pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
 CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+
+### The game's flows
+
+- `tests/game/` (`playwright.game.config.ts`): Pushback played by keys (desktop) and by taps (a phone), from the title through a duel won and one lost, the pause, leaving, options, the save, the demo. Run `pnpm test:game` after any change to the game or to the Blip UI parts it uses; it reuses a running `pnpm dev` (port 3000, `GAME_PORT` for another) and the installed Chrome
+- No screenshots, so it runs on macOS too. It reads only what a player and a screen reader get: the screen's region (`Pushback, …`), roles and names, `aria-current` and the live region, never a class, so it holds while the UI underneath is rebuilt
+- Repeatable: the clock stands still (a run's and a duel's seed is the time) and `Math.random` is seeded; a duel is won with the counters from the game's own lines (`playDuel`), not by luck
+- Every test fails on an error in the console
 
 ### Visual Regression Tests
 

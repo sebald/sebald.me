@@ -57,6 +57,7 @@
     "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts' 'packages/*/src/**/*.test.ts'",
     "pushback:simulate": "pnpm --filter @sebald/pushback simulate",
     "typecheck": "tsc --noEmit",
+    "test:game": "playwright test --config playwright.game.config.ts",
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots",
     "vrt:update:ci": "./scripts/vrt-update-ci.sh",
