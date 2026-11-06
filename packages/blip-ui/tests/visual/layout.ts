@@ -20,6 +20,9 @@ export const escapes = (page: Page) =>
       const rect = el.getBoundingClientRect();
       if (!rect.width || !rect.height) continue;
       if (getComputedStyle(el).visibility === 'hidden') continue;
+      // A modal dialog's backdrop from Base UI: fixed over the whole
+      // viewport to catch a tap outside, and it draws nothing
+      if (el.matches('[data-base-ui-inert]')) continue;
       let { left, top, right, bottom } = rect;
       for (
         let up = el.parentElement;
