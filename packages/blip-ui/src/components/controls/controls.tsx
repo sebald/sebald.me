@@ -1,6 +1,6 @@
 'use client';
 
-import { type ReactNode, createContext } from 'react';
+import { type CSSProperties, type ReactNode, createContext } from 'react';
 
 import { useInputKind } from '../../hooks/use-input-kind';
 import { usePixels } from '../../providers/pixels';
@@ -28,6 +28,8 @@ export interface ControlsProps {
    */
   show?: 'touch' | 'always';
   className?: string;
+  /** Inline styles: where a game's own row of the top is (a duel's faces in the corners) */
+  style?: CSSProperties;
 }
 
 /**
@@ -45,6 +47,7 @@ export const Controls = ({
   children,
   show = 'touch',
   className,
+  style,
 }: ControlsProps) => {
   const { tall } = usePixels();
   const kind = useInputKind();
@@ -56,6 +59,7 @@ export const Controls = ({
         data-slot="controls"
         data-layout={layout}
         className={controls.root({ layout, className })}
+        style={style}
       >
         {children}
       </div>
