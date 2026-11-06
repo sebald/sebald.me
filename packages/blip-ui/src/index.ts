@@ -32,6 +32,7 @@ export {
 } from './foundations/scale';
 
 // Providers
+export { Announcer, useAnnounce } from './providers/announcer';
 export {
   type Feedback,
   type FeedbackEvent,
@@ -57,6 +58,8 @@ export {
 export { TICK_MS, prefersReducedMotion, useClock } from './hooks/use-clock';
 export { type InputKind, useInputKind } from './hooks/use-input-kind';
 export { KeyLayerContext, useKeyLayer, useOnTop } from './hooks/key-layer';
+export { useAnyKey } from './hooks/use-any-key';
+export { useIdle } from './hooks/use-idle';
 export { useKeys } from './hooks/use-keys';
 export { type Scroll, overflows, useScroll } from './hooks/use-scroll';
 

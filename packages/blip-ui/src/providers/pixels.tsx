@@ -5,6 +5,7 @@ import { createContext, useContext } from 'react';
 
 import { BACKING, NATIVE, fontSizeFor as fontSize } from '../foundations/scale';
 import { cn } from '../utils/styles';
+import { Announcer } from './announcer';
 
 /** What a piece needs to know about the pixels it is drawn in */
 export interface PixelsValue {
@@ -77,7 +78,7 @@ export const Pixels = ({
         ...style,
       }}
     >
-      {children}
+      <Announcer>{children}</Announcer>
     </div>
   </PixelsContext.Provider>
 );

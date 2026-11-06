@@ -9,6 +9,7 @@ import type {
 import { useRef } from 'react';
 
 import { NATIVE, fontSizeFor } from '../../foundations/scale';
+import { Announcer } from '../../providers/announcer';
 import { PixelsContext } from '../../providers/pixels';
 import { stage } from './stage.styles';
 import { useScale } from './use-scale';
@@ -148,15 +149,17 @@ export const Stage = ({
       {/* The full stage, its top rows above the section when cropped;
           lifted, it starts lower and ends at the same bottom (the bar) */}
       <PixelsContext.Provider value={measured}>
-        <div
-          className={stage.layer()}
-          style={{
-            top: (lift - crop) * scale,
-            height: (tall ? rows - lift : nativeHeight) * scale,
-          }}
-        >
-          {children}
-        </div>
+        <Announcer>
+          <div
+            className={stage.layer()}
+            style={{
+              top: (lift - crop) * scale,
+              height: (tall ? rows - lift : nativeHeight) * scale,
+            }}
+          >
+            {children}
+          </div>
+        </Announcer>
       </PixelsContext.Provider>
     </section>
   );

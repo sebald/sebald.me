@@ -16,6 +16,7 @@ import { createPortal } from 'react-dom';
 import { focusTakes, useOnTop } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
+import { useAnnounce } from '../../providers/announcer';
 import { type Feedback, useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
 import { Setting } from '../setting/setting';
@@ -381,6 +382,11 @@ const Row = ({
   }, [isCurrent, picker.overflow]);
 
   const shownNote = picker.active && isCurrent && Boolean(note);
+  // Read out as it shows, after the item's own name
+  const announce = useAnnounce();
+  useEffect(() => {
+    if (shownNote && note) announce(note);
+  }, [shownNote, note, announce]);
   const place = useNotePlace(
     rowRef,
     picker.listRef,
@@ -431,9 +437,7 @@ const Row = ({
               width: `calc(var(--px) * ${place.width})`,
             }}
           >
-            <p aria-live="polite" className="m-0">
-              {note}
-            </p>
+            <p className="m-0">{note}</p>
           </Window>,
           place.root,
         )}
