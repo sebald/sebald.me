@@ -65,7 +65,8 @@ does; how it looks follows from that.
 - **Compound components share state through context.** The root holds the
   state that concerns all parts (`Tabs`' value); the parts read it and take no prop for it.
 - **The look is shared by internal parts, not by exported styles.** A tab's
-  panel is drawn by the same `WindowFrame` as a `Window`. Style objects are
+  panel and a `Dialog` are drawn by the same `WindowFrame` as a `Window`,
+  so there is no `Window` to put in them. Style objects are
   not part of the kit's API.
 
 ## Placement: the parent places, the child marks itself
@@ -91,6 +92,10 @@ Learned from React Aria and Marigold, which do the same with slots.
   the parent tells its children through context, never through a prop the
   caller has to repeat: `Controls` tells its buttons whether they are on
   the bar (label and a thumb-sized icon) or in a corner.
+- **Keys go to the top layer.** A part that listens for keys checks
+  `useOnTop()` when one comes in; a `Dialog` opens a layer
+  (`useKeyLayer`) and gives it to its parts, so the screen under it hears
+  nothing without a flag of its own.
 - **State as data attributes**, which the styles read: Base UI's
   `data-active` on a tab, `data-layout` on the controls.
 

@@ -72,8 +72,9 @@ shows the rail.
 - **Do** put a picker in a Window, with a Legend that names the keys.
 - **Do** keep a disabled item in the list and say why in its note.
 - **Don't** hide what is not available. Nothing in a menu is hidden.
-- **Don't** have two active pickers. When a Confirm opens over a menu, set
-  the menu's `active` to false.
+- **Don't** have two active pickers on one layer. One in a `Dialog` (or
+  a `Confirm`) is on a layer of its own: the menu under it hears no keys
+  until it closes, without turning its `active` off.
 
 ## The description box
 

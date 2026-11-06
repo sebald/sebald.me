@@ -1,0 +1,71 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as DialogStories from './dialog.stories';
+
+<Meta of={DialogStories} />
+
+# Dialog
+
+A window over the stage, for what interrupts a screen: options, a pause,
+how it works, a question before something can't be undone. The stage is
+dimmed down to the bar of controls, the window sits in the middle, and
+while it is open it has the keys: the screen under it hears none. Built
+on Base UI's Dialog (focus, Escape, a tap outside, the roles).
+
+<Canvas of={DialogStories.Default} />
+<Controls of={DialogStories.Default} />
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen}>
+  <DialogTitle>Options</DialogTitle>
+  <DialogActions>
+    <Picker label="Options">…</Picker>
+  </DialogActions>
+  <Legend keys={[['Esc', 'back']]} touch="Tap a line" />
+</Dialog>
+```
+
+## Anatomy
+
+1. **Scrim**, the stage dimmed (`--bui-scrim`), down to the bar of
+   controls (`--bui-bar`)
+2. **The window**, drawn as a `Window` is; the dialog draws it, so there
+   is no `Window` to put in it
+3. **DialogTitle**, which names it
+4. **DialogContent**, what it says: a line or two, a list
+5. **DialogActions**, what can be done: a `Picker`, or buttons side by
+   side, centred
+6. **Legend**, last, along the bottom edge
+
+The dialog places its parts by their slot, in that order, with the room
+between them; each part places nothing itself. All of them but the title
+are optional: how it works is a title, what it says and a legend, no
+actions.
+
+<Canvas of={DialogStories.Overview} />
+
+## Usage
+
+- **Do** place it anywhere inside the stage. It covers the stage, not the
+  part it is placed in.
+- **Do** give it a `DialogTitle`; a dialog without a name is a wall.
+- **Do** use `size="large"` for a lot to read (how it works), the
+  default for a question or a few settings.
+- **Do** use `role="alertdialog"` (or `Confirm`) before something that
+  can't be undone: a tap outside doesn't close it.
+- **Don't** turn the screen's Picker `active` off while it is open: the
+  dialog takes the keys from it by itself.
+
+## Input
+
+- The dialog's own keys (its Picker's, `useKeys` inside it); the screen
+  under it hears none until it closes
+- Escape closes it, and so does a tap outside (not for an
+  `alertdialog`); both sound like going back
+
+## Accessibility
+
+- `role="dialog"` or `alertdialog`, named by its title and described by
+  its content
+- The focus moves into it and stays there, and goes back where it was
+  when it closes

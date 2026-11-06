@@ -15,25 +15,28 @@ options follow, the safe one first and selected.
 
 ## Anatomy
 
-1. **Scrim**, the stage dimmed (`--bui-scrim`), down to the bar of controls
-   (`--bui-bar`)
-2. **Window** with the title, the cost and a Legend
-3. **Picker** with the safe option first, then the one that does it
+A `Dialog` with `role="alertdialog"`:
+
+1. **DialogTitle**, the question
+2. **DialogContent**, what it costs
+3. **DialogActions**, a Picker with the safe option first, then the one
+   that does it
+4. **Legend**
 
 ## Usage
 
 - **Do** say what goes: _This deletes your run and 2 shipped roles._
 - **Do** name the action in the confirm option (_Erase save_), not _OK_.
-- **Do** place it inside the stage, over the menu it came from, and turn
-  that menu's Picker `active` off while it is open.
+- **Do** render it while the question is open, anywhere inside the stage.
+  It takes the keys from the menu under it by itself.
 - **Don't** confirm what can be undone.
 
 ## Input
 
 - Up and down choose, Enter or a tap confirms
-- Escape cancels
+- Escape cancels; a tap outside does nothing
 
 ## Accessibility
 
-- `role="alertdialog"`, named by the title
-- The Picker is the one active list, so the keys work without focus
+- `role="alertdialog"`, named by the title and described by the cost
+- The focus moves into it and stays there

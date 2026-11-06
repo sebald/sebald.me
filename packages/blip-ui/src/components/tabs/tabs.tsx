@@ -4,6 +4,7 @@ import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import { useEffect, useRef } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
+import { focusTakes, useOnTop } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { Step } from '../setting/setting';
@@ -61,6 +62,7 @@ export const Tabs = ({
 }: TabsProps) => {
   const play = useFeedback();
   const ref = useRef<HTMLDivElement>(null);
+  const onTop = useOnTop();
   useEffect(() => {
     if (!keys) return;
     const onKey = (event: KeyboardEvent) => {
@@ -70,14 +72,15 @@ export const Tabs = ({
           : event.key === 'ArrowRight' || event.key === 'd'
             ? 1
             : 0;
-      if (!by) return;
       // A focused tab handles the arrows itself
-      if ((event.target as Element | null)?.closest('[role=tablist]')) return;
+      if (!by || !onTop() || focusTakes(event)) return;
       if (stepTab(ref.current, by)) event.preventDefault();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [keys]);
+    // In the capture phase: a dialog's popup stops the arrow keys on their
+    // way up, and the keys are the top layer's wherever the focus is
+    window.addEventListener('keydown', onKey, true);
+    return () => window.removeEventListener('keydown', onKey, true);
+  }, [keys, onTop]);
   return (
     <BaseTabs.Root
       ref={ref}

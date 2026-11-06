@@ -56,6 +56,7 @@ export {
 } from './hooks/fullscreen';
 export { TICK_MS, prefersReducedMotion, useClock } from './hooks/use-clock';
 export { type InputKind, useInputKind } from './hooks/use-input-kind';
+export { KeyLayerContext, useKeyLayer, useOnTop } from './hooks/key-layer';
 export { useKeys } from './hooks/use-keys';
 export { type Scroll, overflows, useScroll } from './hooks/use-scroll';
 
@@ -97,6 +98,14 @@ export {
 export { Stage, type StageProps, TALL_BAR } from './components/stage/stage';
 export { useScale } from './components/stage/use-scale';
 export { Confirm, type ConfirmProps } from './components/confirm/confirm';
+export {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  type DialogPartProps,
+  type DialogProps,
+  DialogTitle,
+} from './components/dialog/dialog';
 export {
   Picker,
   PickerGroup,

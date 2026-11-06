@@ -1,12 +1,16 @@
 'use client';
 
-import { type ReactNode, useMemo } from 'react';
+import type { ReactNode } from 'react';
 
-import { useKeys } from '../../hooks/use-keys';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '../dialog/dialog';
 import { Picker, PickerItem } from '../picker/picker';
-import { Heading, Text } from '../text/text';
-import { Legend, Window } from '../window/window';
-import { confirm as styles } from './confirm.styles';
+import { Text } from '../text/text';
+import { Legend } from '../window/window';
 
 export interface ConfirmProps {
   title: string;
@@ -25,10 +29,10 @@ export interface ConfirmProps {
 }
 
 /**
- * Asks before something that cannot be undone: the stage dimmed, a
- * quiet window in the middle with what it costs, and two options, the
- * safe one first and selected. Escape cancels. Place it inside the
- * stage: it covers it, down to the bar of controls (`--bui-bar`).
+ * Asks before something that cannot be undone: a `Dialog` (an
+ * `alertdialog`) with what it costs and two options, the safe one first
+ * and selected. Escape cancels, a tap outside does nothing. Render it
+ * while the question is open, anywhere inside the stage.
  */
 export const Confirm = ({
   title,
@@ -38,37 +42,34 @@ export const Confirm = ({
   onConfirm,
   onCancel,
   className,
-}: ConfirmProps) => {
-  useKeys(useMemo(() => ({ Escape: onCancel }), [onCancel]));
-  return (
-    <div
-      role="alertdialog"
-      data-slot="confirm"
-      aria-label={title}
-      className={styles.root({ className })}
-    >
-      <Window className={styles.window()}>
-        <div className={styles.body()}>
-          <Heading>{title}</Heading>
-          <Text className="text-balance">{children}</Text>
-          <Picker label={title} className={styles.picker()} initial="cancel">
-            <PickerItem id="cancel" variant="back" onSelect={onCancel}>
-              {cancel}
-            </PickerItem>
-            <PickerItem id="confirm" onSelect={onConfirm}>
-              {confirm}
-            </PickerItem>
-          </Picker>
-        </div>
-        <Legend
-          keys={[
-            ['↑↓', 'choose'],
-            ['Enter', 'confirm'],
-            ['Esc', 'cancel'],
-          ]}
-          touch="Tap a line"
-        />
-      </Window>
-    </div>
-  );
-};
+}: ConfirmProps) => (
+  <Dialog
+    open
+    role="alertdialog"
+    onOpenChange={open => !open && onCancel()}
+    className={className}
+  >
+    <DialogTitle>{title}</DialogTitle>
+    <DialogContent>
+      <Text className="text-balance">{children}</Text>
+    </DialogContent>
+    <DialogActions>
+      <Picker label={title} initial="cancel">
+        <PickerItem id="cancel" variant="back" onSelect={onCancel}>
+          {cancel}
+        </PickerItem>
+        <PickerItem id="confirm" onSelect={onConfirm}>
+          {confirm}
+        </PickerItem>
+      </Picker>
+    </DialogActions>
+    <Legend
+      keys={[
+        ['↑↓', 'choose'],
+        ['Enter', 'confirm'],
+        ['Esc', 'cancel'],
+      ]}
+      touch="Tap a line"
+    />
+  </Dialog>
+);
