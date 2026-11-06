@@ -1,9 +1,9 @@
 import { cva } from '../../utils/styles';
 
 export const dialog = {
-  /** The stage dimmed, above the bar of controls; the window in the middle */
+  /** The stage dimmed down to the bar of controls, and over the controls (z-40 to their z-30), which a tap only closes it from; the window in the middle */
   root: cva({
-    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-10 flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
+    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-40 flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
   }),
   popup: cva({
     base: 'outline-none',
@@ -17,17 +17,6 @@ export const dialog = {
     },
     defaultVariants: { size: 'default' },
   }),
-  /** The window's body places the parts, each by its slot */
-  body: cva({
-    base: [
-      'gap-[calc(var(--bui-px)*3)]',
-      '*:data-[slot=dialog-actions]:mt-[calc(var(--bui-px)*2)]',
-      '*:data-[slot=legend]:pt-0',
-    ],
-  }),
-  title: cva({ base: 'm-0 font-semibold text-(--bui-heading)' }),
-  content: cva({ base: 'm-0' }),
-  actions: cva({
-    base: 'flex flex-wrap justify-center gap-[calc(var(--bui-px)*4)] *:data-[slot=picker]:basis-full',
-  }),
+  /** What can be done, centred under what it says */
+  body: cva({ base: '*:data-[slot=actions]:justify-center' }),
 };

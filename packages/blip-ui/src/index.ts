@@ -106,14 +106,15 @@ export {
 export { Stage, type StageProps, TALL_BAR } from './components/stage/stage';
 export { useScale } from './components/stage/use-scale';
 export { Confirm, type ConfirmProps } from './components/confirm/confirm';
+export { Dialog, type DialogProps } from './components/dialog/dialog';
 export {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  type DialogPartProps,
-  type DialogProps,
-  DialogTitle,
-} from './components/dialog/dialog';
+  Actions,
+  Content,
+  type PartProps,
+  PartsContext,
+  type PartsValue,
+  Title,
+} from './components/parts/parts';
 export {
   Picker,
   PickerGroup,

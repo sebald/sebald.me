@@ -2,12 +2,8 @@
 
 import type { ReactNode } from 'react';
 
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from '../dialog/dialog';
+import { Dialog } from '../dialog/dialog';
+import { Actions, Content, Title } from '../parts/parts';
 import { Picker, PickerItem } from '../picker/picker';
 import { Text } from '../text/text';
 import { Legend } from '../window/window';
@@ -49,11 +45,11 @@ export const Confirm = ({
     onOpenChange={open => !open && onCancel()}
     className={className}
   >
-    <DialogTitle>{title}</DialogTitle>
-    <DialogContent>
+    <Title>{title}</Title>
+    <Content>
       <Text className="text-balance">{children}</Text>
-    </DialogContent>
-    <DialogActions>
+    </Content>
+    <Actions>
       <Picker label={title} initial="cancel">
         <PickerItem id="cancel" variant="back" onSelect={onCancel}>
           {cancel}
@@ -62,7 +58,7 @@ export const Confirm = ({
           {confirm}
         </PickerItem>
       </Picker>
-    </DialogActions>
+    </Actions>
     <Legend
       keys={[
         ['↑↓', 'choose'],

@@ -17,10 +17,10 @@ on Base UI's Dialog (focus, Escape, a tap outside, the roles).
 
 ```tsx
 <Dialog open={open} onOpenChange={setOpen}>
-  <DialogTitle>Options</DialogTitle>
-  <DialogActions>
+  <Title>Options</Title>
+  <Actions>
     <Picker label="Options">…</Picker>
-  </DialogActions>
+  </Actions>
   <Legend keys={[['Esc', 'back']]} touch="Tap a line" />
 </Dialog>
 ```
@@ -31,14 +31,16 @@ on Base UI's Dialog (focus, Escape, a tap outside, the roles).
    controls (`--bui-bar`)
 2. **The window**, drawn as a `Window` is; the dialog draws it, so there
    is no `Window` to put in it
-3. **DialogTitle**, which names it
-4. **DialogContent**, what it says: a line or two, a list
-5. **DialogActions**, what can be done: a `Picker`, or buttons side by
-   side, centred
+3. **Title**, which names it
+4. **Content**, what it says: a line or two, a list; it describes it
+5. **Actions**, what can be done: a `Picker`, or buttons side by side,
+   centred
 6. **Legend**, last, along the bottom edge
 
-The dialog places its parts by their slot, in that order, with the room
-between them; each part places nothing itself. All of them but the title
+These are the kit's shared parts (Title, Content, Actions), the same in a
+`Window` or a tab's panel; in a dialog its title names it and its content
+describes it. The window places them by their slot, in that order, with
+the room between them; each part places nothing itself. All of them but the title
 are optional: how it works is a title, what it says and a legend, no
 actions.
 
@@ -48,7 +50,7 @@ actions.
 
 - **Do** place it anywhere inside the stage. It covers the stage, not the
   part it is placed in.
-- **Do** give it a `DialogTitle`; a dialog without a name is a wall.
+- **Do** give it a `Title`; a dialog without a name is a wall.
 - **Do** use `size="large"` for a lot to read (how it works), the
   default for a question or a few settings.
 - **Do** use `role="alertdialog"` (or `Confirm`) before something that
@@ -62,6 +64,9 @@ actions.
   under it hears none until it closes
 - Escape closes it, and so does a tap outside (not for an
   `alertdialog`); both sound like going back
+- It is modal: a tap on anything else, a corner control or the bar's,
+  only closes it and does nothing there, and the page around the game
+  holds still while it is open
 
 ## Accessibility
 

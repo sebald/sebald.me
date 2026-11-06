@@ -99,6 +99,29 @@ Learned from React Aria and Marigold, which do the same with slots.
 - **State as data attributes**, which the styles read: Base UI's
   `data-active` on a tab, `data-layout` on the controls.
 
+## Shared parts
+
+Learned from React Spectrum and Marigold, whose containers share their
+parts by role.
+
+- **A part that recurs across containers is one shared part**, named by
+  its role: `Title`, `Content`, `Actions`. Not a `DialogTitle`,
+  `WindowTitle` and `TabPanelTitle` that differ in a level and a class;
+  never a place (`Footer`, `Header`).
+- **The container says what the part can't know, through context**
+  (`PartsContext`): the element that draws it there (a dialog's title is
+  its name) and the heading level. Only meaning goes through context,
+  never a look and never a place.
+- **The container places the parts by their slot**, in its own styles,
+  as with any child: the window's body puts room under a title and above
+  the actions.
+- **A part works anywhere**: outside a container a `Title` is a heading.
+  Nothing throws, and `Content` clears the context, so what the caller
+  nests in it is never taken for the container's parts.
+- **A new container checks these first.** If it has a title, something it
+  says or things to do, it takes the shared parts and provides the
+  context; a part of its own only for a role no other container has.
+
 ## Lists of items
 
 Children over arrays of data: a menu built from `<PickerItem>`s reads like

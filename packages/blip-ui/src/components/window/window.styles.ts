@@ -8,7 +8,10 @@ export const window = {
     base: [
       'relative flex min-h-0 flex-1 flex-col bg-(--bui-surface) leading-[1.35] text-(--bui-text)',
       'p-[calc(var(--bui-px)*4)]',
-      // A legend in it: along the bottom edge, right aligned
+      // The parts by their slot: room under a title and above what can
+      // be done; a legend along the bottom edge, right aligned
+      '[&>[data-slot=title]+*]:mt-[calc(var(--bui-px)*3)]',
+      '*:data-[slot=actions]:mt-[calc(var(--bui-px)*4)]',
       '*:data-[slot=legend]:mt-auto *:data-[slot=legend]:pt-[calc(var(--bui-px)*2)] *:data-[slot=legend]:text-right',
     ],
   }),

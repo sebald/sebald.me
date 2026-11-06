@@ -3,10 +3,11 @@ import { type ReactNode, useState } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
 import { Button } from '../button/button';
+import { Actions, Content, Title } from '../parts/parts';
 import { Picker, PickerItem, PickerSetting } from '../picker/picker';
 import { Heading, Text } from '../text/text';
 import { Legend } from '../window/window';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from './dialog';
+import { Dialog } from './dialog';
 
 const noop = () => {};
 
@@ -80,8 +81,8 @@ export const Default: Story = {
           </PickerItem>
         </Picker>
         <Dialog {...args} open={open} onOpenChange={setOpen}>
-          <DialogTitle>Options</DialogTitle>
-          <DialogActions>
+          <Title>Options</Title>
+          <Actions>
             <Picker label="Options">
               <PickerSetting
                 id="music"
@@ -98,7 +99,7 @@ export const Default: Story = {
                 Back
               </PickerItem>
             </Picker>
-          </DialogActions>
+          </Actions>
           <Legend
             keys={[
               ['↑↓', 'choose'],
@@ -127,22 +128,22 @@ export const Overview: Story = {
     <>
       <Stage>
         <Dialog defaultOpen>
-          <DialogTitle>Leave the duel?</DialogTitle>
-          <DialogContent>
+          <Title>Leave the duel?</Title>
+          <Content>
             <Text>The round so far is lost.</Text>
-          </DialogContent>
-          <DialogActions>
+          </Content>
+          <Actions>
             <Button variant="secondary" size="small">
               Stay
             </Button>
             <Button size="small">Leave</Button>
-          </DialogActions>
+          </Actions>
         </Dialog>
       </Stage>
       <Stage>
         <Dialog defaultOpen size="large">
-          <DialogTitle>How it works</DialogTitle>
-          <DialogContent>
+          <Title>How it works</Title>
+          <Content>
             <ol className="m-0 grid list-none gap-[calc(var(--bui-px)*2)] p-0">
               <li>
                 1. They say something. You answer before the clock runs out.
@@ -150,7 +151,7 @@ export const Overview: Story = {
               <li>2. A good answer moves the beam your way.</li>
               <li>3. Push it all the way and the meeting is yours.</li>
             </ol>
-          </DialogContent>
+          </Content>
           <Legend keys={[['Esc', 'close']]} touch="Tap outside" />
         </Dialog>
       </Stage>

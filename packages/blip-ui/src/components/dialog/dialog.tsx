@@ -6,10 +6,19 @@ import { type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { KeyLayerContext, useKeyLayer } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import type { VariantProps } from '../../utils/styles';
+import { PartsContext, type PartsValue } from '../parts/parts';
 import { WindowFrame } from '../window/window';
 import { dialog as styles } from './dialog.styles';
 
 type Variants = VariantProps<typeof styles.popup>;
+
+/** What its content says, as Base UI's description (a `div`, it may hold a list) */
+const Description = (props: object) => (
+  <BaseDialog.Description render={<div />} {...props} />
+);
+
+/** Its title names it and its content describes it, through Base UI's parts */
+const PARTS: PartsValue = { title: BaseDialog.Title, content: Description };
 
 export interface DialogProps {
   /** Whether it is open (controlled) */
@@ -32,7 +41,7 @@ export interface DialogProps {
    * @default 'default'
    */
   size?: NonNullable<Variants['size']>;
-  /** Its parts: `DialogTitle`, `DialogContent`, `DialogActions`, a `Legend` */
+  /** Its parts: a `Title` (it names the dialog), `Content`, `Actions`, a `Legend` */
   children: ReactNode;
   className?: string;
 }
@@ -42,6 +51,8 @@ export interface DialogProps {
  * controls, the window in the middle, drawn as a `Window` is. While it
  * is open it has the keys (the screen under it hears none) and the
  * focus; Escape or a tap outside closes it, and sounds like going back.
+ * Modal: a tap on a control under it only closes it, and the page holds
+ * still.
  * Place it anywhere inside the stage: it covers the stage, not its
  * parent. Built on Base UI's Dialog.
  */
@@ -77,8 +88,9 @@ export const Dialog = ({
       <span ref={anchor} hidden />
       <BaseDialog.Root
         open={shown}
-        // The focus is held, the page under the game still scrolls
-        modal="trap-focus"
+        // Modal: the focus stays in it, and a tap anywhere else (a corner
+        // control) only closes it; the page holds still while it is open
+        modal
         disablePointerDismissal={role === 'alertdialog'}
         onOpenChange={(next, details) => {
           if (
@@ -106,9 +118,11 @@ export const Dialog = ({
               className={styles.popup({ size, className })}
             >
               <KeyLayerContext value={layer}>
-                <WindowFrame bodyClassName={styles.body()}>
-                  {children}
-                </WindowFrame>
+                <PartsContext value={PARTS}>
+                  <WindowFrame bodyClassName={styles.body()}>
+                    {children}
+                  </WindowFrame>
+                </PartsContext>
               </KeyLayerContext>
             </BaseDialog.Popup>
           </BaseDialog.Portal>
@@ -117,36 +131,3 @@ export const Dialog = ({
     </>
   );
 };
-
-export interface DialogPartProps {
-  children: ReactNode;
-  className?: string;
-}
-
-/** The dialog's title, which names it for assistive technology */
-export const DialogTitle = ({ className, children }: DialogPartProps) => (
-  <BaseDialog.Title
-    data-slot="dialog-title"
-    className={styles.title({ className })}
-  >
-    {children}
-  </BaseDialog.Title>
-);
-
-/** What it says: a line or two, a list; it describes the dialog */
-export const DialogContent = ({ className, children }: DialogPartProps) => (
-  <BaseDialog.Description
-    data-slot="dialog-content"
-    render={<div />}
-    className={styles.content({ className })}
-  >
-    {children}
-  </BaseDialog.Description>
-);
-
-/** What can be done: a `Picker`, or buttons side by side */
-export const DialogActions = ({ className, children }: DialogPartProps) => (
-  <div data-slot="dialog-actions" className={styles.actions({ className })}>
-    {children}
-  </div>
-);

@@ -7,6 +7,7 @@ import { IconButton, IconToggle } from '../components/icon-button/icon-button';
 import { Ledger, LedgerRow } from '../components/ledger/ledger';
 import { Line } from '../components/line/line';
 import { Meter } from '../components/meter/meter';
+import { Actions, Content, Title } from '../components/parts/parts';
 import {
   Picker,
   PickerGroup,
@@ -15,7 +16,7 @@ import {
 } from '../components/picker/picker';
 import { SpeechBubble } from '../components/speech-bubble/speech-bubble';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
-import { Heading, ScreenTitle, Text } from '../components/text/text';
+import { ScreenTitle, Text } from '../components/text/text';
 import { Timer } from '../components/timer/timer';
 import { Legend, Window } from '../components/window/window';
 import { Pixels, usePixels } from '../providers/pixels';
@@ -82,9 +83,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * A menu screen: the title along the top, a window with a heading, a
- * picker with a setting and a disabled item, its legend, and the
- * buttons under it
+ * A menu screen: the title along the top, a window with a title, what
+ * it says and a picker with a setting and a disabled item, its legend,
+ * and the buttons under it
  */
 export const Menu: Story = {
   render: () => (
@@ -94,31 +95,33 @@ export const Menu: Story = {
       </ScreenTitle>
       <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)]">
         <Window>
-          <Heading>Developer</Heading>
-          <Text className="mb-[calc(var(--px)*3)]">
-            Ships on Friday. Regrets nothing.
-          </Text>
-          <Picker label="Menu" active={false}>
-            <PickerItem id="start" variant="accent" onSelect={noop}>
-              Start the run
-            </PickerItem>
-            <PickerSetting id="music" value="On" onStep={noop}>
-              Music
-            </PickerSetting>
-            <PickerItem
-              id="hard"
-              disabled
-              note="Beat the Stakeholder first."
-              onSelect={noop}
-            >
-              Hard mode
-            </PickerItem>
-            <PickerGroup>
-              <PickerItem id="back" variant="back" onSelect={noop}>
-                Back
+          <Title>Developer</Title>
+          <Content>
+            <Text>Ships on Friday. Regrets nothing.</Text>
+          </Content>
+          <Actions>
+            <Picker label="Menu" active={false}>
+              <PickerItem id="start" variant="accent" onSelect={noop}>
+                Start the run
               </PickerItem>
-            </PickerGroup>
-          </Picker>
+              <PickerSetting id="music" value="On" onStep={noop}>
+                Music
+              </PickerSetting>
+              <PickerItem
+                id="hard"
+                disabled
+                note="Beat the Stakeholder first."
+                onSelect={noop}
+              >
+                Hard mode
+              </PickerItem>
+              <PickerGroup>
+                <PickerItem id="back" variant="back" onSelect={noop}>
+                  Back
+                </PickerItem>
+              </PickerGroup>
+            </Picker>
+          </Actions>
           <Legend
             keys={[
               ['↑↓', 'choose'],
