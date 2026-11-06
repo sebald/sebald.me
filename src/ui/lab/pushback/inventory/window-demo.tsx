@@ -1,13 +1,11 @@
 'use client';
 
-import { MAX_CROP, useClock } from '@sebald/blip-ui';
+import { Legend, MAX_CROP, Text, Window, useClock } from '@sebald/blip-ui';
 import { CLOSERS, MENU_PROMPTS, PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT, STAGE, typedChars } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { Picker } from '@sebald/pushback/ui/picker';
 import { Pixels } from '@sebald/pushback/ui/stage';
-import { Muted } from '@sebald/pushback/ui/text';
-import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
 import { Field, field } from './controls';
@@ -50,31 +48,18 @@ export const WindowDemo = () => {
         </span>
       </form>
       <Pixels scale={scale} className="grid gap-[calc(var(--px)*6)]">
-        <Window
-          style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}
-          legend={
-            <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
-          }
-        >
+        <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
           <Dialogue speaker="opponent">{typed}</Dialogue>
+          <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
         </Window>
         <Window
           style={{
             width: `calc(var(--px) * ${LAYOUT.panel.width})`,
             minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
           }}
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
         >
           <Dialogue speaker="opponent">{LINE}</Dialogue>
-          <Muted className="my-[calc(var(--px)*4)]">Pick your counter.</Muted>
+          <Text className="my-[calc(var(--px)*4)]">Pick your counter.</Text>
           <Picker
             label="Counters"
             className="gap-0"
@@ -84,25 +69,21 @@ export const WindowDemo = () => {
               onSelect: () => setPicked(pair.counter),
             }))}
           />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
+          />
         </Window>
         <Window
           style={{
             width: `calc(var(--px) * ${LAYOUT.panel.width})`,
             minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
           }}
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
         >
-          <Muted className="my-[calc(var(--px)*4)]">
-            {MENU_PROMPTS.micDrop}
-          </Muted>
+          <Text className="my-[calc(var(--px)*4)]">{MENU_PROMPTS.micDrop}</Text>
           <Picker
             label="Your phrases"
             className="gap-0"
@@ -120,6 +101,13 @@ export const WindowDemo = () => {
               },
             ]}
           />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
+          />
         </Window>
         <Window
           style={{
@@ -127,21 +115,12 @@ export const WindowDemo = () => {
             minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
             maxHeight,
           }}
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
         >
           <Dialogue speaker="opponent">{LINE}</Dialogue>
-          <Muted className="my-[calc(var(--px)*4)]">
+          <Text className="my-[calc(var(--px)*4)]">
             Pick your counter. (Ten options in a short window: the list scrolls
             on its rail.)
-          </Muted>
+          </Text>
           <Picker
             label="Counters, many"
             className="gap-0"
@@ -150,6 +129,13 @@ export const WindowDemo = () => {
               label: pair.counter,
               onSelect: () => setPicked(pair.counter),
             }))}
+          />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
           />
         </Window>
       </Pixels>

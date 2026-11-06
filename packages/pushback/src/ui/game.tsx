@@ -1,11 +1,10 @@
 'use client';
 
-import { FeedbackProvider } from '@sebald/blip-ui';
+import { FeedbackProvider, Text } from '@sebald/blip-ui';
 import dynamic from 'next/dynamic';
 
 import { PALETTE } from './palette';
 import { Stage } from './stage';
-import { Muted } from './text';
 import { feedback } from './use-sound';
 
 // The game reads `localStorage` and `matchMedia` on mount and later draws
@@ -18,7 +17,7 @@ const Pushback = dynamic(
     loading: () => (
       <Stage>
         <Stage.Center>
-          <Muted>Loading…</Muted>
+          <Text>Loading…</Text>
         </Stage.Center>
       </Stage>
     ),

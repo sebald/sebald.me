@@ -1,6 +1,6 @@
 'use client';
 
-import { useKeys } from '@sebald/blip-ui';
+import { Heading, Legend, Text, Window, useKeys } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, MODES, MODE_LABELS } from '../lib/characters';
@@ -19,8 +19,6 @@ import { Ledger, Meter } from './ledger';
 import { Picker } from './picker';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
-import { Heading, Muted } from './text';
-import { Legend, Window } from './window';
 
 interface ResultScreenProps {
   run: SavedRun;
@@ -85,16 +83,6 @@ export const ResultScreen = ({
           // Held upright, down to the bar of controls
           bottom: `calc(var(--bui-bar) + ${px(panel.x)})`,
         }}
-        legend={
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-              ['Esc', 'back'],
-            ]}
-            touch="Tap a line"
-          />
-        }
       >
         <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)] tall:flex-col tall:gap-[calc(var(--px)*6)]">
           <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)]">
@@ -111,7 +99,7 @@ export const ResultScreen = ({
             </span>
             <div className="mt-[calc(var(--px)*2)] grid justify-items-center">
               <Heading>{name}</Heading>
-              <Muted>{ROLE_LABELS[run.role]}</Muted>
+              <Text>{ROLE_LABELS[run.role]}</Text>
             </div>
           </div>
           <div className="grid min-w-0 flex-1 content-start gap-[calc(var(--px)*5)]">
@@ -125,11 +113,11 @@ export const ResultScreen = ({
               >
                 {verdict}
               </Heading>
-              <Muted>
+              <Text>
                 {model.finished
                   ? 'Stakeholder beaten'
                   : 'Stakeholder took it offline'}
-              </Muted>
+              </Text>
             </div>
             <div className="flex items-baseline gap-[1ch]">
               <span className="text-[1.8em] leading-none font-bold text-(--pb-heading) tabular-nums">
@@ -164,11 +152,11 @@ export const ResultScreen = ({
                 </dd>
                 {/* Held upright, under the row: four columns do not fit */}
                 <dd className="m-0 text-right tall:col-span-full tall:-mt-[calc(var(--px)*2)]">
-                  <Muted className="text-[0.85em]">
+                  <Text className="text-[0.85em]">
                     {pool.missed === 0
                       ? 'none missed'
                       : `${pool.missed} missed`}
-                  </Muted>
+                  </Text>
                 </dd>
               </div>
             ))}
@@ -197,6 +185,14 @@ export const ResultScreen = ({
             ]}
           />
         </div>
+        <Legend
+          keys={[
+            ['↑↓', 'choose'],
+            ['Enter', 'confirm'],
+            ['Esc', 'back'],
+          ]}
+          touch="Tap a line"
+        />
       </Window>
       <Controls
         escape={{

@@ -1,11 +1,9 @@
 'use client';
 
-import { useKeys } from '@sebald/blip-ui';
+import { Heading, Legend, Text, Window, useKeys } from '@sebald/blip-ui';
 import { useMemo } from 'react';
 
 import { Picker } from './picker';
-import { Heading, Muted } from './text';
-import { Legend, Window } from './window';
 
 export interface ConfirmProps {
   title: string;
@@ -36,22 +34,10 @@ export const Confirm = ({
       aria-label={title}
       className="absolute inset-x-0 top-0 bottom-(--bui-bar) z-10 flex items-center justify-center bg-(--pb-bg)/80"
     >
-      <Window
-        className="w-[70%] tall:w-[90%]"
-        legend={
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-              ['Esc', 'cancel'],
-            ]}
-            touch="Tap a line"
-          />
-        }
-      >
+      <Window className="w-[70%] tall:w-[90%]">
         <div className="grid gap-[calc(var(--px)*3)]">
           <Heading>{title}</Heading>
-          <Muted className="text-balance">{children}</Muted>
+          <Text className="text-balance">{children}</Text>
           <Picker
             label={title}
             className="mt-[calc(var(--px)*2)]"
@@ -62,6 +48,14 @@ export const Confirm = ({
             ]}
           />
         </div>
+        <Legend
+          keys={[
+            ['↑↓', 'choose'],
+            ['Enter', 'confirm'],
+            ['Esc', 'cancel'],
+          ]}
+          touch="Tap a line"
+        />
       </Window>
     </div>
   );

@@ -152,6 +152,21 @@
 [data-stage] {
   --bui-ground: var(--pb-bg);
   --bui-ink: var(--pb-ink);
+  --bui-surface: var(--pb-fill);
+  --bui-surface-light: var(--pb-fill-top);
+  --bui-surface-shade: var(--pb-fill-shade);
+  --bui-frame: var(--pb-frame);
+  --bui-frame-dim: var(--pb-frame-dim);
+  --bui-frame-inner: var(--pb-frame-inner);
+  --bui-text: var(--pb-text);
+  --bui-text-bright: var(--pb-text-bright);
+  --bui-heading: var(--pb-heading);
+  --bui-muted: var(--pb-muted);
+  --bui-dim: var(--pb-dim);
+  --bui-empty: var(--pb-empty);
+  --bui-empty-dots: var(--pb-empty-dots);
+  --bui-paper: var(--pb-paper);
+  --bui-paper-shade: var(--pb-paper-shade);
   --bui-primary: var(--pb-gold);
   --bui-primary-light: var(--pb-gold-light);
   --bui-primary-shade: var(--pb-gold-shade);

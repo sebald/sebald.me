@@ -1,6 +1,10 @@
 'use client';
 
 import {
+  Heading,
+  Legend,
+  Text,
+  Window,
   prefersReducedMotion,
   useAnyKey,
   useKeys,
@@ -88,9 +92,7 @@ import { Setting } from './setting';
 import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
-import { Heading, Muted } from './text';
 import { useMusic, useSoundSettings } from './use-sound';
-import { Legend, Window } from './window';
 
 // Styles
 // ---------------
@@ -799,9 +801,9 @@ export const DuelScreen = ({
           <Dialogue speaker="player" muted>
             {counterText(state.outcome?.picked ?? null)}
           </Dialogue>
-          <Muted className="tall:mt-[calc(var(--px)*5)]">
+          <Text className="tall:mt-[calc(var(--px)*5)]">
             The reply: {step.text}
-          </Muted>
+          </Text>
         </>
       )}
       {(step?.kind === 'menu' || asking) && (
@@ -836,9 +838,9 @@ export const DuelScreen = ({
           >
             {/* The prompt sits above the options, with room on both sides */}
             {promptLine && (
-              <Muted className="my-[calc(var(--px)*4)] tall:mt-[calc(var(--px)*8+8px)] tall:mb-[calc(var(--px)*10)]">
+              <Text className="my-[calc(var(--px)*4)] tall:mt-[calc(var(--px)*8+8px)] tall:mb-[calc(var(--px)*10)]">
                 {promptLine}
-              </Muted>
+              </Text>
             )}
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
@@ -980,7 +982,7 @@ export const DuelScreen = ({
               }
         }
       >
-        <Window className="min-h-0 flex-1" legend={legend}>
+        <Window className="min-h-0 flex-1">
           {/* The silence bar: a stopwatch in the corner, beside the
               phrase being answered */}
           {timing && (
@@ -994,6 +996,7 @@ export const DuelScreen = ({
             />
           )}
           {contents(false)}
+          {legend}
         </Window>
         {/* The same window unseen at its natural height: what the shown
             one grows to when this is more than its own */}
@@ -1007,7 +1010,10 @@ export const DuelScreen = ({
             className="absolute"
             style={{ height: px(WINDOW_HEIGHT) }}
           />
-          <Window legend={legend}>{contents(true)}</Window>
+          <Window>
+            {contents(true)}
+            {legend}
+          </Window>
         </div>
         {ghostShown && (
           <span
@@ -1076,11 +1082,8 @@ export const DuelScreen = ({
       )}
       {paused && !leaving && (
         <div className={styles.pause()}>
-          <Window
-            className="w-[60%]"
-            legend={<Legend keys={[['Esc', 'resume']]} touch="Tap Resume" />}
-          >
-            <Muted className="mb-[calc(var(--px)*3)] text-center">Paused</Muted>
+          <Window className="w-[60%]">
+            <Text className="mb-[calc(var(--px)*3)] text-center">Paused</Text>
             <Picker
               label="Pause"
               items={[
@@ -1110,6 +1113,7 @@ export const DuelScreen = ({
                 },
               ]}
             />
+            <Legend keys={[['Esc', 'resume']]} touch="Tap Resume" />
           </Window>
         </div>
       )}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useKeys } from '@sebald/blip-ui';
+import { Heading, Legend, Window, useKeys } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { MODE_LABELS, type Mode, nextMode, stepMode } from '../lib/characters';
@@ -9,9 +9,7 @@ import { canPlay, effect, setSettings } from './audio/engine';
 import { Confirm } from './confirm';
 import { Picker, type PickerItem } from './picker';
 import { Setting } from './setting';
-import { Heading } from './text';
 import { useSoundSettings } from './use-sound';
-import { Legend, Window } from './window';
 
 /** What each mode changes, under the list while the cursor is on the mode */
 const MODE_NOTES: Record<Mode, string> = {
@@ -153,25 +151,21 @@ export const Options = ({
 
   return (
     <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60">
-      <Window
-        className="w-[19em] tall:w-[90%]"
-        legend={
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-              ['Esc', 'back'],
-            ]}
-            touch="Tap a line"
-          />
-        }
-      >
+      <Window className="w-[19em] tall:w-[90%]">
         <Heading>Options</Heading>
         <Picker
           label="Options"
           className="mt-[calc(var(--px)*3)]"
           items={items}
           active={asking === null}
+        />
+        <Legend
+          keys={[
+            ['↑↓', 'choose'],
+            ['Enter', 'confirm'],
+            ['Esc', 'back'],
+          ]}
+          touch="Tap a line"
         />
       </Window>
 

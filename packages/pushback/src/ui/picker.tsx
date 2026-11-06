@@ -1,6 +1,12 @@
 'use client';
 
-import { useInputKind, useKeydown, usePixels } from '@sebald/blip-ui';
+import {
+  Text,
+  Window,
+  useInputKind,
+  useKeydown,
+  usePixels,
+} from '@sebald/blip-ui';
 import {
   type RefObject,
   useEffect,
@@ -13,8 +19,6 @@ import { createPortal } from 'react-dom';
 import { STAGE } from '../lib/stage';
 import { effect } from './audio/engine';
 import { cn, cva } from './styles.utils';
-import { Loud } from './text';
-import { Window } from './window';
 
 const pickerStyles = {
   root: cva({ base: 'flex min-h-0' }),
@@ -222,7 +226,7 @@ const useNotePlace = (
       section.tagName === 'SECTION'
         ? ((section.firstElementChild as HTMLElement | null) ?? section)
         : section;
-    const frame = row.closest<HTMLElement>('[data-window]') ?? row;
+    const frame = row.closest<HTMLElement>('[data-slot=window]') ?? row;
     const origin = root.getBoundingClientRect();
     const line = row.getBoundingClientRect();
     const toStage = (n: number) => Math.round(n / scale);
@@ -399,7 +403,9 @@ export const Picker = ({
               >
                 {/* The loud one blinks; the cursor beside it does not */}
                 {item.accent ? (
-                  <Loud className="text-inherit">{item.label}</Loud>
+                  <Text variant="call" className="text-inherit">
+                    {item.label}
+                  </Text>
                 ) : (
                   item.label
                 )}

@@ -1,6 +1,14 @@
 'use client';
 
-import { Button, useClock, useKeys, useScale } from '@sebald/blip-ui';
+import {
+  Button,
+  Heading,
+  Legend,
+  ScreenTitle,
+  useClock,
+  useKeys,
+  useScale,
+} from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
 import { LOOKS, type Look } from '../lib/characters';
@@ -17,8 +25,6 @@ import { SHEETS } from './sheets';
 import { Stage, TALL_BAR, px } from './stage';
 import { Stamp, stampSize } from './stamp';
 import { cn, cva } from './styles.utils';
-import { Heading, ScreenTitle } from './text';
-import { CornerLegend } from './window';
 
 /**
  * The portrait is the sheet's head square at twice its pixels; held
@@ -312,7 +318,7 @@ export const SelectScreen = ({
         )}
       </div>
 
-      <CornerLegend
+      <Legend
         keys={[
           ['←→', 'role'],
           ['↑↓', 'look'],

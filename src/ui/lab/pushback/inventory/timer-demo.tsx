@@ -1,13 +1,12 @@
 'use client';
 
-import { useClock } from '@sebald/blip-ui';
+import { Legend, Window, useClock } from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT } from '@sebald/pushback/lib/stage';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { Picker } from '@sebald/pushback/ui/picker';
 import { SILENCE_CLOCK, SilenceTimer } from '@sebald/pushback/ui/silence-timer';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
-import { Legend, Window } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
 import { Field, field } from './controls';
@@ -93,18 +92,7 @@ export const TimerDemo = () => {
         </span>
       </form>
       <Pixels scale={scale}>
-        <Window
-          style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
-        >
+        <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
           {elapsed < LIMIT && (
             <SilenceTimer
               key={playing ? Math.floor(clock / (LIMIT + REST)) : 'held'}
@@ -129,6 +117,13 @@ export const TimerDemo = () => {
               label: p.counter,
               onSelect: () => {},
             }))}
+          />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
           />
         </Window>
       </Pixels>

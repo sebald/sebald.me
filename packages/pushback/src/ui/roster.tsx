@@ -1,6 +1,6 @@
 'use client';
 
-import { useKeys } from '@sebald/blip-ui';
+import { Legend, ScreenTitle, Window, useKeys } from '@sebald/blip-ui';
 import {
   type PropsWithChildren,
   type ReactNode,
@@ -20,8 +20,6 @@ import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
 import { Stamp, stampSize } from './stamp';
 import { cn } from './styles.utils';
-import { ScreenTitle } from './text';
-import { CornerLegend, Window } from './window';
 
 /** The run window is centred between here, under the title and its line, and the legend */
 const LIST_TOP = 40;
@@ -176,7 +174,7 @@ export const RosterScreen = ({
       />
 
       <ScreenTitle blurb="Beat your colleagues in order. The Stakeholder waits at the end.">
-        Your run as {ROLE_LABELS[run.role]}
+        {`Your run as ${ROLE_LABELS[run.role]}`}
       </ScreenTitle>
 
       {/* The run, centred, the window as large as the list */}
@@ -197,7 +195,7 @@ export const RosterScreen = ({
         </Window>
       </div>
 
-      <CornerLegend
+      <Legend
         keys={[
           ['↑↓', 'choose'],
           ['Enter', 'play'],

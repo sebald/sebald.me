@@ -1,6 +1,15 @@
 'use client';
 
-import { useAnyKey, useInputKind, useKeys, useScale } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Text,
+  Window,
+  useAnyKey,
+  useInputKind,
+  useKeys,
+  useScale,
+} from '@sebald/blip-ui';
 import NextImage from 'next/image';
 import {
   type ReactNode,
@@ -32,8 +41,6 @@ import { Options, type SaveSummary } from './options';
 import { Picker, type PickerItem } from './picker';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
-import { Heading, Loud } from './text';
-import { Legend, Window } from './window';
 
 interface TitleScreenProps {
   /** Open on the menu, the splash skipped: back from the demo */
@@ -80,7 +87,7 @@ const FICTION =
  */
 const HowTo = ({ legend }: { legend: ReactNode }) => (
   <div className="absolute inset-x-0 top-0 bottom-(--bui-bar) flex items-center justify-center bg-(--pb-bg)/60 p-[calc(var(--px)*6)]">
-    <Window className="w-full" legend={legend}>
+    <Window className="w-full">
       <Heading>How it works</Heading>
       <ol className="m-0 mt-[calc(var(--px)*3)] grid list-none gap-[calc(var(--px)*2.5)] p-0 leading-[1.4]">
         {HOW_TO.map((line, i) => (
@@ -90,6 +97,7 @@ const HowTo = ({ legend }: { legend: ReactNode }) => (
           </li>
         ))}
       </ol>
+      {legend}
     </Window>
   </div>
 );
@@ -343,15 +351,6 @@ export const TitleScreen = ({
         <Window
           className="absolute left-1/2 -translate-x-1/2"
           style={{ top: px(tall ? TALL.menu : MENU_TOP) }}
-          legend={
-            <Legend
-              keys={[
-                ['↑↓', 'choose'],
-                ['Enter', 'confirm'],
-              ]}
-              touch="Tap a line"
-            />
-          }
         >
           <Picker
             label="Title menu"
@@ -359,6 +358,13 @@ export const TitleScreen = ({
             items={items}
             initial={returned ?? (running ? 'continue' : 'start')}
             active={!asking && !browsing}
+          />
+          <Legend
+            keys={[
+              ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
+            ]}
+            touch="Tap a line"
           />
         </Window>
       ) : (
@@ -371,9 +377,12 @@ export const TitleScreen = ({
             height: px(CALL.height),
           }}
         >
-          <Loud className="font-bold tracking-[0.15em] uppercase">
+          <Text
+            variant="call"
+            className="font-bold tracking-[0.15em] uppercase"
+          >
             {kind === 'touch' ? 'Tap to play' : 'Press Enter to play'}
-          </Loud>
+          </Text>
         </p>
       )}
       {!reading && !setting && (

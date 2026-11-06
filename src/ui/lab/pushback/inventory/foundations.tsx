@@ -1,13 +1,12 @@
 'use client';
 
+import { Heading, Legend, Text } from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
 import { Picker } from '@sebald/pushback/ui/picker';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { Stamp } from '@sebald/pushback/ui/stamp';
-import { Heading, Loud, Muted } from '@sebald/pushback/ui/text';
-import { Legend } from '@sebald/pushback/ui/window';
 import { useState } from 'react';
 
 import { Field, field } from './controls';
@@ -100,34 +99,36 @@ export const TextDemo = () => {
         <p className="m-0 text-(--pb-text-bright)">
           A line to pick, a shade brighter, white under the cursor.
         </p>
-        <Muted>
-          Muted: a prompt over the options, a hint, the reply shown.
-        </Muted>
-        <Muted className="text-[0.8em] opacity-70">
+        <Text>Muted: a prompt over the options, a hint, the reply shown.</Text>
+        <Text className="text-[0.8em] opacity-70">
           Muted, smaller and fainter: the fiction line.
-        </Muted>
+        </Text>
         <p className="m-0">
-          <Loud>Loud: the closer on offer, blinking to half.</Loud>
+          <Text variant="call">
+            Loud: the closer on offer, blinking to half.
+          </Text>
         </p>
         <p className="m-0 [--blink-low:0]">
-          <Loud className="font-bold tracking-[0.15em] uppercase">
+          <Text
+            variant="call"
+            className="font-bold tracking-[0.15em] uppercase"
+          >
             Loud, a full blink: press Enter to play
-          </Loud>
+          </Text>
         </p>
         <Dialogue speaker="opponent">{PAIRS[0]!.phrase}</Dialogue>
         <Dialogue speaker="player">{PAIRS[0]!.counter}</Dialogue>
         <Dialogue speaker="player" muted>
           A line that is over, muted, with its mark.
         </Dialogue>
-        <p className="m-0 text-right text-[0.75em] text-(--pb-dim)">
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-            ]}
-            touch="Tap a line"
-          />
-        </p>
+        <Legend
+          className="text-right"
+          keys={[
+            ['↑↓', 'choose'],
+            ['Enter', 'confirm'],
+          ]}
+          touch="Tap a line"
+        />
       </Pixels>
     </div>
   );

@@ -1,6 +1,13 @@
 'use client';
 
-import { useKeys, usePixels } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Text,
+  Window,
+  useKeys,
+  usePixels,
+} from '@sebald/blip-ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -16,8 +23,6 @@ import { Dialogue } from './dialogue';
 import { ScrollRail, overflows, useScroll } from './picker';
 import { px } from './stage';
 import { cva } from './styles.utils';
-import { Heading, Muted } from './text';
-import { Legend, Window } from './window';
 
 /** How far one press of up or down scrolls: a share of what shows */
 const SCROLL_STEP = 0.3;
@@ -153,20 +158,7 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
         className="absolute m-0 h-auto max-h-none w-auto max-w-none border-0 bg-transparent p-0 text-inherit outline-none"
         style={{ left: px(12), right: px(12), top: px(10), bottom: px(10) }}
       >
-        <Window
-          className="h-full"
-          legend={
-            <Legend
-              keys={[
-                ['←→', 'pool'],
-                ['↑↓', 'scroll'],
-                ['Esc', 'close'],
-              ]}
-              // Held upright the window fills the stage: the bar's Back
-              touch={tall ? 'Back closes it' : 'Tap outside to close'}
-            />
-          }
-        >
+        <Window className="h-full">
           <div
             role="tablist"
             aria-label="Pools"
@@ -190,9 +182,9 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
               </button>
             ))}
           </div>
-          <Muted className="mb-[calc(var(--px)*8)] text-center text-[0.8em]">
+          <Text className="mb-[calc(var(--px)*8)] text-center text-[0.8em]">
             Gather every line thrown at you, and the comeback that beats it.
-          </Muted>
+          </Text>
           <div className="flex min-h-0 flex-1">
             <div
               ref={listRef}
@@ -235,6 +227,15 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
             </div>
             {overflows(scroll) && <ScrollRail scroll={scroll} />}
           </div>
+          <Legend
+            keys={[
+              ['←→', 'pool'],
+              ['↑↓', 'scroll'],
+              ['Esc', 'close'],
+            ]}
+            // Held upright the window fills the stage: the bar's Back
+            touch={tall ? 'Back closes it' : 'Tap outside to close'}
+          />
         </Window>
       </dialog>
     </div>
