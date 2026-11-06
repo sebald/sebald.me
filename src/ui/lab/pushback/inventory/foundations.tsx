@@ -1,11 +1,17 @@
 'use client';
 
-import { Heading, Legend, Picker, PickerItem, Text } from '@sebald/blip-ui';
+import {
+  Heading,
+  Legend,
+  Line,
+  Picker,
+  PickerItem,
+  Stamp,
+  Text,
+} from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
-import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
 import { Pixels } from '@sebald/pushback/ui/stage';
-import { Stamp } from '@sebald/pushback/ui/stamp';
 import { useState } from 'react';
 
 import { Field, field } from './controls';
@@ -115,11 +121,9 @@ export const TextDemo = () => {
             Loud, a full blink: press Enter to play
           </Text>
         </p>
-        <Dialogue speaker="opponent">{PAIRS[0]!.phrase}</Dialogue>
-        <Dialogue speaker="player">{PAIRS[0]!.counter}</Dialogue>
-        <Dialogue speaker="player" muted>
-          A line that is over, muted, with its mark.
-        </Dialogue>
+        <Line variant="secondary">{PAIRS[0]!.phrase}</Line>
+        <Line>{PAIRS[0]!.counter}</Line>
+        <Line past>A line that is over, muted, with its mark.</Line>
         <Legend
           className="text-right"
           keys={[
@@ -198,7 +202,7 @@ export const StampDemo = () => (
   >
     <Stamp word="SHIPPED" />
     <Stamp word="DONE" />
-    <Stamp word="FLAWLESS" tone="gold" />
+    <Stamp word="FLAWLESS" variant="primary" />
     {/* Over a skin tone, the way it sits on a face */}
     <span className="bg-[#c58a62] p-[calc(var(--px)*3)]">
       <Stamp word="DONE" />

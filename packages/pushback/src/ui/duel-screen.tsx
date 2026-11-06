@@ -2,13 +2,23 @@
 
 import {
   Confirm,
+  FLOOR,
+  FeedbackProvider,
   Heading,
+  Ledger,
+  LedgerRow,
   Legend,
-  Text,
-  Window,
+  Line,
   Picker,
   PickerItem,
   PickerSetting,
+  SpeechBubble,
+  TAIL_REACH,
+  TIMER_SIZE,
+  Text,
+  Timer,
+  Typewriter,
+  Window,
   prefersReducedMotion,
   useAnyKey,
   useKeys,
@@ -78,22 +88,18 @@ import {
   speak,
   toggleSound,
 } from './audio/engine';
-import { BUBBLE_TAIL, Bubble } from './bubble';
 import { Burst } from './burst';
 import { Character } from './character';
 import { Controls } from './controls';
 import { DemoLabel } from './demo-label';
-import { Dialogue } from './dialogue';
 import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
-import { Ledger } from './ledger';
 import { RoundCall } from './round-call';
-import { SILENCE_CLOCK, SilenceTimer } from './silence-timer';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
-import { useMusic, useSoundSettings } from './use-sound';
+import { feedback, useMusic, useSoundSettings, voiced } from './use-sound';
 
 // Styles
 // ---------------
@@ -566,17 +572,6 @@ export const DuelScreen = ({
         ? step.text.length
         : typedChars(cursor.elapsed, step.text)
       : 0;
-  // The rest of the line holds its room, so it never rewraps or grows
-  // the window as it types
-  const typed =
-    step?.kind === 'line' ? (
-      <>
-        {step.text.slice(0, typedLength)}
-        {typedLength < step.text.length && (
-          <span className="invisible">{step.text.slice(typedLength)}</span>
-        )}
-      </>
-    ) : null;
 
   // The defence is one screen: the phrase types out in the window the
   // counters already stand in, hidden until it has been said, so nothing
@@ -787,15 +782,20 @@ export const DuelScreen = ({
         ? state.setup.role
         : opponentVoice
       : null;
-  const lineId = `${key}:${cursor.index}`;
-  const spokenRef = useRef({ id: '', length: 0 });
-  useEffect(() => {
-    if (auto || !voice || step?.kind !== 'line') return;
-    const spoken = spokenRef.current;
-    const from = spoken.id === lineId ? spoken.length : 0;
-    spokenRef.current = { id: lineId, length: typedLength };
-    if (typedLength > from) speak(voice, step.text.slice(from, typedLength));
-  }, [auto, voice, step, lineId, typedLength]);
+  const lineFeedback = useMemo(
+    () => (voice ? voiced(voice) : feedback),
+    [voice],
+  );
+  // The line typing out, blipping in the speaker's voice; `sizing` for the
+  // unseen copy that measures the window, which makes no sound
+  const typed = (sizing: boolean) =>
+    step?.kind === 'line' ? (
+      <FeedbackProvider play={lineFeedback}>
+        <Typewriter typed={typedLength} sound={!auto && !sizing}>
+          {step.text}
+        </Typewriter>
+      </FeedbackProvider>
+    ) : null;
   // The ghost, as its bubble appears
   const ghostSpeaks = !auto && Boolean(bubble);
   useEffect(() => {
@@ -808,13 +808,13 @@ export const DuelScreen = ({
   const contents = (sizing: boolean) => (
     <>
       {step?.kind === 'line' && !asking && (
-        <Dialogue speaker={step.speaker}>{typed}</Dialogue>
+        <Line variant={step.speaker === 'player' ? 'primary' : 'secondary'}>
+          {typed(sizing)}
+        </Line>
       )}
       {step?.kind === 'reveal' && (
         <>
-          <Dialogue speaker="player" muted>
-            {counterText(state.outcome?.picked ?? null)}
-          </Dialogue>
+          <Line past>{counterText(state.outcome?.picked ?? null)}</Line>
           <Text className="tall:mt-[calc(var(--px)*5)]">
             The reply: {step.text}
           </Text>
@@ -826,15 +826,17 @@ export const DuelScreen = ({
               player reads to pick, and the question, so a defence needs
               no prompt. Typed out first, then kept. */}
           {asking && state.exchange && (
-            <Dialogue
-              speaker="opponent"
+            <Line
+              variant="secondary"
               // Clear of the stopwatch in the corner
-              style={{ paddingRight: px(SILENCE_CLOCK.width + 4) }}
+              style={{
+                paddingRight: `calc(${px(TIMER_SIZE.width, FLOOR)} + ${px(4)})`,
+              }}
             >
               {step?.kind === 'line'
-                ? typed
+                ? typed(sizing)
                 : phraseText(state.exchange.phrase)}
-            </Dialogue>
+            </Line>
           )}
           <div
             className={cn(
@@ -880,17 +882,15 @@ export const DuelScreen = ({
           >
             {verdict}
           </Heading>
-          <Ledger
-            className="mt-[calc(var(--px)*3)] w-[24em] tall:mt-[calc(var(--px)*6)] tall:w-full"
-            rows={[
-              [
-                'Exchanges won',
-                `${exchangesWon}/${exchangesWon + exchangesLost}`,
-              ],
-              ['Mic drops', micDrops],
-              ['Lines collected', learned > 0 ? `+${learned}` : 'none'],
-            ]}
-          />
+          <Ledger className="mt-[calc(var(--px)*3)] w-[24em] tall:mt-[calc(var(--px)*6)] tall:w-full">
+            <LedgerRow label="Exchanges won">
+              {`${exchangesWon}/${exchangesWon + exchangesLost}`}
+            </LedgerRow>
+            <LedgerRow label="Mic drops">{micDrops}</LedgerRow>
+            <LedgerRow label="Lines collected">
+              {learned > 0 ? `+${learned}` : 'none'}
+            </LedgerRow>
+          </Ledger>
         </>
       )}
     </>
@@ -1001,11 +1001,12 @@ export const DuelScreen = ({
           {/* The silence bar: a stopwatch in the corner, beside the
               phrase being answered */}
           {timing && (
-            <SilenceTimer
-              elapsed={timing.elapsed}
-              limit={timing.limit}
-              still={reduced}
-              ticking={!auto}
+            <Timer
+              duration={timing.limit}
+              remaining={timing.limit - timing.elapsed}
+              paused={paused}
+              sound={!auto}
+              aria-label={`Silence, ${Math.ceil(Math.max(0, timing.limit - timing.elapsed) / 1000)} seconds left`}
               className="absolute"
               style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
             />
@@ -1047,10 +1048,10 @@ export const DuelScreen = ({
           </span>
         )}
         {bubble && (
-          <Bubble
-            point="down"
+          <SpeechBubble
+            side="bottom"
             // The tail over the middle of the figure's head
-            tail={
+            offset={
               GHOST.corner.right + GHOST.figure.width / 2 - GHOST.bubble.right
             }
             className="pointer-events-none absolute max-w-[55%] text-balance"
@@ -1059,11 +1060,11 @@ export const DuelScreen = ({
               // Above the figure: its top is the cell's height less where
               // the figure starts in it, over the corner it sinks into,
               // and the tail hangs below the bubble's edge
-              bottom: `calc(100% - ${px(GHOST.corner.overlap)} + ${px(LAYOUT.cell.height - GHOST.figure.top + GHOST.bubble.gap + BUBBLE_TAIL)})`,
+              bottom: `calc(100% - ${px(GHOST.corner.overlap)} + ${px(LAYOUT.cell.height - GHOST.figure.top + GHOST.bubble.gap + TAIL_REACH)})`,
             }}
           >
             {ghostLine}
-          </Bubble>
+          </SpeechBubble>
         )}
       </div>
 

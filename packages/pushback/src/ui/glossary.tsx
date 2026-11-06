@@ -3,13 +3,14 @@
 import {
   Heading,
   Legend,
+  Line,
+  overflows,
   ScrollRail,
   Text,
-  Window,
-  overflows,
   useKeys,
   usePixels,
   useScroll,
+  Window,
 } from '@sebald/blip-ui';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -22,7 +23,6 @@ import {
   closersOf,
   poolOf,
 } from '../lib/lines';
-import { Dialogue } from './dialogue';
 import { px } from './stage';
 import { cva } from './styles.utils';
 
@@ -61,15 +61,13 @@ const Entry = ({
 }) =>
   known ? (
     <li className="grid gap-[var(--px)]">
-      <Dialogue
-        speaker="opponent"
+      <Line
+        variant="secondary"
         className={closer ? 'text-(--pb-gold)' : 'text-(--pb-text-bright)'}
       >
         {pair.phrase}
-      </Dialogue>
-      <Dialogue speaker="player" muted>
-        {pair.counter}
-      </Dialogue>
+      </Line>
+      <Line past>{pair.counter}</Line>
     </li>
   ) : (
     <li

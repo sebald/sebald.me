@@ -5,8 +5,10 @@ import {
   Picker,
   PickerItem,
   ScreenTitle,
-  Window,
+  Stamp,
+  stampSize,
   useKeys,
+  Window,
 } from '@sebald/blip-ui';
 import {
   type PropsWithChildren,
@@ -24,7 +26,6 @@ import { PALETTE } from './palette';
 import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
-import { Stamp, stampSize } from './stamp';
 import { cn } from './styles.utils';
 
 /** The run window is centred between here, under the title and its line, and the legend */
@@ -56,7 +57,7 @@ const BeatenStamp = ({ flawless }: { flawless: boolean }) => {
   return (
     <Stamp
       word={word}
-      tone={flawless ? 'gold' : 'red'}
+      variant={flawless ? 'primary' : 'danger'}
       className="absolute"
       style={{
         left: px((face - stampSize(word).width) / 2),

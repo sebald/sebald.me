@@ -76,6 +76,10 @@ export {
 } from './components/bitmap-text/bitmap-text';
 export { Line, type LineProps } from './components/line/line';
 export {
+  Typewriter,
+  type TypewriterProps,
+} from './components/typewriter/typewriter';
+export {
   SpeechBubble,
   type SpeechBubbleProps,
   TAIL_REACH,

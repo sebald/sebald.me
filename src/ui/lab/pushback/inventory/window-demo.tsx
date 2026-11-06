@@ -2,16 +2,16 @@
 
 import {
   Legend,
+  Line,
   MAX_CROP,
   Picker,
   PickerItem,
   Text,
-  Window,
   useClock,
+  Window,
 } from '@sebald/blip-ui';
 import { CLOSERS, MENU_PROMPTS, PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT, STAGE, typedChars } from '@sebald/pushback/lib/stage';
-import { Dialogue } from '@sebald/pushback/ui/dialogue';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
@@ -56,7 +56,7 @@ export const WindowDemo = () => {
       </form>
       <Pixels scale={scale} className="grid gap-[calc(var(--px)*6)]">
         <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
-          <Dialogue speaker="opponent">{typed}</Dialogue>
+          <Line variant="secondary">{typed}</Line>
           <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
         </Window>
         <Window
@@ -65,7 +65,7 @@ export const WindowDemo = () => {
             minHeight: `calc(var(--px) * ${LAYOUT.panel.height})`,
           }}
         >
-          <Dialogue speaker="opponent">{LINE}</Dialogue>
+          <Line variant="secondary">{LINE}</Line>
           <Text className="my-[calc(var(--px)*4)]">Pick your counter.</Text>
           <Picker label="Counters" className="gap-0">
             {options.map(pair => (
@@ -126,7 +126,7 @@ export const WindowDemo = () => {
             maxHeight,
           }}
         >
-          <Dialogue speaker="opponent">{LINE}</Dialogue>
+          <Line variant="secondary">{LINE}</Line>
           <Text className="my-[calc(var(--px)*4)]">
             Pick your counter. (Ten options in a short window: the list scrolls
             on its rail.)

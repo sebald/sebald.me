@@ -1,8 +1,7 @@
 'use client';
 
-import { useClock } from '@sebald/blip-ui';
+import { SpeechBubble, useClock } from '@sebald/blip-ui';
 import { GHOST_ANIM_MS, ghostEnter } from '@sebald/pushback/lib/buddy';
-import { Bubble } from '@sebald/pushback/ui/bubble';
 import { Ghost } from '@sebald/pushback/ui/ghost';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
@@ -73,12 +72,12 @@ export const GhostDemo = () => {
         scale={scale}
         className="flex w-fit flex-col gap-[calc(var(--px)*10)] bg-(--pb-fill) p-[calc(var(--px)*10)]"
       >
-        <Bubble className="w-fit">
+        <SpeechBubble className="w-fit">
           I&apos;m not haunting you. I&apos;m onboarding you.
-        </Bubble>
-        <Bubble className="max-w-[calc(var(--px)*160)]">
+        </SpeechBubble>
+        <SpeechBubble className="max-w-[calc(var(--px)*160)]">
           Read it again. Slowly. I have time. I have nothing but time.
-        </Bubble>
+        </SpeechBubble>
       </Pixels>
     </div>
   );

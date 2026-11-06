@@ -181,4 +181,14 @@
   --bui-danger-light: var(--pb-stamp-light);
   --bui-danger-shade: var(--pb-stamp-shade);
   --bui-danger-foreground: var(--pb-spark);
+  --bui-danger-rim: var(--pb-stamp-rim);
+  --bui-secondary: var(--pb-ember);
+  --bui-secondary-light: var(--pb-ember-light);
+  --bui-secondary-shade: var(--pb-ember-shade);
+  --bui-secondary-foreground: var(--pb-ink);
+  /* The stopwatch's time while a counter still counts as fast */
+  --bui-info: var(--pb-time);
+  --bui-info-shade: var(--pb-time-shade);
+  --bui-spark: var(--pb-spark);
+  --bui-paper-foreground: var(--pb-ink);
 }

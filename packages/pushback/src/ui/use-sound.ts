@@ -5,19 +5,23 @@ import { useEffect, useSyncExternalStore } from 'react';
 
 import type { Cue } from '../lib/audio/music';
 import { DEFAULT_SOUND } from '../lib/audio/settings';
-import type { Effect } from './audio/effects';
+import type { BlipVoice, Effect } from './audio/effects';
 import {
   arm,
   canPlay,
   effect,
   getSettings,
   music,
+  speak,
   subscribe,
   toggleSound,
 } from './audio/engine';
 
-/** The game's sound for each of Blip UI's (`FeedbackProvider`) */
-const FEEDBACK: Record<FeedbackEvent, Effect> = {
+/**
+ * The game's sound for each of Blip UI's (`FeedbackProvider`); typing has
+ * a voice, the speaker's (`voiced`)
+ */
+const FEEDBACK: Record<Exclude<FeedbackEvent, 'type'>, Effect> = {
   move: 'cursor',
   confirm: 'confirm',
   back: 'cancel',
@@ -27,7 +31,15 @@ const FEEDBACK: Record<FeedbackEvent, Effect> = {
 };
 
 /** What Blip UI's parts play, in the game's sounds */
-export const feedback: Feedback = event => effect(FEEDBACK[event]);
+export const feedback: Feedback = event => {
+  if (event !== 'type') effect(FEEDBACK[event]);
+};
+
+/** The same, a line typed blipping in this voice, pitched by its letters */
+export const voiced =
+  (voice: BlipVoice): Feedback =>
+  (event, text) =>
+    event === 'type' ? speak(voice, text ?? '') : feedback(event);
 
 /** The sound switches, live */
 export const useSoundSettings = () =>

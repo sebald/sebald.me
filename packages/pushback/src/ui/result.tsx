@@ -2,12 +2,15 @@
 
 import {
   Heading,
+  Ledger,
+  LedgerRow,
   Legend,
+  Meter,
   Picker,
   PickerItem,
   Text,
-  Window,
   useKeys,
+  Window,
 } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
 
@@ -23,7 +26,6 @@ import { PLAYER_SHEETS } from '../lib/sprites';
 import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
-import { Ledger, Meter } from './ledger';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
 
@@ -134,7 +136,13 @@ export const ResultScreen = ({
                 {MODE_LABELS[model.mode]} ×{MODES[model.mode].rules.score}
               </span>
             </div>
-            <Ledger rows={model.rows} />
+            <Ledger>
+              {model.rows.map(([label, value], i) => (
+                <LedgerRow key={i} label={label}>
+                  {value}
+                </LedgerRow>
+              ))}
+            </Ledger>
           </div>
         </div>
 
@@ -152,7 +160,8 @@ export const ResultScreen = ({
               <div key={pool.role} className="contents">
                 <dt className="min-w-[8ch]">{ROLE_LABELS[pool.role]}</dt>
                 <dd className="m-0 flex">
-                  <Meter value={pool.collected} total={pool.total} />
+                  {/* The count follows it in words */}
+                  <Meter aria-hidden value={pool.collected} max={pool.total} />
                 </dd>
                 <dd className="m-0 text-(--pb-heading) tabular-nums">
                   {pool.collected}/{pool.total}

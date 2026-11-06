@@ -1,4 +1,4 @@
-import type { SVGAttributes } from 'react';
+import type { CSSProperties, SVGAttributes } from 'react';
 
 import { type Font, glyphOf, lit, supported } from '../../foundations/bitmap';
 import { px } from '../../foundations/pixel';
@@ -91,7 +91,9 @@ const ROOM = INK * 2 + 2;
  * Text in a five by seven pixel font, the way the logo's letters are
  * drawn: each letter pixel two or five stage pixels, an ink line round it,
  * a hard drop down and to the right, the top row lit and the
- * bottom two shaded. Decorative (`aria-hidden`): say it in text too.
+ * bottom two shaded. Each letter is a group (`data-slot="bitmap-letter"`)
+ * with its place in `--i`, to animate them one by one. Decorative
+ * (`aria-hidden`): say it in text too.
  */
 export const BitmapText = ({
   children,
@@ -126,7 +128,14 @@ export const BitmapText = ({
           row: y,
         }));
         return (
-          <g key={i}>
+          // Each letter its own group, its place in `--i`, so a letter can
+          // move on its own: `[&>[data-slot=bitmap-letter]]` and a delay of
+          // `calc(var(--i) * 90ms)`
+          <g
+            key={i}
+            data-slot="bitmap-letter"
+            style={{ '--i': i } as CSSProperties}
+          >
             {/* The drop, then the ink line, then the letter */}
             {at.map(({ x, y }) => (
               <rect

@@ -11,6 +11,8 @@ import { createContext, useContext } from 'react';
  * - `back`: stepping back, Escape, Cancel
  * - `bump`: a disabled item was picked
  * - `tick`, `ping`: a clock's seconds, and its warning
+ * - `type`: a line typed on by a step, with the text the step added (a
+ *   voice can pitch its blip by the letter)
  */
 export type FeedbackEvent =
   | 'move'
@@ -18,9 +20,11 @@ export type FeedbackEvent =
   | 'back'
   | 'bump'
   | 'tick'
-  | 'ping';
+  | 'ping'
+  | 'type';
 
-export type Feedback = (event: FeedbackEvent) => void;
+/** Plays an event; `text` is what was typed, for `type` only */
+export type Feedback = (event: FeedbackEvent, text?: string) => void;
 
 const FeedbackContext = createContext<Feedback>(() => {});
 

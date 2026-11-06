@@ -1,10 +1,18 @@
 'use client';
 
-import { Legend, Picker, PickerItem, Window, useClock } from '@sebald/blip-ui';
+import {
+  FLOOR,
+  Legend,
+  Line,
+  Picker,
+  PickerItem,
+  Timer,
+  TIMER_SIZE,
+  useClock,
+  Window,
+} from '@sebald/blip-ui';
 import { PAIRS } from '@sebald/pushback/lib/lines';
 import { LAYOUT } from '@sebald/pushback/lib/stage';
-import { Dialogue } from '@sebald/pushback/ui/dialogue';
-import { SILENCE_CLOCK, SilenceTimer } from '@sebald/pushback/ui/silence-timer';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
@@ -93,21 +101,23 @@ export const TimerDemo = () => {
       <Pixels scale={scale}>
         <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
           {elapsed < LIMIT && (
-            <SilenceTimer
+            <Timer
               key={playing ? Math.floor(clock / (LIMIT + REST)) : 'held'}
-              elapsed={elapsed}
-              limit={LIMIT}
-              still={still}
+              duration={LIMIT}
+              remaining={LIMIT - elapsed}
+              paused={still}
               className="absolute"
               style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
             />
           )}
-          <Dialogue
-            speaker="opponent"
-            style={{ paddingRight: px(SILENCE_CLOCK.width + 4) }}
+          <Line
+            variant="secondary"
+            style={{
+              paddingRight: `calc(${px(TIMER_SIZE.width, FLOOR)} + ${px(4)})`,
+            }}
           >
             {pair.phrase}
-          </Dialogue>
+          </Line>
           <Picker
             label="Counters"
             className="mt-[calc(var(--px)*2)] gap-0 [&_button]:py-[0.1em]"

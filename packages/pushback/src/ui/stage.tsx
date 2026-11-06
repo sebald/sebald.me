@@ -7,6 +7,7 @@ import {
   type StageProps as BlipStageProps,
   TALL_BAR,
   canFullscreen,
+  px,
   toggleFullscreen,
 } from '@sebald/blip-ui';
 import type { PropsWithChildren } from 'react';
@@ -20,8 +21,11 @@ import { cn } from './styles.utils';
  */
 export { TALL_BAR };
 
-/** A length in stage pixels, for inline styles: `px(3)` is three of them */
-export const px = (n: number) => `calc(var(--px) * ${n})`;
+/**
+ * A length in stage pixels, for inline styles: `px(3)` is three of them,
+ * `px(3, FLOOR)` three never finer than Blip UI's floor
+ */
+export { px };
 
 /**
  * The stage's pixel unit for pieces shown outside a stage (the

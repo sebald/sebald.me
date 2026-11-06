@@ -5,6 +5,8 @@ import {
   Heading,
   Legend,
   ScreenTitle,
+  Stamp,
+  stampSize,
   useClock,
   useKeys,
   useScale,
@@ -23,7 +25,6 @@ import { Portrait } from './portrait';
 import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage, TALL_BAR, px } from './stage';
-import { Stamp, stampSize } from './stamp';
 import { cn, cva } from './styles.utils';
 
 /**

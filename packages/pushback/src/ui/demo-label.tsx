@@ -1,8 +1,7 @@
 'use client';
 
-import { useInputKind } from '@sebald/blip-ui';
+import { BitmapText, useInputKind } from '@sebald/blip-ui';
 
-import { GOLD, SIZE, SPARK, Word } from './round-call';
 import { px } from './stage';
 import { cn } from './styles.utils';
 
@@ -29,13 +28,10 @@ export const DemoLabel = ({ y, className }: DemoLabelProps) => {
       )}
       style={{ top: px(y), animationDuration: '1.6s' }}
     >
-      <Word word="DEMO" size={SIZE.win} ramp={GOLD} />
-      <Word
-        word={kind === 'touch' ? 'TAP TO PLAY' : 'PRESS ENTER TO PLAY'}
-        size={SIZE.line}
-        ramp={SPARK}
-        className="mt-[calc(var(--px)*4)]"
-      />
+      <BitmapText size="large">DEMO</BitmapText>
+      <BitmapText variant="spark" className="mt-[calc(var(--px)*4)]">
+        {kind === 'touch' ? 'TAP TO PLAY' : 'PRESS ENTER TO PLAY'}
+      </BitmapText>
     </div>
   );
 };

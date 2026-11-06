@@ -54,7 +54,10 @@ Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
 - **Do** use `neutral` for the bad news and `primary` for the good.
 - **Don't** set a paragraph in it.
 - **Don't** animate it here: slam, drop and sparkle are for the screen that
-  uses it.
+  uses it. Each letter is its own group, `data-slot="bitmap-letter"` with
+  its place in the word as `--i`, so a screen can move them one by one
+  (`[&>[data-slot=bitmap-letter]]:animate-…` with a delay of
+  `calc(var(--i) * 90ms)`).
 
 ## Accessibility
 
