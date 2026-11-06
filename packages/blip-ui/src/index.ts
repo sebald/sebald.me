@@ -22,6 +22,7 @@ export {
   MIN_SCALE,
   NATIVE,
   type Native,
+  TALL_MIN_SCALE,
   backingFor,
   crisp,
   crispScale,
@@ -51,6 +52,7 @@ export {
 // Hooks
 export {
   canFullscreen,
+  fullscreenFits,
   isFullscreen,
   toggleFullscreen,
   useFullscreen,

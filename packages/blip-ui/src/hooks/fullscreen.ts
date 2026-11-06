@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+import { MIN_SCALE, NATIVE, type Native, scaleFor } from '../foundations/scale';
+
 /**
  * The element that goes fullscreen: the one marked `data-fullscreen-root`,
  * around every screen of a game, so moving from one to the next (each
@@ -18,6 +20,15 @@ export const canFullscreen = () =>
   typeof document !== 'undefined' &&
   document.fullscreenEnabled === true &&
   root() !== null;
+
+/**
+ * Whether the game would fit fullscreen on this screen at its smallest
+ * scale (`MIN_SCALE`): a desktop's screen does, a phone's on its side
+ * mostly not
+ */
+export const fullscreenFits = (native: Native = NATIVE) =>
+  typeof screen !== 'undefined' &&
+  scaleFor(screen.width, screen.height, 3, native) >= MIN_SCALE;
 
 export const isFullscreen = () =>
   typeof document !== 'undefined' && document.fullscreenElement !== null;

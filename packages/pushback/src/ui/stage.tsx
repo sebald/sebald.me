@@ -7,6 +7,7 @@ import {
   type StageProps as BlipStageProps,
   TALL_BAR,
   canFullscreen,
+  fullscreenFits,
   px,
   toggleFullscreen,
 } from '@sebald/blip-ui';
@@ -45,16 +46,17 @@ export const Pixels = ({
   </BlipPixels>
 );
 
-/** What a phone held sideways sees: the ask to turn it, or fullscreen */
-const Turned = () => (
+/** Fullscreen, where the browser has it and the screen is big enough */
+const offersFullscreen = () => canFullscreen() && fullscreenFits();
+
+/** The ask instead of the stage, with fullscreen as the way out where it fits */
+const Ask = ({ ask, or }: { ask: string; or: string }) => (
   <>
-    <p className="m-0 text-(--pb-gold)">Turn your phone upright.</p>
+    <p className="m-0 text-(--pb-gold)">{ask}</p>
     <p className="m-0 text-(--pb-muted)">
-      {canFullscreen()
-        ? 'Or have the screen to itself, sideways.'
-        : 'The meeting will wait.'}
+      {offersFullscreen() ? or : 'The meeting will wait.'}
     </p>
-    {canFullscreen() && (
+    {offersFullscreen() && (
       <Button className="mx-auto mt-4 w-fit" onClick={toggleFullscreen}>
         Play fullscreen
       </Button>
@@ -70,10 +72,26 @@ type StageProps = Pick<
 /**
  * The stage every screen sits in: Blip UI's, 320 by 214 at its scale
  * (tall when held upright), in the game's palette, asking a phone on its
- * side to turn upright
+ * side to turn upright and a window too small for the menus to grow
  */
 export const Stage = ({ label = 'Pushback', ...props }: StageProps) => (
-  <BlipStage label={label} style={paletteVars} turned={<Turned />} {...props} />
+  <BlipStage
+    label={label}
+    style={paletteVars}
+    turned={
+      <Ask
+        ask="Turn your phone upright."
+        or="Or have the screen to itself, sideways."
+      />
+    }
+    small={
+      <Ask
+        ask="Make the window bigger to play."
+        or="Or have the screen to itself."
+      />
+    }
+    {...props}
+  />
 );
 
 Stage.Center = BlipStage.Center;

@@ -93,6 +93,19 @@ test.describe('the title', () => {
     await expect(sound).toHaveAttribute('aria-pressed', before!);
   });
 
+  test('a window too small for the menus asks to grow, then plays', async ({
+    page,
+  }) => {
+    // Under the smallest scale (2.25): 700 wide is about 2x
+    await page.setViewportSize({ width: 700, height: 500 });
+    await open(page);
+    await expect(
+      screen(page).getByText('Make the window bigger to play.'),
+    ).toBeVisible();
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await expect(screen(page).getByText('Press Enter to play')).toBeVisible();
+  });
+
   test('left alone, it plays the demo; a key brings the menu back', async ({
     page,
   }) => {

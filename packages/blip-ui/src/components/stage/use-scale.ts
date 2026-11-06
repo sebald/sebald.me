@@ -65,6 +65,7 @@ export const useScale = (
     tall: false,
     rows: height,
     turn: false,
+    small: false,
     crisp: false,
     backing: BACKING,
   });
@@ -85,7 +86,13 @@ export const useScale = (
           backing: backingFor(scale, dpr),
         });
       if (fixed) {
-        settle(fixed, { crop: 0, tall: false, rows: height, turn: false });
+        settle(fixed, {
+          crop: 0,
+          tall: false,
+          rows: height,
+          turn: false,
+          small: false,
+        });
         return;
       }
       if (upright.matches) {
@@ -101,6 +108,7 @@ export const useScale = (
           tall: true,
           rows: tall.rows,
           turn: false,
+          small: false,
         });
         return;
       }
@@ -128,6 +136,7 @@ export const useScale = (
         tall: false,
         rows: height,
         turn: sideways.matches && !full,
+        small: fit.scale < MIN_SCALE,
       });
     };
     // A media query that stops matching when the ratio changes; it fires

@@ -70,8 +70,8 @@ describe('scaleFor', () => {
     assert.equal(crispScale(2.9, 1), 2.9);
     assert.equal(crispScale(3, 2), 3);
     // Never under the minimum: the fraction stays
-    assert.equal(crispScale(1.4, 2), 1.4);
-    assert.equal(crispScale(1.6, 2), 1.5);
+    assert.equal(crispScale(2.4, 2), 2.4);
+    assert.equal(crispScale(2.6, 2), 2.5);
     assert.deepEqual(fitFor(900, 1000, 3, 2), { scale: 2.5, crop: 0 });
     const short = fitFor(1200, 400, 3, 2);
     assert.equal(short.scale, 2.5);

@@ -20,6 +20,7 @@ through `usePixels()`.
 1. **Section**, `width` by `height` times the scale, in the ground colour
 2. **Layer**, the full grid inside it: moved up by `crop`, down by `lift`
 3. **Turned screen**, instead of all of it on a phone held sideways (`turned`)
+   or in a window too small for the screens' words (`small`)
 
 ## Fitting the viewport
 
@@ -29,11 +30,12 @@ others pin the scale so they do not fight Storybook's frame):
 | Window                  | Stage                                                                      |
 | ----------------------- | -------------------------------------------------------------------------- |
 | Wide                    | 3x where it fits with a 24 px gutter, else what the width or height allows |
-| Dense screen            | The scale snaps to whole device pixels (`crispScale`), never under 1.1x    |
+| Dense screen            | The scale snaps to whole device pixels (`crispScale`), never under 2.25x   |
 | Short                   | `crop="fit"` takes up to 60 rows of ceiling off the top before it shrinks  |
 | Held upright (portrait) | Tall: the window's width, the height of the small viewport, `rows` rows    |
 | Fullscreen              | No gutter, all of it fits                                                  |
 | Phone on its side       | `turned`, if given, else the stage                                         |
+| Too small (under 2.25x) | `small`, if given, else the stage at 2.25x, wider than the window          |
 
 The pure maths is `scaleFor`, `fitFor`, `tallFor`, `crispScale`, `crisp`,
 `backingFor` and `fontSizeFor` in `foundations/scale`, all taking the native
@@ -42,15 +44,16 @@ size.
 ## What it provides
 
 `usePixels()` gives `scale`, `tall`, `rows`, `crop`, `crisp`, `backing` (the
-scale to draw a canvas at) and `turn`. The stage sets `--px`, `--bui-bar`
+scale to draw a canvas at), `turn` and `small`. The stage sets `--px`, `--bui-bar`
 (the tall bar's height, `bar` CSS pixels, else 0) and the font size, and
 `data-layout="tall"` for the `tall:` variant.
 
 ## Usage
 
 - **Do** give a game one stage, with every screen inside.
-- **Do** fill `turned` with the ask to turn the phone, and a fullscreen
-  button if the game has one.
+- **Do** fill `turned` with the ask to turn the phone, and `small` with
+  the ask for a bigger window, each with a fullscreen button if the game
+  has one and the screen fits it (`fullscreenFits()`).
 - **Do** use `lift` on the tall stage to centre a group in the rows it does
   not need.
 - **Don't** set sizes in CSS pixels inside it, except for touch targets.

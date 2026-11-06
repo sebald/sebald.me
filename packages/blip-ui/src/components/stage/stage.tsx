@@ -69,6 +69,14 @@ export interface StageProps extends PropsWithChildren {
    * it the stage is shown whatever the orientation
    */
   turned?: ReactNode;
+  /**
+   * What a window too small for the screens sees instead of the stage
+   * (under `MIN_SCALE`, about 770 px wide): the game's ask for a bigger
+   * window, and a button for fullscreen if the screen is big enough
+   * (`fullscreenFits`). Without it the stage stays at `MIN_SCALE`, wider
+   * than the window
+   */
+  small?: ReactNode;
 }
 
 /**
@@ -92,12 +100,13 @@ export const Stage = ({
   lift: liftProp = 0,
   bar = TALL_BAR,
   turned,
+  small: smallScreen,
 }: StageProps) => {
   const measured = useScale(fixed, {
     width: nativeWidth,
     height: nativeHeight,
   });
-  const { scale, tall, rows, turn } = measured;
+  const { scale, tall, rows, turn, small } = measured;
   const crop = cropProp === 'fit' ? measured.crop : cropProp;
   const lift = tall ? liftProp : 0;
   // The section, for the focus and for what renders into the stage
@@ -116,7 +125,15 @@ export const Stage = ({
     const active = document.activeElement;
     if (!active || !root?.contains(active)) root?.focus();
   };
-  if (turn && !fixed && turned) {
+  // A phone on its side, or a window too small: the game's ask instead
+  const ask = fixed
+    ? null
+    : turn && turned
+      ? turned
+      : small && smallScreen
+        ? smallScreen
+        : null;
+  if (ask) {
     return (
       <section
         data-stage
@@ -124,7 +141,7 @@ export const Stage = ({
         className={stage.turned()}
         style={{ ...styleProp, ['--px' as string]: '2px' }}
       >
-        {turned}
+        {ask}
       </section>
     );
   }

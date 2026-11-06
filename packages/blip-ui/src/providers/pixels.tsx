@@ -24,6 +24,11 @@ export interface PixelsValue {
   backing: number;
   /** A phone on its side, too short to play: the game asks to turn it */
   turn: boolean;
+  /**
+   * A window too small for the screens' words (under `MIN_SCALE`): the
+   * game asks for a bigger one
+   */
+  small: boolean;
 }
 
 /** What a piece outside any stage sees: 3x, wide, nothing cropped */
@@ -35,6 +40,7 @@ export const DEFAULT_PIXELS: PixelsValue = {
   crisp: true,
   backing: BACKING,
   turn: false,
+  small: false,
 };
 
 /** The context `Pixels` and `Stage` provide; read it with `usePixels` */
