@@ -194,3 +194,15 @@ and the game both read (the title fits the room's picture inside the
 padded render to the stage; a test checks every `scene-1x.webp`
 against it). The corner office and the studio take 0.76, their desks, chairs and doors came the largest. A fresh render that fits the cast gets the
 factor set to 1.
+
+## The link preview
+
+```bash
+node .claude/skills/pixel-sprite/scripts/og.mjs [--dim 0.62]
+```
+
+`og.mjs` writes `/lab/pushback`'s `opengraph-image.png` and
+`twitter-image.png` (1200 by 630): the office's poster cropped to its
+room (`roomBox`, from `rooms.json`), dimmed under a vignette, the logo
+sheet on top at 4x, nearest. Run it again whenever the logo or the
+office changes, and look at the result before committing it.
