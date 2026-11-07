@@ -7,6 +7,7 @@ import {
   ScreenTitle,
   Stamp,
   stampSize,
+  prefersReducedMotion,
   useClock,
   useKeys,
   useScale,
@@ -137,8 +138,9 @@ export const SelectScreen = ({
   const role = ROLES[cursor.column]!;
   const look: Look = cursor.row === 0 ? 'a' : 'b';
   const sheet = PLAYER_SHEETS[role][look];
-  // The frame around the chosen face blinks, four times a second
-  const clock = useClock();
+  // The frame around the chosen face blinks, four times a second; under
+  // reduced motion it stays lit (the clock rests at zero)
+  const clock = useClock(!prefersReducedMotion());
   const lit = Math.floor(clock / 250) % 2 === 0;
 
   const move = (dc: number, dr: number) => {
@@ -284,6 +286,7 @@ export const SelectScreen = ({
           sheet={sheet}
           x={place.column.x + (place.column.width - LAYOUT.cell.width) / 2}
           feet={place.grid.y + place.feet}
+          still={prefersReducedMotion()}
         />
       )}
       <div
