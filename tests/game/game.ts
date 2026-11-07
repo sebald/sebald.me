@@ -4,12 +4,19 @@ import {
   expect,
   test as base,
 } from '@playwright/test';
+import { type Mode, bossIndex } from '@sebald/pushback/lib/characters';
 import {
   BOSS_PAIRS,
   CLOSERS,
   PAIRS,
   pairById,
 } from '@sebald/pushback/lib/lines';
+import {
+  type Save,
+  SAVE_KEY,
+  emptySave,
+  startRun,
+} from '@sebald/pushback/lib/save';
 
 /**
  * The game played through its screens, by what a player and a screen
@@ -133,6 +140,68 @@ export const open = async (page: Page) => {
   await page.goto('/lab/pushback');
   await settle(page, 500);
   await expect(screen(page)).toHaveAccessibleName('Pushback, title');
+};
+
+/**
+ * A returning player's save, built with the game's own functions: a run
+ * as the first role and look, drawn at the fixed time (so the same
+ * colleagues every run), with its first `beaten` colleagues beaten and,
+ * with `glossary`, every pair collected (the Stakeholder asks for
+ * counters from every pool)
+ */
+export const saveWith = ({
+  mode = 'easy',
+  beaten = 0,
+  flawless = false,
+  glossary = false,
+}: {
+  mode?: Mode;
+  beaten?: number | 'colleagues';
+  flawless?: boolean;
+  glossary?: boolean;
+} = {}): Save => {
+  const save = startRun(emptySave(mode), 'pm', 'a', START.getTime());
+  const run = save.run!;
+  const count = beaten === 'colleagues' ? bossIndex(run.run) : beaten;
+  const all = PAIRS.map(pair => pair.id);
+  return {
+    ...save,
+    run: {
+      ...run,
+      beaten: Object.fromEntries(
+        Array.from({ length: count }, (_, i) => [i, { flawless, score: 1000 }]),
+      ),
+      attempts: count,
+      collected: glossary
+        ? [...new Set([...run.collected, ...all])]
+        : run.collected,
+    },
+    glossary: glossary ? all : [],
+  };
+};
+
+/**
+ * Open the game on a save, as a returning player would: it is in
+ * storage before the page's first script, written once, so what the
+ * test plays from there is saved as it would be
+ */
+export const openWith = async (page: Page, save: Save) => {
+  await page.addInitScript(
+    ([key, value]) => {
+      if (sessionStorage.getItem('pushback-test-save')) return;
+      sessionStorage.setItem('pushback-test-save', '1');
+      localStorage.setItem(key, value);
+    },
+    [SAVE_KEY, JSON.stringify(save)] as const,
+  );
+  await open(page);
+};
+
+/** From the title's menu, the run in play picked up: on its roster */
+export const toContinue = async (page: Page) => {
+  await press(page, 'Enter');
+  await choose(page, /^Continue/);
+  await expect(screen(page)).toHaveAccessibleName('Pushback, roster');
 };
 
 /** What the live region says now (the duel narrates every step in it) */

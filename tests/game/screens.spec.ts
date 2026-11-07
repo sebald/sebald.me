@@ -5,11 +5,14 @@ import {
   expect,
   holdClock,
   open,
+  openWith,
   playDuel,
   press,
   settle,
   screen,
+  saveWith,
   test,
+  toContinue,
   toMenu,
   toRoster,
 } from './game';
@@ -95,5 +98,19 @@ test.describe('screens', { tag: '@screens' }, () => {
     await choose(page, 'Erase save');
     await expect(page.getByRole('alertdialog')).toBeVisible();
     await shot(page, 'options-erase');
+  });
+
+  test('the end of a run: the Stakeholder and the result card', async ({
+    page,
+  }) => {
+    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
+    await toContinue(page);
+    await shot(page, 'roster-boss-open');
+    await press(page, 'Enter');
+    await expect(screen(page)).toHaveAccessibleName(/Stakeholder/);
+    await shot(page, 'duel-boss');
+    await playDuel(page);
+    await expect(screen(page)).toHaveAccessibleName('Pushback, result');
+    await shot(page, 'result');
   });
 });

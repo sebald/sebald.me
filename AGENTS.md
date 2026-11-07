@@ -39,6 +39,7 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - No screenshots, so it runs on macOS too. It reads only what a player and a screen reader get: the screen's region (`Pushback, …`), roles and names, `aria-current` and the live region, never a class, so it holds while the UI underneath is rebuilt
 - Repeatable: the clock stands still (a run's and a duel's seed is the time) and `Math.random` is seeded; a duel is won with the counters from the game's own lines (`playDuel`), not by luck
 - Every test fails on an error in the console
+- A test starts deep in a run by opening the game on a save (`openWith(page, saveWith({ beaten, mode, glossary }))`): written to storage before the page loads, as a returning player's, built with the game's own save functions. No test-only code in the game
 - `screens.spec.ts` (`@screens`): a screenshot of each screen's stage, desktop and phone, baselines in `tests/game/__screenshots__`. Linux only (the Playwright image or CI); on a Mac they are skipped, `GAME_SCREENS=1` runs them to try a change, never to commit its PNGs. The clock is held (`holdClock`) and moves only by `press`/`settle`, which wait for the page to rest first, so animations show the same frame every run. `pnpm vrt:update:ci` regenerates them with the site's and Blip UI's
 - The "Game" workflow runs it on pull requests that touch the game, Blip UI (the screens are built from it) or the suite, and by hand (`workflow_dispatch`)
 
