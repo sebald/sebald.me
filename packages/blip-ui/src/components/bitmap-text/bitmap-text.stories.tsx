@@ -15,7 +15,7 @@ const meta = {
     },
     size: {
       control: 'inline-radio',
-      options: ['default', 'medium', 'large'],
+      options: ['small', 'default', 'medium', 'large'],
       table: { defaultValue: { summary: 'default' } },
     },
   },
@@ -33,9 +33,9 @@ const VARIANTS = ['primary', 'neutral', 'spark'] as const;
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[auto_repeat(3,auto)] items-center gap-x-8 gap-y-4">
+    <div className="grid w-fit grid-cols-[auto_repeat(4,auto)] items-center gap-x-8 gap-y-4">
       <span />
-      {['default', 'medium', 'large'].map(col => (
+      {['small', 'default', 'medium', 'large'].map(col => (
         <span key={col} className="text-[0.75em] text-(--bui-dim)">
           {col}
         </span>
@@ -44,6 +44,9 @@ export const Overview: Story = {
         <span key={variant} className="text-[0.75em] text-(--bui-dim)">
           {variant}
         </span>,
+        <BitmapText key={`${variant}-s`} variant={variant} size="small">
+          YOU WIN
+        </BitmapText>,
         <BitmapText key={`${variant}-d`} variant={variant}>
           YOU WIN
         </BitmapText>,

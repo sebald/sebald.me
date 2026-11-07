@@ -13,6 +13,7 @@ import {
   useAnyKey,
   useIdle,
   useInputKind,
+  usePixels,
   useScale,
 } from '@sebald/blip-ui';
 import NextImage from 'next/image';
@@ -98,6 +99,24 @@ const HowTo = ({ legend }: { legend: ReactNode }) => (
     </Window>
   </div>
 );
+
+/**
+ * The call to play: the kit's call drawn in the bitmap letters, the
+ * words for a screen reader beside them. A letter pixel is one stage
+ * pixel on the wide stage, two held upright, where the stage pixel is
+ * small and one would not read.
+ */
+const Call = ({ children }: { children: string }) => {
+  const { tall } = usePixels();
+  return (
+    <Text variant="call">
+      <BitmapText size={tall ? 'default' : 'small'}>
+        {children.toUpperCase()}
+      </BitmapText>
+      <span className="sr-only">{children}</span>
+    </Text>
+  );
+};
 
 /** The logo's native size: the render cut on its pixel grid, keyed and trimmed */
 const LOGO_NATIVE = { width: 226, height: 77 } as const;
@@ -345,9 +364,8 @@ export const TitleScreen = ({
           />
         </Window>
       ) : (
-        /* The arcade call to play, under the logo: the kit's call (a full
-           blink, nothing between on and off) drawn in the bitmap letters,
-           the words for a screen reader beside them */
+        /* The arcade call to play, under the logo: a full blink, nothing
+           between on and off */
         <p
           className="absolute inset-x-0 m-0 flex items-center justify-center [--blink-low:0]"
           style={{
@@ -355,10 +373,7 @@ export const TitleScreen = ({
             height: px(CALL.height),
           }}
         >
-          <Text variant="call">
-            <BitmapText>{call.toUpperCase()}</BitmapText>
-            <span className="sr-only">{call}</span>
-          </Text>
+          <Call>{call}</Call>
         </p>
       )}
       {!reading && !setting && (
