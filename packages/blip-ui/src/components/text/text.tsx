@@ -1,6 +1,9 @@
+'use client';
+
 import type { CSSProperties, PropsWithChildren } from 'react';
 
 import { px } from '../../foundations/pixel';
+import { usePixels } from '../../providers/pixels';
 import { BitmapText } from '../bitmap-text/bitmap-text';
 import { text as styles } from './text.styles';
 
@@ -47,24 +50,28 @@ export interface ScreenTitleProps {
 /**
  * A menu screen's title, centred along the stage's top in the bitmap
  * letters (`BitmapText`), in the primary colour, with an optional line
- * under it. The heading itself is there for assistive technology; the
- * letters are drawn over it.
+ * under it; on the tall stage, whose stage pixel is small, the letters
+ * are `medium`. The heading itself is there for assistive technology;
+ * the letters are drawn over it.
  */
 export const ScreenTitle = ({
   blurb,
   className,
   children,
-}: ScreenTitleProps) => (
-  <header
-    data-slot="screen-title"
-    className={styles.title({ className })}
-    style={{ top: px(TITLE_TOP) }}
-  >
-    <h2 className={styles.titleText()}>{children}</h2>
-    <BitmapText>{children}</BitmapText>
-    {blurb && <Text className="text-[0.85em]">{blurb}</Text>}
-  </header>
-);
+}: ScreenTitleProps) => {
+  const { tall } = usePixels();
+  return (
+    <header
+      data-slot="screen-title"
+      className={styles.title({ className })}
+      style={{ top: px(TITLE_TOP) }}
+    >
+      <h2 className={styles.titleText()}>{children}</h2>
+      <BitmapText size={tall ? 'medium' : 'default'}>{children}</BitmapText>
+      {blurb && <Text className="text-[0.85em]">{blurb}</Text>}
+    </header>
+  );
+};
 
 export interface TextProps extends BaseProps {
   /**

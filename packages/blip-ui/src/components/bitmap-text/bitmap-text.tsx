@@ -74,14 +74,15 @@ export interface BitmapTextProps extends Omit<
   variant?: NonNullable<Variants['variant']>;
   /**
    * How big: `default` for a line (two stage pixels a letter pixel),
-   * `large` for the word a screen is about (five)
+   * `medium` for a screen's title on the tall stage, where the stage
+   * pixel is small (three), `large` for the word a screen is about (five)
    * @default 'default'
    */
   size?: keyof typeof SIZES;
 }
 
 /** Stage pixels a letter pixel, by size */
-const SIZES = { default: 2, large: 5 } as const;
+const SIZES = { default: 2, medium: 3, large: 5 } as const;
 
 /** Room round the word: its ink line (one pixel) all round, its drop (two) below and right */
 const INK = 1;
@@ -89,7 +90,7 @@ const ROOM = INK * 2 + 2;
 
 /**
  * Text in a five by seven pixel font, the way the logo's letters are
- * drawn: each letter pixel two or five stage pixels, an ink line round it,
+ * drawn: each letter pixel two, three or five stage pixels, an ink line round it,
  * a hard drop down and to the right, the top row lit and the
  * bottom two shaded. Each letter is a group (`data-slot="bitmap-letter"`)
  * with its place in `--i`, to animate them one by one. Decorative
