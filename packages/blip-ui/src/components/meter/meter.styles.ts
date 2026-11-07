@@ -7,8 +7,14 @@ import { cva } from '../../utils/styles';
  */
 export const meter = {
   root: cva({
-    base: 'inline-flex items-center gap-[calc(var(--bui-px)*2)] p-(--bui-px) align-middle',
+    base: 'inline-flex items-center p-(--bui-px) align-middle',
     variants: {
+      size: {
+        /** Cells 4 wide, two pixels apart */
+        default: 'gap-[calc(var(--bui-px)*2)]',
+        /** Cells 3 wide, their ink lines shared: a long pool on a phone */
+        compact: 'gap-(--bui-px)',
+      },
       variant: {
         /** The player's side, the main pool */
         primary:
@@ -18,7 +24,7 @@ export const meter = {
           '[--m-light:var(--bui-secondary-light)] [--m-mid:var(--bui-secondary)] [--m-shade:var(--bui-secondary-shade)]',
       },
     },
-    defaultVariants: { variant: 'primary' },
+    defaultVariants: { variant: 'primary', size: 'default' },
   }),
   // An ink line a pixel wide around every cell
   cell: cva({

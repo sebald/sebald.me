@@ -10,6 +10,7 @@ import {
   PickerItem,
   Text,
   useKeys,
+  usePixels,
   Window,
 } from '@sebald/blip-ui';
 import { useMemo, useState } from 'react';
@@ -52,6 +53,22 @@ const PORTRAIT_SCALE = 3;
  * verdict heads the numbers in the duel end's letters. Copy puts the
  * text card on the clipboard.
  */
+/**
+ * A pool's meter, compact held upright: twenty cells at a phone's
+ * floor are wider than the window. The count follows it in words.
+ */
+const PoolMeter = ({ value, max }: { value: number; max: number }) => {
+  const { tall } = usePixels();
+  return (
+    <Meter
+      aria-hidden
+      value={value}
+      max={max}
+      size={tall ? 'compact' : 'default'}
+    />
+  );
+};
+
 export const ResultScreen = ({
   run,
   glossary,
@@ -147,26 +164,26 @@ export const ResultScreen = ({
         </div>
 
         <div className="mt-[calc(var(--px)*12)] px-[calc(var(--px)*2)]">
-          <dl className="m-0 grid grid-cols-[auto_auto_1fr_auto] items-center gap-x-[calc(var(--px)*5)] gap-y-[calc(var(--px)*2)]">
+          {/* Held upright, a pool is its name and count, then its meter
+              across the window, then what was missed */}
+          <dl className="m-0 grid grid-cols-[auto_auto_1fr_auto] items-center gap-x-[calc(var(--px)*5)] gap-y-[calc(var(--px)*2)] tall:grid-flow-row-dense tall:grid-cols-[1fr_auto]">
             <div className="contents">
-              <dt className="col-span-2 mb-[calc(var(--px)*1)] font-semibold text-(--pb-heading)">
+              <dt className="col-span-2 mb-[calc(var(--px)*1)] font-semibold text-(--pb-heading) tall:col-span-1">
                 Glossary
               </dt>
-              <dd className="col-span-2 m-0 mb-[calc(var(--px)*1)] font-semibold text-(--pb-heading) tabular-nums">
+              <dd className="col-span-2 m-0 mb-[calc(var(--px)*1)] font-semibold text-(--pb-heading) tabular-nums tall:col-span-1">
                 {model.glossary.collected}/{model.glossary.total}
               </dd>
             </div>
             {model.pools.map(pool => (
               <div key={pool.role} className="contents">
                 <dt className="min-w-[8ch]">{ROLE_LABELS[pool.role]}</dt>
-                <dd className="m-0 flex">
-                  {/* The count follows it in words */}
-                  <Meter aria-hidden value={pool.collected} max={pool.total} />
+                <dd className="m-0 flex tall:col-span-full">
+                  <PoolMeter value={pool.collected} max={pool.total} />
                 </dd>
                 <dd className="m-0 text-(--pb-heading) tabular-nums">
                   {pool.collected}/{pool.total}
                 </dd>
-                {/* Held upright, under the row: four columns do not fit */}
                 <dd className="m-0 text-right tall:col-span-full tall:-mt-[calc(var(--px)*2)]">
                   <Text className="text-[0.85em]">
                     {pool.missed === 0

@@ -9,6 +9,7 @@ const meta = {
     value: 3,
     max: 5,
     variant: 'primary',
+    size: 'default',
     blink: false,
     'aria-label': 'Momentum',
   },
@@ -19,6 +20,11 @@ const meta = {
       control: 'inline-radio',
       options: ['primary', 'secondary'],
       table: { defaultValue: { summary: 'primary' } },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['default', 'compact'],
+      table: { defaultValue: { summary: 'default' } },
     },
     blink: {
       control: 'boolean',
@@ -34,6 +40,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {};
 
 const VARIANTS = ['primary', 'secondary'] as const;
+const SIZES = ['default', 'compact'] as const;
 const STATES = [
   { name: 'empty', value: 0, blink: false },
   { name: 'partial', value: 3, blink: false },
@@ -41,7 +48,7 @@ const STATES = [
   { name: 'blinking', value: 5, blink: true },
 ] as const;
 
-/** Every variant in every state, side by side */
+/** Every variant and size in every state, side by side */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -52,21 +59,27 @@ export const Overview: Story = {
           {state.name}
         </span>
       ))}
-      {VARIANTS.flatMap(variant => [
-        <span key={variant} className="text-[0.75em] text-(--bui-dim)">
-          {variant}
-        </span>,
-        ...STATES.map(state => (
-          <Meter
-            key={`${variant}-${state.name}`}
-            aria-label={`${variant} ${state.name}`}
-            variant={variant}
-            max={5}
-            value={state.value}
-            blink={state.blink}
-          />
-        )),
-      ])}
+      {SIZES.flatMap(size =>
+        VARIANTS.flatMap(variant => [
+          <span
+            key={`${size}-${variant}`}
+            className="text-[0.75em] text-(--bui-dim)"
+          >
+            {size === 'default' ? variant : `${variant}, ${size}`}
+          </span>,
+          ...STATES.map(state => (
+            <Meter
+              key={`${size}-${variant}-${state.name}`}
+              aria-label={`${variant} ${size} ${state.name}`}
+              variant={variant}
+              size={size}
+              max={5}
+              value={state.value}
+              blink={state.blink}
+            />
+          )),
+        ]),
+      )}
     </div>
   ),
 };

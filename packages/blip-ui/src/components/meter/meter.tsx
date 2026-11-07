@@ -6,8 +6,11 @@ import { meter } from './meter.styles';
 
 type Variants = VariantProps<typeof meter.root>;
 
-/** One cell, in stage pixels */
-const CELL = { width: 4, height: 6 } as const;
+/** One cell by size, in stage pixels */
+const CELL = {
+  default: { width: 4, height: 6 },
+  compact: { width: 3, height: 6 },
+} as const;
 
 export interface MeterProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
@@ -22,6 +25,11 @@ export interface MeterProps extends Omit<
    * @default 'primary'
    */
   variant?: NonNullable<Variants['variant']>;
+  /**
+   * The cells' size: `compact` fits a long pool where room is short
+   * @default 'default'
+   */
+  size?: NonNullable<Variants['size']>;
   /**
    * Blink the lit cells, between their colour and its light, at the
    * arcade rhythm: a full pool asking to be used. Steady under reduced
@@ -41,6 +49,7 @@ export const Meter = ({
   value,
   max,
   variant,
+  size = 'default',
   blink = false,
   className,
   ...props
@@ -56,7 +65,7 @@ export const Meter = ({
       aria-valuemax={max}
       aria-valuenow={lit}
       aria-valuetext={`${lit} of ${max}`}
-      className={meter.root({ variant, className })}
+      className={meter.root({ variant, size, className })}
       {...props}
     >
       {Array.from({ length: max }, (_, i) => {
@@ -69,8 +78,8 @@ export const Meter = ({
               state: on ? 'lit' : 'empty',
             })}
             style={{
-              width: px(CELL.width, FLOOR),
-              height: px(CELL.height, FLOOR),
+              width: px(CELL[size].width, FLOOR),
+              height: px(CELL[size].height, FLOOR),
             }}
           >
             {!on && <span className={meter.dots()} />}
