@@ -14,7 +14,7 @@ interface DemoLabelProps {
 /**
  * The attract mode's label, the way an arcade cabinet marks its demo, in
  * the round call's pixel letters: `DEMO` in gold at the call's size and
- * the way in under it at the flawless line's, white, blinking together
+ * the way in under it at the flawless line's size, gold too, blinking together
  * and slower than the title's call to play, centred over the room
  */
 export const DemoLabel = ({ y, className }: DemoLabelProps) => {
@@ -29,7 +29,7 @@ export const DemoLabel = ({ y, className }: DemoLabelProps) => {
       style={{ top: px(y), animationDuration: '1.6s' }}
     >
       <BitmapText size="large">DEMO</BitmapText>
-      <BitmapText variant="spark" className="mt-[calc(var(--px)*4)]">
+      <BitmapText className="mt-[calc(var(--px)*4)]">
         {kind === 'touch' ? 'TAP TO PLAY' : 'PRESS ENTER TO PLAY'}
       </BitmapText>
     </div>

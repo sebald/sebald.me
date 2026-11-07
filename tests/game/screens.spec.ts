@@ -42,6 +42,14 @@ test.describe('screens', { tag: '@screens' }, () => {
     await shot(page, 'title-options');
   });
 
+  test('the demo, left alone on the title', async ({ page }) => {
+    await toMenu(page);
+    await page.clock.runFor(21_000);
+    await settle(page, 500);
+    await expect(screen(page)).toHaveAccessibleName(/duel against/);
+    await shot(page, 'demo');
+  });
+
   test('a run: the role, the roster, a duel and its windows', async ({
     page,
   }) => {
