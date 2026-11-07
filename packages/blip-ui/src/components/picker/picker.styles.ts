@@ -81,6 +81,6 @@ export const picker = {
   thumb: cva({ base: 'absolute inset-x-0 bg-(--bui-neutral)' }),
   /** The description box beside the menu's window */
   note: cva({
-    base: 'pointer-events-none absolute z-20 text-[0.85em] leading-[1.35] text-balance',
+    base: 'pointer-events-none absolute z-(--bui-layer-note) text-[0.85em] leading-[1.35] text-balance',
   }),
 };

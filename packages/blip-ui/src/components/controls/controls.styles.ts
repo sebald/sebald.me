@@ -12,14 +12,14 @@ export const controls = {
       layout: {
         /** The tall stage's bar along the bottom, `--bui-bar` tall */
         bar: [
-          'absolute inset-x-0 bottom-0 z-30 h-(--bui-bar) px-2',
+          'absolute inset-x-0 bottom-0 z-(--bui-layer-controls) h-(--bui-bar) px-2',
           'border-t border-(--bui-frame-dim) bg-(--bui-ground)',
           // At the bar's right the label comes first, the icon at the edge
           '[&>:not([slot=leave])]:flex-row-reverse',
         ],
         /** Along the wide stage's top, the buttons in its corners; the row between lets taps through */
         corner: [
-          'pointer-events-none absolute inset-x-[calc(var(--px)*5)] top-[calc(var(--px)*5)] z-30',
+          'pointer-events-none absolute inset-x-[calc(var(--px)*5)] top-[calc(var(--px)*5)] z-(--bui-layer-controls)',
           '[&>*]:pointer-events-auto',
         ],
       },

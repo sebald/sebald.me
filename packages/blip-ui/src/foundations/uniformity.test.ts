@@ -141,6 +141,23 @@ describe('the kit’s styles', () => {
       'a disabled state is bui-disabled, not an opacity of its own',
     );
   });
+
+  it('stack the layers over a screen by the tokens, --bui-layer-*', () => {
+    // `z-1` lifts a part over its neighbours inside it (the open tab)
+    const off = classes.filter(c => {
+      const value = /^-?z-(.+)$/.exec(c.utility)?.[1];
+      return (
+        value !== undefined &&
+        value !== '1' &&
+        !/^\(--bui-layer-[a-z]+\)$/.test(value)
+      );
+    });
+    assert.deepEqual(
+      off.map(c => `${c.file}: ${c.token}`),
+      [],
+      'a layer over the screen is z-(--bui-layer-note|controls|dialog)',
+    );
+  });
 });
 
 describe('the kit’s components', () => {

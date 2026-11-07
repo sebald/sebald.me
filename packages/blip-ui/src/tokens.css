@@ -91,6 +91,13 @@
      Set again on every stage below, where --px is. */
   --bui-px: max(var(--px, 3px), var(--bui-min-px));
 
+  /* The layers over a screen, bottom to top: a picker's note over the
+     rows, the controls over the screen, a dialog and its scrim over the
+     controls. A part's own order inside it (the open tab) stays local */
+  --bui-layer-note: 20;
+  --bui-layer-controls: 30;
+  --bui-layer-dialog: 40;
+
   /* Held upright, the bar of controls along the bottom (0 elsewhere) */
   --bui-bar: 0px;
 
