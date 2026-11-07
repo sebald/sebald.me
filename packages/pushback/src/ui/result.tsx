@@ -110,8 +110,10 @@ export const ResultScreen = ({
           bottom: `calc(var(--bui-bar) + ${px(panel.x)})`,
         }}
       >
-        <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)] tall:flex-col tall:gap-[calc(var(--px)*6)]">
-          <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)]">
+        {/* Held upright, the portrait beside the verdict and the score, the
+            ledger under both across the window */}
+        <div className="flex gap-[calc(var(--px)*10)] px-[calc(var(--px)*2)] pt-[calc(var(--px)*2)] tall:grid tall:grid-cols-[auto_1fr] tall:gap-x-[calc(var(--px)*8)] tall:gap-y-[calc(var(--px)*5)]">
+          <div className="grid shrink-0 content-start justify-items-center gap-[calc(var(--px)*3)] tall:row-span-2">
             <span
               className="block bg-(--pb-frame-inner)"
               style={{
@@ -128,7 +130,7 @@ export const ResultScreen = ({
               <Text>{ROLE_LABELS[run.role]}</Text>
             </div>
           </div>
-          <div className="grid min-w-0 flex-1 content-start gap-[calc(var(--px)*5)]">
+          <div className="grid min-w-0 flex-1 content-start gap-[calc(var(--px)*5)] tall:contents">
             <div className="grid gap-[calc(var(--px)*1)]">
               <Heading
                 className={
@@ -153,7 +155,7 @@ export const ResultScreen = ({
                 {MODE_LABELS[model.mode]} ×{MODES[model.mode].rules.score}
               </span>
             </div>
-            <Ledger>
+            <Ledger className="tall:col-span-full">
               {model.rows.map(([label, value], i) => (
                 <LedgerRow key={i} label={label}>
                   {value}
