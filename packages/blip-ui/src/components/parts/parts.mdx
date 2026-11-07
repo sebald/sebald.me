@@ -1,0 +1,62 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as PartsStories from './parts.stories';
+
+<Meta of={PartsStories} />
+
+# Parts
+
+`Title`, `Content` and `Actions`: the parts that recur in the kit's
+containers, written the same in each. A `Window`, a tab's panel and a
+`Dialog` place them; a container that has to wire them (a dialog's title
+names it) tells them how.
+
+<Canvas of={PartsStories.Default} />
+<Controls of={PartsStories.Default} />
+
+```tsx
+<Dialog open={open} onOpenChange={setOpen}>
+  <Title>Leave the duel?</Title>
+  <Content>
+    <Text>The round so far is lost.</Text>
+  </Content>
+  <Actions>
+    <Button variant="secondary">Stay</Button>
+    <Button>Leave</Button>
+  </Actions>
+</Dialog>
+```
+
+## Anatomy
+
+1. **Title**, what names the container: a heading, or in a dialog the
+   dialog's name
+2. **Content**, what it says: a line or two, a list. In a dialog it
+   describes it
+3. **Actions**, what can be done: a `Picker` across the width, or buttons
+   side by side
+
+Each marks itself (`data-slot="title"`, `"content"`, `"actions"`) and
+places nothing. A window's body puts room under a title and above the
+actions, a dialog centres its actions, and a `Legend` after them goes
+along the bottom edge.
+
+<Canvas of={PartsStories.Overview} />
+
+## Usage
+
+- **Do** use them in the order they are read: title, content, actions.
+- **Do** leave out what a container doesn't need; none is required, but
+  a dialog needs its title to have a name.
+- **Do** use `Heading` for a heading inside the content (a pool's name):
+  a `Title` in a `Content` is only a heading, never the container's name.
+- **Don't** add a `WindowTitle` or `DialogActions` of your own: a new
+  container provides `PartsContext` (what the parts can't know) and
+  places them by their slot.
+
+## Accessibility
+
+- In a `Dialog`, the title is its accessible name (`aria-labelledby`)
+  and the content its description (`aria-describedby`)
+- Elsewhere the title is an `h2`, so the
+  screen's outline stays right

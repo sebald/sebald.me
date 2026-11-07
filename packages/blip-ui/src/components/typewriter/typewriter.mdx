@@ -1,0 +1,49 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TypewriterStories from './typewriter.stories';
+
+<Meta of={TypewriterStories} />
+
+# Typewriter
+
+A line typing itself out, a few characters a step, the way a game's
+dialogue does. Use it for a line someone says: the opponent's phrase, the
+player's reply. It is controlled: you own the clock and pass how many
+characters are `typed`.
+
+<Canvas of={TypewriterStories.Default} />
+<Controls of={TypewriterStories.Default} />
+
+## Anatomy
+
+1. **Typed**, the characters so far
+2. **Rest**, the line still to come, unseen but holding its room, so the
+   text never rewraps or grows its box as it types
+
+<Canvas of={TypewriterStories.Overview} />
+
+## Usage
+
+- **Do** count `typed` from the same clock that decides when the line is
+  done, so skipping and moving on stay in step.
+- **Do** let a press or a tap skip the typing: pass the whole line.
+- **Do** pass the whole line under reduced motion. The kit does not
+  decide it for you, since your clock decides when the line is over.
+- **Don't** use it for menus or text the player has to act on. Those
+  show at once.
+
+<Canvas of={TypewriterStories.Running} />
+
+## Sound
+
+With `sound`, the typewriter plays `type` through `useFeedback()` each
+time `typed` grows, with the text that step added, so the game can pitch
+a voice by the letter. One sound a step, not a character: the clock's
+step sets the rate. Turn it on for one copy only, if the line is also
+rendered unseen to measure it.
+
+## Accessibility
+
+- Plain text in a `<span>`; the rest of the line is `visibility: hidden`,
+  so a screen reader reads only what is typed. Say the whole line through
+  `useAnnounce()` if it should be heard at once

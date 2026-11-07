@@ -1,0 +1,65 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TimerStories from './timer.stories';
+
+<Meta of={TimerStories} />
+
+# Timer
+
+A pixel stopwatch whose face is a wedge of the time left. Use it where a
+choice runs against the clock: a counter to pick before the silence ends.
+It is controlled; you own the clock and pass how much time is left.
+
+<Canvas of={TimerStories.Default} />
+<Controls of={TimerStories.Default} />
+
+## Anatomy
+
+1. **Crown**, a primary-coloured knob on a short stem
+2. **Case**, in the danger colour so it is seen at once, lit on the upper
+   left
+3. **Face**, paper, sunk in the case, with dots at twelve, three, six and
+   nine
+4. **Wedge**, the time left, shrinking clockwise from twelve
+5. **Hand**, at twelve on its pin
+
+The art is a map of characters drawn at two thirds of a `--bui-px`, the
+way the faces in the bars are drawn: a readout, so on a phone's tall stage
+it keeps its size instead of thinning with the stage pixel.
+
+## Phases
+
+| Phase      | Time left                  | Wedge     | Behaviour     |
+| ---------- | -------------------------- | --------- | ------------- |
+| `fast`     | Above `warnAt` (50%)       | Info      | Still         |
+| `warning`  | Down to `criticalAt` (25%) | Secondary | Blinks, ticks |
+| `critical` | The last quarter           | Danger    | Blinks, ticks |
+
+The current phase is on the element as `data-phase`.
+
+<Canvas of={TimerStories.Overview} />
+
+## Usage
+
+- **Do** feed it `remaining` from one clock, so the wedge and the sound
+  stay in step.
+- **Do** pause it while the game is paused: no blink, no sound, the wedge
+  stays.
+- **Don't** use it for long spans. A wedge shows a share, not minutes.
+- **Don't** position it inside: place it from outside, in a corner.
+
+<Canvas of={TimerStories.Running} />
+
+## Sound
+
+With `sound`, the timer plays `ping` through `useFeedback()` when the fast
+part runs out, then `tick` with every blink (a beat every half second).
+Under reduced motion it does not blink, but the ticks continue.
+
+## Accessibility
+
+- `role="timer"` with an `aria-label` of the seconds left; pass your own
+  `aria-label` to name what is timed. It is not a live region, so it
+  does not read out every change
+- The blink stops under `prefers-reduced-motion`, and the colour is not
+  the only signal: the wedge's size carries the time

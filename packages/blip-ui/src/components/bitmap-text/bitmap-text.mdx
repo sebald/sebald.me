@@ -1,0 +1,70 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as BitmapTextStories from './bitmap-text.stories';
+
+<Meta of={BitmapTextStories} />
+
+# BitmapText
+
+Text in a five by seven pixel font, drawn like the logo: an ink line round
+each letter, a hard drop to the lower right, the top row lit and the bottom
+two shaded. Use it for a title or a call that should feel like part of the
+art. Running text is plain text, not BitmapText.
+
+<Canvas of={BitmapTextStories.Default} />
+<Controls of={BitmapTextStories.Default} />
+
+## Anatomy
+
+1. **Ink line**, one pixel round every letter pixel
+2. **Drop**, the ink line again, two pixels down and to the right
+3. **Letter**, the top row in the variant's light, the bottom two in its shade,
+   the rest in its main colour
+
+## Letters
+
+The font has these letters: `A D E F I L M N O P R S T U W Y` and the
+space. The text is upper-cased; any other character is left blank.
+
+## Variants
+
+`variant` picks the accent ramp the letters take their three colours from.
+
+| Variant   | Ramp                                              |
+| --------- | ------------------------------------------------- |
+| `primary` | The primary colour: the winning, loud call        |
+| `neutral` | Quiet: a loss, something that is over             |
+| `spark`   | White-hot, shaded in the primary: a flawless line |
+
+<Canvas of={BitmapTextStories.Overview} />
+
+## Size
+
+`size` is `small` for a line on the wide stage, one stage pixel a letter
+pixel (on the tall stage, where a stage pixel is small, it is too small to
+read: use `default` there); `default` for a line, two; `medium`,
+three, for a screen's title on the tall stage, where a stage pixel is about
+a third of the wide one's; or `large` for the word a screen is about (a
+round's result), five. The word is `6 × letters − 1` letter pixels wide: by
+default a title of 26 characters fills the 320 stage pixels of a stage,
+small one of 53, medium one of 17, large one of 10. The font has A to
+Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
+
+<Canvas of={BitmapTextStories.Title} />
+
+## Usage
+
+- **Do** keep it to a word or two.
+- **Do** use `neutral` for the bad news and `primary` for the good.
+- **Don't** set a paragraph in it.
+- **Don't** animate it here: slam, drop and sparkle are for the screen that
+  uses it. Each letter is its own group, `data-slot="bitmap-letter"` with
+  its place in the word as `--i`, so a screen can move them one by one
+  (`[&>[data-slot=bitmap-letter]]:animate-…` with a delay of
+  `calc(var(--i) * 90ms)`).
+
+## Accessibility
+
+- `aria-hidden`, since an SVG made of rectangles has no text. Put the same
+  words in text for assistive technology (a visually hidden element, or the
+  region's label)

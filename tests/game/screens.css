@@ -1,0 +1,4 @@
+/* The dev server's badge (pnpm dev): not the game's, and it animates */
+nextjs-portal {
+  display: none !important;
+}

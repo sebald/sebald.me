@@ -1,0 +1,85 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Meter } from './meter';
+
+const meta = {
+  title: 'Components/Meter',
+  component: Meter,
+  args: {
+    value: 3,
+    max: 5,
+    variant: 'primary',
+    size: 'default',
+    blink: false,
+    'aria-label': 'Momentum',
+  },
+  argTypes: {
+    value: { control: { type: 'number', min: 0, max: 12, step: 1 } },
+    max: { control: { type: 'number', min: 1, max: 12, step: 1 } },
+    variant: {
+      control: 'inline-radio',
+      options: ['primary', 'secondary'],
+      table: { defaultValue: { summary: 'primary' } },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['default', 'compact'],
+      table: { defaultValue: { summary: 'default' } },
+    },
+    blink: {
+      control: 'boolean',
+      table: { defaultValue: { summary: 'false' } },
+    },
+  },
+} satisfies Meta<typeof Meter>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/** Every prop through the controls */
+export const Default: Story = {};
+
+const VARIANTS = ['primary', 'secondary'] as const;
+const SIZES = ['default', 'compact'] as const;
+const STATES = [
+  { name: 'empty', value: 0, blink: false },
+  { name: 'partial', value: 3, blink: false },
+  { name: 'full', value: 5, blink: false },
+  { name: 'blinking', value: 5, blink: true },
+] as const;
+
+/** Every variant and size in every state, side by side */
+export const Overview: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="grid w-fit grid-cols-[auto_repeat(4,auto)] items-center gap-x-6 gap-y-3">
+      <span />
+      {STATES.map(state => (
+        <span key={state.name} className="text-[0.75em] text-(--bui-dim)">
+          {state.name}
+        </span>
+      ))}
+      {SIZES.flatMap(size =>
+        VARIANTS.flatMap(variant => [
+          <span
+            key={`${size}-${variant}`}
+            className="text-[0.75em] text-(--bui-dim)"
+          >
+            {size === 'default' ? variant : `${variant}, ${size}`}
+          </span>,
+          ...STATES.map(state => (
+            <Meter
+              key={`${size}-${variant}-${state.name}`}
+              aria-label={`${variant} ${size} ${state.name}`}
+              variant={variant}
+              size={size}
+              max={5}
+              value={state.value}
+              blink={state.blink}
+            />
+          )),
+        ]),
+      )}
+    </div>
+  ),
+};

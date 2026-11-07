@@ -1,0 +1,42 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as ConfirmStories from './confirm.stories';
+
+<Meta of={ConfirmStories} />
+
+# Confirm
+
+Asks before something that can't be undone: erasing a save, restarting a
+run. The stage is dimmed, a quiet window says what it costs, and two
+options follow, the safe one first and selected.
+
+<Canvas of={ConfirmStories.Default} />
+<Controls of={ConfirmStories.Default} />
+
+## Anatomy
+
+A `Dialog` with `role="alertdialog"`:
+
+1. **Title**, the question
+2. **Content**, what it costs
+3. **Actions**, a Picker with the safe option first, then the one
+   that does it
+4. **Legend**
+
+## Usage
+
+- **Do** say what goes: _This deletes your run and 2 shipped roles._
+- **Do** name the action in the confirm option (_Erase save_), not _OK_.
+- **Do** render it while the question is open, anywhere inside the stage.
+  It takes the keys from the menu under it by itself.
+- **Don't** confirm what can be undone.
+
+## Input
+
+- Up and down choose, Enter or a tap confirms
+- Escape cancels; a tap outside does nothing
+
+## Accessibility
+
+- `role="alertdialog"`, named by the title and described by the cost
+- The focus moves into it and stays there

@@ -4,6 +4,10 @@
 @import './theme.css';
 @import './prose.css';
 
+/* The lab's design system (Blip UI) and its game: their classes, tokens, variants and motion */
+@import '@sebald/blip-ui/styles.css';
+@import '@sebald/pushback/styles.css';
+
 ::selection {
   background-color: oklch(0.74 0.1 65 / 0.5);
   color: var(--color-mist-50);

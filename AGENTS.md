@@ -20,12 +20,28 @@ pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
 pnpm narrate          # Render narrations of changed notes (Python, see Narration)
 pnpm narrate:check    # Fail if a note's narration is missing or outdated
+pnpm test:game        # The game played through its screens (Playwright, against the dev server)
+pnpm vrt:game         # The same plus a screenshot of each screen (Docker)
+pnpm vrt:game:update  # Regenerate the game's screenshot baselines (Docker)
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
-pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker)
+pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Blip UI's too
+pnpm storybook        # Blip UI's Storybook (port 6006)
+pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
+pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
 CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+
+### The game's flows
+
+- `tests/game/` (`playwright.game.config.ts`): Pushback played by keys (desktop) and by taps (a phone), from the title through a duel won and one lost, the pause, leaving, options, the save, the demo. Run `pnpm test:game` after any change to the game or to the Blip UI parts it uses; it reuses a running `pnpm dev` (port 3000, `GAME_PORT` for another) and the installed Chrome
+- No screenshots, so it runs on macOS too. It reads only what a player and a screen reader get: the screen's region (`Pushback, …`), roles and names, `aria-current` and the live region, never a class, so it holds while the UI underneath is rebuilt
+- Repeatable: the clock stands still (a run's and a duel's seed is the time) and `Math.random` is seeded; a duel is won with the counters from the game's own lines (`playDuel`), not by luck
+- Every test fails on an error in the console
+- A test starts deep in a run by opening the game on a save (`openWith(page, saveWith({ beaten, mode, glossary }))`): written to storage before the page loads, as a returning player's, built with the game's own save functions. No test-only code in the game
+- `screens.spec.ts` (`@screens`): a screenshot of each screen's stage, desktop and phone, baselines in `tests/game/__screenshots__`. Linux only (the Playwright image or CI); on a Mac they are skipped, `GAME_SCREENS=1` runs them to try a change, never to commit its PNGs. The clock is held (`holdClock`) and moves only by `press`/`settle`, which wait for the page to rest first, so animations show the same frame every run. `pnpm vrt:update:ci` regenerates them with the site's and Blip UI's
+- The "Game" workflow runs it on pull requests that touch the game, Blip UI (the screens are built from it) or the suite, and by hand (`workflow_dispatch`)
 
 ### Visual Regression Tests
 
@@ -66,6 +82,16 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - `src/ui/` - React components using CVA for variants
 - `src/css/` - Tailwind styles and theme tokens (`theme.css` defines color system)
 - `content/` - MDX content files
+- `packages/` - pnpm workspace packages, consumed as source (no build step; Next compiles them)
+
+### Packages
+
+- `packages/blip-ui` (`@sebald/blip-ui`): Blip UI, the design system for the lab's pixel games. Tokens are CSS variables only (`src/tokens.css`, `--bui-*` roles with defaults); a game sets its values for the same names on its stage. Components take `variant`, `size` (with defaults) and a `className` merged last, with their styles in a `*.styles.ts` next to them (cva). How components are built is `src/building-components.mdx` (follow it): named by what they do; a new component only for new behaviour, a different look is a `variant`; states are booleans named for the state, never for the look; parts are children, never JSX through a prop; every root has `data-slot="<name>"` and the parent places its children by it (or tells them through context), a child places nothing itself; parts that recur across containers are shared by role (`Title`, `Content`, `Actions`), the container telling them what they can't know through `PartsContext`. Colours only through `--bui-*` tokens, lengths in stage pixels (art on the grid in `--px`; spacing, controls and readouts in `--bui-px`, never finer than `--bui-min-px`), spacing from `SPACE` (1, 2, 3, 4, 6, 8), text at 0.75, 0.85, 1 or 2em, disabled as `bui-disabled` (`foundations/uniformity.test.ts` fails on anything else); sounds through `useFeedback()` (the game decides what plays), the scale through `usePixels()`. Base UI is the headless layer where a primitive fits (Tabs) No game data, no assets, no `next/*`
+- Blip UI's docs are its Storybook (`packages/blip-ui/.storybook`, Vite): per component a story file and an MDX page with the guidelines. Stories: one `Default` whose args are the props' defaults, one `Overview` with every variant × size and state side by side (what the visual tests cover), and otherwise only compositions; never a story per variant or size. Its visual regression tests (`packages/blip-ui/tests/visual`) screenshot every story from the built Storybook's index, wide at 3x and 1x and tall on a 402 × 714 phone at its scale (402 / 320), in the same Docker image as the site's; a story tagged `no-vrt` is left out, one tagged `no-vrt-<shot>` (`no-vrt-1x`) skips that shot. A baseline is only what the story looked like when it was taken, faults included, so each shot also fails when part of the story lies outside `#storybook-root` or its text is cut off by a container that hides its overflow (`tests/visual/layout.ts`), and new or changed baselines are looked at before they are committed. The "Blip UI Visual Regression" workflow runs them on pull requests that touch the kit
+- `packages/pushback` (`@sebald/pushback`): the lab's game, built on Dither (its `styles.css` maps the palette onto Blip UI's roles), mounted at `/lab/pushback`. Its logic in `src/lib`, its UI in `src/ui`, its art in `src/assets`
+- Independent of the site: no `@/` imports (its own `tsc` run, `pnpm --filter @sebald/pushback typecheck`, fails on one), its own `cn`/`cva` copy, and its own CSS (`src/styles.css`: the `tall:`/`touch:` variants, `pb-focus`, the stage's leading, the game's keyframes), which `src/css/styles.css` imports after Blip UI's
+- The site imports `Game` from the package root and the inventory's pieces by subpath (`@sebald/pushback/ui/<module>`, `@sebald/pushback/lib/<module>`). The inventory itself (`src/ui/lab/pushback/inventory`) stays in the site, as the game's workbench
+- `pnpm test` runs the packages' tests too
 
 ### Content Frontmatter (notes)
 

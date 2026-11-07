@@ -1,0 +1,194 @@
+/*
+ * Pushback's styles, for the host's Tailwind entry to import after
+ * `tailwindcss`: the classes in the game's files, its variants, its
+ * focus ring and the stage's leading.
+ */
+@source './';
+
+/* Inside a stage held upright, which is tall (`Stage`) */
+@custom-variant tall (&:where([data-layout=tall] *));
+/* A touch screen without a mouse */
+@custom-variant touch (@media (hover: none) and (pointer: coarse));
+
+/* The keyboard's focus ring, in the gold of the title */
+@utility pb-focus {
+  @apply outline-2 outline-offset-2 outline-solid;
+  outline-color: oklch(0.74 0.1 65 / 0.8);
+}
+
+/* The stage stacks lines of text and wants normal leading, whatever the
+   page around it trims */
+[data-stage],
+[data-stage] * {
+  text-box: normal;
+}
+
+/* The game's motion: stepped, in whole pixels where it moves */
+@theme {
+  /* The arcade blink, half a second on, half off, no fade; how
+     low it goes is --blink-low (0.6 by default, 0 for a full blink) */
+  @keyframes arcade-blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: var(--blink-low, 0.6);
+    }
+  }
+
+  --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
+
+  /* YOU WIN slamming in from three times its size, in five
+     steps, so it lands in near-whole pixels */
+  @keyframes call-slam {
+    from {
+      scale: 3;
+    }
+    to {
+      scale: 1;
+    }
+  }
+
+  --animate-call-slam: call-slam 160ms steps(5) both;
+
+  /* YOU LOSE dropping in from above the stage, faster as it
+     falls */
+  @keyframes call-drop {
+    from {
+      translate: 0 calc(var(--px, 2px) * -110);
+    }
+    to {
+      translate: 0 0;
+    }
+  }
+
+  --animate-call-drop: call-drop 380ms ease-in both;
+
+  /* A letter of YOU LOSE sagging by `--sag`, a pixel at a time;
+     each letter's delay is set inline */
+  @keyframes call-sag {
+    to {
+      translate: 0 var(--sag);
+    }
+  }
+
+  --animate-call-sag: call-sag 240ms steps(4) both;
+
+  /* Something shown at once after its delay, set inline: a
+     letter of the flawless line, a menu once its window has grown */
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  --animate-appear: appear 10ms steps(1) both;
+
+  /* The whole stage jolted as YOU WIN lands, in whole pixels,
+     smaller each time; held back until the landing */
+  @keyframes stage-shake {
+    0% {
+      translate: calc(var(--px, 2px) * -3) var(--px, 2px);
+    }
+    25% {
+      translate: calc(var(--px, 2px) * 2) calc(var(--px, 2px) * -2);
+    }
+    50% {
+      translate: calc(var(--px, 2px) * -1) var(--px, 2px);
+    }
+    75% {
+      translate: var(--px, 2px) 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stage-shake: stage-shake 200ms steps(1) 160ms both;
+
+  /* The stage knocked down a pixel as YOU LOSE lands */
+  @keyframes stage-thud {
+    0% {
+      translate: 0 var(--px, 2px);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-stage-thud: stage-thud 120ms steps(1) 380ms both;
+
+  /* The white flash of the deciding blow, one frame and gone */
+  @keyframes end-flash {
+    from {
+      opacity: 0.85;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  --animate-end-flash: end-flash 180ms steps(2) both;
+
+  /* A sparkle by a flawless call, in and out in three steps */
+  @keyframes call-sparkle {
+    0%,
+    100% {
+      scale: 0;
+    }
+    50% {
+      scale: 1;
+    }
+  }
+
+  --animate-call-sparkle: call-sparkle 360ms steps(3) both;
+}
+
+/* Pushback's values for Blip UI's roles, on every stage */
+[data-stage] {
+  --bui-ground: var(--pb-bg);
+  --bui-ink: var(--pb-ink);
+  --bui-surface: var(--pb-fill);
+  --bui-surface-light: var(--pb-fill-top);
+  --bui-surface-shade: var(--pb-fill-shade);
+  --bui-frame: var(--pb-frame);
+  --bui-frame-dim: var(--pb-frame-dim);
+  --bui-frame-inner: var(--pb-frame-inner);
+  --bui-text: var(--pb-text);
+  --bui-text-bright: var(--pb-text-bright);
+  /* The item the cursor is on, warm against the white-ish rest */
+  --bui-text-selected: var(--pb-gold-light);
+  --bui-heading: var(--pb-heading);
+  --bui-muted: var(--pb-muted);
+  --bui-dim: var(--pb-dim);
+  --bui-empty: var(--pb-empty);
+  --bui-empty-dots: var(--pb-empty-dots);
+  --bui-paper: var(--pb-paper);
+  --bui-paper-shade: var(--pb-paper-shade);
+  --bui-primary: var(--pb-gold);
+  --bui-primary-light: var(--pb-gold-light);
+  --bui-primary-shade: var(--pb-gold-shade);
+  --bui-primary-foreground: var(--pb-ink);
+  --bui-neutral: var(--pb-steel);
+  --bui-neutral-light: var(--pb-steel-light);
+  --bui-neutral-shade: var(--pb-dim);
+  --bui-neutral-foreground: var(--pb-ink);
+  --bui-danger: var(--pb-stamp);
+  --bui-danger-light: var(--pb-stamp-light);
+  --bui-danger-shade: var(--pb-stamp-shade);
+  --bui-danger-foreground: var(--pb-spark);
+  --bui-danger-rim: var(--pb-stamp-rim);
+  --bui-secondary: var(--pb-ember);
+  --bui-secondary-light: var(--pb-ember-light);
+  --bui-secondary-shade: var(--pb-ember-shade);
+  --bui-secondary-foreground: var(--pb-ink);
+  /* The stopwatch's time while a counter still counts as fast */
+  --bui-info: var(--pb-time);
+  --bui-info-shade: var(--pb-time-shade);
+  --bui-spark: var(--pb-spark);
+  --bui-paper-foreground: var(--pb-ink);
+}

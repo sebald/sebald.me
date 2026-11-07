@@ -1,0 +1,86 @@
+{
+  "cell": {
+    "width": 72,
+    "height": 112
+  },
+  "count": 6,
+  "background": "484d53",
+  "cells": [
+    {
+      "box": {
+        "x": 19,
+        "y": 33,
+        "width": 33,
+        "height": 79
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 18,
+        "y": 33,
+        "width": 36,
+        "height": 79
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 15,
+        "y": 34,
+        "width": 42,
+        "height": 78
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 14,
+        "y": 30,
+        "width": 44,
+        "height": 82
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 13,
+        "y": 25,
+        "width": 46,
+        "height": 87
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 20,
+        "y": 37,
+        "width": 31,
+        "height": 75
+      },
+      "clipped": false
+    }
+  ],
+  "features": {
+    "head": {
+      "x": 23,
+      "y": 32,
+      "width": 24,
+      "height": 24
+    },
+    "mouth": {
+      "x": 26,
+      "y": 46,
+      "width": 19,
+      "height": 12
+    },
+    "talkMouth": {
+      "x": 22,
+      "y": 46
+    },
+    "eye": {
+      "x": 41,
+      "y": 51
+    }
+  }
+}

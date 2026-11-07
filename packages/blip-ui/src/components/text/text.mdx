@@ -1,0 +1,45 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TextStories from './text.stories';
+
+<Meta of={TextStories} />
+
+# Text
+
+The letters by role, so every screen says the same thing the same way.
+Sizes are in em, because the stage sizes its text from its scale; set
+them from the screen, never in CSS pixels.
+
+<Canvas of={TextStories.Default} />
+<Controls of={TextStories.Default} />
+
+| Role                  | Colour          | Use                                                                |
+| --------------------- | --------------- | ------------------------------------------------------------------ |
+| `Heading`             | `--bui-heading` | The title inside a window, a name; an `h2` or `h3`                 |
+| `Text`                | `--bui-muted`   | A hint: a prompt over options, a blurb; a paragraph                |
+| `Text variant="call"` | `--bui-primary` | The call to act right now, blinking; inline                        |
+| `ScreenTitle`         | `--bui-primary` | A menu screen's title along the stage's top, in the bitmap letters |
+
+`Heading` and `ScreenTitle` are components of their own because they do
+something else: a heading is in the page's outline, a screen title is drawn
+in the bitmap letters and placed along the stage's top. A hint and a call
+are both a line of text, so they are variants of one.
+
+<Canvas of={TextStories.Overview} />
+
+## Usage
+
+- **Do** use one call at a time. Two blinking lines compete.
+- **Do** put `BitmapText` inside the call when it should feel like part of
+  the art (a title screen's "press start"), with the words beside it in an
+  `sr-only` span: the call blinks it, the letters are aria-hidden.
+- **Do** keep a screen title to a few words; the blurb says the rest. On
+  the tall stage its letters are `medium` (three stage pixels a letter
+  pixel), so a title of up to 17 characters fits.
+- **Don't** colour text yourself. If a role is missing, it's a token to add.
+
+## Motion
+
+A call blinks half a second on and half off, with no fade, and stays
+steady under reduced motion. `--blink-low` sets how far it dims (0.6 by
+default, 0 for a full blink).

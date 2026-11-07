@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as IconButtonStories from './icon-button.stories';
+
+<Meta of={IconButtonStories} />
+
+# IconButton
+
+The round of the controls: a pixel icon in a button at least 44 CSS pixels
+to touch. `IconButton` does something (back, pause); `IconToggle` is on or
+off (sound, fullscreen). They stand alone in a corner or sit in
+[Controls](?path=/docs/components-controls--docs).
+
+<Canvas of={IconButtonStories.Default} />
+<Controls of={IconButtonStories.Default} />
+
+## Anatomy
+
+1. **Icon**, a [PixelIcon](?path=/docs/components-pixelicon--docs), at the stage's pixels in a corner and at a thumb's size on the bar
+2. **Label**, beside the icon on the bar only
+3. **Target**, 44 by 44 CSS pixels at least, larger than the icon
+
+## Where it is
+
+It has no variant: where it is sets its look, so the same JSX works in
+both layouts.
+
+| Where                             | Looks like                              |
+| --------------------------------- | --------------------------------------- |
+| A corner of the wide stage, alone | The icon alone, brighter on hover       |
+| The tall stage's bar (`Controls`) | Icon and label in the muted text colour |
+
+<Canvas of={IconButtonStories.Overview} />
+
+## Toggle
+
+`IconToggle` takes `pressed` and `onPressedChange`; the state lives with
+you. Give it an icon for each state (`icon`, `pressedIcon`) and, on the bar,
+a label for each (`label`, `pressedLabel`).
+
+<Canvas of={IconButtonStories.SoundToggle} />
+
+## Usage
+
+- **Do** write the `aria-label` as what the button does, with its key:
+  _Sound (M)_.
+- **Do** keep the label the same in both states of a toggle. The icon shows
+  the state, `aria-pressed` tells assistive technology.
+- **Don't** use one for a screen's main action. That is a Button.
+- **Don't** start sound from it unless the game's engine does so on the tap
+  (a tap is the gesture browsers need).
+
+## Input
+
+A tap stays with the control: `pointerdown` and `click` do not bubble, so
+pressing it does not also advance a screen behind it.
+
+## Accessibility
+
+- A native `<button>`; `aria-label` is required, the icon is decorative
+- A toggle sets `aria-pressed`
+- The focus ring shows for the keyboard only (`:focus-visible`)
+- At least 44 CSS pixels square (WCAG 2.5.5), whatever the scale

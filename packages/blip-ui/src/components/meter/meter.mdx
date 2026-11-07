@@ -1,0 +1,60 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as MeterStories from './meter.stories';
+
+<Meta of={MeterStories} />
+
+# Meter
+
+A row of boxes, some lit and the rest empty: how much of a pool is
+collected. Momentum beside a name, a score towards a goal. Whole cells
+only; for a value that runs smoothly, draw a bar instead.
+
+<Canvas of={MeterStories.Default} />
+<Controls of={MeterStories.Default} />
+
+## Anatomy
+
+1. **Ink**, a line one pixel wide around every cell
+2. **Lit cell**, a light top row, the variant's colour, a shaded bottom row
+3. **Empty cell**, dark, with a rim in the dots' colour and a checker of
+   dots, so the slot shows
+4. **Gap**, two pixels between cells (one in `compact`, the ink lines shared)
+
+A cell is 4 by 6 in `--bui-px`, 3 by 6 in `compact`: a readout, so on a
+phone's tall stage it keeps its size instead of thinning with the stage
+pixel.
+
+## Variants
+
+| Variant     | When to use                     |
+| ----------- | ------------------------------- |
+| `primary`   | The player's pool, the main one |
+| `secondary` | The other side's pool           |
+
+| Size      | When to use                                                  |
+| --------- | ------------------------------------------------------------ |
+| `default` | Most meters                                                  |
+| `compact` | A long pool where room is short: twenty cells across a phone |
+
+`blink` blinks the lit cells between their colour and its light, at the
+arcade rhythm, for a full pool asking to be used. The meter runs it
+itself, and holds it steady under reduced motion.
+
+<Canvas of={MeterStories.Overview} />
+
+## Usage
+
+- **Do** keep `max` small, ten at most; more cells stop reading as boxes.
+  A longer pool that has to be counted out (twenty) is `compact`.
+- **Do** put the name next to the meter, and give the meter an `aria-label`.
+- **Don't** pass fractions. The value is rounded to a whole cell.
+- **Don't** rely on the variant alone: the lit count is what carries the value.
+- **Don't** add a colour for a new kind of pool before a screen needs it.
+
+## Accessibility
+
+- `role="meter"` with `aria-valuemin`, `aria-valuemax` and `aria-valuenow`,
+  and `aria-valuetext` like "3 of 5"
+- The cells are hidden from assistive technology
+- Not focusable: it only shows a value

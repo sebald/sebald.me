@@ -1,0 +1,37 @@
+{
+  "cell": {
+    "width": 72,
+    "height": 112
+  },
+  "count": 3,
+  "background": "30343d",
+  "cells": [
+    {
+      "box": {
+        "x": 21,
+        "y": 57,
+        "width": 30,
+        "height": 55
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 21,
+        "y": 56,
+        "width": 29,
+        "height": 56
+      },
+      "clipped": false
+    },
+    {
+      "box": {
+        "x": 17,
+        "y": 57,
+        "width": 38,
+        "height": 55
+      },
+      "clipped": false
+    }
+  ]
+}
