@@ -30,6 +30,9 @@ are both a line of text, so they are variants of one.
 ## Usage
 
 - **Do** use one call at a time. Two blinking lines compete.
+- **Do** put `BitmapText` inside the call when it should feel like part of
+  the art (a title screen's "press start"), with the words beside it in an
+  `sr-only` span: the call blinks it, the letters are aria-hidden.
 - **Do** keep a screen title to a few words; the blurb says the rest. On
   the tall stage its letters are `medium` (three stage pixels a letter
   pixel), so a title of up to 17 characters fits.

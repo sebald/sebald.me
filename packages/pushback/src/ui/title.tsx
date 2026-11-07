@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  BitmapText,
   Confirm,
   Heading,
   Legend,
@@ -344,19 +345,19 @@ export const TitleScreen = ({
           />
         </Window>
       ) : (
-        /* The arcade call to play, under the logo: a full blink, nothing between on and off */
+        /* The arcade call to play, under the logo: the kit's call (a full
+           blink, nothing between on and off) drawn in the bitmap letters,
+           the words for a screen reader beside them */
         <p
-          className="absolute inset-x-0 m-0 flex items-center justify-center text-center text-[1.25em] [--blink-low:0]"
+          className="absolute inset-x-0 m-0 flex items-center justify-center [--blink-low:0]"
           style={{
             top: px(tall ? TALL.logo + LOGO.height + 4 : CALL.top),
             height: px(CALL.height),
           }}
         >
-          <Text
-            variant="call"
-            className="font-bold tracking-[0.15em] uppercase"
-          >
-            {call}
+          <Text variant="call">
+            <BitmapText>{call.toUpperCase()}</BitmapText>
+            <span className="sr-only">{call}</span>
           </Text>
         </p>
       )}
