@@ -198,7 +198,9 @@ export const ResultScreen = ({
           </dl>
         </div>
 
-        <div className="mt-auto flex justify-end px-[calc(var(--px)*2)] pt-[calc(var(--px)*4)]">
+        {/* Bottom right beside the glossary; held upright, across the
+            window, its rows in line with the ledger's */}
+        <div className="mt-auto flex justify-end px-[calc(var(--px)*2)] pt-[calc(var(--px)*4)] tall:block">
           <Picker label="Result" className="w-[14em] tall:w-full">
             <PickerItem id="copy" onSelect={copy}>
               {copied ? 'Copied' : 'Copy result'}
