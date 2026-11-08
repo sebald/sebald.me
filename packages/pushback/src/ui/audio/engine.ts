@@ -5,7 +5,7 @@
  * while the tab is hidden. Everything is a no-op until then.
  */
 import { MUSIC, type Cue } from '../../lib/audio/music';
-import { type Schedule, compile } from '../../lib/audio/notes';
+import { type Piece, type Schedule, compile } from '../../lib/audio/notes';
 import {
   DEFAULT_SOUND,
   type SoundSettings,
@@ -51,7 +51,9 @@ const CRUSH = `registerProcessor('pushback-crush', class extends AudioWorkletPro
 });`;
 
 interface Playing {
-  cue: Cue;
+  /** What plays: a cue of the soundtrack, or a piece the inventory auditions */
+  cue: Cue | Piece;
+  piece: Piece;
   schedule: Schedule;
   /** A gain per track: the momentum layers */
   tracks: GainNode[];
@@ -76,8 +78,11 @@ let settings: SoundSettings | null = null;
 const listeners = new Set<() => void>();
 /** The cue the screen asks for; `null` is silence */
 let wanted: Cue | null = null;
-/** The inventory plays a cue whatever the switches say */
-let audition: Cue | null = null;
+/**
+ * The inventory plays a cue whatever the switches say, or a piece that
+ * is not in the soundtrack (a candidate to listen to)
+ */
+let audition: Cue | Piece | null = null;
 let playing: Playing | null = null;
 let momentum = 0;
 /** The game is on the page: only then do its screens make sound */
@@ -235,9 +240,9 @@ const fadeOut = (piece: Playing, seconds: number) => {
 };
 
 /** Start a piece at `start`: its notes scheduled a little ahead, looped, or once */
-const start = (cue: Cue, at: number): Playing => {
+const start = (cue: Cue | Piece, at: number): Playing => {
   const { ctx, chip, reverb } = graph!;
-  const piece = MUSIC[cue];
+  const piece = typeof cue === 'string' ? MUSIC[cue] : cue;
   const schedule = compile(piece);
   const level = gainOf(ctx, 0);
   level.gain.setValueAtTime(0, at - 0.01);
@@ -277,7 +282,7 @@ const start = (cue: Cue, at: number): Playing => {
   };
   const timer = setInterval(tick, TICK_MS);
   tick();
-  return { cue, schedule, tracks, level, timer };
+  return { cue, piece, schedule, tracks, level, timer };
 };
 
 /** Play what is wanted, if the switches and the context allow it */
@@ -325,8 +330,7 @@ export const cut = () => {
 export const setMomentum = (value: number) => {
   momentum = value;
   if (!playing || !graph) return;
-  const piece = MUSIC[playing.cue];
-  piece.tracks.forEach((track, i) =>
+  playing.piece.tracks.forEach((track, i) =>
     playing!.tracks[i]!.gain.setTargetAtTime(
       track.layer <= value ? 1 : 0,
       graph!.ctx.currentTime,
@@ -372,7 +376,7 @@ export const speak = (voice: BlipVoice, typed: string, force = false) => {
  * The inventory's player: plays a cue whatever the switches say, and
  * makes the context (it is called from a click); `null` stops it
  */
-export const auditionMusic = (cue: Cue | null) => {
+export const auditionMusic = (cue: Cue | Piece | null) => {
   audition = cue;
   if (cue) unlock();
   if (cue && playing?.cue === cue) {

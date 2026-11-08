@@ -19,6 +19,7 @@ import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
 import { SoundDemo } from './sound-demo';
 import { TimerDemo } from './timer-demo';
+import { TunePicker } from './tune-picker';
 import { WindowDemo } from './window-demo';
 
 const Section = ({
@@ -90,6 +91,12 @@ export const Inventory = () => (
       blurb="The soundtrack and the effects (audio/), whatever the game's switches say. Six pieces in C minor on a Mega Drive's chip: the title, the duel with its momentum layers, the boss, the two jingles and the result. The effects are NES chip; the text blip has a voice per role. Nothing plays before a click."
     >
       <SoundDemo />
+    </Section>
+    <Section
+      title="Duel tunes to pick"
+      blurb="Each room's duel loop as it ships (A) and two variations on it (B, C), the same chords and tune with another groove or colour. One plays at a time, Momentum brings in the layers. Pick one per room; the picks stay in this browser."
+    >
+      <TunePicker />
     </Section>
     <Section
       title="Character"
