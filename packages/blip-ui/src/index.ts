@@ -82,6 +82,7 @@ export {
   type BitmapPart,
   type BitmapRect,
   bitmapTextLayout,
+  bitmapTextSize,
   drawBitmapText,
 } from './components/bitmap-text/bitmap-text.layout';
 export { Line, type LineProps } from './components/line/line';

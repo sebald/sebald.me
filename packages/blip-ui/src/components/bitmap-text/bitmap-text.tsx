@@ -50,11 +50,7 @@ export const BitmapText = ({
   style,
   ...props
 }: BitmapTextProps) => {
-  const { width, height, rects } = bitmapTextLayout(children, SIZES[size]);
-  // The rectangles by letter, in the order they are drawn
-  const letters = new Map<number, typeof rects>();
-  for (const rect of rects)
-    letters.set(rect.letter, [...(letters.get(rect.letter) ?? []), rect]);
+  const { width, height, letters } = bitmapTextLayout(children, SIZES[size]);
   return (
     <svg
       aria-hidden
@@ -65,7 +61,7 @@ export const BitmapText = ({
       style={{ width: px(width), height: px(height), ...style }}
       {...props}
     >
-      {[...letters].map(([i, parts]) => (
+      {letters.map((parts, i) => (
         // Each letter its own group, its place in `--i`, so a letter can
         // move on its own: `[&>[data-slot=bitmap-letter]]` and a delay of
         // `calc(var(--i) * 90ms)`. The drop, the ink line, then the letter

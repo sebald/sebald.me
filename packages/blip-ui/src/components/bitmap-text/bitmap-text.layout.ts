@@ -61,6 +61,9 @@ export const FONT: Font = {
 /** The letters the font can draw, for the docs */
 export const BITMAP_GLYPHS = supported(FONT);
 
+/** Characters drawn as another: the dashes of a range or score (`23–9`) as the hyphen */
+const ALIASES: Readonly<Record<string, string>> = { '–': '-', '—': '-' };
+
 export const GLYPH = { width: 5, height: 7, gap: 1 } as const;
 
 /** Room round the word: its ink line (one pixel) all round, its drop (two) below and right */
@@ -83,8 +86,21 @@ export interface BitmapRect {
 export interface BitmapLayout {
   width: number;
   height: number;
-  rects: BitmapRect[];
+  /** The rectangles by letter, one group a character (a space's empty) */
+  letters: BitmapRect[][];
 }
+
+/** A word's box at `scale`, without laying out its letters */
+export const bitmapTextSize = (
+  text: string,
+  scale: number,
+): { width: number; height: number } => {
+  const columns = [...text].length * (GLYPH.width + GLYPH.gap) - GLYPH.gap;
+  return {
+    width: columns * scale + ROOM,
+    height: GLYPH.height * scale + ROOM,
+  };
+};
 
 /** The top row lit, the bottom two shaded, the rest the colour */
 const partOf = (y: number): BitmapPart =>
@@ -92,15 +108,15 @@ const partOf = (y: number): BitmapPart =>
 
 /**
  * A word laid out at `scale` units a letter pixel (upper-cased; a
- * character the font lacks is blank): letter by letter its drop, its ink
- * line, then its pixels, in units of the box it fills
+ * dash drawn as the hyphen; any other character the font lacks blank):
+ * letter by letter its drop, its ink line, then its pixels, in units of
+ * the box it fills
  */
 export const bitmapTextLayout = (text: string, scale: number): BitmapLayout => {
   const chars = [...text.toUpperCase()];
-  const columns = chars.length * (GLYPH.width + GLYPH.gap) - GLYPH.gap;
-  const rects = chars.flatMap((char, letter) => {
+  const letters = chars.map((char, letter) => {
     const left = INK + letter * (GLYPH.width + GLYPH.gap) * scale;
-    const at = lit(glyphOf(FONT, char)).map(({ x, y }) => ({
+    const at = lit(glyphOf(FONT, ALIASES[char] ?? char)).map(({ x, y }) => ({
       x: left + x * scale,
       y: INK + y * scale,
       row: y,
@@ -132,11 +148,7 @@ export const bitmapTextLayout = (text: string, scale: number): BitmapLayout => {
       })),
     ];
   });
-  return {
-    width: columns * scale + ROOM,
-    height: GLYPH.height * scale + ROOM,
-    rects,
-  };
+  return { ...bitmapTextSize(text, scale), letters };
 };
 
 /** A canvas has no CSS variables: the ramp as colours */
@@ -166,7 +178,7 @@ export const drawBitmapText = (
   },
 ): { width: number; height: number } => {
   const layout = bitmapTextLayout(text, scale);
-  for (const rect of layout.rects) {
+  for (const rect of layout.letters.flat()) {
     ctx.fillStyle = colours[rect.part];
     ctx.fillRect(
       x + rect.x * unit,

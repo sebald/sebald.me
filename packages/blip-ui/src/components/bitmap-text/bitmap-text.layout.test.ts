@@ -4,6 +4,7 @@ import { describe, it } from 'node:test';
 import {
   BITMAP_GLYPHS,
   bitmapTextLayout,
+  bitmapTextSize,
   drawBitmapText,
 } from './bitmap-text.layout';
 
@@ -15,7 +16,7 @@ describe('bitmapTextLayout', () => {
   });
 
   it('draws each letter as its drop and ink line, then its pixels', () => {
-    const { rects } = bitmapTextLayout('I', 1);
+    const rects = bitmapTextLayout('I', 1).letters.flat();
     const parts = rects.map(rect => rect.part);
     const firstLetter = parts.findIndex(part => part !== 'ink');
     assert.ok(firstLetter > 0);
@@ -23,7 +24,7 @@ describe('bitmapTextLayout', () => {
   });
 
   it('lights the top row and shades the bottom two', () => {
-    const { rects } = bitmapTextLayout('I', 1);
+    const rects = bitmapTextLayout('I', 1).letters.flat();
     const row = (part: string) =>
       new Set(rects.filter(r => r.part === part).map(r => r.y - 1));
     assert.deepEqual([...row('light')], [0]);
@@ -32,13 +33,12 @@ describe('bitmapTextLayout', () => {
 
   it('has a slash, for counts like 60/60 and addresses', () => {
     assert.ok(BITMAP_GLYPHS.includes('/'));
-    const blank = bitmapTextLayout(' ', 1).rects.length;
-    assert.equal(blank, 0);
-    assert.ok(bitmapTextLayout('/', 1).rects.length > 0);
+    assert.deepEqual(bitmapTextLayout(' ', 1).letters, [[]]);
+    assert.ok(bitmapTextLayout('/', 1).letters[0]!.length > 0);
   });
 
   it('leaves a character the font lacks blank, and upper-cases', () => {
-    assert.equal(bitmapTextLayout('~', 1).rects.length, 0);
+    assert.deepEqual(bitmapTextLayout('~', 1).letters, [[]]);
     assert.deepEqual(bitmapTextLayout('a', 2), bitmapTextLayout('A', 2));
   });
 });
@@ -60,16 +60,36 @@ describe('drawBitmapText', () => {
       colours,
     });
     const layout = bitmapTextLayout('I', 2);
-    assert.equal(calls.length, layout.rects.length);
+    const rects = layout.letters.flat();
+    assert.equal(calls.length, rects.length);
     assert.deepEqual(calls[0], [
-      10 + layout.rects[0]!.x * 3,
-      20 + layout.rects[0]!.y * 3,
-      layout.rects[0]!.width * 3,
-      layout.rects[0]!.height * 3,
+      10 + rects[0]!.x * 3,
+      20 + rects[0]!.y * 3,
+      rects[0]!.width * 3,
+      rects[0]!.height * 3,
     ]);
     assert.deepEqual(box, {
       width: layout.width * 3,
       height: layout.height * 3,
     });
+  });
+});
+
+describe('bitmapTextLayout groups', () => {
+  it('keeps a group for every character, a space too, so a screen styling the letters by place counts them all', () => {
+    const { letters } = bitmapTextLayout('YOU LOSE', 5);
+    assert.equal(letters.length, 8);
+    assert.deepEqual(letters[3], []);
+  });
+
+  it('draws a dash as the hyphen', () => {
+    const hyphen = bitmapTextLayout('-', 1).letters;
+    assert.deepEqual(bitmapTextLayout('–', 1).letters, hyphen);
+    assert.deepEqual(bitmapTextLayout('—', 1).letters, hyphen);
+  });
+
+  it('sizes without laying out the same as with', () => {
+    const { width, height } = bitmapTextLayout('5,690', 3);
+    assert.deepEqual(bitmapTextSize('5,690', 3), { width, height });
   });
 });
