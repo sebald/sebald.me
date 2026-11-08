@@ -7,6 +7,7 @@ import {
   Picker,
   PickerItem,
   Text,
+  Typewriter,
   useClock,
   Window,
 } from '@sebald/blip-ui';
@@ -24,8 +25,9 @@ export const WindowDemo = () => {
   const [picked, setPicked] = useState<string | null>(null);
   const [scale, setScale] = useState(3);
   const clock = useClock();
-  // The line types over and over, four seconds a round
-  const typed = LINE.slice(0, typedChars(clock % 4000, LINE));
+  // The line types over and over, four seconds a round, holding its room
+  // so the window keeps its height
+  const typed = typedChars(clock % 4000, LINE);
   const options = PAIRS.slice(1, 5);
   // Hard mode's mic drop in a short window: ten options, more than the
   // cropped stage has room for
@@ -56,7 +58,9 @@ export const WindowDemo = () => {
       </form>
       <Pixels scale={scale} className="grid gap-[calc(var(--px)*6)]">
         <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
-          <Line variant="secondary">{typed}</Line>
+          <Line variant="secondary">
+            <Typewriter typed={typed}>{LINE}</Typewriter>
+          </Line>
           <Legend keys={[['Enter', 'continue']]} touch="Tap to continue" />
         </Window>
         <Window
