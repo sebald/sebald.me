@@ -23,8 +23,9 @@ art. Running text is plain text, not BitmapText.
 
 ## Letters
 
-The font has these letters: `A D E F I L M N O P R S T U W Y` and the
-space. The text is upper-cased; any other character is left blank.
+The font has A to Z, 0 to 9, `. , ! ? ' - : / &` and the space
+(`BITMAP_GLYPHS`). The text is upper-cased; any other character is left
+blank.
 
 ## Variants
 
@@ -48,7 +49,7 @@ a third of the wide one's; or `large` for the word a screen is about (a
 round's result), five. The word is `6 × letters − 1` letter pixels wide: by
 default a title of 26 characters fills the 320 stage pixels of a stage,
 small one of 53, medium one of 17, large one of 10. The font has A to
-Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
+Z, 0 to 9 and the marks above (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
 
 <Canvas of={BitmapTextStories.Title} />
 
@@ -62,6 +63,17 @@ Z, 0 to 9 and `. , ! ? ' - : &` (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
   its place in the word as `--i`, so a screen can move them one by one
   (`[&>[data-slot=bitmap-letter]]:animate-…` with a delay of
   `calc(var(--i) * 90ms)`).
+
+## On a canvas
+
+For a picture made outside the page, such as a result card to save or
+share, draw the same letters on a canvas with `drawBitmapText(ctx, text,
+{ x, y, scale, unit, colours })`: `scale` is the size's letter pixel (1, 2,
+3 or 5), `unit` canvas pixels a stage pixel, and `colours` the ramp as
+plain colours (`ink`, `light`, `main`, `shade`), since a canvas has no CSS
+variables. It returns the word's box. Both draw from `bitmapTextLayout`,
+the word as the rectangles it is made of, so the canvas and the component
+never differ. Keep the canvas's smoothing off and the unit whole.
 
 ## Accessibility
 

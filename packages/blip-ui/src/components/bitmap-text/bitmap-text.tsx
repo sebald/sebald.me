@@ -1,63 +1,11 @@
 import type { CSSProperties, SVGAttributes } from 'react';
 
-import { type Font, glyphOf, lit, supported } from '../../foundations/bitmap';
 import { px } from '../../foundations/pixel';
 import type { VariantProps } from '../../utils/styles';
+import { bitmapTextLayout } from './bitmap-text.layout';
 import { bitmapText } from './bitmap-text.styles';
 
-/** The letters, digits and a few marks, five by seven pixels each, `#` inked */
-const FONT: Font = {
-  A: ['.###.', '#...#', '#...#', '#####', '#...#', '#...#', '#...#'],
-  B: ['####.', '#...#', '#...#', '####.', '#...#', '#...#', '####.'],
-  C: ['.####', '#....', '#....', '#....', '#....', '#....', '.####'],
-  D: ['####.', '#...#', '#...#', '#...#', '#...#', '#...#', '####.'],
-  E: ['#####', '#....', '#....', '####.', '#....', '#....', '#####'],
-  F: ['#####', '#....', '#....', '####.', '#....', '#....', '#....'],
-  G: ['.####', '#....', '#....', '#..##', '#...#', '#...#', '.###.'],
-  H: ['#...#', '#...#', '#...#', '#####', '#...#', '#...#', '#...#'],
-  I: ['#####', '..#..', '..#..', '..#..', '..#..', '..#..', '#####'],
-  J: ['..###', '...#.', '...#.', '...#.', '...#.', '#..#.', '.##..'],
-  K: ['#...#', '#..#.', '#.#..', '##...', '#.#..', '#..#.', '#...#'],
-  L: ['#....', '#....', '#....', '#....', '#....', '#....', '#####'],
-  M: ['#...#', '##.##', '#.#.#', '#.#.#', '#...#', '#...#', '#...#'],
-  N: ['#...#', '##..#', '#.#.#', '#.#.#', '#..##', '#...#', '#...#'],
-  O: ['.###.', '#...#', '#...#', '#...#', '#...#', '#...#', '.###.'],
-  P: ['####.', '#...#', '#...#', '####.', '#....', '#....', '#....'],
-  Q: ['.###.', '#...#', '#...#', '#...#', '#.#.#', '#..#.', '.##.#'],
-  R: ['####.', '#...#', '#...#', '####.', '#.#..', '#..#.', '#...#'],
-  S: ['.####', '#....', '#....', '.###.', '....#', '....#', '####.'],
-  T: ['#####', '..#..', '..#..', '..#..', '..#..', '..#..', '..#..'],
-  U: ['#...#', '#...#', '#...#', '#...#', '#...#', '#...#', '.###.'],
-  V: ['#...#', '#...#', '#...#', '#...#', '.#.#.', '.#.#.', '..#..'],
-  W: ['#...#', '#...#', '#...#', '#.#.#', '#.#.#', '##.##', '#...#'],
-  X: ['#...#', '#...#', '.#.#.', '..#..', '.#.#.', '#...#', '#...#'],
-  Y: ['#...#', '#...#', '.#.#.', '..#..', '..#..', '..#..', '..#..'],
-  Z: ['#####', '....#', '...#.', '..#..', '.#...', '#....', '#####'],
-  '0': ['.###.', '#...#', '#..##', '#.#.#', '##..#', '#...#', '.###.'],
-  '1': ['..#..', '.##..', '..#..', '..#..', '..#..', '..#..', '.###.'],
-  '2': ['.###.', '#...#', '....#', '...#.', '..#..', '.#...', '#####'],
-  '3': ['####.', '....#', '....#', '.###.', '....#', '....#', '####.'],
-  '4': ['...#.', '..##.', '.#.#.', '#..#.', '#####', '...#.', '...#.'],
-  '5': ['#####', '#....', '####.', '....#', '....#', '#...#', '.###.'],
-  '6': ['.###.', '#....', '#....', '####.', '#...#', '#...#', '.###.'],
-  '7': ['#####', '....#', '...#.', '..#..', '.#...', '.#...', '.#...'],
-  '8': ['.###.', '#...#', '#...#', '.###.', '#...#', '#...#', '.###.'],
-  '9': ['.###.', '#...#', '#...#', '.####', '....#', '....#', '.###.'],
-  '.': ['.....', '.....', '.....', '.....', '.....', '.##..', '.##..'],
-  ',': ['.....', '.....', '.....', '.....', '.##..', '..#..', '.#...'],
-  '!': ['..#..', '..#..', '..#..', '..#..', '..#..', '.....', '..#..'],
-  '?': ['.###.', '#...#', '....#', '...#.', '..#..', '.....', '..#..'],
-  "'": ['..#..', '..#..', '.#...', '.....', '.....', '.....', '.....'],
-  '-': ['.....', '.....', '.....', '.###.', '.....', '.....', '.....'],
-  ':': ['.....', '.##..', '.##..', '.....', '.##..', '.##..', '.....'],
-  '&': ['.##..', '#..#.', '#.#..', '.#...', '#.#.#', '#..#.', '.##.#'],
-  ' ': ['.....', '.....', '.....', '.....', '.....', '.....', '.....'],
-};
-
-/** The letters the font can draw, for the docs */
-export const BITMAP_GLYPHS = supported(FONT);
-
-const GLYPH = { width: 5, height: 7, gap: 1 } as const;
+export { BITMAP_GLYPHS } from './bitmap-text.layout';
 
 type Variants = VariantProps<typeof bitmapText.root>;
 
@@ -86,10 +34,6 @@ export interface BitmapTextProps extends Omit<
 /** Stage pixels a letter pixel, by size */
 const SIZES = { small: 1, default: 2, medium: 3, large: 5 } as const;
 
-/** Room round the word: its ink line (one pixel) all round, its drop (two) below and right */
-const INK = 1;
-const ROOM = INK * 2 + 2;
-
 /**
  * Text in a five by seven pixel font, the way the logo's letters are
  * drawn: each letter pixel one, two, three or five stage pixels, an ink line round it,
@@ -106,13 +50,11 @@ export const BitmapText = ({
   style,
   ...props
 }: BitmapTextProps) => {
-  const scale = SIZES[size];
-  const chars = [...children.toUpperCase()];
-  const columns = chars.length * (GLYPH.width + GLYPH.gap) - GLYPH.gap;
-  const width = columns * scale + ROOM;
-  const height = GLYPH.height * scale + ROOM;
-  const row = (y: number) =>
-    y === 0 ? 'light' : y >= GLYPH.height - 2 ? 'shade' : 'main';
+  const { width, height, rects } = bitmapTextLayout(children, SIZES[size]);
+  // The rectangles by letter, in the order they are drawn
+  const letters = new Map<number, typeof rects>();
+  for (const rect of rects)
+    letters.set(rect.letter, [...(letters.get(rect.letter) ?? []), rect]);
   return (
     <svg
       aria-hidden
@@ -123,56 +65,31 @@ export const BitmapText = ({
       style={{ width: px(width), height: px(height), ...style }}
       {...props}
     >
-      {chars.map((char, i) => {
-        const left = INK + i * (GLYPH.width + GLYPH.gap) * scale;
-        const at = lit(glyphOf(FONT, char)).map(({ x, y }) => ({
-          x: left + x * scale,
-          y: INK + y * scale,
-          row: y,
-        }));
-        return (
-          // Each letter its own group, its place in `--i`, so a letter can
-          // move on its own: `[&>[data-slot=bitmap-letter]]` and a delay of
-          // `calc(var(--i) * 90ms)`
-          <g
-            key={i}
-            data-slot="bitmap-letter"
-            style={{ '--i': i } as CSSProperties}
-          >
-            {/* The drop, then the ink line, then the letter */}
-            {at.map(({ x, y }) => (
-              <rect
-                key={`d${x}-${y}`}
-                x={x + 2}
-                y={y + 2}
-                width={scale + 1}
-                height={scale + 1}
-                className={bitmapText.ink()}
-              />
-            ))}
-            {at.map(({ x, y }) => (
-              <rect
-                key={`o${x}-${y}`}
-                x={x - 1}
-                y={y - 1}
-                width={scale + 2}
-                height={scale + 2}
-                className={bitmapText.ink()}
-              />
-            ))}
-            {at.map(({ x, y, row: r }) => (
-              <rect
-                key={`l${x}-${y}`}
-                x={x}
-                y={y}
-                width={scale}
-                height={scale}
-                className={bitmapText.letter({ row: row(r) })}
-              />
-            ))}
-          </g>
-        );
-      })}
+      {[...letters].map(([i, parts]) => (
+        // Each letter its own group, its place in `--i`, so a letter can
+        // move on its own: `[&>[data-slot=bitmap-letter]]` and a delay of
+        // `calc(var(--i) * 90ms)`. The drop, the ink line, then the letter
+        <g
+          key={i}
+          data-slot="bitmap-letter"
+          style={{ '--i': i } as CSSProperties}
+        >
+          {parts.map(({ x, y, width: w, height: h, part }) => (
+            <rect
+              key={`${part}${x}-${y}-${w}`}
+              x={x}
+              y={y}
+              width={w}
+              height={h}
+              className={
+                part === 'ink'
+                  ? bitmapText.ink()
+                  : bitmapText.letter({ row: part })
+              }
+            />
+          ))}
+        </g>
+      ))}
     </svg>
   );
 };

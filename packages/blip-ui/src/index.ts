@@ -72,10 +72,18 @@ export { type Scroll, overflows, useScroll } from './hooks/use-scroll';
 
 // Components
 export {
-  BITMAP_GLYPHS,
   BitmapText,
   type BitmapTextProps,
 } from './components/bitmap-text/bitmap-text';
+export {
+  BITMAP_GLYPHS,
+  type BitmapColours,
+  type BitmapLayout,
+  type BitmapPart,
+  type BitmapRect,
+  bitmapTextLayout,
+  drawBitmapText,
+} from './components/bitmap-text/bitmap-text.layout';
 export { Line, type LineProps } from './components/line/line';
 export {
   Typewriter,
