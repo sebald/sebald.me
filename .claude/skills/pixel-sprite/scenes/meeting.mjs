@@ -15,7 +15,7 @@ import {
   sat,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
-import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
+import { FEET, ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
 
@@ -40,6 +40,40 @@ const isSteam = (c, x, y) => {
   return lum(c) < lum(wall) - 10 && sat(c) < 0.25;
 };
 for (const [x, y] of collect(STEAM, isSteam)) setPx(plate, x, y, wallAt(y));
+
+// The diagram on the whiteboard comes off the plate: shrunk with the
+// room its one-pixel lines went pale and two wide (smoothly) or crooked
+// (on the art's pixels), so it is drawn again after the shrink, on the
+// shrunk room's pixels (`drawDiagram`). Each marker pixel takes the board
+// beside it, inside the beam or out
+const DIAGRAM = { x0: 193, y0: 96, x1: 272, y1: 152 };
+// Marker, its pale edges too: bluer than the grey board, or redder than
+// the beam's peach
+const isInk = ([r, g, b]) => b - r > 18 || r - g > 40;
+for (let y = DIAGRAM.y0; y < DIAGRAM.y1; y++)
+  for (let x = DIAGRAM.x0; x < DIAGRAM.x1; x++) {
+    if (!isInk(rgb(base, x, y))) continue;
+    for (let d = 1; d < 12; d++) {
+      const left = rgb(base, x - d, y);
+      if (!isInk(left)) {
+        setPx(plate, x, y, left);
+        break;
+      }
+      const right = rgb(base, x + d, y);
+      if (!isInk(right)) {
+        setPx(plate, x, y, right);
+        break;
+      }
+    }
+  }
+
+// The sticky notes come off too, for the same reason (`drawNotes`): the
+// board around them is plain, out of the beam
+const NOTES_AREA = { x0: 318, y0: 90, x1: 353, y1: 122 };
+const boardAt = y => rgb(base, NOTES_AREA.x0 - 2, y);
+for (let y = NOTES_AREA.y0; y < NOTES_AREA.y1; y++)
+  for (let x = NOTES_AREA.x0; x < NOTES_AREA.x1; x++)
+    setPx(plate, x, y, boardAt(y));
 
 // Steam
 // ---------------
@@ -137,6 +171,356 @@ const drawLed = (b, t) => {
   for (const [x, y, c] of on ? led : ledOff) setPx(b, x, y, c);
 };
 
+// The diagram, drawn again
+// ---------------
+// The same boxes and arrows in the render's pixels (where they were
+// drawn), placed on the shrunk room's grid: every line one pixel and
+// straight, the arrowheads at their drawn size, in the marker's colour,
+// lighter in the beam
+const FACTOR = ROOM_FACTORS.meeting;
+const LEFT = Math.round((scene.W - Math.round(scene.W * FACTOR)) / 2);
+const TOP = FEET - Math.round(FEET * FACTOR);
+const sx = x => Math.round(x * FACTOR - 0.1) + LEFT;
+const sy = y => Math.round(y * FACTOR - 0.1) + TOP;
+
+// The markers' colours, in the beam a little lighter, as drawn
+const INK = {
+  red: { board: [183, 57, 53], beam: [188, 73, 67] },
+  blue: { board: [59, 76, 163], beam: [86, 104, 165] },
+};
+// In the beam where the shrunk board under the pixel is warmer than grey
+const warmUnder = (f, i) => f[i] > f[i + 2] + 6;
+
+// Shapes in the render's pixels: rectangles (x0, y0, x1, y1), lines and
+// polylines through points, and arrowheads at a tip, pointing a way
+const SHAPES = [
+  // The two red boxes, the upper one a folder with a tab
+  {
+    ink: 'red',
+    line: [
+      [221, 99],
+      [232, 99],
+    ],
+  },
+  {
+    ink: 'red',
+    line: [
+      [232, 98],
+      [240, 98],
+    ],
+  },
+  {
+    ink: 'red',
+    line: [
+      [221, 99],
+      [221, 107],
+      [240, 107],
+      [240, 98],
+    ],
+  },
+  { ink: 'red', rect: [221, 118, 240, 127] },
+  // The blue boxes: left, right, bottom left (with text), bottom middle
+  { ink: 'blue', rect: [195, 118, 209, 127] },
+  { ink: 'blue', rect: [253, 117, 268, 126] },
+  { ink: 'blue', rect: [196, 138, 210, 147] },
+  { ink: 'blue', rect: [224, 139, 239, 148] },
+  // The speech bubble, its corners round
+  {
+    ink: 'blue',
+    line: [
+      [254, 134],
+      [267, 134],
+    ],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [254, 142],
+      [267, 142],
+    ],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [253, 135],
+      [253, 141],
+    ],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [268, 135],
+      [268, 141],
+    ],
+  },
+  // Arrows: shaft, then head
+  {
+    ink: 'red',
+    line: [
+      [211, 122],
+      [218, 122],
+    ],
+    head: [219, 122, 'right'],
+  },
+  {
+    ink: 'red',
+    line: [
+      [243, 122],
+      [250, 122],
+    ],
+    head: [251, 122, 'right'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [231, 109],
+      [231, 115],
+    ],
+    head: [231, 116, 'down'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [231, 130],
+      [231, 138],
+    ],
+    head: [231, 129, 'up'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [203, 130],
+      [203, 137],
+    ],
+    head: [203, 129, 'up'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [213, 143],
+      [222, 143],
+    ],
+    head: [212, 143, 'left'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [260, 128],
+      [260, 132],
+    ],
+    head: [260, 133, 'down'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [253, 137],
+      [244, 129],
+    ],
+    head: [243, 128, 'upLeft'],
+  },
+  {
+    ink: 'red',
+    line: [
+      [203, 116],
+      [204, 112],
+      [207, 108],
+      [211, 105],
+      [218, 104],
+    ],
+    head: [219, 104, 'right'],
+  },
+  {
+    ink: 'blue',
+    line: [
+      [243, 103],
+      [248, 104],
+      [253, 106],
+      [256, 109],
+      [258, 113],
+    ],
+    head: [259, 114, 'down'],
+  },
+];
+
+// Arrowheads as offsets from the tip, in the shrunk room's pixels
+const HEADS = {
+  right: [
+    [0, 0],
+    [-1, -1],
+    [-1, 1],
+    [-2, -2],
+    [-2, 2],
+  ],
+  left: [
+    [0, 0],
+    [1, -1],
+    [1, 1],
+    [2, -2],
+    [2, 2],
+  ],
+  up: [
+    [0, 0],
+    [-1, 1],
+    [1, 1],
+    [-2, 2],
+    [2, 2],
+  ],
+  down: [
+    [0, 0],
+    [-1, -1],
+    [1, -1],
+    [-2, -2],
+    [2, -2],
+  ],
+  upLeft: [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [0, 1],
+    [0, 2],
+  ],
+};
+
+// The text in the bottom left box and the speech bubble, in the shrunk
+// room's pixels from the box's top left corner: rows of dashes
+const TEXT = [
+  {
+    ink: 'blue',
+    at: [196, 138],
+    dashes: [
+      [2, 2, 4],
+      [6, 2, 7],
+      [2, 4, 7],
+    ],
+  },
+  {
+    ink: 'blue',
+    at: [253, 134],
+    dashes: [
+      [2, 2, 4],
+      [7, 2, 9],
+      [3, 4, 7],
+    ],
+  },
+];
+
+const putInk = (f, X, Y, ink) => {
+  const i = (Y * scene.W + X) * 3;
+  const c = INK[ink][warmUnder(f, i) ? 'beam' : 'board'];
+  f[i] = c[0];
+  f[i + 1] = c[1];
+  f[i + 2] = c[2];
+};
+
+// A one-pixel line between two shrunk points (Bresenham)
+const strokeShrunk = (f, [ax, ay], [bx, by], ink) => {
+  const dx = Math.abs(bx - ax);
+  const dy = -Math.abs(by - ay);
+  const stepX = ax < bx ? 1 : -1;
+  const stepY = ay < by ? 1 : -1;
+  let err = dx + dy;
+  for (let x = ax, y = ay; ;) {
+    putInk(f, x, y, ink);
+    if (x === bx && y === by) return;
+    const e2 = 2 * err;
+    if (e2 >= dy) {
+      err += dy;
+      x += stepX;
+    }
+    if (e2 <= dx) {
+      err += dx;
+      y += stepY;
+    }
+  }
+};
+
+const drawDiagram = f => {
+  for (const shape of SHAPES) {
+    const { ink } = shape;
+    const points = shape.rect
+      ? (([x0, y0, x1, y1]) => [
+          [x0, y0],
+          [x1, y0],
+          [x1, y1],
+          [x0, y1],
+          [x0, y0],
+        ])(shape.rect)
+      : shape.line;
+    const shrunkPoints = points.map(([x, y]) => [sx(x), sy(y)]);
+    for (let i = 1; i < shrunkPoints.length; i++)
+      strokeShrunk(f, shrunkPoints[i - 1], shrunkPoints[i], ink);
+    if (shape.head) {
+      const [x, y, way] = shape.head;
+      for (const [dx, dy] of HEADS[way]) putInk(f, sx(x) + dx, sy(y) + dy, ink);
+    }
+  }
+  for (const { ink, at, dashes } of TEXT)
+    for (const [from, row, to] of dashes)
+      for (let x = from; x <= to; x++)
+        putInk(f, sx(at[0]) + x, sy(at[1]) + row, ink);
+};
+
+// The sticky notes, drawn again: each at its place in the render, five
+// by four on the shrunk grid with its shadow under it and its scribble,
+// in the colours they were drawn in. Listed back to front (the orange
+// one sits on the green one)
+const NOTE_SHADOW = rgb(base, 324, 98);
+const NOTES = [
+  { at: [321, 93], body: [321 + 3, 93 + 4], marks: 'lines' },
+  { at: [330, 93], body: [330 + 5, 93 + 5], marks: 'dash' },
+  { at: [344, 92], body: [344 + 1, 92 + 1], marks: 'lines' },
+  { at: [339, 96], body: [339 + 1, 96 + 4], marks: 'lines' },
+  { at: [325, 101], body: [325 + 1, 101 + 1], marks: 'face' },
+  { at: [334, 103], body: [334 + 1, 103 + 1], marks: 'face' },
+  { at: [343, 104], body: [343 + 5, 104 + 4], marks: 'dash' },
+  { at: [329, 109], body: [329 + 5, 109 + 4], marks: 'dash' },
+  { at: [342, 113], body: [342 + 1, 113 + 1], marks: 'face' },
+];
+// The scribbles, as pixels from the note's top left
+const MARKS = {
+  lines: [
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [1, 2],
+    [2, 2],
+  ],
+  dash: [
+    [1, 1],
+    [2, 1],
+    [3, 1],
+    [1, 2],
+  ],
+  face: [
+    [1, 1],
+    [3, 1],
+    [1, 2],
+    [3, 2],
+  ],
+};
+
+const putRgb = (f, X, Y, c) => {
+  const i = (Y * scene.W + X) * 3;
+  f[i] = c[0];
+  f[i + 1] = c[1];
+  f[i + 2] = c[2];
+};
+
+const drawNotes = f => {
+  for (const note of NOTES) {
+    const colour = rgb(base, ...note.body);
+    // The scribble: the note's colour much darker
+    const ink = colour.map(v => Math.round(v * 0.4));
+    const X = sx(note.at[0]);
+    const Y = sy(note.at[1]);
+    for (let x = 0; x < 5; x++) putRgb(f, X + x - 1, Y + 4, NOTE_SHADOW);
+    for (let y = 1; y < 4; y++) putRgb(f, X - 1, Y + y, NOTE_SHADOW);
+    for (let y = 0; y < 4; y++)
+      for (let x = 0; x < 5; x++) putRgb(f, X + x, Y + y, colour);
+    for (const [x, y] of MARKS[note.marks]) putRgb(f, X + x, Y + y, ink);
+  }
+};
+
 // Render
 // ---------------
 console.log(`led ${led.length}, motes ${MOTES.length}`);
@@ -149,12 +533,30 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   return f;
 });
 
-// The room a fifth smaller than drawn, see shrink.mjs
+// The room a fifth smaller than drawn, see shrink.mjs; the whiteboard's
+// straight lines shrunk on the art's pixels so they stay sharp: the
+// frame (the tray left and right of the mug, where the steam rises). The
+// diagram and the sticky notes are drawn again instead
+const CRISP = [
+  { x0: 109, y0: 84, x1: 361, y1: 91 },
+  { x0: 109, y0: 84, x1: 116, y1: 173 },
+  { x0: 354, y0: 84, x1: 361, y1: 173 },
+  { x0: 109, y0: 164, x1: 250, y1: 173 },
+  { x0: 272, y0: 164, x1: 361, y1: 173 },
+];
+
+const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
+  factor: ROOM_FACTORS.meeting,
+  crisp: CRISP,
+});
+for (const f of shrunk) {
+  drawDiagram(f);
+  drawNotes(f);
+}
+
 await writeLoop({
   scene,
-  frames: await shrinkFrames(frames, scene.W, scene.H, {
-    factor: ROOM_FACTORS.meeting,
-  }),
+  frames: shrunk,
   delay: DELAY,
   outDir,
   shownWidth: SHOWN_WIDTH,

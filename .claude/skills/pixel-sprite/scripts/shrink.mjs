@@ -45,15 +45,100 @@ const paletteOf = async (png, colours) => {
   return out;
 };
 
+/** How far from the patch's lightness a colour must be to count as detail */
+const STANDS_OUT = 24;
+
+/** The ring of source pixels round a patch its surroundings are read from */
+const AROUND = 2;
+
+const lightness = (r, g, b) => 0.299 * r + 0.587 * g + 0.114 * b;
+
+/**
+ * The crisp shrink, for the shrunk pixels in `box`: per new pixel, the
+ * source colours weighted by the area they cover, double for the detail
+ * (the one farthest from the surroundings' mean, if far enough), and the
+ * heaviest wins, handed to `put(x, y, rgb)`. One-pixel lines stay one
+ * pixel and keep their colour, but some rows and columns double and
+ * others drop, which makes a diagonal or a curve step unevenly: only
+ * for boxes of straight lines (a whiteboard, sticky notes), never a room.
+ */
+const shrinkOnPixels = (f, W, H, factor, box, put) => {
+  const cover = new Map();
+  for (let y = box.y0; y < box.y1; y++)
+    for (let x = box.x0; x < box.x1; x++) {
+      const x0 = x / factor;
+      const x1 = (x + 1) / factor;
+      const y0 = y / factor;
+      const y1 = (y + 1) / factor;
+      cover.clear();
+      // The last row and column can reach past the render's edge
+      for (let sy = Math.floor(y0); sy < Math.min(H, Math.ceil(y1)); sy++)
+        for (let sx = Math.floor(x0); sx < Math.min(W, Math.ceil(x1)); sx++) {
+          const area =
+            (Math.min(x1, sx + 1) - Math.max(x0, sx)) *
+            (Math.min(y1, sy + 1) - Math.max(y0, sy));
+          if (area <= 0) continue;
+          const i = (sy * W + sx) * 3;
+          const key = (f[i] << 16) | (f[i + 1] << 8) | f[i + 2];
+          cover.set(key, (cover.get(key) ?? 0) + area);
+        }
+      // What the pixel sits in: the patch and a ring of source pixels
+      // round it, so a line wider than the patch still reads as the line
+      let mean = 0;
+      let total = 0;
+      for (
+        let sy = Math.max(0, Math.floor(y0) - AROUND);
+        sy < Math.min(H, Math.ceil(y1) + AROUND);
+        sy++
+      )
+        for (
+          let sx = Math.max(0, Math.floor(x0) - AROUND);
+          sx < Math.min(W, Math.ceil(x1) + AROUND);
+          sx++
+        ) {
+          const i = (sy * W + sx) * 3;
+          mean += lightness(f[i], f[i + 1], f[i + 2]);
+          total++;
+        }
+      mean /= total;
+      // The detail is the colour farthest from its surroundings, lighter
+      // or darker: a line or a speck pulls their mean less than what it
+      // sits on
+      let detail = -1;
+      let farthest = STANDS_OUT;
+      for (const key of cover.keys()) {
+        const d = Math.abs(
+          lightness(key >> 16, (key >> 8) & 255, key & 255) - mean,
+        );
+        if (d > farthest) {
+          farthest = d;
+          detail = key;
+        }
+      }
+      let best = 0;
+      let heaviest = -1;
+      for (const [key, area] of cover) {
+        const weight = key === detail ? area * 2 : area;
+        if (weight > heaviest) {
+          heaviest = weight;
+          best = key;
+        }
+      }
+      put(x, y, best);
+    }
+};
+
 /**
  * The frames (raw RGB, W by H) shrunk by `factor` about the floor line,
- * centred, on a canvas of the same size. Returns raw RGB frames.
+ * centred, on a canvas of the same size. Returns raw RGB frames. `crisp`
+ * lists boxes in the render's pixels ({ x0, y0, x1, y1 }) shrunk on the
+ * art's pixels instead (`shrinkOnPixels`).
  */
 export const shrinkFrames = async (
   frames,
   W,
   H,
-  { factor = ROOM_FACTOR, feet = FEET, colours = 64 } = {},
+  { factor = ROOM_FACTOR, feet = FEET, colours = 64, crisp = [] } = {},
 ) => {
   if (factor === 1) return frames;
   const w = Math.round(W * factor);
@@ -109,6 +194,20 @@ export const shrinkFrames = async (
           out[d + 1] = g;
           out[d + 2] = b;
         }
+      for (const c of crisp) {
+        const box = {
+          x0: Math.floor(c.x0 * factor),
+          y0: Math.floor(c.y0 * factor),
+          x1: Math.ceil(c.x1 * factor),
+          y1: Math.ceil(c.y1 * factor),
+        };
+        shrinkOnPixels(f, W, H, factor, box, (x, y, rgb) => {
+          const d = ((y + top) * W + x + left) * 3;
+          out[d] = rgb >> 16;
+          out[d + 1] = (rgb >> 8) & 255;
+          out[d + 2] = rgb & 255;
+        });
+      }
       return out;
     }),
   );

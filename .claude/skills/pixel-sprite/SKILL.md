@@ -188,7 +188,14 @@ down smoothly about the floor line, every pixel snapped back to the
 first frame's palette, and padded to the stage with the render's corner
 colour (never in the window). The loop scripts and `native.png` stay in
 the render's own pixels; only `scene.webp`, `scene-1x.webp` and
-`poster.png` are smaller. Each scene's factor is in
+`poster.png` are smaller. The smooth shrink keeps lines straight but pale; where a detail is
+looked at (the meeting room's whiteboard), the loop script takes it off
+the plate before the shrink and draws it again after it on the shrunk
+grid, one-pixel lines in its own colours (`drawDiagram`, `drawNotes` in
+`scenes/meeting.mjs`), and `shrinkFrames({ crisp })` shrinks boxes of
+lines that only run across or down (a frame) on the art's pixels. Never
+the whole room on its pixels: at 0.8 rows and columns double or drop and
+straight edges go crooked. Each scene's factor is in
 `packages/pushback/src/assets/scenes/rooms.json`, which the loop scripts
 and the game both read (the title fits the room's picture inside the
 padded render to the stage; a test checks every `scene-1x.webp`
