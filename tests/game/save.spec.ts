@@ -4,6 +4,7 @@ import {
   openWith,
   playDuel,
   press,
+  said,
   saveWith,
   screen,
   test,
@@ -43,5 +44,22 @@ test.describe('a save to come back to', () => {
     await playDuel(page);
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     await expect(screen(page)).toContainText('Stakeholder beaten');
+  });
+
+  test('lost to the Stakeholder: taken offline, and the result says so', async ({
+    page,
+  }) => {
+    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
+    await toContinue(page);
+    await press(page, 'Enter');
+    const offline = async () =>
+      /took it offline/.test((await said(page).textContent()) ?? '');
+    await playDuel(page, { wrong: true, until: offline });
+    await expect(said(page)).toHaveText(
+      /You lost\. The Stakeholder took it offline/,
+    );
+    await playDuel(page, { wrong: true });
+    await expect(screen(page)).toHaveAccessibleName('Pushback, result');
+    await expect(screen(page)).toContainText('Stakeholder took it offline');
   });
 });

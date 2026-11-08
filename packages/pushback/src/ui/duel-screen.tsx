@@ -637,7 +637,13 @@ export const DuelScreen = ({
     if (step.kind === 'reveal') return `The reply was: ${step.text}`;
     if (step.kind === 'menu') return showsHint(state) ? HINT : prompt(state);
     if (step.kind === 'wait') {
-      return `${state.winner === 'player' ? 'You won' : 'You lost'}. ${barsLabel(state, 'player')}. Press Enter to continue.`;
+      const result =
+        state.winner === 'player'
+          ? 'You won'
+          : state.boss
+            ? 'You lost. The Stakeholder took it offline'
+            : 'You lost';
+      return `${result}. ${barsLabel(state, 'player')}. Press Enter to continue.`;
     }
     return barsLabel(state, 'player');
   }, [step, state, character.name]);
@@ -955,7 +961,11 @@ export const DuelScreen = ({
           className="pointer-events-none absolute -translate-x-1/2"
           style={{ left: px(CALL_AT.x), top: px(CALL_AT.y) }}
         >
-          <RoundCall won={won} flawless={flawless} />
+          <RoundCall
+            won={won}
+            flawless={flawless}
+            offline={!won && state.boss}
+          />
         </div>
       )}
 

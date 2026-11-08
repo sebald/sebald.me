@@ -73,6 +73,11 @@ export interface RoundCallProps {
   won: boolean;
   /** A line of FLAWLESS under YOU WIN, and sparkles round it */
   flawless?: boolean;
+  /**
+   * Lost to the Stakeholder: OFFLINE in place of YOU LOSE, their
+   * `Let's take this offline.` as the word the run ends on
+   */
+  offline?: boolean;
   className?: string;
   style?: CSSProperties;
 }
@@ -81,14 +86,16 @@ export interface RoundCallProps {
  * The end of a duel called the way a fighting game calls the round, over
  * the room: YOU WIN in gold (BitmapText's `large`) slamming in from three times its size, the
  * stage jolting as it lands; YOU LOSE in grey dropping in from above,
- * landing with a thud, its letters then sagging one after the other. A
- * flawless win adds FLAWLESS under it, a letter at a time, and sparkles.
+ * landing with a thud, its letters then sagging one after the other;
+ * OFFLINE the same way when the Stakeholder wins. A flawless win adds
+ * FLAWLESS under it, a letter at a time, and sparkles.
  * Position it from outside by its centre; under reduced motion it is
  * there at once and stays still.
  */
 export const RoundCall = ({
   won,
   flawless = false,
+  offline = false,
   className,
   style,
 }: RoundCallProps) => {
@@ -118,7 +125,7 @@ export const RoundCall = ({
             } as CSSProperties
           }
         >
-          YOU LOSE
+          {offline ? 'OFFLINE' : 'YOU LOSE'}
         </BitmapText>
       </div>
     );

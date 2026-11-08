@@ -275,12 +275,20 @@ const answer = async (page: Page) => {
  * answers the phrase (from the game's own lines), otherwise Enter
  * (continue, or the first phrase to throw); the time runs on between
  * presses, as it would while a player reads. `wrong` replies with
- * anything but the counter, to lose.
+ * anything but the counter, to lose; `until` stops the duel where it
+ * holds (the end called, before Enter moves on).
  */
-export const playDuel = async (page: Page, { wrong = false } = {}) => {
+export const playDuel = async (
+  page: Page,
+  {
+    wrong = false,
+    until,
+  }: { wrong?: boolean; until?: () => Promise<boolean> } = {},
+) => {
   for (let i = 0; i < 300; i++) {
     const name = (await screen(page).getAttribute('aria-label')) ?? '';
     if (!name.includes('duel against')) return;
+    if (until && (await until())) return;
     const counter = await answer(page);
     if (counter) {
       for (let step = 0; step < 8; step++) {
