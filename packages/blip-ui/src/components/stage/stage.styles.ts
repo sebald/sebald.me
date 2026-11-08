@@ -19,10 +19,16 @@ export const stage = {
   turned: cva({
     base: 'grid min-h-[60svh] place-content-center gap-2 bg-(--bui-ground) p-6 text-center text-sm text-(--bui-text)',
   }),
-  /** The full stage inside the section; a lift settles smoothly */
+  /**
+   * The full stage inside the section, coming in from the ground's dark;
+   * once settled, a lift moves smoothly. Not before: the first render is
+   * at scale 1 until the stage has measured the window, and a transition
+   * then grew every new screen in from the top
+   */
   layer: cva({
     base: [
-      'absolute inset-x-0 transition-[top,height] duration-300 ease-out motion-reduce:transition-none',
+      'absolute inset-x-0 animate-bui-enter motion-reduce:animate-none',
+      'data-settled:transition-[top,height] data-settled:duration-300 data-settled:ease-out motion-reduce:transition-none',
       // A legend on the stage itself: the bottom right corner; held
       // upright, centred over the bar of controls
       '*:data-[slot=legend]:absolute *:data-[slot=legend]:right-[calc(var(--bui-px)*4)] *:data-[slot=legend]:bottom-[calc(var(--bui-px)*3)] *:data-[slot=legend]:text-right',

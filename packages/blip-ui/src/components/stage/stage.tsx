@@ -6,7 +6,7 @@ import type {
   PropsWithChildren,
   ReactNode,
 } from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { NATIVE, fontSizeFor } from '../../foundations/scale';
 import { Announcer } from '../../providers/announcer';
@@ -111,6 +111,13 @@ export const Stage = ({
   const lift = tall ? liftProp : 0;
   // The section, for the focus and for what renders into the stage
   const [root, setRoot] = useState<HTMLElement | null>(null);
+  // Settled once the measured size has been painted: from then on a
+  // change of lift moves smoothly, the first size never does
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setSettled(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
   // Focusing the game (a tap on it, or focus arriving from the page)
   // centres the stage in the viewport
   const centre = () =>
@@ -178,6 +185,7 @@ export const Stage = ({
         <StageContext value={root}>
           <Announcer>
             <div
+              data-settled={settled || undefined}
               className={stage.layer()}
               style={{
                 top: (lift - crop) * scale,

@@ -45,4 +45,16 @@
   }
 
   --animate-bui-blink: bui-blink 1s steps(1) infinite;
+
+  /* A screen coming in: up from the ground's dark in four steps */
+  @keyframes bui-enter {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  --animate-bui-enter: bui-enter 160ms steps(4, jump-end) both;
 }
