@@ -36,6 +36,7 @@ import {
 } from 'react';
 
 import { DEMO_ACCURACY, DEMO_END_MS, DEMO_PICK_MS } from '../lib/attract';
+import { DUEL_CUES } from '../lib/audio/music';
 import {
   GHOST,
   buddyLine,
@@ -743,7 +744,11 @@ export const DuelScreen = ({
   // music off the stinger. The demo leaves the title's music playing and
   // makes no sound of its own.
   useMusic(
-    auto || state.phase === 'end' ? undefined : state.boss ? 'boss' : 'duel',
+    auto || state.phase === 'end'
+      ? undefined
+      : state.boss
+        ? 'boss'
+        : DUEL_CUES[scene],
   );
   useEffect(() => {
     if (!auto) setMomentum(state.momentum.player);

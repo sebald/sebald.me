@@ -1,8 +1,15 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { DUEL_LAYERS, MUSIC } from './music';
-import { STEPS_PER_BAR, compile, fitsChip, lineSteps } from './notes';
+import { DUEL_CUES, DUEL_LAYERS, MUSIC } from './music';
+import {
+  STEPS_PER_BAR,
+  chordOf,
+  compile,
+  fitsChip,
+  lineSteps,
+  parseLine,
+} from './notes';
 
 describe('the soundtrack', () => {
   for (const [cue, piece] of Object.entries(MUSIC)) {
@@ -37,15 +44,68 @@ describe('the soundtrack', () => {
     }
   });
 
-  it('gives the duel no lead before momentum, and a layer per step of it', () => {
-    const base = MUSIC.duel.tracks.filter(track => track.layer === 0);
-    assert.ok(
-      base.every(track => track.chip !== 'fm' || track.voice !== 'mellow'),
+  it('gives every room a duel loop of its own, in the same groove', () => {
+    const cues = Object.values(DUEL_CUES);
+    assert.deepEqual(Object.keys(DUEL_CUES).sort(), [
+      'floor',
+      'meeting',
+      'office',
+      'studio',
+    ]);
+    assert.equal(new Set(cues).size, 4);
+    assert.equal(DUEL_CUES.floor, 'duel');
+    for (const cue of cues) {
+      assert.equal(MUSIC[cue].bpm, 96, cue);
+      assert.equal(MUSIC[cue].chords.length, 8, cue);
+      assert.notEqual(MUSIC[cue].once, true, cue);
+    }
+    // No two rooms share a tune
+    const tunes = cues.map(cue =>
+      JSON.stringify(
+        MUSIC[cue].tracks.map(track => ('line' in track ? track.line : '')),
+      ),
     );
-    assert.equal(
-      new Set(MUSIC.duel.tracks.map(track => track.layer)).size,
-      DUEL_LAYERS.length,
-    );
+    assert.equal(new Set(tunes).size, 4);
+  });
+
+  it('keeps each duel loop to C dorian and its Ab major seventh', () => {
+    const dorian = new Set([0, 2, 3, 5, 7, 8, 9, 10]);
+    for (const cue of Object.values(DUEL_CUES)) {
+      for (const chord of MUSIC[cue].chords) {
+        const { root, intervals } = chordOf(chord as string);
+        // Every chord tone is in the scale (and the Ab of the Abmaj7), bar the G7's leading tone
+        for (const interval of intervals) {
+          const pitch = (root + interval) % 12;
+          assert.ok(
+            dorian.has(pitch) || (chord === 'G7' && pitch === 11),
+            `${cue} ${chord}`,
+          );
+        }
+      }
+      for (const track of MUSIC[cue].tracks) {
+        if (!('line' in track) || !track.line) continue;
+        for (const [, midi] of parseLine(track.line, track.transpose)) {
+          const pitch = midi % 12;
+          assert.ok(dorian.has(pitch) || pitch === 11, `${cue} ${midi}`);
+        }
+      }
+    }
+  });
+
+  it('gives each duel loop no lead before momentum, and a layer per step of it', () => {
+    for (const cue of Object.values(DUEL_CUES)) {
+      const tracks = MUSIC[cue].tracks;
+      const base = tracks.filter(track => track.layer === 0);
+      assert.ok(
+        base.every(track => track.chip !== 'fm' || track.voice !== 'mellow'),
+        cue,
+      );
+      assert.equal(
+        new Set(tracks.map(track => track.layer)).size,
+        DUEL_LAYERS.length,
+        cue,
+      );
+    }
   });
 
   it('hands the jingles over to the result on G and E flat', () => {
