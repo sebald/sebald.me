@@ -132,13 +132,29 @@ export type Cue =
   | 'lose'
   | 'result';
 
-/** The duel loop of each room (the boss's fight plays the boss's piece instead) */
+/** The duel loop of each room (the boss's fight opens on the office's) */
 export const DUEL_CUES: Record<SceneId, Cue> = {
   floor: 'duel',
   meeting: 'duelMeeting',
   studio: 'duelStudio',
   office: 'duelOffice',
 };
+
+/**
+ * What a duel plays: its room's loop; the Stakeholder's fight opens on
+ * the office's while they look at their phone, and the boss's piece comes
+ * in with the first exchange the player wins
+ */
+export const duelCue = ({
+  scene,
+  boss,
+  exchangesWon,
+}: {
+  scene: SceneId;
+  boss: boolean;
+  exchangesWon: number;
+}): Cue =>
+  boss ? (exchangesWon > 0 ? 'boss' : DUEL_CUES.office) : DUEL_CUES[scene];
 
 export const MUSIC: Record<Cue, Piece> = {
   // Dark: a synth lead and FM pads over a half-time beat, the snare on three
@@ -271,8 +287,9 @@ export const MUSIC: Record<Cue, Piece> = {
       },
     ],
   },
-  // The design studio: laid back, a lazy bass and sparse chords in a roomy
-  // kit, the tune airy
+  // The design studio: warm and hazy, focus music. A lazy bass under the
+  // chords held as a soft wash, the kick lazy and the hats on the offbeats,
+  // the tune an octave down (picked from three in the inventory)
   duelStudio: {
     name: 'Duel, the design studio',
     bpm: 96,
@@ -289,21 +306,21 @@ export const MUSIC: Record<Cue, Piece> = {
       {
         chip: 'fm',
         voice: 'epiano',
-        pattern: PATTERNS.stabs(64, [3, 10]),
+        pattern: PATTERNS.hold(60),
         layer: 0,
-        velocity: 0.7,
+        velocity: 0.5,
         reverb: 0.3,
       },
       {
         chip: 'dac',
-        drums: { snare: '....x.......x...', kick: 'x.......x..x....' },
+        drums: { snare: '....x.......x...', kick: 'x......x..x.....' },
         layer: 0,
-        reverb: 0.6,
+        reverb: 0.4,
         velocity: 0.7,
       },
       {
         chip: 'noise',
-        drums: { hat: 'x...x...x...x...' },
+        drums: { hat: '..x...x...x...x.' },
         layer: 0,
         velocity: 0.45,
       },
@@ -311,6 +328,7 @@ export const MUSIC: Record<Cue, Piece> = {
         chip: 'fm',
         voice: 'mellow',
         line: STUDIO_TUNE,
+        transpose: -12,
         layer: 1,
         reverb: 0.4,
       },

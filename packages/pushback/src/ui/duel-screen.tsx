@@ -36,7 +36,7 @@ import {
 } from 'react';
 
 import { DEMO_ACCURACY, DEMO_END_MS, DEMO_PICK_MS } from '../lib/attract';
-import { DUEL_CUES } from '../lib/audio/music';
+import { duelCue } from '../lib/audio/music';
 import {
   GHOST,
   buddyLine,
@@ -739,17 +739,20 @@ export const DuelScreen = ({
 
   // Sound
   // ---------------
-  // The duel's music, the boss's for the boss, momentum bringing in its
-  // layers and the pause turning it down. The deciding blow cuts it for
+  // The room's music (the boss's fight opens on the office's and the
+  // boss's piece comes in with the first exchange won), momentum bringing
+  // in its layers and the pause turning it down. The deciding blow cuts it for
   // the hit-stop; the round's jingle plays with the call, or with the
   // music off the stinger. The demo leaves the title's music playing and
   // makes no sound of its own.
   useMusic(
     auto || state.phase === 'end'
       ? undefined
-      : state.boss
-        ? 'boss'
-        : DUEL_CUES[scene],
+      : duelCue({
+          scene,
+          boss: state.boss,
+          exchangesWon: state.stats.exchangesWon,
+        }),
   );
   useEffect(() => {
     if (!auto) setMomentum(state.momentum.player);

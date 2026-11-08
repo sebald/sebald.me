@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { DUEL_CUES, DUEL_LAYERS, MUSIC } from './music';
+import { DUEL_CUES, DUEL_LAYERS, MUSIC, duelCue } from './music';
 import {
   STEPS_PER_BAR,
   chordOf,
@@ -106,6 +106,22 @@ describe('the soundtrack', () => {
         cue,
       );
     }
+  });
+
+  it("plays the room's loop, and opens the boss's fight on the office's until an exchange is won", () => {
+    for (const scene of ['floor', 'meeting', 'studio'] as const)
+      assert.equal(
+        duelCue({ scene, boss: false, exchangesWon: 3 }),
+        DUEL_CUES[scene],
+      );
+    assert.equal(
+      duelCue({ scene: 'office', boss: true, exchangesWon: 0 }),
+      'duelOffice',
+    );
+    assert.equal(
+      duelCue({ scene: 'office', boss: true, exchangesWon: 1 }),
+      'boss',
+    );
   });
 
   it('hands the jingles over to the result on G and E flat', () => {
