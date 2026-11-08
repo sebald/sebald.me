@@ -188,6 +188,46 @@ export const PATTERNS = {
         [14, r2 + 7, 2, 0.85],
       ];
     }),
+  /** A walking bass: the root, the fifth, an octave pop, steady on the quarters (the meeting room) */
+  walk: (base: number) =>
+    perBar((first, second) => {
+      const r = rootAt(first, base);
+      const r2 = rootAt(second, base);
+      return [
+        [0, r, 2, 1],
+        [4, r + 7, 2, 0.8],
+        [6, r + 12, 1, 0.7],
+        [8, r2, 2, 1],
+        [12, r2 + 7, 2, 0.8],
+        [14, r2 + 12, 1, 0.7],
+      ];
+    }),
+  /** A lazy funk bass: long roots with ghost notes between (the design studio) */
+  sway: (base: number) =>
+    perBar((first, second) => {
+      const r = rootAt(first, base);
+      const r2 = rootAt(second, base);
+      return [
+        [0, r, 3, 1],
+        [4, r, 1, 0.55],
+        [6, r + 12, 1, 0.8],
+        [8, r2, 3, 0.9],
+        [12, r2 + 7, 1, 0.65],
+        [14, r2 + 10, 2, 0.8],
+      ];
+    }),
+  /** Long roots and a fifth in the gaps, half as busy as the funk (the corner office) */
+  pedal: (base: number) =>
+    perBar((first, second) => {
+      const r = rootAt(first, base);
+      const r2 = rootAt(second, base);
+      return [
+        [0, r, 6, 1],
+        [7, r + 12, 1, 0.6],
+        [8, r2, 6, 0.95],
+        [15, r2 + 7, 1, 0.5],
+      ];
+    }),
   /** The chord held for the bar, or each half for its own */
   hold: (low: number) =>
     perBar((first, second) =>
