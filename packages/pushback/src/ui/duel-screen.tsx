@@ -273,11 +273,12 @@ export const DuelScreen = ({
     clockRef.current = clock;
   });
 
-  // Centre the stage in the viewport when the duel starts, so the panel
-  // is never below the fold
+  // Centre the stage in the viewport when the player starts a duel, so the
+  // panel is never below the fold; never for the demo, which starts by
+  // itself and would pull a reader below the game back up
   const rootRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (scale !== undefined) return;
+    if (scale !== undefined || auto) return;
     // After the stage has measured itself and taken its size
     const frame = requestAnimationFrame(() => {
       rootRef.current
@@ -285,7 +286,7 @@ export const DuelScreen = ({
         ?.scrollIntoView({ block: 'center', behavior: 'auto' });
     });
     return () => cancelAnimationFrame(frame);
-  }, [scale]);
+  }, [scale, auto]);
 
   const steps = useMemo(() => scriptFor(state), [state]);
   // A new script starts at step 0 in the same render, so a stale elapsed
