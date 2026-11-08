@@ -148,8 +148,8 @@ export const Reflection = ({
  * 480 by 270 render, at the stage's pixels) with the duellists and the
  * ghost standing in it (`band`), under a canvas the size of the stage
  * for the chrome, drawn at the screen's device pixels where a stage
- * pixel is a whole number of them (`backingFor`) and at 3x scaled down
- * smoothly otherwise, plus a DOM overlay in the same frame for
+ * pixel is a whole number of them (`backingFor`) and a little larger,
+ * scaled down smoothly, otherwise, plus a DOM overlay in the same frame for
  * everything that is text. Sits in the same `Stage` as the menu screens,
  * so nothing changes size.
  */
@@ -267,8 +267,8 @@ const FrameBody = ({
       </div>
       {/*
         The chrome, drawn at the device pixels per stage pixel when that is
-        whole, so the canvas is shown at its own size; else at 3x and
-        scaled down smoothly by CSS, which keeps the art's pixels even
+        whole, so the canvas is shown at its own size; else at the next
+        whole number up and scaled down smoothly by CSS, which keeps the art's pixels even
         where `pixelated` would round them. Transparent, so the band and
         the people show through.
       */}

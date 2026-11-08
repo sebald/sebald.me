@@ -125,8 +125,10 @@ export const tallFor = (
 /**
  * A canvas is drawn at a whole-number scale. When the device pixels per
  * stage pixel are whole (`crisp`) that is the number, and the canvas is
- * shown at exactly its own size; else `BACKING`, scaled down smoothly by
- * CSS, which is the best a fraction can do.
+ * shown at exactly its own size; else the next whole number up, never
+ * under `BACKING`, scaled down a little by CSS, which is the best a
+ * fraction can do. Never one under, which the browser would enlarge and
+ * blur (an iPhone held upright shows a stage pixel on 3.77 of its own).
  */
 export const BACKING = 3;
 
@@ -136,7 +138,9 @@ export const crisp = (scale: number, dpr: number): boolean => {
 };
 
 export const backingFor = (scale: number, dpr: number): number =>
-  crisp(scale, dpr) ? Math.round(scale * dpr) : BACKING;
+  crisp(scale, dpr)
+    ? Math.round(scale * dpr)
+    : Math.max(BACKING, Math.ceil(scale * dpr));
 
 /**
  * The overlay's font size at a scale: 16 px at 3x, never below 14 px.

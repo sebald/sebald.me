@@ -85,6 +85,9 @@ describe('scaleFor', () => {
     assert.equal(backingFor(3, 3), 9);
     assert.equal(backingFor(2, 1), 2);
     assert.equal(backingFor(2.7, 1), BACKING);
+    // An iPhone held upright: drawn at 4 and shown at 3.77, never enlarged
+    assert.equal(backingFor(402 / 320, 3), 4);
+    assert.equal(backingFor(1.172, 2), BACKING);
   });
 });
 
