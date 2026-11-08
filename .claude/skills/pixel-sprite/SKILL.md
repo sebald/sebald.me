@@ -191,8 +191,9 @@ the render's own pixels; only `scene.webp`, `scene-1x.webp` and
 `poster.png` are smaller. The smooth shrink keeps lines straight but pale; where a detail is
 looked at (the meeting room's whiteboard), the loop script takes it off
 the plate before the shrink and draws it again after it on the shrunk
-grid, one-pixel lines in its own colours (`drawDiagram`, `drawNotes` in
-`scenes/meeting.mjs`), and `shrinkFrames({ crisp })` shrinks boxes of
+grid, one-pixel lines in its own colours (`scripts/redraw.mjs`: `takeOff`,
+`drawShapes`, `shrunkGrid`; used by the meeting room's whiteboard, the
+floor's small whiteboard and the studio's corkboard frame), and `shrinkFrames({ crisp })` shrinks boxes of
 lines that only run across or down (a frame) on the art's pixels. Never
 the whole room on its pixels: at 0.8 rows and columns double or drop and
 straight edges go crooked. Each scene's factor is in

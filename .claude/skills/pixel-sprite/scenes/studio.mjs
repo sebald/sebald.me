@@ -16,6 +16,7 @@ import {
   scale,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
+import { shrunkGrid } from '../scripts/redraw.mjs';
 import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
@@ -105,11 +106,46 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
 
 // The room a fifth smaller than drawn, see shrink.mjs, and the studio
 // another twentieth: its drafting table and door came large
+// The corkboard's frame, drawn again on the shrunk grid (see
+// redraw.mjs): drawn as a dark line, two of wood and a dark line, it
+// went pale when shrunk smoothly and broke into dots on the art's
+// pixels, so it is three rings a pixel each, dark, wood, dark, in the
+// colours it was drawn in. The papers pinned to it keep the smooth
+// shrink, small pictures that read fine a little soft
+const { sx, sy } = shrunkGrid(scene.W, ROOM_FACTORS.studio);
+const FRAME = { x0: 161, y0: 69, x1: 298, y1: 154 };
+const RINGS = [rgb(base, 161, 100), rgb(base, 162, 100), rgb(base, 164, 100)];
+const drawFrame = f => {
+  RINGS.forEach((c, d) => {
+    const x0 = sx(FRAME.x0) + d;
+    const y0 = sy(FRAME.y0) + d;
+    const x1 = sx(FRAME.x1) - d;
+    const y1 = sy(FRAME.y1) - d;
+    const put = (x, y) => {
+      const i = (y * scene.W + x) * 3;
+      f[i] = c[0];
+      f[i + 1] = c[1];
+      f[i + 2] = c[2];
+    };
+    for (let x = x0; x <= x1; x++) {
+      put(x, y0);
+      put(x, y1);
+    }
+    for (let y = y0; y <= y1; y++) {
+      put(x0, y);
+      put(x1, y);
+    }
+  });
+};
+
+const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
+  factor: ROOM_FACTORS.studio,
+});
+for (const f of shrunk) drawFrame(f);
+
 await writeLoop({
   scene,
-  frames: await shrinkFrames(frames, scene.W, scene.H, {
-    factor: ROOM_FACTORS.studio,
-  }),
+  frames: shrunk,
   delay: DELAY,
   outDir,
   shownWidth: SHOWN_WIDTH,

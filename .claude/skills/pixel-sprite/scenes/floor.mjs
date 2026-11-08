@@ -17,6 +17,7 @@ import {
   scale,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
+import { drawShapes, shrunkGrid, takeOff } from '../scripts/redraw.mjs';
 import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
@@ -30,6 +31,13 @@ const { base, rgb, setPx, collect } = scene;
 
 // Clean plate: the scene as drawn is the resting state
 const plate = Buffer.from(base);
+
+// The diagram on the small whiteboard comes off the plate and is drawn
+// again after the shrink, on the shrunk room's pixels (see redraw.mjs):
+// shrunk with the room its one-pixel lines went pale and two wide
+const BOARD = { x0: 218, y0: 99, x1: 262, y1: 125 };
+const isMarker = c => lum(c) < 140;
+takeOff(scene, plate, BOARD, isMarker);
 
 // Build light
 // ---------------
@@ -145,11 +153,50 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
 });
 
 // The room a fifth smaller than drawn, see shrink.mjs
+// The small whiteboard's diagram, drawn again in the marker's grey
+const { sx, sy } = shrunkGrid(scene.W, ROOM_FACTORS.floor);
+const MARKER = rgb(base, 221, 105);
+const DIAGRAM = [
+  // A box with a line of text
+  { rect: [221, 101, 230, 111] },
+  { line: [223, 104, 227, 104] },
+  // An open box, a dash over it and a tick in its corner
+  { line: [235, 101, 239, 101] },
+  { line: [233, 103, 233, 110, 242, 110, 242, 103] },
+  { line: [240, 102, 240, 103, 239, 103] },
+  // The arrow round to the right box, its head flat
+  { line: [246, 105, 254, 105, 254, 110] },
+  { line: [252, 110], at: [254, 111], marks: [-1, 0, 0, 0, 1, 0] },
+  { line: [256, 110] },
+  // The arrow up from the bottom row
+  { line: [234, 120, 226, 120, 226, 115], head: [226, 114, 'up'] },
+  // Two boxes of text
+  { rect: [237, 115, 246, 123] },
+  { at: [237, 115], marks: [2, 2, 4, 2, 5, 2, 2, 4, 3, 4, 4, 4, 5, 4] },
+  { rect: [249, 114, 258, 123] },
+  { at: [249, 114], marks: [2, 2, 3, 2, 5, 2, 6, 2, 2, 4, 3, 4, 4, 4] },
+];
+
+// The board's frame and the tray, lines that only run across or down,
+// shrunk on the art's pixels (not round the build light, which stands
+// in front of the tray)
+const CRISP = [
+  { x0: 214, y0: 94, x1: 267, y1: 99 },
+  { x0: 214, y0: 94, x1: 219, y1: 125 },
+  { x0: 261, y0: 94, x1: 267, y1: 132 },
+  { x0: 231, y0: 125, x1: 267, y1: 132 },
+];
+
+const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
+  factor: ROOM_FACTORS.floor,
+  crisp: CRISP,
+});
+for (const f of shrunk)
+  drawShapes(f, scene.W, DIAGRAM, { sx, sy, colour: () => MARKER });
+
 await writeLoop({
   scene,
-  frames: await shrinkFrames(frames, scene.W, scene.H, {
-    factor: ROOM_FACTORS.floor,
-  }),
+  frames: shrunk,
   delay: DELAY,
   outDir,
   shownWidth: SHOWN_WIDTH,
