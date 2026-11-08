@@ -13,7 +13,13 @@ import {
   usePixels,
   Window,
 } from '@sebald/blip-ui';
-import { useMemo, useState } from 'react';
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 
 import { LOOKS, MODES, MODE_LABELS } from '../lib/characters';
 import { type PairId, ROLE_LABELS, RUN_VERDICTS, inTurn } from '../lib/lines';
@@ -28,7 +34,7 @@ import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
 import { Portrait } from './portrait';
-import { canShareImage, shareResult } from './share';
+import { canShareImage, resultImage, shareResult } from './share';
 import { Stage, px } from './stage';
 
 interface ResultScreenProps {
@@ -42,18 +48,12 @@ interface ResultScreenProps {
   scale?: number;
 }
 
+/** For a value that never changes while the page is open */
+const noChange = () => () => {};
+
 /** The portrait at three times its pixels, a frame around it */
 const PORTRAIT_SCALE = 3;
 
-/**
- * The end of a run as an RPG status screen, one window filling the
- * stage: the face, the name and the role on the left, the result, the
- * score with the mode's factor and the run's numbers with dot leaders
- * on the right, and below, apart, the glossary by pool,
- * a meter of the pool's twenty pairs each, so the gaps show. The
- * verdict heads the numbers in the duel end's letters. Copy puts the
- * text card on the clipboard.
- */
 /**
  * A pool's meter, compact held upright: twenty cells at a phone's
  * floor are wider than the window. The count follows it in words.
@@ -70,6 +70,15 @@ const PoolMeter = ({ value, max }: { value: number; max: number }) => {
   );
 };
 
+/**
+ * The end of a run as an RPG status screen, one window filling the
+ * stage: the face, the name and the role on the left, the result, the
+ * score with the mode's factor and the run's numbers with dot leaders
+ * on the right, and below, apart, the glossary by pool,
+ * a meter of the pool's twenty pairs each, so the gaps show. The
+ * verdict heads the numbers in the duel end's letters. Copy puts the
+ * text card on the clipboard; Share or Save image hands over its picture.
+ */
 export const ResultScreen = ({
   run,
   glossary,
@@ -80,9 +89,19 @@ export const ResultScreen = ({
   const text = useMemo(() => resultCardText(run, glossary), [run, glossary]);
   const model = useMemo(() => resultModel(run, glossary), [run, glossary]);
   const [copied, setCopied] = useState(false);
-  // The picture: shared through the sheet where there is one, else saved
-  const [sharing] = useState(canShareImage);
+  // The picture: shared through the sheet where there is one, else saved.
+  // Read on the client only, so a page rendered on the server (the
+  // inventory) hydrates with the same menu
+  const sharing = useSyncExternalStore(noChange, canShareImage, () => false);
   const [sent, setSent] = useState<'shared' | 'saved' | null>(null);
+  // Drawn as the screen opens, so a press opens the share sheet at once:
+  // a sheet only opens close to the press, Safari's especially
+  const picture = useRef<Promise<Blob | undefined>>(undefined);
+  useEffect(() => {
+    picture.current = resultImage({ run, glossary }).catch(() => undefined);
+  }, [run, glossary]);
+  // One share at a time: a second press while a sheet is open would fail
+  const busy = useRef(false);
 
   const copy = async () => {
     try {
@@ -94,11 +113,18 @@ export const ResultScreen = ({
   };
 
   const share = async () => {
+    if (busy.current) return;
+    busy.current = true;
     try {
-      const done = await shareResult({ run, glossary }, text);
+      const done = await shareResult(
+        { run, glossary },
+        { text, picture: await picture.current },
+      );
       setSent(done === 'cancelled' ? null : done);
     } catch {
       setSent(null);
+    } finally {
+      busy.current = false;
     }
   };
 

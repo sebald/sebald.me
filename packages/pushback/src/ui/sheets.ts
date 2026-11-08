@@ -75,7 +75,8 @@ export const BURST_KEY: PlainKey = 'micdrop';
 
 const images = new Map<string, Promise<HTMLImageElement>>();
 
-const loadImage = (src: string): Promise<HTMLImageElement> => {
+/** An image by its address, loaded once and shared */
+export const loadImage = (src: string): Promise<HTMLImageElement> => {
   let pending = images.get(src);
   if (!pending) {
     pending = new Promise((resolve, reject) => {

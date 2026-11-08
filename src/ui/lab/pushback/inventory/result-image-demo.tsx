@@ -9,6 +9,7 @@ import { PAIRS, ROLES, type Role } from '@sebald/pushback/lib/lines';
 import {
   CARD_SIZE,
   type CardImages,
+  download,
   drawResultCard,
   loadCardImages,
   resultImage,
@@ -62,9 +63,9 @@ export const ResultImageDemo = () => {
   // The pictures depend on the role and look only (the face's sheet)
   useEffect(() => {
     let live = true;
-    loadCardImages({ run: sampleRun(role, look, true) }).then(
-      images => live && setLoaded({ key: `${role}-${look}`, images }),
-    );
+    loadCardImages({ role, look })
+      .then(images => live && setLoaded({ key: `${role}-${look}`, images }))
+      .catch(error => console.error(error));
     return () => {
       live = false;
     };
@@ -76,15 +77,11 @@ export const ResultImageDemo = () => {
       drawResultCard(ctx, { run, glossary }, images, { overlay });
   }, [run, glossary, images, overlay]);
 
-  const save = async () => {
-    const blob = await resultImage({ run, glossary });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pushback-${role}-${look}.png`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
+  const save = async () =>
+    download(
+      await resultImage({ run, glossary }),
+      `pushback-${role}-${look}.png`,
+    );
 
   return (
     <div className="grid gap-4">

@@ -19,14 +19,9 @@ import { PLAYER_SHEETS } from '../lib/sprites';
 import { roomBox } from '../lib/stage';
 import { PALETTE } from './palette';
 import { SCENE_ASSETS } from './scenes';
-import { SHEETS } from './sheets';
+import { SHEETS, loadImage } from './sheets';
 
-export {
-  CARD,
-  type CardInput,
-  type CardPart,
-  resultCard,
-} from '../lib/result-card';
+export type { CardInput } from '../lib/result-card';
 
 /** The card's size in canvas pixels */
 export const CARD_SIZE = {
@@ -74,22 +69,18 @@ export interface CardImages {
   logo: CanvasImageSource;
 }
 
-const load = (src: string) =>
-  new Promise<HTMLImageElement>((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error(`Could not load ${src}`));
-    image.src = src;
-  });
-
-/** The office, the player's sheet and the logo, loaded */
+/**
+ * The office, the player's sheet and the logo, loaded once and shared
+ * (the game's own loader), so a second share or save does no I/O
+ */
 export const loadCardImages = async ({
-  run,
-}: CardInput): Promise<CardImages> => {
+  role,
+  look,
+}: Pick<CardInput['run'], 'role' | 'look'>): Promise<CardImages> => {
   const [room, sheet, mark] = await Promise.all([
-    load(SCENE_ASSETS.office.poster.src),
-    load(SHEETS[PLAYER_SHEETS[run.role][run.look]].image.src),
-    load(logo.src),
+    loadImage(SCENE_ASSETS.office.poster.src),
+    loadImage(SHEETS[PLAYER_SHEETS[role][look]].image.src),
+    loadImage(logo.src),
   ]);
   return { room, sheet, logo: mark };
 };
@@ -284,7 +275,7 @@ export const resultImage = async (input: CardInput): Promise<Blob> => {
   canvas.height = CARD_SIZE.height;
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('No 2D canvas');
-  drawResultCard(ctx, input, await loadCardImages(input));
+  drawResultCard(ctx, input, await loadCardImages(input.run));
   return new Promise((resolve, reject) =>
     canvas.toBlob(
       blob => (blob ? resolve(blob) : reject(new Error('No PNG'))),
@@ -311,36 +302,44 @@ export const canShareImage = (): boolean => {
   }
 };
 
-const download = (blob: Blob, name: string) => {
+/** Download a picture: a link clicked in the page, its address freed a while after */
+export const download = (blob: Blob, name: string) => {
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
   a.download = name;
+  // In the document, which Firefox wants for the click to download
+  document.body.append(a);
   a.click();
-  // After the click has started the download
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+  a.remove();
+  // Safari and Firefox can drop a download whose address goes at once
+  setTimeout(() => URL.revokeObjectURL(url), 10_000);
 };
 
 /**
  * Share the card: the picture and `text` (the text card) through the
  * share sheet where there is one, otherwise the picture downloaded.
  * `shared` or `saved`; `cancelled` when the sheet was closed without
- * sharing, which is not an error.
+ * sharing, which is not an error. Pass the `picture` drawn beforehand
+ * (`resultImage`) where it can be: a share sheet only opens close to the
+ * press (Safari's is short), and drawing takes a moment. A sheet that
+ * refuses for any other reason gets the picture downloaded instead.
  */
 export const shareResult = async (
   input: CardInput,
-  text?: string,
+  { text, picture }: { text?: string; picture?: Blob } = {},
 ): Promise<'shared' | 'saved' | 'cancelled'> => {
-  const blob = await resultImage(input);
-  const file = new File([blob], fileName(input), { type: 'image/png' });
-  if (canShareImage() && navigator.canShare({ files: [file] })) {
+  const blob = picture ?? (await resultImage(input));
+  if (canShareImage()) {
     try {
-      await navigator.share({ files: [file], text });
+      await navigator.share({
+        files: [new File([blob], fileName(input), { type: 'image/png' })],
+        text,
+      });
       return 'shared';
     } catch (error) {
       if (error instanceof DOMException && error.name === 'AbortError')
         return 'cancelled';
-      throw error;
     }
   }
   download(blob, fileName(input));

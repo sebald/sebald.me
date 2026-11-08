@@ -5,7 +5,7 @@
  * paints (`ui/share.ts` draws it). The text is BitmapText's five by seven
  * font only: the card needs no font file and its letters stay crisp.
  */
-import { bitmapTextLayout } from '@sebald/blip-ui';
+import { bitmapTextSize } from '@sebald/blip-ui';
 
 import { type Look, LOOKS, MODE_LABELS, MODES } from './characters';
 import { type PairId, ROLE_LABELS, RUN_VERDICTS, inTurn } from './lines';
@@ -16,11 +16,11 @@ import { formatScore, resultModel } from './save';
 export const CARD = { width: 400, height: 210, unit: 3 } as const;
 
 /** The head square's pixels (24) at this many units each */
-export const FACE_SCALE = 3;
+const FACE_SCALE = 3;
 const FACE = 24 * FACE_SCALE;
 
 /** The logo at one canvas pixel a pixel of its sheet (226 by 77), in units */
-export const LOGO_BOX = { width: 226 / CARD.unit, height: 77 / CARD.unit };
+const LOGO_BOX = { width: 226 / CARD.unit, height: 77 / CARD.unit };
 
 /** A colour by what it says, mapped to the palette where it is drawn */
 export type CardTone = 'gold' | 'red' | 'steel' | 'heading' | 'muted';
@@ -64,15 +64,13 @@ const text = (
   tone: CardTone,
   align: 'left' | 'right' | 'centre' = 'left',
 ): Extract<CardPart, { kind: 'text' }> => {
-  // The font has a hyphen, not the dashes the screen's numbers use (23–9)
-  const shown = value.replace(/[–—]/g, '-').toUpperCase();
-  const { width, height } = bitmapTextLayout(shown, scale);
+  const { width, height } = bitmapTextSize(value, scale);
   const left =
     align === 'right' ? x - width : align === 'centre' ? x - width / 2 : x;
   return {
     kind: 'text',
     name,
-    text: shown,
+    text: value.toUpperCase(),
     x: Math.round(left),
     y,
     scale,
