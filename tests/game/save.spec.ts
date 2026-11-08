@@ -10,8 +10,10 @@ import {
   said,
   saveWith,
   screen,
+  sharedWith,
+  takenOffline,
   test,
-  toContinue,
+  toBossDuel,
   withShareSheet,
 } from './game';
 
@@ -38,13 +40,7 @@ test.describe('a save to come back to', () => {
   test('the Stakeholder beaten: the run is won, its result card', async ({
     page,
   }) => {
-    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
-    await toContinue(page);
-    await expect(current(page)).toHaveText(/Stakeholder/);
-    await press(page, 'Enter');
-    await expect(screen(page)).toHaveAccessibleName(
-      /duel against .*Stakeholder/,
-    );
+    await toBossDuel(page);
     await playDuel(page);
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     await expect(screen(page)).toContainText('Stakeholder beaten');
@@ -53,12 +49,8 @@ test.describe('a save to come back to', () => {
   test('lost to the Stakeholder: taken offline, and the result says so', async ({
     page,
   }) => {
-    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
-    await toContinue(page);
-    await press(page, 'Enter');
-    const offline = async () =>
-      /took it offline/.test((await said(page).textContent()) ?? '');
-    await playDuel(page, { wrong: true, until: offline });
+    await toBossDuel(page);
+    await playDuel(page, { wrong: true, until: () => takenOffline(page) });
     await expect(said(page)).toHaveText(
       /You lost\. The Stakeholder took it offline/,
     );
@@ -70,9 +62,7 @@ test.describe('a save to come back to', () => {
   test('the result as a picture: saved where there is no share sheet', async ({
     page,
   }) => {
-    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
-    await toContinue(page);
-    await press(page, 'Enter');
+    await toBossDuel(page);
     await playDuel(page);
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     await expect(
@@ -94,9 +84,7 @@ test.describe('a save to come back to', () => {
     page,
   }) => {
     await withShareSheet(page);
-    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
-    await toContinue(page);
-    await press(page, 'Enter');
+    await toBossDuel(page);
     await playDuel(page);
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     // The sheet can copy too: no Copy result beside it
@@ -107,17 +95,7 @@ test.describe('a save to come back to', () => {
     await expect(
       screen(page).getByRole('button', { name: 'Shared' }),
     ).toBeVisible();
-    const shared = await page.evaluate(
-      () =>
-        (
-          window as unknown as {
-            __shared: {
-              files: { name: string; type: string; size: number }[];
-              text: string;
-            };
-          }
-        ).__shared,
-    );
+    const shared = await sharedWith(page);
     expect(shared.files).toHaveLength(1);
     expect(shared.files[0]).toMatchObject({
       name: 'pushback-pm.png',

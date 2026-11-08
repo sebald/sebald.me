@@ -232,12 +232,37 @@ export const withShareSheet = (page: Page) =>
     });
   });
 
+/** What the stand-in share sheet was handed */
+export interface Shared {
+  files: { name: string; type: string; size: number }[];
+  text?: string;
+}
+
+/** What `withShareSheet`'s stand-in was handed, once something was shared */
+export const sharedWith = (page: Page) =>
+  page.evaluate(() => (window as unknown as { __shared: Shared }).__shared);
+
 /** From the title's menu, the run in play picked up: on its roster */
 export const toContinue = async (page: Page) => {
   await press(page, 'Enter');
   await choose(page, /^Continue/);
   await expect(screen(page)).toHaveAccessibleName('Pushback, roster');
 };
+
+/**
+ * A returning player with every colleague beaten and every pair known,
+ * in the Stakeholder's duel
+ */
+export const toBossDuel = async (page: Page) => {
+  await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
+  await toContinue(page);
+  await press(page, 'Enter');
+  await expect(screen(page)).toHaveAccessibleName(/duel against .*Stakeholder/);
+};
+
+/** The Stakeholder has won: the live region says it was taken offline */
+export const takenOffline = async (page: Page) =>
+  /took it offline/.test((await said(page).textContent()) ?? '');
 
 /** What the live region says now (the duel narrates every step in it) */
 export const said = (page: Page) =>

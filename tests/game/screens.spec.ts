@@ -9,11 +9,12 @@ import {
   openWith,
   playDuel,
   press,
-  said,
-  settle,
-  screen,
   saveWith,
+  screen,
+  settle,
+  takenOffline,
   test,
+  toBossDuel,
   toContinue,
   toMenu,
   toRoster,
@@ -132,14 +133,8 @@ test.describe('screens', { tag: '@screens' }, () => {
   });
 
   test('the Stakeholder wins: the run taken offline', async ({ page }) => {
-    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
-    await toContinue(page);
-    await press(page, 'Enter');
-    await playDuel(page, {
-      wrong: true,
-      until: async () =>
-        /took it offline/.test((await said(page).textContent()) ?? ''),
-    });
+    await toBossDuel(page);
+    await playDuel(page, { wrong: true, until: () => takenOffline(page) });
     await settle(page, 1500);
     await shot(page, 'duel-boss-lost');
   });
