@@ -302,7 +302,7 @@ export const TitleScreen = ({
         >
           <Picker
             label="Title menu"
-            className="w-[10em] tall:w-[14em]"
+            className="w-[14em]"
             initial={returned ?? (running ? 'continue' : 'start')}
             active={!asking && !browsing}
           >
@@ -312,25 +312,17 @@ export const TitleScreen = ({
             >
               Start
             </PickerItem>
-            <PickerItem
-              id="continue"
-              disabled={!running}
-              note={
-                running
-                  ? undefined
-                  : 'No run in progress yet. Start one and pick a role.'
-              }
-              onSelect={onContinue}
-            >
-              <span className="flex items-center gap-[1ch]">
-                Continue
-                {running && (
+            {/* Only with a run to go back to: a role picked starts one */}
+            {running && (
+              <PickerItem id="continue" onSelect={onContinue}>
+                <span className="flex items-center gap-[1ch]">
+                  Continue
                   <span className="ml-auto text-[0.8em] text-(--pb-muted)">
                     {running.beaten}/{running.slots}
                   </span>
-                )}
-              </span>
-            </PickerItem>
+                </span>
+              </PickerItem>
+            )}
             <PickerItem
               id="glossary"
               disabled={collected === 0}

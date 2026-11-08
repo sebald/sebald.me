@@ -17,9 +17,9 @@ test.describe('the title', () => {
     await expect(screen(page).getByText('Press Enter to play')).toBeVisible();
     await page.keyboard.press('Enter');
     const menu = screen(page).getByRole('list', { name: 'Title menu' });
+    // No run yet: no Continue
     await expect(menu.getByRole('button')).toHaveText([
       'Start',
-      'Continue',
       /^Glossary/,
       'How to play',
       'Options',
@@ -32,14 +32,14 @@ test.describe('the title', () => {
   }) => {
     await toMenu(page);
     await page.keyboard.press('ArrowDown');
-    await expect(current(page)).toHaveText('Continue');
+    await expect(current(page)).toHaveText(/^Glossary/);
     // Shown beside the menu, and said
     await expect(
       screen(page)
-        .getByText('No run in progress yet.', { exact: false })
+        .getByText('Nothing collected yet.', { exact: false })
         .first(),
     ).toBeVisible();
-    await expect(said(page)).toContainText('No run in progress yet.');
+    await expect(said(page)).toContainText('Nothing collected yet.');
     await page.keyboard.press('ArrowUp');
     await expect(current(page)).toHaveText('Start');
     // Round past the top to the bottom
