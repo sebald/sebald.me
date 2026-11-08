@@ -306,6 +306,15 @@ const CRISP = [
 const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
   factor: ROOM_FACTORS.meeting,
   crisp: CRISP,
+  // What is drawn after the shrink, so the palette has room for it
+  keep: [
+    ...Object.values(INK).flatMap(({ board, beam }) => [board, beam]),
+    NOTE_SHADOW,
+    ...NOTES.flatMap(note => {
+      const colour = rgb(base, ...note.body);
+      return [colour, colour.map(v => Math.round(v * 0.4))];
+    }),
+  ],
 });
 for (const f of shrunk) {
   drawShapes(f, scene.W, SHAPES, { sx, sy, colour: markerColour });

@@ -128,17 +128,53 @@ const shrinkOnPixels = (f, W, H, factor, box, put) => {
     }
 };
 
+/** At most this many colours, so lossless WebP keeps its palette mode */
+const MAX_COLOURS = 256;
+
+/**
+ * The palette with `keep` in it (the colours a loop script draws after
+ * the shrink, see redraw.mjs), the closest pairs merged to make room, so
+ * the frames stay within `MAX_COLOURS`; one slot is left for the corner
+ * colour the padding takes
+ */
+const fitPalette = (palette, keep) => {
+  const out = [...palette];
+  const d = (a, b) =>
+    (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2;
+  while (out.length + keep.length > MAX_COLOURS - 1) {
+    let drop = 0;
+    let closest = Infinity;
+    for (let i = 0; i < out.length; i++)
+      for (let j = i + 1; j < out.length; j++) {
+        const e = d(out[i], out[j]);
+        if (e < closest) {
+          closest = e;
+          drop = j;
+        }
+      }
+    out.splice(drop, 1);
+  }
+  return [...out, ...keep];
+};
+
 /**
  * The frames (raw RGB, W by H) shrunk by `factor` about the floor line,
  * centred, on a canvas of the same size. Returns raw RGB frames. `crisp`
  * lists boxes in the render's pixels ({ x0, y0, x1, y1 }) shrunk on the
- * art's pixels instead (`shrinkOnPixels`).
+ * art's pixels instead (`shrinkOnPixels`). `keep` lists the colours drawn
+ * after the shrink, which the palette makes room for.
  */
 export const shrinkFrames = async (
   frames,
   W,
   H,
-  { factor = ROOM_FACTOR, feet = FEET, colours = 64, crisp = [] } = {},
+  {
+    factor = ROOM_FACTOR,
+    feet = FEET,
+    colours = 64,
+    crisp = [],
+    keep = [],
+  } = {},
 ) => {
   if (factor === 1) return frames;
   const w = Math.round(W * factor);
@@ -152,7 +188,10 @@ export const shrinkFrames = async (
       .png()
       .toBuffer();
 
-  const palette = await paletteOf(await small(frames[0]), colours);
+  const palette = fitPalette(
+    await paletteOf(await small(frames[0]), colours),
+    keep,
+  );
   const nearest = new Map();
   const snap = (r, g, b) => {
     const key = (r << 16) | (g << 8) | b;
@@ -201,11 +240,14 @@ export const shrinkFrames = async (
           x1: Math.ceil(c.x1 * factor),
           y1: Math.ceil(c.y1 * factor),
         };
+        // Snapped to the loop's palette like the rest: a frame of more
+        // than 256 colours loses lossless WebP's palette and grows by half
         shrinkOnPixels(f, W, H, factor, box, (x, y, rgb) => {
           const d = ((y + top) * W + x + left) * 3;
-          out[d] = rgb >> 16;
-          out[d + 1] = (rgb >> 8) & 255;
-          out[d + 2] = rgb & 255;
+          const [r, g, b] = snap(rgb >> 16, (rgb >> 8) & 255, rgb & 255);
+          out[d] = r;
+          out[d + 1] = g;
+          out[d + 2] = b;
         });
       }
       return out;

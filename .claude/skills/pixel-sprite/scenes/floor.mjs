@@ -190,6 +190,7 @@ const CRISP = [
 const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
   factor: ROOM_FACTORS.floor,
   crisp: CRISP,
+  keep: [MARKER],
 });
 for (const f of shrunk)
   drawShapes(f, scene.W, DIAGRAM, { sx, sy, colour: () => MARKER });

@@ -140,6 +140,7 @@ const drawFrame = f => {
 
 const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
   factor: ROOM_FACTORS.studio,
+  keep: RINGS,
 });
 for (const f of shrunk) drawFrame(f);
 
