@@ -1,4 +1,5 @@
 import type { Page } from '@playwright/test';
+import { readFile } from 'node:fs/promises';
 
 import {
   choose,
@@ -121,6 +122,13 @@ test.describe('screens', { tag: '@screens' }, () => {
     await playDuel(page);
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     await shot(page, 'result');
+    // The card as the picture a player saves: the same on every device,
+    // so once, compared pixel for pixel as the screens are
+    if (test.info().project.name !== 'desktop') return;
+    const download = page.waitForEvent('download');
+    await choose(page, 'Save image');
+    const card = await readFile((await (await download).path())!);
+    expect(card).toMatchSnapshot('result-card.png');
   });
 
   test('the Stakeholder wins: the run taken offline', async ({ page }) => {

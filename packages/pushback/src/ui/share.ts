@@ -292,3 +292,57 @@ export const resultImage = async (input: CardInput): Promise<Blob> => {
     ),
   );
 };
+
+/** The picture's file name, for the share sheet and the download */
+const fileName = ({ run }: CardInput) => `pushback-${run.role}.png`;
+
+/**
+ * Whether the device has a share sheet that takes a picture (most phones,
+ * some desktops): then `shareResult` hands it over instead of downloading
+ */
+export const canShareImage = (): boolean => {
+  if (typeof navigator === 'undefined' || !navigator.canShare) return false;
+  try {
+    return navigator.canShare({
+      files: [new File([''], 'pushback.png', { type: 'image/png' })],
+    });
+  } catch {
+    return false;
+  }
+};
+
+const download = (blob: Blob, name: string) => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  a.click();
+  // After the click has started the download
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+};
+
+/**
+ * Share the card: the picture and `text` (the text card) through the
+ * share sheet where there is one, otherwise the picture downloaded.
+ * `shared` or `saved`; `cancelled` when the sheet was closed without
+ * sharing, which is not an error.
+ */
+export const shareResult = async (
+  input: CardInput,
+  text?: string,
+): Promise<'shared' | 'saved' | 'cancelled'> => {
+  const blob = await resultImage(input);
+  const file = new File([blob], fileName(input), { type: 'image/png' });
+  if (canShareImage() && navigator.canShare({ files: [file] })) {
+    try {
+      await navigator.share({ files: [file], text });
+      return 'shared';
+    } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError')
+        return 'cancelled';
+      throw error;
+    }
+  }
+  download(blob, fileName(input));
+  return 'saved';
+};

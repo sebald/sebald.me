@@ -28,6 +28,7 @@ import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
 import { Portrait } from './portrait';
+import { canShareImage, shareResult } from './share';
 import { Stage, px } from './stage';
 
 interface ResultScreenProps {
@@ -79,6 +80,9 @@ export const ResultScreen = ({
   const text = useMemo(() => resultCardText(run, glossary), [run, glossary]);
   const model = useMemo(() => resultModel(run, glossary), [run, glossary]);
   const [copied, setCopied] = useState(false);
+  // The picture: shared through the sheet where there is one, else saved
+  const [sharing] = useState(canShareImage);
+  const [sent, setSent] = useState<'shared' | 'saved' | null>(null);
 
   const copy = async () => {
     try {
@@ -86,6 +90,15 @@ export const ResultScreen = ({
       setCopied(true);
     } catch {
       setCopied(false);
+    }
+  };
+
+  const share = async () => {
+    try {
+      const done = await shareResult({ run, glossary }, text);
+      setSent(done === 'cancelled' ? null : done);
+    } catch {
+      setSent(null);
     }
   };
 
@@ -202,9 +215,21 @@ export const ResultScreen = ({
             window, its rows in line with the ledger's */}
         <div className="mt-auto flex justify-end px-[calc(var(--px)*2)] pt-[calc(var(--px)*4)] tall:block">
           <Picker label="Result" className="w-[14em] tall:w-full">
-            <PickerItem id="copy" onSelect={copy}>
-              {copied ? 'Copied' : 'Copy result'}
-            </PickerItem>
+            {/* A share sheet can copy too: it takes the copy's place */}
+            {sharing ? (
+              <PickerItem id="share" onSelect={share}>
+                {sent === 'shared' ? 'Shared' : 'Share…'}
+              </PickerItem>
+            ) : (
+              <>
+                <PickerItem id="copy" onSelect={copy}>
+                  {copied ? 'Copied' : 'Copy result'}
+                </PickerItem>
+                <PickerItem id="image" onSelect={share}>
+                  {sent === 'saved' ? 'Saved' : 'Save image'}
+                </PickerItem>
+              </>
+            )}
             {onNewRun && (
               <PickerItem id="new" onSelect={onNewRun}>
                 New run

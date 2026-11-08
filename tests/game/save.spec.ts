@@ -1,4 +1,7 @@
+import { readFile } from 'node:fs/promises';
+
 import {
+  choose,
   current,
   expect,
   openWith,
@@ -9,6 +12,7 @@ import {
   screen,
   test,
   toContinue,
+  withShareSheet,
 } from './game';
 
 /**
@@ -61,5 +65,65 @@ test.describe('a save to come back to', () => {
     await playDuel(page, { wrong: true });
     await expect(screen(page)).toHaveAccessibleName('Pushback, result');
     await expect(screen(page)).toContainText('Stakeholder took it offline');
+  });
+
+  test('the result as a picture: saved where there is no share sheet', async ({
+    page,
+  }) => {
+    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
+    await toContinue(page);
+    await press(page, 'Enter');
+    await playDuel(page);
+    await expect(screen(page)).toHaveAccessibleName('Pushback, result');
+    await expect(
+      screen(page).getByRole('button', { name: 'Copy result' }),
+    ).toBeVisible();
+    const download = page.waitForEvent('download');
+    await choose(page, 'Save image');
+    const file = await download;
+    expect(file.suggestedFilename()).toBe('pushback-pm.png');
+    const png = await readFile((await file.path())!);
+    // The PNG's header: its width and height, big-endian from byte 16
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630]);
+    await expect(
+      screen(page).getByRole('button', { name: 'Saved' }),
+    ).toBeVisible();
+  });
+
+  test('the result as a picture: handed to the share sheet with the text', async ({
+    page,
+  }) => {
+    await withShareSheet(page);
+    await openWith(page, saveWith({ beaten: 'colleagues', glossary: true }));
+    await toContinue(page);
+    await press(page, 'Enter');
+    await playDuel(page);
+    await expect(screen(page)).toHaveAccessibleName('Pushback, result');
+    // The sheet can copy too: no Copy result beside it
+    await expect(
+      screen(page).getByRole('button', { name: 'Copy result' }),
+    ).toHaveCount(0);
+    await choose(page, 'Share…');
+    await expect(
+      screen(page).getByRole('button', { name: 'Shared' }),
+    ).toBeVisible();
+    const shared = await page.evaluate(
+      () =>
+        (
+          window as unknown as {
+            __shared: {
+              files: { name: string; type: string; size: number }[];
+              text: string;
+            };
+          }
+        ).__shared,
+    );
+    expect(shared.files).toHaveLength(1);
+    expect(shared.files[0]).toMatchObject({
+      name: 'pushback-pm.png',
+      type: 'image/png',
+    });
+    expect(shared.files[0]!.size).toBeGreaterThan(10_000);
+    expect(shared.text).toContain('Pushback · PM');
   });
 });

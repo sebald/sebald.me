@@ -68,6 +68,15 @@ export const test = base.extend<{ errors: string[] }>({
         return ((t ^ (t >>> 14)) >>> 0) / 4_294_967_296;
       };
     });
+    // No share sheet, as on Linux's Chrome, so every machine shows the
+    // same result screen; `withShareSheet` puts a stand-in back
+    await page.addInitScript(() => {
+      for (const name of ['share', 'canShare'])
+        Object.defineProperty(Navigator.prototype, name, {
+          value: undefined,
+          configurable: true,
+        });
+    });
     // Fake timers to step through a duel, and a time that stands still:
     // a run's opponents and a duel's lines are seeded by it
     // Every change to the page, counted, so a test can wait until it rests
@@ -196,6 +205,32 @@ export const openWith = async (page: Page, save: Save) => {
   );
   await open(page);
 };
+
+/**
+ * A share sheet that takes files, standing in for a phone's: what it is
+ * handed lands in `window.__shared` (the files' names, types and sizes,
+ * and the text)
+ */
+export const withShareSheet = (page: Page) =>
+  page.addInitScript(() => {
+    Object.defineProperty(Navigator.prototype, 'canShare', {
+      value: () => true,
+      configurable: true,
+    });
+    Object.defineProperty(Navigator.prototype, 'share', {
+      value: async (data: ShareData) => {
+        (window as unknown as { __shared: unknown }).__shared = {
+          files: (data.files ?? []).map(f => ({
+            name: f.name,
+            type: f.type,
+            size: f.size,
+          })),
+          text: data.text,
+        };
+      },
+      configurable: true,
+    });
+  });
 
 /** From the title's menu, the run in play picked up: on its roster */
 export const toContinue = async (page: Page) => {
