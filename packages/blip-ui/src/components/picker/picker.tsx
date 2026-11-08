@@ -361,12 +361,24 @@ const Row = ({
     [picker.entries, id],
   );
 
-  // The current item stays in view; only a list that scrolls is moved,
-  // so a short list never scrolls the page
+  // The current item stays in view inside a list that scrolls. The list
+  // is scrolled itself, never the page: `scrollIntoView` would also move
+  // the page to a row off the screen (a demo picking on its own)
+  const { listRef } = picker;
   useEffect(() => {
-    if (isCurrent && picker.overflow)
-      rowRef.current?.scrollIntoView({ block: 'nearest' });
-  }, [isCurrent, picker.overflow]);
+    const list = listRef.current;
+    const row = rowRef.current;
+    if (!isCurrent || !picker.overflow || !list || !row) return;
+    // The row's place in the list's content, whatever is positioned
+    const top =
+      row.getBoundingClientRect().top -
+      list.getBoundingClientRect().top +
+      list.scrollTop;
+    const bottom = top + row.offsetHeight;
+    if (top < list.scrollTop) list.scrollTop = top;
+    else if (bottom > list.scrollTop + list.clientHeight)
+      list.scrollTop = bottom - list.clientHeight;
+  }, [isCurrent, picker.overflow, listRef]);
 
   const shownNote = picker.active && isCurrent && Boolean(note);
   // Read out as it shows, after the item's own name
