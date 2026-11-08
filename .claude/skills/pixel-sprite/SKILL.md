@@ -183,12 +183,9 @@ furniture and the band the composition rule keeps clear must be clear.
 The finished frames are written a fifth smaller than drawn
 (`scripts/shrink.mjs`, `ROOM_FACTOR` 0.8): three rounds of renders kept
 the furniture too large for the cast, so each loop script hands its
-frames to `shrinkFrames` before `writeLoop`. The frames are shrunk
-about the floor line on the art's pixels: each new pixel takes the
-colour covering most of what it shrinks, the one farthest from its
-surroundings (an outline, a marker line, a lit window) counting double,
-so lines stay one pixel and keep their colour (a smooth shrink washed
-them out, a nearest-neighbour one drops every fifth), and padded to the stage with the render's corner
+frames to `shrinkFrames` before `writeLoop`. The frames are scaled
+down smoothly about the floor line, every pixel snapped back to the
+first frame's palette, and padded to the stage with the render's corner
 colour (never in the window). The loop scripts and `native.png` stay in
 the render's own pixels; only `scene.webp`, `scene-1x.webp` and
 `poster.png` are smaller. Each scene's factor is in
