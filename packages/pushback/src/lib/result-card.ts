@@ -64,13 +64,15 @@ const text = (
   tone: CardTone,
   align: 'left' | 'right' | 'centre' = 'left',
 ): Extract<CardPart, { kind: 'text' }> => {
-  const { width, height } = bitmapTextLayout(value, scale);
+  // The font has a hyphen, not the dashes the screen's numbers use (23–9)
+  const shown = value.replace(/[–—]/g, '-').toUpperCase();
+  const { width, height } = bitmapTextLayout(shown, scale);
   const left =
     align === 'right' ? x - width : align === 'centre' ? x - width / 2 : x;
   return {
     kind: 'text',
     name,
-    text: value.toUpperCase(),
+    text: shown,
     x: Math.round(left),
     y,
     scale,

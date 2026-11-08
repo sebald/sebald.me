@@ -10,7 +10,11 @@ import { useMemo, useState } from 'react';
 import { Field, field } from './controls';
 
 /** A run that reached the Stakeholder, with made-up numbers and a glossary */
-const sampleRun = (role: Role, look: Look, finished: boolean): SavedRun => {
+export const sampleRun = (
+  role: Role,
+  look: Look,
+  finished: boolean,
+): SavedRun => {
   const run = createRunState(role, look, 7);
   return {
     ...run,
@@ -36,7 +40,7 @@ const sampleRun = (role: Role, look: Look, finished: boolean): SavedRun => {
 };
 
 /** Some of every pool, more of the own one */
-const sampleGlossary = (role: Role) =>
+export const sampleGlossary = (role: Role) =>
   PAIRS.filter((pair, i) =>
     pair.role === role ? i % 8 !== 3 : i % 3 !== 0 && i % 5 !== 0,
   ).map(pair => pair.id);

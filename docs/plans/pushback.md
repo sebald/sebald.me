@@ -514,6 +514,8 @@ Seven work packages, each a mergeable PR with its own tests, ordered so the game
   - [x] Tests open the game on a save (`openWith`, `saveWith`), no test-only code in the game: the boss duel, the roster with the boss open and the result card have screenshots. The first one found the result's glossary wider than a phone: `Meter`'s `compact` size (cells 3 wide, ink lines shared), the portrait beside the verdict and the menu in line with the ledger, held upright
   - [x] The link preview for `/lab/pushback`: the logo at 4x (nearest) over the corner office, cropped to the room and dimmed, as the route's `opengraph-image.png` and `twitter-image.png` with their alt text
   - [x] The lose moment: lost to the Stakeholder, the round call says `OFFLINE` instead of `YOU LOSE`, tested and with a screenshot (`duel-boss-lost`)
+  - [x] Sharing, steps 1 and 2: BitmapText as a layout of rectangles (`bitmapTextLayout`, `drawBitmapText`, the `/` glyph); the card laid out as data (`lib/result-card.ts`, tested for its text, its bounds and no overlaps); drawn on a canvas by `@sebald/pushback/share` (`resultImage`, `drawResultCard`, `loadCardImages`), the window letting the office through faintly; in the inventory as `Result image` with the run's controls, an overlay naming every part and `Save image`
+  - [ ] Sharing, steps 3 and 4: `Share…` and `Save image` on the result screen through `shareResult`, the flows and the card's screenshot
 - [x] **7. Lines pass** (read every line aloud in a duel, cut what does not land, check the 70-character limit, confirm each counter reads as a reply next to five decoys, fix boss-3; the closers too). Done when the tables in this spec and `lines.ts` match.
 
 Open questions to settle before package 4:

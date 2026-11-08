@@ -14,6 +14,7 @@ import { GhostDemo } from './ghost-demo';
 import { HudDemo } from './hud-demo';
 import { LedgerDemo } from './ledger-demo';
 import { ResultDemo } from './result-demo';
+import { ResultImageDemo } from './result-image-demo';
 import { Sandbox } from './sandbox';
 import { SceneViewer } from './scene-viewer';
 import { SoundDemo } from './sound-demo';
@@ -134,6 +135,12 @@ export const Inventory = () => (
       blurb="The end of a run as a status screen: the face, the verdict, the numbers with dot leaders, the glossary by pool."
     >
       <ResultDemo />
+    </Section>
+    <Section
+      title="Result image"
+      blurb="The result card as the picture a player saves or shares (@sebald/pushback/share), drawn on a canvas in the browser: the office dimmed, the face, the verdict, the score and the numbers, all in the pixel letters. The overlay outlines each part of the layout with its name."
+    >
+      <ResultImageDemo />
     </Section>
     <Section
       title="Scenes"
