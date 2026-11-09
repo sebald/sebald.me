@@ -28,7 +28,8 @@ does; how it looks follows from that.
 | --------------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------- |
 | `variant`             | The kind of thing by its use. It implies the rules: `primary` is the one a screen is for | `Button variant="destructive"`, `Text variant="call"` |
 | `size`                | How much room it takes                                                                   | `Button size="small"`                                 |
-| A state, as a boolean | Named for the state, never for the look                                                  | `disabled`, `pressed`, `past`, `blink`                |
+| A state, as a boolean | A yes or no, named for the state, never for the look                                     | `disabled`, `pressed`, `past`, `blink`                |
+| A choice, as a string | One of named options: `left` or `right`, never a boolean for one of them                 | `Step points="left"`                                  |
 | Content               | `children`, the words or the parts                                                       | `<Tab value="pm">PM</Tab>`                            |
 
 - **`variant` and `size` only**, with defaults, and the default is the
@@ -40,6 +41,12 @@ does; how it looks follows from that.
   without a window. One look is less to keep consistent.
 - **No raw style values as props.** No opacity, colour or pixel offset:
   name what it is for and let the component decide the value.
+- **Strings for a choice, booleans for a fact.** A boolean is only for
+  a yes or no (`disabled`). Where it would pick one of two or more
+  options (`left` for a way it points) or where several booleans
+  describe one thing between them, it is one string naming the options
+  (`points: 'left' | 'right'`): it reads at the call site and cannot
+  hold a combination that makes no sense.
 - **No booleans that change the structure.** If a prop would render other
   parts or other logic, it is another component, or parts you compose.
 - **Every component takes `className`**, merged last, for the one-off

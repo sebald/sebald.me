@@ -8,9 +8,9 @@ export const setting = {
   step: cva({
     base: 'inline-block h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] bg-current',
     variants: {
-      left: {
-        true: '[clip-path:polygon(100%_0,0_50%,100%_100%)]',
-        false: '[clip-path:polygon(0_0,100%_50%,0_100%)]',
+      points: {
+        left: '[clip-path:polygon(100%_0,0_50%,100%_100%)]',
+        right: '[clip-path:polygon(0_0,100%_50%,0_100%)]',
       },
       more: { true: '', false: 'bui-disabled' },
     },

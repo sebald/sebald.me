@@ -3,16 +3,20 @@ import type { ReactNode } from 'react';
 import { setting as styles } from './setting.styles';
 
 export interface StepProps {
-  /** Points left (back) instead of right */
-  left?: boolean;
+  /** Which way it points: `left` (back) or `right` (on) */
+  points?: 'left' | 'right';
   /** Whether there is more that way; dim at the end it cannot go past */
   more?: boolean;
   className?: string;
 }
 
 /** Left or right of a setting's value: a pixel triangle, dim at an end */
-export const Step = ({ left = false, more = true, className }: StepProps) => (
-  <span aria-hidden className={styles.step({ left, more, className })} />
+export const Step = ({
+  points = 'right',
+  more = true,
+  className,
+}: StepProps) => (
+  <span aria-hidden className={styles.step({ points, more, className })} />
 );
 
 export interface SettingProps {
@@ -37,7 +41,7 @@ export const Setting = ({
   className,
 }: SettingProps) => (
   <span data-slot="setting" className={styles.root({ className })}>
-    <Step left more={!first} />
+    <Step points="left" more={!first} />
     <span className={styles.value()}>{children}</span>
     <Step more={!last} />
   </span>

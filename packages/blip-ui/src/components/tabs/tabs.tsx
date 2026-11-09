@@ -109,7 +109,7 @@ export const TabList = ({ className, ...props }: TabListProps) => {
       className={styles.arrow()}
       onClick={() => stepTab(ref.current, by)}
     >
-      <Step left={by < 0} />
+      <Step points={by < 0 ? 'left' : 'right'} />
     </button>
   );
   return (
