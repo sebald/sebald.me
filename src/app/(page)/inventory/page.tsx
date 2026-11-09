@@ -132,6 +132,9 @@ const InventoryPage = () => (
                 </Link>{' '}
                 with proper attributes.
               </Text>
+              <Link href="#" size="small" className="w-fit">
+                A small link on its own
+              </Link>
             </div>
           </div>
 

@@ -8,7 +8,7 @@ import { cva } from '@/lib/styles.utils';
 // ---------------
 // A 4:3 grid of three pictures, one large and two small, sized unevenly so
 // it reads as a collage, not a table. The grid places the tiles by their
-// slot, a tile only fills the cell it gets
+// slot; a tile only fills the cell it gets
 const styles = {
   root: cva({
     base: ['grid aspect-4/3 w-full gap-1.5'],
@@ -31,7 +31,16 @@ const styles = {
     },
   }),
   tile: cva({
-    base: ['relative overflow-hidden rounded-lg bg-mist-800'],
+    base: ['group/tile relative overflow-hidden rounded-lg bg-mist-800'],
+  }),
+  // The picture inside the frame comes a little closer while the pointer
+  // is over this tile, the frame and its edge stay put
+  picture: cva({
+    base: [
+      'object-cover',
+      'motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out',
+      'motion-safe:group-hover/tile:scale-105',
+    ],
   }),
 };
 
@@ -71,7 +80,7 @@ const Tile = ({
       alt={alt}
       fill
       sizes={sizes}
-      className="object-cover"
+      className={styles.picture()}
     />
   </span>
 );

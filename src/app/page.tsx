@@ -141,7 +141,11 @@ const CurrentWork = () => (
           Reservix&apos;s open-source design system. It defines how our product
           looks and works, and the code it is built with.
         </Text>
-        <Link href="https://www.marigold-ui.io" className="mt-4 w-fit">
+        <Link
+          href="https://www.marigold-ui.io"
+          size="small"
+          className="mt-4 w-fit"
+        >
           Visit marigold-ui.io
         </Link>
       </div>
@@ -166,7 +170,7 @@ const LabList = () => (
               </Headline>
             </Link>
             <Text>{entry.blurb}</Text>
-            <Link href={labUrl(entry)} className="mt-4 w-fit">
+            <Link href={labUrl(entry)} size="small" className="mt-4 w-fit">
               Play {entry.title}
             </Link>
           </div>

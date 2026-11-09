@@ -37,8 +37,15 @@ export const styles = cva({
       // Only focus and transition, for links styled by what they wrap (cards)
       plain: '',
     },
+    size: {
+      // The size of the text around it
+      default: '',
+      // The caption size (`Text size="caption"`), for a link set apart
+      // from running text, like the one below an entry on the home page
+      small: 'text-[0.8125rem] md:text-xs',
+    },
   },
-  defaultVariants: { variant: 'default' },
+  defaultVariants: { variant: 'default', size: 'default' },
 });
 
 // Props
@@ -54,6 +61,7 @@ export interface LinkProps
 // ---------------
 export const Link = ({
   variant,
+  size,
   children,
   href,
   target,
@@ -76,7 +84,7 @@ export const Link = ({
       {...props}
       {...externalProps}
       href={href as Route}
-      className={styles({ variant, className })}
+      className={styles({ variant, size, className })}
     >
       {children}
     </Component>
