@@ -2,6 +2,7 @@ import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
+import { PageTransition } from '@/ui/page-transition';
 import { Text } from '@/ui/text';
 
 // Set apart from the notes by size and brightness alone: the name outranks
@@ -73,10 +74,12 @@ const NotesList = () => {
 };
 
 const HomePage = () => (
-  <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
-    <Intro />
-    <NotesList />
-  </div>
+  <PageTransition>
+    <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
+      <Intro />
+      <NotesList />
+    </div>
+  </PageTransition>
 );
 
 export default HomePage;

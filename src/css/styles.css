@@ -3,6 +3,7 @@
 
 @import './theme.css';
 @import './prose.css';
+@import './transitions.css';
 
 /* The lab's design system (Blip UI) and its game: their classes, tokens, variants and motion */
 @import '@sebald/blip-ui/styles.css';
