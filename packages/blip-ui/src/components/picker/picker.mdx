@@ -1,0 +1,105 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as PickerStories from './picker.stories';
+
+<Meta of={PickerStories} />
+
+# Picker
+
+A list the player moves through with a cursor: the title menu, options,
+the choices in a duel. It is always open and always listening, so one
+picker at a time is `active`. Lists of choices are a Picker, not a column
+of buttons. It is built from its parts, so the JSX reads like the menu:
+
+```tsx
+<Picker label="Options">
+  <PickerSetting id="mode" value="Normal" onStep={step}>
+    Mode
+  </PickerSetting>
+  <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
+    Hard mode
+  </PickerItem>
+  <PickerGroup>
+    <PickerItem id="back" variant="back" onSelect={close}>
+      Back
+    </PickerItem>
+  </PickerGroup>
+</Picker>
+```
+
+<Canvas of={PickerStories.Default} />
+<Controls of={PickerStories.Default} />
+
+## Anatomy
+
+1. **Cursor**, a pixel triangle on the current row
+2. **Row**, the label; the current one is white, an accent one is primary
+3. **Rail**, beside a list that does not fit: an arrow lit where there is
+   more, and a track with the view's place on it
+4. **Note**, a small window beside the list's own, at the current row
+
+## Parts
+
+| Part            | What it is                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------- |
+| `PickerItem`    | Something to pick                                                                           |
+| `PickerSetting` | A setting: its name and its value between the step arrows; left and right step it (Setting) |
+| `PickerGroup`   | Items that belong together, with room above them                                            |
+
+## Variants and states
+
+<Canvas of={PickerStories.Overview} />
+
+| Prop               | Effect                                                                         |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `variant="accent"` | The loud one: primary colour, blinking (steady under reduced motion)           |
+| `variant="back"`   | It leaves: Back or Cancel, which sound like stepping back, not like confirming |
+| `disabled`         | Dimmed and reachable, but it bumps when picked. Give it a `note` why           |
+| `ruledOut`         | From 0 to 1, how far a hint has ruled it out: it fades, still there to pick    |
+| `note`             | What it does, or why it is off, in a window beside the list                    |
+
+## Compositions
+
+<Canvas of={PickerStories.InAWindow} />
+
+A list that is taller than its room scrolls, keeps the cursor in view and
+shows the rail.
+
+<Canvas of={PickerStories.ScrollingList} />
+
+## Usage
+
+- **Do** put a picker in a Window, with a Legend that names the keys.
+- **Do** keep a disabled item in the list and say why in its note.
+- **Don't** hide what is not available. Nothing in a menu is hidden.
+- **Don't** have two active pickers on one layer. One in a `Dialog` (or
+  a `Confirm`) is on a layer of its own: the menu under it hears no keys
+  until it closes, without turning its `active` off.
+
+## The description box
+
+The note is rendered into the closest `[data-stage]` (what `Pixels`
+sets), so no window can cut it off. It goes beside the list's window, on
+the right or on the left where the right has no room. The stage's width
+is measured. On the tall
+layout it goes under the window, as wide as it.
+
+## Input
+
+- Up and down, or W and S, move; the list wraps
+- Left and right, or A and D, step a `PickerSetting`
+- Enter or Space picks the current item
+- Hovering a row moves the cursor; a click or tap picks it
+- Under a finger there is no cursor: only a row with a note is marked
+
+## Sound
+
+`move` when the cursor moves or a value steps, `confirm` when an item is
+picked, `back` for a `back` item and `bump` for a disabled one.
+
+## Accessibility
+
+- A `<ul>` named by `label` with a button per row; the current one has
+  `aria-current`, a disabled one `aria-disabled`
+- The note is an `aria-live` region
+- The focus ring shows for the keyboard only (`:focus-visible`)

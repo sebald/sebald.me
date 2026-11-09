@@ -1,0 +1,41 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as SettingStories from './setting.stories';
+
+<Meta of={SettingStories} />
+
+# Setting
+
+A value between two step arrows, for a menu row that is a setting: Mode
+◀ Normal ▶. It shows the value; in a Picker, `PickerSetting` draws it and takes
+the keys.
+
+<Canvas of={SettingStories.Default} />
+<Controls of={SettingStories.Default} />
+
+## Anatomy
+
+1. **Left step**, a pixel triangle, dim only at a range's first value
+2. **Value**, centred in six characters so the arrows stay put
+3. **Right step**, dim only at a range's last value
+
+<Canvas of={SettingStories.Overview} />
+
+## Usage
+
+- **Do** use `PickerSetting` in a Picker: it draws the Setting and takes
+  the keys.
+- **Do** use it on every menu row that is a setting, even one of two
+  values (On and Off), so they all read and work alike.
+- **Do** let a choice go round: left from the first value goes to the
+  last, both arrows lit (Mode, Music On/Off). Leave `first` and `last`
+  unset.
+- **Do** stop a range at its ends: a volume or a brightness has a min and
+  a max, and 10 jumping to 0 would be a surprise. Set `first` and `last`
+  so the arrow at an end dims.
+- **Don't** use it alone: it has no keys or click of its own.
+
+## Accessibility
+
+The arrows are hidden from assistive technology. Name the setting and its
+value in the row's label.

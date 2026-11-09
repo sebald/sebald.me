@@ -4,6 +4,7 @@
   "private": true,
   "packageManager": "pnpm@11.28.6",
   "dependencies": {
+    "@sebald/blip-ui": "workspace:*",
     "@base-ui/react": "1.9.0",
     "@phosphor-icons/react": "2.1.10",
     "@vercel/analytics": "^2.0.1",
@@ -51,11 +52,15 @@
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "test": "pnpm test:lib",
-    "test:lib": "node --import tsx --test 'src/**/*.test.ts'",
-    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts'",
+    "test:lib": "node --import tsx --test 'src/**/*.test.ts' 'packages/*/src/**/*.test.ts'",
+    "test:lib:watch": "node --import tsx --test --watch 'src/**/*.test.ts' 'packages/*/src/**/*.test.ts'",
     "typecheck": "tsc --noEmit",
     "vrt": "./scripts/vrt.sh",
     "vrt:update": "./scripts/vrt.sh --update-snapshots",
-    "vrt:update:ci": "./scripts/vrt-update-ci.sh"
+    "vrt:update:ci": "./scripts/vrt-update-ci.sh",
+    "storybook": "pnpm --filter @sebald/blip-ui storybook",
+    "build-storybook": "pnpm --filter @sebald/blip-ui build-storybook",
+    "vrt:blip-ui": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts",
+    "vrt:blip-ui:update": "./scripts/vrt.sh --config packages/blip-ui/playwright.config.ts --update-snapshots"
   }
 }

@@ -22,7 +22,10 @@ pnpm narrate          # Render narrations of changed notes (Python, see Narratio
 pnpm narrate:check    # Fail if a note's narration is missing or outdated
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
-pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker)
+pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Blip UI's too
+pnpm storybook        # Blip UI's Storybook (port 6006)
+pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
+pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
 CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
@@ -66,6 +69,13 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - `src/ui/` - React components using CVA for variants
 - `src/css/` - Tailwind styles and theme tokens (`theme.css` defines color system)
 - `content/` - MDX content files
+- `packages/` - pnpm workspace packages, consumed as source (no build step; Next compiles them)
+
+### Packages
+
+- `packages/blip-ui` (`@sebald/blip-ui`): Blip UI, the design system for the lab's pixel games. Tokens are CSS variables only (`src/tokens.css`, `--bui-*` roles with defaults); a game sets its values for the same names on its stage. Components take `variant`, `size` (with defaults) and a `className` merged last, with their styles in a `*.styles.ts` next to them (cva). How components are built is `src/building-components.mdx` (follow it): named by what they do; a new component only for new behaviour, a different look is a `variant`; a yes or no is a boolean named for the state, never for the look, and a choice between options a string naming them (`points: 'left' | 'right'`), in the games built on it too; parts are children, never JSX through a prop; every root has `data-slot="<name>"` and the parent places its children by it (or tells them through context), a child places nothing itself; parts that recur across containers are shared by role (`Title`, `Content`, `Actions`), the container telling them what they can't know through `PartsContext`. Colours only through `--bui-*` tokens, lengths in stage pixels (art on the grid in `--px`; spacing, controls and readouts in `--bui-px`, never finer than `--bui-min-px`), spacing from `SPACE` (1, 2, 3, 4, 6, 8), text at 0.75, 0.85, 1 or 2em, disabled as `bui-disabled` (`foundations/uniformity.test.ts` fails on anything else); sounds through `useFeedback()` (the game decides what plays), the scale through `usePixels()`. Base UI is the headless layer where a primitive fits (Tabs) No game data, no assets, no `next/*`
+- Blip UI's docs are its Storybook (`packages/blip-ui/.storybook`, Vite): per component a story file and an MDX page with the guidelines. Stories: one `Default` whose args are the props' defaults, one `Overview` with every variant × size and state side by side (what the visual tests cover), and otherwise only compositions; never a story per variant or size. Its visual regression tests (`packages/blip-ui/tests/visual`) screenshot every story from the built Storybook's index, wide at 3x and 1x and tall on a 402 × 714 phone at its scale (402 / 320), in the same Docker image as the site's; a story tagged `no-vrt` is left out, one tagged `no-vrt-<shot>` (`no-vrt-1x`) skips that shot. A baseline is only what the story looked like when it was taken, faults included, so each shot also fails when part of the story lies outside `#storybook-root` or its text is cut off by a container that hides its overflow (`tests/visual/layout.ts`), and new or changed baselines are looked at before they are committed. The "Blip UI Visual Regression" workflow runs them on pull requests that touch the kit
+- `pnpm test` runs the packages' tests too
 
 ### Content Frontmatter (notes)
 

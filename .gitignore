@@ -1,5 +1,5 @@
 # deps
-/node_modules
+node_modules/
 
 # generated content
 .source
@@ -27,6 +27,11 @@ next-env.d.ts
 # playwright
 /playwright-report/
 /test-results/
+packages/*/playwright-report/
+packages/*/test-results/
+# storybook
+storybook-static/
+debug-storybook.log
 # playwright mcp output
 /.playwright-mcp/
 

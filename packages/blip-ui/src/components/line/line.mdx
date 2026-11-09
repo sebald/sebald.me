@@ -1,0 +1,48 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as LineStories from './line.stories';
+
+<Meta of={LineStories} />
+
+# Line
+
+One line of a conversation, with a small square in front of it that says
+whose it is. Use it for a back-and-forth where the reader must tell the
+two sides apart without names.
+
+<Canvas of={LineStories.Default} />
+<Controls of={LineStories.Default} />
+
+## Anatomy
+
+1. **Mark**, a small square in the speaker's colour
+2. **Line**, the words; a gap of 3 `--bui-px` between them
+
+## Variants
+
+| Variant     | Mark  | Whose                                    |
+| ----------- | ----- | ---------------------------------------- |
+| `primary`   | Gold  | The side the screen is about: the player |
+| `secondary` | Ember | The other side                           |
+
+`past` is a line already said: the phrase being answered, a reply already
+shown. It is quieter, so the live line stands out.
+
+<Canvas of={LineStories.Overview} />
+
+## Usage
+
+- **Do** use the same variant for the same speaker throughout.
+- **Do** mark the line being answered `past`, so the live one stands out.
+
+<Canvas of={LineStories.Exchange} />
+
+- **Don't** rely on the mark's colour alone to name a speaker where it
+  matters. Say it in the words or the surrounding text.
+
+## Accessibility
+
+- A `<p>`; the mark is `aria-hidden` and carries no meaning for assistive
+  technology
+- A past line is a quieter text colour (`--bui-muted`), not a lower
+  opacity
