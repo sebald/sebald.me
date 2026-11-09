@@ -335,9 +335,6 @@ export const SLOTS: readonly Slot[] = [
   BOSS_SLOT,
 ];
 
-/** The colleagues of a run: one per role, then the boss */
-export const MAX_COLLEAGUES = SLOTS.length - 1;
-
 // The deck
 // ---------------
 
@@ -500,8 +497,6 @@ export interface Run {
   deck: PairId[];
   /** The colleagues, then the boss last */
   slots: RunSlot[];
-  /** The characters out of office this run */
-  outOfOffice: CharacterId[];
 }
 
 /** The boss is the last slot */
@@ -520,7 +515,6 @@ export const drawRun = (role: Role, look: Look, seed: number): Run => {
   const rng = new Rng(seedRng(seed));
   const deck = drawDeck(rng);
   const slots: RunSlot[] = [];
-  const outOfOffice: CharacterId[] = [];
   const taken = new Set<SheetId>([PLAYER_SHEETS[role][look]]);
   const [own, ...foreign] = roleOrder(role);
   for (const opponentRole of [own!, ...rng.shuffle(foreign)]) {
@@ -531,11 +525,9 @@ export const drawRun = (role: Role, look: Look, seed: number): Run => {
         taken.add(character.sheet);
         slots.push({ character: character.id, slot: SLOTS[slots.length]! });
         drawn = true;
-      } else {
-        outOfOffice.push(character.id);
       }
     }
   }
   slots.push({ character: 'stakeholder', slot: BOSS_SLOT });
-  return { seed, deck, slots, outOfOffice };
+  return { seed, deck, slots };
 };

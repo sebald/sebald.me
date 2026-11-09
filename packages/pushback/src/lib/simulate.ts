@@ -95,16 +95,13 @@ export const playDuel = (
     if (s.phase === 'defend') {
       const { answer } = s.exchange!;
       if (s.exchange!.micDrop && !s.boss) tally.opponent++;
-      const known =
-        s.collected.includes(answer) && !s.boss
-          ? true
-          : s.collected.includes(answer);
-      const p = known
+      const recalled = s.collected.includes(answer);
+      const p = recalled
         ? model.recall
         : guessChance(s.setup.slot, s.menu.length, model);
       const correct = rng.chance(p);
       if (s.silence) {
-        const fast = known && rng.chance(model.speed);
+        const fast = recalled && rng.chance(model.speed);
         const ms = fast ? s.silence.limit * 0.3 : s.silence.limit * 0.8;
         s = reduce(s, { type: 'tick', ms });
         if (s.phase !== 'defend') continue;

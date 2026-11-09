@@ -4,26 +4,11 @@
  * storage calls, which take the storage as an argument so tests can pass
  * a fake and the server (no `window`) gets an empty save.
  */
-import {
-  type Look,
-  LOOKS,
-  MODE_LABELS,
-  MODE_ORDER,
-  type Mode,
-} from './characters';
+import { type Look, LOOKS, MODE_ORDER, type Mode } from './characters';
 import type { DuelState } from './duel';
-import {
-  PAIRS,
-  POOL_SIZE,
-  pairById,
-  poolPairs,
-  type PairId,
-  ROLE_LABELS,
-  type Role,
-  ROLES,
-  isPairId,
-} from './lines';
-import { type RunState, createRunState, recordDuel, runScore } from './run';
+import { type PairId, type Role, ROLES, isPairId } from './lines';
+import { type RunState, createRunState, recordDuel } from './run';
+import { type KeyValueStorage, readJson, writeJson } from './storage';
 
 export const SAVE_KEY = 'pushback';
 export const SAVE_VERSION = 4;
@@ -54,7 +39,7 @@ export interface Save {
 }
 
 /** What the save needs from `localStorage` */
-export type SaveStorage = Pick<Storage, 'getItem' | 'setItem'>;
+export type SaveStorage = KeyValueStorage;
 
 export const emptySave = (
   mode: Mode = 'easy',
@@ -66,15 +51,6 @@ export const emptySave = (
   shipped: {},
   glossary,
 });
-
-const storageOrNull = (storage?: SaveStorage): SaveStorage | null => {
-  if (storage) return storage;
-  try {
-    return typeof localStorage === 'undefined' ? null : localStorage;
-  } catch {
-    return null;
-  }
-};
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -177,26 +153,12 @@ export const parseSave = (raw: string | null): Save | null => {
 };
 
 /** The save, or null when there is none (or no storage) */
-export const loadSave = (storage?: SaveStorage): Save | null => {
-  const store = storageOrNull(storage);
-  if (!store) return null;
-  try {
-    return parseSave(store.getItem(SAVE_KEY));
-  } catch {
-    return null;
-  }
-};
+export const loadSave = (storage?: SaveStorage): Save | null =>
+  readJson(SAVE_KEY, parseSave, null, storage);
 
 /** Write the save; silently does nothing without storage */
-export const writeSave = (save: Save, storage?: SaveStorage): void => {
-  const store = storageOrNull(storage);
-  if (!store) return;
-  try {
-    store.setItem(SAVE_KEY, JSON.stringify(save));
-  } catch {
-    // Quota or private mode: the game still plays, it just won't persist
-  }
-};
+export const writeSave = (save: Save, storage?: SaveStorage): void =>
+  writeJson(SAVE_KEY, save, storage);
 
 /** Start a run for a role with a look; it replaces the one in play */
 export const startRun = (
@@ -221,7 +183,7 @@ export const finishDuel = (
   const { run } = save;
   if (!run) return save;
   const known = new Set(save.glossary);
-  const next = { ...recordDuel(run, index, duel), look: run.look };
+  const next = recordDuel(run, index, duel);
   return {
     ...save,
     run: next,
@@ -258,73 +220,3 @@ export const resetSave = (save: Save): Save => emptySave(save.mode);
 /** The player's name on the select screen and the result card */
 export const playerName = (role: Role, look: Look): string =>
   LOOKS[role][look].name;
-
-/** The result card as plain text, the Wordle trick */
-export const resultCardText = (
-  run: RunState,
-  glossary: readonly PairId[] = run.collected,
-): string => {
-  const flawless = Object.values(run.beaten).filter(b => b.flawless).length;
-  const { stats } = run;
-  return [
-    `Pushback · ${ROLE_LABELS[run.role]}`,
-    `${run.finished ? 'Stakeholder beaten' : 'Stakeholder took it offline'} · ${run.attempts} duels · ${flawless} flawless · ${MODE_LABELS[runMode(run)].toLowerCase()} mode`,
-    `Score ${formatScore(runScore(run))}`,
-    `Exchanges ${stats.exchangesWon}–${stats.exchangesLost} · Mic drops ${stats.micDrops} · Glossary ${poolPairs(glossary).length}/${PAIRS.length}`,
-    `Missed counters: PM ${stats.missesByPool.pm} · Dev ${stats.missesByPool.dev} · Designer ${stats.missesByPool.designer}`,
-    'sebald.me/lab/pushback',
-  ].join('\n');
-};
-
-/** The mode a run was played in: the last duel's, or what an old save's flag says */
-export const runMode = (run: RunState): Mode =>
-  run.mode ?? (run.buddy ? 'easy' : 'hard');
-
-/** A score with thousands separated: 12,340 */
-export const formatScore = (score: number): string =>
-  score.toLocaleString('en-US');
-
-/** One pool on the result screen: what of it is collected, what was missed */
-export interface ResultPool {
-  role: Role;
-  collected: number;
-  total: number;
-  missed: number;
-}
-
-/** What the result screen shows: the ledger and the glossary by pool */
-export interface ResultModel {
-  finished: boolean;
-  score: number;
-  mode: Mode;
-  rows: [label: string, value: string][];
-  pools: ResultPool[];
-  glossary: { collected: number; total: number };
-}
-
-export const resultModel = (
-  run: RunState,
-  glossary: readonly PairId[] = run.collected,
-): ResultModel => {
-  const flawless = Object.values(run.beaten).filter(b => b.flawless).length;
-  const { stats } = run;
-  const pairs = poolPairs(glossary);
-  return {
-    finished: run.finished,
-    score: runScore(run),
-    mode: runMode(run),
-    rows: [
-      ['Duels', String(run.attempts)],
-      ['Flawless', String(flawless)],
-      ['Exchanges', `${stats.exchangesWon}–${stats.exchangesLost}`],
-      ['Mic drops', String(stats.micDrops)],
-    ],
-    pools: ROLES.map(role => ({
-      role,
-      collected: pairs.filter(id => pairById(id).role === role).length,
-      total: POOL_SIZE,
-      missed: stats.missesByPool[role],
-    })),
-    glossary: { collected: pairs.length, total: PAIRS.length },
-  };
-};

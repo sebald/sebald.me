@@ -66,8 +66,6 @@ describe('drawRun', () => {
     assert.equal(new Set(sheets).size, sheets.length);
     // Jo is a PM look and a colleague's sheet: never across from herself
     assert.ok(!sheets.includes('pm-jo'));
-    assert.equal(run.outOfOffice.length, 6);
-    assert.ok(run.outOfOffice.every(id => !ids.includes(id)));
     assert.equal(run.deck.length, DECK_PER_POOL * ROLES.length);
   });
 

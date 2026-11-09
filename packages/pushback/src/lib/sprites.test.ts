@@ -5,6 +5,7 @@ import { CHARACTERS } from './characters';
 import {
   GHOST_CELLS,
   POSE_CELL,
+  FRAME_MS,
   SHEET_IDS,
   TALK,
   TEARS,
@@ -14,7 +15,6 @@ import {
   mouthOpen,
   tearDrop,
 } from './sprites';
-import { FRAME_MS } from './stage';
 
 describe('cellFor', () => {
   it('maps every pose to its sheet cell', () => {

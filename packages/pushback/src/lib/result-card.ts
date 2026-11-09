@@ -9,8 +9,8 @@ import { bitmapTextSize } from '@sebald/blip-ui';
 
 import { type Look, LOOKS, MODE_LABELS, MODES } from './characters';
 import { type PairId, ROLE_LABELS, RUN_VERDICTS, inTurn } from './lines';
+import { formatScore, resultModel } from './result';
 import type { RunState } from './run';
-import { formatScore, resultModel } from './save';
 
 /** The card in units: 400 by 210, three canvas pixels each, 1200 by 630 */
 export const CARD = { width: 400, height: 210, unit: 3 } as const;

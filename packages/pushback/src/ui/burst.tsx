@@ -3,7 +3,7 @@
 import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useRef } from 'react';
 
-import { FRAME_MS } from '../lib/stage';
+import { FRAME_MS } from '../lib/sprites';
 import { drawCell } from './draw';
 import { BURST_KEY, SHEETS, useSprites } from './sheets';
 import { cn } from './styles.utils';

@@ -3,6 +3,7 @@
  * save keeps them. Off by default; nothing plays until the player turns
  * it on.
  */
+import { type KeyValueStorage, readJson, writeJson } from '../storage';
 
 export interface SoundSettings {
   music: boolean;
@@ -14,16 +15,7 @@ export const SOUND_KEY = 'pushback-sound';
 export const DEFAULT_SOUND: SoundSettings = { music: false, effects: false };
 
 /** What the settings need from `localStorage` */
-export type SoundStorage = Pick<Storage, 'getItem' | 'setItem'>;
-
-const storageOrNull = (storage?: SoundStorage): SoundStorage | null => {
-  if (storage) return storage;
-  try {
-    return typeof localStorage === 'undefined' ? null : localStorage;
-  } catch {
-    return null;
-  }
-};
+export type SoundStorage = KeyValueStorage;
 
 /** The stored switches, or the defaults for anything missing or unreadable */
 export const parseSound = (raw: string | null): SoundSettings => {
@@ -38,26 +30,11 @@ export const parseSound = (raw: string | null): SoundSettings => {
   }
 };
 
-export const loadSound = (storage?: SoundStorage): SoundSettings => {
-  const store = storageOrNull(storage);
-  if (!store) return DEFAULT_SOUND;
-  try {
-    return parseSound(store.getItem(SOUND_KEY));
-  } catch {
-    return DEFAULT_SOUND;
-  }
-};
+export const loadSound = (storage?: SoundStorage): SoundSettings =>
+  readJson(SOUND_KEY, parseSound, DEFAULT_SOUND, storage);
 
 /** Write the switches; silently does nothing without storage */
 export const writeSound = (
   settings: SoundSettings,
   storage?: SoundStorage,
-): void => {
-  const store = storageOrNull(storage);
-  if (!store) return;
-  try {
-    store.setItem(SOUND_KEY, JSON.stringify(settings));
-  } catch {
-    // Quota or private mode: the switches hold until the page closes
-  }
-};
+): void => writeJson(SOUND_KEY, settings, storage);

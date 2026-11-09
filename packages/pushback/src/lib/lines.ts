@@ -552,13 +552,6 @@ export const BOSS_WIN_BARKS: Record<Role, readonly string[]> = {
   designer: ['Has design seen this?', 'Did design approve this?'],
 };
 
-/** Blurbs on the role-select screen */
-export const ROLE_BLURBS: Record<Role, string> = {
-  pm: 'Has a roadmap and is not afraid to use it.',
-  dev: 'Will fix it in the next sprint. Which sprint is a detail.',
-  designer: 'Has opinions about your line height.',
-};
-
 /**
  * The verdict over the end of a duel, the heading of its window: two or
  * three words, the way a court calls it, picked in turn

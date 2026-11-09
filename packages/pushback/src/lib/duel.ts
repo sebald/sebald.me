@@ -137,8 +137,6 @@ export interface DuelState {
   thrown: PairId[];
   /** Boss phrases still to come */
   bossQueue: BossPairId[];
-  /** The player's misses against the boss */
-  misses: number;
   /** Opponent throws so far (retry alternation) */
   turn: number;
   /** Exchanges so far */
@@ -191,7 +189,6 @@ export const createDuel = (setup: DuelSetup): DuelState => {
     outcome: null,
     thrown: [],
     bossQueue,
-    misses: 0,
     turn: 0,
     exchanges: 0,
     winner: null,
@@ -239,14 +236,16 @@ export const SCORE = {
   boss: 1000,
 } as const;
 
+/** Words in the counters of a menu */
+const menuWords = (menu: readonly PairId[]): number =>
+  menu.reduce((n, id) => n + wordCount(pairById(id).counter), 0);
+
 /**
  * The time a median reader needs for a menu's counters, in ms: the
  * yardstick for speed points, the same in every mode, timer or not
  */
 export const readingMs = (menu: readonly PairId[]): number =>
-  (menu.reduce((n, id) => n + wordCount(pairById(id).counter), 0) /
-    RULES.reading.wordsPerSecond) *
-  1000;
+  (menuWords(menu) / RULES.reading.wordsPerSecond) * 1000;
 
 /** Speed points for a right counter after `answerMs` of `reading` ms */
 export const speedPoints = (answerMs: number, reading: number): number =>
@@ -268,9 +267,8 @@ export const silenceLimit = (
   menu: readonly PairId[],
   micDrop: boolean,
 ): number => {
-  const words = menu.reduce((n, id) => n + wordCount(pairById(id).counter), 0);
   const seconds =
-    (words / rules.reading.wordsPerSecond) *
+    (menuWords(menu) / rules.reading.wordsPerSecond) *
     rules.reading.share *
     (micDrop ? rules.micDrop.silence : 1);
   return Math.round(seconds * 8) * 125;
@@ -386,6 +384,10 @@ const nextExchange = (state: DuelState): DuelState => {
     : opponentThrows(state);
 };
 
+/** What an exchange moves the scale by: a mic drop is worth more */
+const worthOf = (rules: Rules, exchange: Exchange): number =>
+  exchange.micDrop ? rules.micDrop.worth : 1;
+
 /** Score the exchange and move to `resolve` */
 const resolve = (state: DuelState, outcome: Outcome): DuelState => {
   const { exchange } = state;
@@ -404,8 +406,7 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
         ? 0
         : Math.max(0, state.momentum[loser] - state.rules.momentumLoss),
   };
-  const winnerGains =
-    winner === exchange.by || outcome.fast || state.setup.slot.silence === null;
+  const winnerGains = winner === exchange.by || outcome.fast;
   if (winnerGains && !outcome.offline) {
     momentum[winner] = Math.min(momentum[winner] + 1, state.rules.momentum);
   }
@@ -415,7 +416,6 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     missesByPool: { ...state.stats.missesByPool },
   };
   let lastMissPool = state.lastMissPool;
-  let misses = state.misses;
   if (winner === 'player') stats.exchangesWon++;
   else stats.exchangesLost++;
   if (exchange.by === 'player' && exchange.micDrop) stats.micDrops++;
@@ -424,7 +424,6 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     const pool = poolOfPhrase(exchange.phrase);
     stats.missesByPool[pool]++;
     lastMissPool = pool;
-    misses++;
   }
 
   // A pair the player defended against is collected, win or lose
@@ -452,7 +451,6 @@ const resolve = (state: DuelState, outcome: Outcome): DuelState => {
     silence: null,
     stats,
     lastMissPool,
-    misses,
     exchanges: state.exchanges + 1,
     winner: duelWinner,
   };
@@ -479,7 +477,7 @@ const playerCounters = (
     picked,
     fast: right && fast,
     // A mic drop moves the scale two steps, landed or countered
-    worth: exchange.micDrop ? state.rules.micDrop.worth : 1,
+    worth: worthOf(state.rules, exchange),
     offline: false,
   });
 };
@@ -534,7 +532,7 @@ const playerThrows = (state: DuelState, phrase: PairId): DuelState => {
       winner: answered ? 'opponent' : 'player',
       picked,
       fast: true,
-      worth: exchange.micDrop ? state.rules.micDrop.worth : 1,
+      worth: worthOf(state.rules, exchange),
       offline: false,
     }),
     rng: rng.state,

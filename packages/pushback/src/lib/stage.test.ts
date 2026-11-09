@@ -7,9 +7,7 @@ import { RULES, STAKEHOLDER, type SceneId, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
-  barRects,
   roomBox,
-  barWidth,
   barsLabel,
   bob,
   PACE,
@@ -26,27 +24,6 @@ import {
 } from './stage';
 
 describe('bars', () => {
-  it('lays boxes out with gaps and fills the first ones', () => {
-    const rects = barRects({
-      x: 10,
-      y: 5,
-      count: 3,
-      filled: 2,
-      width: 10,
-      height: 6,
-      gap: 2,
-    });
-    assert.deepEqual(
-      rects.map(r => [r.x, r.filled]),
-      [
-        [10, true],
-        [22, true],
-        [34, false],
-      ],
-    );
-    assert.equal(barWidth(3, { width: 10, gap: 2 }), 34);
-  });
-
   it('draws the scale as a beam clash, the spark pushed toward the loser', () => {
     const even = scaleBeam({ scale: 0, toWin: 3, toLose: 3 });
     assert.equal(even.steps, 6);

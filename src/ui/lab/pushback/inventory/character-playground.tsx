@@ -1,12 +1,15 @@
 'use client';
 
-import { SHEET_IDS, type SheetId } from '@sebald/pushback/lib/sprites';
-import { type Pose } from '@sebald/pushback/lib/stage';
+import {
+  SHEET_IDS,
+  type Pose,
+  type SheetId,
+} from '@sebald/pushback/lib/sprites';
 import { Character } from '@sebald/pushback/ui/character';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, Floor, ScaleSelect, Select, field } from './controls';
+import { DemoForm, Field, Floor, ScaleSelect, Select } from './controls';
 
 const POSES: Pose[] = ['idle', 'talk', 'taunt', 'flinch', 'win', 'lose'];
 
@@ -31,7 +34,7 @@ const NAMES: Record<SheetId, string> = {
 };
 
 /** One entry per sheet */
-export const CAST: Entry[] = SHEET_IDS.map(sheet => ({
+const CAST: Entry[] = SHEET_IDS.map(sheet => ({
   label: NAMES[sheet],
   sheet,
 }));
@@ -52,7 +55,7 @@ export const CharacterPlayground = () => {
 
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Select
           label="Who"
           value={who}
@@ -93,7 +96,7 @@ export const CharacterPlayground = () => {
             onChange={e => setStill(e.target.checked)}
           />
         </Field>
-      </form>
+      </DemoForm>
       <Pixels scale={scale}>
         <Floor>
           <Character

@@ -19,6 +19,7 @@ import {
   isBossPairId,
   pairById,
 } from './lines';
+import { FRAME_MS, type Pose } from './sprites';
 
 // Geometry
 // ---------------
@@ -106,38 +107,6 @@ export const viewFor = (stands: {
   };
 };
 
-export interface Rect {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  filled: boolean;
-}
-
-/** A row of `count` boxes from `x`, the first `filled` ones filled */
-export const barRects = (options: {
-  x: number;
-  y: number;
-  count: number;
-  filled: number;
-  width: number;
-  height: number;
-  gap: number;
-}): Rect[] =>
-  Array.from({ length: options.count }, (_, i) => ({
-    x: options.x + i * (options.width + options.gap),
-    y: options.y,
-    width: options.width,
-    height: options.height,
-    filled: i < options.filled,
-  }));
-
-/** Width of a bar of `count` boxes */
-export const barWidth = (
-  count: number,
-  { width, gap }: { width: number; gap: number },
-): number => count * width + (count - 1) * gap;
-
 /** One tick of the shared scale */
 export interface Beam {
   x: number;
@@ -214,9 +183,6 @@ export const PACE = {
   endBeat: 800,
 } as const;
 
-/** Milliseconds between frames: 8 fps, like the scene loops */
-export const FRAME_MS = 125;
-
 /**
  * A hit flickers: after the flash, the figure blinks in and out every
  * frame for this long, the way old arcade games marked a landed hit
@@ -284,8 +250,6 @@ export const breathFrame = (pose: Pose, elapsed: number): 0 | 1 => {
 
 // Poses
 // ---------------
-
-export type Pose = 'idle' | 'talk' | 'taunt' | 'flinch' | 'win' | 'lose';
 
 /** Vertical bob and horizontal step of a pose at `elapsed` ms into it */
 export const poseOffset = (

@@ -139,11 +139,11 @@ const addStats = (a: DuelStats, b: DuelStats): DuelStats => ({
 });
 
 /** Fold a finished duel back into the run */
-export const recordDuel = (
-  state: RunState,
+export const recordDuel = <T extends RunState>(
+  state: T,
   index: number,
   duel: DuelState,
-): RunState => {
+): T => {
   if (duel.phase !== 'end' || !duel.winner) return state;
   const won = duel.winner === 'player';
   const beaten = { ...state.beaten };

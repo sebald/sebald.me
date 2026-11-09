@@ -5,13 +5,14 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { Side } from '../lib/duel';
 import {
+  type Pose,
   type SheetId,
   cellFor,
   mouthOpen,
   cries,
   tearDrop,
 } from '../lib/sprites';
-import { LAYOUT, type Pose, breathFrame, poseOffset } from '../lib/stage';
+import { LAYOUT, breathFrame, poseOffset } from '../lib/stage';
 import { drawCell, drawTear } from './draw';
 import { useSprites } from './sheets';
 import { cn } from './styles.utils';
