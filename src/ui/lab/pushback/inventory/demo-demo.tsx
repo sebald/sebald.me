@@ -3,9 +3,9 @@
 import { demoFor } from '@sebald/pushback/lib/attract';
 import { createDuel } from '@sebald/pushback/lib/duel';
 import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { field } from './controls';
+import { DemoForm, field } from './controls';
 
 /**
  * The attract mode without the twenty seconds on the title: the demo
@@ -16,15 +16,15 @@ import { field } from './controls';
 export const DemoDemo = () => {
   const [seed, setSeed] = useState(1);
   const next = () => setSeed(s => s + 1);
-  const demo = demoFor(seed);
+  const demo = useMemo(() => demoFor(seed), [seed]);
   return (
     <div className="grid gap-4">
-      <div className={field.form}>
+      <DemoForm>
         <button type="button" className={field.input} onClick={next}>
           Next demo
         </button>
         <span className="text-mist-400">Seed {seed}</span>
-      </div>
+      </DemoForm>
       <DuelScreen
         key={seed}
         look={demo.look}

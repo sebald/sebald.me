@@ -5,7 +5,7 @@ import { Hud } from '@sebald/pushback/ui/hud';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, field } from './controls';
+import { DemoForm, Field } from './controls';
 
 /** The bars with every number on a control, over a flat band */
 export const HudDemo = () => {
@@ -16,10 +16,10 @@ export const HudDemo = () => {
   const [boss, setBoss] = useState(false);
   const [still, setStill] = useState(false);
   const toWin = boss ? 4 : 3;
-  const toLose = boss ? 3 : 3;
+  const toLose = 3;
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Field label={`Scale ${scale}`}>
           <input
             type="range"
@@ -71,7 +71,7 @@ export const HudDemo = () => {
             onChange={e => setStill(e.target.checked)}
           />
         </Field>
-      </form>
+      </DemoForm>
       <Pixels scale={3}>
         <div
           className="relative overflow-hidden bg-(--pb-wall)"

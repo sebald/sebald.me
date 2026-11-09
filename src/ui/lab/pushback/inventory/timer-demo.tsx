@@ -16,7 +16,7 @@ import { LAYOUT } from '@sebald/pushback/lib/stage';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, ScaleSelect, field } from './controls';
+import { DemoForm, field, Field, ScaleSelect } from './controls';
 
 /** A normal-mode menu of five runs about thirteen seconds */
 const LIMIT = 13_000;
@@ -50,7 +50,7 @@ export const TimerDemo = () => {
   const options = PAIRS.slice(3, 8);
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <ScaleSelect value={scale} scales={[2, 3, 4]} onChange={setScale} />
         <button
           type="button"
@@ -85,7 +85,7 @@ export const TimerDemo = () => {
         <span className="text-mist-400 tabular-nums">
           {left.toFixed(1)} s left · {phase}
         </span>
-      </form>
+      </DemoForm>
       <Pixels scale={scale}>
         <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
           {elapsed < LIMIT && (

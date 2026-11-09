@@ -18,7 +18,14 @@ import { useState } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
-const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
+import {
+  DemoForm,
+  Field,
+  SCENES,
+  ScaleSelect,
+  Select,
+  field,
+} from './controls';
 
 const px = (n: number, scale: number) => `${n * scale}px`;
 
@@ -116,74 +123,44 @@ export const SceneViewer = () => {
   );
 
   return (
-    <section className="grid gap-3 font-mono text-sm">
-      <h2 className="text-mist-200">Scene viewer</h2>
-      <form
-        className="flex flex-wrap items-center gap-3 text-mist-300"
-        onSubmit={e => e.preventDefault()}
-      >
-        <label className="flex items-center gap-1">
-          Scene
-          <select
-            value={scene}
-            onChange={e => setScene(e.target.value as SceneId)}
-            className="rounded bg-mist-900 px-1 py-0.5 text-mist-100"
-          >
-            {SCENES.map(id => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex items-center gap-1">
-          Scale
-          <select
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-            className="rounded bg-mist-900 px-1 py-0.5 text-mist-100"
-          >
-            {[1, 2, 3, 4].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex items-center gap-1">
+    <div className="grid gap-3 font-mono text-sm">
+      <DemoForm>
+        <Select
+          label="Scene"
+          value={scene}
+          options={SCENES}
+          onChange={setScene}
+        />
+        <ScaleSelect value={scale} scales={[1, 2, 3, 4]} onChange={setScale} />
+        <Field label="Poster">
           <input
             type="checkbox"
             checked={still}
             onChange={e => setStill(e.target.checked)}
           />
-          Poster
-        </label>
-        <label className="flex items-center gap-1">
+        </Field>
+        <Field label="Window">
           <input
             type="checkbox"
             checked={windowed}
             onChange={e => setWindowed(e.target.checked)}
           />
-          Window
-        </label>
-        <label className="flex items-center gap-1">
+        </Field>
+        <Field label="Guides">
           <input
             type="checkbox"
             checked={guides}
             onChange={e => setGuides(e.target.checked)}
           />
-          Guides
-        </label>
-        <label className="flex items-center gap-1">
+        </Field>
+        <Field label="Figures">
           <input
             type="checkbox"
             checked={figures}
             onChange={e => setFigures(e.target.checked)}
           />
-          Figures
-        </label>
-        <label className="flex items-center gap-1">
-          Room ×{room.toFixed(2)}
+        </Field>
+        <Field label={`Room ×${room.toFixed(2)}`}>
           <input
             type="range"
             min={0.5}
@@ -194,44 +171,28 @@ export const SceneViewer = () => {
           />
           <button
             type="button"
-            className="rounded bg-mist-900 px-1 py-0.5 text-mist-300"
+            className={field.input}
             onClick={() => setRoom(1)}
           >
             1
           </button>
-        </label>
-        <label className="flex items-center gap-1">
-          Left
-          <select
-            value={who.player}
-            onChange={e => setWho({ ...who, player: e.target.value })}
-            className="rounded bg-mist-900 px-1 py-0.5 text-mist-100"
-          >
-            {FIGURES.map(f => (
-              <option key={f.label} value={f.label}>
-                {f.label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="flex items-center gap-1">
-          Right
-          <select
-            value={who.opponent}
-            onChange={e => setWho({ ...who, opponent: e.target.value })}
-            className="rounded bg-mist-900 px-1 py-0.5 text-mist-100"
-          >
-            {FIGURES.map(f => (
-              <option key={f.label} value={f.label}>
-                {f.label}
-              </option>
-            ))}
-          </select>
-        </label>
+        </Field>
+        <Select
+          label="Left"
+          value={who.player}
+          options={FIGURES.map(f => f.label)}
+          onChange={player => setWho({ ...who, player })}
+        />
+        <Select
+          label="Right"
+          value={who.opponent}
+          options={FIGURES.map(f => f.label)}
+          onChange={opponent => setWho({ ...who, opponent })}
+        />
         <span className="text-mist-500">
           {usedBy} · {still ? 'poster.png' : 'scene-1x.webp'}
         </span>
-      </form>
+      </DemoForm>
 
       <Pixels scale={scale}>
         <div
@@ -330,6 +291,6 @@ export const SceneViewer = () => {
         {room !== 1 ? ` (now ×${room.toFixed(2)})` : ''}; the render is then
         regenerated or resampled to it.
       </p>
-    </section>
+    </div>
   );
 };

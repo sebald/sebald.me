@@ -10,7 +10,7 @@ import {
   speak,
   unlock,
 } from '@sebald/pushback/ui/audio/engine';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
@@ -43,11 +43,16 @@ const VOICES: Record<BlipVoice, string> = {
 /** A line typed at the game's pace, three letters a step */
 const LINE = "Let's take this offline.";
 
+/** The steps of a typed line, as timeouts to clear */
 const typeLine = (voice: BlipVoice) => {
   unlock();
+  const timers: ReturnType<typeof setTimeout>[] = [];
   for (let i = 3; i <= LINE.length + 2; i += 3) {
-    setTimeout(() => speak(voice, LINE.slice(i - 3, i), true), (i / 3) * 125);
+    timers.push(
+      setTimeout(() => speak(voice, LINE.slice(i - 3, i), true), (i / 3) * 125),
+    );
   }
+  return timers;
 };
 
 /** What a piece takes of the chip, as the hardware counts it */
@@ -65,17 +70,33 @@ export const SoundDemo = () => {
   const [playing, setPlaying] = useState<Cue | null>(null);
   const [momentum, setLayer] = useState(0);
 
+  // Pending timeouts: a typed line's steps, a jingle's end
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const jingle = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const type = (voice: BlipVoice) => {
+    timers.current.forEach(clearTimeout);
+    timers.current = typeLine(voice);
+  };
+
   // Stop when the section goes
-  useEffect(() => () => auditionMusic(null), []);
+  useEffect(
+    () => () => {
+      timers.current.forEach(clearTimeout);
+      clearTimeout(jingle.current);
+      auditionMusic(null);
+    },
+    [],
+  );
 
   const play = (cue: Cue) => {
     const stop = playing === cue;
+    clearTimeout(jingle.current);
     setPlaying(stop ? null : cue);
     auditionMusic(stop ? null : cue);
     // A jingle is over by itself
     if (!stop && MUSIC[cue].once) {
       const { steps, stepSeconds } = compile(MUSIC[cue]);
-      setTimeout(
+      jingle.current = setTimeout(
         () => setPlaying(current => (current === cue ? null : current)),
         steps * stepSeconds * 1000,
       );
@@ -147,7 +168,7 @@ export const SoundDemo = () => {
             key={voice}
             type="button"
             className={field.input}
-            onClick={() => typeLine(voice)}
+            onClick={() => type(voice)}
           >
             {VOICES[voice]}
           </button>

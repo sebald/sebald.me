@@ -1,3 +1,4 @@
+import type { SceneId } from '@sebald/pushback/lib/characters';
 import type { PropsWithChildren, ReactNode } from 'react';
 
 import { cn } from '@/lib/styles.utils';
@@ -7,6 +8,16 @@ export const field = {
   form: 'flex flex-wrap items-center gap-x-6 gap-y-2 rounded-xl bg-mist-950 p-4 font-mono text-sm',
   input: 'rounded-md bg-mist-900 px-2 py-1 text-mist-100 ring-1 ring-mist-700',
 };
+
+/** The scenes the game has, in the order the inventory lists them */
+export const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
+
+/** A form of the inventory's controls; nothing is submitted */
+export const DemoForm = ({ children }: PropsWithChildren) => (
+  <form className={field.form} onSubmit={e => e.preventDefault()}>
+    {children}
+  </form>
+);
 
 export const Field = ({
   label,

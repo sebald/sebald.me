@@ -29,7 +29,7 @@ import { Rng, seedRng } from '@sebald/pushback/lib/random';
 import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
 import { useMemo, useState } from 'react';
 
-import { Field, ScaleSelect, Select, field } from './controls';
+import { Field, SCENES, ScaleSelect, Select, field } from './controls';
 
 // Options
 // ---------------
@@ -66,8 +66,6 @@ interface Options {
   reducedMotion: boolean;
   scale: number;
 }
-
-const SCENES: SceneId[] = ['floor', 'meeting', 'studio', 'office'];
 
 /** The person on a sheet, from its id: `dev-sam` is Sam */
 const personOn = (sheet: string) => {
@@ -137,11 +135,10 @@ const play = (state: DuelState, jump: Jump): DuelState => {
 };
 
 /** The state the sandbox hands to the real duel screen */
-export const sandboxState = (options: Options): DuelState => {
+const sandboxState = (options: Options): DuelState => {
   const character = characterById(options.character as 'junior');
-  const base: Slot =
+  const slot: Slot =
     character.role === 'boss' ? BOSS_SLOT : (SLOTS[options.slot] ?? SLOTS[0]!);
-  const slot: Slot = base;
   const rules = MODES[options.mode].rules;
   const deck = drawDeck(new Rng(seedRng(options.seed)));
   const collected =
@@ -182,16 +179,19 @@ export const sandboxState = (options: Options): DuelState => {
 // ---------------
 export const Sandbox = () => {
   const [options, setOptions] = useState<Options>(DEFAULTS);
-  const [applied, setApplied] = useState<Options>(DEFAULTS);
-  const [generation, setGeneration] = useState(0);
+  // What the duel shows, and how often it was applied: the key that remounts it
+  const [shown, setShown] = useState({ applied: DEFAULTS, generation: 0 });
+  const { applied, generation } = shown;
   const [last, setLast] = useState<string>('');
 
   const initial = useMemo(() => sandboxState(applied), [applied]);
   const set = <K extends keyof Options>(key: K, value: Options[K]) =>
     setOptions(previous => ({ ...previous, [key]: value }));
   const apply = () => {
-    setApplied(options);
-    setGeneration(g => g + 1);
+    setShown(({ generation }) => ({
+      applied: options,
+      generation: generation + 1,
+    }));
     setLast('');
   };
 

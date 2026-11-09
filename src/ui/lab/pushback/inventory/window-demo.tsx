@@ -16,7 +16,7 @@ import { LAYOUT, STAGE, typedChars } from '@sebald/pushback/lib/stage';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { ScaleSelect, field } from './controls';
+import { DemoForm, ScaleSelect } from './controls';
 
 const LINE = PAIRS[0]!.phrase;
 
@@ -38,12 +38,12 @@ export const WindowDemo = () => {
   const maxHeight = `calc(var(--px) * ${STAGE.height - LAYOUT.panel.x - MAX_CROP - LAYOUT.hud})`;
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <ScaleSelect value={scale} scales={[2, 3, 4]} onChange={setScale} />
         <span className="text-mist-400">
           {picked ? `Picked: ${picked}` : 'Pick a line with the keys or a tap.'}
         </span>
-      </form>
+      </DemoForm>
       <Pixels scale={scale} className="grid gap-[calc(var(--px)*6)]">
         <Window style={{ width: `calc(var(--px) * ${LAYOUT.panel.width})` }}>
           <Line variant="secondary">

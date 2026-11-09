@@ -16,8 +16,8 @@ import {
 } from '@sebald/pushback/share';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { Field, Select, field } from './controls';
-import { sampleGlossary, sampleRun } from './result-demo';
+import { DemoForm, field, Field, Select } from './controls';
+import { sampleGlossary, sampleRun } from './fixtures';
 
 const GLOSSARIES = ['sample', 'full', 'empty'] as const;
 type GlossaryPick = (typeof GLOSSARIES)[number];
@@ -85,7 +85,7 @@ export const ResultImageDemo = () => {
 
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Select label="Role" value={role} options={ROLES} onChange={setRole} />
         <Select
           label="Look"
@@ -133,7 +133,7 @@ export const ResultImageDemo = () => {
         <button type="button" className={field.input} onClick={save}>
           Save image
         </button>
-      </form>
+      </DemoForm>
       <canvas
         ref={canvas}
         width={CARD_SIZE.width}

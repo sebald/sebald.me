@@ -14,7 +14,7 @@ import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, ScaleSelect, field } from './controls';
+import { DemoForm, Field, ScaleSelect } from './controls';
 
 /** The palette by what it is for */
 const GROUPS: { title: string; keys: PaletteKey[] }[] = [
@@ -75,9 +75,9 @@ export const TextDemo = () => {
   const [scale, setScale] = useState(3);
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <ScaleSelect value={scale} scales={[2, 3, 4]} onChange={setScale} />
-      </form>
+      </DemoForm>
       <Pixels
         scale={scale}
         className="grid w-fit gap-[calc(var(--px)*4)] bg-(--pb-fill) p-[calc(var(--px)*6)] leading-[1.35] text-(--pb-text)"
@@ -132,7 +132,7 @@ export const PickerDemo = () => {
   const pairs = PAIRS.slice(0, 3);
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Field label="Ghost dims the wrong ones">
           <input
             type="checkbox"
@@ -145,7 +145,7 @@ export const PickerDemo = () => {
             ? `Picked: ${picked}`
             : 'Move with the keys or hover, confirm with Enter or a tap.'}
         </span>
-      </form>
+      </DemoForm>
       <Pixels
         scale={3}
         className="w-fit bg-(--pb-fill) p-[calc(var(--px)*6)] leading-[1.35] text-(--pb-text)"

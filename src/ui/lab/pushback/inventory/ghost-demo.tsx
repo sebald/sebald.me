@@ -6,7 +6,7 @@ import { Ghost } from '@sebald/pushback/ui/ghost';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Floor, ScaleSelect, Select, field } from './controls';
+import { DemoForm, field, Floor, ScaleSelect, Select } from './controls';
 
 /** The ghost hovering, pointing, and going through its black hole */
 export const GhostDemo = () => {
@@ -23,7 +23,7 @@ export const GhostDemo = () => {
   }
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Select
           label="Whisper step"
           value={step}
@@ -53,7 +53,7 @@ export const GhostDemo = () => {
         >
           Leave
         </button>
-      </form>
+      </DemoForm>
       <Pixels scale={scale}>
         <Floor>
           <Ghost step={step} enter={enter} />

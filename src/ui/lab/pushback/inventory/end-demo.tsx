@@ -3,9 +3,9 @@
 import { demoFor } from '@sebald/pushback/lib/attract';
 import { type DuelState, createDuel } from '@sebald/pushback/lib/duel';
 import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
-import { Select, field } from './controls';
+import { DemoForm, field, Select } from './controls';
 
 type Ending = 'win' | 'flawless' | 'lose';
 
@@ -16,8 +16,11 @@ const ENDINGS: Record<Ending, string> = {
 };
 
 /** A duel at its end, with a few exchanges' worth of numbers */
-const ended = (seed: number, ending: Ending, encounter: number): DuelState => {
-  const { setup } = demoFor(seed);
+const ended = (
+  { setup }: ReturnType<typeof demoFor>,
+  ending: Ending,
+  encounter: number,
+): DuelState => {
   const duel = createDuel({ ...setup, buddy: false, encounter });
   const won = ending !== 'lose';
   return {
@@ -49,10 +52,11 @@ export const EndDemo = () => {
   const [ending, setEnding] = useState<Ending>('win');
   const [seed, setSeed] = useState(1);
   const [play, setPlay] = useState(0);
+  const demo = useMemo(() => demoFor(seed), [seed]);
   const replay = () => setPlay(n => n + 1);
   return (
     <div className="grid gap-4">
-      <form className={field.form} onSubmit={e => e.preventDefault()}>
+      <DemoForm>
         <Select
           label="Ending"
           value={ending}
@@ -76,11 +80,11 @@ export const EndDemo = () => {
           Next colleague
         </button>
         <span className="text-mist-400">Enter or tap moves on</span>
-      </form>
+      </DemoForm>
       <DuelScreen
         key={`${seed}-${ending}-${play}`}
-        look={demoFor(seed).look}
-        initial={ended(seed, ending, play)}
+        look={demo.look}
+        initial={ended(demo, ending, play)}
         scale={2}
         onEnd={replay}
         onBack={replay}
