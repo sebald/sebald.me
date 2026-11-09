@@ -1,3 +1,5 @@
+import { ArrowRightIcon } from '@phosphor-icons/react/ssr';
+
 import { LAB_ENTRIES, labUrl } from '@/lib/lab';
 import { notesSource, sortByDate } from '@/lib/source';
 import type { BentoProps } from '@/ui/bento';
@@ -117,6 +119,11 @@ const Entry = ({
   <As className="grid gap-4 sm:grid-cols-[18rem_1fr] sm:gap-6">{children}</As>
 );
 
+// The link below an entry: its arrow hangs into the margin (the link's own
+// 4px inset, the 12px arrow and the 6px gap), so the text lines up with
+// the paragraph above
+const entryLink = 'mt-4 w-fit -ml-5.5';
+
 // What I am building at work, laid out like a note
 const CurrentWork = () => (
   <section className="grid gap-10">
@@ -144,8 +151,9 @@ const CurrentWork = () => (
         <Link
           href="https://www.marigold-ui.io"
           size="small"
-          className="mt-4 w-fit"
+          className={entryLink}
         >
+          <ArrowRightIcon weight="bold" aria-hidden />
           Visit marigold-ui.io
         </Link>
       </div>
@@ -170,7 +178,8 @@ const LabList = () => (
               </Headline>
             </Link>
             <Text>{entry.blurb}</Text>
-            <Link href={labUrl(entry)} size="small" className="mt-4 w-fit">
+            <Link href={labUrl(entry)} size="small" className={entryLink}>
+              <ArrowRightIcon weight="bold" aria-hidden />
               Play {entry.title}
             </Link>
           </div>

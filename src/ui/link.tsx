@@ -41,8 +41,13 @@ export const styles = cva({
       // The size of the text around it
       default: '',
       // The caption size (`Text size="caption"`), for a link set apart
-      // from running text, like the one below an entry on the home page
-      small: 'text-[0.8125rem] md:text-xs',
+      // from running text, like the one below an entry on the home page.
+      // Its hit area reaches past the text (an invisible layer, so the
+      // layout and the spacing around it stay as they are)
+      small: [
+        'relative text-[0.8125rem] md:text-xs [&_svg]:size-3',
+        "after:absolute after:-inset-x-2 after:-inset-y-2.5 after:content-['']",
+      ],
     },
   },
   defaultVariants: { variant: 'default', size: 'default' },
