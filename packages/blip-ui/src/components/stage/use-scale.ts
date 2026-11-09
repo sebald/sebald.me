@@ -17,17 +17,31 @@ import {
 import type { PixelsValue } from '../../providers/pixels';
 
 /** The side gutter the stage keeps to the viewport, in CSS pixels */
-export const STAGE_GUTTER = 24;
+const STAGE_GUTTER = 24;
 
 /** A window held upright: the stage goes tall (`tallFor`) */
-export const UPRIGHT = '(orientation: portrait)';
+const UPRIGHT = '(orientation: portrait)';
 
 /**
  * A phone on its side: too short for the menus with the browser's bars,
  * which a page cannot hide there, so the game asks to turn it upright
  */
-export const SIDEWAYS =
+const SIDEWAYS =
   '(orientation: landscape) and (pointer: coarse) and (max-height: 500px)';
+
+/** What a stage that is neither cropped, tall, turned nor small has */
+const SETTLED = { crop: 0, tall: false, turn: false, small: false } as const;
+
+/** Whether a measurement says what the last one did, so nothing re-renders */
+const same = (a: PixelsValue, b: PixelsValue) =>
+  a.scale === b.scale &&
+  a.crop === b.crop &&
+  a.tall === b.tall &&
+  a.rows === b.rows &&
+  a.turn === b.turn &&
+  a.small === b.small &&
+  a.crisp === b.crisp &&
+  a.backing === b.backing;
 
 /**
  * The height of the small viewport, the one with the browser's bars
@@ -61,11 +75,8 @@ export const useScale = (
   const { width, height } = native;
   const [state, setState] = useState<PixelsValue>({
     scale: fixed ?? 1,
-    crop: 0,
-    tall: false,
+    ...SETTLED,
     rows: height,
-    turn: false,
-    small: false,
     crisp: false,
     backing: BACKING,
   });
@@ -79,20 +90,17 @@ export const useScale = (
         scale: number,
         rest: Omit<PixelsValue, 'scale' | 'crisp' | 'backing'>,
       ) =>
-        setState({
-          scale,
-          ...rest,
-          crisp: crisp(scale, dpr),
-          backing: backingFor(scale, dpr),
+        setState(previous => {
+          const next = {
+            scale,
+            ...rest,
+            crisp: crisp(scale, dpr),
+            backing: backingFor(scale, dpr),
+          };
+          return same(previous, next) ? previous : next;
         });
       if (fixed) {
-        settle(fixed, {
-          crop: 0,
-          tall: false,
-          rows: height,
-          turn: false,
-          small: false,
-        });
+        settle(fixed, { ...SETTLED, rows: height });
         return;
       }
       if (upright.matches) {
@@ -103,13 +111,7 @@ export const useScale = (
           dpr,
           size,
         );
-        settle(tall.scale, {
-          crop: 0,
-          tall: true,
-          rows: tall.rows,
-          turn: false,
-          small: false,
-        });
+        settle(tall.scale, { ...SETTLED, tall: true, rows: tall.rows });
         return;
       }
       // Fullscreen, the stage has the screen to itself: no gutter, and no

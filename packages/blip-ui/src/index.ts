@@ -15,7 +15,7 @@ export {
   endMask,
   fadeMask,
 } from './foundations/dither';
-export { FLOOR, SPACE, UNIT, px } from './foundations/pixel';
+export { DOT, FLOOR, SPACE, UNIT, px } from './foundations/pixel';
 export {
   BACKING,
   MAX_CROP,
@@ -119,7 +119,6 @@ export {
 } from './components/icon-button/icon-button';
 export { ICONS, type IconName } from './components/pixel-icon/icons';
 export {
-  DOT,
   PixelIcon,
   type PixelIconProps,
 } from './components/pixel-icon/pixel-icon';

@@ -2,13 +2,10 @@
 
 import { useContext } from 'react';
 
-import { FLOOR, px } from '../../foundations/pixel';
+import { DOT, FLOOR, px } from '../../foundations/pixel';
 import { cn } from '../../utils/styles';
 import { ControlsLayout } from '../controls/controls';
 import { ICONS, ICON_COLOURS, type IconName } from './icons';
-
-/** A pixel of an icon in `FLOOR` pixels (never finer than `--bui-min-px`), as fine as a stopwatch's */
-export const DOT = 2 / 3;
 
 /** CSS pixels per icon pixel on the tall stage's bar, where a thumb sets the size */
 const BAR_DOT = 1.5;

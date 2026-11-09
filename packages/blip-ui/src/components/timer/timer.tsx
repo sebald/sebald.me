@@ -1,8 +1,14 @@
 'use client';
 
-import { useEffect, type CSSProperties, type SVGAttributes } from 'react';
+import {
+  useEffect,
+  useMemo,
+  type CSSProperties,
+  type ReactNode,
+  type SVGAttributes,
+} from 'react';
 
-import { FLOOR, px } from '../../foundations/pixel';
+import { DOT, FLOOR, px } from '../../foundations/pixel';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { timer } from './timer.styles';
@@ -47,9 +53,6 @@ const WATCH = [
   '.....KKDDDDDKK.....',
 ];
 
-/** A pixel of the watch in `FLOOR` pixels, finer than the stage's grid: a readout, kept legible on a phone */
-const DOT = 2 / 3;
-
 /** The watch's box in stage pixels, for the room kept beside it */
 export const TIMER_SIZE = {
   width: WATCH[0]!.length * DOT,
@@ -88,6 +91,27 @@ const PIXELS = WATCH.flatMap((row, y) =>
           },
         ],
   ),
+);
+
+const pixelRect = (x: number, y: number, colour: string) => (
+  <rect
+    key={`${x}-${y}`}
+    x={x}
+    y={y}
+    width={1}
+    height={1}
+    style={{ fill: colour }}
+  />
+);
+
+const isFace = ({ cell }: { cell: string }) => cell === 'F' || cell === 'S';
+
+/** The face's pixels, which the time left colours */
+const FACE = PIXELS.filter(isFace);
+
+/** The rest of the watch, which never changes: built once */
+const CASE = PIXELS.filter(pixel => !isFace(pixel)).map(({ x, y, cell }) =>
+  pixelRect(x, y, COLOURS[cell]!),
 );
 
 export interface TimerProps extends Omit<
@@ -165,34 +189,23 @@ export const Timer = ({
     if (sound && !paused && beat >= 0) play(beat === 0 ? 'ping' : 'tick');
   }, [sound, paused, beat, play]);
 
-  const fill = timer.phase[phase];
-  const pixels = PIXELS.map(({ x, y, cell, angle }) => {
-    const face = cell === 'F' || cell === 'S';
-    const wedge = face && angle >= 1 - share;
-    const colour = !face
-      ? COLOURS[cell]!
-      : wedge
+  const { paper, wedge } = useMemo(() => {
+    const fill = timer.phase[phase];
+    const paper: ReactNode[] = [];
+    const wedge: ReactNode[] = [];
+    for (const { x, y, cell, angle } of FACE) {
+      const lit = angle >= 1 - share;
+      const colour = lit
         ? cell === 'S'
           ? fill.shade
           : fill.main
         : cell === 'S'
           ? 'var(--bui-paper-shade)'
           : 'var(--bui-paper)';
-    return { x, y, wedge, colour };
-  });
-  const rects = (wedge: boolean) =>
-    pixels
-      .filter(pixel => pixel.wedge === wedge)
-      .map(({ x, y, colour }) => (
-        <rect
-          key={`${x}-${y}`}
-          x={x}
-          y={y}
-          width={1}
-          height={1}
-          style={{ fill: colour }}
-        />
-      ));
+      (lit ? wedge : paper).push(pixelRect(x, y, colour));
+    }
+    return { paper, wedge };
+  }, [share, phase]);
   const seconds = Math.ceil(Math.max(0, remaining) / 1000);
   return (
     <svg
@@ -215,9 +228,10 @@ export const Timer = ({
         className={timer.watch({ blinking })}
         style={{ animationDuration: `${BLINK_MS}ms` }}
       >
-        {rects(false)}
+        {CASE}
+        {paper}
       </g>
-      <g>{rects(true)}</g>
+      <g>{wedge}</g>
     </svg>
   );
 };

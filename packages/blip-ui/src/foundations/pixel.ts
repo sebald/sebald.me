@@ -12,6 +12,9 @@ export const UNIT = '--px';
  */
 export const FLOOR = '--bui-px';
 
+/** A pixel of an icon or the stopwatch in `FLOOR` pixels (never finer than `--bui-min-px`), finer than the stage's grid: a readout, kept legible on a phone */
+export const DOT = 2 / 3;
+
 /**
  * The spacing scale, in `FLOOR` pixels: every padding, gap and margin in
  * the kit is one of these (`uniformity.test.ts` checks the styles)

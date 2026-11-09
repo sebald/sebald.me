@@ -31,6 +31,7 @@ packages/*/playwright-report/
 packages/*/test-results/
 # storybook
 storybook-static/
+debug-storybook.log
 # playwright mcp output
 /.playwright-mcp/
 

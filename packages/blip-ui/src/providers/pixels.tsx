@@ -1,10 +1,10 @@
 'use client';
 
 import type { CSSProperties, PropsWithChildren } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
 import { useScale } from '../components/stage/use-scale';
-import { BACKING, NATIVE, fontSizeFor as fontSize } from '../foundations/scale';
+import { BACKING, NATIVE, fontSizeFor } from '../foundations/scale';
 import { cn } from '../utils/styles';
 import { Announcer } from './announcer';
 
@@ -62,9 +62,6 @@ export const StageContext = createContext<HTMLElement | null | undefined>(
 /** The stage element a piece is in: `null` until it is there, `undefined` outside any */
 export const useStage = () => useContext(StageContext);
 
-/** The text size at a scale: 16px at 3x, never under 14 (17 held upright) */
-export const fontSizeFor = fontSize;
-
 export interface PixelsProps extends PropsWithChildren {
   /** CSS pixels per stage pixel; 3 by default */
   scale?: number;
@@ -91,8 +88,9 @@ export const Pixels = ({
 }: PixelsProps) => {
   const [root, setRoot] = useState<HTMLElement | null>(null);
   const measured = useScale(scale);
+  const value = useMemo(() => ({ ...measured, tall }), [measured, tall]);
   return (
-    <PixelsContext.Provider value={{ ...measured, tall }}>
+    <PixelsContext.Provider value={value}>
       <div
         ref={setRoot}
         data-stage

@@ -229,6 +229,8 @@ export const Picker = ({
     if (first !== undefined) setCurrent(first);
   }, [children, current, entries]);
 
+  const pick = (entry: Entry) => choose(entry, play);
+
   useKeydown(event => {
     const move = (step: number) => {
       const ids = order();
@@ -237,39 +239,35 @@ export const Picker = ({
       const at = current === undefined ? -1 : ids.indexOf(current);
       setCurrent(ids[(at + step + ids.length) % ids.length]);
     };
-    {
-      const entry = current === undefined ? undefined : entries.get(current);
-      switch (event.key) {
-        case 'ArrowDown':
-        case 's':
+    const entry = current === undefined ? undefined : entries.get(current);
+    switch (event.key) {
+      case 'ArrowDown':
+      case 's':
+        event.preventDefault();
+        move(1);
+        break;
+      case 'ArrowUp':
+      case 'w':
+        event.preventDefault();
+        move(-1);
+        break;
+      case 'ArrowLeft':
+      case 'ArrowRight':
+      case 'a':
+      case 'd':
+        if (entry?.onStep && !entry.disabled) {
           event.preventDefault();
-          move(1);
-          break;
-        case 'ArrowUp':
-        case 'w':
+          play('move');
+          entry.onStep(event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1);
+        }
+        break;
+      case 'Enter':
+      case ' ':
+        if (entry) {
           event.preventDefault();
-          move(-1);
-          break;
-        case 'ArrowLeft':
-        case 'ArrowRight':
-        case 'a':
-        case 'd':
-          if (entry?.onStep && !entry.disabled) {
-            event.preventDefault();
-            play('move');
-            entry.onStep(
-              event.key === 'ArrowLeft' || event.key === 'a' ? -1 : 1,
-            );
-          }
-          break;
-        case 'Enter':
-        case ' ':
-          if (entry) {
-            event.preventDefault();
-            choose(entry, play);
-          }
-          break;
-      }
+          pick(entry);
+        }
+        break;
     }
   }, active);
 
@@ -278,7 +276,7 @@ export const Picker = ({
       value={{
         current,
         setCurrent,
-        choose: entry => choose(entry, play),
+        choose: pick,
         entries,
         active,
         touch,
@@ -351,8 +349,9 @@ const Row = ({
   const isCurrent = picker.current === id;
 
   // The keys reach the item through the picker: its latest handlers
+  const entry: Entry = { disabled, variant, onSelect, onStep };
   useLayoutEffect(() => {
-    picker.entries.set(id, { disabled, variant, onSelect, onStep });
+    picker.entries.set(id, entry);
   });
   useLayoutEffect(
     () => () => {
@@ -406,7 +405,7 @@ const Row = ({
         onPointerEnter={() => picker.setCurrent(id)}
         onClick={() => {
           picker.setCurrent(id);
-          picker.choose({ disabled, variant, onSelect, onStep });
+          picker.choose(entry);
         }}
       >
         <span aria-hidden className={styles.cursor({ shown: marked })} />
