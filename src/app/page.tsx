@@ -1,3 +1,4 @@
+import { LAB_ENTRIES, labUrl } from '@/lib/lab';
 import { notesSource, sortByDate } from '@/lib/source';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
@@ -37,18 +38,22 @@ const formatDate = (date: Date | string) =>
     day: 'numeric',
   });
 
+// A section's label, not a competitor to the titles below it
+const Label = ({ children }: { children: string }) => (
+  <Headline
+    level="3"
+    className="text-[0.8125rem] font-medium tracking-[0.08em] text-muted-foreground uppercase md:text-xs"
+  >
+    {children}
+  </Headline>
+);
+
 const NotesList = () => {
   const notes = sortByDate(notesSource.getPages());
 
   return (
     <section className="grid gap-10">
-      {/* A label, not a competitor to the note titles below it */}
-      <Headline
-        level="3"
-        className="text-[0.8125rem] font-medium tracking-[0.08em] text-muted-foreground uppercase md:text-xs"
-      >
-        Notes
-      </Headline>
+      <Label>Notes</Label>
       <ul className="grid gap-14 sm:gap-20">
         {notes.map(note => (
           <li key={note.url} className="grid gap-2">
@@ -72,10 +77,49 @@ const NotesList = () => {
   );
 };
 
+// What I am building at work, laid out like a note
+const CurrentWork = () => (
+  <section className="grid gap-10">
+    <Label>Current work</Label>
+    <div className="grid gap-2">
+      <Link href="https://www.marigold-ui.io" variant="inherit">
+        <Headline level="2" as="h2">
+          Marigold
+        </Headline>
+      </Link>
+      <Text>
+        Reservix&apos;s open-source design system, and the driver for reshaping
+        our product around the people who use it.
+      </Text>
+    </div>
+  </section>
+);
+
+// Things that are more code than prose, laid out like the notes
+const LabList = () => (
+  <section className="grid gap-10">
+    <Label>Lab</Label>
+    <ul className="grid gap-14 sm:gap-20">
+      {LAB_ENTRIES.map(entry => (
+        <li key={entry.slug} className="grid gap-2">
+          <Link href={labUrl(entry)} variant="inherit">
+            <Headline level="2" as="h2">
+              {entry.title}
+            </Headline>
+          </Link>
+          <Text>{entry.blurb}</Text>
+        </li>
+      ))}
+    </ul>
+  </section>
+);
+
 const HomePage = () => (
   <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
     <Intro />
     <NotesList />
+    <CurrentWork />
+    <LabList />
   </div>
 );
 
