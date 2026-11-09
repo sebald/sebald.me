@@ -112,10 +112,6 @@ const build = async (id: SheetKey): Promise<Sprite> => {
   return { canvas: toCanvas(image, sheet.meta).canvas, meta: sheet.meta };
 };
 
-/** The sprite of a sheet, once built; `undefined` until then */
-export const getSprite = (key: SheetKey): Sprite | undefined =>
-  sprites.get(key);
-
 /** Start building a sheet's sprite; resolves when drawn */
 export const loadSprite = (key: SheetKey): Promise<Sprite> => {
   const done = sprites.get(key);

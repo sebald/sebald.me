@@ -76,8 +76,6 @@ let settings: SoundSettings | null = null;
 const listeners = new Set<() => void>();
 /** The cue the screen asks for; `null` is silence */
 let wanted: Cue | null = null;
-/** The inventory plays a cue whatever the switches say */
-let audition: Cue | null = null;
 let playing: Playing | null = null;
 let momentum = 0;
 /** The game is on the page: only then do its screens make sound */
@@ -211,7 +209,7 @@ export const arm = () => {
   if (!hasWindow()) return () => {};
   const onGesture = () => {
     const { music, effects } = getSettings();
-    if (music || effects || audition) unlock();
+    if (music || effects) unlock();
   };
   window.addEventListener('pointerdown', onGesture, true);
   window.addEventListener('keydown', onGesture, true);
@@ -283,10 +281,10 @@ const start = (cue: Cue, at: number): Playing => {
 /** Play what is wanted, if the switches and the context allow it */
 const apply = () => {
   if (!graph) return;
-  const cue = audition ?? (armed && getSettings().music ? wanted : null);
+  const cue = armed && getSettings().music ? wanted : null;
   const now = graph.ctx.currentTime;
   graph.musicLevel.gain.setTargetAtTime(
-    audition ? 1 : (quiet ? 0.5 : 1) * (paused ? 0.35 : 1),
+    (quiet ? 0.5 : 1) * (paused ? 0.35 : 1),
     now,
     0.05,
   );
@@ -351,37 +349,18 @@ const dip = (depth: number, ms: number) => {
   gain.setTargetAtTime(1, now + ms / 1000, 0.2);
 };
 
-const effectsOn = (force: boolean) =>
-  graph !== null && (force || (armed > 0 && getSettings().effects));
+const effectsOn = () => graph !== null && armed > 0 && getSettings().effects;
 
-/** An effect, when effects are on (or `force`, the inventory) */
-export const effect = (name: Effect, force = false) => {
-  if (!effectsOn(force)) return;
+/** An effect, when effects are on */
+export const effect = (name: Effect) => {
+  if (!effectsOn()) return;
   EFFECTS[name](graph!.effects, graph!.ctx.currentTime + 0.01, dip);
 };
 
 /** The blip for the characters just typed: one a step, so it never chatters */
-export const speak = (voice: BlipVoice, typed: string, force = false) => {
+export const speak = (voice: BlipVoice, typed: string) => {
   const char = [...typed].reverse().find(c => /\p{L}/u.test(c));
-  if (!char || !effectsOn(force)) return;
+  if (!char || !effectsOn()) return;
   blip(graph!.effects, graph!.ctx.currentTime + 0.01, voice, char);
   dip(0.6, 160);
 };
-
-/**
- * The inventory's player: plays a cue whatever the switches say, and
- * makes the context (it is called from a click); `null` stops it
- */
-export const auditionMusic = (cue: Cue | null) => {
-  audition = cue;
-  if (cue) unlock();
-  if (cue && playing?.cue === cue) {
-    // Again from the top
-    fadeOut(playing, 0.05);
-    playing = null;
-  }
-  apply();
-};
-
-/** Whether the inventory is playing a cue */
-export const auditioning = () => audition;

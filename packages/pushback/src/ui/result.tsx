@@ -38,8 +38,6 @@ interface ResultScreenProps {
   onBack: () => void;
   /** Pick a role for the next run; once the Stakeholder is beaten */
   onNewRun?: () => void;
-  /** Fix the scale (the inventory) */
-  scale?: number;
 }
 
 /** For a value that never changes while the page is open */
@@ -78,14 +76,13 @@ export const ResultScreen = ({
   glossary,
   onBack,
   onNewRun,
-  scale,
 }: ResultScreenProps) => {
   const text = useMemo(() => resultCardText(run, glossary), [run, glossary]);
   const model = useMemo(() => resultModel(run, glossary), [run, glossary]);
   const [copied, setCopied] = useState(false);
   // The picture: shared through the sheet where there is one, else saved.
-  // Read on the client only, so a page rendered on the server (the
-  // inventory) hydrates with the same menu
+  // Read on the client only, so the server's render hydrates with the
+  // same menu
   const sharing = useSyncExternalStore(noChange, canShareImage, () => false);
   const [sent, setSent] = useState<'shared' | 'saved' | null>(null);
   // Drawn as the screen opens, so a press opens the share sheet at once:
@@ -132,7 +129,7 @@ export const ResultScreen = ({
   );
 
   return (
-    <Stage label="Pushback, result" scale={scale}>
+    <Stage label="Pushback, result">
       <Window
         className="absolute"
         style={{

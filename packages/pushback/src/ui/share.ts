@@ -12,7 +12,6 @@ import {
   type CardInput,
   type CardPart,
   type CardTone,
-  partBox,
   resultCard,
 } from '../lib/result-card';
 import { PLAYER_SHEETS } from '../lib/sprites';
@@ -224,40 +223,11 @@ const drawPart = (
   }
 };
 
-/** Every part's box outlined and named, to see where things go */
-const drawOverlay = (ctx: CanvasRenderingContext2D, parts: CardPart[]) => {
-  ctx.lineWidth = 1;
-  ctx.font = '12px monospace';
-  for (const part of parts) {
-    const box = partBox(part);
-    if (!box) continue;
-    ctx.strokeStyle = part.kind === 'text' ? '#ff4fd8' : '#4fe3ff';
-    ctx.strokeRect(
-      at(box.x) + 0.5,
-      at(box.y) + 0.5,
-      at(box.width) - 1,
-      at(box.height) - 1,
-    );
-    ctx.fillStyle = ctx.strokeStyle;
-    ctx.fillText(
-      part.kind === 'text' ? part.name : part.kind,
-      at(box.x) + 2,
-      at(box.y) - 2,
-    );
-  }
-};
-
-export interface DrawOptions {
-  /** Outline every part with its name, for the inventory */
-  overlay?: boolean;
-}
-
 /** Draw the card for a run on a 1200 by 630 canvas */
 export const drawResultCard = (
   ctx: CanvasRenderingContext2D,
   input: CardInput,
   images: CardImages,
-  { overlay = false }: DrawOptions = {},
 ) => {
   const parts = resultCard(input);
   const meta = SHEETS[PLAYER_SHEETS[input.run.role][input.run.look]].meta;
@@ -265,7 +235,6 @@ export const drawResultCard = (
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, CARD_SIZE.width, CARD_SIZE.height);
   for (const part of parts) drawPart(ctx, part, images, head);
-  if (overlay) drawOverlay(ctx, parts);
 };
 
 /** The card for a run as a PNG */

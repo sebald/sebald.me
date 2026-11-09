@@ -3,7 +3,7 @@
  * reads them as hex; the DOM reads them as CSS variables the stage sets
  * on its root (`paletteVars`), written `text-(--pb-muted)`,
  * `bg-(--pb-fill)`, `ring-(--pb-frame)` and so on, so a shade is changed
- * once and the inventory's palette shows what the game uses. The sprites
+ * once for both. The sprites
  * and the rooms keep their own colours: nothing here recolours a sheet.
  */
 export const PALETTE = {

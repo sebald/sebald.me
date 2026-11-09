@@ -289,7 +289,7 @@ export const MUSIC: Record<Cue, Piece> = {
   },
   // The design studio: warm and hazy, focus music. A lazy bass under the
   // chords held as a soft wash, the kick lazy and the hats on the offbeats,
-  // the tune an octave down (picked from three in the inventory)
+  // the tune an octave down
   duelStudio: {
     name: 'Duel, the design studio',
     bpm: 96,
@@ -538,10 +538,3 @@ export const MUSIC: Record<Cue, Piece> = {
     ],
   },
 };
-
-/** What the duel's momentum layers add, for the inventory */
-export const DUEL_LAYERS = [
-  'A groove with no lead: round FM bass, electric piano, a soft kit',
-  'A mellow FM lead plays the tune low, under the text',
-  'A quiet square-wave arpeggio in eighths',
-] as const;

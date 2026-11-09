@@ -1,8 +1,7 @@
 /**
  * The result card as a picture to save or share, laid out as data: what
  * goes where on a grid of card units, in the order it is drawn. Pure, so
- * the tests and the inventory's overlay read exactly what the canvas
- * paints (`ui/share.ts` draws it). The text is BitmapText's five by seven
+ * the tests read exactly what the canvas paints (`ui/share.ts` draws it). The text is BitmapText's five by seven
  * font only: the card needs no font file and its letters stay crisp.
  */
 import { bitmapTextSize } from '@sebald/blip-ui';

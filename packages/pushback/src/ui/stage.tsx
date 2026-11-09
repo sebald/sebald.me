@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  Pixels as BlipPixels,
   Stage as BlipStage,
   Button,
   type StageProps as BlipStageProps,
@@ -11,10 +10,8 @@ import {
   px,
   toggleFullscreen,
 } from '@sebald/blip-ui';
-import type { PropsWithChildren } from 'react';
 
 import { paletteVars } from './palette';
-import { cn } from './styles.utils';
 
 /**
  * The tall stage's bar of controls along the bottom, in CSS pixels
@@ -27,24 +24,6 @@ export { TALL_BAR };
  * `px(3, FLOOR)` three never finer than Blip UI's floor
  */
 export { px };
-
-/**
- * The stage's pixel unit for pieces shown outside a stage (the
- * inventory): Blip UI's `Pixels` in the game's palette and font.
- */
-export const Pixels = ({
-  scale,
-  children,
-  className,
-}: PropsWithChildren<{ scale: number; className?: string }>) => (
-  <BlipPixels
-    scale={scale}
-    className={cn('font-mono', className)}
-    style={paletteVars}
-  >
-    {children}
-  </BlipPixels>
-);
 
 /** Fullscreen, where the browser has it and the screen is big enough */
 const offersFullscreen = () => canFullscreen() && fullscreenFits();

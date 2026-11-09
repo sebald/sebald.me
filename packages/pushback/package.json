@@ -13,13 +13,8 @@
       "style": "./src/styles.css",
       "default": "./src/styles.css"
     },
-    "./share": "./src/ui/share.ts",
     "./lib/*": [
       "./src/lib/*.ts"
-    ],
-    "./ui/*": [
-      "./src/ui/*.tsx",
-      "./src/ui/*.ts"
     ]
   },
   "scripts": {

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { DUEL_CUES, DUEL_LAYERS, MUSIC, duelCue } from './music';
+import { DUEL_CUES, MUSIC, duelCue } from './music';
 import {
   STEPS_PER_BAR,
   chordOf,
@@ -100,11 +100,8 @@ describe('the soundtrack', () => {
         base.every(track => track.chip !== 'fm' || track.voice !== 'mellow'),
         cue,
       );
-      assert.equal(
-        new Set(tracks.map(track => track.layer)).size,
-        DUEL_LAYERS.length,
-        cue,
-      );
+      // A groove, a lead under the text, an arpeggio
+      assert.equal(new Set(tracks.map(track => track.layer)).size, 3, cue);
     }
   });
 
