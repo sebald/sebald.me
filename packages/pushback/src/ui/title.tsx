@@ -166,6 +166,12 @@ const VIEW = {
 } as const;
 
 /**
+ * What the title shows: the splash, the menu, or what the menu opened
+ * (How to play, Options, the glossary, the question before a new run)
+ */
+type TitleView = 'splash' | 'menu' | 'how' | 'options' | 'glossary' | 'confirm';
+
+/**
  * The start screen: the corner office at night fills the whole stage,
  * dimmed a little, the logo over it and an arcade line blinking under
  * it. Any key or a tap opens the menu: the logo slides up and a small
@@ -187,36 +193,27 @@ export const TitleScreen = ({
   onAttract,
   glossary,
 }: TitleScreenProps) => {
-  const [open, setOpen] = useState(menu);
-  // How it works, from the menu; Enter, Escape or a tap goes back
-  const [reading, setReading] = useState(false);
-  // The options, from the menu; Escape or Back goes back
-  const [setting, setSetting] = useState(false);
-  // The glossary, from the menu; Tab, Escape or its close goes back
-  const [browsing, setBrowsing] = useState(false);
-  // Start over a run in play asks first
-  const [asking, setAsking] = useState(false);
-  // The item the cursor goes back to, once the menu is shown again
+  const [view, setView] = useState<TitleView>(menu ? 'menu' : 'splash');
+  // The item the cursor goes back to, once the menu is shown again: the
+  // one whose view was closed (How to play, Options, Glossary are named
+  // as their items)
   const [returned, setReturned] = useState<string>();
-  const closeHowTo = useCallback(() => {
-    setReading(false);
-    setReturned('how');
-  }, []);
-  const closeGlossary = useCallback(() => {
-    setBrowsing(false);
-    setReturned('glossary');
-  }, []);
-  const closeOptions = useCallback(() => {
-    setSetting(false);
-    setReturned('options');
-  }, []);
+  const close = useCallback(() => {
+    setReturned(view);
+    setView('menu');
+  }, [view]);
+  const open = view !== 'splash';
+  // How to play and the options take the menu's place; the glossary and
+  // the question before a new run go over it
+  const over = view === 'how' || view === 'options';
+  const covered = over || view === 'glossary';
   // Any key or a tap goes back (on the tap's click, so the rest of it
   // does not land on the menu that comes back under the finger; not the
   // press that opened it)
   useAnyKey(() => {
     effect('cancel');
-    closeHowTo();
-  }, reading);
+    close();
+  }, view === 'how');
   const kind = useInputKind();
   // The call to play, said on the splash as well as blinking
   const call = kind === 'touch' ? 'Tap to play' : 'Press Enter to play';
@@ -233,11 +230,11 @@ export const TitleScreen = ({
   // the tap's click, and not the key that brought the title up)
   useAnyKey(() => {
     effect('confirm');
-    setOpen(true);
+    setView('menu');
   }, !open);
 
   // Start always works; with a run in play it asks first. Continue is
-  // under it, off without a run, and the cursor starts on it with one.
+  // under it only with a run, and the cursor starts on it then.
   // The glossary is here and not in a run because it outlives the runs.
   const collected = poolPairs(glossary).length;
 
@@ -283,17 +280,17 @@ export const TitleScreen = ({
         />
       </h2>
 
-      {open && reading ? (
+      {view === 'how' ? (
         <HowTo
           legend={<Legend keys={[['Enter', 'back']]} touch="Tap to go back" />}
         />
-      ) : open && setting ? (
+      ) : view === 'options' ? (
         <Options
           mode={mode}
           onMode={onMode}
           save={save}
           onErase={onErase}
-          onClose={closeOptions}
+          onClose={close}
         />
       ) : open ? (
         <Window
@@ -304,11 +301,11 @@ export const TitleScreen = ({
             label="Title menu"
             className="w-[14em]"
             initial={returned ?? (running ? 'continue' : 'start')}
-            active={!asking && !browsing}
+            active={view === 'menu'}
           >
             <PickerItem
               id="start"
-              onSelect={() => (running ? setAsking(true) : onStart())}
+              onSelect={() => (running ? setView('confirm') : onStart())}
             >
               Start
             </PickerItem>
@@ -331,7 +328,7 @@ export const TitleScreen = ({
                   ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
                   : undefined
               }
-              onSelect={() => setBrowsing(true)}
+              onSelect={() => setView('glossary')}
             >
               <span className="flex items-center gap-[1ch]">
                 Glossary
@@ -340,10 +337,10 @@ export const TitleScreen = ({
                 </span>
               </span>
             </PickerItem>
-            <PickerItem id="how" onSelect={() => setReading(true)}>
+            <PickerItem id="how" onSelect={() => setView('how')}>
               How to play
             </PickerItem>
-            <PickerItem id="options" onSelect={() => setSetting(true)}>
+            <PickerItem id="options" onSelect={() => setView('options')}>
               Options
             </PickerItem>
           </Picker>
@@ -368,7 +365,7 @@ export const TitleScreen = ({
           <Call>{call}</Call>
         </p>
       )}
-      {!reading && !setting && (
+      {!over && (
         <p
           className="absolute inset-x-0 m-0 px-[calc(var(--px)*6)] text-center text-[0.7em] text-balance text-(--pb-text)"
           style={{
@@ -380,38 +377,36 @@ export const TitleScreen = ({
       )}
       {/* The sound: the speaker in the corner, or the bar held upright,
           which stays under what is open and has its Back */}
-      {(tall || (!reading && !setting && !browsing)) && (
+      {(tall || !covered) && (
         <Controls
           speaker="always"
           escape={
-            reading || setting || browsing
+            covered
               ? {
                   kind: 'back',
                   onPress: () => {
                     effect('cancel');
-                    if (reading) closeHowTo();
-                    else if (setting) closeOptions();
-                    else closeGlossary();
+                    close();
                   },
                 }
               : undefined
           }
         />
       )}
-      {browsing && (
+      {view === 'glossary' && (
         <Glossary
           glossary={glossary}
           role={running?.role ?? ROLES[0]!}
-          onClose={closeGlossary}
+          onClose={close}
         />
       )}
-      {asking && running && (
+      {view === 'confirm' && running && (
         <Confirm
           title={`Abandon your run as ${ROLE_LABELS[running.role]}?`}
           confirm="Start a new run"
-          onCancel={() => setAsking(false)}
+          onCancel={() => setView('menu')}
           onConfirm={() => {
-            setAsking(false);
+            setView('menu');
             onStart();
           }}
         >
