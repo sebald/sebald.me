@@ -1,0 +1,147 @@
+import assert from 'node:assert/strict';
+import { describe, it } from 'node:test';
+
+import { createDuel, reduce } from './duel';
+import { duelSetupFor } from './run';
+import {
+  SAVE_KEY,
+  type SaveStorage,
+  emptySave,
+  finishDuel,
+  hasProgress,
+  loadSave,
+  openRun,
+  parseSave,
+  playerName,
+  resetSave,
+  setMode,
+  startRun,
+  writeSave,
+} from './save';
+
+const fakeStorage = (initial: Record<string, string> = {}): SaveStorage => {
+  const data = new Map(Object.entries(initial));
+  return {
+    getItem: key => data.get(key) ?? null,
+    setItem: (key, value) => void data.set(key, value),
+  };
+};
+
+describe('save', () => {
+  it('round-trips through storage', () => {
+    const storage = fakeStorage();
+    const save = startRun(setMode(emptySave(), 'hard'), 'dev', 'b', 42);
+    writeSave(save, storage);
+    assert.deepEqual(loadSave(storage), save);
+  });
+
+  it('starts over when the mode changes: no run, no stamps, no glossary', () => {
+    const save = startRun(emptySave('easy', ['pm-1']), 'dev', 'a', 1);
+    assert.ok(hasProgress(save));
+    assert.equal(setMode(save, 'easy'), save);
+    const hard = setMode(save, 'hard');
+    assert.deepEqual(hard, emptySave('hard'));
+    assert.equal(hasProgress(hard), false);
+    // A glossary alone is progress too
+    assert.ok(hasProgress(emptySave('easy', ['pm-1'])));
+  });
+
+  it('resets to an empty save and keeps the mode', () => {
+    const save = startRun(setMode(emptySave(), 'hard'), 'pm', 'b', 1);
+    assert.ok(openRun(save));
+    assert.deepEqual(resetSave(save), emptySave('hard'));
+    assert.equal(openRun(resetSave(save)), null);
+    // A stamp alone is progress too
+    assert.ok(hasProgress({ ...emptySave(), shipped: { dev: 'a' } }));
+  });
+
+  it('returns null without a save, on corrupt data and on another version', () => {
+    assert.equal(loadSave(fakeStorage()), null);
+    assert.equal(loadSave(fakeStorage({ [SAVE_KEY]: '{not json' })), null);
+    assert.equal(
+      parseSave(JSON.stringify({ version: 1, mode: 'hard', runs: {} })),
+      null,
+    );
+    assert.equal(
+      parseSave(JSON.stringify({ version: 3, mode: 'hard', runs: {} })),
+      null,
+    );
+  });
+
+  it('plays easy with an odd mode and keeps only real pairs in the glossary', () => {
+    const parse = (fields: object) =>
+      parseSave(JSON.stringify({ ...emptySave(), ...fields }));
+    assert.equal(parse({ mode: 'brutal' })?.mode, 'easy');
+    assert.equal(parse({ mode: 'normal' })?.mode, 'normal');
+    assert.deepEqual(parse({ glossary: ['pm-1', 'nope', 3] })?.glossary, [
+      'pm-1',
+    ]);
+  });
+
+  it('drops a run that does not look like one and an odd stamp', () => {
+    const save = startRun(emptySave(), 'pm', 'a', 1);
+    const parsed = parseSave(
+      JSON.stringify({
+        ...save,
+        run: { role: 'dev' },
+        shipped: { pm: 'b', dev: 'c', boss: 'a' },
+      }),
+    );
+    assert.equal(parsed?.run, null);
+    assert.deepEqual(parsed?.shipped, { pm: 'b' });
+  });
+
+  it('does nothing without storage', () => {
+    assert.equal(loadSave(undefined), null);
+    writeSave(emptySave(), undefined);
+  });
+
+  it('keeps one run: a new one replaces it, the stamps and glossary stay', () => {
+    let save = startRun(
+      { ...emptySave('easy', ['pm-1']), shipped: { dev: 'a' } },
+      'pm',
+      'b',
+      1,
+    );
+    assert.equal(save.run?.look, 'b');
+    save = startRun(save, 'designer', 'a', 2);
+    assert.equal(save.run?.role, 'designer');
+    assert.equal(save.run?.look, 'a');
+    assert.deepEqual(save.shipped, { dev: 'a' });
+    assert.deepEqual(save.glossary, ['pm-1']);
+    assert.equal(playerName('pm', 'b'), 'Piet');
+  });
+
+  it('folds a finished duel into the run', () => {
+    let save = startRun(emptySave(), 'pm', 'a', 3);
+    const run = save.run!;
+    let duel = createDuel(duelSetupFor(run, 0, { seed: 1, silence: false }));
+    duel = reduce(duel, { type: 'begin' });
+    for (let guard = 0; guard < 100 && duel.phase !== 'end'; guard++) {
+      if (duel.phase === 'defend') {
+        duel = reduce(duel, { type: 'counter', phrase: duel.exchange!.answer });
+      } else if (duel.phase === 'attack') {
+        duel = reduce(duel, { type: 'throw', phrase: duel.hand[0]! });
+      } else {
+        duel = reduce(duel, { type: 'continue' });
+      }
+    }
+    save = finishDuel(save, 0, duel);
+    assert.ok(save.run?.beaten[0]);
+    // The glossary records what the duel collected, once each
+    assert.deepEqual(save.glossary, duel.collected);
+    assert.deepEqual(finishDuel(save, 0, duel).glossary, duel.collected);
+    assert.equal(save.run?.attempts, 1);
+    assert.equal(save.run?.look, 'a');
+    assert.deepEqual(save.shipped, {});
+    assert.equal(finishDuel(emptySave(), 0, duel).run, null);
+    // A finished run ships its role with its look, and is not continued
+    const done = finishDuel(
+      { ...save, run: { ...save.run!, finished: true } },
+      0,
+      duel,
+    );
+    assert.deepEqual(done.shipped, { pm: 'a' });
+    assert.equal(openRun(done), null);
+  });
+});

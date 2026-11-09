@@ -1,0 +1,56 @@
+name: Game
+
+# Plays Pushback through its screens (tests/game): the flows by keys and
+# by touch, and a screenshot of each screen against its baseline. Runs
+# only when the game, Blip UI (its screens are built from the kit), its
+# tests or this workflow change, or by hand.
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/pushback/**'
+      - 'packages/blip-ui/**'
+      - 'tests/game/**'
+      - 'playwright.game.config.ts'
+      - '.github/workflows/game.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  game:
+    runs-on: ubuntu-latest
+    # Must match the @playwright/test version in package.json
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Play the game
+        run: pnpm test:game
+
+      - name: Upload report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: game-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
