@@ -26,8 +26,8 @@ import { TitleScreen } from './title';
 import { useMusic, useMuteKey, useSoundArm } from './use-sound';
 
 type Screen =
-  /** `menu`: open on the menu, skipping the splash (back from the demo) */
-  | { name: 'title'; menu?: boolean }
+  /** `start`: what the title opens on (the menu, back from the demo) */
+  | { name: 'title'; start?: 'splash' | 'menu' }
   | { name: 'attract'; seed: number }
   | { name: 'select' }
   | { name: 'roster' }
@@ -58,7 +58,7 @@ export const Pushback = () => {
   const toRoster = useCallback(() => setScreen({ name: 'roster' }), []);
   const toTitle = useCallback(() => setScreen({ name: 'title' }), []);
   const toMenu = useCallback(
-    () => setScreen({ name: 'title', menu: true }),
+    () => setScreen({ name: 'title', start: 'menu' }),
     [],
   );
   const toAttract = useCallback(
@@ -99,7 +99,7 @@ export const Pushback = () => {
     case 'title':
       return (
         <TitleScreen
-          menu={screen.menu}
+          start={screen.start}
           mode={save.mode}
           onMode={mode => setSave(previous => setMode(previous, mode))}
           onStart={toSelect}

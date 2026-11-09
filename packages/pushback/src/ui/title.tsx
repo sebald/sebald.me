@@ -41,8 +41,8 @@ import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
 
 interface TitleScreenProps {
-  /** Open on the menu, the splash skipped: back from the demo */
-  menu?: boolean;
+  /** What it opens on: the splash, or the menu (back from the demo) */
+  start?: 'splash' | 'menu';
   mode: Mode;
   onMode: (mode: Mode) => void;
   /** Pick a role for a new run; with a run in play, it asks first */
@@ -182,7 +182,7 @@ type TitleView = 'splash' | 'menu' | 'how' | 'options' | 'glossary' | 'confirm';
  * erasing the save.
  */
 export const TitleScreen = ({
-  menu = false,
+  start = 'splash',
   mode,
   onMode,
   onStart,
@@ -193,7 +193,7 @@ export const TitleScreen = ({
   onAttract,
   glossary,
 }: TitleScreenProps) => {
-  const [view, setView] = useState<TitleView>(menu ? 'menu' : 'splash');
+  const [view, setView] = useState<TitleView>(start);
   // The item the cursor goes back to, once the menu is shown again: the
   // one whose view was closed (How to play, Options, Glossary are named
   // as their items)

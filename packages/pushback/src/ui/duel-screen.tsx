@@ -44,7 +44,7 @@ import {
   buddyStep,
   ghostEnter,
 } from '../lib/buddy';
-import { type Look, SCENE_OF, STANDS, type SceneId } from '../lib/characters';
+import { type Look, SCENE_OF, STANDS } from '../lib/characters';
 import {
   type DuelAction,
   type DuelState,
@@ -152,25 +152,13 @@ const styles = {
 // ---------------
 
 export interface DuelScreenProps {
-  /** A duel at `intro`, or any state the workbench constructed */
+  /** A duel at `intro` */
   initial: DuelState;
   /** The player's look, which picks their sheet */
   look: Look;
   onEnd: (duel: DuelState) => void;
   /** Leave; in attract mode, any key or a tap */
   onBack: () => void;
-  /** Force reduced motion (the workbench); otherwise the media query */
-  reducedMotion?: boolean;
-  /** Fix the scale (the workbench) */
-  scale?: number;
-  /**
-   * The ghost out on every defence from its start, without the wait and
-   * without leaving after it helped (the workbench, to judge where it
-   * stands); only with the buddy on
-   */
-  ghostAlways?: boolean;
-  /** Another room than the opponent's (the workbench, to judge the scale) */
-  scene?: SceneId;
   /**
    * Attract mode: the duel plays itself, the menus picked after a pause,
    * and any key or tap leaves (`onBack`); `onEnd` fires a few seconds
@@ -231,10 +219,6 @@ export const DuelScreen = ({
   look,
   onEnd,
   onBack,
-  reducedMotion,
-  scale,
-  ghostAlways = false,
-  scene: sceneProp,
   auto = false,
   className,
 }: DuelScreenProps) => {
@@ -260,10 +244,10 @@ export const DuelScreen = ({
     since: number;
     leaving: boolean;
   } | null>(null);
-  const reduced = reducedMotion ?? prefersReducedMotion();
+  const reduced = prefersReducedMotion();
   // The ceiling rows a short window crops: the HUD and the names move down.
   // Held upright the room and the window sit centred instead (`tallLift`).
-  const { crop, tall, rows, scale: shownScale } = useScale(scale);
+  const { crop, tall, rows, scale: shownScale } = useScale();
   const sound = useSoundSettings();
 
   const stateRef = useRef(state);
@@ -278,7 +262,7 @@ export const DuelScreen = ({
   // itself and would pull a reader below the game back up
   const rootRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (scale !== undefined || auto) return;
+    if (auto) return;
     // After the stage has measured itself and taken its size
     const frame = requestAnimationFrame(() => {
       rootRef.current
@@ -286,7 +270,7 @@ export const DuelScreen = ({
         ?.scrollIntoView({ block: 'center', behavior: 'auto' });
     });
     return () => cancelAnimationFrame(frame);
-  }, [scale, auto]);
+  }, [auto]);
 
   const steps = useMemo(() => scriptFor(state), [state]);
   // A new script starts at step 0 in the same render, so a stale elapsed
@@ -413,17 +397,13 @@ export const DuelScreen = ({
   // The ghost helps once a duel: after the exchange it whispered on it
   // leaves, and the counters stop dimming
   const buddy =
-    buddyOn &&
-    (ghostAlways || whisperedOn === null || whisperedOn === state.exchanges);
+    buddyOn && (whisperedOn === null || whisperedOn === state.exchanges);
   const defending = state.phase === 'defend' && step?.kind === 'menu';
   const whisper =
     buddy && defending
-      ? Math.max(
-          ghostAlways ? 1 : 0,
-          buddyStep(
-            state.silence?.elapsed ?? cursor.elapsed,
-            state.silence?.limit ?? null,
-          ),
+      ? buddyStep(
+          state.silence?.elapsed ?? cursor.elapsed,
+          state.silence?.limit ?? null,
         )
       : 0;
   // A miss after the whisper gets the ghost's own line during the resolve
@@ -470,7 +450,7 @@ export const DuelScreen = ({
   // Frame model
   // ---------------
   const { character } = state.setup;
-  const scene = sceneProp ?? SCENE_OF[character.role];
+  const scene = SCENE_OF[character.role];
   const stands = STANDS[scene];
   // The mic-drop burst between the duellists: pulsing while the phrase is
   // thrown (with a flash and a shake of the room) and again when it lands,
@@ -912,7 +892,6 @@ export const DuelScreen = ({
       onStep={onStep}
       paused={paused || holding}
       label={`Pushback, duel against ${character.name}`}
-      scale={scale}
       lift={tall ? tallLift(rows, shownScale, tallest) : 0}
       // The stage jolts as the call lands
       className={cn(

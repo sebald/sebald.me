@@ -162,35 +162,18 @@ interface FrameProps extends PropsWithChildren {
   onStep?: (elapsedMs: number) => void;
   paused?: boolean;
   label: string;
-  /** Fix the scale (the workbench) instead of fitting the viewport */
-  scale?: number;
   /** Held upright, rows to move the room and the window down by (`Stage`) */
   lift?: number;
   className?: string;
 }
 
-export const Frame = ({
-  label,
-  scale,
-  lift,
-  className,
-  ...body
-}: FrameProps) => (
-  <Stage
-    label={label}
-    scale={scale}
-    crop="fit"
-    lift={lift}
-    className={className}
-  >
+export const Frame = ({ label, lift, className, ...body }: FrameProps) => (
+  <Stage label={label} crop="fit" lift={lift} className={className}>
     <FrameBody {...body} />
   </Stage>
 );
 
-type FrameBodyProps = Omit<
-  FrameProps,
-  'label' | 'scale' | 'lift' | 'className'
->;
+type FrameBodyProps = Omit<FrameProps, 'label' | 'lift' | 'className'>;
 
 /** Inside the stage, where its scale is known */
 const FrameBody = ({
