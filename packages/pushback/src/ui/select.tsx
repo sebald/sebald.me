@@ -20,10 +20,10 @@ import { PLAYER_SHEETS } from '../lib/sprites';
 import { LAYOUT } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Character } from './character';
-import { Controls } from './controls';
+import { Controls, useBack } from './controls';
+import { Backdrop } from './frame';
 import { PALETTE } from './palette';
 import { Portrait } from './portrait';
-import { SCENE_ASSETS } from './scenes';
 import { SHEETS } from './sheets';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
@@ -168,13 +168,10 @@ export const SelectScreen = ({
         s: () => move(0, 1),
         Enter: play,
         ' ': play,
-        Escape: () => {
-          effect('cancel');
-          onBack();
-        },
       };
-    }, [role, look, onConfirm, onBack]),
+    }, [role, look, onConfirm]),
   );
+  const back = useBack(onBack);
 
   const { tall, rows, scale } = useScale();
   const place = tall
@@ -194,11 +191,7 @@ export const SelectScreen = ({
   return (
     <Stage label="Pushback, pick a role">
       {/* The corner office, dimmed, behind the roster */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
-        style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
-      />
+      <Backdrop />
 
       <ScreenTitle>Pick a role</ScreenTitle>
 
@@ -331,15 +324,7 @@ export const SelectScreen = ({
         ]}
         touch={tall ? 'Tap a face to choose' : 'Tap the face again to play'}
       />
-      <Controls
-        escape={{
-          kind: 'back',
-          onPress: () => {
-            effect('cancel');
-            onBack();
-          },
-        }}
-      />
+      <Controls escape={{ kind: 'back', onPress: back }} />
     </Stage>
   );
 };

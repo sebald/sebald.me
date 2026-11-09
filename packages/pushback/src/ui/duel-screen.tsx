@@ -35,7 +35,7 @@ import {
   useState,
 } from 'react';
 
-import { DEMO_ACCURACY, DEMO_END_MS, DEMO_PICK_MS } from '../lib/attract';
+import { DEMO_END_MS, DEMO_PICK_MS, demoAction } from '../lib/attract';
 import { duelCue } from '../lib/audio/music';
 import {
   GHOST,
@@ -340,22 +340,9 @@ export const DuelScreen = ({
             elapsed >= DEMO_PICK_MS &&
             cursor.elapsed < DEMO_PICK_MS
           ) {
-            // The demo's player: the closer when one is on offer, else a
-            // phrase from the hand; the answer most of the time, a decoy
-            // otherwise
-            if (s.phase === 'attack' && s.hand.length) {
-              const phrase =
-                s.closer ?? s.hand[Math.floor(Math.random() * s.hand.length)]!;
-              act({ type: 'throw', phrase });
-            } else if (s.phase === 'defend' && s.exchange) {
-              const answer = s.exchange.answer;
-              const decoys = s.menu.filter(id => id !== answer);
-              const phrase =
-                Math.random() < DEMO_ACCURACY || decoys.length === 0
-                  ? answer
-                  : decoys[Math.floor(Math.random() * decoys.length)]!;
-              act({ type: 'counter', phrase });
-            }
+            // The demo's player (`demoAction`)
+            const move = demoAction(s, Math.random);
+            if (move) act(move);
           }
           // Ticks run the silence bar and the answer time the score's
           // speed points come from, timer or not

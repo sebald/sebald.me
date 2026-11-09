@@ -7,24 +7,17 @@ import {
   ScreenTitle,
   Stamp,
   stampSize,
-  useKeys,
   Window,
 } from '@sebald/blip-ui';
-import {
-  type PropsWithChildren,
-  type ReactNode,
-  useCallback,
-  useMemo,
-} from 'react';
+import { type PropsWithChildren, type ReactNode } from 'react';
 
 import { bossIndex, characterById } from '../lib/characters';
 import { ROLE_LABELS } from '../lib/lines';
 import { type RunState, bossUnlocked, canPlay, nextSlot } from '../lib/run';
-import { effect } from './audio/engine';
-import { Controls } from './controls';
+import { Controls, useBack } from './controls';
+import { Backdrop } from './frame';
 import { PALETTE } from './palette';
 import { Portrait } from './portrait';
-import { SCENE_ASSETS } from './scenes';
 import { Stage, px } from './stage';
 import { cn } from './styles.utils';
 
@@ -111,11 +104,7 @@ export const RosterScreen = ({
 }: RosterScreenProps) => {
   const next = nextSlot(run);
 
-  const back = useCallback(() => {
-    effect('cancel');
-    onBack();
-  }, [onBack]);
-  useKeys(useMemo(() => ({ Escape: back }), [back]));
+  const back = useBack(onBack);
 
   const items = run.run.slots.map((slot, index) => {
     const character = characterById(slot.character);
@@ -171,11 +160,7 @@ export const RosterScreen = ({
   return (
     <Stage label="Pushback, roster">
       {/* The corner office, dimmed, behind the window */}
-      <div
-        aria-hidden
-        className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
-        style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
-      />
+      <Backdrop />
 
       <ScreenTitle blurb="Beat your colleagues in order. The Stakeholder waits at the end.">
         {`Your run as ${ROLE_LABELS[run.role]}`}

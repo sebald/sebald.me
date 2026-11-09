@@ -6,7 +6,8 @@ import type { CSSProperties, PropsWithChildren, ReactNode } from 'react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type { SceneId } from '../lib/characters';
-import { FRAME_MS, LAYOUT, SCENE, STAGE } from '../lib/stage';
+import { FRAME_MS } from '../lib/sprites';
+import { LAYOUT, SCENE, STAGE } from '../lib/stage';
 import { fadeMask } from './dither';
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
@@ -291,3 +292,12 @@ const FrameBody = ({
     </>
   );
 };
+
+/** The corner office, dimmed, behind a menu screen's window */
+export const Backdrop = () => (
+  <div
+    aria-hidden
+    className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
+    style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
+  />
+);

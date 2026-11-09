@@ -13,7 +13,7 @@ import {
   drawDeck,
   repertoireFor,
 } from './characters';
-import type { DuelSetup } from './duel';
+import type { DuelAction, DuelSetup, DuelState } from './duel';
 import { ROLES, type Role, deckPool } from './lines';
 import { Rng, seedRng } from './random';
 import { PLAYER_SHEETS } from './sprites';
@@ -71,4 +71,31 @@ export const demoFor = (seed: number): Demo => {
       tutorial: false,
     },
   };
+};
+
+/**
+ * What the demo's player does at a menu: the closer when one is on offer,
+ * else a phrase from the hand; the answer `DEMO_ACCURACY` of the time, a
+ * decoy otherwise. `random` is `Math.random`'s shape (called in a fixed
+ * order, so a seeded one replays the demo); nothing outside a menu.
+ */
+export const demoAction = (
+  state: DuelState,
+  random: () => number,
+): DuelAction | undefined => {
+  if (state.phase === 'attack' && state.hand.length) {
+    const phrase =
+      state.closer ?? state.hand[Math.floor(random() * state.hand.length)]!;
+    return { type: 'throw', phrase };
+  }
+  if (state.phase === 'defend' && state.exchange) {
+    const answer = state.exchange.answer;
+    const decoys = state.menu.filter(id => id !== answer);
+    const phrase =
+      random() < DEMO_ACCURACY || decoys.length === 0
+        ? answer
+        : decoys[Math.floor(random() * decoys.length)]!;
+    return { type: 'counter', phrase };
+  }
+  return undefined;
 };

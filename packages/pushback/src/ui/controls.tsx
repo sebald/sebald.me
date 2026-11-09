@@ -8,10 +8,12 @@ import {
   toggleFullscreen,
   useFullscreen,
   useInputKind,
+  useKeys,
   usePixels,
 } from '@sebald/blip-ui';
+import { useCallback, useMemo } from 'react';
 
-import { canPlay, toggleSound } from './audio/engine';
+import { canPlay, effect, toggleSound } from './audio/engine';
 import { px } from './stage';
 import { useSoundSettings } from './use-sound';
 
@@ -20,6 +22,19 @@ export interface Escape {
   kind: 'back' | 'pause';
   onPress: () => void;
 }
+
+/**
+ * Going back: Escape calls `onBack` (Blip UI's keys play the cancel
+ * sound), and the callback returned is for the Back button's `onPress`,
+ * which plays it too
+ */
+export const useBack = (onBack: () => void) => {
+  useKeys(useMemo(() => ({ Escape: onBack }), [onBack]));
+  return useCallback(() => {
+    effect('cancel');
+    onBack();
+  }, [onBack]);
+};
 
 const ESCAPE_LABELS = { back: 'Back', pause: 'Pause' } as const;
 

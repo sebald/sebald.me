@@ -9,7 +9,6 @@ import {
   Picker,
   PickerItem,
   Text,
-  useKeys,
   usePixels,
   Window,
 } from '@sebald/blip-ui';
@@ -23,16 +22,11 @@ import {
 
 import { LOOKS, MODES, MODE_LABELS } from '../lib/characters';
 import { type PairId, ROLE_LABELS, RUN_VERDICTS, inTurn } from '../lib/lines';
-import {
-  type SavedRun,
-  formatScore,
-  resultCardText,
-  resultModel,
-} from '../lib/save';
+import { formatScore, resultCardText, resultModel } from '../lib/result';
+import type { SavedRun } from '../lib/save';
 import { PLAYER_SHEETS } from '../lib/sprites';
 import { LAYOUT } from '../lib/stage';
-import { effect } from './audio/engine';
-import { Controls } from './controls';
+import { Controls, useBack } from './controls';
 import { Portrait } from './portrait';
 import { canShareImage, resultImage, shareResult } from './share';
 import { Stage, px } from './stage';
@@ -128,7 +122,7 @@ export const ResultScreen = ({
     }
   };
 
-  useKeys(useMemo(() => ({ Escape: onBack }), [onBack]));
+  const back = useBack(onBack);
 
   const { panel } = LAYOUT;
   const name = LOOKS[run.role][run.look].name;
@@ -275,15 +269,7 @@ export const ResultScreen = ({
           touch="Tap a line"
         />
       </Window>
-      <Controls
-        escape={{
-          kind: 'back',
-          onPress: () => {
-            effect('cancel');
-            onBack();
-          },
-        }}
-      />
+      <Controls escape={{ kind: 'back', onPress: back }} />
     </Stage>
   );
 };
