@@ -1,0 +1,42 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as PixelIconStories from './pixel-icon.stories';
+
+<Meta of={PixelIconStories} />
+
+# PixelIcon
+
+A small pixel-art icon, drawn rect by rect from a character map: sound on
+and off, back, pause, fullscreen and leaving it. Icons are data, picked by
+name from `ICONS`. They sit inside an [IconButton](?path=/docs/components-iconbutton--docs),
+which names them.
+
+<Canvas of={PixelIconStories.Default} />
+<Controls of={PixelIconStories.Default} />
+
+## Anatomy
+
+1. **Ink outline**, in the ground colour so the icon holds on any surface
+2. **Lit top edge**, **face** and **shade** below, in the primary ramp
+3. **Accents**: the speaker's waves, a danger cross when the sound is off
+
+<Canvas of={PixelIconStories.Overview} />
+
+## The pixel
+
+An icon pixel is two thirds of a `--bui-px` (`DOT`), as fine as a
+stopwatch's, so the icon stays crisp at whole scales and never thins below
+the finest a control's pixel gets. On the tall stage's bar of controls,
+where a thumb sets the size, an icon pixel is 1.5 CSS pixels: the bar
+tells its icons through context, so nothing is passed.
+
+## Usage
+
+- **Do** pick the icon by name: `<PixelIcon icon="back" />`.
+- **Do** put it in a button with an `aria-label`.
+- **Don't** use it alone to carry meaning: it is `aria-hidden`.
+
+## Accessibility
+
+The SVG is decorative (`aria-hidden`). The control around it carries the
+name and the state.

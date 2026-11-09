@@ -1,0 +1,52 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# Blip UI
+
+A design system for small pixel-art games, built like a product one.
+Pushback is its first game.
+
+## Principles
+
+- **The grid is law.** Every length is a whole number of stage pixels. Art
+  on the stage's grid (a window's frame, bitmap letters, a stamp) counts in
+  `--px`. Spacing, the controls and the readouts (buttons, meters, the
+  stopwatch, icons) count in `--bui-px`, the stage pixel never finer than
+  `--bui-min-px`, so a phone's tall stage doesn't thin them to nothing. A
+  component never invents a CSS pixel value of its own; only the touch
+  parts are sized in CSS pixels, for a thumb.
+- **One scale each.** Every padding, gap and margin is 1, 2, 3, 4, 6 or 8
+  `--bui-px` (`SPACE`). Text is 0.75em (a legend), 0.85em (small: a note, a
+  blurb, a small button), 1em, or 2em. Anything that can't be used right
+  now looks the same everywhere (`bui-disabled`: faded and grey). A test
+  (`foundations/uniformity.test.ts`) fails on a style from outside them.
+- **Intent, not colour.** Components ask for roles (`primary`, `neutral`,
+  `danger`); a game's theme decides what colour a role is.
+- **Every input is equal.** Keys, touch and the pointer each play the whole
+  game. Touch targets are 44 CSS pixels at least.
+- **Motion in steps.** What moves in pixels moves at the stage's 8 frames a
+  second, and stops under reduced motion.
+
+## Tokens
+
+Tokens are CSS variables, nothing else (`src/tokens.css`). A game sets its
+values for the same names on its stage:
+
+```css
+[data-stage] {
+  --bui-primary: var(--pb-gold);
+  --bui-primary-light: var(--pb-gold-light);
+  --bui-primary-shade: var(--pb-gold-shade);
+}
+```
+
+What sits over a screen stacks by three of them, bottom to top: a
+picker's note (`--bui-layer-note`), the controls (`--bui-layer-controls`),
+a dialog and its scrim (`--bui-layer-dialog`). A component stacks only by
+these, or lifts a part over its neighbours inside it (`z-1`, the open
+tab); the same test holds it to that.
+
+## Status
+
+Everything here is **alpha** until a second theme runs on it unchanged.

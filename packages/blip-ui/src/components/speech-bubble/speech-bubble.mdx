@@ -1,0 +1,45 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import * as SpeechBubbleStories from './speech-bubble.stories';
+
+<Meta of={SpeechBubbleStories} />
+
+# SpeechBubble
+
+A comic speech bubble: paper with ink letters and a tail that points to
+whoever is speaking. Use it for a line a character says on the stage, over
+a scene. Text the screen itself says (menus, results) belongs in a Window.
+
+<Canvas of={SpeechBubbleStories.Default} />
+<Controls of={SpeechBubbleStories.Default} />
+
+## Anatomy
+
+1. **Ink**, the outline, with stepped corners (`[2, 1]`)
+2. **Paper**, one step in, with a row of dithered shade along the bottom
+3. **Tail**, ink rows widening from the tip with the paper inside them. It
+   reaches 5 stage pixels (`TAIL_REACH`) past the edge
+4. **Text**, in the paper's foreground colour
+
+## Tail
+
+`side` puts the tail on the `top` (pointing up to a speaker above) or the
+`bottom`. `align` measures `offset`, in stage pixels, from the `end` (right)
+or `start` (left) edge to the tail's centre.
+
+<Canvas of={SpeechBubbleStories.Overview} />
+
+<Canvas of={SpeechBubbleStories.AboveSpeaker} />
+
+## Usage
+
+- **Do** aim the tail at the speaker and leave room for it past the edge.
+- **Do** keep a bubble to a line or two.
+- **Don't** put controls inside a bubble. It is a line of speech.
+
+## Accessibility
+
+- A `<p>`: the text is read as any paragraph. The outline, the tail and the
+  shade are `aria-hidden`
+- Text is `--bui-paper-foreground` on `--bui-paper`; keep the pair readable
+  when you theme them
