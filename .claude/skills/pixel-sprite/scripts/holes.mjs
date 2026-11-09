@@ -16,12 +16,10 @@
 // run.
 
 import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
-const require = createRequire(import.meta.url);
-const sharp = createRequire(require.resolve('next/package.json'))('sharp');
+import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 
 const ROOT = resolve(import.meta.dirname, '../../../..');
 

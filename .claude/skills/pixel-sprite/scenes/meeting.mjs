@@ -15,7 +15,7 @@ import {
   sat,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
-import { drawShapes, shrunkGrid, takeOff } from '../scripts/redraw.mjs';
+import { drawShapes, putRgb, shrunkGrid, takeOff } from '../scripts/redraw.mjs';
 import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
@@ -257,13 +257,6 @@ const MARKS = {
   ],
 };
 
-const putRgb = (f, X, Y, c) => {
-  const i = (Y * scene.W + X) * 3;
-  f[i] = c[0];
-  f[i + 1] = c[1];
-  f[i + 2] = c[2];
-};
-
 const drawNotes = f => {
   for (const note of NOTES) {
     const colour = rgb(base, ...note.body);
@@ -271,11 +264,13 @@ const drawNotes = f => {
     const ink = colour.map(v => Math.round(v * 0.4));
     const X = sx(note.at[0]);
     const Y = sy(note.at[1]);
-    for (let x = 0; x < 5; x++) putRgb(f, X + x - 1, Y + 4, NOTE_SHADOW);
-    for (let y = 1; y < 4; y++) putRgb(f, X - 1, Y + y, NOTE_SHADOW);
+    for (let x = 0; x < 5; x++)
+      putRgb(f, scene.W, X + x - 1, Y + 4, NOTE_SHADOW);
+    for (let y = 1; y < 4; y++) putRgb(f, scene.W, X - 1, Y + y, NOTE_SHADOW);
     for (let y = 0; y < 4; y++)
-      for (let x = 0; x < 5; x++) putRgb(f, X + x, Y + y, colour);
-    for (const [x, y] of MARKS[note.marks]) putRgb(f, X + x, Y + y, ink);
+      for (let x = 0; x < 5; x++) putRgb(f, scene.W, X + x, Y + y, colour);
+    for (const [x, y] of MARKS[note.marks])
+      putRgb(f, scene.W, X + x, Y + y, ink);
   }
 };
 

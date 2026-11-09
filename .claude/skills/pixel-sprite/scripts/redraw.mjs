@@ -60,6 +60,14 @@ const pairs = flat => {
   return out;
 };
 
+/** One pixel of a raw RGB frame `f`, W wide, set to `rgb` */
+export const putRgb = (f, W, x, y, rgb) => {
+  const i = (y * W + x) * 3;
+  f[i] = rgb[0];
+  f[i + 1] = rgb[1];
+  f[i + 2] = rgb[2];
+};
+
 /**
  * Draw shapes on a shrunk frame `f` (raw RGB, W wide). Each shape has an
  * `ink` and one of:
@@ -73,13 +81,8 @@ const pairs = flat => {
  * what is under it (a beam).
  */
 export const drawShapes = (f, W, shapes, { sx, sy, colour }) => {
-  const put = (X, Y, ink) => {
-    const i = (Y * W + X) * 3;
-    const c = colour(f, i, ink);
-    f[i] = c[0];
-    f[i + 1] = c[1];
-    f[i + 2] = c[2];
-  };
+  const put = (X, Y, ink) =>
+    putRgb(f, W, X, Y, colour(f, (Y * W + X) * 3, ink));
   // A one-pixel line between two shrunk points (Bresenham)
   const stroke = ([ax, ay], [bx, by], ink) => {
     const dx = Math.abs(bx - ax);

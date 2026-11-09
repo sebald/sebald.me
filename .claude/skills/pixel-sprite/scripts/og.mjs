@@ -8,13 +8,10 @@
 // pixels stay square. Written as the route's `opengraph-image.png` and
 // `twitter-image.png`; run it again after the logo or the office changes.
 
-import { createRequire } from 'node:module';
 import { parseArgs } from 'node:util';
 
+import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 import { ROOM_FACTORS, roomBox } from './shrink.mjs';
-
-const require = createRequire(import.meta.url);
-const sharp = createRequire(require.resolve('next/package.json'))('sharp');
 
 const { values } = parseArgs({
   options: { dim: { type: 'string', default: '0.62' } },

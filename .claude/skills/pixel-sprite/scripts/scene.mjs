@@ -9,15 +9,12 @@
 
 import { spawnSync } from 'node:child_process';
 import { mkdtemp, mkdir, rm } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { parseArgs } from 'node:util';
 
+import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 import { padPixels } from './pad.mjs';
-
-const require = createRequire(import.meta.url);
-const sharp = createRequire(require.resolve('next/package.json'))('sharp');
 
 export const STAGE = { width: 480, height: 270 };
 

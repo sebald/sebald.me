@@ -108,6 +108,22 @@ export const press = async (page: Page, key: string) => {
   await settle(page);
 };
 
+/** Enter, until a duel has put its first choice on offer; the choice's buttons */
+export const toFirstChoice = async (page: Page) => {
+  const offer = screen(page).getByRole('list').getByRole('button');
+  for (let i = 0; i < 20 && (await offer.count()) === 0; i++) {
+    await press(page, 'Enter');
+    await settle(page, 700);
+  }
+  return offer;
+};
+
+/** The roster's opponents, in run order */
+export const opponents = (page: Page): Locator =>
+  screen(page)
+    .getByRole('list', { name: 'Opponents in run order' })
+    .getByRole('button');
+
 /** Until the page has stopped changing for a real moment: React has rendered */
 const rest = async (page: Page) => {
   const changes = () =>

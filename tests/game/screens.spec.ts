@@ -16,6 +16,7 @@ import {
   test,
   toBossDuel,
   toContinue,
+  toFirstChoice,
   toMenu,
   toRoster,
 } from './game';
@@ -68,11 +69,7 @@ test.describe('screens', { tag: '@screens' }, () => {
     await expect(screen(page)).toHaveAccessibleName(/duel against/);
     await shot(page, 'duel-line');
     // On to the first choice
-    const offer = screen(page).getByRole('list').getByRole('button');
-    for (let i = 0; i < 20 && (await offer.count()) === 0; i++) {
-      await press(page, 'Enter');
-      await settle(page, 700);
-    }
+    await toFirstChoice(page);
     await shot(page, 'duel-choice');
 
     await press(page, 'Escape');

@@ -9,12 +9,9 @@
 // the crop down (positive) or up (negative) by N native pixels.
 
 import { mkdir } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { parseArgs } from 'node:util';
 
-// sharp is not a direct dependency, it comes with Next
-const require = createRequire(import.meta.url);
-const sharp = createRequire(require.resolve('next/package.json'))('sharp');
+import { sharp } from './sharp.mjs';
 
 const { positionals, values } = parseArgs({
   allowPositionals: true,

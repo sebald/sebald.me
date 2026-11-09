@@ -1,13 +1,9 @@
 // Shared helpers for the per-scene loop scripts: load the snapped scene, read
 // and write pixels, and export the loop as a 3x animated WebP plus a poster.
 
-import { createRequire } from 'node:module';
+import { sharp } from './sharp.mjs';
 
-const require = createRequire(import.meta.url);
-// sharp is no direct dependency, resolve the copy that ships with Next
-export const sharp = createRequire(require.resolve('next/package.json'))(
-  'sharp',
-);
+export { sharp };
 
 // The loop is exported with hard edges, scaled by the smallest whole number
 // that covers the widest it is shown (a note header is up to 720 CSS pixels)

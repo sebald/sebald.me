@@ -1,9 +1,11 @@
-import { expect, open, screen, settle, test } from './game';
+import type { Page } from '@playwright/test';
+
+import { expect, open, opponents, screen, settle, test } from './game';
 
 test.describe('on a phone, by touch', () => {
   test.skip(({ isMobile }) => !isMobile, 'a phone held upright');
 
-  const tap = (page: Parameters<typeof screen>[0], name: string | RegExp) =>
+  const tap = (page: Page, name: string | RegExp) =>
     screen(page)
       .getByRole('button', { name, exact: typeof name === 'string' })
       .first()
@@ -19,11 +21,7 @@ test.describe('on a phone, by touch', () => {
     // A tap picks a face, a second one on it plays
     await tap(page, 'PM, Jo');
     await expect(screen(page)).toHaveAccessibleName('Pushback, roster');
-    const first = screen(page)
-      .getByRole('list', { name: 'Opponents in run order' })
-      .getByRole('button')
-      .first();
-    await first.tap();
+    await opponents(page).first().tap();
     await expect(screen(page)).toHaveAccessibleName(/duel against/);
     // A tap anywhere on the stage goes on with the duel
     const line = await screen(page).locator('p').first().textContent();

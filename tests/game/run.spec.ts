@@ -2,12 +2,13 @@ import {
   choose,
   current,
   expect,
+  opponents,
   playDuel,
   press,
   said,
   screen,
-  settle,
   test,
+  toFirstChoice,
   toMenu,
   toRoster,
 } from './game';
@@ -35,13 +36,11 @@ test.describe('a run', () => {
     page,
   }) => {
     await toRoster(page);
-    const opponents = screen(page)
-      .getByRole('list', { name: 'Opponents in run order' })
-      .getByRole('button');
-    await expect(opponents).toHaveCount(4);
-    await expect(opponents.nth(0)).toBeEnabled();
-    for (const i of [1, 2, 3]) await expect(opponents.nth(i)).toBeDisabled();
-    await expect(opponents.nth(3)).toHaveAccessibleName(/Stakeholder locked/);
+    const roster = opponents(page);
+    await expect(roster).toHaveCount(4);
+    await expect(roster.nth(0)).toBeEnabled();
+    for (const i of [1, 2, 3]) await expect(roster.nth(i)).toBeDisabled();
+    await expect(roster.nth(3)).toHaveAccessibleName(/Stakeholder locked/);
     await page.keyboard.press('Escape');
     await expect(screen(page)).toHaveAccessibleName('Pushback, title');
   });
@@ -50,10 +49,7 @@ test.describe('a run', () => {
     page,
   }) => {
     await toRoster(page);
-    const first = screen(page)
-      .getByRole('list', { name: 'Opponents in run order' })
-      .getByRole('button')
-      .first();
+    const first = opponents(page).first();
     const name = (await first.textContent())!.replace(/Tier \d$/, '').trim();
     await page.keyboard.press('Enter');
     await expect(screen(page)).toHaveAccessibleName(
@@ -90,11 +86,7 @@ test.describe('a run', () => {
       await page.keyboard.press('Enter');
       await expect(screen(page)).toHaveAccessibleName(/duel against/);
       // On to the first choice: what was said, and what is on offer
-      const offer = screen(page).getByRole('list').getByRole('button');
-      for (let i = 0; i < 20 && (await offer.count()) === 0; i++) {
-        await press(page, 'Enter');
-        await settle(page, 700);
-      }
+      const offer = await toFirstChoice(page);
       firsts.push(
         [
           await screen(page).getAttribute('aria-label'),

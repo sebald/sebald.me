@@ -16,7 +16,7 @@ import {
   scale,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
-import { shrunkGrid } from '../scripts/redraw.mjs';
+import { putRgb, shrunkGrid } from '../scripts/redraw.mjs';
 import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
@@ -121,12 +121,7 @@ const drawFrame = f => {
     const y0 = sy(FRAME.y0) + d;
     const x1 = sx(FRAME.x1) - d;
     const y1 = sy(FRAME.y1) - d;
-    const put = (x, y) => {
-      const i = (y * scene.W + x) * 3;
-      f[i] = c[0];
-      f[i + 1] = c[1];
-      f[i + 2] = c[2];
-    };
+    const put = (x, y) => putRgb(f, scene.W, x, y, c);
     for (let x = x0; x <= x1; x++) {
       put(x, y0);
       put(x, y1);

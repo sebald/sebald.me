@@ -8,10 +8,7 @@
 // one-pixel outlines kept as a tone where a nearest-neighbour shrink
 // would drop every fifth one. The loop scripts keep working in the
 // render's own pixels; only what is written out is smaller.
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const sharp = createRequire(require.resolve('next/package.json'))('sharp');
+import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 
 /**
  * The factor each room is shrunk by, by scene; 1 would write the render
@@ -200,10 +197,9 @@ export const shrinkFrames = async (
       .png()
       .toBuffer();
 
-  const palette = fitPalette(
-    await paletteOf(await small(frames[0]), colours),
-    keep,
-  );
+  // The first frame is shrunk once: its palette is the loop's, and it is drawn
+  const first = await small(frames[0]);
+  const palette = fitPalette(await paletteOf(first, colours), keep);
   const nearest = new Map();
   const snap = (r, g, b) => {
     const key = (r << 16) | (g << 8) | b;
@@ -224,7 +220,7 @@ export const shrinkFrames = async (
 
   return Promise.all(
     frames.map(async f => {
-      const { data } = await sharp(await small(f))
+      const { data } = await sharp(f === frames[0] ? first : await small(f))
         .raw()
         .removeAlpha()
         .toBuffer({ resolveWithObject: true });
