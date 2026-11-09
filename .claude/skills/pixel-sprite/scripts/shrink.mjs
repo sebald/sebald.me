@@ -26,6 +26,21 @@ export const ROOM_FACTOR = 0.8;
 /** The scene's floor line (the duellists' feet), which stays put */
 export const FEET = 230;
 
+/**
+ * Where the shrunk room sits in a render W by H: shrunk by `factor` about
+ * the floor line and centred. The game's `roomBox` (`packages/pushback/
+ * src/lib/stage.ts`) rounds the same way and must stay in step.
+ */
+export const roomBox = (W, H, factor, feet = FEET) => {
+  const width = Math.round(W * factor);
+  return {
+    x: Math.round((W - width) / 2),
+    y: feet - Math.round(feet * factor),
+    width,
+    height: Math.round(H * factor),
+  };
+};
+
 /** Colours of the first frame after the shrink, as the loop's palette */
 const paletteOf = async (png, colours) => {
   const { data, info } = await sharp(png)
@@ -177,10 +192,7 @@ export const shrinkFrames = async (
   } = {},
 ) => {
   if (factor === 1) return frames;
-  const w = Math.round(W * factor);
-  const h = Math.round(H * factor);
-  const left = Math.round((W - w) / 2);
-  const top = feet - Math.round(feet * factor);
+  const { x: left, y: top, width: w, height: h } = roomBox(W, H, factor, feet);
 
   const small = f =>
     sharp(f, { raw: { width: W, height: H, channels: 3 } })

@@ -2,16 +2,16 @@
 //
 //   node .claude/skills/pixel-sprite/scripts/og.mjs [--dim 0.62]
 //
-// The office's poster cropped to its room (the box `roomBox` in
-// `packages/pushback/src/lib/stage.ts` finds inside the padded render,
-// from the factor in `rooms.json`), covering 1200 by 630 and dimmed
+// The office's poster cropped to its room (`roomBox` in shrink.mjs, from
+// the factor in `rooms.json`, as the game finds it), covering 1200 by 630 and dimmed
 // under a vignette, with the logo sheet on top at 4x, nearest, so its
 // pixels stay square. Written as the route's `opengraph-image.png` and
 // `twitter-image.png`; run it again after the logo or the office changes.
 
-import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import { parseArgs } from 'node:util';
+
+import { ROOM_FACTORS, roomBox } from './shrink.mjs';
 
 const require = createRequire(import.meta.url);
 const sharp = createRequire(require.resolve('next/package.json'))('sharp');
@@ -26,16 +26,9 @@ const ROUTE = 'src/app/(page)/lab/pushback';
 const OG = { width: 1200, height: 630 };
 const LOGO_SCALE = 4;
 
-// The scene in stage pixels and the room inside it, as `roomBox` does
-const SCENE = { width: 480, height: 270, feet: 230 };
-const rooms = JSON.parse(await readFile(`${ASSETS}/scenes/rooms.json`, 'utf8'));
-const factor = rooms.office;
-const room = {
-  x: Math.round((SCENE.width - Math.round(SCENE.width * factor)) / 2),
-  y: SCENE.feet - Math.round(SCENE.feet * factor),
-  width: Math.round(SCENE.width * factor),
-  height: Math.round(SCENE.height * factor),
-};
+// The scene in stage pixels and the room inside it
+const SCENE = { width: 480, height: 270 };
+const room = roomBox(SCENE.width, SCENE.height, ROOM_FACTORS.office);
 
 const poster = sharp(`${ASSETS}/scenes/office/poster.png`);
 const { width: posterWidth } = await poster.metadata();

@@ -6,15 +6,14 @@
 // arrows, given in the render's pixels where they were drawn, every line
 // one pixel and straight, arrowheads and small marks at their drawn size.
 
-import { FEET } from './shrink.mjs';
+import { FEET, roomBox } from './shrink.mjs';
 
 /**
  * Where a render pixel lands in the shrunk frame (raw RGB, W wide): the
  * room is shrunk by `factor` about the floor line and centred
  */
 export const shrunkGrid = (W, factor, feet = FEET) => {
-  const left = Math.round((W - Math.round(W * factor)) / 2);
-  const top = feet - Math.round(feet * factor);
+  const { x: left, y: top } = roomBox(W, 0, factor, feet);
   return {
     sx: x => Math.round(x * factor - 0.1) + left,
     sy: y => Math.round(y * factor - 0.1) + top,
