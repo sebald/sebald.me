@@ -55,14 +55,21 @@ export interface CardInput {
   glossary?: readonly PairId[];
 }
 
+interface TextAt {
+  /** The anchor, in units: the left edge, the right or the centre */
+  x: number;
+  y: number;
+  /** Units a letter pixel; 1 by default */
+  scale?: 1 | 2 | 3;
+  tone: CardTone;
+  /** Which side of the text `x` is; the left by default */
+  align?: 'left' | 'right' | 'centre';
+}
+
 const text = (
   name: string,
   value: string,
-  x: number,
-  y: number,
-  scale: 1 | 2 | 3,
-  tone: CardTone,
-  align: 'left' | 'right' | 'centre' = 'left',
+  { x, y, scale = 1, tone, align = 'left' }: TextAt,
 ): Extract<CardPart, { kind: 'text' }> => {
   const { width, height } = bitmapTextSize(value, scale);
   const left =
@@ -98,27 +105,22 @@ export const resultCard = ({ run, glossary }: CardInput): CardPart[] => {
   const faceCentre = LEFT.x + FACE / 2;
   const ledgerTop = RIGHT.y + 70;
   // The number to beat, the largest thing on the card
-  const score = text(
-    'score',
-    formatScore(model.score),
-    RIGHT.x,
-    RIGHT.y + 36,
-    3,
-    'heading',
-  );
+  const score = text('score', formatScore(model.score), {
+    x: RIGHT.x,
+    y: RIGHT.y + 36,
+    scale: 3,
+    tone: 'heading',
+  });
 
   const ledger = model.rows.flatMap(([label, value], i) => {
     const y = ledgerTop + i * ROW;
-    const left = text(`row ${label}`, label, RIGHT.x, y, 1, 'muted');
-    const right = text(
-      `value ${label}`,
-      value,
-      RIGHT.end,
+    const left = text(`row ${label}`, label, { x: RIGHT.x, y, tone: 'muted' });
+    const right = text(`value ${label}`, value, {
+      x: RIGHT.end,
       y,
-      1,
-      'heading',
-      'right',
-    );
+      tone: 'heading',
+      align: 'right',
+    });
     const from = left.x + left.width + 2;
     return [
       left,
@@ -128,84 +130,74 @@ export const resultCard = ({ run, glossary }: CardInput): CardPart[] => {
   });
 
   const pools = model.pools.map((pool, i) => [
-    text(
-      `pool ${pool.role}`,
-      ROLE_LABELS[pool.role],
-      GLOSSARY.x,
-      ledgerTop + (i + 1) * ROW,
-      1,
-      'muted',
-    ),
-    text(
-      `pool ${pool.role} count`,
-      `${pool.collected}/${pool.total}`,
-      GLOSSARY.end,
-      ledgerTop + (i + 1) * ROW,
-      1,
-      'heading',
-      'right',
-    ),
+    text(`pool ${pool.role}`, ROLE_LABELS[pool.role], {
+      x: GLOSSARY.x,
+      y: ledgerTop + (i + 1) * ROW,
+      tone: 'muted',
+    }),
+    text(`pool ${pool.role} count`, `${pool.collected}/${pool.total}`, {
+      x: GLOSSARY.end,
+      y: ledgerTop + (i + 1) * ROW,
+      tone: 'heading',
+      align: 'right',
+    }),
   ]);
 
   return [
     { kind: 'room' },
     { kind: 'panel', ...PANEL },
     { kind: 'face', x: LEFT.x, y: LEFT.y, size: FACE },
-    text('name', name, faceCentre, LEFT.y + FACE + 8, 2, 'heading', 'centre'),
-    text(
-      'role',
-      ROLE_LABELS[run.role],
-      faceCentre,
-      LEFT.y + FACE + 28,
-      1,
-      'muted',
-      'centre',
-    ),
-    text(
-      'verdict',
-      verdict,
-      RIGHT.x,
-      RIGHT.y,
-      2,
-      model.finished ? 'gold' : 'red',
-    ),
-    text(
-      'result',
-      model.finished ? 'Stakeholder beaten' : 'Taken offline',
-      RIGHT.x,
-      RIGHT.y + 22,
-      1,
-      'steel',
-    ),
+    text('name', name, {
+      x: faceCentre,
+      y: LEFT.y + FACE + 8,
+      scale: 2,
+      tone: 'heading',
+      align: 'centre',
+    }),
+    text('role', ROLE_LABELS[run.role], {
+      x: faceCentre,
+      y: LEFT.y + FACE + 28,
+      tone: 'muted',
+      align: 'centre',
+    }),
+    text('verdict', verdict, {
+      x: RIGHT.x,
+      y: RIGHT.y,
+      scale: 2,
+      tone: model.finished ? 'gold' : 'red',
+    }),
+    text('result', model.finished ? 'Stakeholder beaten' : 'Taken offline', {
+      x: RIGHT.x,
+      y: RIGHT.y + 22,
+      tone: 'steel',
+    }),
     score,
     text(
       'mode',
       `${MODE_LABELS[model.mode]} x${MODES[model.mode].rules.score}`,
-      score.x + score.width + 4,
-      score.y + score.height - 13,
-      1,
-      'muted',
+      {
+        x: score.x + score.width + 4,
+        y: score.y + score.height - 13,
+        tone: 'muted',
+      },
     ),
     ...ledger,
-    text('glossary', 'Glossary', GLOSSARY.x, ledgerTop, 1, 'heading'),
+    text('glossary', 'Glossary', {
+      x: GLOSSARY.x,
+      y: ledgerTop,
+      tone: 'heading',
+    }),
     text(
       'glossary count',
       `${model.glossary.collected}/${model.glossary.total}`,
-      GLOSSARY.end,
-      ledgerTop,
-      1,
-      'heading',
-      'right',
+      { x: GLOSSARY.end, y: ledgerTop, tone: 'heading', align: 'right' },
     ),
     ...pools.flat(),
-    text(
-      'address',
-      'sebald.me/lab/pushback',
-      LEFT.x,
-      PANEL.y + PANEL.height - 18,
-      1,
-      'muted',
-    ),
+    text('address', 'sebald.me/lab/pushback', {
+      x: LEFT.x,
+      y: PANEL.y + PANEL.height - 18,
+      tone: 'muted',
+    }),
     {
       kind: 'logo',
       x: Math.round(PANEL.x + PANEL.width - 12 - LOGO_BOX.width),
