@@ -1,4 +1,4 @@
-import type { PropsWithChildren } from 'react';
+import type { PropsWithChildren, ReactNode } from 'react';
 
 import { cn } from '@/lib/styles.utils';
 
@@ -16,6 +16,69 @@ export const Field = ({
     {label}
     {children}
   </label>
+);
+
+type SelectOption<T> = T | readonly [value: T, label: ReactNode];
+
+/**
+ * A labelled select of the inventory's forms. `options` are values, shown
+ * as they are, or `[value, label]` pairs; `onChange` gets the value back
+ * in its own type, a number as a number
+ */
+export const Select = <T extends string | number>({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: T;
+  options: readonly SelectOption<T>[];
+  onChange: (value: T) => void;
+}) => {
+  const entries = options.map(
+    option =>
+      (Array.isArray(option) ? option : [option, String(option)]) as readonly [
+        T,
+        ReactNode,
+      ],
+  );
+  return (
+    <Field label={label}>
+      <select
+        className={field.input}
+        value={value}
+        onChange={e => {
+          const picked = entries.find(([v]) => String(v) === e.target.value);
+          if (picked) onChange(picked[0]);
+        }}
+      >
+        {entries.map(([v, text]) => (
+          <option key={v} value={v}>
+            {text}
+          </option>
+        ))}
+      </select>
+    </Field>
+  );
+};
+
+/** The zoom a demo is drawn at, as `2x`, `3x`, … */
+export const ScaleSelect = ({
+  value,
+  scales,
+  onChange,
+}: {
+  value: number;
+  scales: readonly number[];
+  onChange: (scale: number) => void;
+}) => (
+  <Select
+    label="Scale"
+    value={value}
+    options={scales.map(n => [n, `${n}x`] as const)}
+    onChange={onChange}
+  />
 );
 
 /** A patch of the stage's floor to stand things on, in `--px` units */

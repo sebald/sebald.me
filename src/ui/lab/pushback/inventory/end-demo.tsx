@@ -5,7 +5,7 @@ import { type DuelState, createDuel } from '@sebald/pushback/lib/duel';
 import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
 import { useState } from 'react';
 
-import { Field, field } from './controls';
+import { Select, field } from './controls';
 
 type Ending = 'win' | 'flawless' | 'lose';
 
@@ -53,22 +53,15 @@ export const EndDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Ending">
-          <select
-            className={field.input}
-            value={ending}
-            onChange={e => {
-              setEnding(e.target.value as Ending);
-              replay();
-            }}
-          >
-            {Object.entries(ENDINGS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label="Ending"
+          value={ending}
+          options={Object.entries(ENDINGS) as [Ending, string][]}
+          onChange={value => {
+            setEnding(value);
+            replay();
+          }}
+        />
         <button type="button" className={field.input} onClick={replay}>
           Replay
         </button>

@@ -6,7 +6,7 @@ import { Character } from '@sebald/pushback/ui/character';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, Floor, field } from './controls';
+import { Field, Floor, ScaleSelect, Select, field } from './controls';
 
 const POSES: Pose[] = ['idle', 'talk', 'taunt', 'flinch', 'win', 'lose'];
 
@@ -53,45 +53,18 @@ export const CharacterPlayground = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Who">
-          <select
-            className={field.input}
-            value={who}
-            onChange={e => setWho(e.target.value)}
-          >
-            {CAST.map(e => (
-              <option key={e.label} value={e.label}>
-                {e.label}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Pose">
-          <select
-            className={field.input}
-            value={pose}
-            onChange={e => setPose(e.target.value as Pose)}
-          >
-            {POSES.map(p => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[1, 2, 3, 4, 6].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label="Who"
+          value={who}
+          options={CAST.map(e => e.label)}
+          onChange={setWho}
+        />
+        <Select label="Pose" value={pose} options={POSES} onChange={setPose} />
+        <ScaleSelect
+          value={scale}
+          scales={[1, 2, 3, 4, 6]}
+          onChange={setScale}
+        />
         <Field label="Mirrored">
           <input
             type="checkbox"

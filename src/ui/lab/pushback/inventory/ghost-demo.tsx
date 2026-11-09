@@ -6,7 +6,7 @@ import { Ghost } from '@sebald/pushback/ui/ghost';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, Floor, field } from './controls';
+import { Floor, ScaleSelect, Select, field } from './controls';
 
 /** The ghost hovering, pointing, and going through its black hole */
 export const GhostDemo = () => {
@@ -24,30 +24,21 @@ export const GhostDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Whisper step">
-          <select
-            className={field.input}
-            value={step}
-            onChange={e => setStep(Number(e.target.value))}
-          >
-            <option value={0}>0, hovering</option>
-            <option value={1}>1, hovering</option>
-            <option value={2}>2, pointing</option>
-          </select>
-        </Field>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[1, 2, 3, 4, 6].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label="Whisper step"
+          value={step}
+          options={[
+            [0, '0, hovering'],
+            [1, '1, hovering'],
+            [2, '2, pointing'],
+          ]}
+          onChange={setStep}
+        />
+        <ScaleSelect
+          value={scale}
+          scales={[1, 2, 3, 4, 6]}
+          onChange={setScale}
+        />
         <button
           type="button"
           className={field.input}

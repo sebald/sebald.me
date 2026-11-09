@@ -14,7 +14,7 @@ import { PALETTE, type PaletteKey, pbVar } from '@sebald/pushback/ui/palette';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, field } from './controls';
+import { Field, ScaleSelect, field } from './controls';
 
 /** The palette by what it is for */
 const GROUPS: { title: string; keys: PaletteKey[] }[] = [
@@ -76,19 +76,7 @@ export const TextDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[2, 3, 4].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <ScaleSelect value={scale} scales={[2, 3, 4]} onChange={setScale} />
       </form>
       <Pixels
         scale={scale}

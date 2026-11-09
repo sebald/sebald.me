@@ -16,7 +16,7 @@ import {
 } from '@sebald/pushback/share';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { Field, field } from './controls';
+import { Field, Select, field } from './controls';
 import { sampleGlossary, sampleRun } from './result-demo';
 
 const GLOSSARIES = ['sample', 'full', 'empty'] as const;
@@ -86,42 +86,19 @@ export const ResultImageDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Role">
-          <select
-            className={field.input}
-            value={role}
-            onChange={e => setRole(e.target.value as Role)}
-          >
-            {ROLES.map(r => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Look">
-          <select
-            className={field.input}
-            value={look}
-            onChange={e => setLook(e.target.value as Look)}
-          >
-            <option value="a">a</option>
-            <option value="b">b</option>
-          </select>
-        </Field>
-        <Field label="Mode">
-          <select
-            className={field.input}
-            value={mode}
-            onChange={e => setMode(e.target.value as Mode)}
-          >
-            {MODE_ORDER.map(m => (
-              <option key={m} value={m}>
-                {m}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select label="Role" value={role} options={ROLES} onChange={setRole} />
+        <Select
+          label="Look"
+          value={look}
+          options={['a', 'b'] as const}
+          onChange={setLook}
+        />
+        <Select
+          label="Mode"
+          value={mode}
+          options={MODE_ORDER}
+          onChange={setMode}
+        />
         <Field label="Beaten">
           <input
             type="checkbox"
@@ -129,19 +106,12 @@ export const ResultImageDemo = () => {
             onChange={e => setFinished(e.target.checked)}
           />
         </Field>
-        <Field label="Glossary">
-          <select
-            className={field.input}
-            value={glossaryPick}
-            onChange={e => setGlossaryPick(e.target.value as GlossaryPick)}
-          >
-            {GLOSSARIES.map(g => (
-              <option key={g} value={g}>
-                {g}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label="Glossary"
+          value={glossaryPick}
+          options={GLOSSARIES}
+          onChange={setGlossaryPick}
+        />
         {/* The verdict is picked in turn by the duels played */}
         <Field label="Duels">
           <input

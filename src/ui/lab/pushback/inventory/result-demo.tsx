@@ -7,7 +7,7 @@ import type { SavedRun } from '@sebald/pushback/lib/save';
 import { ResultScreen } from '@sebald/pushback/ui/result';
 import { useMemo, useState } from 'react';
 
-import { Field, field } from './controls';
+import { Field, ScaleSelect, Select, field } from './controls';
 
 /** A run that reached the Stakeholder, with made-up numbers and a glossary */
 export const sampleRun = (
@@ -59,29 +59,13 @@ export const ResultDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Role">
-          <select
-            className={field.input}
-            value={role}
-            onChange={e => setRole(e.target.value as Role)}
-          >
-            {ROLES.map(r => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Look">
-          <select
-            className={field.input}
-            value={look}
-            onChange={e => setLook(e.target.value as Look)}
-          >
-            <option value="a">a</option>
-            <option value="b">b</option>
-          </select>
-        </Field>
+        <Select label="Role" value={role} options={ROLES} onChange={setRole} />
+        <Select
+          label="Look"
+          value={look}
+          options={['a', 'b'] as const}
+          onChange={setLook}
+        />
         <Field label="Beaten">
           <input
             type="checkbox"
@@ -89,19 +73,7 @@ export const ResultDemo = () => {
             onChange={e => setFinished(e.target.checked)}
           />
         </Field>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[2, 3].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <ScaleSelect value={scale} scales={[2, 3]} onChange={setScale} />
       </form>
       <ResultScreen
         run={run}

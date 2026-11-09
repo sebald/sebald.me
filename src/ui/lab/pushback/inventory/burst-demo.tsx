@@ -4,7 +4,7 @@ import { BURST_CELLS, Burst } from '@sebald/pushback/ui/burst';
 import { Pixels } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, Floor, field } from './controls';
+import { Field, Floor, ScaleSelect, field } from './controls';
 
 /** The three cells of the burst, and the pulse */
 export const BurstDemo = () => {
@@ -13,19 +13,7 @@ export const BurstDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[1, 2, 3, 4].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <ScaleSelect value={scale} scales={[1, 2, 3, 4]} onChange={setScale} />
         <Field label="Pulse">
           <input
             type="checkbox"

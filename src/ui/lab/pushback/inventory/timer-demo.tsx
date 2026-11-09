@@ -16,7 +16,7 @@ import { LAYOUT } from '@sebald/pushback/lib/stage';
 import { Pixels, px } from '@sebald/pushback/ui/stage';
 import { useState } from 'react';
 
-import { Field, field } from './controls';
+import { Field, ScaleSelect, field } from './controls';
 
 /** A normal-mode menu of five runs about thirteen seconds */
 const LIMIT = 13_000;
@@ -51,19 +51,7 @@ export const TimerDemo = () => {
   return (
     <div className="grid gap-4">
       <form className={field.form} onSubmit={e => e.preventDefault()}>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={scale}
-            onChange={e => setScale(Number(e.target.value))}
-          >
-            {[2, 3, 4].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <ScaleSelect value={scale} scales={[2, 3, 4]} onChange={setScale} />
         <button
           type="button"
           className={field.input}

@@ -29,7 +29,7 @@ import { Rng, seedRng } from '@sebald/pushback/lib/random';
 import { DuelScreen } from '@sebald/pushback/ui/duel-screen';
 import { useMemo, useState } from 'react';
 
-import { Field, field } from './controls';
+import { Field, ScaleSelect, Select, field } from './controls';
 
 // Options
 // ---------------
@@ -204,87 +204,58 @@ export const Sandbox = () => {
           apply();
         }}
       >
-        <Field label="Player role">
-          <select
-            className={field.input}
-            value={options.role}
-            onChange={e => set('role', e.target.value as Role)}
-          >
-            {ROLES.map(role => (
-              <option key={role} value={role}>
-                {role}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Look">
-          <select
-            className={field.input}
-            value={options.look}
-            onChange={e => set('look', e.target.value as Look)}
-          >
-            {(['a', 'b'] as const).map(look => (
-              <option key={look} value={look}>
-                {LOOKS[options.role][look].name}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Opponent">
-          <select
-            className={field.input}
-            value={options.character}
-            onChange={e => set('character', e.target.value)}
-          >
-            {CHARACTERS.map(c => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-                {c.sheet === 'boss' ? '' : ` · ${personOn(c.sheet)}`}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Room">
-          <select
-            className={field.input}
-            value={options.scene ?? ''}
-            onChange={e =>
-              set('scene', e.target.value ? (e.target.value as SceneId) : null)
-            }
-          >
-            <option value="">{"the opponent's"}</option>
-            {SCENES.map(id => (
-              <option key={id} value={id}>
-                {id}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Slot">
-          <select
-            className={field.input}
-            value={options.slot}
-            onChange={e => set('slot', Number(e.target.value))}
-          >
-            {SLOTS.map((slot, index) => (
-              <option key={index} value={index}>
-                {index + 1}: tier {slot.tier}, {slot.decoys},{' '}
-                {slot.silence ? 'timed' : 'no bar'}
-              </option>
-            ))}
-          </select>
-        </Field>
-        <Field label="Attempt">
-          <select
-            className={field.input}
-            value={options.attempt}
-            onChange={e => set('attempt', e.target.value as Options['attempt'])}
-          >
-            <option value="first">first</option>
-            <option value="retry">retry</option>
-            <option value="replay">replay</option>
-          </select>
-        </Field>
+        <Select
+          label="Player role"
+          value={options.role}
+          options={ROLES}
+          onChange={role => set('role', role)}
+        />
+        <Select
+          label="Look"
+          value={options.look}
+          options={(['a', 'b'] as const).map(
+            look => [look, LOOKS[options.role][look].name] as const,
+          )}
+          onChange={look => set('look', look)}
+        />
+        <Select
+          label="Opponent"
+          value={options.character}
+          options={CHARACTERS.map(
+            c =>
+              [
+                c.id,
+                c.sheet === 'boss'
+                  ? c.name
+                  : `${c.name} · ${personOn(c.sheet)}`,
+              ] as const,
+          )}
+          onChange={id => set('character', id)}
+        />
+        <Select
+          label="Room"
+          value={options.scene ?? ''}
+          options={[['', "the opponent's"], ...SCENES]}
+          onChange={id => set('scene', id || null)}
+        />
+        <Select
+          label="Slot"
+          value={options.slot}
+          options={SLOTS.map(
+            (slot, index) =>
+              [
+                index,
+                `${index + 1}: tier ${slot.tier}, ${slot.decoys}, ${slot.silence ? 'timed' : 'no bar'}`,
+              ] as const,
+          )}
+          onChange={slot => set('slot', slot)}
+        />
+        <Select
+          label="Attempt"
+          value={options.attempt}
+          options={['first', 'retry', 'replay'] as const}
+          onChange={attempt => set('attempt', attempt)}
+        />
         <Field label="Seed">
           <input
             className={field.input}
@@ -293,19 +264,18 @@ export const Sandbox = () => {
             onChange={e => set('seed', Number(e.target.value))}
           />
         </Field>
-        <Field label="Collected">
-          <select
-            className={field.input}
-            value={options.collected}
-            onChange={e =>
-              set('collected', e.target.value as Options['collected'])
-            }
-          >
-            <option value="own">own pool</option>
-            <option value="all">everything</option>
-            <option value="none">nothing</option>
-          </select>
-        </Field>
+        <Select
+          label="Collected"
+          value={options.collected}
+          options={
+            [
+              ['own', 'own pool'],
+              ['all', 'everything'],
+              ['none', 'nothing'],
+            ] as const
+          }
+          onChange={collected => set('collected', collected)}
+        />
         <Field label="Silence bar">
           <input
             type="checkbox"
@@ -330,19 +300,12 @@ export const Sandbox = () => {
             }}
           />
         </Field>
-        <Field label="Rules">
-          <select
-            className={field.input}
-            value={options.mode}
-            onChange={e => set('mode', e.target.value as Mode)}
-          >
-            {MODE_ORDER.map(mode => (
-              <option key={mode} value={mode}>
-                {MODE_LABELS[mode]}
-              </option>
-            ))}
-          </select>
-        </Field>
+        <Select
+          label="Rules"
+          value={options.mode}
+          options={MODE_ORDER.map(mode => [mode, MODE_LABELS[mode]] as const)}
+          onChange={mode => set('mode', mode)}
+        />
         <Field label="Reading share">
           <input
             className={field.input}
@@ -360,21 +323,22 @@ export const Sandbox = () => {
             }
           />
         </Field>
-        <Field label="Jump to">
-          <select
-            className={field.input}
-            value={options.jump}
-            onChange={e => set('jump', e.target.value as Jump)}
-          >
-            <option value="intro">intro</option>
-            <option value="defend">defend (first phrase)</option>
-            <option value="attack">attack (the hand)</option>
-            <option value="resolve-win">resolve, player won</option>
-            <option value="resolve-miss">resolve, player missed</option>
-            <option value="end-win">end, won</option>
-            <option value="end-lose">end, lost</option>
-          </select>
-        </Field>
+        <Select
+          label="Jump to"
+          value={options.jump}
+          options={
+            [
+              ['intro', 'intro'],
+              ['defend', 'defend (first phrase)'],
+              ['attack', 'attack (the hand)'],
+              ['resolve-win', 'resolve, player won'],
+              ['resolve-miss', 'resolve, player missed'],
+              ['end-win', 'end, won'],
+              ['end-lose', 'end, lost'],
+            ] as const
+          }
+          onChange={jump => set('jump', jump)}
+        />
         <Field label="Momentum full">
           <input
             type="checkbox"
@@ -389,19 +353,11 @@ export const Sandbox = () => {
             onChange={e => set('reducedMotion', e.target.checked)}
           />
         </Field>
-        <Field label="Scale">
-          <select
-            className={field.input}
-            value={options.scale}
-            onChange={e => set('scale', Number(e.target.value))}
-          >
-            {[1, 2, 3, 4].map(n => (
-              <option key={n} value={n}>
-                {n}x
-              </option>
-            ))}
-          </select>
-        </Field>
+        <ScaleSelect
+          value={options.scale}
+          scales={[1, 2, 3, 4]}
+          onChange={n => set('scale', n)}
+        />
         <div className="col-span-full flex items-center gap-4">
           <button
             type="submit"
