@@ -63,58 +63,19 @@ describe('save', () => {
       null,
     );
     assert.equal(
-      parseSave(JSON.stringify({ version: 2, mode: 'hard', runs: [] })),
+      parseSave(JSON.stringify({ version: 3, mode: 'hard', runs: {} })),
       null,
     );
   });
 
   it('plays easy with an odd mode and keeps only real pairs in the glossary', () => {
-    assert.equal(
-      parseSave(JSON.stringify({ version: 3, mode: 'brutal', runs: {} }))?.mode,
-      'easy',
-    );
-    assert.equal(
-      parseSave(JSON.stringify({ version: 3, mode: 'normal', runs: {} }))?.mode,
-      'normal',
-    );
-    const parsed = parseSave(
-      JSON.stringify({
-        version: 2,
-        mode: 'hard',
-        runs: {},
-        glossary: ['pm-1', 'nope', 3],
-      }),
-    );
-    assert.equal(parsed?.mode, 'hard');
-    assert.deepEqual(parsed?.glossary, ['pm-1']);
-  });
-
-  it('gives an old run a score of nothing and its speed points', () => {
-    const run = startRun(emptySave(), 'pm', 'a', 1).run!;
-    const { speed: _speed, ...stats } = run.stats;
-    const raw = JSON.stringify({
-      version: 2,
-      mode: 'normal',
-      runs: {
-        pm: {
-          ...run,
-          mode: undefined,
-          beaten: { 0: { flawless: true } },
-          stats,
-        },
-      },
-      glossary: [],
-    });
-    const parsed = parseSave(raw)!.run!;
-    assert.deepEqual(parsed.beaten, { 0: { flawless: true, score: 0 } });
-    assert.equal(parsed.stats.speed, 0);
-  });
-
-  it('reads a two-mode save: its normal had the ghost, so it is easy', () => {
-    const old = (mode: string) =>
-      parseSave(JSON.stringify({ version: 2, mode, runs: {} }))?.mode;
-    assert.equal(old('normal'), 'easy');
-    assert.equal(old('hard'), 'hard');
+    const parse = (fields: object) =>
+      parseSave(JSON.stringify({ ...emptySave(), ...fields }));
+    assert.equal(parse({ mode: 'brutal' })?.mode, 'easy');
+    assert.equal(parse({ mode: 'normal' })?.mode, 'normal');
+    assert.deepEqual(parse({ glossary: ['pm-1', 'nope', 3] })?.glossary, [
+      'pm-1',
+    ]);
   });
 
   it('drops a run that does not look like one and an odd stamp', () => {
@@ -128,30 +89,6 @@ describe('save', () => {
     );
     assert.equal(parsed?.run, null);
     assert.deepEqual(parsed?.shipped, { pm: 'b' });
-  });
-
-  it('carries one run over from a save with a run per role', () => {
-    const run = (role: 'pm' | 'dev' | 'designer', attempts: number) => ({
-      ...startRun(emptySave(), role, 'b', 1).run!,
-      attempts,
-    });
-    const parsed = parseSave(
-      JSON.stringify({
-        version: 3,
-        mode: 'normal',
-        runs: {
-          pm: run('pm', 2),
-          dev: run('dev', 5),
-          designer: { ...run('designer', 9), finished: true },
-        },
-        glossary: ['pm-1'],
-      }),
-    );
-    // The unfinished run played the most; the finished one is shipped
-    assert.equal(parsed?.run?.role, 'dev');
-    assert.deepEqual(parsed?.shipped, { designer: 'b' });
-    assert.deepEqual(parsed?.glossary, ['pm-1']);
-    assert.equal(parsed?.version, 4);
   });
 
   it('does nothing without storage', () => {

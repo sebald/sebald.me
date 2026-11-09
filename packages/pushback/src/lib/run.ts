@@ -40,8 +40,6 @@ export interface RunState {
   finished: boolean;
   /** Duels played, retries and replays included */
   attempts: number;
-  /** A duel of this run was played with the ghost, i.e. in easy mode */
-  buddy: boolean;
   /** The mode of the last duel played, for the result card */
   mode?: Mode;
   stats: DuelStats;
@@ -61,7 +59,6 @@ export const createRunState = (
     collected: [...deckPool(run.deck, role), ...closersOf(role).map(p => p.id)],
     finished: false,
     attempts: 0,
-    buddy: false,
     stats: emptyStats(),
   };
 };
@@ -165,7 +162,6 @@ export const recordDuel = <T extends RunState>(
     collected: duel.collected,
     finished: state.finished || (won && index === bossIndex(state.run)),
     attempts: state.attempts + 1,
-    buddy: state.buddy || duel.setup.buddy === true,
     mode: duel.setup.mode ?? state.mode,
     stats: addStats(state.stats, duel.stats),
   };

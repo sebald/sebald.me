@@ -69,43 +69,14 @@ const isSavedRun = (value: unknown): value is SavedRun =>
   typeof value.attempts === 'number' &&
   isRecord(value.stats);
 
-/**
- * Fill in what older saves lack: the buddy flag, the speed points and
- * a score on every beaten slot (none before the score existed)
- */
-const withBuddyFlag = (run: SavedRun): SavedRun => ({
-  ...run,
-  buddy: run.buddy === true,
-  mode: MODE_ORDER.includes(run.mode as Mode) ? run.mode : undefined,
-  beaten: Object.fromEntries(
-    Object.entries(run.beaten).map(([index, b]) => [
-      index,
-      { flawless: b.flawless === true, score: Number(b.score) || 0 },
-    ]),
-  ),
-  stats: { ...run.stats, speed: Number(run.stats.speed) || 0 },
-});
-
+/** A stored run, with a mode only if it is one */
 const parseRun = (value: unknown): SavedRun | null =>
-  isSavedRun(value) ? withBuddyFlag(value) : null;
-
-/**
- * Versions 2 and 3 kept a run per role. One carries over: the unfinished
- * run played the most; the finished ones are shipped.
- */
-const fromRuns = (
-  value: Record<string, unknown>,
-): Pick<Save, 'run' | 'shipped'> => {
-  const runs = ROLES.map(role => parseRun(value[role])).filter(
-    (run, i): run is SavedRun => run !== null && run.role === ROLES[i],
-  );
-  const shipped: Save['shipped'] = {};
-  for (const run of runs) if (run.finished) shipped[run.role] = run.look;
-  const open = runs
-    .filter(run => !run.finished)
-    .sort((a, b) => b.attempts - a.attempts);
-  return { run: open[0] ?? null, shipped };
-};
+  isSavedRun(value)
+    ? {
+        ...value,
+        mode: MODE_ORDER.includes(value.mode as Mode) ? value.mode : undefined,
+      }
+    : null;
 
 const parseShipped = (value: unknown): Save['shipped'] => {
   const shipped: Save['shipped'] = {};
@@ -126,30 +97,21 @@ export const parseSave = (raw: string | null): Save | null => {
   } catch {
     return null;
   }
-  // Version 2 knew two modes: its normal had the ghost, which is easy now;
-  // 2 and 3 kept a run per role
-  if (!isRecord(data) || ![2, 3, SAVE_VERSION].includes(Number(data.version)))
-    return null;
-  let runs: Pick<Save, 'run' | 'shipped'>;
-  if (data.version === SAVE_VERSION) {
-    runs = { run: parseRun(data.run), shipped: parseShipped(data.shipped) };
-  } else {
-    if (!isRecord(data.runs)) return null;
-    runs = fromRuns(data.runs);
-  }
+  if (!isRecord(data) || data.version !== SAVE_VERSION) return null;
   const glossary = Array.isArray(data.glossary)
     ? data.glossary.filter((id): id is PairId => isPairId(id))
     : [];
   // A save with an odd mode plays easy
-  const mode: Mode =
-    data.version === 2
-      ? data.mode === 'hard'
-        ? 'hard'
-        : 'easy'
-      : MODE_ORDER.includes(data.mode as Mode)
-        ? (data.mode as Mode)
-        : 'easy';
-  return { version: SAVE_VERSION, mode, ...runs, glossary };
+  const mode: Mode = MODE_ORDER.includes(data.mode as Mode)
+    ? (data.mode as Mode)
+    : 'easy';
+  return {
+    version: SAVE_VERSION,
+    mode,
+    run: parseRun(data.run),
+    shipped: parseShipped(data.shipped),
+    glossary,
+  };
 };
 
 /** The save, or null when there is none (or no storage) */

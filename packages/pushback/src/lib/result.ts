@@ -16,9 +16,8 @@ import {
 } from './lines';
 import { type RunState, runScore } from './run';
 
-/** The mode a run was played in: the last duel's, or what an old save's flag says */
-export const runMode = (run: RunState): Mode =>
-  run.mode ?? (run.buddy ? 'easy' : 'hard');
+/** The mode a run was played in: its last duel's, easy before any */
+export const runMode = (run: RunState): Mode => run.mode ?? 'easy';
 
 /** A score with thousands separated: 12,340 */
 export const formatScore = (score: number): string =>

@@ -16,7 +16,6 @@ export const sampleRun = (
     finished,
     mode: 'normal',
     attempts: 6,
-    buddy: false,
     beaten: {
       0: { flawless: true, score: 2460 },
       1: { flawless: false, score: 1830 },
