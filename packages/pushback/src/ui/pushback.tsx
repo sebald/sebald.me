@@ -130,7 +130,7 @@ export const Pushback = () => {
           key={`demo-${screen.seed}`}
           look={demo.look}
           initial={createDuel(demo.setup)}
-          auto
+          play="demo"
           onEnd={toTitle}
           onBack={toMenu}
         />

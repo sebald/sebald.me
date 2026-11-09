@@ -6,6 +6,9 @@
 import type { Look } from './characters';
 import type { Role } from './lines';
 
+/** Which way a figure looks; every sheet is drawn facing right */
+export type Facing = 'right' | 'left';
+
 /** Milliseconds between frames: 8 fps, like the scene loops */
 export const FRAME_MS = 125;
 

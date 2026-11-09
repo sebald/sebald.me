@@ -8,6 +8,7 @@ import { BACKING } from '@sebald/blip-ui';
  * (`Hud`, `Window`, see the screen).
  */
 import type { SceneId } from '../lib/characters';
+import type { Facing } from '../lib/sprites';
 import { BREATH, LAYOUT, STAGE } from '../lib/stage';
 import { PALETTE } from './palette';
 import type { Sprite } from './sheets';
@@ -63,25 +64,26 @@ const drawBand = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
   );
 };
 
-/** Where a cell is drawn: its left edge, its bottom, mirrored or not */
+/** Where a cell is drawn: its left edge, its bottom, which way it faces */
 export interface CellPlace {
   x: number;
   bottom: number;
-  mirrored?: boolean;
+  /** `left` mirrors the cell, the sheets facing right */
+  facing?: Facing;
   /** Times the sheet's pixels */
   scale?: number;
 }
 
-/** Run `draw` in the cell's own pixels, mirrored about the cell when asked */
+/** Run `draw` in the cell's own pixels, mirrored about the cell to face left */
 const inCell = (
   ctx: CanvasRenderingContext2D,
   sprite: Sprite,
-  { x, bottom, mirrored = false, scale = 1 }: CellPlace,
+  { x, bottom, facing = 'right', scale = 1 }: CellPlace,
   draw: (scale: number) => void,
 ) => {
   const { width, height } = sprite.meta.cell;
   ctx.save();
-  if (mirrored) {
+  if (facing === 'left') {
     ctx.translate(x + width * scale, bottom - height * scale);
     ctx.scale(-1, 1);
   } else {

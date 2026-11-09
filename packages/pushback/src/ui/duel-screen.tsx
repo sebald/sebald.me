@@ -98,7 +98,7 @@ import type { FrameModel } from './draw';
 import { Frame } from './frame';
 import { Ghost } from './ghost';
 import { Hud } from './hud';
-import { RoundCall } from './round-call';
+import { type Call, RoundCall } from './round-call';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
 import { feedback, useMusic, useSoundSettings, voiced } from './use-sound';
@@ -160,11 +160,11 @@ export interface DuelScreenProps {
   /** Leave; in attract mode, any key or a tap */
   onBack: () => void;
   /**
-   * Attract mode: the duel plays itself, the menus picked after a pause,
-   * and any key or tap leaves (`onBack`); `onEnd` fires a few seconds
-   * after the duel is over
+   * Who plays: the `player`, or the `demo` (attract mode), where the duel
+   * plays itself, the menus picked after a pause, and any key or tap
+   * leaves (`onBack`); `onEnd` fires a few seconds after the duel is over
    */
-  auto?: boolean;
+  play?: 'player' | 'demo';
   className?: string;
 }
 
@@ -219,9 +219,10 @@ export const DuelScreen = ({
   look,
   onEnd,
   onBack,
-  auto = false,
+  play = 'player',
   className,
 }: DuelScreenProps) => {
+  const demo = play === 'demo';
   // The duel, and the state before the last exchange resolved: the bars
   // stay on the old numbers until the beat
   const [{ duel: state, before: shownBefore }, act] = useReducer(
@@ -232,9 +233,10 @@ export const DuelScreen = ({
   const [storedCursor, setCursor] = useState<Cursor>(() =>
     atStart(scriptKey(initial)),
   );
-  const [paused, setPaused] = useState(false);
-  // Leaving from the pause asks first
-  const [leaving, setLeaving] = useState(false);
+  // The pause: off, its menu, or the question before leaving, which
+  // the menu's Back to the roster asks first
+  const [pause, setPause] = useState<'off' | 'menu' | 'leave'>('off');
+  const paused = pause !== 'off';
   const [clock, setClock] = useState(0);
   // The exchange the buddy's whisper started on, for the miss line and
   // for sending it away afterwards
@@ -262,7 +264,7 @@ export const DuelScreen = ({
   // itself and would pull a reader below the game back up
   const rootRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (auto) return;
+    if (demo) return;
     // After the stage has measured itself and taken its size
     const frame = requestAnimationFrame(() => {
       rootRef.current
@@ -270,7 +272,7 @@ export const DuelScreen = ({
         ?.scrollIntoView({ block: 'center', behavior: 'auto' });
     });
     return () => cancelAnimationFrame(frame);
-  }, [auto]);
+  }, [demo]);
 
   const steps = useMemo(() => scriptFor(state), [state]);
   // A new script starts at step 0 in the same render, so a stale elapsed
@@ -320,7 +322,7 @@ export const DuelScreen = ({
         case 'menu': {
           const s = stateRef.current;
           if (
-            auto &&
+            demo &&
             elapsed >= DEMO_PICK_MS &&
             cursor.elapsed < DEMO_PICK_MS
           ) {
@@ -345,16 +347,16 @@ export const DuelScreen = ({
           break;
         }
         case 'wait':
-          if (auto && elapsed >= DEMO_END_MS) onEnd(stateRef.current);
+          if (demo && elapsed >= DEMO_END_MS) onEnd(stateRef.current);
           else setCursor({ ...cursor, elapsed });
       }
     },
-    [steps, cursor, reduced, advance, act, auto, onEnd],
+    [steps, cursor, reduced, advance, act, demo, onEnd],
   );
 
   // Attract mode: any key or tap leaves the demo, for the title's menu;
   // a tap on its click, so the rest of it does not land on that menu
-  useAnyKey(onBack, auto);
+  useAnyKey(onBack, demo);
 
   // Confirm: skip typing, or move on, or leave at the end
   const confirm = useCallback(() => {
@@ -377,7 +379,7 @@ export const DuelScreen = ({
       () => ({
         Escape: () => {
           effect(paused ? 'cancel' : 'confirm');
-          setPaused(!paused);
+          setPause(paused ? 'off' : 'menu');
         },
         ...(paused || step?.kind === 'menu'
           ? {}
@@ -385,7 +387,7 @@ export const DuelScreen = ({
       }),
       [paused, step?.kind, confirm],
     ),
-    !auto && !leaving,
+    !demo && pause !== 'leave',
     true,
   );
 
@@ -526,7 +528,7 @@ export const DuelScreen = ({
         pose={poses.opponent}
         typing={!typingDone}
         micDrop={micDropBy('opponent')}
-        mirrored
+        facing="left"
         x={standX.opponent}
         still={reduced}
         side="opponent"
@@ -660,7 +662,7 @@ export const DuelScreen = ({
   if (room && room.need > tallest) setTallest(room.need);
 
   // The control hints along the window's bottom edge: only what works now
-  const legend = auto ? (
+  const legend = demo ? (
     <Legend keys={[['Any key', 'menu']]} touch="Tap for the menu" />
   ) : step?.kind === 'menu' ? (
     <Legend
@@ -682,15 +684,22 @@ export const DuelScreen = ({
   // label where the call would go.
   const won = state.winner === 'player';
   const flawless = isFlawless(state) && state.setup.buddy !== true;
+  const call: Call = !won
+    ? state.boss
+      ? 'offline'
+      : 'lose'
+    : flawless
+      ? 'flawless'
+      : 'win';
   const verdict = inTurn(
-    VERDICTS[!won ? 'lose' : flawless ? 'flawless' : 'win'],
+    VERDICTS[call === 'offline' ? 'lose' : call],
     state.setup.encounter,
   );
   const { exchangesWon, exchangesLost, micDrops } = state.stats;
   const learned = state.collected.length - state.setup.collected.length;
 
   // The deciding blow: the flash and the held frame as the end beat starts
-  const blow = state.phase === 'end' && step?.kind === 'beat' && !auto;
+  const blow = state.phase === 'end' && step?.kind === 'beat' && !demo;
   // (once a duel: the screen is mounted afresh for every duel)
   const [released, setReleased] = useState(false);
   const holding = blow && !reduced && !released;
@@ -701,7 +710,7 @@ export const DuelScreen = ({
   }, [holding]);
   const called =
     state.phase === 'end' &&
-    !auto &&
+    !demo &&
     (step?.kind !== 'beat' || released || reduced);
 
   // Sound
@@ -713,7 +722,7 @@ export const DuelScreen = ({
   // music off the stinger. The demo leaves the title's music playing and
   // makes no sound of its own.
   useMusic(
-    auto || state.phase === 'end'
+    demo || state.phase === 'end'
       ? undefined
       : duelCue({
           scene,
@@ -722,13 +731,13 @@ export const DuelScreen = ({
         }),
   );
   useEffect(() => {
-    if (!auto) setMomentum(state.momentum.player);
-  }, [auto, state.momentum.player]);
+    if (!demo) setMomentum(state.momentum.player);
+  }, [demo, state.momentum.player]);
   useEffect(() => {
-    if (auto) return;
+    if (demo) return;
     setMusicPaused(paused);
     return () => setMusicPaused(false);
-  }, [auto, paused]);
+  }, [demo, paused]);
   useEffect(() => {
     if (!blow) return;
     cut();
@@ -742,7 +751,7 @@ export const DuelScreen = ({
   // A hit when the loser flinches, a sparkle on top for a fast counter
   // against the stopwatch
   const flinching =
-    !auto &&
+    !demo &&
     state.phase === 'resolve' &&
     state.outcome !== null &&
     (step?.kind === 'reveal' || step?.kind === 'beat');
@@ -758,7 +767,7 @@ export const DuelScreen = ({
   }, [flinching, fastCounter, state.exchanges]);
   // The mic drop as it is said
   const micDropSaid =
-    !auto && burstShown && step?.kind === 'line' && step.speaker === thrower;
+    !demo && burstShown && step?.kind === 'line' && step.speaker === thrower;
   useEffect(() => {
     if (micDropSaid) effect('micDrop');
   }, [micDropSaid, state.exchanges]);
@@ -780,13 +789,13 @@ export const DuelScreen = ({
   const typed = (sizing: boolean) =>
     step?.kind === 'line' ? (
       <FeedbackProvider play={lineFeedback}>
-        <Typewriter typed={typedLength} sound={!auto && !sizing}>
+        <Typewriter typed={typedLength} sound={!demo && !sizing}>
           {step.text}
         </Typewriter>
       </FeedbackProvider>
     ) : null;
   // The ghost, as its bubble appears
-  const ghostSpeaks = !auto && Boolean(bubble);
+  const ghostSpeaks = !demo && Boolean(bubble);
   useEffect(() => {
     if (ghostSpeaks && ghostLine) speak('ghost', ghostLine);
   }, [ghostSpeaks, ghostLine]);
@@ -849,7 +858,7 @@ export const DuelScreen = ({
             )}
             <Picker
               label={state.phase === 'attack' ? 'Your phrases' : 'Counters'}
-              active={!sizing && step?.kind === 'menu' && !paused && !auto}
+              active={!sizing && step?.kind === 'menu' && !paused && !demo}
               // Tighter than the menus' rows, so six fit the window; held
               // upright a row is a thumb's height or more, and a longer
               // list scrolls, with the rail beside it
@@ -919,7 +928,7 @@ export const DuelScreen = ({
       />
 
       {/* The demo label over the room, where the round is called */}
-      {auto && <DemoLabel y={CALL_AT.y} />}
+      {demo && <DemoLabel y={CALL_AT.y} />}
 
       {/* The deciding blow's flash, over the room and the bars */}
       {blow && !reduced && (
@@ -936,11 +945,7 @@ export const DuelScreen = ({
           className="pointer-events-none absolute -translate-x-1/2"
           style={{ left: px(CALL_AT.x), top: px(CALL_AT.y) }}
         >
-          <RoundCall
-            won={won}
-            flawless={flawless}
-            offline={!won && state.boss}
-          />
+          <RoundCall call={call} />
         </div>
       )}
 
@@ -994,7 +999,7 @@ export const DuelScreen = ({
               duration={timing.limit}
               remaining={timing.limit - timing.elapsed}
               paused={paused}
-              sound={!auto}
+              sound={!demo}
               aria-label={`Silence, ${Math.ceil(Math.max(0, timing.limit - timing.elapsed) / 1000)} seconds left`}
               className="absolute"
               style={{ top: px(2), right: 'calc(var(--px) * 3 + 4px)' }}
@@ -1033,7 +1038,7 @@ export const DuelScreen = ({
               bottom: `calc(100% - ${px(GHOST.corner.overlap)})`,
             }}
           >
-            <Ghost step={whisper} enter={enter} still={reduced} mirrored />
+            <Ghost step={whisper} enter={enter} still={reduced} facing="left" />
           </span>
         )}
         {bubble && (
@@ -1061,13 +1066,13 @@ export const DuelScreen = ({
           bar held upright; nothing to pause in the demo */}
       <Controls
         escape={
-          auto || paused
+          demo || paused
             ? undefined
             : {
                 kind: 'pause',
                 onPress: () => {
                   effect('confirm');
-                  setPaused(true);
+                  setPause('menu');
                 },
               }
         }
@@ -1075,22 +1080,22 @@ export const DuelScreen = ({
         speaker="none"
       />
 
-      {paused && leaving && (
+      {pause === 'leave' && (
         <Confirm
           title="Leave the duel?"
           confirm="Leave"
-          onCancel={() => setLeaving(false)}
+          onCancel={() => setPause('menu')}
           onConfirm={onBack}
         >
           Back to the roster. The duel counts as neither a win nor a loss.
         </Confirm>
       )}
-      {paused && !leaving && (
+      {pause === 'menu' && (
         <div className={styles.pause()}>
           <Window className="w-[60%]">
             <Text className="mb-[calc(var(--px)*3)] text-center">Paused</Text>
             <Picker label="Pause">
-              <PickerItem id="resume" onSelect={() => setPaused(false)}>
+              <PickerItem id="resume" onSelect={() => setPause('off')}>
                 Resume
               </PickerItem>
               {/* The touch version of M, and where a player looks for it */}
@@ -1102,7 +1107,7 @@ export const DuelScreen = ({
               >
                 Sound
               </PickerSetting>
-              <PickerItem id="back" onSelect={() => setLeaving(true)}>
+              <PickerItem id="back" onSelect={() => setPause('leave')}>
                 Back to the roster
               </PickerItem>
             </Picker>

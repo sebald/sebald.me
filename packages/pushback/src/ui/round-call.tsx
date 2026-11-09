@@ -69,15 +69,16 @@ const LINE = { from: 380, each: 50 } as const;
 /** When the lost title's letters sag, after it has landed, one by one */
 const SAG = { from: 650, each: 90 } as const;
 
+/**
+ * How a duel ended: `win`, `flawless` (YOU WIN with a line of FLAWLESS
+ * under it and sparkles), `lose`, or `offline` (lost to the Stakeholder:
+ * OFFLINE in place of YOU LOSE, their `Let's take this offline.` as the
+ * word the run ends on)
+ */
+export type Call = 'win' | 'flawless' | 'lose' | 'offline';
+
 export interface RoundCallProps {
-  won: boolean;
-  /** A line of FLAWLESS under YOU WIN, and sparkles round it */
-  flawless?: boolean;
-  /**
-   * Lost to the Stakeholder: OFFLINE in place of YOU LOSE, their
-   * `Let's take this offline.` as the word the run ends on
-   */
-  offline?: boolean;
+  call: Call;
   className?: string;
   style?: CSSProperties;
 }
@@ -92,14 +93,8 @@ export interface RoundCallProps {
  * Position it from outside by its centre; under reduced motion it is
  * there at once and stays still.
  */
-export const RoundCall = ({
-  won,
-  flawless = false,
-  offline = false,
-  className,
-  style,
-}: RoundCallProps) => {
-  if (!won) {
+export const RoundCall = ({ call, className, style }: RoundCallProps) => {
+  if (call === 'lose' || call === 'offline') {
     return (
       <div
         className={cn(
@@ -125,7 +120,7 @@ export const RoundCall = ({
             } as CSSProperties
           }
         >
-          {offline ? 'OFFLINE' : 'YOU LOSE'}
+          {call === 'offline' ? 'OFFLINE' : 'YOU LOSE'}
         </BitmapText>
       </div>
     );
@@ -141,7 +136,7 @@ export const RoundCall = ({
       >
         YOU WIN
       </BitmapText>
-      {flawless && (
+      {call === 'flawless' && (
         <>
           {/* A letter at a time */}
           <BitmapText

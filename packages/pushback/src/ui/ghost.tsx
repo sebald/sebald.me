@@ -4,7 +4,7 @@ import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useRef } from 'react';
 
 import { GHOST } from '../lib/buddy';
-import { ghostCell } from '../lib/sprites';
+import { type Facing, ghostCell } from '../lib/sprites';
 import { LAYOUT, bob } from '../lib/stage';
 import { GHOST_ALPHA, drawCell } from './draw';
 import { PALETTE } from './palette';
@@ -18,8 +18,8 @@ export interface GhostProps {
   x?: number;
   /** The whisper step: it points from the second one on */
   step?: number;
-  /** Facing left, toward the options under it */
-  mirrored?: boolean;
+  /** Which way it looks: `left`, toward the options under it */
+  facing?: Facing;
   /** 0 to 1: how far out of the black hole it is (`ghostEnter`) */
   enter?: number;
   still?: boolean;
@@ -34,7 +34,7 @@ export interface GhostProps {
 export const Ghost = ({
   x,
   step = 0,
-  mirrored = false,
+  facing = 'right',
   enter = 1,
   still = false,
   className,
@@ -80,7 +80,7 @@ export const Ghost = ({
     }
     ctx.globalAlpha = GHOST_ALPHA;
     if (sprite) {
-      drawCell(ctx, sprite, cell, { x: 0, bottom, mirrored });
+      drawCell(ctx, sprite, cell, { x: 0, bottom, facing });
     } else {
       ctx.fillStyle = PALETTE.ghost;
       ctx.fillRect(cx - 10, bottom - 40, 20, 34);
@@ -88,7 +88,7 @@ export const Ghost = ({
       ctx.fillRect(cx - 9, bottom - 58, 18, 18);
     }
     ctx.restore();
-  }, [backing, sprite, clock, step, mirrored, enter, still]);
+  }, [backing, sprite, clock, step, facing, enter, still]);
 
   return (
     <canvas

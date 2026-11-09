@@ -1,4 +1,4 @@
-import type { SheetId } from '../lib/sprites';
+import type { Facing, SheetId } from '../lib/sprites';
 import { SHEETS } from './sheets';
 import { px } from './stage';
 
@@ -11,14 +11,14 @@ import { px } from './stage';
 export const Portrait = ({
   sheet,
   scale = 2,
-  mirrored = false,
+  facing = 'right',
   inset = 0,
 }: {
   sheet: SheetId;
   /** Pixels of the portrait per stage pixel */
   scale?: number;
-  /** Facing the other way: the opponent's, looking at the player */
-  mirrored?: boolean;
+  /** Which way it looks: `left` for the opponent's, at the player */
+  facing?: Facing;
   /** Pixels of the head square cut off each side */
   inset?: number;
 }) => {
@@ -41,7 +41,7 @@ export const Portrait = ({
         backgroundSize: `${px(meta.cell.width * meta.count * s)} ${px(meta.cell.height * s)}`,
         backgroundPosition: `${px(-(head.x + inset) * s)} ${px(-(head.y + inset) * s)}`,
         backgroundRepeat: 'no-repeat',
-        transform: mirrored ? 'scaleX(-1)' : undefined,
+        transform: facing === 'left' ? 'scaleX(-1)' : undefined,
       }}
     />
   );

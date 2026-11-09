@@ -136,7 +136,7 @@ const ScaleBeam = ({
         <Portrait
           sheet={sheet}
           scale={LAYOUT.heads.scale}
-          mirrored={side === 'opponent'}
+          facing={side === 'opponent' ? 'left' : 'right'}
         />
       </span>
     );

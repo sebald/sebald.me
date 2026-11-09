@@ -5,6 +5,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { Side } from '../lib/duel';
 import {
+  type Facing,
   type Pose,
   type SheetId,
   cellFor,
@@ -28,8 +29,8 @@ export interface CharacterProps {
   /** The sheet: a look's, or a colleague's */
   sheet: SheetId;
   pose?: Pose;
-  /** Faces left: the right-hand duellist */
-  mirrored?: boolean;
+  /** Which way it looks: `left` for the right-hand duellist */
+  facing?: Facing;
   /** The line is still typing: the talk pose alternates its mouth */
   typing?: boolean;
   /** The taunt is a mic drop: a longer step */
@@ -60,7 +61,7 @@ export interface CharacterProps {
 export const Character = ({
   sheet,
   pose = 'idle',
-  mirrored = false,
+  facing = 'right',
   typing = false,
   micDrop = false,
   x,
@@ -87,7 +88,7 @@ export const Character = ({
     ctx.clearRect(0, 0, width, height);
     const offset = still
       ? { dx: 0, dy: 0, lighter: false, hidden: false }
-      : poseOffset(pose, elapsed, mirrored ? -1 : 1, micDrop);
+      : poseOffset(pose, elapsed, facing === 'left' ? -1 : 1, micDrop);
     // A flicker frame of a flinch: the cell stays clear
     if (offset.hidden) return;
     const bottom = height + offset.dy;
@@ -105,7 +106,7 @@ export const Character = ({
     }
     const cell = cellFor(pose);
     const breath = still ? 0 : breathFrame(pose, clock);
-    const place = { x: offset.dx, bottom, mirrored };
+    const place = { x: offset.dx, bottom, facing };
     const draw = () =>
       drawCell(ctx, sprite, cell, place, {
         breath,
@@ -132,7 +133,7 @@ export const Character = ({
     pose,
     elapsed,
     clock,
-    mirrored,
+    facing,
     typing,
     micDrop,
     still,
