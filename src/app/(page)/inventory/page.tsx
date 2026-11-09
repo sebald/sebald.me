@@ -1,6 +1,7 @@
 import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
+import { Bento } from '@/ui/bento';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Callout } from '@/ui/callout';
@@ -228,6 +229,23 @@ const InventoryPage = () => (
               <Card href="/inventory" variant="flat" inset="snug">
                 <Text as="span">Flat card with a link</Text>
               </Card>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <Headline level="2">Bento</Headline>
+
+            <div className="flex flex-wrap gap-4">
+              <Bento layout="side" className="max-w-72">
+                <Bento.Tile src="/home/marigold-venue.webp" />
+                <Bento.Tile src="/home/marigold-palette.webp" />
+                <Bento.Tile src="/home/marigold-flower.webp" />
+              </Bento>
+              <Bento layout="top" className="max-w-72">
+                <Bento.Tile src="/home/pushback-duel.webp" />
+                <Bento.Tile src="/home/pushback-result.webp" />
+                <Bento.Tile src="/home/pushback-title.webp" />
+              </Bento>
             </div>
           </div>
 

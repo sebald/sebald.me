@@ -1,5 +1,7 @@
 import { LAB_ENTRIES, labUrl } from '@/lib/lab';
 import { notesSource, sortByDate } from '@/lib/source';
+import type { BentoProps } from '@/ui/bento';
+import { Bento } from '@/ui/bento';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
@@ -77,21 +79,73 @@ const NotesList = () => {
   );
 };
 
+// The entry's pictures. They repeat the title's link for the pointer, so
+// they are hidden from screen readers and skipped by the keyboard
+const Pictures = ({
+  href,
+  layout,
+  images,
+}: {
+  href: string;
+  layout: BentoProps['layout'];
+  images: readonly string[];
+}) => (
+  <Link
+    href={href}
+    variant="inherit"
+    tabIndex={-1}
+    aria-hidden="true"
+    className="block w-full max-w-72"
+  >
+    <Bento layout={layout}>
+      {images.map(src => (
+        <Bento.Tile key={src} src={src} />
+      ))}
+    </Bento>
+  </Link>
+);
+
+// An entry with pictures: beside the text from tablet up, above it on
+// phones
+const Entry = ({
+  as: As = 'div',
+  children,
+}: {
+  as?: 'div' | 'li';
+  children: React.ReactNode;
+}) => (
+  <As className="grid gap-4 sm:grid-cols-[18rem_1fr] sm:gap-6">{children}</As>
+);
+
 // What I am building at work, laid out like a note
 const CurrentWork = () => (
   <section className="grid gap-10">
     <Label>Current work</Label>
-    <div className="grid gap-2">
-      <Link href="https://www.marigold-ui.io" variant="inherit">
-        <Headline level="2" as="h2">
-          Marigold
-        </Headline>
-      </Link>
-      <Text>
-        Reservix&apos;s open-source design system, and the driver for reshaping
-        our product around the people who use it.
-      </Text>
-    </div>
+    <Entry>
+      <Pictures
+        href="https://www.marigold-ui.io"
+        layout="side"
+        images={[
+          '/home/marigold-venue.webp',
+          '/home/marigold-palette.webp',
+          '/home/marigold-flower.webp',
+        ]}
+      />
+      <div className="grid content-start gap-2">
+        <Link href="https://www.marigold-ui.io" variant="inherit">
+          <Headline level="2" as="h2">
+            Marigold
+          </Headline>
+        </Link>
+        <Text>
+          Reservix&apos;s open-source design system. It defines how our product
+          looks and works, and the code it is built with.
+        </Text>
+        <Link href="https://www.marigold-ui.io" className="mt-4 w-fit">
+          Visit marigold-ui.io
+        </Link>
+      </div>
+    </Entry>
   </section>
 );
 
@@ -101,14 +155,22 @@ const LabList = () => (
     <Label>Lab</Label>
     <ul className="grid gap-14 sm:gap-20">
       {LAB_ENTRIES.map(entry => (
-        <li key={entry.slug} className="grid gap-2">
-          <Link href={labUrl(entry)} variant="inherit">
-            <Headline level="2" as="h2">
-              {entry.title}
-            </Headline>
-          </Link>
-          <Text>{entry.blurb}</Text>
-        </li>
+        <Entry as="li" key={entry.slug}>
+          {entry.images && (
+            <Pictures href={labUrl(entry)} layout="top" images={entry.images} />
+          )}
+          <div className="grid content-start gap-2">
+            <Link href={labUrl(entry)} variant="inherit">
+              <Headline level="2" as="h2">
+                {entry.title}
+              </Headline>
+            </Link>
+            <Text>{entry.blurb}</Text>
+            <Link href={labUrl(entry)} className="mt-4 w-fit">
+              Play {entry.title}
+            </Link>
+          </div>
+        </Entry>
       ))}
     </ul>
   </section>
@@ -117,9 +179,12 @@ const LabList = () => (
 const HomePage = () => (
   <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
     <Intro />
-    <NotesList />
-    <CurrentWork />
-    <LabList />
+    {/* The sections a step further apart than the intro is from them */}
+    <div className="grid gap-23 sm:gap-35">
+      <NotesList />
+      <CurrentWork />
+      <LabList />
+    </div>
   </div>
 );
 
