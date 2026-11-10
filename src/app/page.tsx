@@ -2,8 +2,7 @@ import { ArrowRightIcon } from '@phosphor-icons/react/ssr';
 
 import { LAB_ENTRIES, labUrl } from '@/lib/lab';
 import { notesSource, sortByDate } from '@/lib/source';
-import type { BentoProps } from '@/ui/bento';
-import { Bento } from '@/ui/bento';
+import { Bento, type BentoLayout } from '@/ui/bento';
 import { Headline } from '@/ui/headline';
 import { Link } from '@/ui/link';
 import { TimeLogo } from '@/ui/logo-time';
@@ -60,7 +59,7 @@ const NotesList = () => {
       <Label>Notes</Label>
       <ul className="grid gap-14 sm:gap-20">
         {notes.map(note => (
-          <li key={note.url} className="grid gap-2">
+          <li key={note.url} className="relative grid gap-2">
             {note.data.date && (
               <Text variant="muted" size="caption" as="span">
                 <time dateTime={String(note.data.date)}>
@@ -68,7 +67,7 @@ const NotesList = () => {
                 </time>
               </Text>
             )}
-            <Link href={note.url} variant="inherit">
+            <Link href={note.url} variant="stretched">
               <Headline level="2" as="h2">
                 {note.data.title}
               </Headline>
@@ -81,78 +80,80 @@ const NotesList = () => {
   );
 };
 
-// The entry's pictures. They repeat the title's link for the pointer, so
-// they are hidden from screen readers and skipped by the keyboard
-const Pictures = ({
+// The entry's pictures, a bento across the column. It repeats the title's
+// link for the pointer, so it is hidden from screen readers and skipped by
+// the keyboard
+const EntryBento = ({
   href,
   layout,
-  images,
+  tiles,
 }: {
   href: string;
-  layout: BentoProps['layout'];
-  images: readonly string[];
+  layout: BentoLayout;
+  tiles: readonly string[];
 }) => (
   <Link
     href={href}
-    variant="inherit"
+    variant="plain"
     tabIndex={-1}
     aria-hidden="true"
-    className="block w-full max-w-72"
+    className="block"
   >
     <Bento layout={layout}>
-      {images.map(src => (
+      {tiles.map(src => (
         <Bento.Tile key={src} src={src} />
       ))}
     </Bento>
   </Link>
 );
 
-// An entry with pictures: beside the text from tablet up, above it on
-// phones
+// An entry with pictures: the title, the bento under it, then the text and
+// its link, read down the left edge like the notes
 const Entry = ({
   as: As = 'div',
   children,
 }: {
   as?: 'div' | 'li';
   children: React.ReactNode;
-}) => (
-  <As className="grid gap-4 sm:grid-cols-[18rem_1fr] sm:gap-6">{children}</As>
-);
+}) => <As className="grid gap-5">{children}</As>;
 
-// The link below an entry: its arrow hangs into the margin (the link's own
-// 4px inset, the 12px arrow and the 6px gap), so the text lines up with
-// the paragraph above
-const entryLink = 'mt-4 w-fit -ml-5.5';
+// The text and link under the bento. The title's leading leaves more room
+// above its baseline than the text's leaves above its capitals, so the text
+// steps down to sit as far below the bento as the title sits above it
+const entryText = 'grid gap-2 pt-2';
+
+// The link below an entry, its arrow in line with the text above
+const entryLink = 'mt-4 w-fit';
+
+const MARIGOLD = 'https://www.marigold-ui.io';
 
 // What I am building at work, laid out like a note
 const CurrentWork = () => (
   <section className="grid gap-10">
     <Label>Current work</Label>
     <Entry>
-      <Pictures
-        href="https://www.marigold-ui.io"
-        layout="side"
-        images={[
-          '/home/marigold-venue.webp',
-          '/home/marigold-palette.webp',
-          '/home/marigold-flower.webp',
+      <Link href={MARIGOLD} variant="inherit">
+        <Headline level="2" as="h2">
+          Marigold
+        </Headline>
+      </Link>
+      <EntryBento
+        href={MARIGOLD}
+        layout="hero-and-three"
+        tiles={[
+          '/home/marigold-tile-screen.webp',
+          '/home/marigold-tile-users.webp',
+          '/home/marigold-tile-guidelines.webp',
+          '/home/marigold-tile-flower.webp',
         ]}
       />
-      <div className="grid content-start gap-2">
-        <Link href="https://www.marigold-ui.io" variant="inherit">
-          <Headline level="2" as="h2">
-            Marigold
-          </Headline>
-        </Link>
+      <div className={entryText}>
         <Text>
-          Reservix&apos;s open-source design system. It defines how our product
-          looks and works, and the code it is built with.
+          Reservix&apos;s open-source design system. One shared design language
+          for all our products, and the way we&apos;re modernizing our oldest
+          systems.
         </Text>
-        <Link
-          href="https://www.marigold-ui.io"
-          size="small"
-          className={entryLink}
-        >
+        <Link href={MARIGOLD} className={entryLink}>
           <ArrowRightIcon weight="bold" aria-hidden />
           Visit marigold-ui.io
         </Link>
@@ -168,17 +169,15 @@ const LabList = () => (
     <ul className="grid gap-14 sm:gap-20">
       {LAB_ENTRIES.map(entry => (
         <Entry as="li" key={entry.slug}>
-          {entry.images && (
-            <Pictures href={labUrl(entry)} layout="top" images={entry.images} />
-          )}
-          <div className="grid content-start gap-2">
-            <Link href={labUrl(entry)} variant="inherit">
-              <Headline level="2" as="h2">
-                {entry.title}
-              </Headline>
-            </Link>
+          <Link href={labUrl(entry)} variant="inherit">
+            <Headline level="2" as="h2">
+              {entry.title}
+            </Headline>
+          </Link>
+          {entry.bento && <EntryBento href={labUrl(entry)} {...entry.bento} />}
+          <div className={entryText}>
             <Text>{entry.blurb}</Text>
-            <Link href={labUrl(entry)} size="small" className={entryLink}>
+            <Link href={labUrl(entry)} className={entryLink}>
               <ArrowRightIcon weight="bold" aria-hidden />
               Play {entry.title}
             </Link>
@@ -193,7 +192,7 @@ const HomePage = () => (
   <div className="grid gap-20 pt-10 sm:gap-32 md:pt-32">
     <Intro />
     {/* The sections a step further apart than the intro is from them */}
-    <div className="grid gap-23 sm:gap-35">
+    <div className="grid gap-26 sm:gap-38">
       <NotesList />
       <CurrentWork />
       <LabList />

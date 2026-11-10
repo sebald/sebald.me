@@ -1,7 +1,7 @@
 import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
-import { Bento } from '@/ui/bento';
+import { Bento, type BentoLayout } from '@/ui/bento';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Callout } from '@/ui/callout';
@@ -28,6 +28,30 @@ export const metadata: Metadata = {
   title: 'Inventory',
   description: 'Overview of styles and components.',
 };
+
+// Bento
+// ---------------
+const BENTO_LAYOUTS: BentoLayout[] = [
+  'hero-and-three',
+  'four-piece',
+  'film-strip',
+  'center-stage-left',
+  'center-stage-right',
+];
+
+const MARIGOLD_TILES = [
+  '/home/marigold-tile-screen.webp',
+  '/home/marigold-tile-users.webp',
+  '/home/marigold-tile-guidelines.webp',
+  '/home/marigold-tile-flower.webp',
+];
+
+const PUSHBACK_TILES = [
+  '/home/pushback-tile-scene.webp',
+  '/home/pushback-tile-logo.webp',
+  '/home/pushback-tile-roles.webp',
+  '/home/pushback-tile-title-menu.webp',
+];
 
 // Page
 // ---------------
@@ -132,9 +156,6 @@ const InventoryPage = () => (
                 </Link>{' '}
                 with proper attributes.
               </Text>
-              <Link href="#" size="small" className="w-fit">
-                A small link on its own
-              </Link>
             </div>
           </div>
 
@@ -238,17 +259,19 @@ const InventoryPage = () => (
           <div className="grid gap-4">
             <Headline level="2">Bento</Headline>
 
-            <div className="flex flex-wrap gap-4">
-              <Bento layout="side" className="max-w-72">
-                <Bento.Tile src="/home/marigold-venue.webp" />
-                <Bento.Tile src="/home/marigold-palette.webp" />
-                <Bento.Tile src="/home/marigold-flower.webp" />
-              </Bento>
-              <Bento layout="top" className="max-w-72">
-                <Bento.Tile src="/home/pushback-duel.webp" />
-                <Bento.Tile src="/home/pushback-result.webp" />
-                <Bento.Tile src="/home/pushback-title.webp" />
-              </Bento>
+            <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+              {BENTO_LAYOUTS.map((layout, i) => (
+                <div key={layout} className="grid gap-2">
+                  <Bento layout={layout}>
+                    {(i % 2 ? PUSHBACK_TILES : MARIGOLD_TILES).map(src => (
+                      <Bento.Tile key={src} src={src} />
+                    ))}
+                  </Bento>
+                  <Text size="caption" variant="muted">
+                    {layout}
+                  </Text>
+                </div>
+              ))}
             </div>
           </div>
 

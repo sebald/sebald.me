@@ -36,21 +36,19 @@ export const styles = cva({
       ],
       // Only focus and transition, for links styled by what they wrap (cards)
       plain: '',
-    },
-    size: {
-      // The size of the text around it
-      default: '',
-      // The caption size (`Text size="caption"`), for a link set apart
-      // from running text, like the one below an entry on the home page.
-      // Its hit area reaches past the text (an invisible layer, so the
-      // layout and the spacing around it stay as they are)
-      small: [
-        'relative text-[0.8125rem] md:text-xs [&_svg]:size-3',
-        "after:absolute after:-inset-x-2 after:-inset-y-2.5 after:content-['']",
+      // A title whose link covers its whole entry, up to the nearest
+      // positioned parent: a press anywhere on the entry follows it, and the
+      // title answers the pointer and the focus ring frames the entry
+      stretched: [
+        'text-inherit',
+        'underline decoration-transparent underline-offset-3',
+        'hover:text-link hover:decoration-link',
+        "after:absolute after:-inset-2 after:rounded-xl after:content-['']",
+        'focus-visible:outline-none focus-visible:after:ui-focus',
       ],
     },
   },
-  defaultVariants: { variant: 'default', size: 'default' },
+  defaultVariants: { variant: 'default' },
 });
 
 // Props
@@ -66,7 +64,6 @@ export interface LinkProps
 // ---------------
 export const Link = ({
   variant,
-  size,
   children,
   href,
   target,
@@ -89,7 +86,7 @@ export const Link = ({
       {...props}
       {...externalProps}
       href={href as Route}
-      className={styles({ variant, size, className })}
+      className={styles({ variant, className })}
     >
       {children}
     </Component>
