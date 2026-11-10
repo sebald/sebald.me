@@ -28,7 +28,7 @@ export const LAB_ENTRIES: readonly LabEntry[] = [
       layout: 'four-piece',
       tiles: [
         '/home/pushback-tile-scene.webp',
-        '/home/pushback-tile-logo.webp',
+        '/home/pushback-tile-wordmark.webp',
         '/home/pushback-tile-roles.webp',
         '/home/pushback-tile-title-menu.webp',
       ],

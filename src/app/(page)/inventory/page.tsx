@@ -48,7 +48,7 @@ const MARIGOLD_TILES = [
 
 const PUSHBACK_TILES = [
   '/home/pushback-tile-scene.webp',
-  '/home/pushback-tile-logo.webp',
+  '/home/pushback-tile-wordmark.webp',
   '/home/pushback-tile-roles.webp',
   '/home/pushback-tile-title-menu.webp',
 ];
