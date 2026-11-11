@@ -39,8 +39,8 @@ export const SCENE = { width: 480, height: 270, feet: 230 } as const;
 /**
  * Where a scene's room sits inside its render: the room was drawn too
  * large for the cast, so the loop scripts shrink it by its factor in
- * `rooms.json` about the floor line and pad the rest with a flat dark
- * (`shrink.mjs`, the same rounding). A screen that shows the whole room
+ * `rooms.json` about the floor line and pad the rest by repeating its edge
+ * rows and columns (`shrink.mjs`, the same rounding). A screen that shows the whole room
  * fits this box, not the render.
  */
 export const roomBox = (scene: SceneId) => {
@@ -91,19 +91,21 @@ export const LAYOUT = {
 
 /**
  * The window of the scene the band shows: 320 of its 480 columns, centred
- * on the duellists unless the stands fix it (`view`), and the rows that put the scene's floor line on the
- * stage's feet line. Stage x = scene x − view.x.
+ * on the duellists unless the stands fix it (`view`), and the rows that put
+ * the duellists' feet (the scene's floor line, or the stands' own `feet`)
+ * on the stage's feet line. Stage x = scene x − view.x.
  */
 export const viewFor = (stands: {
   left: number;
   right: number;
+  feet?: number;
   view?: number;
 }) => {
   const centre = (stands.left + stands.right) / 2 + LAYOUT.cell.width / 2;
   const x = stands.view ?? Math.round(centre - STAGE.width / 2);
   return {
     x: Math.max(0, Math.min(SCENE.width - STAGE.width, x)),
-    y: SCENE.feet - LAYOUT.feet,
+    y: (stands.feet ?? SCENE.feet) - LAYOUT.feet,
   };
 };
 

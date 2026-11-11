@@ -198,28 +198,38 @@ are built (pixel-header skill, steps 4 and 5). Check the result in a
 duel in that room (`pnpm dev`, `/lab/pushback`): the stands must not overlap
 furniture and the band the composition rule keeps clear must be clear.
 
-The finished frames are written a fifth smaller than drawn
-(`scripts/shrink.mjs`, `ROOM_FACTOR` 0.8): three rounds of renders kept
-the furniture too large for the cast, so each loop script hands its
-frames to `shrinkFrames` before `writeLoop`. The frames are scaled
-down smoothly about the floor line, every pixel snapped back to the
-first frame's palette, and padded to the stage with the render's corner
-colour (never in the window). The loop scripts and `native.png` stay in
-the render's own pixels; only `scene.webp`, `scene-1x.webp` and
-`poster.png` are smaller. The smooth shrink keeps lines straight but pale; where a detail is
-looked at (the meeting room's whiteboard), the loop script takes it off
-the plate before the shrink and draws it again after it on the shrunk
-grid, one-pixel lines in its own colours (`scripts/redraw.mjs`: `takeOff`,
-`drawShapes`, `shrunkGrid`; used by the meeting room's whiteboard, the
-floor's small whiteboard and the studio's corkboard frame), and `shrinkFrames({ crisp })` shrinks boxes of
-lines that only run across or down (a frame) on the art's pixels. Never
-the whole room on its pixels: at 0.8 rows and columns double or drop and
-straight edges go crooked. Each scene's factor is in
+The finished frames are written smaller than drawn
+(`scripts/shrink.mjs`): Gemini sizes a room for its own idea of a
+person, about half the frame high, whatever the prompt or the reference
+says, so each loop script hands its frames to `shrinkFrames` before
+`writeLoop`. The frames are scaled down smoothly about the floor line,
+every pixel snapped back to the colours the first frame was drawn in
+(the unshrunk frame's, never the blends the downscale makes), and a
+pixel left between two different neighbours takes the closer one
+(`settleEdges`): hard edges, and the one-pixel lines a nearest-neighbour
+shrink would drop survive. Round the room, the stage is padded by
+repeating the room's edge rows and columns, so a band that reaches past
+it shows the floor and the wall going on. The loop scripts and
+`native.png` stay in the render's own pixels; only `scene.webp`,
+`scene-1x.webp` and `poster.png` are smaller. Where a detail is looked
+at (the meeting room's whiteboard), the loop script may still take it
+off the plate before the shrink and draw it again after it on the
+shrunk grid, one-pixel lines in its own colours (`scripts/redraw.mjs`:
+`takeOff`, `drawShapes`, `shrunkGrid`; the meeting room's and the
+floor's whiteboards), and `shrinkFrames({ crisp })` shrinks boxes of
+lines that only run across or down on the art's pixels. Never the whole
+room on its pixels: rows and columns double or drop and straight edges
+go crooked.
+
+Each scene's factor is in
 `packages/pushback/src/assets/scenes/rooms.json`, which the loop scripts
 and the game both read (the title fits the room's picture inside the
-padded render to the stage; a test checks every `scene-1x.webp`
-against it). The corner office and the studio take 0.76, their desks, chairs and doors came the largest. A fresh render that fits the cast gets the
-factor set to 1.
+padded render to the stage). It is set by eye with the cast on the
+stands: a desk at a hip, a door a person and a half. The stands in
+`STANDS` (`packages/pushback/src/lib/characters.ts`) are set per room
+the same way, with the row the feet stand on (`feet`), which moves the
+band's window with them. Tests check every `scene-1x.webp` against its
+factor and that at most 4 % of the edges inside the room are soft.
 
 ## The link preview
 

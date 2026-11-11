@@ -32,13 +32,14 @@ const plate = Buffer.from(base);
 
 // City windows
 // ---------------
-// Lit windows are warm single pixels in the towers, muted in the snapped
-// palette. A few of them go dark or come on every second; the rest stay.
-// The desk and the chair stand in front of the window; the lit box skips
-// the desk, whose wood is as warm as a window
-const CITY = { x0: 99, x1: 377, y0: 80, y1: 190 };
-const onDesk = (x, y) => x >= 238 && x <= 346 && y >= 158;
-const isLit = c => c[0] > 90 && c[0] > c[2] + 25;
+// Lit windows are bright warm single pixels in the towers. A few of them
+// go dark or come on every second; the rest stay. The desk and the chair
+// stand in front of the window and the spotlights' cones cross the glass
+// in a dimmer amber; the lit test takes only the bright pixels and the
+// box skips the desk and the chair, whose wood is as warm as a window
+const CITY = { x0: 64, x1: 414, y0: 82, y1: 196 };
+const onDesk = (x, y) => x >= 168 && x <= 312 && y >= 140;
+const isLit = c => c[0] > 150 && c[0] > c[2] + 80;
 const lit = collect(CITY, (c, x, y) => isLit(c) && !onDesk(x, y));
 const litOff = lit.map(([x, y, c]) => [x, y, mix(c, [28, 32, 52], 0.8)]);
 // Dark window-ish pixels next to lit ones can come on
@@ -64,7 +65,7 @@ const drawCity = (b, t) => {
 // ---------------
 // The glowing phone on the desk and its cyan halo: a notification lights
 // it fully for a moment, then it settles back to a dimmer glow
-const PHONE = { x0: 272, x1: 312, y0: 138, y1: 176 };
+const PHONE = { x0: 204, x1: 232, y0: 169, y1: 189 };
 const isCyan = c => c[2] > c[0] + 30 && c[1] > c[0] + 20 && lum(c) > 60;
 const cyan = collect(PHONE, isCyan);
 
@@ -77,18 +78,20 @@ const drawPhone = (b, t) => {
 
 // Rain
 // ---------------
-// Thin diagonal streaks slide down the glass over the plain sky above the
-// skyline, between the window mullions. Drawn, never scaled: a streak is
+// Thin diagonal streaks slide down the glass over the sky above the
+// skyline, between the window mullions, over the ones drawn into the glass. Drawn, never scaled: a streak is
 // three pixels of a slightly lighter navy, stepping one down and one right
 // per frame, wrapping within its pane.
-const SKY = { y0: 58, y1: 110 };
+const SKY = { y0: 34, y1: 96 };
 const PANES = [
-  { x0: 99, x1: 188 },
-  { x0: 191, x1: 284 },
-  { x0: 288, x1: 377 },
+  { x0: 65, x1: 116 },
+  { x0: 123, x1: 177 },
+  { x0: 185, x1: 296 },
+  { x0: 303, x1: 356 },
+  { x0: 363, x1: 413 },
 ];
 const STREAK = [74, 86, 120];
-const STREAKS = Array.from({ length: 14 }, (_, i) => {
+const STREAKS = Array.from({ length: 18 }, (_, i) => {
   const pane = PANES[i % PANES.length];
   return {
     pane,
@@ -130,8 +133,8 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   return f;
 });
 
-// The room a fifth smaller than drawn, see shrink.mjs, and the corner
-// office another twentieth: its desk and chair came the largest
+// The room shrunk to the cast's size, see shrink.mjs: this render drew
+// the office for people half the frame high
 await writeLoop({
   scene,
   frames: await shrinkFrames(frames, scene.W, scene.H, {

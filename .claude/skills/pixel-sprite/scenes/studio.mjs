@@ -1,4 +1,4 @@
-// The studio corner (Designer duels). The desk lamp's pool of light
+// The studio corner (Designer duels). The desk lamp's cone of light
 // flickers now and then, the tablet screen pulses on standby, and the
 // loose note at the right edge of the moodboard lifts its corner in the
 // draught. Coordinates are native pixels of the padded 480x270 scene.
@@ -16,7 +16,6 @@ import {
   scale,
   writeLoop,
 } from '../../pixel-header/scripts/loop.mjs';
-import { putRgb, shrunkGrid } from '../scripts/redraw.mjs';
 import { ROOM_FACTORS, shrinkFrames } from '../scripts/shrink.mjs';
 
 const [src, outDir] = process.argv.slice(2);
@@ -32,35 +31,33 @@ const plate = Buffer.from(base);
 
 // Desk lamp
 // ---------------
-// The pale cone of light under the lamp head, on the wall, the desk and
-// the tablet: the brightest, least saturated pixels inside the cone, which
-// opens from the lamp head at (346, 134) down to the desk at y 161, its
-// left edge near vertical and its right edge sloping out to x 392
-const LAMP_LIGHT = { x0: 336, x1: 400, y0: 125, y1: 165 };
-const isLight = c => lum(c) > 205 && sat(c) < 0.2;
+// The pale cone of light under the lamp head, on the wall and the desk,
+// one flat colour, with the bright bulb in the head: the cone opens from
+// the head at (406, 132) down to the desk at y 166, its left edge leaning
+// out to x 375, its right edge to x 425
+const LAMP_LIGHT = { x0: 372, x1: 428, y0: 130, y1: 167 };
+const near = (c, to, d = 18) =>
+  Math.abs(c[0] - to[0]) + Math.abs(c[1] - to[1]) + Math.abs(c[2] - to[2]) <= d;
+const CONE = [208, 222, 235];
+const isLight = c => near(c, CONE) || (lum(c) > 235 && sat(c) < 0.05);
 const inCone = (x, y) =>
-  y >= 134 &&
-  y <= 162 &&
-  x >= 343 - (y - 134) * 0.12 &&
-  x <= 350 + (y - 134) * 1.6;
+  x >= 402 - (y - 132) * 0.9 && x <= 414 + (y - 132) * 0.35;
 const light = collect(LAMP_LIGHT, (c, x, y) => isLight(c) && inCone(x, y));
 
 const drawLamp = (b, t) => {
   // A flicker: two or three dim frames at two points of the loop
-  const step = Math.floor(t / 1);
-  const dip =
-    (step >= 30 && step <= 32) || (step >= 70 && step <= 71) ? 0.9 : 1;
-  const jitter = hash(3, step) < 0.05 ? 0.96 : 1;
+  const dip = (t >= 30 && t <= 32) || (t >= 70 && t <= 71) ? 0.9 : 1;
+  const jitter = hash(3, t) < 0.05 ? 0.96 : 1;
   for (const [x, y, c] of light) setPx(b, x, y, scale(c, dip * jitter));
 };
 
 // Tablet screen
 // ---------------
-// The pale greenish screen on the desk pulses slowly, like a device on
-// standby: dims to 80 percent and back over four seconds
-const TABLET = { x0: 350, x1: 398, y0: 158, y1: 172 };
-const isScreen = c => c[1] > 180 && c[2] > 170 && c[0] < c[1] && lum(c) > 170;
-const screen = collect(TABLET, isScreen).filter(([, , c]) => !isLight(c));
+// The pale blue screen of the tablet on the desk pulses slowly, like a
+// device on standby: dims to 80 percent and back over four seconds
+const TABLET = { x0: 383, x1: 425, y0: 167, y1: 178 };
+const SCREEN = [202, 228, 241];
+const screen = collect(TABLET, c => near(c, SCREEN, 24));
 
 const drawTablet = (b, t) => {
   const k = 0.8 + 0.2 * (0.5 + 0.5 * Math.sin((t / 32) * Math.PI * 2));
@@ -69,17 +66,17 @@ const drawTablet = (b, t) => {
 
 // Loose note
 // ---------------
-// The yellow sticky note at the bottom right of the cork board: its free
+// The yellow sticky note at the right edge of the cork board: its free
 // corner (the top-right few pixels) lifts by a pixel for a moment, twice
-// per loop.
-const NOTE = { x0: 278, x1: 293, y0: 135, y1: 149 };
+// per loop, the cork showing where it was
+const NOTE = { x0: 312, x1: 327, y0: 97, y1: 111 };
 const isNote = c => c[0] > 200 && c[1] > 180 && c[2] < 170 && c[0] > c[2] + 50;
 const note = collect(NOTE, isNote);
 const noteRight = Math.max(...note.map(([x]) => x));
 const noteTop = Math.min(...note.map(([, y]) => y));
 // The corner: pixels in the right third and top half of the note
-const corner = note.filter(([x, y]) => x >= noteRight - 4 && y <= noteTop + 6);
-const CORK = [150, 103, 62];
+const corner = note.filter(([x, y]) => x >= noteRight - 4 && y <= noteTop + 5);
+const CORK = rgb(base, 328, 104);
 
 const drawNote = (b, t) => {
   const lifted = (t >= 20 && t <= 27) || (t >= 64 && t <= 69);
@@ -104,40 +101,11 @@ const frames = Array.from({ length: FRAMES }, (_, t) => {
   return f;
 });
 
-// The room a fifth smaller than drawn, see shrink.mjs, and the studio
-// another twentieth: its drafting table and door came large
-// The corkboard's frame, drawn again on the shrunk grid (see
-// redraw.mjs): drawn as a dark line, two of wood and a dark line, it
-// went pale when shrunk smoothly and broke into dots on the art's
-// pixels, so it is three rings a pixel each, dark, wood, dark, in the
-// colours it was drawn in. The papers pinned to it keep the smooth
-// shrink, small pictures that read fine a little soft
-const { sx, sy } = shrunkGrid(scene.W, ROOM_FACTORS.studio);
-const FRAME = { x0: 161, y0: 69, x1: 298, y1: 154 };
-const RINGS = [rgb(base, 161, 100), rgb(base, 162, 100), rgb(base, 164, 100)];
-const drawFrame = f => {
-  RINGS.forEach((c, d) => {
-    const x0 = sx(FRAME.x0) + d;
-    const y0 = sy(FRAME.y0) + d;
-    const x1 = sx(FRAME.x1) - d;
-    const y1 = sy(FRAME.y1) - d;
-    const put = (x, y) => putRgb(f, scene.W, x, y, c);
-    for (let x = x0; x <= x1; x++) {
-      put(x, y0);
-      put(x, y1);
-    }
-    for (let y = y0; y <= y1; y++) {
-      put(x0, y);
-      put(x1, y);
-    }
-  });
-};
-
+// The room shrunk to the cast's size, see shrink.mjs: this render drew
+// the studio for people half the frame high
 const shrunk = await shrinkFrames(frames, scene.W, scene.H, {
   factor: ROOM_FACTORS.studio,
-  keep: RINGS,
 });
-for (const f of shrunk) drawFrame(f);
 
 await writeLoop({
   scene,

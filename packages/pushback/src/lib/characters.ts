@@ -217,13 +217,16 @@ export const SCENE_OF: Record<Role | 'boss', SceneId> = {
 
 /**
  * Where the duellists stand in each scene: the x of the left edge of the
- * 72 px sprite cell, player on the left, opponent on the right. The
- * composition rule keeps x 60 to 170 and 310 to 420 clear; scenes may
- * move the stands a little once they exist.
+ * 72 px sprite cell, player on the left, opponent on the right, and the
+ * scene row their feet are on. Placed by eye per room against the room at
+ * its size (`rooms.json`), so the floor they stand on, how far back, and
+ * the furniture beside them read right.
  */
 export interface Stands {
   left: number;
   right: number;
+  /** The scene row the feet stand on; the floor line, 230, without it */
+  feet?: number;
   /**
    * The scene column the band starts at, when it is not centred on the
    * duellists: a stand moved without moving the room
@@ -232,21 +235,16 @@ export interface Stands {
 }
 
 export const STANDS: Record<SceneId, Stands> = {
-  // All four put the figures 160 apart (the office's Stakeholder
-  // eight closer) (cells at stage x 44 and 204, so
-  // sixty-five pixels of room to either edge), the ghost between them.
-  // The left desk ends at x 128, the right one starts at 323; the shelf
-  // with the build light sits between the duellists
-  floor: { left: 117, right: 277 },
-  // The chair ends at x 120; the table (243 to 398) stands behind
-  meeting: { left: 127, right: 287 },
-  // The chair ends at x 120, the desk starts at 333
-  studio: { left: 123, right: 283 },
-  // The cabinet ends at x 90, the desk spans 250 to 340 with the chair
-  // behind its right end, where the Stakeholder stands: eight pixels in
-  // from the chair, two and a half percent of the stage toward the
-  // middle, with the room where the duellists 160 apart put it
-  office: { left: 145, right: 297, view: 101 },
+  // The desk islands at the edges, the shelf with the build light between
+  floor: { left: 117, right: 277, feet: 233 },
+  // The table between the two, against the whiteboard
+  meeting: { left: 127, right: 287, feet: 234 },
+  // A step forward, clear of the printer on the left and the desk on the
+  // right
+  studio: { left: 128, right: 275, feet: 242 },
+  // The desk between the player and the Stakeholder, who stands at its
+  // right end
+  office: { left: 116, right: 297, feet: 232 },
 };
 
 // Player looks

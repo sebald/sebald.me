@@ -241,12 +241,15 @@ describe('viewFor', () => {
     assert.equal(viewFor({ left: 400, right: 408 }).x, 160);
     assert.equal(viewFor({ left: 145, right: 297, view: 101 }).x, 101);
   });
+
+  it("puts a scene's own feet row on the feet line", () => {
+    assert.equal(viewFor({ left: 124, right: 284, feet: 242 }).y, 114);
+  });
 });
 
 describe('roomBox', () => {
-  // The room's picture as the scene files have it: everything that is not
-  // the flat padding round it, measured in the first frame of the 1x loop
-  const measure = async (scene: SceneId) => {
+  // The first frame of a scene's 1x loop, raw RGB
+  const frame = async (scene: SceneId) => {
     // sharp comes with Next, as in the scene scripts
     const local = createRequire(import.meta.url);
     const sharp = createRequire(local.resolve('next/package.json'))(
@@ -271,34 +274,111 @@ describe('roomBox', () => {
       .removeAlpha()
       .raw()
       .toBuffer({ resolveWithObject: true });
-    const pad = [data[0], data[1], data[2]];
-    let [x0, y0, x1, y1] = [Infinity, Infinity, -1, -1];
-    for (let y = 0; y < info.height; y++)
-      for (let x = 0; x < info.width; x++) {
-        const i = (y * info.width + x) * 3;
-        if (
-          data[i] === pad[0] &&
-          data[i + 1] === pad[1] &&
-          data[i + 2] === pad[2]
-        )
-          continue;
-        x0 = Math.min(x0, x);
-        y0 = Math.min(y0, y);
-        x1 = Math.max(x1, x);
-        y1 = Math.max(y1, y);
-      }
-    return { x: x0, y: y0, width: x1 - x0 + 1, height: y1 - y0 + 1 };
+    const at = (x: number, y: number) => {
+      const i = (y * info.width + x) * 3;
+      return [data[i]!, data[i + 1]!, data[i + 2]!];
+    };
+    return { data, width: info.width, height: info.height, at };
   };
 
-  for (const scene of ['floor', 'meeting', 'studio', 'office'] as const)
+  for (const scene of ['floor', 'meeting', 'studio', 'office'] as const) {
     it(`matches the room in the ${scene} scene's files`, async () => {
       const box = roomBox(scene);
-      const found = await measure(scene);
-      // A pixel of slack: the room's own edge can match the padding
-      for (const key of ['x', 'y', 'width', 'height'] as const)
+      const { width, height, at } = await frame(scene);
+      const right = box.x + box.width - 1;
+      const bottom = box.y + box.height - 1;
+      const same = (a: number[], b: number[]) => a.join() === b.join();
+      // Round the room, every pixel repeats the room's nearest edge pixel
+      for (let y = 0; y < height; y++)
+        for (let x = 0; x < width; x++) {
+          if (x >= box.x && x <= right && y >= box.y && y <= bottom) continue;
+          const near = at(
+            Math.min(right, Math.max(box.x, x)),
+            Math.min(bottom, Math.max(box.y, y)),
+          );
+          assert.ok(
+            same(at(x, y), near),
+            `${x},${y} is not padding: the room is larger than rooms.json says`,
+          );
+        }
+      // And the room reaches its box: its outer rows and columns differ
+      // from the ones a few pixels in somewhere (a render's own padding,
+      // two rows at most from `scene.mjs`, stays within that)
+      const IN = 3;
+      const differs = (
+        n: number,
+        a: (i: number) => number[],
+        b: (i: number) => number[],
+      ) => Array.from({ length: n }, (_, i) => i).some(i => !same(a(i), b(i)));
+      const edges = {
+        left: differs(
+          box.height,
+          i => at(box.x, box.y + i),
+          i => at(box.x + IN, box.y + i),
+        ),
+        right: differs(
+          box.height,
+          i => at(right, box.y + i),
+          i => at(right - IN, box.y + i),
+        ),
+        top: differs(
+          box.width,
+          i => at(box.x + i, box.y),
+          i => at(box.x + i, box.y + IN),
+        ),
+        bottom: differs(
+          box.width,
+          i => at(box.x + i, bottom),
+          i => at(box.x + i, bottom - IN),
+        ),
+      };
+      for (const [edge, ok] of Object.entries(edges))
         assert.ok(
-          Math.abs(found[key] - box[key]) <= 1,
-          `${key}: the files have ${found[key]}, rooms.json says ${box[key]}`,
+          ok,
+          `the ${edge} edge is padding: the room is smaller than rooms.json says`,
         );
     });
+
+    // What a smooth shrink leaves on an edge: a pixel whose colour lies
+    // between its two different neighbours in a row or a column, on every
+    // channel and clearly on one (`settleEdges` in `shrink.mjs`)
+    it(`gives the ${scene} room hard edges`, async () => {
+      const box = roomBox(scene);
+      const { at } = await frame(scene);
+      const between = (a: number[], m: number[], b: number[]) => {
+        let clearly = false;
+        for (let c = 0; c < 3; c++) {
+          const lo = Math.min(a[c]!, b[c]!);
+          const hi = Math.max(a[c]!, b[c]!);
+          if (m[c]! < lo || m[c]! > hi) return false;
+          if (hi - lo > 24 && m[c]! > lo + 4 && m[c]! < hi - 4) clearly = true;
+        }
+        return clearly;
+      };
+      let meetings = 0;
+      let soft = 0;
+      // Along the rows, then down the columns
+      for (const dx of [1, 0] as const) {
+        const outer = dx ? box.height : box.width;
+        const inner = dx ? box.width : box.height;
+        for (let o = 0; o < outer; o++) {
+          let run = 1;
+          for (let i = 1; i < inner; i++) {
+            const p = (k: number) =>
+              dx ? at(box.x + k, box.y + o) : at(box.x + o, box.y + k);
+            if (p(i).join() === p(i - 1).join()) {
+              run++;
+              continue;
+            }
+            meetings++;
+            if (run === 1 && i >= 2 && between(p(i - 2), p(i - 1), p(i)))
+              soft++;
+            run = 1;
+          }
+        }
+      }
+      const share = (100 * soft) / meetings;
+      assert.ok(share <= 4, `${share.toFixed(1)} % of the edges are soft`);
+    });
+  }
 });

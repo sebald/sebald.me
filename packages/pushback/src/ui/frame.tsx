@@ -7,7 +7,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import type { SceneId } from '../lib/characters';
 import { FRAME_MS } from '../lib/sprites';
-import { LAYOUT, SCENE, STAGE } from '../lib/stage';
+import { LAYOUT, SCENE, STAGE, roomBox } from '../lib/stage';
 import { fadeMask } from './dither';
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
@@ -276,11 +276,30 @@ const FrameBody = ({
   );
 };
 
-/** The corner office, dimmed, behind a menu screen's window */
+/** The corner office's room inside its padded render */
+const OFFICE = roomBox('office');
+
+/**
+ * The corner office, dimmed, behind a menu screen's window: its room
+ * (not the padding round it) scaled to cover the screen, a hair more so
+ * no padding shows at an edge, and centred. The room's box is a child
+ * of the screen's size (`cqw`/`cqh`), the picture placed in it by
+ * percentages: offset = (box − picture) × position
+ */
 export const Backdrop = () => (
   <div
     aria-hidden
-    className="absolute inset-0 bg-cover bg-center brightness-[0.3] [image-rendering:pixelated]"
-    style={{ backgroundImage: `url(${SCENE_ASSETS.office.poster.src})` }}
-  />
+    className="[container-type:size] absolute inset-0 overflow-hidden brightness-[0.22]"
+  >
+    <div
+      className="absolute top-1/2 left-1/2 -translate-1/2 bg-no-repeat [image-rendering:pixelated]"
+      style={{
+        width: `calc(max(100cqw, 100cqh * ${OFFICE.width / OFFICE.height}) * 1.02)`,
+        aspectRatio: `${OFFICE.width} / ${OFFICE.height}`,
+        backgroundImage: `url(${SCENE_ASSETS.office.poster.src})`,
+        backgroundSize: `${(SCENE.width / OFFICE.width) * 100}% auto`,
+        backgroundPosition: `${(OFFICE.x / (SCENE.width - OFFICE.width)) * 100}% ${(OFFICE.y / (SCENE.height - OFFICE.height)) * 100}%`,
+      }}
+    />
+  </div>
 );
