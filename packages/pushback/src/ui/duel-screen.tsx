@@ -106,8 +106,11 @@ import { feedback, useMusic, useSoundSettings, voiced } from './use-sound';
 // Styles
 // ---------------
 
-/** Where the round is called at the end of a duel, and the demo labelled: its top centre */
-const CALL_AT = { x: STAGE.width / 2, y: 44 } as const;
+/**
+ * Where the demo is labelled: its top, over the room between the
+ * duellists' heads (no duel is called in the demo)
+ */
+const DEMO_LABEL_Y = 44;
 
 /**
  * The hit-stop of the deciding blow: the stage holds its frame this long
@@ -925,10 +928,15 @@ export const DuelScreen = ({
         heads={{ player: playerSheet, opponent: character.sheet }}
         crop={crop}
         still={reduced}
+        // The duel is decided: the bars step out for the call
+        className={cn(
+          'transition-opacity duration-300 motion-reduce:transition-none',
+          called && 'opacity-0',
+        )}
       />
 
       {/* The demo label over the room, where the round is called */}
-      {demo && <DemoLabel y={CALL_AT.y} />}
+      {demo && <DemoLabel y={DEMO_LABEL_Y} />}
 
       {/* The deciding blow's flash, over the room and the bars */}
       {blow && !reduced && (
@@ -938,12 +946,13 @@ export const DuelScreen = ({
         />
       )}
 
-      {/* The round called over the room, between the duellists' heads;
-          centred by its wrapper, since the call moves its own `translate` */}
+      {/* The round called over the room, in the bars' rows (they step
+          out for it), so both duellists' faces stay in view; centred by
+          its wrapper, since the call moves its own `translate` */}
       {called && (
         <div
           className="pointer-events-none absolute -translate-x-1/2"
-          style={{ left: px(CALL_AT.x), top: px(CALL_AT.y) }}
+          style={{ left: px(STAGE.width / 2), top: px(crop + LAYOUT.call.y) }}
         >
           <RoundCall call={call} />
         </div>

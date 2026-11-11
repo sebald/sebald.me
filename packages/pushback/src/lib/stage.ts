@@ -87,6 +87,12 @@ export const LAYOUT = {
   names: { y: 12 },
   /** Rows the bars take at the top: a window never grows over them */
   hud: 30,
+  /**
+   * The round called at the end of a duel, in the bars' rows once they
+   * have stepped out: `y`, its top; `line`, the pixels between YOU WIN and
+   * the flawless line beside it
+   */
+  call: { y: 4, line: 4 },
 } as const;
 
 /**

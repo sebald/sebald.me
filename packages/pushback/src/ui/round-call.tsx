@@ -1,6 +1,7 @@
 import { BitmapText } from '@sebald/blip-ui';
 import type { CSSProperties } from 'react';
 
+import { LAYOUT } from '../lib/stage';
 import { PALETTE } from './palette';
 import { px } from './stage';
 import { cn } from './styles.utils';
@@ -85,11 +86,12 @@ export interface RoundCallProps {
 
 /**
  * The end of a duel called the way a fighting game calls the round, over
- * the room: YOU WIN in gold (BitmapText's `large`) slamming in from three times its size, the
+ * the room in one line above the duellists' heads (BitmapText's
+ * `medium`): YOU WIN in gold slamming in from three times its size, the
  * stage jolting as it lands; YOU LOSE in grey dropping in from above,
  * landing with a thud, its letters then sagging one after the other;
  * OFFLINE the same way when the Stakeholder wins. A flawless win adds
- * FLAWLESS under it, a letter at a time, and sparkles.
+ * FLAWLESS beside it, a letter at a time, and sparkles.
  * Position it from outside by its centre; under reduced motion it is
  * there at once and stays still.
  */
@@ -107,7 +109,7 @@ export const RoundCall = ({ call, className, style }: RoundCallProps) => {
             other one twice as far (in the SVG's own units, stage pixels) */}
         <BitmapText
           variant="neutral"
-          size="large"
+          size="medium"
           className={cn(
             '[--sag:2px] [&>:nth-child(even)]:[--sag:4px]',
             '*:animate-call-sag *:motion-reduce:animate-none',
@@ -127,11 +129,11 @@ export const RoundCall = ({ call, className, style }: RoundCallProps) => {
   }
   return (
     <div
-      className={cn('relative grid justify-items-center', className)}
+      className={cn('relative grid grid-flow-col items-end', className)}
       style={style}
     >
       <BitmapText
-        size="large"
+        size="medium"
         className="animate-call-slam motion-reduce:animate-none"
       >
         YOU WIN
@@ -142,12 +144,12 @@ export const RoundCall = ({ call, className, style }: RoundCallProps) => {
           <BitmapText
             variant="spark"
             className={cn(
-              'mt-[calc(var(--px)*4)]',
               '*:animate-appear *:motion-reduce:animate-none',
               '*:[animation-delay:calc(var(--line-from)+var(--i)*var(--line-each))]',
             )}
             style={
               {
+                marginLeft: px(LAYOUT.call.line),
                 '--line-from': `${LINE.from}ms`,
                 '--line-each': `${LINE.each}ms`,
               } as CSSProperties
