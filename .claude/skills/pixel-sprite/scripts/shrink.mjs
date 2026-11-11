@@ -2,12 +2,18 @@
 // furniture a fifth or more too large for the cast (desks at the hip,
 // but chairs, tables and doors a head too tall), so the finished frames
 // of a scene loop are scaled down as a whole about the floor line and
-// padded back to the stage with the render's own corner colour, which the
-// band's window never reaches. A smooth downscale, then every pixel
-// snapped to the palette of the first frame: hard edges again, the
-// one-pixel outlines kept as a tone where a nearest-neighbour shrink
-// would drop every fifth one. The loop scripts keep working in the
-// render's own pixels; only what is written out is smaller.
+// padded back to the stage by repeating the room's edge rows and columns
+// (as `scene.mjs` pads a render), so a band that reaches past the room
+// shows plain floor, wall and ceiling going on. A smooth downscale, then every pixel
+// snapped back to the colours the render was drawn in (the unshrunk first
+// frame's, never the blends the downscale makes), then a pixel left
+// between two different neighbours in a row or a column takes the closer
+// one: hard edges again, the one-pixel outlines kept where a
+// nearest-neighbour shrink would drop every fifth one. Gemini cannot be
+// asked for the cast's proportions (it sizes a room to its own idea of a
+// person, about half the frame high), so the shrink stays. The loop
+// scripts keep working in the render's own pixels; only what is written
+// out is smaller.
 import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 
 /**
@@ -55,6 +61,61 @@ const paletteOf = async (png, colours) => {
     out.push([data[i], data[i + 1], data[i + 2]]);
   }
   return out;
+};
+
+/**
+ * The distance colours are matched by: green counts most, blue next, as
+ * the eye weighs them
+ */
+const distance = (a, b) =>
+  2 * (a[0] - b[0]) ** 2 + 4 * (a[1] - b[1]) ** 2 + 3 * (a[2] - b[2]) ** 2;
+
+/**
+ * Within `box` of a raw RGB frame W wide: a pixel whose colour lies
+ * between its two neighbours in a row (or else a column), on every
+ * channel and clearly on one, while they differ, is what a smooth
+ * downscale leaves on an edge; it takes the neighbour it is closer to.
+ * Read from a copy, so one pass never feeds the next pixel. The same
+ * test as the "rooms have hard edges" test in `stage.test.ts`.
+ */
+export const settleEdges = (frame, W, box) => {
+  const src = Buffer.from(frame);
+  const at = (x, y) => (y * W + x) * 3;
+  const px = i => [src[i], src[i + 1], src[i + 2]];
+  const between = (a, m, b) => {
+    let clearly = false;
+    for (let c = 0; c < 3; c++) {
+      const lo = Math.min(src[a + c], src[b + c]);
+      const hi = Math.max(src[a + c], src[b + c]);
+      if (src[m + c] < lo || src[m + c] > hi) return false;
+      if (hi - lo > 24 && src[m + c] > lo + 4 && src[m + c] < hi - 4)
+        clearly = true;
+    }
+    return clearly;
+  };
+  const same = (a, b) =>
+    src[a] === src[b] && src[a + 1] === src[b + 1] && src[a + 2] === src[b + 2];
+  for (let y = box.y; y < box.y + box.height; y++)
+    for (let x = box.x; x < box.x + box.width; x++) {
+      const m = at(x, y);
+      for (const [dx, dy] of [
+        [1, 0],
+        [0, 1],
+      ]) {
+        const [ax, ay, bx, by] = [x - dx, y - dy, x + dx, y + dy];
+        if (ax < box.x || ay < box.y) continue;
+        if (bx >= box.x + box.width || by >= box.y + box.height) continue;
+        const a = at(ax, ay);
+        const b = at(bx, by);
+        if (same(a, b) || !between(a, m, b)) continue;
+        const to = distance(px(a), px(m)) <= distance(px(b), px(m)) ? a : b;
+        frame[m] = src[to];
+        frame[m + 1] = src[to + 1];
+        frame[m + 2] = src[to + 2];
+        break;
+      }
+    }
+  return frame;
 };
 
 /** How far from the patch's lightness a colour must be to count as detail */
@@ -146,8 +207,7 @@ const MAX_COLOURS = 256;
 /**
  * The palette with `keep` in it (the colours a loop script draws after
  * the shrink, see redraw.mjs), the closest pairs merged to make room, so
- * the frames stay within `MAX_COLOURS`; one slot is left for the corner
- * colour the padding takes
+ * the frames stay within `MAX_COLOURS`, one slot to spare
  */
 const fitPalette = (palette, keep) => {
   const out = [...palette];
@@ -183,7 +243,7 @@ export const shrinkFrames = async (
   {
     factor = ROOM_FACTOR,
     feet = FEET,
-    colours = 64,
+    colours = MAX_COLOURS,
     crisp = [],
     keep = [],
   } = {},
@@ -197,9 +257,15 @@ export const shrinkFrames = async (
       .png()
       .toBuffer();
 
-  // The first frame is shrunk once: its palette is the loop's, and it is drawn
+  // The palette is the colours the first frame is drawn in, before the
+  // shrink: the blends the downscale makes never become colours of their own
   const first = await small(frames[0]);
-  const palette = fitPalette(await paletteOf(first, colours), keep);
+  const drawn = await sharp(frames[0], {
+    raw: { width: W, height: H, channels: 3 },
+  })
+    .png()
+    .toBuffer();
+  const palette = fitPalette(await paletteOf(drawn, colours), keep);
   const nearest = new Map();
   const snap = (r, g, b) => {
     const key = (r << 16) | (g << 8) | b;
@@ -208,7 +274,7 @@ export const shrinkFrames = async (
     let best = palette[0];
     let bestD = Infinity;
     for (const c of palette) {
-      const d = (c[0] - r) ** 2 + (c[1] - g) ** 2 + (c[2] - b) ** 2;
+      const d = distance(c, [r, g, b]);
       if (d < bestD) {
         bestD = d;
         best = c;
@@ -225,13 +291,6 @@ export const shrinkFrames = async (
         .removeAlpha()
         .toBuffer({ resolveWithObject: true });
       const out = Buffer.alloc(W * H * 3);
-      // The render's corner colour fills what the window never shows
-      const [cr, cg, cb] = [f[0], f[1], f[2]];
-      for (let i = 0; i < W * H * 3; i += 3) {
-        out[i] = cr;
-        out[i + 1] = cg;
-        out[i + 2] = cb;
-      }
       for (let y = 0; y < h; y++)
         for (let x = 0; x < w; x++) {
           const s = (y * w + x) * 3;
@@ -241,6 +300,7 @@ export const shrinkFrames = async (
           out[d + 1] = g;
           out[d + 2] = b;
         }
+      settleEdges(out, W, { x: left, y: top, width: w, height: h });
       for (const c of crisp) {
         const box = {
           x0: Math.floor(c.x0 * factor),
@@ -258,6 +318,19 @@ export const shrinkFrames = async (
           out[d + 2] = b;
         });
       }
+      // Round the room, its nearest edge pixel
+      for (let y = 0; y < H; y++)
+        for (let x = 0; x < W; x++) {
+          if (x >= left && x < left + w && y >= top && y < top + h) continue;
+          const sx = Math.min(left + w - 1, Math.max(left, x));
+          const sy = Math.min(top + h - 1, Math.max(top, y));
+          out.copy(
+            out,
+            (y * W + x) * 3,
+            (sy * W + sx) * 3,
+            (sy * W + sx) * 3 + 3,
+          );
+        }
       return out;
     }),
   );
