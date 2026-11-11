@@ -58,6 +58,11 @@ Z, 0 to 9 and the marks above (`BITMAP_GLYPHS`); `ScreenTitle` draws in it.
 - **Do** keep it to a word or two.
 - **Do** use `neutral` for the bad news and `primary` for the good.
 - **Don't** set a paragraph in it.
+- **Don't** put it inside a `Window` (or a tab's panel). A window holds
+  lines and controls; a word drawn like the art reads as a stray headline
+  there and takes the lines' rows. Set it over the stage, with the art it
+  belongs to: a screen's title above its window, a round's result over
+  the room.
 - **Don't** animate it here: slam, drop and sparkle are for the screen that
   uses it. Each letter is its own group, `data-slot="bitmap-letter"` with
   its place in the word as `--i`, so a screen can move them one by one
