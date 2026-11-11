@@ -1,6 +1,7 @@
 import { DropIcon } from '@phosphor-icons/react/dist/ssr';
 import type { Metadata } from 'next';
 
+import { Bento, type BentoLayout } from '@/ui/bento';
 import { Blockquote } from '@/ui/blockquote';
 import { Button } from '@/ui/button';
 import { Callout } from '@/ui/callout';
@@ -27,6 +28,30 @@ export const metadata: Metadata = {
   title: 'Inventory',
   description: 'Overview of styles and components.',
 };
+
+// Bento
+// ---------------
+const BENTO_LAYOUTS: BentoLayout[] = [
+  'hero-and-three',
+  'four-piece',
+  'film-strip',
+  'center-stage-left',
+  'center-stage-right',
+];
+
+const MARIGOLD_TILES = [
+  '/home/marigold-tile-screen.webp',
+  '/home/marigold-tile-users.webp',
+  '/home/marigold-tile-guidelines.webp',
+  '/home/marigold-tile-flower.webp',
+];
+
+const PUSHBACK_TILES = [
+  '/home/pushback-tile-scene.webp',
+  '/home/pushback-tile-wordmark.webp',
+  '/home/pushback-tile-roles.webp',
+  '/home/pushback-tile-title-menu.webp',
+];
 
 // Page
 // ---------------
@@ -228,6 +253,25 @@ const InventoryPage = () => (
               <Card href="/inventory" variant="flat" inset="snug">
                 <Text as="span">Flat card with a link</Text>
               </Card>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <Headline level="2">Bento</Headline>
+
+            <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+              {BENTO_LAYOUTS.map((layout, i) => (
+                <div key={layout} className="grid gap-2">
+                  <Bento layout={layout}>
+                    {(i % 2 ? PUSHBACK_TILES : MARIGOLD_TILES).map(src => (
+                      <Bento.Tile key={src} src={src} />
+                    ))}
+                  </Bento>
+                  <Text size="caption" variant="muted">
+                    {layout}
+                  </Text>
+                </div>
+              ))}
             </div>
           </div>
 

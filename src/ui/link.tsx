@@ -36,6 +36,16 @@ export const styles = cva({
       ],
       // Only focus and transition, for links styled by what they wrap (cards)
       plain: '',
+      // A title whose link covers its whole entry, up to the nearest
+      // positioned parent: a press anywhere on the entry follows it, and the
+      // title answers the pointer and the focus ring frames the entry
+      stretched: [
+        'text-inherit',
+        'underline decoration-transparent underline-offset-3',
+        'hover:text-link hover:decoration-link',
+        "after:absolute after:-inset-2 after:rounded-xl after:content-['']",
+        'focus-visible:outline-none focus-visible:after:ui-focus',
+      ],
     },
   },
   defaultVariants: { variant: 'default' },
