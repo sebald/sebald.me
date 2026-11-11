@@ -13,6 +13,7 @@ import { Announcer } from '../../providers/announcer';
 import { PixelsContext, StageContext } from '../../providers/pixels';
 import { stage } from './stage.styles';
 import { useScale } from './use-scale';
+import { useSnap } from './use-snap';
 
 /**
  * The tall stage's bar of controls along the bottom, in CSS pixels
@@ -86,7 +87,8 @@ export interface StageProps extends PropsWithChildren {
  * height of its small viewport, `rows` stage pixels down
  * (`data-layout="tall"`, the `tall:` variant), with the text at 17 px or
  * more. Everything inside positions in stage pixels through `--px` and
- * sizes text in em. It provides what it measures through `usePixels`.
+ * sizes text in em, its origin kept on a whole device pixel (`useSnap`).
+ * It provides what it measures through `usePixels`.
  */
 export const Stage = ({
   children,
@@ -118,6 +120,8 @@ export const Stage = ({
     const frame = requestAnimationFrame(() => setSettled(true));
     return () => cancelAnimationFrame(frame);
   }, []);
+  // The origin on a whole device pixel, wherever the page puts it
+  useSnap(root, scale);
   // Focusing the game (a tap on it, or focus arriving from the page)
   // centres the stage in the viewport
   const centre = () =>

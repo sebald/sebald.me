@@ -10,6 +10,7 @@ import {
   fitFor,
   fontSizeFor,
   scaleFor,
+  snapOffset,
   tallFor,
 } from './scale';
 
@@ -88,6 +89,43 @@ describe('scaleFor', () => {
     // An iPhone held upright: drawn at 4 and shown at 3.77, never enlarged
     assert.equal(backingFor(402 / 320, 3), 4);
     assert.equal(backingFor(1.172, 2), BACKING);
+  });
+});
+
+describe('snapOffset', () => {
+  const near = (actual: number, expected: number) =>
+    assert.ok(
+      Math.abs(actual - expected) < 1e-9,
+      `${actual} is not ${expected}`,
+    );
+
+  it('moves a box onto the nearest device pixel', () => {
+    // 143 CSS px at 1.25 is 178.75 device px: on to 179
+    near(snapOffset(143, 1.25), 0.2);
+    // 115 at 1.5 is 172.5: on to 173, a third of a CSS pixel
+    near(snapOffset(115, 1.5), 1 / 3);
+    // 60.785 device px at 2.625: back to 61
+    near(snapOffset(60.785 / 2.625, 2.625), 0.215 / 2.625);
+    near(snapOffset(10.1, 2), -0.1);
+  });
+
+  it('is never more than half a device pixel', () => {
+    for (const dpr of [1, 1.25, 1.5, 2, 2.625, 3])
+      for (let p = 0; p < 50; p += 0.37)
+        assert.ok(Math.abs(snapOffset(p, dpr) * dpr) <= 0.5 + 1e-9);
+  });
+
+  it('leaves a whole position alone at any ratio', () => {
+    for (const dpr of [1, 1.25, 1.5, 2, 2.625, 3]) {
+      assert.equal(snapOffset(0, dpr), 0);
+      assert.equal(snapOffset(8 / dpr, dpr), 0);
+    }
+    // A scale of 4 / 1.5 is stored a hair off: still whole
+    assert.equal(snapOffset(1280 / 1.5 + 1e-9, 1.5), 0);
+  });
+
+  it('moves half a pixel at 1x', () => {
+    assert.equal(Math.abs(snapOffset(160.5, 1)), 0.5);
   });
 });
 

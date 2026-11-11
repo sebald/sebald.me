@@ -143,6 +143,21 @@ export const backingFor = (scale: number, dpr: number): number =>
     : Math.max(BACKING, Math.ceil(scale * dpr));
 
 /**
+ * How far to move a box that starts at `position` (CSS pixels) so it
+ * starts on a whole device pixel: to the nearest one, at most half a
+ * device pixel either way. A crisp stage pixel is only crisp on screen
+ * when the stage's origin is whole too; the scale is snapped
+ * (`crispScale`), the position is wherever the page and its scroll put
+ * it (Chrome scrolls in whole CSS pixels, which at 1.25 or 1.5 are not
+ * whole device pixels).
+ */
+export const snapOffset = (position: number, dpr: number): number => {
+  const offset = Math.round(position * dpr) / dpr - position;
+  // A position already on the grid, give or take the float
+  return Math.abs(offset * dpr) < 1e-3 ? 0 : offset;
+};
+
+/**
  * The overlay's font size at a scale: 16 px at 3x, never below 14 px.
  * The tall stage sets its text by the reader, not by the art: 17 px at
  * least, whatever the scale, since a phone held upright has the room.
