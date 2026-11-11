@@ -1,3 +1,4 @@
+import { bitmapTextSize } from '@sebald/blip-ui';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { describe, it } from 'node:test';
@@ -7,6 +8,8 @@ import { RULES, STAKEHOLDER, type SceneId, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
+  LAYOUT,
+  STAGE,
   roomBox,
   barsLabel,
   bob,
@@ -230,6 +233,33 @@ describe('barsLabel', () => {
       barsLabel({ ...s, scale: -1 }, 'player'),
       'They lead, 1 of 3, momentum 0 of 2',
     );
+  });
+});
+
+describe('the round call', () => {
+  // BitmapText's sizes, in stage pixels a letter pixel
+  const MEDIUM = 3;
+  const DEFAULT = 2;
+
+  it('keeps FLAWLESS on the line of the call, inside the stage', () => {
+    const line =
+      bitmapTextSize('YOU WIN', MEDIUM).width +
+      LAYOUT.call.line +
+      bitmapTextSize('FLAWLESS', DEFAULT).width;
+    const inside = STAGE.width - 2 * LAYOUT.heads.x;
+    assert.ok(line <= inside, `${line} px in ${inside}`);
+  });
+
+  it("stays in the bars' rows, above the tallest head", () => {
+    const height = Math.max(
+      ...['YOU WIN', 'YOU LOSE', 'OFFLINE'].map(
+        word => bitmapTextSize(word, MEDIUM).height,
+      ),
+    );
+    const bottom = LAYOUT.call.y + height;
+    assert.ok(bottom <= LAYOUT.hud, `the call ends at row ${bottom}`);
+    // The tallest head the sheets allow (`sheets.test.ts`)
+    assert.ok(bottom <= LAYOUT.feet - 96, `the call ends at row ${bottom}`);
   });
 });
 
