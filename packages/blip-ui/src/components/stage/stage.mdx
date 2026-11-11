@@ -31,15 +31,27 @@ others pin the scale so they do not fight Storybook's frame):
 | ----------------------- | -------------------------------------------------------------------------- |
 | Wide                    | 3x where it fits with a 24 px gutter, else what the width or height allows |
 | Dense screen            | The scale snaps to whole device pixels (`crispScale`), never under 2.25x   |
+| Between device pixels   | The origin snaps too: moved under a device pixel onto the nearest one      |
 | Short                   | `crop="fit"` takes up to 60 rows of ceiling off the top before it shrinks  |
 | Held upright (portrait) | Tall: the window's width, the height of the small viewport, `rows` rows    |
 | Fullscreen              | No gutter, all of it fits                                                  |
 | Phone on its side       | `turned`, if given, else the stage                                         |
 | Too small (under 2.25x) | `small`, if given, else the stage at 2.25x, wider than the window          |
 
+A crisp stage pixel is only crisp on screen when the stage also starts on a
+whole device pixel. Where it starts is up to the page: the centring, what sits
+above it, and the scroll, which Chrome keeps in whole CSS pixels (at 1.25 and
+1.5, the usual Windows scaling, those fall between device pixels). So the stage
+measures where it is in the viewport and moves itself by the remainder with
+`translate` (`useSnap`, `snapOffset`), again after every scroll, resize and
+change of the device pixel ratio. It does so only when the scale is crisp and
+the ratio is above 1: at 1x the browser snaps the box itself. What is laid over
+the stage (dialogs, notes) is absolute inside it and moves with it; nothing in
+it may be `position: fixed`.
+
 The pure maths is `scaleFor`, `fitFor`, `tallFor`, `crispScale`, `crisp`,
-`backingFor` and `fontSizeFor` in `foundations/scale`, all taking the native
-size.
+`backingFor`, `snapOffset` and `fontSizeFor` in `foundations/scale`, all but
+`snapOffset` taking the native size.
 
 ## What it provides
 
