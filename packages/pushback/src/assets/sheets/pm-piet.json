@@ -13,7 +13,8 @@
         "width": 33,
         "height": 79
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 0
     },
     {
       "box": {
@@ -22,7 +23,8 @@
         "width": 36,
         "height": 79
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 4
     },
     {
       "box": {
@@ -31,7 +33,8 @@
         "width": 42,
         "height": 78
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 4
     },
     {
       "box": {
@@ -40,7 +43,8 @@
         "width": 44,
         "height": 82
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 1
     },
     {
       "box": {
@@ -49,7 +53,8 @@
         "width": 46,
         "height": 87
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 2
     },
     {
       "box": {
@@ -58,7 +63,8 @@
         "width": 31,
         "height": 75
       },
-      "clipped": false
+      "clipped": false,
+      "dx": 2
     }
   ],
   "features": {

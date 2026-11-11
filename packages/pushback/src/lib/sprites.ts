@@ -59,6 +59,13 @@ export interface SheetMeta {
     /** Where the figure sits inside its cell */
     box: Rect;
     clipped: boolean;
+    /**
+     * How far the figure is drawn along its own facing, in whole pixels,
+     * so its feet stand where the idle cell's do (the cutter centres each
+     * figure on its box, which a raised arm widens). 0 on idle; none on
+     * sheets that are not stood on their feet.
+     */
+    dx?: number;
   }[];
   features?: {
     /** The head in the idle cell: the portrait */

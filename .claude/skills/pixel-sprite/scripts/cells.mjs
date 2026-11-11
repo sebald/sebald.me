@@ -251,6 +251,43 @@ export const cutCells = (
   return { data: out, width: stride, height: cell.height, cells };
 };
 
+/** The rows at the bottom of a figure's box that count as its feet */
+export const FEET_ROWS = 6;
+
+/**
+ * The feet's centre in a cell: the mean x of the visible pixels in the
+ * lowest `FEET_ROWS` rows of the figure's `box`, in cell pixels. `rgba`
+ * is the whole sheet, `stride` its width.
+ */
+export const feetCentre = (rgba, stride, index, cell, box) => {
+  const bottom = box.y + box.height;
+  let sum = 0;
+  let count = 0;
+  for (let y = Math.max(0, bottom - FEET_ROWS); y < bottom; y++)
+    for (let x = 0; x < cell.width; x++)
+      if (rgba[(y * stride + index * cell.width + x) * 4 + 3] > 0) {
+        sum += x;
+        count++;
+      }
+  return count ? sum / count : cell.width / 2;
+};
+
+/**
+ * Anchor every cell on the first cell's feet: how far each figure is
+ * drawn along its own facing (`dx`, whole pixels, 0 on the first) so its
+ * feet land where the first cell's do. The cutter centres each figure on
+ * its box, and a raised arm widens the box, so without it the body slides
+ * the other way whenever the pose changes. The PNG keeps the centred cut.
+ * The feet hold on the lose cell too: bowed, they still stand where they
+ * stood.
+ */
+export const anchorOffsets = (rgba, stride, cell, boxes) => {
+  const feet = boxes.map((box, index) =>
+    feetCentre(rgba, stride, index, cell, box),
+  );
+  return feet.map(x => Math.round(feet[0] - x) || 0);
+};
+
 /**
  * Lock the palette: merge the closest pair of colours (weighted by how
  * many pixels use them) until at most `max` are left, then map every

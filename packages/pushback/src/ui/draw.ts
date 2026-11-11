@@ -8,7 +8,7 @@ import { BACKING } from '@sebald/blip-ui';
  * (`Hud`, `Window`, see the screen).
  */
 import type { SceneId } from '../lib/characters';
-import type { Facing } from '../lib/sprites';
+import { type Facing, POSE_CELL } from '../lib/sprites';
 import { BREATH, LAYOUT, STAGE } from '../lib/stage';
 import { PALETTE } from './palette';
 import type { Sprite } from './sheets';
@@ -74,14 +74,21 @@ export interface CellPlace {
   scale?: number;
 }
 
-/** Run `draw` in the cell's own pixels, mirrored about the cell to face left */
+/**
+ * Run `draw` in the pixels of the sprite's `cell`, mirrored about the
+ * cell to face left, and moved by the cell's `dx` so the figure's feet
+ * stand where the idle pose's do. The move is in the cell's own space,
+ * so it turns with the figure.
+ */
 const inCell = (
   ctx: CanvasRenderingContext2D,
   sprite: Sprite,
+  cell: number,
   { x, bottom, facing = 'right', scale = 1 }: CellPlace,
   draw: (scale: number) => void,
 ) => {
   const { width, height } = sprite.meta.cell;
+  const dx = sprite.meta.cells[cell]?.dx ?? 0;
   ctx.save();
   if (facing === 'left') {
     ctx.translate(x + width * scale, bottom - height * scale);
@@ -89,6 +96,7 @@ const inCell = (
   } else {
     ctx.translate(x, bottom - height * scale);
   }
+  ctx.translate(dx * scale, 0);
   draw(scale);
   ctx.restore();
 };
@@ -113,7 +121,7 @@ export const drawCell = (
   place: CellPlace,
   { breath = 0, mouthShut = false }: CellOptions = {},
 ) =>
-  inCell(ctx, sprite, place, scale => {
+  inCell(ctx, sprite, cell, place, scale => {
     const { width, height } = sprite.meta.cell;
     const w = width * scale;
     const h = height * scale;
@@ -175,7 +183,7 @@ export const drawTear = (
 ) => {
   const eye = sprite.meta.features?.eye;
   if (!eye) return;
-  inCell(ctx, sprite, place, scale => {
+  inCell(ctx, sprite, POSE_CELL.lose, place, scale => {
     const x = eye.x * scale;
     const y = (eye.y + 1 + fallen + breath) * scale;
     ctx.fillStyle = TEAR.tail;
