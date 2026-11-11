@@ -1,8 +1,7 @@
 /**
  * The cast, the slot table and the run draw. A character is a face, a
  * name, three intro barks and a sheet; it throws from its whole pool.
- * Difficulty is not on the character but on the slot in the run (see
- * `docs/plans/pushback.md`, "The run").
+ * Difficulty is not on the character but on the slot in the run.
  */
 import {
   BOSS_ANSWERS,
