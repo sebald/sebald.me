@@ -6,11 +6,9 @@ description: Scenes and sprites for the Pushback game (`/lab/pushback`) in the b
 # Pixel sprite
 
 The art pipeline of the Pushback game. Nothing is drawn by hand: Gemini
-renders the image from a prompt in `docs/plans/pushback-prompts.md`, the
-scripts here pull it onto its pixel grid and into the game's formats, and
-the contact prints are reviewed by eye. The spec is `docs/plans/pushback.md`
-("Art and animation"); the pixel-header skill holds the shared `snap.mjs`
-and `loop.mjs`.
+renders the image from a prompt, the scripts here pull it onto its pixel
+grid and into the game's formats, and the contact prints are reviewed by
+eye. The pixel-header skill holds the shared `snap.mjs` and `loop.mjs`.
 
 Renders go to `packages/pushback/src/assets/sources/<id>.jpg` (recompressed,
 committed) with the Gemini original in `sources/originals/` (ignored).

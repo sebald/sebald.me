@@ -1,7 +1,8 @@
 /**
  * Every line in the game: the three pools of phrase/counter pairs, the
- * Stakeholder's phrases, and the barks. The tables in
- * `docs/plans/pushback-lines.md` are the source; this file has to match them.
+ * Stakeholder's phrases, and the barks. This file is the source of every
+ * line; `lines.test.ts` checks their length and that no two counters of a
+ * pool open the same way.
  *
  * Rules for a line: role-neutral (never names the target's role), under
  * 70 characters, no names, and a counter has to read as a reply even out
