@@ -9,8 +9,8 @@ import { createRequire } from 'node:module';
 import { join, resolve } from 'node:path';
 import { describe, it } from 'node:test';
 
-import { SHEET_IDS, type SheetMeta } from './sprites';
-import { LAYOUT } from './stage';
+import { POSE_CELL, type Pose, SHEET_IDS, type SheetMeta } from './sprites';
+import { LAYOUT, poseOffset } from './stage';
 
 const require = createRequire(import.meta.url);
 const sharp = createRequire(require.resolve('next/package.json'))('sharp');
@@ -73,6 +73,73 @@ describe('model sheets', () => {
       assert.equal(width, LAYOUT.cell.width * 6);
       assert.equal(height, LAYOUT.cell.height);
       assert.ok(colours(data).size <= PALETTE);
+    });
+  }
+});
+
+/** The feet rows of `anchorOffsets` (`cells.mjs`) */
+const FEET_ROWS = 6;
+
+/** The mean x of the visible pixels in the lowest rows of a cell's box */
+const feetCentre = (
+  data: Buffer,
+  stride: number,
+  index: number,
+  { box }: SheetMeta['cells'][number],
+) => {
+  let sum = 0;
+  let count = 0;
+  for (let y = box.y + box.height - FEET_ROWS; y < box.y + box.height; y++)
+    for (let x = 0; x < LAYOUT.cell.width; x++)
+      if (data[(y * stride + index * LAYOUT.cell.width + x) * 4 + 3]! > 0) {
+        sum += x;
+        count++;
+      }
+  return sum / count;
+};
+
+/** The furthest a pose steps, forward (+) and back (-): the mic-drop taunt, the flinch */
+const steps = (pose: Pose) => {
+  const all = [
+    poseOffset(pose, 10_000, 1).dx,
+    poseOffset(pose, 10_000, 1, true).dx,
+    poseOffset(pose, 0, 1).dx,
+  ];
+  return { forward: Math.max(0, ...all), back: Math.min(0, ...all) };
+};
+
+describe('every pose anchored on the feet', () => {
+  for (const id of SHEET_IDS) {
+    it(`${id}: every pose stands where the idle pose stands`, async () => {
+      const m = meta(id);
+      const { data, width } = await pixels(id);
+      const idle = feetCentre(data, width, 0, m.cells[0]!);
+      m.cells.forEach((cell, index) => {
+        const feet = feetCentre(data, width, index, cell) + cell.dx!;
+        assert.ok(
+          Math.abs(feet - idle) <= 1,
+          `cell ${index}: feet at ${feet.toFixed(1)}, idle at ${idle.toFixed(1)}`,
+        );
+      });
+    });
+
+    it(`${id}: dx is a whole number on every cell and 0 on idle`, () => {
+      const m = meta(id);
+      for (const cell of m.cells) assert.ok(Number.isInteger(cell.dx));
+      assert.equal(m.cells[POSE_CELL.idle]!.dx, 0);
+    });
+
+    it(`${id}: the shifted figure stays inside its cell, steps included`, () => {
+      const m = meta(id);
+      for (const [pose, index] of Object.entries(POSE_CELL)) {
+        const { box, dx } = m.cells[index]!;
+        const { forward, back } = steps(pose as Pose);
+        assert.ok(box.x + dx! + back >= 0, `${pose}: off the back edge`);
+        assert.ok(
+          box.x + box.width + dx! + forward <= m.cell.width,
+          `${pose}: off the front edge`,
+        );
+      }
     });
   }
 });

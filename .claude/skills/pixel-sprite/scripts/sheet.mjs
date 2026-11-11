@@ -23,6 +23,7 @@ import { parseArgs } from 'node:util';
 
 import { sharp } from '../../pixel-header/scripts/sharp.mjs';
 import {
+  anchorOffsets,
   borderColour,
   cutCells,
   findFigures,
@@ -173,6 +174,18 @@ for (const patch of patches ?? []) {
   }
 }
 
+// Anchor each cell on the first cell's feet (after the patches, which can
+// clear pixels), for figures stood on the bottom row; items have no feet
+if (values.anchor === 'bottom') {
+  const offsets = anchorOffsets(
+    sheet.data,
+    sheet.width,
+    cell,
+    sheet.cells.map(c => c.box),
+  );
+  sheet.cells.forEach((c, i) => (c.dx = offsets[i]));
+}
+
 // Write. The palette is locked here, not by sharp: the sharp that ships
 // with Next has no quantiser, `palette: true` is a no-op
 const palette = quantise(sheet.data, Number(values.colours));
@@ -190,7 +203,7 @@ await writeFile(
       cell,
       count: sheet.cells.length,
       background: background.map(v => v.toString(16).padStart(2, '0')).join(''),
-      cells: sheet.cells.map(({ box, clipped }) => ({ box, clipped })),
+      cells: sheet.cells.map(({ box, clipped, dx }) => ({ box, clipped, dx })),
     },
     null,
     2,

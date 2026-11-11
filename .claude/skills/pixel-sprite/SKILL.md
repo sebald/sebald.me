@@ -77,10 +77,15 @@ What it does, in order:
    reaching into the next figure's columns is still only copied once.
 4. Each figure is centred in its cell and stood on the bottom row
    (`--anchor bottom`, the feet line), or centred (`centre`, items).
+   Stood figures are then anchored on the feet: each cell gets a `dx`,
+   the idle cell's feet centre minus its own (the mean x of the lowest
+   6 rows), which the game draws the figure along its facing so every
+   pose stands where idle does. Centring on the box alone moves the body
+   away from a raised arm; the PNG keeps the centred cut.
 5. The palette is locked to `--colours` (32) by merging the closest
    shades; the sharp that ships with Next has no quantiser.
 6. Written: `sheets/<id>.png` (RGBA, cells in a row), `sheets/<id>.json`
-   (cell size, count, each figure's box) and the contact print at 4x in
+   (cell size, count, each figure's box and `dx`) and the contact print at 4x in
    `sources/contact/<id>.png`, plus `<id>-keyed.png`, the keyed render with
    the background in magenta, to see what the key took.
 
@@ -106,6 +111,19 @@ its own and dark shoes lie inside the feet rows, so both stay. Every
 person sheet has had it except Kim (`designer-kim`), whose trousers are
 drawn in the background's own shades and whose legs touch; check the
 sheet at 4x on a bright colour after each run.
+
+### Anchor
+
+A sheet cut before the feet anchor, or a PNG edited by hand, gets its
+`dx` from the PNG alone (only the JSON is written):
+
+```sh
+node .claude/skills/pixel-sprite/scripts/anchor.mjs [id ...]
+```
+
+`sheets.test.ts` fails when a pose's feet plus its `dx` are more than a
+pixel from the idle pose's, or when the shifted figure (with the taunt's
+and the flinch's step) leaves its cell.
 
 ### Features
 
