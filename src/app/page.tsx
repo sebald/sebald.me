@@ -151,7 +151,10 @@ const CurrentWork = () => (
         <Text>
           Reservix&apos;s open-source design system. One shared design language
           for all our products, and the way we&apos;re modernizing our oldest
-          systems.
+          systems. Much of our work goes into guidelines, patterns and
+          accessibility, so anyone can build good screens, even without design
+          experience. AI tools read the same docs and support everyone in using
+          it well.
         </Text>
         <Link href={MARIGOLD} className={entryLink}>
           <ArrowRightIcon weight="bold" aria-hidden />
