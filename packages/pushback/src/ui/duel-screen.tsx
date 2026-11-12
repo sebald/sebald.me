@@ -125,6 +125,13 @@ const HOLD_MS = 250;
 const WINDOW_HEIGHT = LAYOUT.panel.y + LAYOUT.panel.height - (LAYOUT.feet + 2);
 
 /**
+ * The window's sides, two columns in from the panel's: the room's
+ * reflection on the ground (`Reflection`) shows beside it over five
+ * columns, enough to read as the floor fading out, not a ragged edge
+ */
+const WINDOW_X = LAYOUT.panel.x + 2;
+
+/**
  * Held upright: the window's top, a little air under the room, and the
  * least it is tall in CSS pixels, enough for a phrase and most menus, so
  * it keeps its size from line to menu; a longer menu grows it to the bar
@@ -978,8 +985,8 @@ export const DuelScreen = ({
         style={
           tall
             ? {
-                left: px(LAYOUT.panel.x),
-                right: px(LAYOUT.panel.x),
+                left: px(WINDOW_X),
+                right: px(WINDOW_X),
                 top: px(TALL_TOP),
                 height: room
                   ? `max(${tallest}px, ${room.need}px)`
@@ -987,8 +994,8 @@ export const DuelScreen = ({
                 maxHeight: `calc(100% - ${px(TALL_TOP + 3)} - var(--bui-bar))`,
               }
             : {
-                left: px(LAYOUT.panel.x),
-                right: px(LAYOUT.panel.x),
+                left: px(WINDOW_X),
+                right: px(WINDOW_X),
                 bottom: px(
                   STAGE.height - (LAYOUT.panel.y + LAYOUT.panel.height),
                 ),
