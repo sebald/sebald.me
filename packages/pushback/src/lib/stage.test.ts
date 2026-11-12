@@ -50,6 +50,35 @@ describe('bars', () => {
     assert.equal(boss.steps, 7);
     assert.equal(boss.spark, boss.x + 3 * boss.step);
   });
+
+  it('notches the beam between its steps, not at its ends', () => {
+    for (const [toWin, toLose] of [
+      [3, 3],
+      [4, 3],
+    ] as const) {
+      const beam = scaleBeam({ scale: 0, toWin, toLose });
+      assert.equal(beam.notches.length, beam.steps - 1);
+      // The last column of each step but the last
+      assert.deepEqual(
+        beam.notches,
+        Array.from(
+          { length: beam.steps - 1 },
+          (_, i) => beam.x + (i + 1) * beam.step - 1,
+        ),
+      );
+      assert.ok(beam.notches.every(n => n > beam.x));
+      assert.ok(beam.notches.every(n => n < beam.x + beam.width - 1));
+    }
+  });
+
+  it('gives the name plates a whole number of rows, as tall as the pips or taller', () => {
+    assert.ok(Number.isInteger(LAYOUT.names.height));
+    assert.ok(LAYOUT.names.height >= LAYOUT.pips.height);
+    // Centred on each other: the pips start on a whole row
+    assert.ok(Number.isInteger((LAYOUT.names.height - LAYOUT.pips.height) / 2));
+    // Clear of the round's call and inside the bars' rows
+    assert.ok(LAYOUT.names.y + LAYOUT.names.height <= LAYOUT.hud);
+  });
 });
 
 describe('typing', () => {
