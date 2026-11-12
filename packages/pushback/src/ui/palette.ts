@@ -81,10 +81,6 @@ export const PALETTE = {
   /** Its paper, and the dithered row of shade along its bottom */
   paper: '#f6f3e8',
   paperShade: '#cfc9b6',
-
-  // The placeholder room, until a scene loop has loaded
-  wall: '#2e3a4a',
-  floor: '#23292f',
 } as const;
 
 export type PaletteKey = keyof typeof PALETTE;

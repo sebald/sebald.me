@@ -128,6 +128,14 @@ export const loadSprite = (key: SheetKey): Promise<Sprite> => {
   return pending;
 };
 
+/**
+ * Start building sheets a later screen needs, so they are drawn when it
+ * opens; nothing waits for them
+ */
+export const preloadSprites = (keys: Iterable<SheetKey>) => {
+  for (const key of keys) loadSprite(key).catch(() => {});
+};
+
 /** What a piece needs: sprites by sheet */
 export type Sprites = Partial<Record<SheetKey, Sprite>>;
 

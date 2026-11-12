@@ -3,7 +3,6 @@
 import { useClock, usePixels } from '@sebald/blip-ui';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import type { Side } from '../lib/duel';
 import {
   type Facing,
   type Pose,
@@ -17,13 +16,6 @@ import { LAYOUT, breathFrame, poseOffset } from '../lib/stage';
 import { drawCell, drawTear } from './draw';
 import { useSprites } from './sheets';
 import { cn } from './styles.utils';
-
-/** Placeholder colours, until the sprite is built */
-const PLACEHOLDER: Record<Side, { body: string; head: string; light: string }> =
-  {
-    player: { body: '#2f8f8a', head: '#d9b38c', light: '#7fd6d0' },
-    opponent: { body: '#c0622f', head: '#e3c2a0', light: '#f0a36f' },
-  };
 
 export interface CharacterProps {
   /** The sheet: a look's, or a colleague's */
@@ -45,8 +37,6 @@ export interface CharacterProps {
   feet?: number;
   /** No animation at all: the resting frame of the pose */
   still?: boolean;
-  /** Which placeholder to draw until the sprite is built */
-  side?: Side;
   className?: string;
 }
 
@@ -67,7 +57,6 @@ export const Character = ({
   x,
   feet = LAYOUT.feet,
   still = false,
-  side = 'player',
   className,
 }: CharacterProps) => {
   const { backing } = usePixels();
@@ -89,21 +78,10 @@ export const Character = ({
     const offset = still
       ? { dx: 0, dy: 0, lighter: false, hidden: false }
       : poseOffset(pose, elapsed, facing === 'left' ? -1 : 1, micDrop);
-    // A flicker frame of a flinch: the cell stays clear
-    if (offset.hidden) return;
+    // A flicker frame of a flinch, or the sheet not built yet: the cell
+    // stays clear
+    if (offset.hidden || !sprite) return;
     const bottom = height + offset.dy;
-    if (!sprite) {
-      const colours = PLACEHOLDER[side];
-      const cx = offset.dx + Math.floor(width / 2);
-      const body = offset.lighter ? colours.light : colours.body;
-      ctx.fillStyle = body;
-      ctx.fillRect(cx - 12, bottom - 24, 10, 24);
-      ctx.fillRect(cx + 2, bottom - 24, 10, 24);
-      ctx.fillRect(cx - 15, bottom - 76, 30, 52);
-      ctx.fillStyle = offset.lighter ? colours.light : colours.head;
-      ctx.fillRect(cx - 11, bottom - 100, 22, 22);
-      return;
-    }
     const cell = cellFor(pose);
     const breath = still ? 0 : breathFrame(pose, clock);
     const place = { x: offset.dx, bottom, facing };
@@ -137,7 +115,6 @@ export const Character = ({
     typing,
     micDrop,
     still,
-    side,
   ]);
 
   return (

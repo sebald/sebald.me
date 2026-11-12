@@ -30,6 +30,7 @@ import {
   type Role,
   poolPairs,
 } from '../lib/lines';
+import { SHEET_IDS } from '../lib/sprites';
 import { STAGE, TITLE_VIEW } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
@@ -37,6 +38,7 @@ import { endMask } from './dither';
 import { Room } from './frame';
 import { Glossary } from './glossary';
 import { Options, type SaveSummary } from './options';
+import { preloadSprites } from './sheets';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
 
@@ -214,6 +216,10 @@ export const TitleScreen = ({
     if (!open) say(call);
   }, [open, call, say]);
   const { tall } = useScale();
+
+  // While the title waits for a key: the whole cast (about 90 KB), so
+  // Pick a role and the first duel open on drawn figures and faces
+  useEffect(() => preloadSprites(SHEET_IDS), []);
 
   // Attract mode: a key or a tap resets the clock, silence starts the demo
   useIdle(ATTRACT_AFTER_MS, () => onAttract?.(), Boolean(onAttract));

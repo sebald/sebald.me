@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  usePixels,
   Legend,
   Picker,
   PickerItem,
@@ -9,13 +10,13 @@ import {
   stampSize,
   Window,
 } from '@sebald/blip-ui';
-import { type PropsWithChildren, type ReactNode } from 'react';
+import { type PropsWithChildren, type ReactNode, useEffect } from 'react';
 
-import { bossIndex, characterById } from '../lib/characters';
+import { SCENE_OF, bossIndex, characterById } from '../lib/characters';
 import { ROLE_LABELS } from '../lib/lines';
 import { type RunState, bossUnlocked, canPlay, nextSlot } from '../lib/run';
 import { Controls, useBack } from './controls';
-import { Backdrop } from './frame';
+import { Backdrop, preloadRoom } from './frame';
 import { PALETTE } from './palette';
 import { Portrait } from './portrait';
 import { Stage, px } from './stage';
@@ -103,6 +104,16 @@ export const RosterScreen = ({
   onBack,
 }: RosterScreenProps) => {
   const next = nextSlot(run);
+
+  // The next duel's room, so the duel opens in it (the title has
+  // loaded the cast)
+  const { crisp } = usePixels();
+  const nextCharacter = next >= 0 ? run.run.slots[next]!.character : null;
+  useEffect(() => {
+    if (!nextCharacter) return;
+    const character = characterById(nextCharacter);
+    preloadRoom(SCENE_OF[character.role], crisp);
+  }, [nextCharacter, crisp]);
 
   const back = useBack(onBack);
 

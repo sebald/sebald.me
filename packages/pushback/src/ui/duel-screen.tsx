@@ -524,7 +524,6 @@ export const DuelScreen = ({
         micDrop={micDropBy('player')}
         x={standX.player}
         still={reduced}
-        side="player"
       />
       <Character
         sheet={character.sheet}
@@ -534,7 +533,6 @@ export const DuelScreen = ({
         facing="left"
         x={standX.opponent}
         still={reduced}
-        side="opponent"
       />
     </>
   );
