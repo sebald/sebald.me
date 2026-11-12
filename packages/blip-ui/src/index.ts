@@ -15,6 +15,12 @@ export {
   endMask,
   fadeMask,
 } from './foundations/dither';
+export {
+  MOTION_EASE,
+  MOTION_MS,
+  glidingArt,
+  transitionFaults,
+} from './foundations/motion';
 export { DOT, FLOOR, SPACE, UNIT, px } from './foundations/pixel';
 export {
   BACKING,

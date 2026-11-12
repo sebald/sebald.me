@@ -55,7 +55,9 @@ export const Room = ({ scene, view }: RoomProps) => {
     <picture
       key={key}
       className={cn(
-        'absolute transition-opacity duration-300',
+        // In from the ground once loaded, a fade that stays under
+        // reduced motion
+        'absolute transition-opacity duration-250 ease-bui-out',
         loaded === key ? 'opacity-100' : 'opacity-0',
       )}
       style={{

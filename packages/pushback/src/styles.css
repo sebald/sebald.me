@@ -23,22 +23,10 @@
   text-box: normal;
 }
 
-/* The game's motion: stepped, in whole pixels where it moves */
+/* The game's art in motion: stepped, in whole pixels where it moves,
+   like the sprites (Blip UI's rule, `building-components.mdx`); the
+   stage's jolts and flashes are the kit's (`animate-bui-*`) */
 @theme {
-  /* The arcade blink, half a second on, half off, no fade; how
-     low it goes is --blink-low (0.6 by default, 0 for a full blink) */
-  @keyframes arcade-blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: var(--blink-low, 0.6);
-    }
-  }
-
-  --animate-arcade-blink: arcade-blink 1s steps(1) infinite;
-
   /* YOU WIN slamming in from three times its size, in five
      steps, so it lands in near-whole pixels */
   @keyframes call-slam {
@@ -52,8 +40,10 @@
 
   --animate-call-slam: call-slam 160ms steps(5) both;
 
-  /* YOU LOSE dropping in from above the stage, faster as it
-     falls */
+  /* YOU LOSE dropping in from above the stage, faster as it falls:
+     the one piece of art that glides. Stepped on the game's frame, both
+     in-air frames are above the stage and it only appears; its gravity
+     is what lands it on the stage's thud */
   @keyframes call-drop {
     from {
       translate: 0 calc(var(--px, 2px) * -110);
@@ -74,65 +64,6 @@
   }
 
   --animate-call-sag: call-sag 240ms steps(4) both;
-
-  /* Something shown at once after its delay, set inline: a
-     letter of the flawless line, a menu once its window has grown */
-  @keyframes appear {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-
-  --animate-appear: appear 10ms steps(1) both;
-
-  /* The whole stage jolted as YOU WIN lands, in whole pixels,
-     smaller each time; held back until the landing */
-  @keyframes stage-shake {
-    0% {
-      translate: calc(var(--px, 2px) * -3) var(--px, 2px);
-    }
-    25% {
-      translate: calc(var(--px, 2px) * 2) calc(var(--px, 2px) * -2);
-    }
-    50% {
-      translate: calc(var(--px, 2px) * -1) var(--px, 2px);
-    }
-    75% {
-      translate: var(--px, 2px) 0;
-    }
-    100% {
-      translate: 0 0;
-    }
-  }
-
-  --animate-stage-shake: stage-shake 200ms steps(1) 160ms both;
-
-  /* The stage knocked down a pixel as YOU LOSE lands */
-  @keyframes stage-thud {
-    0% {
-      translate: 0 var(--px, 2px);
-    }
-    100% {
-      translate: 0 0;
-    }
-  }
-
-  --animate-stage-thud: stage-thud 120ms steps(1) 380ms both;
-
-  /* The white flash of the deciding blow, one frame and gone */
-  @keyframes end-flash {
-    from {
-      opacity: 0.85;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-
-  --animate-end-flash: end-flash 180ms steps(2) both;
 
   /* A sparkle by a flawless call, in and out in three steps */
   @keyframes call-sparkle {

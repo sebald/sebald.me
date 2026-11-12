@@ -274,7 +274,9 @@ export const TitleScreen = ({
           at once where it was when the window closes */}
       <h2
         className={cn(
-          'absolute left-1/2 m-0 w-max -translate-x-1/2 transition-[top] duration-500 ease-out motion-reduce:transition-none',
+          // Up to the menu across the stage, by its top: a transform
+          // would draw the logo between device pixels at a scale like 2.25
+          'absolute left-1/2 m-0 w-max -translate-x-1/2 transition-[top] duration-300 ease-bui-in-out motion-reduce:transition-none',
           view === 'how' && 'invisible',
         )}
         style={{

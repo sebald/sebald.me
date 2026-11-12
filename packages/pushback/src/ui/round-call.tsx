@@ -144,7 +144,7 @@ export const RoundCall = ({ call, className, style }: RoundCallProps) => {
           <BitmapText
             variant="spark"
             className={cn(
-              '*:animate-appear *:motion-reduce:animate-none',
+              '*:animate-bui-appear *:motion-reduce:animate-none',
               '*:[animation-delay:calc(var(--line-from)+var(--i)*var(--line-each))]',
             )}
             style={

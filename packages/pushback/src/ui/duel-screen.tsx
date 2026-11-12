@@ -848,7 +848,7 @@ export const DuelScreen = ({
                 : // A menu that grows the window shows once it has grown
                   growing &&
                     !sizing &&
-                    'animate-appear [animation-delay:200ms]',
+                    'animate-bui-appear [animation-delay:200ms]',
             )}
           >
             {/* The prompt sits above the options, with room on both sides */}
@@ -903,10 +903,13 @@ export const DuelScreen = ({
       paused={paused || holding}
       label={`Pushback, duel against ${character.name}`}
       lift={tall ? tallLift(rows, shownScale, tallest) : 0}
-      // The stage jolts as the call lands
+      // The stage jolts as the call lands: YOU WIN's slam (160 ms), YOU
+      // LOSE's drop (380 ms)
       className={cn(
         called &&
-          (won ? 'animate-stage-shake' : 'animate-stage-thud') +
+          (won
+            ? 'animate-bui-shake [animation-delay:160ms]'
+            : 'animate-bui-thud [animation-delay:380ms]') +
             ' motion-reduce:animate-none',
         className,
       )}
@@ -926,9 +929,10 @@ export const DuelScreen = ({
         heads={{ player: playerSheet, opponent: character.sheet }}
         crop={crop}
         still={reduced}
-        // The duel is decided: the bars step out for the call
+        // The duel is decided: the bars make way for the call, a fade
+        // that stays under reduced motion
         className={cn(
-          'transition-opacity duration-300 motion-reduce:transition-none',
+          'transition-opacity duration-200 ease-bui-out',
           called && 'opacity-0',
         )}
       />
@@ -940,7 +944,7 @@ export const DuelScreen = ({
       {blow && !reduced && (
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 animate-end-flash bg-(--pb-spark)"
+          className="pointer-events-none absolute inset-0 animate-bui-flash bg-(--pb-spark)"
         />
       )}
 
@@ -967,9 +971,10 @@ export const DuelScreen = ({
       />
 
       {/* The window and the ghost perched on its corner, which moves
-          up with it when a long menu grows the window */}
+          up with it when a long menu grows the window: its height, as
+          an accordion's, the one size a transform can't stand in for */}
       <div
-        className="absolute flex flex-col transition-[height] duration-200 ease-out motion-reduce:transition-none"
+        className="absolute flex flex-col transition-[height] duration-200 ease-bui-out motion-reduce:transition-none"
         style={
           tall
             ? {
