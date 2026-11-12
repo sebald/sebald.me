@@ -184,8 +184,8 @@ export const Options = ({
             onMode(asking);
           }}
         >
-          A run is played in one mode, so switching starts over:{' '}
-          {list(losses(save))} go.
+          A run is played in one mode, so switching starts over and deletes{' '}
+          {list(losses(save))}.
         </Confirm>
       )}
     </Dialog>

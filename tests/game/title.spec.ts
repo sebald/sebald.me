@@ -1,3 +1,5 @@
+import type { Page } from '@playwright/test';
+import type { Save } from '@sebald/pushback/lib/save';
 import { SHEET_IDS } from '@sebald/pushback/lib/sprites';
 
 import {
@@ -5,7 +7,10 @@ import {
   current,
   expect,
   open,
+  openWith,
+  press,
   said,
+  saveWith,
   screen,
   test,
   toMenu,
@@ -104,6 +109,33 @@ test.describe('the title', () => {
     await expect(
       screen(page).getByRole('button', { name: 'Mode Normal' }),
     ).toBeVisible();
+  });
+
+  /** Options on a save, the mode switched: the question it asks first */
+  const switchMode = async (page: Page, save: Save) => {
+    await openWith(page, save);
+    await press(page, 'Enter');
+    await choose(page, 'Options');
+    await page.keyboard.press('ArrowRight');
+    const dialog = page.getByRole('alertdialog');
+    await expect(dialog).toBeVisible();
+    return dialog;
+  };
+
+  test('switching the mode with a run in play says it goes', async ({
+    page,
+  }) => {
+    await expect(await switchMode(page, saveWith())).toContainText(
+      'so switching starts over and deletes your run as PM.',
+    );
+  });
+
+  test('switching the mode lists everything it deletes', async ({ page }) => {
+    await expect(
+      await switchMode(page, saveWith({ glossary: true })),
+    ).toContainText(
+      /so switching starts over and deletes your run as PM and \d+ collected lines\./,
+    );
   });
 
   test('M mutes and unmutes, anywhere', async ({ page }) => {
