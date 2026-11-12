@@ -91,10 +91,16 @@ export const LAYOUT = {
   /**
    * The duellists' faces in the corners, the beam's top on their
    * frame's (the spark's two pixels above it stay clear of the stage's
-   * edge): the
-   * 24 px head square at two thirds (16 px, two screen pixels a sprite
-   * pixel at 3x, so it stays sharp), this far in from the stage's edge,
-   * the beam this far from the faces
+   * edge): the 24 px head square at two thirds, 16 px, this far in from
+   * the stage's edge, the beam this far from the faces.
+   *
+   * Two thirds is even only where a stage pixel is a multiple of three
+   * device pixels: 3x on a 1x screen (two a face pixel) or on a 2x one
+   * (four). At 2.5 on a 2x screen (a window 800 to 959 wide) a face pixel
+   * is 3⅓ device pixels, so its columns run 3 and 4 wide. Kept: it only
+   * shows enlarged, and a 16 px crop of every head drawn at 1x would cost
+   * each face its hair or chin. Like the logo at 1.25x, a
+   * deliberate exception to whole-pixel art.
    */
   heads: { x: 6, y: 5, scale: 2 / 3, size: 16, gap: 4 },
   /** Momentum pips after the names */
