@@ -269,10 +269,13 @@ export const TitleScreen = ({
         <div className="absolute inset-0 bg-(--pb-bg)/15" />
       </div>
       {/* As wide as the logo: placed from the middle, a heading would
-          only get half the stage, and the logo would be squeezed to it */}
+          only get half the stage, and the logo would be squeezed to it.
+          How to play takes its place: hidden, not moved, so it is back
+          at once where it was when the window closes */}
       <h2
         className={cn(
           'absolute left-1/2 m-0 w-max -translate-x-1/2 transition-[top] duration-500 ease-out motion-reduce:transition-none',
+          view === 'how' && 'invisible',
         )}
         style={{
           top: px(tall ? TALL.logo : open ? LOGO_TOP.menu : LOGO_TOP.splash),
