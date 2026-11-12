@@ -99,8 +99,11 @@ export const LAYOUT = {
   heads: { x: 6, y: 5, scale: 2 / 3, size: 16, gap: 4 },
   /** Momentum pips after the names */
   pips: { width: 8, height: 5, gap: 2 },
-  /** The names under the beam, at its ends */
-  names: { y: 12 },
+  /**
+   * The names under the beam, at its ends: a plate this tall, the text
+   * centred in it, the pips beside it on its top edge
+   */
+  names: { y: 12, height: 9 },
   /** Rows the bars take at the top: a window never grows over them */
   hud: 30,
   /**
@@ -143,6 +146,11 @@ export interface Beam {
   steps: number;
   /** Where the two beams meet: the gold one ends, the ember one starts */
   spark: number;
+  /**
+   * The column of each notch, the last of a step, so the steps can be
+   * counted: between steps only, none at either end
+   */
+  notches: number[];
 }
 
 /**
@@ -175,6 +183,10 @@ export const scaleBeam = (options: {
     step,
     steps,
     spark: x + at * step,
+    notches: Array.from(
+      { length: steps - 1 },
+      (_, i) => x + (i + 1) * step - 1,
+    ),
   };
 };
 

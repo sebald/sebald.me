@@ -16,13 +16,13 @@ const styles = {
       'font-semibold tracking-wide uppercase',
       // Held upright the text is set for reading: the names step back
       'tall:text-[0.72em]',
-      'bg-(--pb-ink)/85 px-[calc(var(--px)*2)] py-[calc(var(--px)*0.5)]',
+      'flex items-center bg-(--pb-ink) px-[calc(var(--px)*2)] leading-none',
       'shadow-[0_0_0_var(--px)_var(--pb-ink)]',
     ],
     variants: {
       side: {
         player: 'text-(--pb-gold)',
-        opponent: 'text-right text-(--pb-ember)',
+        opponent: 'justify-end text-(--pb-ember)',
       },
     },
   }),
@@ -109,7 +109,7 @@ const SLIDE =
 
 /**
  * The shared scale as a beam clash: gold from the player's end, ember
- * from the opponent's, a notch every step, meeting at a white spark,
+ * from the opponent's, a notch between steps, meeting at a white spark,
  * and each duellist's face in the corner at its own end, framed in its
  * colour, so the beam says whose is whose.
  */
@@ -120,7 +120,7 @@ const ScaleBeam = ({
   beam: ReturnType<typeof scaleBeam>;
   heads?: Record<Side, SheetId>;
 }) => {
-  const { x, y, width, height, step, spark } = beam;
+  const { x, y, width, height, spark, notches } = beam;
   // A duellist's face in its corner, framed in its side's colour
   const head = (side: Side, sheet: SheetId) => {
     const { x: inset, y: top, size } = LAYOUT.heads;
@@ -174,17 +174,20 @@ const ScaleBeam = ({
           background: lit('opponent'),
         }}
       />
-      {/* A notch of ink at every step, so the steps can be counted */}
-      <span
-        className="absolute"
-        style={{
-          left: px(x),
-          top: px(y + 1),
-          width: px(width),
-          height: px(height - 2),
-          backgroundImage: `repeating-linear-gradient(90deg, transparent 0 calc(var(--px) * ${step - 1}), color-mix(in srgb, ${PALETTE.ink} 45%, transparent) calc(var(--px) * ${step - 1}) calc(var(--px) * ${step}))`,
-        }}
-      />
+      {/* A notch of ink between the steps, so they can be counted */}
+      {notches.map(notch => (
+        <span
+          key={notch}
+          className="absolute"
+          style={{
+            left: px(notch),
+            top: px(y + 1),
+            width: px(1),
+            height: px(height - 2),
+            background: `color-mix(in srgb, ${PALETTE.ink} 45%, transparent)`,
+          }}
+        />
+      ))}
       {heads && (
         <>
           {head('player', heads.player)}
@@ -262,6 +265,7 @@ export const Hud = ({
     return (
       <span
         className={cn(
+          // The pips hang from the plate's top edge, a bar level with the name
           'absolute flex items-start',
           side === 'opponent' && 'flex-row-reverse',
         )}
@@ -273,7 +277,12 @@ export const Hud = ({
             : { right: px(STAGE.width - beam.x - beam.width) }),
         }}
       >
-        <span className={styles.name({ side })}>{names[side]}</span>
+        <span
+          className={styles.name({ side })}
+          style={{ height: px(LAYOUT.names.height) }}
+        >
+          {names[side]}
+        </span>
         {/* Filling from the name outward */}
         <span
           className={cn('flex', side === 'opponent' && 'flex-row-reverse')}
