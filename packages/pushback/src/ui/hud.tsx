@@ -265,7 +265,8 @@ export const Hud = ({
     return (
       <span
         className={cn(
-          'absolute flex items-center',
+          // The pips hang from the plate's top edge, a bar level with the name
+          'absolute flex items-start',
           side === 'opponent' && 'flex-row-reverse',
         )}
         style={{

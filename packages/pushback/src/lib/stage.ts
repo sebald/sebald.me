@@ -101,7 +101,7 @@ export const LAYOUT = {
   pips: { width: 8, height: 5, gap: 2 },
   /**
    * The names under the beam, at its ends: a plate this tall, the text
-   * centred in it, the pips centred beside it
+   * centred in it, the pips beside it on its top edge
    */
   names: { y: 12, height: 9 },
   /** Rows the bars take at the top: a window never grows over them */

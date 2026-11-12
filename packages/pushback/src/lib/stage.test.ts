@@ -74,8 +74,6 @@ describe('bars', () => {
   it('gives the name plates a whole number of rows, as tall as the pips or taller', () => {
     assert.ok(Number.isInteger(LAYOUT.names.height));
     assert.ok(LAYOUT.names.height >= LAYOUT.pips.height);
-    // Centred on each other: the pips start on a whole row
-    assert.ok(Number.isInteger((LAYOUT.names.height - LAYOUT.pips.height) / 2));
     // Clear of the round's call and inside the bars' rows
     assert.ok(LAYOUT.names.y + LAYOUT.names.height <= LAYOUT.hud);
   });
