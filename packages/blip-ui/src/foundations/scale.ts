@@ -60,6 +60,11 @@ export const scaleFor = (
  * fraction (snapping there would only shrink the game), and so does a
  * scale that would fall under `min` (`MIN_SCALE`; the tall stage, which
  * sets its text by the reader, takes `TALL_MIN_SCALE`).
+ *
+ * Accepted: on a 1x screen a window too narrow for 3x (about 770 to 960
+ * px) shows the game at a fraction, evenly soft. The whole scale under
+ * it, 2, is under `MIN_SCALE`, and fitting every screen's words at 2
+ * would take re-laying all of them for a window size few 1x screens use.
  */
 export const crispScale = (
   scale: number,
