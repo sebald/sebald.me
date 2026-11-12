@@ -6,11 +6,11 @@ export const setting = {
   }),
   /** Left or right of the value: a pixel triangle, dim at the end it cannot go past */
   step: cva({
-    base: 'inline-block h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] bg-current',
+    base: 'inline-block h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)]',
     variants: {
       points: {
-        left: '[clip-path:polygon(100%_0,0_50%,100%_100%)]',
-        right: '[clip-path:polygon(0_0,100%_50%,0_100%)]',
+        left: 'bui-point-left',
+        right: 'bui-point-right',
       },
       more: { true: '', false: 'bui-disabled' },
     },
