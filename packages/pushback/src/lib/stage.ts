@@ -55,6 +55,22 @@ export const roomBox = (scene: SceneId) => {
   };
 };
 
+/**
+ * The corner office behind the title, one room pixel a stage pixel, so
+ * it takes the crisp frames like the duel's band: the middle 320 of the
+ * room's columns, from its top row down. The room is shorter than the
+ * stage; `rows` is how many of the stage's rows it fills, the rest under
+ * it is the floor's flat colour.
+ */
+export const TITLE_VIEW = (() => {
+  const box = roomBox('office');
+  return {
+    x: box.x + Math.floor((box.width - STAGE.width) / 2),
+    y: box.y,
+    rows: Math.min(box.height, STAGE.height),
+  };
+})();
+
 /** Where everything goes, in stage pixels */
 export const LAYOUT = {
   /** The room band: rows 0 to 133 */

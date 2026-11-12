@@ -10,6 +10,7 @@ import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
   LAYOUT,
   STAGE,
+  TITLE_VIEW,
   roomBox,
   barsLabel,
   bob,
@@ -274,6 +275,23 @@ describe('viewFor', () => {
 
   it("puts a scene's own feet row on the feet line", () => {
     assert.equal(viewFor({ left: 124, right: 284, feet: 242 }).y, 114);
+  });
+});
+
+describe('the office behind the title', () => {
+  const box = roomBox('office');
+
+  it('is shown 1:1, on whole pixels, inside the room', () => {
+    assert.ok(Number.isInteger(TITLE_VIEW.x));
+    assert.ok(Number.isInteger(TITLE_VIEW.y));
+    assert.ok(TITLE_VIEW.x >= box.x);
+    assert.ok(TITLE_VIEW.x + STAGE.width <= box.x + box.width);
+    assert.equal(TITLE_VIEW.y, box.y);
+  });
+
+  it("leaves the stage's last 14 rows to the floor colour", () => {
+    // A taller or shorter room changes this: look at the title again
+    assert.equal(STAGE.height - TITLE_VIEW.rows, 14);
   });
 });
 
