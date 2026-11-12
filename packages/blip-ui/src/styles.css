@@ -23,6 +23,51 @@
   filter: saturate(0);
 }
 
+/* Small pointers drawn in whole --bui-px squares, in currentColor, never a
+   slanted edge the browser blends: a right or left one 3 wide and 5 high
+   (columns of 5, 3, 1), an up or down one 5 wide and 3 high (rows of 1,
+   3, 5). The element sets the size */
+@utility bui-point-right {
+  background:
+    linear-gradient(currentColor 0 0) 0 0 / var(--bui-px)
+      calc(var(--bui-px) * 5),
+    linear-gradient(currentColor 0 0) var(--bui-px) var(--bui-px) /
+      var(--bui-px) calc(var(--bui-px) * 3),
+    linear-gradient(currentColor 0 0) calc(var(--bui-px) * 2)
+      calc(var(--bui-px) * 2) / var(--bui-px) var(--bui-px);
+  background-repeat: no-repeat;
+}
+@utility bui-point-left {
+  background:
+    linear-gradient(currentColor 0 0) calc(var(--bui-px) * 2) 0 / var(--bui-px)
+      calc(var(--bui-px) * 5),
+    linear-gradient(currentColor 0 0) var(--bui-px) var(--bui-px) /
+      var(--bui-px) calc(var(--bui-px) * 3),
+    linear-gradient(currentColor 0 0) 0 calc(var(--bui-px) * 2) / var(--bui-px)
+      var(--bui-px);
+  background-repeat: no-repeat;
+}
+@utility bui-point-up {
+  background:
+    linear-gradient(currentColor 0 0) calc(var(--bui-px) * 2) 0 / var(--bui-px)
+      var(--bui-px),
+    linear-gradient(currentColor 0 0) var(--bui-px) var(--bui-px) /
+      calc(var(--bui-px) * 3) var(--bui-px),
+    linear-gradient(currentColor 0 0) 0 calc(var(--bui-px) * 2) /
+      calc(var(--bui-px) * 5) var(--bui-px);
+  background-repeat: no-repeat;
+}
+@utility bui-point-down {
+  background:
+    linear-gradient(currentColor 0 0) 0 0 / calc(var(--bui-px) * 5)
+      var(--bui-px),
+    linear-gradient(currentColor 0 0) var(--bui-px) var(--bui-px) /
+      calc(var(--bui-px) * 3) var(--bui-px),
+    linear-gradient(currentColor 0 0) calc(var(--bui-px) * 2)
+      calc(var(--bui-px) * 2) / var(--bui-px) var(--bui-px);
+  background-repeat: no-repeat;
+}
+
 /* A stage stacks lines of text and wants normal leading, whatever the
    page around it trims */
 [data-stage],

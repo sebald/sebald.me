@@ -127,6 +127,13 @@ describe('the kit’s styles', () => {
     );
   });
 
+  it('draw shapes on the pixel grid, never a slanted clip the browser blends', () => {
+    const slanted = classes
+      .filter(({ token }) => /clip-path:polygon\(/.test(token))
+      .map(({ file, token }) => `${file}: ${token}`);
+    assert.deepEqual(slanted, []);
+  });
+
   it('show what is off one way, bui-disabled', () => {
     const off = classes.filter(c => {
       const value = /^opacity-(\d+)$/.exec(c.utility)?.[1];

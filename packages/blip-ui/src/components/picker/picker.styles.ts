@@ -49,9 +49,9 @@ export const picker = {
     ],
     defaultVariants: { selected: false, variant: 'default' },
   }),
-  /** The cursor: a pixel triangle, in `--bui-px` like every control */
+  /** The cursor: a stepped pixel triangle, in `--bui-px` like every control */
   cursor: cva({
-    base: 'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bg-current [clip-path:polygon(0_0,100%_50%,0_100%)]',
+    base: 'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
@@ -66,12 +66,12 @@ export const picker = {
     base: 'h-[calc(var(--bui-px)*3)] w-[calc(var(--bui-px)*5)] shrink-0',
     variants: {
       up: {
-        true: '[clip-path:polygon(50%_0,100%_100%,0_100%)]',
-        false: '[clip-path:polygon(0_0,100%_0,50%_100%)]',
+        true: 'bui-point-up',
+        false: 'bui-point-down',
       },
       more: {
-        true: 'bg-(--bui-text)',
-        false: 'bg-(--bui-empty-dots)',
+        true: 'text-(--bui-text)',
+        false: 'text-(--bui-empty-dots)',
       },
     },
   }),
