@@ -25,11 +25,6 @@ interface RoomProps {
   scene: SceneId;
   /** The window of the render the band shows (`viewFor`), in render pixels */
   view: { x: number; y: number };
-  /**
-   * Stage pixels a render pixel, 1 by default; any other scale (the title
-   * shows the whole room) takes the 8x export scaled smoothly
-   */
-  scale?: number;
   /** The loop has loaded (per scene and scale) */
   onLoad?: (key: string) => void;
 }
@@ -43,9 +38,8 @@ interface RoomProps {
  * replaces it under reduced motion. Position it inside a band-sized box
  * with `overflow-hidden`.
  */
-export const Room = ({ scene, view, scale = 1, onLoad }: RoomProps) => {
-  const stage = usePixels();
-  const crisp = stage.crisp && scale === 1;
+export const Room = ({ scene, view, onLoad }: RoomProps) => {
+  const { crisp } = usePixels();
   const { assets, loop, key } = sceneLoop(scene, crisp);
   const [loaded, setLoaded] = useState<string | null>(null);
   return (
@@ -56,10 +50,10 @@ export const Room = ({ scene, view, scale = 1, onLoad }: RoomProps) => {
         loaded === key ? 'opacity-100' : 'opacity-0',
       )}
       style={{
-        left: `calc(var(--px) * ${-view.x * scale})`,
-        top: `calc(var(--px) * ${-view.y * scale})`,
-        width: `calc(var(--px) * ${SCENE.width * scale})`,
-        height: `calc(var(--px) * ${SCENE.height * scale})`,
+        left: `calc(var(--px) * ${-view.x})`,
+        top: `calc(var(--px) * ${-view.y})`,
+        width: `calc(var(--px) * ${SCENE.width})`,
+        height: `calc(var(--px) * ${SCENE.height})`,
       }}
     >
       <source

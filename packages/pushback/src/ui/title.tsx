@@ -30,7 +30,7 @@ import {
   type Role,
   poolPairs,
 } from '../lib/lines';
-import { STAGE, roomBox } from '../lib/stage';
+import { STAGE, TITLE_VIEW } from '../lib/stage';
 import { effect } from './audio/engine';
 import { Controls } from './controls';
 import { endMask } from './dither';
@@ -149,21 +149,13 @@ const MENU_TOP = LOGO_TOP.menu + LOGO.height + 6;
  */
 const TALL = { logo: 52, menu: STAGE.height - 18, fade: 48 } as const;
 
-/** The corner office's room inside its padded render */
-const OFFICE = roomBox('office');
-
 /**
- * The corner office the title shows: its picture scaled to cover the
- * stage, a hair more so no padding shows at an edge, and centred; cut
- * off a little at the sides, smooth rather than on the art's pixels,
- * which is fine for a backdrop
+ * Under the office's last row, to the stage's bottom: the floor's darkest
+ * flat colour, as the room's own pixels would go on
  */
-const ROOM_SCALE =
-  Math.max(STAGE.width / OFFICE.width, STAGE.height / OFFICE.height) * 1.02;
-const VIEW = {
-  x: OFFICE.x + OFFICE.width / 2 - STAGE.width / ROOM_SCALE / 2,
-  y: OFFICE.y + OFFICE.height / 2 - STAGE.height / ROOM_SCALE / 2,
-} as const;
+const FLOOR = '#131623';
+/** The room's last rows, dithered into the floor's colour */
+const FLOOR_FADE = 8;
 
 /**
  * What the title shows: the splash, the menu, or what the menu opened
@@ -240,8 +232,10 @@ export const TitleScreen = ({
 
   return (
     <Stage label="Pushback, title">
-      {/* The corner office at night, the whole stage, dimmed a little;
-          held upright, the stage's first 214 rows, fading into the dark */}
+      {/* The corner office at night, one room pixel a stage pixel (so it
+          is as crisp as the duel's band), dimmed a little, its floor run on
+          to the stage's bottom; held upright, the stage's first 214 rows,
+          fading into the dark */}
       <div
         aria-hidden
         className="absolute inset-x-0 top-0 overflow-hidden"
@@ -254,7 +248,18 @@ export const TitleScreen = ({
           }),
         }}
       >
-        <Room scene="office" view={VIEW} scale={ROOM_SCALE} />
+        <div className="absolute inset-0" style={{ background: FLOOR }} />
+        <div
+          className="absolute inset-x-0 top-0 overflow-hidden"
+          style={{
+            height: px(TITLE_VIEW.rows),
+            maskImage: endMask(TITLE_VIEW.rows, FLOOR_FADE),
+            maskSize: `${px(4)} ${px(TITLE_VIEW.rows)}`,
+            maskRepeat: 'repeat-x',
+          }}
+        >
+          <Room scene="office" view={TITLE_VIEW} />
+        </div>
         <div className="absolute inset-0 bg-(--pb-bg)/15" />
       </div>
       {/* As wide as the logo: placed from the middle, a heading would
