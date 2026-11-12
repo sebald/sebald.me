@@ -40,7 +40,12 @@ node .claude/skills/pixel-sprite/scripts/sheet.mjs \
   packages/pushback/src/assets/sources/originals/logo-c.jpeg logo \
   --cells 1 --cell 240x134 --anchor centre --specks 0 --colours 24
 rm packages/pushback/src/assets/sheets/logo.json
-# then trim the transparent margin with sharp and put the size in title.tsx
+# then trim the transparent margin with sharp and put the size in title.tsx;
+# last, take the blended pixels off the letters' edges (and fold the
+# palette's near-twins), and look at the marked copy
+node .claude/skills/pixel-sprite/scripts/seams.mjs \
+  packages/pushback/src/assets/sheets/logo.png \
+  --merge cd572c=ca552c,030203=000000,22263c=1d233b --marked logo-seams.png
 
 # A sheet with a ruler figure (Nadia's third roll has Jo at the left as
 # the measure): cut with one cell more, then drop the first cell from the
