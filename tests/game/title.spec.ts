@@ -1,3 +1,5 @@
+import { SHEET_IDS } from '@sebald/pushback/lib/sprites';
+
 import {
   choose,
   current,
@@ -11,6 +13,20 @@ import {
 
 test.describe('the title', () => {
   test.skip(({ isMobile }) => isMobile, 'played by keys');
+
+  test('fetches the cast before a key is pressed', async ({ page }) => {
+    const requested: string[] = [];
+    page.on('request', request => requested.push(request.url()));
+    await open(page);
+    // Next adds a hash to a file's name: match on its base name
+    await expect
+      .poll(() =>
+        SHEET_IDS.filter(
+          sheet => !requested.some(url => url.includes(`/${sheet}.`)),
+        ),
+      )
+      .toEqual([]);
+  });
 
   test('opens on the splash, Enter shows the menu', async ({ page }) => {
     await open(page);

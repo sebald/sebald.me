@@ -11,6 +11,7 @@ import { LAYOUT, SCENE, STAGE, roomBox } from '../lib/stage';
 import { fadeMask } from './dither';
 import { type FrameModel, drawFrame } from './draw';
 import { SCENE_ASSETS, loopFor } from './scenes';
+import { loadImage } from './sheets';
 import { Stage } from './stage';
 import { cn } from './styles.utils';
 
@@ -21,12 +22,20 @@ const sceneLoop = (scene: SceneId, crisp: boolean) => {
   return { assets, loop, key: `${scene}:${loop.src}` };
 };
 
+/**
+ * Start loading a scene's room for a screen still to come, the loop that
+ * `Room` will show at these pixels, or its poster under reduced motion
+ */
+export const preloadRoom = (scene: SceneId, crisp: boolean) => {
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const { assets, loop } = sceneLoop(scene, crisp);
+  loadImage((still ? assets.poster : loop).src).catch(() => {});
+};
+
 interface RoomProps {
   scene: SceneId;
   /** The window of the render the band shows (`viewFor`), in render pixels */
   view: { x: number; y: number };
-  /** The loop has loaded (per scene and scale) */
-  onLoad?: (key: string) => void;
 }
 
 /**
@@ -38,7 +47,7 @@ interface RoomProps {
  * replaces it under reduced motion. Position it inside a band-sized box
  * with `overflow-hidden`.
  */
-export const Room = ({ scene, view, onLoad }: RoomProps) => {
+export const Room = ({ scene, view }: RoomProps) => {
   const { crisp } = usePixels();
   const { assets, loop, key } = sceneLoop(scene, crisp);
   const [loaded, setLoaded] = useState<string | null>(null);
@@ -69,10 +78,7 @@ export const Room = ({ scene, view, onLoad }: RoomProps) => {
         // optimizer
         unoptimized
         loading="eager"
-        onLoad={() => {
-          setLoaded(key);
-          onLoad?.(key);
-        }}
+        onLoad={() => setLoaded(key)}
         className={cn(
           'absolute inset-0 h-full w-full',
           crisp && '[image-rendering:pixelated]',
@@ -177,21 +183,12 @@ const FrameBody = ({
   paused = false,
   children,
 }: FrameBodyProps) => {
-  const { crisp, backing } = usePixels();
+  const { backing } = usePixels();
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const modelRef = useRef(model);
   const stepRef = useRef(onStep);
   const backingRef = useRef(backing);
-  // The scene loop under the canvas; until it has loaded the canvas paints
-  // the flat placeholder band itself
-  const [loadedScene, setLoadedScene] = useState<string | null>(null);
-  const loadedRef = useRef(false);
-  const sceneKey = sceneLoop(model.scene, crisp).key;
-  const sceneLoaded = loadedScene === sceneKey;
   useLayoutEffect(() => {
-    modelRef.current = model;
     stepRef.current = onStep;
-    loadedRef.current = sceneLoaded;
     backingRef.current = backing;
   });
 
@@ -204,10 +201,7 @@ const FrameBody = ({
     const draw = () => {
       const ctx = canvasRef.current?.getContext('2d');
       if (ctx) {
-        drawFrame(ctx, modelRef.current, {
-          background: !loadedRef.current,
-          backing: backingRef.current,
-        });
+        drawFrame(ctx, { backing: backingRef.current });
       }
     };
     draw();
@@ -226,12 +220,11 @@ const FrameBody = ({
     return () => cancelAnimationFrame(frame);
   }, [paused]);
 
-  // Redraw on model changes between steps, so input feels immediate, and
-  // when the canvas is resized
+  // Redraw when the canvas is resized
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d');
-    if (ctx) drawFrame(ctx, model, { background: !sceneLoaded, backing });
-  }, [model, sceneLoaded, backing]);
+    if (ctx) drawFrame(ctx, { backing });
+  }, [backing]);
 
   return (
     <>
@@ -240,7 +233,7 @@ const FrameBody = ({
         className="absolute inset-x-0 top-0 overflow-hidden"
         style={{ height: `calc(var(--px) * ${LAYOUT.band})` }}
       >
-        <Room scene={model.scene} view={model.view} onLoad={setLoadedScene} />
+        <Room scene={model.scene} view={model.view} />
         {band}
       </div>
       {/*

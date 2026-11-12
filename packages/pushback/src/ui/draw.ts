@@ -1,8 +1,8 @@
 import { BACKING } from '@sebald/blip-ui';
 
 /**
- * The frame's canvas: the room band (a flat colour until the loop under
- * the canvas has loaded) and the panel's ground. The duellists and the
+ * The frame's canvas: the panel's ground under the room band, which is
+ * left clear for the scene loop under the canvas. The duellists and the
  * ghost are their own canvases (`Character`, `Ghost`), which share
  * `drawCell`; the bars, the quiet window and the letters are DOM
  * (`Hud`, `Window`, see the screen).
@@ -15,14 +15,6 @@ import type { Sprite } from './sheets';
 
 // Palette
 // ---------------
-
-/** Placeholder band colours: wall and floor */
-const SCENES: Record<SceneId, { wall: string; floor: string }> = {
-  floor: { wall: PALETTE.wall, floor: PALETTE.floor },
-  meeting: { wall: '#6b6256', floor: '#4b4a48' },
-  studio: { wall: '#5a4634', floor: '#3e2e20' },
-  office: { wall: '#141a2b', floor: '#0e1119' },
-};
 
 /** The ghost is see-through: its opacity when fully shown */
 export const GHOST_ALPHA = 0.7;
@@ -49,19 +41,6 @@ const rect = (
 ) => {
   ctx.fillStyle = colour;
   ctx.fillRect(x, y, w, h);
-};
-
-const drawBand = (ctx: CanvasRenderingContext2D, scene: SceneId) => {
-  const colours = SCENES[scene];
-  rect(ctx, 0, 0, STAGE.width, LAYOUT.band, colours.wall);
-  rect(
-    ctx,
-    0,
-    LAYOUT.feet,
-    STAGE.width,
-    LAYOUT.band - LAYOUT.feet,
-    colours.floor,
-  );
 };
 
 /** Where a cell is drawn: its left edge, its bottom, which way it faces */
@@ -205,27 +184,19 @@ const drawPanel = (ctx: CanvasRenderingContext2D) => {
   );
 };
 
-/** The ghost from its sheet, see-through; a pale shape until it is built */
+/** How the frame's canvas is drawn */
 export interface DrawOptions {
-  /**
-   * Paint the flat placeholder band. Off once the scene loop under the
-   * canvas has loaded; the band is then transparent apart from the
-   * figures and the chrome.
-   */
-  background?: boolean;
   /** Canvas pixels per stage pixel (`backingFor`) */
   backing?: number;
 }
 
 export const drawFrame = (
   ctx: CanvasRenderingContext2D,
-  model: FrameModel,
-  { background = true, backing = BACKING }: DrawOptions = {},
+  { backing = BACKING }: DrawOptions = {},
 ) => {
   // Stage coordinates on a canvas `backing` times the stage
   ctx.setTransform(backing, 0, 0, backing, 0, 0);
   ctx.imageSmoothingEnabled = false;
   ctx.clearRect(0, 0, STAGE.width, STAGE.height);
-  if (background) drawBand(ctx, model.scene);
   drawPanel(ctx);
 };
