@@ -63,16 +63,23 @@ test.describe('the title', () => {
     await expect(current(page)).toHaveText('Options');
   });
 
-  test('How to play opens and Escape goes back', async ({ page }) => {
+  test('How to play opens in place of the logo, and Escape goes back', async ({
+    page,
+  }) => {
     await toMenu(page);
+    const logo = screen(page).getByRole('img', { name: 'Pushback' });
     await choose(page, 'How to play');
     await expect(
       screen(page).getByRole('heading', { name: 'How it works' }),
     ).toBeVisible();
+    await expect(logo).toBeHidden();
+    // Still the title for a screen reader
+    await expect(screen(page)).toHaveAccessibleName('Pushback, title');
     await page.keyboard.press('Escape');
     await expect(
       screen(page).getByRole('list', { name: 'Title menu' }),
     ).toBeVisible();
+    await expect(logo).toBeVisible();
   });
 
   test('Options change the mode, and the save keeps it', async ({ page }) => {
