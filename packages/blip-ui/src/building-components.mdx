@@ -138,8 +138,38 @@ list takes the order from the DOM, so items work inside groups and inside
 a screen's own components. What belongs to an item, its description box,
 the item renders itself.
 
+## Motion: a UI element or game art
+
+Two kinds of motion, told apart by what moves.
+
+- **A UI element moves smoothly.** A window, a menu, a bar, the stage
+  itself: a CSS transition, so it can be interrupted, on the kit's curves,
+  `ease-bui-out` for what enters, leaves or answers the player and
+  `ease-bui-in-out` for what moves across the stage. It names the
+  properties it animates (never `transition` or `transition-all`) and
+  stays at 300 ms or under. `opacity` for a fade; for a move or a size,
+  the layout's own properties (`top`, `left`, `width`, `height`): the
+  layout lands on whole device pixels, where a transform or a clip draws
+  between them and blends the art's edges at a scale like 2.25 or a
+  phone's.
+- **Game art moves like a sprite.** A character, a title slamming in, a
+  blink, the stage jolted by a hit: keyframes, stepped (`steps()`), in
+  whole stage pixels and whole frames. The kit's are `animate-bui-*`
+  (`blink`, `enter`, `appear`, `shake`, `thud`, `flash`); the game holds
+  one back to its own moment with `animation-delay`.
+- **Not every change moves.** What the arrows do, the cursor going down a
+  list, a row lighting up, happens at once: list navigation doesn't
+  animate.
+- **Reduced motion**, `motion-reduce:`: what moves snaps, and a fade may
+  stay.
+
+A game's own art follows the same rule in its own stylesheet; where a
+piece of art glides on purpose, its comment says why.
+
 ## Checked by tests
 
 `foundations/uniformity.test.ts` fails on spacing outside `SPACE`, a text
 size outside the scale, an opacity of its own instead of `bui-disabled`,
-and a component root without its `data-slot`.
+a component root without its `data-slot`, and motion that breaks the rule
+above: a transition without named properties, the kit's curve, or a
+duration of 300 ms or under, or keyframes that don't step.

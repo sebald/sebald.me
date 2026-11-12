@@ -3,6 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
+import { glidingArt, transitionFaults } from './motion';
 import { SPACE } from './pixel';
 
 /**
@@ -123,6 +124,28 @@ describe('the kit’s styles', () => {
     });
     assert.deepEqual(
       off.map(c => `${c.file}: ${c.token}`),
+      [],
+    );
+  });
+
+  it('move a UI element smoothly: named properties, the kit’s curve, 300 ms at most', () => {
+    assert.deepEqual(
+      readdirSync(ROOT, { recursive: true, encoding: 'utf8' })
+        .filter(
+          file => /\.tsx?$/.test(file) && !/\.(stories|test)\.tsx?$/.test(file),
+        )
+        .flatMap(file =>
+          transitionFaults(readFileSync(join(ROOT, file), 'utf8')).map(
+            fault => `${file}: ${fault}`,
+          ),
+        ),
+      [],
+    );
+  });
+
+  it('move art like a sprite: keyframes in steps', () => {
+    assert.deepEqual(
+      glidingArt(readFileSync(join(ROOT, '../styles.css'), 'utf8')),
       [],
     );
   });

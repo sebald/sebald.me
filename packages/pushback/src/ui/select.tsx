@@ -97,7 +97,9 @@ const styles = {
   }),
   /** The face, dimmed unless chosen; the stamp over it stays lit */
   face: cva({
-    base: 'block transition-[filter] duration-150',
+    // Lit at once: the arrows move the choice, list navigation, which
+    // doesn't animate
+    base: 'block',
     variants: {
       active: {
         true: 'brightness-100',

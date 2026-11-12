@@ -23,7 +23,7 @@ export const DemoLabel = ({ y, className }: DemoLabelProps) => {
     <div
       aria-hidden
       className={cn(
-        'pointer-events-none absolute inset-x-0 grid animate-arcade-blink justify-items-center [--blink-low:0] motion-reduce:animate-none',
+        'pointer-events-none absolute inset-x-0 grid animate-bui-blink justify-items-center [--blink-low:0] motion-reduce:animate-none',
         className,
       )}
       style={{ top: px(y), animationDuration: '1.6s' }}

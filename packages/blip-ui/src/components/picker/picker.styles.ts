@@ -21,7 +21,9 @@ export const picker = {
   item: cva({
     base: [
       'flex w-full items-center gap-[calc(var(--bui-px)*3)] px-[calc(var(--bui-px)*2)] py-(--bui-px) text-left',
-      'cursor-pointer transition-colors duration-100',
+      // The cursor's row lit at once: moved by the arrows, list
+      // navigation doesn't animate
+      'cursor-pointer',
       'outline-none focus-visible:bui-focus',
       'aria-disabled:cursor-default',
       // Held upright, a row is a thumb's height
@@ -55,7 +57,8 @@ export const picker = {
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
-    base: 'min-w-0 flex-1 transition-opacity duration-500',
+    // Dimmed or lit by a change of state, a short fade
+    base: 'min-w-0 flex-1 transition-opacity duration-200 ease-bui-out',
     variants: { disabled: { true: 'bui-disabled' } },
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */

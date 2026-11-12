@@ -75,8 +75,17 @@
   text-box: normal;
 }
 
-/* The kit's motion: stepped, in whole pixels where it moves */
+/*
+ * The kit's motion, two kinds (`building-components.mdx`, Motion):
+ * a UI element moves smoothly, by a transition on the curves below;
+ * art moves like a sprite, by stepped keyframes, in whole pixels.
+ */
 @theme {
+  /* The curves for a UI element: out for what enters, leaves or answers
+     the player, in-out for what moves across the stage */
+  --ease-bui-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-bui-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
   /* The arcade blink, half a second on, half off, no fade; how low it
      goes is --blink-low (0.6 by default, 0 for a full blink) */
   @keyframes bui-blink {
@@ -102,4 +111,65 @@
   }
 
   --animate-bui-enter: bui-enter 160ms steps(4, jump-end) both;
+
+  /* Something shown at once after its delay, which the game sets
+     (`animation-delay`): a letter of a line, a menu once its window
+     has grown */
+  @keyframes bui-appear {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  --animate-bui-appear: bui-appear 10ms steps(1) both;
+
+  /* The stage jolted by a hit, in whole pixels, smaller each time; the
+     game holds it back to the moment it lands (`animation-delay`) */
+  @keyframes bui-shake {
+    0% {
+      translate: calc(var(--px, 2px) * -3) var(--px, 2px);
+    }
+    25% {
+      translate: calc(var(--px, 2px) * 2) calc(var(--px, 2px) * -2);
+    }
+    50% {
+      translate: calc(var(--px, 2px) * -1) var(--px, 2px);
+    }
+    75% {
+      translate: var(--px, 2px) 0;
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-bui-shake: bui-shake 200ms steps(1) both;
+
+  /* The stage knocked down a pixel by a landing */
+  @keyframes bui-thud {
+    0% {
+      translate: 0 var(--px, 2px);
+    }
+    100% {
+      translate: 0 0;
+    }
+  }
+
+  --animate-bui-thud: bui-thud 120ms steps(1) both;
+
+  /* A flash over the stage, one frame and gone; the element is the
+     flash, in the colour it is given */
+  @keyframes bui-flash {
+    from {
+      opacity: 0.85;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  --animate-bui-flash: bui-flash 180ms steps(2) both;
 }

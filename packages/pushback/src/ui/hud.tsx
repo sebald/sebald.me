@@ -103,9 +103,13 @@ const lit = (side: Side) => {
   return `linear-gradient(to bottom, ${c.top} 0 var(--px), ${c.mid} var(--px) calc(100% - var(--px)), ${c.shade} calc(100% - var(--px)) 100%)`;
 };
 
-/** Slides with the scale; snaps under reduced motion */
+/**
+ * Slides with the scale; snaps under reduced motion. By its left and
+ * width, not a transform or a clip: those draw between device pixels and
+ * blend the beam's edges where a stage pixel isn't a whole number of them
+ */
 const SLIDE =
-  'transition-[left,width] duration-300 ease-out motion-reduce:transition-none';
+  'transition-[left,width] duration-250 ease-bui-out motion-reduce:transition-none';
 
 /**
  * The shared scale as a beam clash: gold from the player's end, ember
