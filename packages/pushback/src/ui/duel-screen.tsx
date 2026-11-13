@@ -67,6 +67,7 @@ import { playerName } from '../lib/save';
 import { PLAYER_SHEETS } from '../lib/sprites';
 import {
   type Step,
+  AMBIENT,
   LAYOUT,
   STAGE,
   barsLabel,
@@ -531,6 +532,7 @@ export const DuelScreen = ({
         micDrop={micDropBy('player')}
         x={standX.player}
         still={reduced}
+        light={AMBIENT[scene]}
       />
       <Character
         sheet={character.sheet}
@@ -540,6 +542,7 @@ export const DuelScreen = ({
         facing="left"
         x={standX.opponent}
         still={reduced}
+        light={AMBIENT[scene]}
       />
     </>
   );
