@@ -286,8 +286,9 @@ export const download = (blob: Blob, name: string) => {
 };
 
 /**
- * Share the card: the picture and `text` (the text card) through the
- * share sheet where there is one, otherwise the picture downloaded.
+ * Share the card: the picture alone through the share sheet where there
+ * is one, otherwise downloaded. No text beside it: macOS's sheet copies
+ * the two as two files, and Slack pastes the picture twice.
  * `shared` or `saved`; `cancelled` when the sheet was closed without
  * sharing, which is not an error. Pass the `picture` drawn beforehand
  * (`resultImage`) where it can be: a share sheet only opens close to the
@@ -296,14 +297,13 @@ export const download = (blob: Blob, name: string) => {
  */
 export const shareResult = async (
   input: CardInput,
-  { text, picture }: { text?: string; picture?: Blob } = {},
+  { picture }: { picture?: Blob } = {},
 ): Promise<'shared' | 'saved' | 'cancelled'> => {
   const blob = picture ?? (await resultImage(input));
   if (canShareImage()) {
     try {
       await navigator.share({
         files: [new File([blob], fileName(input), { type: 'image/png' })],
-        text,
       });
       return 'shared';
     } catch (error) {
