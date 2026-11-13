@@ -17,12 +17,21 @@ const sharp = createRequire(require.resolve('next/package.json'))('sharp');
 
 const SHEETS = resolve(import.meta.dirname, '../assets/sheets');
 
+/** The idle figure is this tall, on a 72 by 112 cell (the spec's range) */
+const FIGURE_HEIGHT = { min: 70, max: 85 };
+
 /**
- * The idle figure is this tall, on a 72 by 112 cell (the spec's range,
- * 70 to 85). Bo and Kim are kept at 94 and 95 by decision, a broad man
- * and a tall woman, so the ceiling is 96; nothing taller gets in.
+ * The sheets kept taller by decision, each with its own ceiling, its
+ * height: Bo and Kim, a broad man and a tall woman a head above the rest,
+ * and Nadia, the Head of Product, whom three rolls drew tall and the
+ * third, measured against Jo, between the cast and those two. Any other
+ * sheet over the range fails.
  */
-const FIGURE_HEIGHT = { min: 70, max: 96 };
+const TALL: Partial<Record<(typeof SHEET_IDS)[number], number>> = {
+  'dev-bo': 94,
+  'designer-kim': 95,
+  'pm-nadia': 87,
+};
 
 /** `features.mjs` finds these on every model sheet */
 const hasFeatures = (m: SheetMeta) =>
@@ -63,7 +72,8 @@ describe('model sheets', () => {
       for (const cell of m.cells) assert.equal(cell.clipped, false);
       const idle = m.cells[0]!.box;
       assert.ok(
-        idle.height >= FIGURE_HEIGHT.min && idle.height <= FIGURE_HEIGHT.max,
+        idle.height >= FIGURE_HEIGHT.min &&
+          idle.height <= (TALL[id] ?? FIGURE_HEIGHT.max),
         `idle figure is ${idle.height} px`,
       );
       // Every pose stands on the cell's bottom row
