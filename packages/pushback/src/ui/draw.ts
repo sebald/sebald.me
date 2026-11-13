@@ -9,7 +9,7 @@ import { BACKING } from '@sebald/blip-ui';
  */
 import type { SceneId } from '../lib/characters';
 import { type Facing, POSE_CELL } from '../lib/sprites';
-import { BREATH, LAYOUT, STAGE } from '../lib/stage';
+import { type Ambient, BREATH, LAYOUT, STAGE } from '../lib/stage';
 import { PALETTE } from './palette';
 import type { Sprite } from './sheets';
 
@@ -145,6 +145,28 @@ export const drawCell = (
       );
     }
   });
+
+/**
+ * A room's light over what is drawn in a `width` by `height` canvas: one
+ * flat wash of its colour, laid only on pixels already there
+ * (`source-atop`), so the outline and every see-through pixel stay as
+ * they are and each colour moves by the same amount. Nothing is picked by
+ * its colour, so skin and clothes can't come apart, as the hue tints that
+ * were tried did.
+ */
+export const washCell = (
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  { colour, amount }: Ambient,
+) => {
+  ctx.save();
+  ctx.globalCompositeOperation = 'source-atop';
+  ctx.globalAlpha = amount;
+  ctx.fillStyle = colour;
+  ctx.fillRect(0, 0, width, height);
+  ctx.restore();
+};
 
 /** The tears' colours: a pale drop with a darker tail */
 const TEAR = { drop: '#bfe6ff', tail: '#6fb6f0' } as const;

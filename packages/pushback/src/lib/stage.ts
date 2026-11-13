@@ -36,6 +36,23 @@ export const STAGE = { width: 320, height: 214 } as const;
 /** The scene renders, and where their floor meets the feet */
 export const SCENE = { width: 480, height: 270, feet: 230 } as const;
 
+/** A room's light on whoever stands in it: a colour, washed over by `amount` */
+export interface Ambient {
+  colour: string;
+  /** From 0, the sheet as drawn, to 1, the colour alone */
+  amount: number;
+}
+
+/**
+ * The rooms whose light the duellists take. The sheets are drawn in
+ * daylight, which fits every room but the corner office at night, where
+ * they would be the brightest things on screen: there they take a little
+ * of the night in its windows. The other rooms show them as drawn.
+ */
+export const AMBIENT: Partial<Record<SceneId, Ambient>> = {
+  office: { colour: '#101e39', amount: 0.15 },
+};
+
 /**
  * Where a scene's room sits inside its render: the room was drawn too
  * large for the cast, so the loop scripts shrink it by its factor in

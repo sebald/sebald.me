@@ -180,7 +180,13 @@ browser builds the sprite from it as it is (`packages/pushback/src/ui/sheets.ts`
 Sprites keep the colours Gemini drew; never recolour a sheet in code.
 Hue-based tints caught skin and hair next to the garment and left pixels
 see-through, so they were taken out; pasting an item into the hand looked
-wrong too, so nothing is pasted on either. A colleague that needs its own
+wrong too, so nothing is pasted on either. The one exception is a
+room's light (`AMBIENT` in `packages/pushback/src/lib/stage.ts`): in a
+room where daylight figures would glare, the corner office at night,
+the duellists are washed with one flat colour over the whole cell
+(`washCell`, `source-atop`). It picks no pixel by its colour and keeps
+every see-through one, so it can't fail the way the tints did; it only
+moves every colour the same way, a little. A colleague that needs its own
 look gets its own sheet; the run draw never shows two colleagues on one
 sheet together.
 

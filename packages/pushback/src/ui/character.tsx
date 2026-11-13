@@ -12,8 +12,8 @@ import {
   cries,
   tearDrop,
 } from '../lib/sprites';
-import { LAYOUT, breathFrame, poseOffset } from '../lib/stage';
-import { drawCell, drawTear } from './draw';
+import { type Ambient, LAYOUT, breathFrame, poseOffset } from '../lib/stage';
+import { drawCell, drawTear, washCell } from './draw';
 import { useSprites } from './sheets';
 import { cn } from './styles.utils';
 
@@ -37,6 +37,8 @@ export interface CharacterProps {
   feet?: number;
   /** No animation at all: the resting frame of the pose */
   still?: boolean;
+  /** The room's light it stands in (`AMBIENT`); without it, as drawn */
+  light?: Ambient;
   className?: string;
 }
 
@@ -57,6 +59,7 @@ export const Character = ({
   x,
   feet = LAYOUT.feet,
   still = false,
+  light,
   className,
 }: CharacterProps) => {
   const { backing } = usePixels();
@@ -104,6 +107,8 @@ export const Character = ({
       draw();
       ctx.restore();
     }
+    // Last, so the tear and the flash are in the room's light too
+    if (light) washCell(ctx, width, height, light);
   }, [
     backing,
     sheet,
@@ -115,6 +120,7 @@ export const Character = ({
     typing,
     micDrop,
     still,
+    light,
   ]);
 
   return (

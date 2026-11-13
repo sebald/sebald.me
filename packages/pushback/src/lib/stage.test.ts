@@ -8,6 +8,7 @@ import { RULES, STAKEHOLDER, type SceneId, characterById } from './characters';
 import { type DuelState, createDuel, reduce } from './duel';
 import { OFFLINE, PLAYER_BARKS, PAIRS, poolOf } from './lines';
 import {
+  AMBIENT,
   LAYOUT,
   STAGE,
   TITLE_VIEW,
@@ -456,4 +457,14 @@ describe('roomBox', () => {
       assert.ok(share <= 4, `${share.toFixed(1)} % of the edges are soft`);
     });
   }
+});
+
+describe('a room’s light', () => {
+  it('washes the duellists only in the night office, and only a little', () => {
+    assert.deepEqual(Object.keys(AMBIENT), ['office']);
+    for (const { colour, amount } of Object.values(AMBIENT)) {
+      assert.match(colour, /^#[0-9a-f]{6}$/);
+      assert.ok(amount > 0 && amount <= 0.3, `${amount}`);
+    }
+  });
 });
