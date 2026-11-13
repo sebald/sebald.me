@@ -109,7 +109,7 @@ export const ResultScreen = ({
     try {
       const done = await shareResult(
         { run, glossary },
-        { text, picture: await picture.current },
+        { picture: await picture.current },
       );
       setSent(done === 'cancelled' ? null : done);
     } catch {
