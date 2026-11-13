@@ -469,7 +469,7 @@ components get built; some gaps stay open so gap drafts have something to fire o
 Tasks and research first. Then a day-zero run on today's Blip with `search` and `docs` only,
 as soon as runs can be made and counted; the rendered layer, the judge and `validate` are added
 to it later by collecting again. Then rules, examples, `validate`, and the plugin's pieces, each followed by the configuration
-that measures it. The rendered pass in the reviewer comes right after v1. `tasks.md` has the
+that measures it. The rendered pass in the reviewer comes right after v1. `tasks/` has the
 list. Every change to Blip is its own pull request and is checked a second time by a subagent
 with fresh context before it is merged.
 

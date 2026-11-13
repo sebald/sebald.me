@@ -10,7 +10,7 @@ researched again and are rewritten below.
 
 **Answered (second review, 2026-11-13).** Q5 accepted: Blip's source may change, each change in
 its own pull request with a second check by a subagent with fresh context (now a rule for
-every task that changes Blip, `tasks.md`). Q8, Q9, Q10, Q14, Q15, Q16 accepted as recommended.
+every task that changes Blip, `tasks/README.md`). Q8, Q9, Q10, Q14, Q15, Q16 accepted as recommended.
 Q11 accepted, plus a check that lists overrides that keep coming back as candidate variants or
 sizes. Q12 accepted, plus pattern pages written on purpose (task `patterns`). Q13: everything
 runs locally on the Claude Code subscription, no API key; `claude-sonnet-5-5` with the two ends
