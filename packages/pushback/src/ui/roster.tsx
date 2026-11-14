@@ -14,7 +14,9 @@ import { type PropsWithChildren, type ReactNode, useEffect } from 'react';
 
 import { SCENE_OF, bossIndex, characterById } from '../lib/characters';
 import { ROLE_LABELS } from '../lib/lines';
-import { type RunState, bossUnlocked, canPlay, nextSlot } from '../lib/run';
+import { bossUnlocked, canPlay, nextSlot } from '../lib/run';
+import type { SavedRun } from '../lib/save';
+import { PLAYER_SHEETS } from '../lib/sprites';
 import { Controls, useBack } from './controls';
 import { Backdrop, preloadRoom } from './frame';
 import { PALETTE } from './palette';
@@ -26,7 +28,7 @@ import { cn } from './styles.utils';
 const LIST_TOP = 40;
 
 interface RosterScreenProps {
-  run: RunState;
+  run: SavedRun;
   onPlay: (index: number) => void;
   onResult: () => void;
   onBack: () => void;
@@ -194,7 +196,20 @@ export const RosterScreen = ({
             {items}
             {run.finished && (
               <PickerItem id="result" onSelect={onResult}>
-                <Row>Result card</Row>
+                {/* The player's own face closes the list, framed as theirs */}
+                <Row
+                  icon={
+                    <span className="block" style={{ boxShadow: FRAME }}>
+                      <Portrait
+                        sheet={PLAYER_SHEETS[run.role][run.look]}
+                        scale={1}
+                        inset={FACE_INSET}
+                      />
+                    </span>
+                  }
+                >
+                  Result card
+                </Row>
               </PickerItem>
             )}
           </Picker>

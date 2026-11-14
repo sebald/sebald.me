@@ -80,7 +80,7 @@ test.describe('a save to come back to', () => {
     ).toBeVisible();
   });
 
-  test('the result as a picture: handed to the share sheet with the text', async ({
+  test('the result as a picture: handed to the share sheet alone', async ({
     page,
   }) => {
     await withShareSheet(page);
@@ -102,6 +102,7 @@ test.describe('a save to come back to', () => {
       type: 'image/png',
     });
     expect(shared.files[0]!.size).toBeGreaterThan(10_000);
-    expect(shared.text).toContain('Pushback · PM');
+    // No text beside it: macOS's sheet would copy it as a second file
+    expect(shared.text).toBeUndefined();
   });
 });
