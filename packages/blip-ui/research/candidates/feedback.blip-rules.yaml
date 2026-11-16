@@ -36,3 +36,27 @@ rules:
     text: Announce that the party rested with useAnnounce.
     markers: [review]
     source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  # Web track (research-web-ux), from 201
+  - id: P-FEEDBACK-201
+    text: Say in text why a choice was refused, not only with a sound or a shake.
+    severity: error
+    markers: [review]
+    wcag: 3.3.1 Error Identification (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: A-FEEDBACK-201
+    text: Announce a refusal with useAnnounce.
+    markers: [review]
+    wcag: 4.1.3 Status Messages (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  - id: T-FEEDBACK-201
+    text: 'Name in a refusal what is missing, "Needs 20 gold".'
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/
+  - id: T-FEEDBACK-202
+    text: Write a refusal without technical jargon, such as an error code.
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/
+  - id: T-FEEDBACK-203
+    text: Offer in a refusal what the player can do instead, when there is something.
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/

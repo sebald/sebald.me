@@ -21,6 +21,12 @@ rules:
     text: Make a disabled row's note say what makes it available.
     markers: [review]
     source: https://www.nngroup.com/articles/error-message-guidelines/
+  # Web track (research-web-ux), from 201
+  - id: A-PICKER-201
+    text: Let a note that covers other content be dismissed without moving the pointer or the cursor.
+    markers: [open]
+    wcag: 1.4.13 Content on Hover or Focus (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html
 when-not:
   - text: The one action a screen is for is a Button, not a Picker of one row.
     use: button

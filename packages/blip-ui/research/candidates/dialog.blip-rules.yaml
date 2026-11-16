@@ -1,0 +1,7 @@
+page: dialog
+rules:
+  # Web track (research-web-ux), from 201
+  - id: P-DIALOG-201
+    text: Never open a Dialog for information the player doesn't have to act on.
+    markers: [review]
+    source: https://www.nngroup.com/articles/modal-nonmodal-dialog/

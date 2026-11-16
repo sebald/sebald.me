@@ -17,3 +17,9 @@ rules:
     text: Explain every word the game invents.
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+  # Web track (research-web-ux), from 201
+  - id: P-HELP-201
+    text: Put the way to How it works in the same place on every screen that offers it.
+    markers: [review]
+    wcag: 3.2.6 Consistent Help (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/consistent-help.html

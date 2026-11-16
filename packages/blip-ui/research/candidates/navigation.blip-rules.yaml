@@ -9,3 +9,23 @@ rules:
     text: Put the way back in the same place on every screen.
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  # Web track (research-web-ux), from 201
+  - id: A-NAVIGATION-201
+    text: Show on every screen that takes keys which item the keys act on.
+    severity: error
+    markers: [review]
+    wcag: 2.4.7 Focus Visible (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html
+  - id: P-NAVIGATION-201
+    text: Close everything that opens over a screen with the same key on every screen.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/112
+  - id: T-NAVIGATION-201
+    text: Call the same action by the same name on every screen.
+    markers: [review]
+    wcag: 3.2.4 Consistent Identification (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification.html
+  - id: P-NAVIGATION-202
+    text: Come back to a menu with the cursor on the item the player left it from.
+    markers: [open]
+    source: https://www.w3.org/WAI/ARIA/apg/patterns/menubar/
