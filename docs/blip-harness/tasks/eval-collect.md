@@ -14,8 +14,10 @@ not exist yet).
 
 **Included.** From the transcript: tool calls, `blip` calls, reads of the package's `dist` and
 `docs`, TypeScript errors met, turns, tokens, cost, time, denials, over-budget. From the tree:
-`tsc`, the build, raw HTML tags and `className`s on changed lines, imports from the package
-that are not exports. Overrides that recur: restyling classes grouped by the Blip component
+`tsc`, the build, raw HTML tags and `className`s, imports from the package that are not
+exports. The task's `rubric.json` says which lines count (`scope`, `evals/blip/README.md`):
+`changed-lines` (`camp-rest`, `pause`) counts only lines changed since the run's first commit,
+so the messy `camp.tsx` isn't held against the agent; `all` counts the whole of `src/`. Overrides that recur: restyling classes grouped by the Blip component
 they sit on, raw tags by tag and classes; a group in at least 3 runs across 2 tasks is listed
 as a candidate variant, size or component (**Q11**). Network use: runs whose Bash commands reach
 out (`curl`, `wget`, `gh`, `npm view`, installing a package) are flagged and reported apart
@@ -39,6 +41,8 @@ collect again. `results/<date>-<label>/results.json` and
 - In the fixtures, the same colour classes on `Button` in three runs of two tasks are listed
   once as a candidate; the same classes in three runs of one task, or a margin on `Button`, are
   not
+- In the fixtures, a raw `div` left untouched in `camp.tsx` is not counted for a
+  `changed-lines` task, and one the agent added is
 - Only `summary.md` and `results.json` are written inside the repo
 
 **Depends on.** [`template`](template.md). Developed against the run layout of spec 3.3; needs [`eval-run`](eval-run.md) to
