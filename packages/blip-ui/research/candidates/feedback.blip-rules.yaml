@@ -36,3 +36,15 @@ rules:
     text: Announce that the party rested with useAnnounce.
     markers: [review]
     source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  # Web track (research-web-ux), from 201
+  # Open: WCAG 3.3.1 covers input errors that are detected automatically; a
+  # refused pick (can't afford, an empty slot) isn't one by its letter. Treating
+  # it as one is Blip's own call (conflict 13).
+  - id: P-FEEDBACK-201
+    text: Say in text why a choice was refused, not only with a sound or a shake.
+    markers: [open]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: T-FEEDBACK-202
+    text: Write a refusal without technical jargon, such as an error code.
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/

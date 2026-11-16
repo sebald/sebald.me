@@ -1,5 +1,5 @@
-# Pattern: an empty list (a gap). The web track's empty-state candidates
-# belong beside these.
+# Pattern: an empty list (a gap). The web track added none here: these cover
+# what its sources say.
 page: empty
 rules:
   - id: P-EMPTY-101

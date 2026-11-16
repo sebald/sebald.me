@@ -44,3 +44,10 @@ rules:
     text: Show how hurt an enemy is as a bar or in words, never as a number.
     markers: [open]
     source: https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision
+  # Web track (research-web-ux), from 201
+  - id: A-HUD-201
+    text: 'Give a readout drawn as art a text alternative with what the art shows, "badly hurt" for a bar without a number.'
+    severity: error
+    markers: [review]
+    wcag: 1.1.1 Non-text Content (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/non-text-content.html

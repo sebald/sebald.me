@@ -50,3 +50,24 @@ rules:
     text: Keep one blinking element on a screen at a time.
     markers: [open]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117
+  # Web track (research-web-ux), from 201
+  - id: F-MOTION-201
+    text: Let the player stop, from inside the game, anything that blinks for more than five seconds beside other content, unless the blinking is essential.
+    markers: [open]
+    wcag: 2.2.2 Pause, Stop, Hide (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html
+  # WCAG 1.4.3 exempts inactive components, so a disabled item is left to
+  # F-COLOUR-102.
+  - id: F-COLOUR-201
+    text: Keep the text of an item that is not disabled at 4.5:1 against what is behind it (3:1 for large text), however faded.
+    severity: error
+    markers: [review]
+    wcag: 1.4.3 Contrast (Minimum) (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+  # 2.4.11 exempts what the player opens over a screen, if the cursor's item can be
+  # brought back into view without closing it.
+  - id: F-LAYER-201
+    text: Let nothing the game lays over a screen by itself hide the item the cursor is on entirely.
+    markers: [review]
+    wcag: 2.4.11 Focus Not Obscured (Minimum) (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html

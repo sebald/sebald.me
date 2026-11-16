@@ -1,0 +1,31 @@
+# A text field, such as a name entry (a gap).
+page: field
+rules:
+  # Web track (research-web-ux), from 201
+  # Stricter than its source: 3.3.2 lets instructions, an icon or the context
+  # stand in for a label. Always a label is Blip's own call.
+  - id: A-FIELD-201
+    text: Give every text field a label.
+    markers: [open]
+    wcag: 3.3.2 Labels or Instructions (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
+  - id: T-FIELD-201
+    text: Say a field's format before the player types, when it is not the usual one.
+    markers: [review]
+    wcag: 3.3.2 Labels or Instructions (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
+  - id: T-FIELD-202
+    text: Say in text what is wrong with a field's input.
+    severity: error
+    markers: [review]
+    wcag: 3.3.1 Error Identification (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: A-FIELD-202
+    text: Point a field at its error message with aria-describedby.
+    markers: [review]
+    source: https://design-system.service.gov.uk/components/error-message/
+  - id: T-FIELD-203
+    text: Suggest a correction in a field's error when one is known.
+    markers: [review]
+    wcag: 3.3.3 Error Suggestion (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-suggestion.html

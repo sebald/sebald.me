@@ -38,3 +38,10 @@ rules:
     text: Make every screen and action reachable by touch alone.
     markers: [review]
     source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  # Web track (research-web-ux), from 201
+  - id: A-INPUT-201
+    text: Bind no single letter key that works whatever has the focus, unless the player can turn it off or remap it.
+    severity: error
+    markers: [open]
+    wcag: 2.1.4 Character Key Shortcuts (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/character-key-shortcuts.html

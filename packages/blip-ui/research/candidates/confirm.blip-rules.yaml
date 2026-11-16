@@ -10,3 +10,16 @@ rules:
     text: Confirm a sale only when the item can't be bought back.
     markers: [open]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  # Web track (research-web-ux), from 201
+  - id: T-CONFIRM-201
+    text: "Name in a Confirm's text what will be lost: which run, which slot, how much."
+    markers: [review]
+    source: https://www.nngroup.com/articles/confirmation-dialog/
+  - id: T-CONFIRM-202
+    text: 'Label the option that goes ahead with what it does, "Leave the run", never Yes or OK.'
+    markers: [review]
+    source: https://www.nngroup.com/articles/confirmation-dialog/
+  - id: T-CONFIRM-203
+    text: 'Label the safe option with what it keeps, "Keep playing", not Cancel.'
+    markers: [open]
+    source: https://www.nngroup.com/articles/confirmation-dialog/
