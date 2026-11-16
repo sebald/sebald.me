@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: A
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/189
 ---
 
 # `research-game-ui`: Catalog game UI elements and draft rules from game UX sources
