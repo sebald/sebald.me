@@ -1,0 +1,31 @@
+# Pattern: buying and selling (a gap).
+page: shop
+rules:
+  - id: P-SHOP-101
+    text: Show the player's gold on the shop screen the whole time.
+    markers: [review]
+    source: https://create.roblox.com/docs/production/game-design/ui-ux-design
+  - id: P-SHOP-102
+    text: Put an item's price in its row.
+    markers: [review]
+    source: https://create.roblox.com/docs/production/game-design/ui-ux-design
+  - id: P-SHOP-103
+    text: Mark an item the player can't afford by more than its colour.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-SHOP-104
+    text: Ask before selling, or let the player buy it back at the price they sold it for.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: P-SHOP-105
+    text: Show how many the player holds beside each item they can sell.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+  - id: P-SHOP-106
+    text: Stop a quantity at what the player can afford or holds.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: T-SHOP-101
+    text: Say in an unaffordable item's note how much gold is missing.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115

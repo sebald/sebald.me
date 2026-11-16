@@ -1,0 +1,6 @@
+page: meter
+rules:
+  - id: C-METER-101
+    text: Set two Meters of the same variant apart, each with its name.
+    markers: [review]
+    source: https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision

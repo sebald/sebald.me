@@ -1,0 +1,35 @@
+# Pattern: a fight's HUD (a gap).
+page: hud
+rules:
+  - id: P-HUD-101
+    text: Keep each part of the HUD in the same place for the whole fight.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/avoid-placing-essential-temporary-information-outside-the-players-eye-line/
+  - id: P-HUD-102
+    text: Show hit points as a bar beside their number.
+    markers: [review]
+    source: https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision
+  - id: P-HUD-103
+    text: Show every change of hit points in the HUD, not only as a floating number.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/avoid-placing-essential-temporary-information-outside-the-players-eye-line/
+  - id: P-HUD-104
+    text: Say a fallen member's state in words on their card.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-HUD-105
+    text: Keep a fallen member's card in its place.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: P-HUD-106
+    text: Mark whose turn it is with a shape or a word as well as a colour.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-a-fixed-colour-alone/
+  - id: P-HUD-107
+    text: Name every status icon in text the player can read.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-HUD-108
+    text: On the tall stage, put the HUD above the bar of controls.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls

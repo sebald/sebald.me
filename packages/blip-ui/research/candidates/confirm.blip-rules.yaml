@@ -1,0 +1,10 @@
+page: confirm
+rules:
+  - id: C-CONFIRM-101
+    text: Never confirm a destructive action by holding a button.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: C-CONFIRM-102
+    text: Confirm a sale only when the item can't be bought back.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115

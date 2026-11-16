@@ -1,0 +1,11 @@
+# Pattern: moving between screens (a gap).
+page: navigation
+rules:
+  - id: P-NAVIGATION-101
+    text: Give every screen but the first a way back on every input.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: P-NAVIGATION-102
+    text: Put the way back in the same place on every screen.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112

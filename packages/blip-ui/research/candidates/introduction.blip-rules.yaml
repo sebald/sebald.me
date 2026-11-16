@@ -1,0 +1,48 @@
+# Candidates for the foundations (Q9: kind F, on the introduction page).
+page: introduction
+rules:
+  - id: F-LENGTH-101
+    text: Size nothing inside the stage in CSS pixels, except a touch target.
+    severity: error
+    check: foundations-length
+    fix: |
+      <div style={{ width: px(48), height: px(12) }} />
+    source: https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering
+  - id: F-LENGTH-102
+    text: On the tall stage, keep every window clear of the bar of controls.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/designing-for-games
+  - id: F-TEXT-101
+    text: Set no text smaller than 0.75em.
+    severity: error
+    check: foundations-text-size
+    fix: |
+      <Text className="text-[0.75em]">Esc back</Text>
+    source: https://partner.steamgames.com/doc/steamdeck/compat
+  - id: F-TEXT-102
+    text: Write interface text in sentence case, not in capitals.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
+  - id: F-TEXT-103
+    text: Offer a setting that makes text larger without scaling the art.
+    markers: [open]
+    source: https://gameaccessibilityguidelines.com/allow-the-font-size-to-be-adjusted/
+  - id: F-COLOUR-101
+    text: Pair every colour that carries meaning with a word, a shape or a count.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-a-fixed-colour-alone/
+  - id: F-COLOUR-102
+    text: Keep the text of something unavailable at 3:1 against its background.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102
+  - id: F-MOTION-101
+    text: Let nothing flash more than three times in one second.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/avoid-flickering-images-and-repetitive-patterns/
+  - id: F-MOTION-102
+    text: Keep one blinking element on a screen at a time.
+    check: one-blink
+    fix: |
+      <Text variant="call">Press start</Text>
+      <Meter aria-label="Momentum" value={5} max={5} />
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117

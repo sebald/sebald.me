@@ -1,0 +1,20 @@
+# Pattern: a quest log. The quests task gets no pattern on purpose (Q12);
+# these stay candidates until that is decided.
+page: quests
+rules:
+  - id: P-QUESTS-101
+    text: Show the current objective before the rest of the log.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  - id: P-QUESTS-102
+    text: Keep done quests in the log, marked done in words.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  - id: P-QUESTS-103
+    text: Split a long log into pages by state, open and done.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: T-QUESTS-101
+    text: Give a quest's progress as a count, "3 of 5 wolves".
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109

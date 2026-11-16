@@ -1,0 +1,31 @@
+# Pattern: save slots (a gap).
+page: saves
+rules:
+  - id: P-SAVES-101
+    text: Show in each slot what it holds, where and when it was saved.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/provide-gameplay-thumbnails-with-game-saves/
+  - id: P-SAVES-102
+    text: Keep the options apart from the saves, so erasing a save keeps them.
+    markers: [review]
+    source: https://accessible.games/accessible-player-experiences/access-patterns/leave-it-there/
+  - id: P-SAVES-103
+    text: Write an empty slot as Empty, disabled with a note when loading.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-SAVES-104
+    text: Ask before saving over a slot that holds a game, naming the game.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: P-SAVES-105
+    text: Say in words that the game saved, each time it saves.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+  - id: P-SAVES-106
+    text: Save on its own at the end of every fight and every rest.
+    markers: [open]
+    source: https://gameaccessibilityguidelines.com/provide-an-autosave-feature/
+  - id: P-SAVES-107
+    text: Don't ask for a name to save.
+    markers: [review]
+    source: https://partner.steamgames.com/doc/steamdeck/compat

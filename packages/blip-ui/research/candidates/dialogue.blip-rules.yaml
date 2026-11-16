@@ -1,0 +1,15 @@
+# Pattern: dialogue (the name plate and portrait are gaps).
+page: dialogue
+rules:
+  - id: P-DIALOGUE-101
+    text: Name the speaker in words the first time they speak in a scene.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/provide-a-visual-indication-of-who-is-currently-speaking/
+  - id: P-DIALOGUE-102
+    text: Move to the next line on a press, never on a timer.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-players-to-progress-through-text-prompts-at-their-own-pace/
+  - id: P-DIALOGUE-103
+    text: Let the player read back what was said in a conversation.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-all-narrative-and-instructions-to-be-replayed/

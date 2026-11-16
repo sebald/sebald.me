@@ -1,0 +1,12 @@
+# Pattern: an empty list (a gap). The web track's empty-state candidates
+# belong beside these.
+page: empty
+rules:
+  - id: P-EMPTY-101
+    text: Say why a list is empty and what fills it.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+  - id: P-EMPTY-102
+    text: Show the empty line instead of a Picker with no rows.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113

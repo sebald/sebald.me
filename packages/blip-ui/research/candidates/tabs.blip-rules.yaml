@@ -1,0 +1,6 @@
+page: tabs
+rules:
+  - id: C-TABS-101
+    text: Label a tab with what its page holds.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114

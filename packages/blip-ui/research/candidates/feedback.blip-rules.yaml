@@ -1,0 +1,30 @@
+# Pattern: what the game says back (notifications and results are a gap).
+page: feedback
+rules:
+  - id: P-FEEDBACK-101
+    text: Update the readout an action changes as the action happens.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  - id: P-FEEDBACK-102
+    text: Say on screen what a buy, a sale or a rest did.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-sounds-alone/
+  - id: P-FEEDBACK-103
+    text: Keep a notification until the player moves on.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-players-to-progress-through-text-prompts-at-their-own-pace/
+  - id: P-FEEDBACK-104
+    text: Keep a notification off the current row and the cursor.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/make-interactive-elements-that-require-accuracy-eg-cursor-touch-controlled-menu-options-stationary/
+  - id: A-FEEDBACK-101
+    text: Play UI sounds through useFeedback, never an Audio of your own.
+    check: no-own-audio
+    fix: |
+      const play = useFeedback();
+      play('confirm');
+    source: https://gameaccessibilityguidelines.com/provide-separate-volume-controls-or-mutes-for-effects-speech-and-background-music/
+  - id: A-FEEDBACK-102
+    text: Announce the result of a purchase, a sale, a save or a rest with useAnnounce.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-screenreader-support-including-menus-installers/
