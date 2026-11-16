@@ -1,7 +1,12 @@
 ---
 status: todo # todo | doing | done
 step: G
-depends: [examples-and-patterns, rule-format, day-zero, research-game-ui, research-web-ux]
+depends:
+  - examples-and-patterns
+  - rule-format
+  - day-zero
+  - research-game-ui
+  - research-web-ux
 pr:
 ---
 
