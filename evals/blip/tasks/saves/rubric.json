@@ -24,7 +24,7 @@
     {
       "id": "no-saves",
       "text": "With no saves at all, all three slots are shown and each says it is empty.",
-      "unstated": false,
+      "unstated": true,
       "from": "screenshot",
       "screenshot": "empty@wide"
     },
@@ -41,13 +41,6 @@
       "unstated": true,
       "from": "diff",
       "url": "full"
-    },
-    {
-      "id": "empty-saves-directly",
-      "text": "Saving into an empty slot saves without asking.",
-      "unstated": true,
-      "from": "diff",
-      "url": "start"
     }
   ]
 }

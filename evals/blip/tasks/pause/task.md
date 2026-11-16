@@ -10,7 +10,7 @@ and leave the run from anywhere in the game.
 - **Options:** music volume and sound volume (0 to 10) and message speed (slow,
   normal, fast). A change takes effect right away and is kept in the game's
   `options`, through `setOption` in `src/game/state.ts`.
-- **Leave the run** ends the run through `leaveRun`. Anything not saved is lost.
+- **Leave the run** ends the run through `leaveRun`.
 - Works with the keyboard and on a touch screen.
 
 Register it as `pause`: the camp with the pause screen open, so it opens with

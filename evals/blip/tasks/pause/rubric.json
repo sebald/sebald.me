@@ -1,6 +1,6 @@
 {
   "task": "pause",
-  "scope": "all",
+  "scope": "changed-lines",
   "urls": [
     { "id": "camp", "url": "?screen=camp&state=start" },
     { "id": "start", "url": "?screen=pause&state=start" }
@@ -8,7 +8,7 @@
   "statements": [
     {
       "id": "choices",
-      "text": "The pause screen offers Resume, Options and Leave the run, and the camp can still be seen around or behind it.",
+      "text": "The pause screen offers Resume, Options and Leave the run, and the camp is still visible behind it.",
       "unstated": false,
       "from": "screenshot",
       "screenshot": "start@wide"

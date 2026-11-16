@@ -8,7 +8,7 @@
   "statements": [
     {
       "id": "members",
-      "text": "Wren, Oda and Pim are shown with their HP and MP as current out of max (Wren 42/50 HP and 6/10 MP).",
+      "text": "Each of Wren, Oda and Pim shows HP and MP as current out of max (as Wren's 42/50 HP and 6/10 MP).",
       "unstated": false,
       "from": "screenshot",
       "screenshot": "fight@wide"
@@ -29,7 +29,7 @@
     },
     {
       "id": "enemies",
-      "text": "The Bog Rat and the Marsh Wisp are shown by name with how hurt they are, and neither's HP is written as a number.",
+      "text": "The Bog Rat and the Marsh Wisp each show how hurt they are by a bar or in words, not as an HP number.",
       "unstated": false,
       "from": "screenshot",
       "screenshot": "fight@wide"

@@ -8,7 +8,7 @@
   "statements": [
     {
       "id": "open-and-done",
-      "text": "The Lost Ferry and Wolves at Hollow Gate are shown as open, apart from and before Herbs for Old Bess, which is shown as done.",
+      "text": "The two open quests (The Lost Ferry, Wolves at Hollow Gate) are listed before, and visibly apart from, the done one (Herbs for Old Bess).",
       "unstated": false,
       "from": "screenshot",
       "screenshot": "start@wide"

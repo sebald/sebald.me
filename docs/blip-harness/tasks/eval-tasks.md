@@ -36,7 +36,7 @@ template's data has to fit those tickets. The tasks come first.
 
 Filled in while the task is worked on: what changed, decisions, numbers.
 
-- **What's there.** Six tasks, 34 statements, 14 of them `unstated`. `evals/blip/README.md`
+- **What's there.** Six tasks, 33 statements, 14 of them `unstated`. `evals/blip/README.md`
   has both formats and what the template holds for the tickets: `data.ts` by name, seven
   fixtures (`start`, `exact`, `broke`, `empty`, `full`, `fight`, `fallen`), and two
   assumptions about `state.ts` and `camp.tsx` that the `template` task has to keep.
@@ -50,9 +50,15 @@ Filled in while the task is worked on: what changed, decisions, numbers.
   statements depend on one: `camp.tsx` listens for keys on `window` (`pause`), and `buy` and
   `rest` already refuse without enough gold (`shop`, `camp-rest`), so calling them and
   showing nothing fails.
-- **`scope`.** `camp-rest` is `changed-lines`: `validate`, the counts and the rendered checks
-  look at what the agent changed, not at the messy screen it found. It has no statement
-  against rewriting the camp: the ticket doesn't forbid it.
+- **`scope`.** `camp-rest` and `pause` are `changed-lines`: both change `camp.tsx`, so
+  `validate`, the counts and the rendered checks look at what the agent changed, not at the
+  messy screen it found. Neither has a statement against rewriting the camp: the tickets
+  don't forbid it.
+- **After review.** Statements that held several claims were narrowed to one (`fight-hud`
+  `members` and `enemies`, `quests` `open-and-done`); `saves` `no-saves` is `unstated` (the
+  ticket never says an empty slot says so) and `empty-saves-directly` is gone (asking before
+  every save breaks nothing, and `overwrite-asks` covers the case that matters); the `pause`
+  ticket no longer says "anything not saved is lost", which hinted at `leave-asks`.
 - **No component names, even as plain words.** Menu, window, dialog, button, tabs, meter,
   title, text, line, step are all Blip names, so the tickets say "pause screen", "name",
   "what to do next", "ask first", "message speed". Checked by a script against every export
