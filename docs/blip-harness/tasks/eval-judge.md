@@ -13,8 +13,12 @@ a layout check can answer.
 **Outcome.** `collect.mjs` asks a judge each rubric statement and stores pass or fail with the
 evidence.
 
-**Included.** `evals/blip/judge.md`, the judge's prompt. The judge sees the task, the rubric,
-the diff of `src/` and the screenshots, and nothing that names the configuration. JSON answers
+**Included.** `evals/blip/judge.md`, the judge's prompt. One question per statement, from the
+one source its `from` names (`evals/blip/README.md`): `diff` gets the ticket and the diff of
+`src/`; `screenshot` gets the ticket and the one screenshot its `screenshot` names
+(`<url id>@wide|phone`). A statement's `note` goes to the judge with it; its `url` is for the
+human reader, not the judge. Nothing names the configuration. Results are keyed
+`<task>/<id>`. JSON answers
 checked against a schema; an invalid answer is retried once, then recorded as a judge error.
 The judge's model and cost in `results.json` (**Q14**).
 
@@ -26,7 +30,9 @@ The judge's model and cost in `results.json` (**Q14**).
   nine statements in ten; where it does not, the statement is rewritten in `eval-tasks`
 - Day zero is collected again from the cache, and its results now hold measure 3
 - The judge's input contains no `.blip/`, no `CLAUDE.md` and no configuration name
-- Unstated statements are reported on their own
+- Unstated statements (`unstated: true`) are reported on their own
+- A statement judged from a screenshot is given no diff, and one judged from the diff no
+  screenshot
 - `summary.md` lists every failed statement with the judge's evidence, for me to read
 
 **Depends on.** [`eval-collect`](eval-collect.md), [`eval-rendered`](eval-rendered.md) (for the screenshots), [`day-zero`](day-zero.md) (the runs to

@@ -29,7 +29,10 @@ spread between repetitions per measure, which later comparisons are held against
 
 - 36 runs collected; runs that hit the budget or the time limit are reported, not dropped
 - Every invented element in the write-up is tied to a run and a line
-- Each catalog "gap" the tasks touch either has a task file or is listed as left open
+- Each gap in the catalog's "Gaps, by how many tasks touch them"
+  (`packages/blip-ui/research/catalog.md`, under "By task") with at least one task either has
+  a task file or is listed as left open, and the write-up says where day zero's runs agree or
+  disagree with that ranking
 - The estimates in **Q13** are replaced by measured numbers
 
 **Depends on.** [`eval-run`](eval-run.md), [`eval-collect`](eval-collect.md), [`research-game-ui`](research-game-ui.md) (the catalog), [`readable-types`](readable-types.md).

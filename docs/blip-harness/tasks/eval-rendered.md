@@ -10,9 +10,12 @@ pr:
 **Problem.** Code that builds can still put a window half outside the stage or cut a price off.
 Blip already has the check for that, but it is tied to Storybook.
 
-**Outcome.** `collect.mjs` builds and serves each result, opens the rubric's URLs wide
-(960 × 600) and on a phone (402 × 714), and records layout escapes, cut text and axe
-violations. Screenshots are kept in the cache.
+**Outcome.** `collect.mjs` builds and serves each result, opens each `urls[].url` of the task's
+`rubric.json` (always `?screen=<name>&state=<fixture>`) wide (960 × 600) and on a phone
+(402 × 714), and records layout escapes, cut text and axe violations. Screenshots are kept in
+the cache, named `<url id>@wide` and `<url id>@phone`: the names rubric statements give in
+`screenshot`. For a `scope: changed-lines` task, what the untouched template shows on the same
+URL is subtracted, so only what the agent's change brought counts.
 
 **Included.** A root parameter for `escapes()` in `tests/visual/layout.ts` (it reads
 `#storybook-root` at `:15`; the default stays, so `stories.spec.ts` is unchanged). `axe-core`
@@ -27,6 +30,7 @@ script, using the installed Chrome as the game's tests do.
 - On the untouched template, `camp` yields the same result on two runs
 - A fixture screen with text in a too-small box that hides its overflow yields one "cut" entry
 - A screen that fails to render is recorded as such and does not stop the collection
+- Every `screenshot` a rubric statement names exists after collecting
 - The "Blip UI Visual Regression" workflow passes on the pull request
 - Day zero is collected again from the cache, and its results now hold measure 4
 
