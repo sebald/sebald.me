@@ -46,7 +46,10 @@ The components day zero calls for are drafted by [`day-zero`](day-zero.md) and a
 - Write what changed, decisions and numbers under **Notes** in the same file
 - `grep -H '^status:' docs/blip-harness/tasks/*.md` lists where everything stands
 
-`blip-harness` lives as a draft pull request against `main`, so CI runs on every push to it.
-Pull requests into `blip-harness` get no CI of their own (the workflows only run for `main`):
-run `pnpm lint`, `pnpm test` and `pnpm typecheck` before merging one, and read the draft
-pull request's checks after.
+`blip-harness` lives as a draft pull request against `main`, so every workflow runs on each
+push to it. A pull request into `blip-harness` runs only the test workflow (lint, format,
+tests, narrations). The screenshot workflows, Blip UI's visual regression and the game's
+flows, run only for `main`, and are never started without asking first. A task that changes
+`packages/blip-ui` runs `pnpm typecheck` and `pnpm test:game` locally and, when it changes
+what a story looks like, `pnpm vrt:blip-ui` in Docker, says so in its pull request, and reads
+the draft pull request's checks after it is merged.
