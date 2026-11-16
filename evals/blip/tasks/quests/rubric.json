@@ -1,0 +1,44 @@
+{
+  "task": "quests",
+  "scope": "all",
+  "urls": [
+    { "id": "start", "url": "?screen=quests&state=start" },
+    { "id": "empty", "url": "?screen=quests&state=empty" }
+  ],
+  "statements": [
+    {
+      "id": "open-and-done",
+      "text": "The Lost Ferry and Wolves at Hollow Gate are shown as open, apart from and before Herbs for Old Bess, which is shown as done.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "giver-and-next",
+      "text": "Each open quest shows who gave it and what to do next (The Lost Ferry: Search the reeds south of the ford).",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "done-mark",
+      "text": "The done quest is marked as done in words or a symbol, not only by colour or by being greyed out.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "description",
+      "text": "Choosing a quest shows its whole `description`.",
+      "unstated": false,
+      "from": "diff"
+    },
+    {
+      "id": "no-quests",
+      "text": "With no quests, the screen says there are none yet, instead of empty space or a heading with nothing under it.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "empty@wide"
+    }
+  ]
+}

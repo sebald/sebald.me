@@ -1,0 +1,53 @@
+{
+  "task": "saves",
+  "scope": "all",
+  "urls": [
+    { "id": "start", "url": "?screen=saves&state=start" },
+    { "id": "full", "url": "?screen=saves&state=full" },
+    { "id": "empty", "url": "?screen=saves&state=empty" }
+  ],
+  "statements": [
+    {
+      "id": "slot-details",
+      "text": "Three slots are shown, and slot 1 shows Mossy Ford, Wren, level 4, its play time and when it was saved.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "readable-times",
+      "text": "Slot 1's play time and save date are written the way a player reads them (like 3:25 and a date), not as a number of seconds or an ISO timestamp.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "no-saves",
+      "text": "With no saves at all, all three slots are shown and each says it is empty.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "empty@wide"
+    },
+    {
+      "id": "empty-cant-load",
+      "text": "An empty slot can't be loaded: it can't be chosen for loading, or choosing it says it is empty and calls no `load`.",
+      "unstated": true,
+      "from": "diff",
+      "url": "start"
+    },
+    {
+      "id": "overwrite-asks",
+      "text": "Saving into a slot that already holds a save asks the player first, and `save` is only called after they agree.",
+      "unstated": true,
+      "from": "diff",
+      "url": "full"
+    },
+    {
+      "id": "empty-saves-directly",
+      "text": "Saving into an empty slot saves without asking.",
+      "unstated": true,
+      "from": "diff",
+      "url": "start"
+    }
+  ]
+}

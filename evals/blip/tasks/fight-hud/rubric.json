@@ -1,0 +1,52 @@
+{
+  "task": "fight-hud",
+  "scope": "all",
+  "urls": [
+    { "id": "fight", "url": "?screen=fight&state=fight" },
+    { "id": "fallen", "url": "?screen=fight&state=fallen" }
+  ],
+  "statements": [
+    {
+      "id": "members",
+      "text": "Wren, Oda and Pim are shown with their HP and MP as current out of max (Wren 42/50 HP and 6/10 MP).",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "fight@wide"
+    },
+    {
+      "id": "status",
+      "text": "Wren is shown as poisoned, and no one else is.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "fight@wide"
+    },
+    {
+      "id": "turn",
+      "text": "Oda is marked as the one whose turn it is, and Wren and Pim are not.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "fight@wide"
+    },
+    {
+      "id": "enemies",
+      "text": "The Bog Rat and the Marsh Wisp are shown by name with how hurt they are, and neither's HP is written as a number.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "fight@wide"
+    },
+    {
+      "id": "fallen",
+      "text": "Pim, at 0 HP, is still shown with the party and is marked as fallen in words or a symbol, not only by colour or by being greyed out.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "fallen@wide"
+    },
+    {
+      "id": "phone",
+      "text": "On the phone, all three members' names and HP are on screen and readable, with nothing overlapping or cut off.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "fallen@phone"
+    }
+  ]
+}
