@@ -14,10 +14,26 @@
       "default": "./src/styles.css"
     }
   },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./styles.css": {
+        "style": "./dist/styles.css",
+        "default": "./dist/styles.css"
+      }
+    }
+  },
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static --quiet",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepack": "rm -rf dist && tsc -p tsconfig.build.json && cp src/styles.css src/tokens.css dist/"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
