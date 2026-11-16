@@ -1,0 +1,53 @@
+{
+  "task": "shop",
+  "scope": "all",
+  "urls": [
+    { "id": "start", "url": "?screen=shop&state=start" },
+    { "id": "exact", "url": "?screen=shop&state=exact" },
+    { "id": "empty", "url": "?screen=shop&state=empty" }
+  ],
+  "statements": [
+    {
+      "id": "stock",
+      "text": "All six items of the shop's stock are listed, each with its name and price.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "gold",
+      "text": "The player's gold is shown, as 120.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "cant-afford",
+      "text": "The Iron Sword (150) is marked as one the player can't afford, and none of the items costing 120 or less is.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "cant-buy",
+      "text": "An item that costs more than the player's gold can't be bought: it can't be chosen, or choosing it says why and calls no `buy`.",
+      "unstated": false,
+      "from": "diff",
+      "note": "`buy` in state.ts already refuses and returns `{ ok: false, reason: 'gold' }`. A shop that calls it and shows nothing when it is refused fails this."
+    },
+    {
+      "id": "exact-gold",
+      "text": "With 25 gold, the Tonic (25) is shown as affordable, the same way as the cheaper items.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "exact@wide"
+    },
+    {
+      "id": "nothing-to-sell",
+      "text": "With an empty pack, selling says there is nothing to sell, instead of showing an empty list or empty space.",
+      "unstated": true,
+      "from": "diff",
+      "url": "empty"
+    }
+  ]
+}

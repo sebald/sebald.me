@@ -293,8 +293,8 @@ toolchain Blip's Storybook already uses (`.storybook/main.ts:2,11`).
 | File                   | Content                                                                                                     |
 | ---------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `package.json`         | Scripts `typecheck`, `build`, `preview`; Blip from the packed tarball; `react` at Blip's exact peer version |
-| `src/game/data.ts`     | Items and prices, a party, quests, save slots, and named fixtures (`broke`, `empty`, `full`)                |
-| `src/game/state.ts`    | The game's state and actions (buy, sell, save, load, rest)                                                  |
+| `src/game/data.ts`     | Items and prices, a party, quests, save slots, and named fixtures (`evals/blip/README.md` lists them)       |
+| `src/game/state.ts`    | The game's state and actions (buy, sell, save, load, rest, setOption, leaveRun)                             |
 | `src/theme.css`        | Its own values for `--bui-*` on `[data-stage]`                                                              |
 | `src/app.tsx`          | A `Stage` and a router-free screen switch: `?screen=<name>&state=<fixture>` opens a screen on a fixture     |
 | `src/screens/index.ts` | The screens by name. A task says which name to add                                                          |

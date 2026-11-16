@@ -26,6 +26,13 @@ exclusions from the root `tsc`, oxlint and oxfmt (the root `tsc` includes `**/*.
 - `?screen=camp` renders wide and on a 402 px phone; `?screen=camp&state=broke` shows the
   fixture's gold
 - `camp.tsx` imports nothing from `@sebald/blip-ui` and styles itself inline
+- The two assumptions the tickets rely on (`evals/blip/README.md`) hold, or the rubrics'
+  `note`s change with them: `buy`, `sell` and `rest` refuse what the state doesn't allow
+  and return the reason; `camp.tsx` takes arrow keys and Enter in a `keydown` listener on
+  `window`, which a Blip `Dialog` opened over it does not silence
+- Every name and fixture in `evals/blip/README.md` ("What the template holds for the tasks")
+  exists with the values it lists, and `state.ts` exports `buy`, `sell`, `save`, `load`,
+  `rest`, `setOption` and `leaveRun`; each of the seven fixtures opens on `?screen=camp`
 - The theme is visibly not Blip's default palette
 - Nothing in the template names Pushback or this repo
 - `pnpm lint`, `pnpm format:check` and `pnpm typecheck` at the root ignore the template
