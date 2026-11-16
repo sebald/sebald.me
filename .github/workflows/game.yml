@@ -6,7 +6,7 @@ name: Game
 # tests or this workflow change, or by hand.
 on:
   pull_request:
-    branches: [main, blip-harness]
+    branches: [main]
     paths:
       - 'packages/pushback/**'
       - 'packages/blip-ui/**'
