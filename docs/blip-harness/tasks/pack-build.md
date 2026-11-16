@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: A
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/193
 ---
 
 # `pack-build`: Pack Blip into a tarball that holds only what a consumer gets
