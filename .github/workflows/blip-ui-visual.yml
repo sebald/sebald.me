@@ -5,7 +5,7 @@ name: Blip UI Visual Regression
 # the kit, its dependencies or this workflow change.
 on:
   pull_request:
-    branches: [main]
+    branches: [main, blip-harness]
     paths:
       - 'packages/blip-ui/**'
       - 'pnpm-lock.yaml'
