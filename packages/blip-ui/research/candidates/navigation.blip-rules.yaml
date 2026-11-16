@@ -16,12 +16,16 @@ rules:
     markers: [review]
     wcag: 2.4.7 Focus Visible (AA)
     source: https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html
+  # Open: XAG 112 asks for navigation that is consistent and predictable, not
+  # for one key that closes every overlay. That key is Blip's own call.
   - id: P-NAVIGATION-201
     text: Close everything that opens over a screen with the same key on every screen.
-    markers: [review]
-    source: https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/112
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  # 3.2.4 asks for consistent, not identical, names: one that adds what it acts on
+  # still names the same action.
   - id: T-NAVIGATION-201
-    text: Call the same action by the same name on every screen.
+    text: Call the same action by the same name on every screen, unless the name only adds what it acts on.
     markers: [review]
     wcag: 3.2.4 Consistent Identification (AA)
     source: https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification.html

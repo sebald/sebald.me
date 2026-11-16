@@ -3,4 +3,5 @@ rules:
   # Web track (research-web-ux), from 201
   - id: T-TEXT-201
     text: 'Never show the player a raw value from the code: undefined, NaN or an id.'
+    markers: [review]
     source: https://www.nngroup.com/articles/ten-usability-heuristics/

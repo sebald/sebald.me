@@ -56,17 +56,18 @@ rules:
     markers: [open]
     wcag: 2.2.2 Pause, Stop, Hide (A)
     source: https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html
+  # WCAG 1.4.3 exempts inactive components, so a disabled item is left to
+  # F-COLOUR-102.
   - id: F-COLOUR-201
-    text: Keep text the player can still pick at 4.5:1 against what is behind it (3:1 for large text), however faded.
+    text: Keep the text of an item that is not disabled at 4.5:1 against what is behind it (3:1 for large text), however faded.
     severity: error
+    markers: [review]
     wcag: 1.4.3 Contrast (Minimum) (AA)
     source: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+  # 2.4.11 exempts what the player opens over a screen, if the cursor's item can be
+  # brought back into view without closing it.
   - id: F-LAYER-201
-    text: Let nothing laid over a screen hide the item the cursor is on entirely.
+    text: Let nothing the game lays over a screen by itself hide the item the cursor is on entirely.
     markers: [review]
     wcag: 2.4.11 Focus Not Obscured (Minimum) (AA)
     source: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html
-  - id: F-LENGTH-201
-    text: Make anything the player can tap at least 44 by 44 CSS pixels, unless the same action has a target that size.
-    wcag: 2.5.5 Target Size (Enhanced) (AAA)
-    source: https://www.w3.org/WAI/WCAG22/Understanding/target-size-enhanced.html

@@ -5,7 +5,8 @@ Each conflict has the game source, the web source, and what Blip does today
 split in two: `research-game-ui` wrote 1 to 9 from the game sources outward,
 `research-web-ux` completed them from the web side and added 10 to 16. Blip
 today was read from the code on 2026-11-16, not tried in a browser, unless an
-entry says so. A candidate marked `[open]` waits on the conflict that names it.
+entry says so. A candidate marked `[open]` is Blip's own call; where a
+conflict names it, it waits on that conflict.
 
 ## 1. A list that wraps, a list that stops
 
@@ -33,8 +34,8 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
 - **Blip today:** the composite-widget reading. A disabled row stays reachable,
   bumps when picked and carries a note
   (`components/picker/picker.mdx:57`, `:73-74`, `:103`). A disabled `Button`
-  is a native one and leaves the tab order (`components/button/button.tsx:49`); its page asks for the reason next to it
-  (`components/button/button.mdx:66-67`).
+  is a native one and leaves the tab order (`components/button/button.mdx:64`);
+  its page asks for the reason next to it (`components/button/button.mdx:66-67`).
 
 ## 3. How faint "disabled" may be
 
@@ -47,8 +48,8 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
   `saturate(0)` (`styles.css:21-24`); its contrast against a window's fill
   has not been measured. `F-COLOUR-102` is `[open]` until it is. A
   `ruledOut` item is not disabled, so WCAG 1.4.3 applies to it in full, yet it
-  fades to 25% (`components/picker/picker.tsx:414`); `F-COLOUR-201` holds text
-  the player can still pick to 4.5:1.
+  fades to 25% (`components/picker/picker.tsx:414`); `F-COLOUR-201` holds the
+  text of an item that is not disabled to 4.5:1.
 
 ## 4. A call that blinks for ever
 
@@ -84,7 +85,8 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
   (`components/picker/picker.mdx:89`). On AZERTY, W and S are not above each
   other; the arrows still work. `P-INPUT-102` asks for the arrows beside every
   letter binding; remapping is a gap (`P-INPUT-105`, `[open]`). The kit hears
-  keys on `window` whatever has the focus (`hooks/key-layer.ts:116`), so W and
+  keys on `window` except in text fields and widgets that take the key
+  (`hooks/key-layer.ts:78-96`, `:116`), so W and
   S fail 2.1.4 until they can be turned off or remapped (`A-INPUT-201`,
   `[open]`).
 
@@ -150,13 +152,13 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
 
 - **Game:** one cursor per screen, moved by the arrows or the D-pad whatever
   the input, and always visible
-  ([XAG 113](https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/113)).
+  ([XAG 113](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113)).
 - **Web:** the keys go to the element with the focus; a composite widget moves
   the focus itself (roving `tabindex`) or points at its active item
   (`aria-activedescendant`), so a screen reader follows it
   ([APG, keyboard interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/)).
-- **Blip today:** a cursor. The kit hears keys on `window` whatever has the
-  focus (`hooks/key-layer.ts:116`); the current row is `aria-current` on a
+- **Blip today:** a cursor. The kit hears keys on `window` except in text
+  fields and widgets that take the key (`hooks/key-layer.ts:78-96`, `:116`); the current row is `aria-current` on a
   button that never gets the focus (`components/picker/picker.tsx:403`), and
   every row is a Tab stop of its own. As the code reads, moving the cursor
   tells a screen reader only the note (`components/picker/picker.tsx:384-387`),
@@ -166,9 +168,10 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
 ## 11. The pointer moves the cursor
 
 - **Game:** the pointer over an item moves the cursor to it, so the mouse and
-  the keys share one cursor
-  ([XAG 112](https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/112):
-  the input that moved the focus can move it away).
+  the keys share one cursor. No source we read says so; it is Blip's own
+  reading of game menus.
+  [XAG 112](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112)
+  asks only that the input that moved the focus can move it on.
 - **Web:** hover changes the hover style only. Content that hover or focus
   shows can be dismissed without moving, unless it covers nothing
   ([WCAG 1.4.13](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html)).
@@ -195,13 +198,15 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
 - **Game:** picking what is off plays a bump and the cursor stays. The
   guidelines ask that nothing essential is said by sound alone
   ([GAG](https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-sounds-alone/)).
-- **Web:** an error is identified and described in text
+- **Web:** an input error that is detected automatically is identified and
+  described in text
   ([WCAG 3.3.1](https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html)).
+  A refused pick isn't one by its letter.
 - **Blip today:** a disabled item bumps
   (`components/picker/picker.tsx:162-165`); the reason is its `note`, asked for
   in the prop's doc but optional (`components/picker/picker.tsx:317-326`).
   Whether a disabled item without a note is allowed is undecided;
-  `P-FEEDBACK-201` asks for the reason in text.
+  `P-FEEDBACK-201` asks for the reason in text and is `[open]`.
 
 ## 14. Ask first, or undo
 
@@ -219,9 +224,10 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
 
 ## 15. Where the focus goes when a dialog opens
 
-- **Game:** the cursor starts on the safe answer
-  ([XAG 112](https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/112),
-  predictable focus).
+- **Game:** the cursor starts on the safe answer. No game source we read says
+  where it starts; this is Blip's own inference.
+  [XAG 112](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112)
+  asks for focus that is predictable.
 - **Web:** the focus goes to the first focusable element, or to the least
   destructive action before something that is hard to undo
   ([APG modal dialog](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)).
@@ -256,5 +262,5 @@ entry says so. A candidate marked `[open]` waits on the conflict that names it.
   ask.
 - **Text that types itself.** A press skips it, reduced motion shows it whole,
   and menus never type (`components/typewriter/typewriter.mdx:29-33`), as
-  [XAG 117](https://learn.microsoft.com/en-us/gaming/accessibility/xbox-accessibility-guidelines/117)
+  [XAG 117](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117)
   asks.
