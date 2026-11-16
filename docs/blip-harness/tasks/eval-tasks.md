@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: A
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/190
 ---
 
 # `eval-tasks`: Write the eval's tasks and their rubrics
