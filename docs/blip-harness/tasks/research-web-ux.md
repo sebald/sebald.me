@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: A
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/191
 ---
 
 # `research-web-ux`: Draft rules from web UX and accessibility sources, and list the conflicts
