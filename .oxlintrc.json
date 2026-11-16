@@ -95,6 +95,7 @@
     "next-env.d.ts",
     ".source/**",
     "**/storybook-static/**",
-    "**/playwright-report/**"
+    "**/playwright-report/**",
+    "packages/blip-ui/dist/**"
   ]
 }
