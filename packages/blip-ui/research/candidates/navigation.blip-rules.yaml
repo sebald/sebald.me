@@ -2,7 +2,7 @@
 page: navigation
 rules:
   - id: P-NAVIGATION-101
-    text: Give every screen but the first a way back on every input.
+    text: Give every screen with something to choose a way back on every input.
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
   - id: P-NAVIGATION-102

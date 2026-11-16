@@ -7,14 +7,18 @@ rules:
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
   - id: P-QUESTS-102
-    text: Keep done quests in the log, marked done in words.
+    text: Keep done quests in the log.
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
   - id: P-QUESTS-103
     text: Split a long log into pages by state, open and done.
     markers: [review]
-    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
   - id: T-QUESTS-101
     text: Give a quest's progress as a count, "3 of 5 wolves".
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  - id: P-QUESTS-104
+    text: Mark a done quest in words, not only in colour.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103

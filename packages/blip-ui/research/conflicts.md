@@ -55,8 +55,10 @@ own.
   can be paused, stopped or hidden
   ([WCAG 2.2.2](https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html)).
 - **Blip today:** a call and a meter's `blink` stop only under reduced motion
-  (`components/text/text.mdx:43-45`, `components/meter/meter.mdx`, Variants);
+  (`components/text/text.mdx:43-45`, `components/meter/meter.mdx:40-42`);
   there is no setting in the game. Undecided whether reduced motion is enough.
+  One call per screen is Blip's own call (`components/text/text.mdx:32`), so
+  `F-MOTION-102` is `[open]`.
 
 ## 5. Keys by character or by place
 
@@ -101,10 +103,14 @@ own.
 
 ## 8. Where the cursor shows
 
-- **Game:** the focused item is always visibly marked
+- **Game:** the focused item is always visibly marked, and focus never sits on
+  an invisible element
   ([XAG 113](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113)).
-- **Web:** the focus ring shows for the keyboard and may be hidden for the
-  pointer (`:focus-visible`).
+- **Web:** the keyboard focus indicator must be visible; showing one for the
+  pointer is optional ("may consider",
+  [WCAG 2.4.7](https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html)),
+  and `:focus-visible` hides the ring after a mouse click
+  ([MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-visible)).
 - **Blip today:** both: the Picker's cursor shows for keys and the pointer,
   not under a finger, where only a row with a note is marked
   (`components/picker/picker.mdx:93`); the focus ring is `:focus-visible`
@@ -113,10 +119,12 @@ own.
 ## 9. Capitals
 
 - **Game:** titles and calls in a pixel font are often all capitals; XAG asks
-  that text can be shown in sentence case
-  ([XAG 101](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101)).
+  that lines of text can be shown in sentence case, and exempts a one- or
+  two-word label
+  ([XAG 101](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101),
+  Text case and alignment).
 - **Web:** capitals are styling; the text underneath stays as written.
 - **Blip today:** BitmapText upper-cases and is `aria-hidden`; the words are
   given again in text (`components/bitmap-text/bitmap-text.mdx`, Letters and
   Accessibility). Running text is never BitmapText. `F-TEXT-102` asks for
-  sentence case everywhere else.
+  sentence case in running text; a short label may stay in capitals.

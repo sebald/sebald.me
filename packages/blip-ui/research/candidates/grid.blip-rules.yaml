@@ -1,6 +1,8 @@
 # A grid of choices is a gap (catalog: Grid of choices).
 page: grid
 rules:
+  # Open until Blip has a grid. XAG 112 says a menu that moves in every direction
+  # should not loop.
   - id: P-GRID-101
     text: Let a grid stop at its edges instead of wrapping round.
     markers: [open]

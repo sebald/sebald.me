@@ -3,4 +3,4 @@ rules:
   - id: C-WINDOW-101
     text: Name in a Legend only the keys that work on that screen now.
     markers: [review]
-    source: https://gameaccessibilityguidelines.com/indicate-allow-reminder-of-controls-during-gameplay/
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls

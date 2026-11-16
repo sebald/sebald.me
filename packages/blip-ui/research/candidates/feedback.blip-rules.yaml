@@ -4,7 +4,7 @@ rules:
   - id: P-FEEDBACK-101
     text: Update the readout an action changes as the action happens.
     markers: [review]
-    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
   - id: P-FEEDBACK-102
     text: Say on screen what a buy, a sale or a rest did.
     markers: [review]
@@ -16,15 +16,23 @@ rules:
   - id: P-FEEDBACK-104
     text: Keep a notification off the current row and the cursor.
     markers: [review]
-    source: https://gameaccessibilityguidelines.com/make-interactive-elements-that-require-accuracy-eg-cursor-touch-controlled-menu-options-stationary/
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html
+  # Open: the source asks for separate volumes for effects, speech and music; it
+  # doesn't say how sounds are played. One path for every sound (useFeedback) is
+  # Blip's own call, and the check no-own-audio waits until it is settled.
   - id: A-FEEDBACK-101
     text: Play UI sounds through useFeedback, never an Audio of your own.
-    check: no-own-audio
-    fix: |
-      const play = useFeedback();
-      play('confirm');
+    markers: [open]
     source: https://gameaccessibilityguidelines.com/provide-separate-volume-controls-or-mutes-for-effects-speech-and-background-music/
   - id: A-FEEDBACK-102
-    text: Announce the result of a purchase, a sale, a save or a rest with useAnnounce.
+    text: Announce the result of a purchase or a sale with useAnnounce.
     markers: [review]
-    source: https://gameaccessibilityguidelines.com/ensure-screenreader-support-including-menus-installers/
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  - id: A-FEEDBACK-105
+    text: Announce that the game saved with useAnnounce.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  - id: A-FEEDBACK-106
+    text: Announce that the party rested with useAnnounce.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html

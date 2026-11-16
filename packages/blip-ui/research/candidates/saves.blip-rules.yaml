@@ -2,17 +2,19 @@
 page: saves
 rules:
   - id: P-SAVES-101
-    text: Show in each slot what it holds, where and when it was saved.
+    text: Show in each slot the place and the progress it holds.
     markers: [review]
-    source: https://gameaccessibilityguidelines.com/provide-gameplay-thumbnails-with-game-saves/
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  # Open: the pattern asks for settings to be kept between sessions; keeping them
+  # apart from the saves is Blip's own call.
   - id: P-SAVES-102
     text: Keep the options apart from the saves, so erasing a save keeps them.
-    markers: [review]
+    markers: [open]
     source: https://accessible.games/accessible-player-experiences/access-patterns/leave-it-there/
   - id: P-SAVES-103
-    text: Write an empty slot as Empty, disabled with a note when loading.
+    text: Write an empty slot as Empty.
     markers: [review]
-    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+    source: https://www.nngroup.com/articles/empty-state-interface-design/
   - id: P-SAVES-104
     text: Ask before saving over a slot that holds a game, naming the game.
     markers: [review]
@@ -20,12 +22,36 @@ rules:
   - id: P-SAVES-105
     text: Say in words that the game saved, each time it saves.
     markers: [review]
-    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
+  # Open: the source asks for an autosave and names no moment; the end of every
+  # fight and rest is Blip's own call.
   - id: P-SAVES-106
     text: Save on its own at the end of every fight and every rest.
     markers: [open]
     source: https://gameaccessibilityguidelines.com/provide-an-autosave-feature/
+  # Open: the source only says text entry must work with a controller; whether a
+  # save is named at all is Blip's own call.
   - id: P-SAVES-107
     text: Don't ask for a name to save.
-    markers: [review]
+    markers: [open]
     source: https://partner.steamgames.com/doc/steamdeck/compat
+  - id: P-SAVES-108
+    text: Show in each slot when it was saved.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  - id: P-SAVES-109
+    text: Show in each slot how long the game has been played.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+  - id: T-SAVES-110
+    text: Write a save's date and play time the way a player reads them, not as seconds or a timestamp code.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
+  - id: P-SAVES-111
+    text: Disable an empty slot when loading, with a note that says it is empty.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-SAVES-112
+    text: Show on the save screen whether the player is saving or loading.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/

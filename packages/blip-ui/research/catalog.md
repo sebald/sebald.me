@@ -24,15 +24,17 @@ disagree is in `conflicts.md`.
 
 The sources, by short name:
 
-| Short | Source                                                                                                                                                                                                               |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GAG   | [Game Accessibility Guidelines](https://gameaccessibilityguidelines.com/full-list/)                                                                                                                                  |
-| XAG   | [Xbox Accessibility Guidelines 3.2](https://learn.microsoft.com/en-us/xbox/accessibility/guidelines), by number (XAG 112)                                                                                            |
-| APX   | [AbleGamers, Accessible Player Experiences](https://accessible.games/accessible-player-experiences/)                                                                                                                 |
-| HIG   | [Apple HIG, Designing for games](https://developer.apple.com/design/human-interface-guidelines/designing-for-games) and [Game controls](https://developer.apple.com/design/human-interface-guidelines/game-controls) |
-| Deck  | [Steam Deck compatibility review](https://partner.steamgames.com/doc/steamdeck/compat)                                                                                                                               |
-| HUD   | [Perceiving without looking: designing HUDs for peripheral vision](https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision)                                                 |
-| Pad   | [MDN, Using the Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API)                                                                                                     |
+| Short | Source                                                                                                                                                                                                                                                                                                          |
+| ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GAG   | [Game Accessibility Guidelines](https://gameaccessibilityguidelines.com/full-list/)                                                                                                                                                                                                                             |
+| XAG   | [Xbox Accessibility Guidelines 3.2](https://learn.microsoft.com/en-us/xbox/accessibility/guidelines), by number (XAG 112)                                                                                                                                                                                       |
+| APX   | [AbleGamers, Accessible Player Experiences](https://accessible.games/accessible-player-experiences/)                                                                                                                                                                                                            |
+| HIG   | [Apple HIG, Designing for games](https://developer.apple.com/design/human-interface-guidelines/designing-for-games) and [Game controls](https://developer.apple.com/design/human-interface-guidelines/game-controls)                                                                                            |
+| Deck  | [Steam Deck compatibility review](https://partner.steamgames.com/doc/steamdeck/compat)                                                                                                                                                                                                                          |
+| HUD   | [Perceiving without looking: designing HUDs for peripheral vision](https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision)                                                                                                                                            |
+| Pad   | [MDN, Using the Gamepad API](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API)                                                                                                                                                                                                |
+| NN/g  | [Nielsen Norman Group](https://www.nngroup.com/articles/): [ten usability heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/), [empty states](https://www.nngroup.com/articles/empty-state-interface-design/), [error messages](https://www.nngroup.com/articles/error-message-guidelines/) |
+| WCAG  | [WCAG 2.2, Understanding](https://www.w3.org/WAI/WCAG22/Understanding/): focus not obscured, headings and labels, status messages                                                                                                                                                                               |
 
 ## Menus and navigation
 
@@ -45,7 +47,7 @@ choices in a fight.
 - **Not** for one action a screen is for (a `Button`), nor for pages of a
   window (`Tabs`).
 - **Blip:** `picker`
-- **Tasks:** `shop`, `saves`, `pause`, `fight-hud`, `quests`, `camp-rest`
+- **Tasks:** `shop`, `saves`, `pause`, `quests`, `camp-rest`
 - **Rules:** `C-PICKER-101`, `A-PICKER-101`, `T-PICKER-101`
 
 ### Grid of choices
@@ -56,7 +58,7 @@ Choices in rows and columns: an inventory of slots, a level select.
   show at once.
 - **Not** when the items are read as words: a list reads faster and wraps.
 - **Blip:** gap, closest: `picker` (one column only)
-- **Tasks:** `shop` (if the agent draws the inventory as slots)
+- **Tasks:** none
 - **Rules:** `P-GRID-101`
 
 ### Setting row
@@ -79,7 +81,7 @@ What opens over a running game: resume, options, how it works, leave.
   keeps its state.
 - **Blip:** `dialog` with a `picker`; pattern: `pause` (gap)
 - **Tasks:** `pause`
-- **Rules:** `P-PAUSE-101`, `P-PAUSE-102`, `P-PAUSE-103`, `P-PAUSE-104`, `P-PAUSE-105`
+- **Rules:** `P-PAUSE-101`, `P-PAUSE-102`, `P-PAUSE-103`, `P-PAUSE-104`, `P-PAUSE-105`, `P-PAUSE-106`, `P-PAUSE-107`
 
 ### Confirmation
 
@@ -90,7 +92,7 @@ overwriting a save, selling the last of something.
 - **Not** for what can be undone, nor for every purchase: a confirm the player
   answers by reflex protects nothing.
 - **Blip:** `confirm`
-- **Tasks:** `pause` (leaving), `saves` (overwriting), `shop` (selling)
+- **Tasks:** `pause` (leaving), `saves` (overwriting)
 - **Rules:** `C-CONFIRM-101`, `C-CONFIRM-102`, `P-SHOP-104`
 
 ### Pages in a window
@@ -103,17 +105,18 @@ chapter.
   side.
 - **Blip:** `tabs`
 - **Tasks:** `shop`, `quests`
-- **Rules:** `C-TABS-101`
+- **Rules:** `C-TABS-101`, `P-QUESTS-103`
 
 ### Way back
 
 Back, Cancel, Escape, the leave corner: how the player gets out of any screen.
 
 - **Use** on every screen but the first.
-- **Not** hidden behind a key alone: a touch player has no Escape.
+- **Not** hidden behind a key alone: a touch player has no Escape. A screen
+  with nothing to choose (a read-only HUD) needs none.
 - **Blip:** `controls` (`slot="leave"`), `picker` (`variant="back"`),
   `hooks` (`useKeys`, Escape)
-- **Tasks:** all six
+- **Tasks:** `shop`, `saves`, `pause`, `quests`
 - **Rules:** `P-NAVIGATION-101`, `P-NAVIGATION-102`
 
 ### Control hints
@@ -124,7 +127,7 @@ The keys that work right now, along a window's bottom edge.
 - **Not** as the only place a control is explained: a hint is a reminder, not
   a tutorial.
 - **Blip:** `window` (Legend)
-- **Tasks:** all six
+- **Tasks:** `shop`, `saves`, `pause`, `quests`
 - **Rules:** `C-WINDOW-101`
 
 ### Description box
@@ -135,7 +138,7 @@ What the current row does, or why it is off, beside the list.
 - **Not** for anything the player must read before picking: that goes in the
   row or above the list.
 - **Blip:** `picker` (note)
-- **Tasks:** `shop`, `saves`, `quests`
+- **Tasks:** `shop`, `quests`
 - **Rules:** `C-PICKER-102`
 
 ### Long list
@@ -145,8 +148,8 @@ A list taller than its room.
 - **Use** the Picker's own scroll and rail.
 - **Not** paging buttons of your own.
 - **Blip:** `picker` (rail)
-- **Tasks:** `shop`, `quests`
-- **Rules:** `P-QUESTS-103`
+- **Tasks:** none
+- **Rules:** none: the Picker's own scroll and rail
 
 ### Screen layout
 
@@ -157,7 +160,7 @@ right, a status block on top.
   `div`s and classes (spec, Q11).
 - **Not** by restyling a component: placing is a wrapper's job.
 - **Blip:** gap, closest: `stage` (`usePixels`), `window`
-- **Tasks:** all six
+- **Tasks:** `shop`, `saves`, `pause`, `fight-hud`, `quests`
 - **Rules:** none: a layout component is a day-zero decision (Q11)
 
 ### Title screen and press start
@@ -182,7 +185,7 @@ A small pool counted out in boxes: momentum, lives, charges.
 - **Not** for hit points out of 100, nor anything that runs smoothly.
 - **Blip:** `meter`
 - **Tasks:** `fight-hud`
-- **Rules:** `C-METER-101`
+- **Rules:** `C-METER-101`, `C-METER-102`
 
 ### Bar
 
@@ -194,7 +197,7 @@ level.
 - **Blip:** gap, closest: `meter`, which says to draw a bar instead
   (`meter.mdx:11`)
 - **Tasks:** `fight-hud`
-- **Rules:** `P-HUD-102`, `P-HUD-103`
+- **Rules:** `P-HUD-102`, `P-HUD-103`, `P-HUD-109`
 
 ### Number readout
 
@@ -242,11 +245,23 @@ Whose turn it is, and what comes next.
 
 Small marks for poisoned, asleep, shielded.
 
-- **Use** with a name in the description box or the card's label.
+- **Use** with a name in the card's label (nothing is chosen on a fight's HUD, so
+  there is no description box).
 - **Not** alone: an icon is `aria-hidden` in Blip.
 - **Blip:** gap (`pixel-icon` has the system icons only)
 - **Tasks:** `fight-hud`
 - **Rules:** `P-HUD-107`
+
+### Enemy condition
+
+How hurt an enemy is, without its hit points.
+
+- **Use** a bar or a word (healthy, hurt, nearly down) beside the enemy's name.
+- **Not** a number: the player isn't told an enemy's HP to the point.
+- **Blip:** gap, closest: `meter`, which says to draw a bar instead
+  (`meter.mdx:11`)
+- **Tasks:** `fight-hud`
+- **Rules:** `P-HUD-110`
 
 ### Floating numbers
 
@@ -255,7 +270,7 @@ Damage or healing rising from a sprite.
 - **Use** as an echo of a change the HUD also shows.
 - **Not** as the only place a change is said.
 - **Blip:** gap (game art, not UI: it would animate in steps)
-- **Tasks:** `fight-hud`
+- **Tasks:** none
 - **Rules:** `P-HUD-103`
 
 ### Countdown
@@ -286,8 +301,8 @@ The keys as buttons: the corners on a wide stage, the bar on a phone.
 - **Not** for gameplay moves of your own design; Controls holds leave and
   system buttons.
 - **Blip:** `controls`, `icon-button`
-- **Tasks:** `fight-hud` (phone), `pause`
-- **Rules:** `C-CONTROLS-101`, `A-CONTROLS-101`
+- **Tasks:** `pause`
+- **Rules:** `C-CONTROLS-101`, `A-CONTROLS-101`, `P-PAUSE-106`
 
 ## Inventory and shops
 
@@ -329,8 +344,8 @@ How many to buy or sell.
 - **Use** a stepped value that stops at its ends (none, all you can afford).
 - **Not** a free number field.
 - **Blip:** `setting` (with `first` and `last`)
-- **Tasks:** `shop`
-- **Rules:** `P-SHOP-106`
+- **Tasks:** none
+- **Rules:** `P-SHOP-106`, `P-SHOP-107`
 
 ### Empty list
 
@@ -339,7 +354,7 @@ Nothing to sell, no quests yet, no saves.
 - **Use** a line that says why it is empty and what fills it.
 - **Not** an empty window, nor a list with no rows and a cursor on nothing.
 - **Blip:** gap, closest: `text` in the window's `Content`
-- **Tasks:** `shop`, `quests`, `saves`
+- **Tasks:** `shop`, `quests`
 - **Rules:** `P-EMPTY-101`, `P-EMPTY-102`
 
 ### Result of a transaction
@@ -419,6 +434,28 @@ A short list of places to save to or load from, each with what is in it.
 - **Tasks:** `saves`
 - **Rules:** `P-SAVES-101`, `P-SAVES-102`
 
+### Time and date readout
+
+When a save was made and how long the game has been played.
+
+- **Use** the way a player reads it: 3:25 of play, 14 Nov, not seconds or a
+  timestamp code.
+- **Not** raw data from the save.
+- **Blip:** gap, closest: `text` or `ledger` for the formatted values
+- **Tasks:** `saves`
+- **Rules:** `T-SAVES-110`, `P-SAVES-108`, `P-SAVES-109`
+
+### Save or load choice
+
+One screen for both: the player says whether this visit saves or loads.
+
+- **Use** a choice that stays on screen and says which one is active.
+- **Not** two screens with their own way back, nor a mode the screen doesn't
+  name.
+- **Blip:** `setting` (in a Picker) or `tabs`
+- **Tasks:** `saves`
+- **Rules:** `P-SAVES-112`
+
 ### Empty slot
 
 A slot with nothing in it.
@@ -428,7 +465,7 @@ A slot with nothing in it.
 - **Not** hidden: the number of slots stays readable.
 - **Blip:** `picker` (`disabled` + `note`)
 - **Tasks:** `saves`
-- **Rules:** `P-SAVES-103`
+- **Rules:** `P-SAVES-103`, `P-SAVES-111`
 
 ### Overwrite
 
@@ -447,7 +484,7 @@ The game says it saved, or is saving.
 - **Use** after every save, manual or automatic.
 - **Not** a spinner that blocks the screen.
 - **Blip:** gap, closest: `hooks` (`useAnnounce`)
-- **Tasks:** `saves`
+- **Tasks:** none
 - **Rules:** `P-SAVES-105`, `P-SAVES-106`
 
 ### Continue
@@ -469,7 +506,7 @@ The rules of the game in a few lines, on hand from the menu.
 - **Use** a large Dialog with a title, the text and a legend.
 - **Not** as the only teaching: a static screen is not a tutorial (XAG 109).
 - **Blip:** `dialog` (`size="large"`)
-- **Tasks:** `pause`
+- **Tasks:** none
 - **Rules:** `P-HELP-101`, `P-HELP-102`
 
 ### Contextual hint
@@ -511,8 +548,8 @@ What a screen reader hears when something changes.
 - **Use** for a result, a purchase, a save.
 - **Not** for every cursor move: the Picker already says that.
 - **Blip:** `hooks` (`useAnnounce`)
-- **Tasks:** `shop`, `saves`, `camp-rest`
-- **Rules:** `A-FEEDBACK-102`
+- **Tasks:** `shop`, `camp-rest`
+- **Rules:** `A-FEEDBACK-102`, `A-FEEDBACK-105`, `A-FEEDBACK-106`
 
 ### Result banner
 
@@ -521,7 +558,7 @@ The word a screen is about: a round won, a run lost.
 - **Use** BitmapText, large, over the scene.
 - **Not** in a Window, nor for a sentence.
 - **Blip:** `bitmap-text`
-- **Tasks:** `fight-hud` (if the fight ends)
+- **Tasks:** none
 - **Rules:** none beyond the page's own
 
 ### Done mark
@@ -532,7 +569,7 @@ SHIPPED, DONE, on a card.
 - **Not** as the only place a result is said.
 - **Blip:** `stamp`
 - **Tasks:** `quests` (a done quest)
-- **Rules:** none beyond the page's own
+- **Rules:** `P-QUESTS-104`
 
 ### Notification
 
@@ -541,7 +578,7 @@ A message that comes and goes: an item gained, a quest updated.
 - **Use** for news that does not need an answer.
 - **Not** on a timer the player can't stop; not over the cursor.
 - **Blip:** gap
-- **Tasks:** `shop`, `quests`, `camp-rest`
+- **Tasks:** `shop`, `camp-rest`
 - **Rules:** `P-FEEDBACK-103`, `P-FEEDBACK-104`
 
 ### Waiting
@@ -573,8 +610,8 @@ The keyboard binding of every action.
 - **Use** `useKeys`, the arrows and WASD, Enter and Space, Escape.
 - **Not** chords, nor a key held down to act.
 - **Blip:** `hooks` (`useKeys`)
-- **Tasks:** all six
-- **Rules:** `P-INPUT-101`, `P-INPUT-102`
+- **Tasks:** `shop`, `saves`, `pause`, `quests`
+- **Rules:** `P-INPUT-101`, `P-INPUT-102`, `P-INPUT-106`
 
 ### Input layers
 
@@ -584,7 +621,7 @@ What hears the keys when a dialog is open.
 - **Not** turning the screen's Picker off by hand.
 - **Blip:** `hooks` (`useKeyLayer`, `useOnTop`), `dialog`
 - **Tasks:** `pause`
-- **Rules:** `P-PAUSE-102`
+- **Rules:** `A-PAUSE-108`
 
 ### Which input is in use
 
@@ -593,8 +630,8 @@ Keys or touch, to name the right one in the hints.
 - **Use** `useInputKind`; the Legend already does.
 - **Not** a setting the player has to find.
 - **Blip:** `hooks` (`useInputKind`), `window` (Legend)
-- **Tasks:** all six
-- **Rules:** `A-INPUT-101`
+- **Tasks:** `shop`, `saves`, `pause`, `quests`
+- **Rules:** `A-INPUT-101`, `A-INPUT-107`
 
 ### Gamepad
 
@@ -624,7 +661,7 @@ Naming a save or a character.
 - **Use** only when the name matters to the player.
 - **Not** required to save: a slot has a name already.
 - **Blip:** gap
-- **Tasks:** `saves` (if an agent asks for a name)
+- **Tasks:** `saves` (only if an agent asks for a name)
 - **Rules:** `P-SAVES-107`
 
 ## Readability at pixel scale
@@ -636,7 +673,7 @@ The scaled grid everything sits on.
 - **Use** one stage per game.
 - **Not** sizes in CSS pixels inside it.
 - **Blip:** `stage`
-- **Tasks:** all six
+- **Tasks:** none (the template mounts it)
 - **Rules:** `F-LENGTH-101`
 
 ### Text size
@@ -657,8 +694,8 @@ The tall stage, the bar of controls.
 - **Use** the stage's tall layout and pad by `--bui-bar`.
 - **Not** a separate phone screen.
 - **Blip:** `stage`, `controls`
-- **Tasks:** `fight-hud`, and every task on the phone screenshot
-- **Rules:** `F-LENGTH-102`, `P-HUD-108`
+- **Tasks:** `fight-hud`, `shop`, `saves`, `pause`, `quests`
+- **Rules:** `F-LENGTH-102`
 
 ### Contrast and colour
 
@@ -692,31 +729,35 @@ The player makes text larger.
 
 ## By task
 
-What each eval task touches. Every entry below is above.
+What each eval task touches, read from its ticket and rubric
+(`origin/eval-tasks`, `evals/blip/tasks/<id>/`). Every entry below is above. An
+entry stays out of a task when neither the ticket nor the rubric asks for it:
+`fight-hud` says nothing needs to be chosen, so it has no menu, way back,
+hints, keys or input; `camp-rest` changes a screen that exists, so it has no
+layout, way back or hints; the template mounts the stage, so no task builds it.
 
-| Task        | Entries                                                                                                                                                                                                                                                                                                                                                                                             | Gaps among them                                                                                                                           |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `shop`      | Menu list, Grid of choices, Confirmation, Pages in a window, Way back, Control hints, Description box, Long list, Screen layout, Number readout, Item with a price, Item the player can't afford, Buy and sell, Quantity, Empty list, Result of a transaction, Announcement, Notification, Error in a game, Keys, Which input is in use, Stage, Text size, Contrast and colour, Motion and blinking | Grid of choices, Screen layout, single Number readout, price slot of Item with a price, Empty list, Result of a transaction, Notification |
-| `saves`     | Menu list, Confirmation, Way back, Control hints, Description box, Screen layout, Save slots, Empty slot, Overwrite, Saving indicator, Empty list, Announcement, Text entry, Keys, Which input is in use, the readability entries                                                                                                                                                                   | Screen layout, slot summary of Save slots, Saving indicator, Empty list, Text entry                                                       |
-| `pause`     | Menu list, Setting row, Pause menu, Confirmation, Way back, Control hints, Screen layout, Touch controls, How it works, Keys, Input layers, Which input is in use, the readability entries                                                                                                                                                                                                          | Pause menu (as a pattern), Screen layout                                                                                                  |
-| `fight-hud` | Menu list, Way back, Control hints, Screen layout, Pool in cells, Bar, Number readout, Party member card, Fallen member, Turn indicator, Status icons, Floating numbers, Touch controls, Result banner, Keys, Phone held upright, the readability entries                                                                                                                                           | Bar, single Number readout, Party member card, Fallen member, Turn indicator, Status icons, Floating numbers, Screen layout               |
-| `quests`    | Menu list, Pages in a window, Way back, Control hints, Description box, Long list, Screen layout, Objective reminder, Empty list, Done mark, Notification, Keys, the readability entries                                                                                                                                                                                                            | Objective reminder, Empty list, Notification, Screen layout                                                                               |
-| `camp-rest` | Menu list, Way back, Control hints, Screen layout, Number readout, Item the player can't afford, Result of a transaction, Announcement, Notification, Error in a game, the readability entries                                                                                                                                                                                                      | single Number readout, Result of a transaction, Notification, Screen layout                                                               |
-
-"The readability entries" are Stage, Text size, Phone held upright, Contrast
-and colour, Motion and blinking.
+| Task        | Entries                                                                                                                                                                                                                                                                                                                                                      | Gaps among them                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| `shop`      | Menu list, Pages in a window, Way back, Control hints, Description box, Screen layout, Number readout, Item with a price, Item the player can't afford, Buy and sell, Empty list, Result of a transaction, Announcement, Notification, Error in a game, Keys, Which input is in use, Phone held upright, Text size, Contrast and colour, Motion and blinking | Screen layout, single Number readout, price slot of Item with a price, Empty list, Result of a transaction, Notification   |
+| `saves`     | Menu list, Save or load choice, Confirmation, Way back, Control hints, Screen layout, Save slots, Empty slot, Overwrite, Time and date readout, Text entry (only if asked), Keys, Which input is in use, Phone held upright, Text size, Contrast and colour, Motion and blinking                                                                             | Screen layout, slot summary of Save slots, Time and date readout, Text entry                                               |
+| `pause`     | Menu list, Setting row, Pause menu, Confirmation, Way back, Control hints, Screen layout, Touch controls, Keys, Input layers, Which input is in use, Phone held upright, Text size, Contrast and colour, Motion and blinking                                                                                                                                 | Pause menu (as a pattern), Screen layout                                                                                   |
+| `fight-hud` | Screen layout, Pool in cells, Bar, Number readout, Party member card, Fallen member, Turn indicator, Status icons, Enemy condition, Phone held upright, Text size, Contrast and colour, Motion and blinking                                                                                                                                                  | Screen layout, Bar, single Number readout, Party member card, Fallen member, Turn indicator, Status icons, Enemy condition |
+| `quests`    | Menu list, Pages in a window, Way back, Control hints, Description box, Screen layout, Objective reminder, Empty list, Done mark, Keys, Which input is in use, Phone held upright, Text size, Contrast and colour, Motion and blinking                                                                                                                       | Objective reminder, Empty list, Screen layout                                                                              |
+| `camp-rest` | Menu list, Number readout, Item the player can't afford, Result of a transaction, Announcement, Notification, Error in a game, Text size, Contrast and colour, Motion and blinking                                                                                                                                                                           | single Number readout, Result of a transaction, Notification                                                               |
 
 ### Gaps, by how many tasks touch them
 
-| Gap                                                       | Tasks | Note                                                                       |
-| --------------------------------------------------------- | ----- | -------------------------------------------------------------------------- |
-| Screen layout                                             | 6     | Q11: whether Blip grows a layout component is decided on day zero          |
-| Empty list                                                | 3     | A pattern, maybe no component: a line of `Text` in `Content` may be enough |
-| Notification / Result of a transaction                    | 3     | The only feedback gap three tasks share                                    |
-| Single number readout                                     | 3     | Gold in a corner; may be a `Ledger` of one row                             |
-| Bar                                                       | 1     | `meter.mdx:11` already sends agents away from Meter                        |
-| Party member card, Fallen member                          | 1     | Likely a pattern (`hud`) over Window, Ledger, Meter, not a component       |
-| Turn indicator, Status icons                              | 1     | Candidates to leave open for gap drafts                                    |
-| Save slot summary, Saving indicator                       | 1     | Pattern `saves`                                                            |
-| Objective reminder                                        | 1     | `quests` gets no pattern on purpose (Q12): a good gap to leave open        |
-| Grid of choices, Price slot, Text entry, Floating numbers | 1     | Only if an agent reaches for them                                          |
+| Gap                                                 | Tasks | Note                                                                       |
+| --------------------------------------------------- | ----- | -------------------------------------------------------------------------- |
+| Screen layout                                       | 5     | Q11: whether Blip grows a layout component is decided on day zero          |
+| Single number readout                               | 3     | Gold in a corner, a member's HP; may be a `Ledger` of one row              |
+| Empty list                                          | 2     | A pattern, maybe no component: a line of `Text` in `Content` may be enough |
+| Notification / Result of a transaction              | 2     | `shop` and `camp-rest`; the only feedback gap two tasks share              |
+| Bar, Enemy condition                                | 1     | `meter.mdx:11` already sends agents away from Meter                        |
+| Party member card, Fallen member                    | 1     | Likely a pattern (`hud`) over Window, Ledger, Meter, not a component       |
+| Turn indicator, Status icons                        | 1     | Candidates to leave open for gap drafts                                    |
+| Save slot summary, Time and date readout            | 1     | Pattern `saves`                                                            |
+| Pause menu (as a pattern)                           | 1     | Pattern `pause`; the parts exist                                           |
+| Objective reminder                                  | 1     | `quests` gets no pattern on purpose (Q12): a good gap to leave open        |
+| Price slot, Text entry                              | 1     | Only if an agent reaches for them                                          |
+| Grid of choices, Floating numbers, Saving indicator | 0     | No ticket or rubric asks; kept for the game                                |

@@ -1,6 +1,10 @@
 page: meter
 rules:
   - id: C-METER-101
-    text: Set two Meters of the same variant apart, each with its name.
+    text: Set two Meters of the same variant apart.
     markers: [review]
     source: https://gamedeveloper.com/design/perceiving-without-looking-designing-huds-for-peripheral-vision
+  - id: C-METER-102
+    text: Give each Meter its own name.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114

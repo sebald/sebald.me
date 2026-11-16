@@ -12,7 +12,7 @@ rules:
   - id: P-HELP-103
     text: Let the player dismiss a hint.
     markers: [review]
-    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/109
+    source: https://gameaccessibilityguidelines.com/allow-players-to-progress-through-text-prompts-at-their-own-pace/
   - id: T-HELP-101
     text: Explain every word the game invents.
     markers: [review]
