@@ -1,0 +1,11 @@
+# Pattern: an options menu (a gap; would be written by the patterns task).
+page: options
+rules:
+  - id: P-OPTIONS-101
+    text: Keep every option the player changed for the next session.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-that-all-settings-are-saved-remembered/
+  - id: P-OPTIONS-102
+    text: Give music and sound effects a volume each.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/provide-separate-volume-controls-or-mutes-for-effects-speech-and-background-music/

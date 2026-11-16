@@ -1,0 +1,40 @@
+# Pattern: input across keys, touch and a gamepad (a gamepad and remapping
+# are gaps).
+page: input
+rules:
+  - id: P-INPUT-101
+    text: Never require two keys at once for an action.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  # XAG 107's example (Grounded) offers the arrow keys beside WASD; "every
+  # action" is Blip's way to meet it.
+  - id: P-INPUT-102
+    text: Bind the arrow keys to every action you bind to WASD.
+    check: arrow-alternative
+    fix: |
+      useKeys({ ArrowLeft: left, a: left, ArrowRight: right, d: right });
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  - id: P-INPUT-103
+    text: Map a gamepad's south button to confirm, east to back and start to pause.
+    markers: [open]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  - id: P-INPUT-104
+    text: Name the gamepad's buttons in hints while it is the input in use.
+    markers: [open]
+    source: https://partner.steamgames.com/doc/steamdeck/compat
+  - id: P-INPUT-105
+    text: Let the player remap every key the game binds.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  - id: A-INPUT-101
+    text: Make every screen and action reachable by keys alone.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  - id: P-INPUT-106
+    text: Never require a key held down for an action.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  - id: A-INPUT-107
+    text: Make every screen and action reachable by touch alone.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls

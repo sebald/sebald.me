@@ -1,0 +1,14 @@
+page: controls
+rules:
+  - id: C-CONTROLS-101
+    text: Keep touch controls out of the areas the thumbs play in.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  # HIG, Game controls: frequently used controls are at least 44x44 pt.
+  - id: A-CONTROLS-101
+    text: Never size a control below its 44-pixel target with a class.
+    severity: error
+    check: no-shrink-target
+    fix: |
+      <IconButton slot="leave" icon="back" label="Back" aria-label="Back (Esc)" onClick={back} />
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls

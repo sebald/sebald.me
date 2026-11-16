@@ -1,0 +1,6 @@
+page: setting
+rules:
+  - id: C-SETTING-101
+    text: Show a setting's effect while it is stepped, before the menu closes.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114

@@ -1,0 +1,19 @@
+# Pattern: teaching the game (contextual hints are a gap).
+page: help
+rules:
+  - id: P-HELP-101
+    text: Offer How it works from the pause menu, not only before the first game.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-all-narrative-and-instructions-to-be-replayed/
+  - id: P-HELP-102
+    text: Teach a mechanic the first time the player uses it.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/include-contextual-in-game-helpguidancetips/
+  - id: P-HELP-103
+    text: Let the player dismiss a hint.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-players-to-progress-through-text-prompts-at-their-own-pace/
+  - id: T-HELP-101
+    text: Explain every word the game invents.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/114
