@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: B
 depends: [pack-build]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/198
 ---
 
 # `cli-lookup`: Ship a `blip` command that searches and prints the docs
