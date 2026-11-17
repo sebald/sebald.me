@@ -76,6 +76,23 @@ const { version } = JSON.parse(
   readFileSync(join(root, 'package.json'), 'utf8'),
 ) as { version: string };
 
+// A block the conversion missed would ship to every consumer
+for (const page of pages) {
+  const outside = page.markdown
+    .split(/^\s*(?:`{3,}|~{3,}).*$/m)
+    .filter((_, index) => index % 2 === 0)
+    .join('\n');
+  const leak = /^import\b|<(?:Meta|Canvas|Controls)\b/m.exec(outside);
+  if (leak) throw new Error(`${page.id}: "${leak[0]}" is left after conversion`);
+}
+
+// `index.ts` is read for `export { … } from './…'` blocks only
+const statements = readFileSync(join(src, 'index.ts'), 'utf8').match(/^export\b/gm) ?? [];
+const blocks = readFileSync(join(src, 'index.ts'), 'utf8').match(/^export\s*\{/gm) ?? [];
+if (statements.length !== blocks.length) {
+  throw new Error('src/index.ts has an export the docs build does not read');
+}
+
 const manifest = buildManifest(version, pages, entries);
 
 const docs = join(root, 'docs');

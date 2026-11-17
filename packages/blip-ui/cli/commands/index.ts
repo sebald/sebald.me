@@ -20,7 +20,7 @@ export const indexCommand = (docs: Docs, json: boolean, io: Io) => {
     event: 'lookup',
     command: 'index',
     arguments: [],
-    results: docs.manifest.pages.length,
+    results: docs.manifest.pages.map(page => page.id),
   });
   if (json) {
     io.out(

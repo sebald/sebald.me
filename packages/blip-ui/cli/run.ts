@@ -17,7 +17,15 @@ export const run = (argv: readonly string[], io: Io): number => {
     );
     return 2;
   }
-  const docs = loadDocs(io.docsDir);
+  let docs;
+  try {
+    docs = loadDocs(io.docsDir);
+  } catch (error) {
+    io.err(
+      `The docs in ${io.docsDir} can't be read: ${(error as Error).message}`,
+    );
+    return 2;
+  }
   if (args.help || args.command === undefined)
     return indexCommand(docs, args.json, io);
   if (args.command === 'search') return searchCommand(docs, args, io);

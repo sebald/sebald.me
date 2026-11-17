@@ -63,7 +63,8 @@ const STOP = new Set([
 
 /** `deleting`, `deleted`, `deletes` and `delete` meet at `delet` */
 export const stem = (word: string) => {
-  if (word.length <= 4) return word;
+  if (word.length <= 3) return word;
+  if (word.length === 4) return word.replace(/s$/, '');
   return word.replace(/(ing|ed|es|s|e)$/, '');
 };
 
@@ -211,5 +212,6 @@ export const closestPage = (
       : distance(wanted.replaceAll('-', ''), other);
     if (!best || cost < best.cost) best = { page, cost };
   }
-  return best?.page ?? null;
+  // Too far from every name to be a misspelling of one
+  return best && best.cost <= Math.max(3, wanted.length / 2) ? best.page : null;
 };

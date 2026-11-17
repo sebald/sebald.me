@@ -97,3 +97,16 @@ component.
   all three commands.
 - A lookup is logged also when it fails (exit 2) or finds nothing; a log that cannot be
   written never fails the command. The log goes to `.blip/` in the working directory.
+
+**Review** (subagent, fresh context, against the task, spec 2.1 to 2.7, `AGENTS.md`,
+`building-components.mdx`). Nothing blocking. Fixed: the build now fails on a leftover
+`import`, `Meta`, `Canvas` or `Controls` outside code and on an `export` in `src/index.ts`
+that is not a `export { … } from` block; `blip docs <export on no page>` says so; the closest
+page is named only within a plausible edit distance; `tab` meets `tabs`; the index's
+`lookup` event logs page ids like the others; an unreadable `docs/` exits 2 with one line;
+`findDocsDir` looks at most two levels up. Left as they are: separate `tsconfig.cli.json`
+(decided, see above); no real-docs integration test (the build's own checks and the tarball run
+cover it); `loadDocs` reads every page on each call (about 0.05 s, so no lazy reading yet);
+`--json` errors for `docs` go to stdout, usage errors to stderr (JSON mode answers in JSON);
+the 0.3 s through `pnpm exec` is pnpm's start-up, the CLI itself takes 0.05 s; props, rules and
+examples in the manifest are the later tasks'.

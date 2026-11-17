@@ -12,14 +12,14 @@ import type { SearchExport, SearchPage } from './search.ts';
  * to have run).
  */
 export const findDocsDir = (from = fileURLToPath(import.meta.url)) => {
+  // `dist/cli/bin.js` and `cli/bin.ts` are two levels or one under the package
   let dir = dirname(from);
-  for (;;) {
+  for (let level = 0; level < 3; level++) {
     if (existsSync(join(dir, 'docs', 'manifest.json')))
       return join(dir, 'docs');
-    const up = dirname(dir);
-    if (up === dir) return null;
-    dir = up;
+    dir = dirname(dir);
   }
+  return null;
 };
 
 export interface Docs {

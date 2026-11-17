@@ -27,6 +27,13 @@ export const docsCommand = (docs: Docs, args: Parsed, io: Io) => {
     );
     return 0;
   }
+  const bare = docs.exports.some(entry => entry.name.toLowerCase() === wanted);
+  if (bare) {
+    const message = `"${name}" is exported, but documented on no page.`;
+    if (args.json) io.out(JSON.stringify({ error: message, closest: null }));
+    else io.err(message);
+    return 2;
+  }
   const closest = closestPage(name, docs.pages, docs.exports);
   const hint = closest
     ? ` The closest page is ${closest}: blip docs ${closest}`

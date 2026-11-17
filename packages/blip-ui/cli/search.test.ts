@@ -47,6 +47,8 @@ describe('stem and queryTerms', () => {
   it('meets delete, deleting and deleted at one word', () => {
     assert.equal(stem('deleting'), stem('delete'));
     assert.equal(stem('deleted'), stem('deletes'));
+    assert.equal(stem('tabs'), stem('tab'));
+    assert.equal(stem('icons'), stem('icon'));
   });
 
   it('drops words that say nothing, unless nothing else is left', () => {
@@ -100,6 +102,7 @@ describe('closestPage', () => {
     assert.equal(closestPage('dialgo', PAGES, EXPORTS), 'dialog');
     assert.equal(closestPage('picker-item', PAGES, EXPORTS), 'picker');
     assert.equal(closestPage('conf', PAGES, EXPORTS), 'confirm');
+    assert.equal(closestPage('zzzzzzzzzz', PAGES, EXPORTS), null);
   });
 });
 
