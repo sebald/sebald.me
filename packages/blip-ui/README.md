@@ -45,3 +45,9 @@ the same names on the stage:
   --bui-primary: #f4b860;
 }
 ```
+
+## Docs
+
+The package ships its docs for agents and humans alike: `pnpm exec blip` lists
+the pages, `pnpm exec blip search <words>` finds one and
+`pnpm exec blip docs <page>` prints it as markdown.

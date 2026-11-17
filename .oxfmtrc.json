@@ -42,6 +42,7 @@
     "**/storybook-static/**",
     "**/playwright-report/**",
     "packages/blip-ui/dist/**",
+    "packages/blip-ui/docs/**",
     "evals/blip/template/**"
   ]
 }

@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: B
 depends: [pack-build]
 pr:
@@ -43,4 +43,57 @@ and lookups before the first `.tsx` write.
 
 ## Notes
 
-Filled in while the task is worked on: what changed, decisions, numbers.
+**Changed.** `packages/blip-ui/cli/`: `bin.ts` (shebang, calls `run`), `run.ts` (dispatch),
+`io.ts` (argument parsing), `commands/{index,search,docs}.ts`, `search.ts` (ranking, closest
+name), `docs-dir.ts` (finds `docs/` above the module and loads it), `events.ts`, and
+`build/{convert,exports,manifest,index}.ts` for the pack step. `publishConfig.bin` is
+`blip: ./dist/cli/bin.js`, `files` gains `docs`, `prepack` now also runs
+`tsc -p tsconfig.cli.json` and `node dist/cli/build/index.js`. `cli/**` is in the package's
+`tsconfig.json` and the root `test:lib` glob; `packages/blip-ui/docs` is in `.gitignore`, both
+oxc ignore lists and the root `tsconfig.json` `exclude`. `rewriteRelativeImportExtensions` is
+on in both `tsconfig.json` files so `cli/` can write `.ts` imports (spec 2.1). README has the
+`pnpm exec blip` lines.
+
+**Numbers** (2026-11-17, from a tarball installed with `file:` into a scratch app). 23 pages
+(21 components, `introduction`, `hooks`; `building-components` is not shipped), 157 exports,
+115 of them on a page. `blip docs dialog` has 0 lines with `import`, `<Meta`, `<Canvas` or
+`<Controls` (a `<Controls>` inside a code fence on the `controls` page stays, on purpose).
+`blip search confirm before deleting` lists `confirm`, `picker`, `dialog`, `hooks`; a search with
+no match prints `Nothing matches "…"` and exits 0; `blip docs nope` exits 2 and says
+`The closest page is line`. Run directly (`node_modules/.bin/blip`), every command takes 0.05 s
+(about 0.34 s once cold, and 0.3 s through `pnpm exec`, which is pnpm's start-up, not the
+CLI's). With `BLIP_EVENTS=off`, `blip`, `search`, `docs` and a failing `docs` in an empty
+directory leave no `.blip/`; without it each call appends one `lookup` line (command,
+arguments, results). Tarball: 167 files, 100 KB (was 71 KB). `pnpm test` 386 pass (the new ones in
+`cli/`); lint, format, Blip's typecheck pass; root `pnpm typecheck` shows the same 34
+environmental errors as `origin/blip-harness` and none in `cli/`.
+
+**Undocumented exports** (the build prints them, 42 value exports on no page): `Stage.Center`,
+`TALL_BAR`, `useScale`, `ScrollRail`, `Step`, `cn`, `cva`, `px`, `lit`, `Announcer`,
+`FeedbackProvider`, `PixelsContext`, `KeyLayerContext`, `useKeydown`, `isFullscreen`,
+`prefersReducedMotion`, `TICK_MS`, `overflows`, the foundations' constants and helpers
+(`UNIT`, `FLOOR`, `CORNERS`, `ditherRows`, `MOTION_MS`, `NATIVE`, `BACKING`, …) and
+`bitmapTextSize`, `STAMP_GLYPHS`, `TIMER_SIZE`. Types are not counted: they follow their
+component.
+
+**Decisions.**
+
+- The CLI has its own build config (`tsconfig.cli.json`, `cli/` to `dist/cli/`), next to
+  `tsconfig.build.json` (`src/` to `dist/`). One config over both roots would emit
+  `dist/src/` and move `dist/index.js`, which `pack-build` fixed. A later task that makes
+  the CLI import from `src/foundations` will have to merge them.
+- An export is "on a page" when the page of its component's folder names it (a capitalised
+  name as a word, `Stage.Center` as written, a lowercase name only in a code span, so `px`
+  does not count for a sentence that says "px"), else when any page does. Compound parts
+  (`Stage.Center = Center`) are found by reading the component's source for
+  `Name.Part =`.
+- `<Controls>` and `<Canvas>` are dropped (props tables and examples are later tasks).
+  Storybook links become `Text (`blip docs <id>`)`, matched on the slug's last segment.
+- Search scores title and id 10, summary 4, headings 3, text 1 per occurrence (at most 5)
+  per term, with stop words dropped and a light suffix stem (`deleting` meets `delete`); an
+  export whose name matches a word scores 8, loses a tie to a page, and is left out when it
+  only repeats its page's title. `blip docs` takes a page id or an export name, in any case.
+- `--section` and rule ids on `docs` are not built (rules do not exist yet); `--json` works on
+  all three commands.
+- A lookup is logged also when it fails (exit 2) or finds nothing; a log that cannot be
+  written never fails the command. The log goes to `.blip/` in the working directory.
