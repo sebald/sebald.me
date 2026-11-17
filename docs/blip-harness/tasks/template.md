@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: B
 depends: [eval-tasks, pack-build]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/197
 ---
 
 # `template`: Build the consumer app the eval's agents work in
