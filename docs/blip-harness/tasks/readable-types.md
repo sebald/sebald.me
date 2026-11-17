@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: A
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/196
 ---
 
 # `readable-types`: Say each prop's options in its type
