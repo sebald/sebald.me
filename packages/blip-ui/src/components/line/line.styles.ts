@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { LineProps } from './line';
 
 export const line = {
   line: cva({
@@ -12,7 +13,7 @@ export const line = {
       variant: {
         primary: 'bg-(--bui-primary)',
         secondary: 'bg-(--bui-secondary)',
-      },
+      } satisfies Record<NonNullable<LineProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary' },
   }),

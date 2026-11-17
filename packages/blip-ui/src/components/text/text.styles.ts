@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { TextProps } from './text';
 
 /**
  * The letters by role, so every screen says the same thing the same way.
@@ -22,7 +23,7 @@ export const text = {
           'font-semibold text-(--bui-primary)',
           'animate-bui-blink motion-reduce:animate-none',
         ],
-      },
+      } satisfies Record<NonNullable<TextProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'hint' },
   }),

@@ -1,13 +1,10 @@
 import type { CSSProperties, SVGAttributes } from 'react';
 
 import { px } from '../../foundations/pixel';
-import type { VariantProps } from '../../utils/styles';
 import { bitmapTextLayout } from './bitmap-text.layout';
 import { bitmapText } from './bitmap-text.styles';
 
 export { BITMAP_GLYPHS } from './bitmap-text.layout';
-
-type Variants = VariantProps<typeof bitmapText.root>;
 
 export interface BitmapTextProps extends Omit<
   SVGAttributes<SVGSVGElement>,
@@ -19,7 +16,7 @@ export interface BitmapTextProps extends Omit<
    * The colour ramp: the top row lit, the bottom two shaded
    * @default 'primary'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'primary' | 'neutral' | 'spark';
   /**
    * How big: `small` for a line on the wide stage, where the stage
    * pixel is large (one stage pixel a letter pixel), `default` for a
@@ -28,11 +25,16 @@ export interface BitmapTextProps extends Omit<
    * pixel is small (three), `large` for the word a screen is about (five)
    * @default 'default'
    */
-  size?: keyof typeof SIZES;
+  size?: 'small' | 'default' | 'medium' | 'large';
 }
 
 /** Stage pixels a letter pixel, by size */
-const SIZES = { small: 1, default: 2, medium: 3, large: 5 } as const;
+const SIZES = {
+  small: 1,
+  default: 2,
+  medium: 3,
+  large: 5,
+} as const satisfies Record<NonNullable<BitmapTextProps['size']>, number>;
 
 /**
  * Text in a five by seven pixel font, the way the logo's letters are

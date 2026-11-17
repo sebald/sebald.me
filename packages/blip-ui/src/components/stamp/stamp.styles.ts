@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { StampProps } from './stamp';
 
 export const stamp = {
   root: cva({
@@ -8,7 +9,7 @@ export const stamp = {
       variant: {
         danger: 'text-(--bui-danger)',
         primary: 'text-(--bui-primary)',
-      },
+      } satisfies Record<NonNullable<StampProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'danger' },
   }),
