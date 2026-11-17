@@ -1,9 +1,6 @@
 import type { HTMLAttributes } from 'react';
 
-import type { VariantProps } from '../../utils/styles';
 import { line } from './line.styles';
-
-type Variants = VariantProps<typeof line.mark>;
 
 export interface LineProps extends HTMLAttributes<HTMLParagraphElement> {
   /**
@@ -11,7 +8,7 @@ export interface LineProps extends HTMLAttributes<HTMLParagraphElement> {
    * gold mark; `secondary` the other side, an ember one
    * @default 'primary'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'primary' | 'secondary';
   /**
    * Said already: the line being answered, a reply shown. Quieter, so
    * the live one stands out

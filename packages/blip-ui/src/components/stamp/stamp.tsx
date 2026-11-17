@@ -2,7 +2,6 @@ import type { SVGAttributes } from 'react';
 
 import { type Font, glyphOf, supported } from '../../foundations/bitmap';
 import { px } from '../../foundations/pixel';
-import type { VariantProps } from '../../utils/styles';
 import { stamp } from './stamp.styles';
 
 /** The letters, three by five pixels each, `#` inked */
@@ -82,8 +81,6 @@ export const stampSize = (word: string) => {
   return { width, height };
 };
 
-type Variants = VariantProps<typeof stamp.root>;
-
 export interface StampProps extends Omit<
   SVGAttributes<SVGSVGElement>,
   'children'
@@ -94,7 +91,7 @@ export interface StampProps extends Omit<
    * The ink: `danger` for a job done, `primary` for one done without a scratch
    * @default 'danger'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'danger' | 'primary';
 }
 
 /**

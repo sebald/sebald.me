@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { ButtonProps } from './button';
 
 /**
  * The button's parts. Inside the ink line every sprite and window has:
@@ -49,7 +50,7 @@ export const button = {
           '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
           '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
         ],
-      },
+      } satisfies Record<NonNullable<ButtonProps['variant']>, ClassValue>,
       size: {
         /** A thumb's height, 44 CSS pixels at least */
         default:
@@ -57,7 +58,7 @@ export const button = {
         /** Dense menus where a pointer aims */
         small:
           '[--b-height:--spacing(8)] [--b-inline:calc(var(--bui-px)*4)] text-[0.85em]',
-      },
+      } satisfies Record<NonNullable<ButtonProps['size']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary', size: 'default' },
   }),

@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { DialogProps } from './dialog';
 
 export const dialog = {
   /** The stage dimmed down to the bar of controls, and over the controls (`--bui-layer-dialog` to their `--bui-layer-controls`), which a tap only closes it from; the window in the middle */
@@ -15,7 +16,7 @@ export const dialog = {
         default: 'w-[70%] tall:w-full',
         /** A lot to read: as wide as the stage lets it */
         large: 'w-full',
-      },
+      } satisfies Record<NonNullable<DialogProps['size']>, ClassValue>,
     },
     defaultVariants: { size: 'default' },
   }),

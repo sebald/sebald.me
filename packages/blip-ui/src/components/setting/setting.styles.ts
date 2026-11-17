@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { StepProps } from './setting';
 
 export const setting = {
   root: cva({
@@ -11,7 +12,7 @@ export const setting = {
       points: {
         left: 'bui-point-left',
         right: 'bui-point-right',
-      },
+      } satisfies Record<NonNullable<StepProps['points']>, ClassValue>,
       more: { true: '', false: 'bui-disabled' },
     },
   }),
