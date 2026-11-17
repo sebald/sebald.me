@@ -94,3 +94,10 @@ a `Dialog` (Enter, Escape and the rest reach it), but arrows from inside the dia
 there for an unrelated reason. A pause built from something that does not stop arrows (a `Window`
 and a menu) would let them through. The `pause` rubric note ("does not stop that listener on its
 own") is true as written; it just isn't true of the arrow keys under a focused `Dialog`.
+
+**Review** (subagent, fresh context, against the task, spec 3.1, `evals/blip/README.md`, the
+rubrics and `AGENTS.md`). Nothing blocking; every name and value matched. Minor: `in` lookups of
+`?state=` and `?screen=` also matched inherited keys (`constructor`), now `Object.hasOwn`; `buy`
+and `sell` moved an item's pack entry to the end, now entries keep their place; `camp.tsx`
+re-subscribes its listener on each arrow press, left as it is. It also asked to confirm the
+`pause` note against the `Dialog` finding above, which is stated there.

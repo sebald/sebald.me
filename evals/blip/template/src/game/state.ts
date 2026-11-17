@@ -47,8 +47,13 @@ const count = (id: string) =>
 
 const withPack = (id: string, change: number): GameState['pack'] => {
   const next = count(id) + change;
-  const rest = game.pack.filter(entry => entry.item !== id);
-  return next > 0 ? [...rest, { item: id, count: next }] : rest;
+  const held = game.pack.some(entry => entry.item === id);
+  // Entries keep their place in the pack
+  const pack = game.pack.map(entry =>
+    entry.item === id ? { ...entry, count: next } : entry,
+  );
+  if (held) return pack.filter(entry => entry.count > 0);
+  return next > 0 ? [...pack, { item: id, count: next }] : pack;
 };
 
 /** Buy one of an item: refused for an unknown item or too little gold */

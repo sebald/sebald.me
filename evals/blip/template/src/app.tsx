@@ -10,10 +10,14 @@ const query = new URLSearchParams(window.location.search);
 const screenName = query.get('screen') ?? 'camp';
 const stateName = query.get('state') ?? 'start';
 
-openFixture(stateName in FIXTURES ? (stateName as FixtureName) : 'start');
+openFixture(
+  Object.hasOwn(FIXTURES, stateName) ? (stateName as FixtureName) : 'start',
+);
 
 export const App = () => {
-  const Screen = screens[screenName];
+  const Screen = Object.hasOwn(screens, screenName)
+    ? screens[screenName]
+    : undefined;
   return (
     <Stage
       label="Ford"
