@@ -41,6 +41,7 @@
     "src/ui/logo-dither.ts",
     "**/storybook-static/**",
     "**/playwright-report/**",
-    "packages/blip-ui/dist/**"
+    "packages/blip-ui/dist/**",
+    "evals/blip/template/**"
   ]
 }
