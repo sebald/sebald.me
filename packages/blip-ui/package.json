@@ -15,9 +15,13 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "docs"
   ],
   "publishConfig": {
+    "bin": {
+      "blip": "./dist/cli/bin.js"
+    },
     "exports": {
       ".": {
         "types": "./dist/index.d.ts",
@@ -33,7 +37,7 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static --quiet",
     "typecheck": "tsc --noEmit",
-    "prepack": "rm -rf dist && tsc -p tsconfig.build.json && cp src/styles.css src/tokens.css dist/"
+    "prepack": "rm -rf dist docs && tsc -p tsconfig.build.json && tsc -p tsconfig.cli.json && cp src/styles.css src/tokens.css dist/ && node dist/cli/build/index.js"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",

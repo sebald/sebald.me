@@ -48,3 +48,4 @@ packages/pushback/src/assets/sources/contact/
 
 # Blip UI: emitted by its prepack step
 packages/blip-ui/dist/
+packages/blip-ui/docs/

@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "declaration": false,
+    "outDir": "dist/cli",
+    "rootDir": "cli",
+    "types": ["node"],
+    "incremental": false
+  },
+  "include": ["cli/**/*.ts"],
+  "exclude": ["cli/**/*.test.ts"]
+}
