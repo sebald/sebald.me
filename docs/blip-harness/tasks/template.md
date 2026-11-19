@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: B
 depends: [eval-tasks, pack-build]
 pr: https://github.com/sebald/sebald.me/pull/197
