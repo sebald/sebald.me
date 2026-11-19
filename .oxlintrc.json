@@ -96,6 +96,7 @@
     ".source/**",
     "**/storybook-static/**",
     "**/playwright-report/**",
-    "packages/blip-ui/dist/**"
+    "packages/blip-ui/dist/**",
+    "evals/blip/template/**"
   ]
 }
