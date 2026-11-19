@@ -94,6 +94,8 @@ a `Dialog` (Enter, Escape and the rest reach it), but arrows from inside the dia
 there for an unrelated reason. A pause built from something that does not stop arrows (a `Window`
 and a menu) would let them through. The `pause` rubric note ("does not stop that listener on its
 own") is true as written; it just isn't true of the arrow keys under a focused `Dialog`.
+After review, the note and `evals/blip/README.md` say so, so a judge doesn't fail a pause
+that relies on the `Dialog` for the arrows and handles only Enter.
 
 **Review** (subagent, fresh context, against the task, spec 3.1, `evals/blip/README.md`, the
 rubrics and `AGENTS.md`). Nothing blocking; every name and value matched. Minor: `in` lookups of

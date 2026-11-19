@@ -114,7 +114,8 @@ What the tickets assume beyond `data.ts`:
 - `src/screens/camp.tsx` shows the place, the gold and the party, and has a
   short list of things to do at camp (look around, talk) moved through with
   arrow keys and Enter in a `keydown` listener on `window`. `pause` depends on
-  that listener: a pause screen on top doesn't stop it on its own
+  that listener: a pause screen on top doesn't stop it on its own. A Blip `Dialog`
+  keeps the arrow keys from it while focus is inside, but not Enter
 
 ## Building the template
 

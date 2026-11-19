@@ -39,7 +39,7 @@
       "unstated": true,
       "from": "diff",
       "url": "start",
-      "note": "camp.tsx, unchanged by the task, handles arrow keys and Enter in a `keydown` listener on `window`. A pause screen opened on top does not stop that listener on its own; the diff has to switch it off while paused or stop the events before they get there."
+      "note": "camp.tsx, unchanged by the task, handles arrow keys and Enter in a `keydown` listener on `window`. A pause screen opened on top does not stop that listener on its own: a Blip `Dialog` keeps the arrow keys from it while focus is inside, but Enter still gets through. So the diff has to switch the listener off while paused or stop Enter (and the arrows, if the pause is not a `Dialog`) before it gets there; a diff that only handles Enter under a `Dialog` passes."
     }
   ]
 }
