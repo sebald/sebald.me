@@ -286,7 +286,7 @@ in that folder is a hand-written write-up, left alone, and `summary.md` links to
 so a re-collect doesn't lose it. It never reruns an
 agent and never writes into a run (`tsc` and the build only add `dist/` there). Options:
 `--cache <dir>` (default `~/.cache/blip-eval`), `--out <dir>` (default `evals/blip/results`),
-`--date`, `--skip-build` (no `tsc`, no build), `--against <results dir>`. Its tests
+`--date`, `--skip-build` (no `tsc`, no build, and so no rendered pass), `--skip-render` (everything but the rendered pass), `--against <results dir>`. Its tests
 (`collect.test.mjs`) run in `pnpm test`; `node evals/blip/fixtures/build-cache.mjs <dir>` builds a
 cache from the fixtures to try it by hand.
 
@@ -349,3 +349,33 @@ cache from the fixtures to try it by hand.
 CLI's version. `--against` puts another label's overall numbers beside this one in `summary.md`
 only when both match; otherwise it says which differs and to collect again. Every process the
 collector starts has `BLIP_EVENTS=off`; the collector never reads or writes `.blip/`.
+
+### The rendered pass
+
+`lib/rendered.mjs` (spec 3.5, layer 2; measure 4), run by `collect.mjs` after the build unless
+`--skip-render` or `--skip-build`. Needs Chrome (the installed one, as the game's tests; the
+Playwright image's on Linux).
+
+- Per run: `vite build` where there is no `dist`, a static server on a free port over `dist`
+  (a path without a file is `index.html`), and each `urls[].url` of the task's `rubric.json` opened
+  in a fresh page wide (960 × 600) and on a phone (402 × 714, a touch device, `isMobile`),
+  `reducedMotion: reduce`, once the fonts are ready and 500 ms later
+- On the stage (`section[data-slot="stage"]`): `escapes()` from
+  `packages/blip-ui/tests/visual/layout.ts` (the file the Blip UI story tests use; its root is now a
+  parameter, `#storybook-root` by default), and axe (`axe-core`, whole page). `escapes()` lists the first
+  50 faults (`limit`; the stories keep its default of 3); they are split into **escapes** (a part outside the stage) and **cut text** (`"…" cut by …`).
+  Axe is recorded as `{ id, impact, nodes }` per violated rule
+- A URL that does not render (the page threw, the stage stayed empty, `No screen called …`, the project
+  does not build) is `rendered: false` with its `reason`, has no faults, and does not stop the others
+- Screenshots: `<cache>/<label>/.screenshots/<config>/<run dir>/<url id>@wide.png` and `@phone.png`, one
+  per URL and viewport, also for a page that did not render (what the judge is given). Rewritten on
+  every collect. `results.json` names them (`runs[].rendered.screenshots`, `pages[].screenshot`), no
+  absolute path
+- `scope: changed-lines`: the template (the run's first commit, built once per label with the run's
+  own `node_modules`) is opened on the same URLs, and what it shows is taken off: faults by what they
+  are without their distance, axe by rule and node count. `subtracted` on the page says how many
+  entries went. If the template itself cannot be rendered nothing is taken off
+- Measures: share of runs with every URL rendered, and escapes, cut text and axe violations (rules)
+  per run, wide and on a phone, medians over the runs of a task. Their detail is in
+  `summary.md`, "Rendered pages to look at"
+- Not covered: baselines or comparisons, and anything past the first screen of a URL (no input is sent)

@@ -64,7 +64,7 @@ const RESULTS = new Set(['done', 'timeout']);
  * and `stopped` could not be measured. Task and rep come from `meta.json`,
  * never from the folder's name
  */
-const findRuns = labelDir => {
+export const findRuns = labelDir => {
   const runs = [];
   const skipped = [];
   for (const config of readdirSync(labelDir, { withFileTypes: true })) {
@@ -163,6 +163,8 @@ export const collect = ({
   build = true,
   against = null,
   writeups = [],
+  // `{ [run id]: rendered }` from `renderLabel`, the rendered layer (async, so done by the caller)
+  rendered = null,
 }) => {
   if (!/^[\w.-]+$/.test(label) || label.startsWith('.')) {
     throw new Error(
@@ -223,6 +225,7 @@ export const collect = ({
         status: transcript.status,
         transcript,
         tree: { ...tree, ...checks },
+        rendered: rendered?.[id] ?? { ran: false },
       },
     ];
   });
@@ -240,7 +243,9 @@ export const collect = ({
     label,
     collector: { version },
     cli: { version: [...cliVersions][0] ?? null },
-    layers: ['transcript', 'tree'],
+    layers: rendered
+      ? ['transcript', 'tree', 'rendered']
+      : ['transcript', 'tree'],
     runs,
     skipped,
     aggregate: stats,
@@ -300,7 +305,48 @@ export const write = ({ results, summary }, outRoot, date) => {
   return dir;
 };
 
-const main = () => {
+/** The rubric's URLs per task, for the rendered layer */
+export const rubricUrls = (task, tasksDir = join(HERE, 'tasks')) => {
+  const path = join(tasksDir, task, 'rubric.json');
+  return existsSync(path) ? (readJson(path).urls ?? []) : [];
+};
+
+/** Opens each result in a browser (`lib/rendered.mjs`); the runs it can't find a rubric for are left to `collect` to refuse */
+export const renderRuns = async ({
+  label,
+  cache,
+  tasksDir = join(HERE, 'tasks'),
+}) => {
+  if (!/^[\w.-]+$/.test(label) || label.startsWith('.')) {
+    throw new Error(
+      `Label "${label}" must be letters, digits, ".", "_" and "-"`,
+    );
+  }
+  const labelDir = join(cache, label);
+  if (!existsSync(labelDir))
+    throw new Error(`No runs for "${label}" in ${cache}`);
+  // Loaded here: Playwright and the stage check are only needed by this layer
+  const { renderLabel } = await import('./lib/rendered.mjs');
+  const { runs } = findRuns(labelDir);
+  // A task without a rubric is for `collect` to refuse, not for this
+  const scopeOf = task => {
+    const path = join(tasksDir, task, 'rubric.json');
+    return existsSync(path) ? (readJson(path).scope ?? 'all') : 'all';
+  };
+  return renderLabel({
+    labelDir,
+    runs: runs.map(run => ({
+      id: run.id,
+      task: run.task,
+      dir: run.dir,
+      scope: scopeOf(run.task),
+    })),
+    urlsOf: task => rubricUrls(task, tasksDir),
+    log: message => console.error(message),
+  });
+};
+
+const main = async () => {
   const { values } = parseArgs({
     options: {
       label: { type: 'string' },
@@ -310,21 +356,27 @@ const main = () => {
       against: { type: 'string' },
       'collector-version': { type: 'string' },
       'skip-build': { type: 'boolean' },
+      'skip-render': { type: 'boolean' },
     },
   });
   if (!values.label) {
     console.error(
-      'Usage: node evals/blip/collect.mjs --label <label> [--cache <dir>] [--out <dir>] [--date YYYY-MM-DD] [--against <results dir>] [--skip-build]',
+      'Usage: node evals/blip/collect.mjs --label <label> [--cache <dir>] [--out <dir>] [--date YYYY-MM-DD] [--against <results dir>] [--skip-build] [--skip-render]',
     );
     process.exit(2);
   }
   try {
     const date = values.date ?? new Date().toISOString().slice(0, 10);
     const outRoot = values.out ? resolve(values.out) : join(HERE, 'results');
+    const cache = values.cache ?? join(homedir(), '.cache', 'blip-eval');
+    const render = !values['skip-build'] && !values['skip-render'];
     const done = collect({
       label: values.label,
       writeups: writeupsIn(outRoot, date, values.label),
-      cache: values.cache,
+      cache,
+      rendered: render
+        ? await renderRuns({ label: values.label, cache })
+        : null,
       version: values['collector-version'] ?? collectorVersion(),
       build: !values['skip-build'],
       against: values.against ? resolve(values.against) : null,
@@ -343,4 +395,4 @@ if (
   process.argv[1] &&
   resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 )
-  main();
+  await main();

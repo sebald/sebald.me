@@ -1,6 +1,6 @@
 # Blip eval: day-zero
 
-Collector `09441c72ac17`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layer 1 only: no `validate`, rendered or judged measures yet.
+Collector `a064ed4a3fd4`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layers 1 and 2: the rendered pass is in, no `validate` or judged measures yet.
 
 Write-ups: [`invented.md`](invented.md).
 
@@ -26,6 +26,57 @@ Write-ups: [`invented.md`](invented.md).
 | ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
 | no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
 | cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+## 4. It renders
+
+### every URL renders, wide and on a phone
+
+| configuration |          all | vs previous |  camp-rest |  fight-hud |      pause |     quests |      saves |       shop |
+| ------------- | -----------: | ----------: | ---------: | ---------: | ---------: | ---------: | ---------: | ---------: |
+| no-cli        | 100% (18/18) |             | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) |
+| cli           | 100% (18/18) |           0 | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) | 100% (3/3) |
+
+### layout escapes, wide
+
+| configuration | all | vs previous | camp-rest | fight-hud | pause | quests | saves | shop |
+| ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
+| no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
+| cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+### layout escapes, phone
+
+| configuration | all | vs previous | camp-rest | fight-hud | pause | quests | saves | shop |
+| ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
+| no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
+| cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+### cut text, wide
+
+| configuration | all | vs previous | camp-rest | fight-hud | pause | quests | saves | shop |
+| ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
+| no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
+| cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+### cut text, phone
+
+| configuration | all | vs previous | camp-rest | fight-hud | pause | quests | saves | shop |
+| ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
+| no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
+| cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+### axe violations, wide
+
+| configuration |        all | vs previous | camp-rest | fight-hud | pause |     quests | saves | shop |
+| ------------- | ---------: | ----------: | --------: | --------: | ----: | ---------: | ----: | ---: |
+| no-cli        | 0 (0 to 1) |             |         0 |         0 |     0 | 0 (0 to 1) |     0 |    0 |
+| cli           | 0 (0 to 1) |           0 |         0 |         0 |     0 | 0 (0 to 1) |     0 |    0 |
+
+### axe violations, phone
+
+| configuration |        all | vs previous | camp-rest | fight-hud | pause |     quests | saves | shop |
+| ------------- | ---------: | ----------: | --------: | --------: | ----: | ---------: | ----: | ---: |
+| no-cli        | 0 (0 to 1) |             |         0 |         0 |     0 | 0 (0 to 1) |     0 |    0 |
+| cli           | 0 (0 to 1) |           0 |         0 |         0 |     0 | 0 (0 to 1) |     0 |    0 |
 
 ## 5. It reuses
 
@@ -196,6 +247,15 @@ Write-ups: [`invented.md`](invented.md).
 ## Runs to look at
 
 None.
+
+## Rendered pages to look at
+
+Screenshots are in the cache, `<label>/.screenshots/<run>/<url id>@wide|phone.png`. For a `changed-lines` task what the untouched template shows is taken off.
+
+- `cli/quests-3` start@wide: axe list (serious), 1 node(s)
+- `cli/quests-3` start@phone: axe list (serious), 1 node(s)
+- `no-cli/quests-2` start@wide: axe list (serious), 1 node(s)
+- `no-cli/quests-2` start@phone: axe list (serious), 1 node(s)
 
 ## Skipped runs
 
