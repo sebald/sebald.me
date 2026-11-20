@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: C
 depends: [template, cli-lookup]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/202
 ---
 
 # `eval-run`: Run a task in an isolated copy of the template with headless Claude Code
