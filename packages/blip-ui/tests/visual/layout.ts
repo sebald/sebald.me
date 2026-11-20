@@ -8,11 +8,12 @@ import type { Page } from '@playwright/test';
  * out up to that ancestor's edge. Each as "tag.class by Npx", the first
  * few. Text cut off inside the story counts too: by an ancestor that
  * hides its overflow (a stage too small for its words), though not by one
- * that scrolls.
+ * that scrolls. `rootSelector` is the box measured against: the story by
+ * default, a game's stage for the eval's rendered layer.
  */
-export const escapes = (page: Page) =>
-  page.evaluate(() => {
-    const root = document.querySelector('#storybook-root');
+export const escapes = (page: Page, rootSelector = '#storybook-root') =>
+  page.evaluate(selector => {
+    const root = document.querySelector(selector);
     if (!root) return [];
     const box = root.getBoundingClientRect();
     const found: string[] = [];
@@ -91,4 +92,4 @@ export const escapes = (page: Page) =>
       }
     }
     return found;
-  });
+  }, rootSelector);

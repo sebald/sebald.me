@@ -42,6 +42,31 @@ export const MEASURES = [
     value: run => run.tree.tsc.errors,
   },
   {
+    id: 'renders',
+    group: '4. It renders',
+    label: 'every URL renders, wide and on a phone',
+    share: true,
+    of: run => run.rendered?.ran,
+    value: run =>
+      ['wide', 'phone'].every(
+        vp =>
+          run.rendered.totals[vp].rendered === run.rendered.totals[vp].pages,
+      ),
+  },
+  ...['escapes', 'cut', 'axe'].flatMap(kind =>
+    ['wide', 'phone'].map(viewport => ({
+      id: `${kind}-${viewport}`,
+      group: '4. It renders',
+      label: `${
+        { escapes: 'layout escapes', cut: 'cut text', axe: 'axe violations' }[
+          kind
+        ]
+      }, ${viewport}`,
+      of: run => run.rendered?.ran,
+      value: run => run.rendered.totals[viewport][kind],
+    })),
+  ),
+  {
     id: 'blipComponents',
     group: '5. It reuses',
     label: 'Blip components used',

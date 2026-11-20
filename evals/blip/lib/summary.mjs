@@ -50,6 +50,7 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
     skipped = [],
     aggregate,
     candidates,
+    layers = [],
   } = results;
   const { configs, tasks, groups } = aggregate;
   const out = [];
@@ -59,7 +60,7 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
     `Collector \`${collector.version}\`, Blip CLI \`${cli.version}\`. ${runs.length} runs, ` +
       `${runs.filter(run => run.status === 'complete').length} complete. Medians, with the ` +
       `lowest and highest of the repetitions in brackets; a share is runs of the runs it ` +
-      `applies to. Layer 1 only: no \`validate\`, rendered or judged measures yet.`,
+      `applies to. ${layers.includes('rendered') ? 'Layers 1 and 2: the rendered pass is in, no `validate` or judged measures yet.' : 'Layer 1 only: no `validate`, rendered or judged measures yet.'}`,
   );
 
   // Hand-written files beside this one, which a new collect leaves alone
@@ -145,6 +146,27 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
     ...failed.map(run => `\`${run.id}\`: the run ended in an error`),
   ];
   out.push(notes.length ? list(notes) : 'None.');
+
+  if (layers.includes('rendered')) {
+    out.push('## Rendered pages to look at');
+    const lines = runs.flatMap(run =>
+      (run.rendered?.pages ?? []).flatMap(page => {
+        const at = `\`${run.id}\` ${page.id}@${page.viewport}`;
+        if (!page.rendered) return [`${at}: did not render (${page.reason})`];
+        return [
+          ...page.escapes.map(entry => `${at}: escapes: ${entry}`),
+          ...page.cut.map(entry => `${at}: cut text: ${entry}`),
+          ...page.axe.map(
+            v => `${at}: axe ${v.id} (${v.impact}), ${v.nodes} node(s)`,
+          ),
+        ];
+      }),
+    );
+    out.push(
+      `Screenshots are in the cache, \`<label>/.screenshots/<run>/<url id>@wide|phone.png\`. For a \`changed-lines\` task what the untouched template shows is taken off.`,
+    );
+    out.push(lines.length ? list(lines) : 'None.');
+  }
 
   out.push('## Skipped runs');
   out.push(

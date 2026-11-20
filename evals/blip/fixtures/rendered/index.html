@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rendered fixture</title>
+    <style>
+      body { margin: 0; font: 16px sans-serif; }
+      section { position: relative; width: 320px; height: 200px; margin: 0 auto; }
+      .box { width: 40px; height: 20px; overflow: hidden; white-space: nowrap; }
+      .out { position: absolute; left: 380px; top: 10px; }
+    </style>
+  </head>
+  <body>
+    <script>
+      // `?screen=` picks what the fixture's stage holds
+      const screen = new URLSearchParams(location.search).get('screen');
+      if (screen === 'crash') throw new Error('the screen threw');
+      const stage = document.createElement('section');
+      stage.setAttribute('data-slot', 'stage');
+      stage.setAttribute('aria-label', 'Fixture');
+      const body = {
+        ok: '<p>Gold 120</p>',
+        // Text in a box too small for it, hiding what overflows
+        cut: '<div class="box">Buy the Iron Sword for 150 gold</div>',
+        // A part placed outside the stage
+        escape: '<p class="out">Out</p>',
+        // An image without a text alternative
+        axe: '<p>Gold 120</p><img src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="4" height="4" />',
+        blank: '',
+        missing: '<p>No screen called “nope”</p>',
+      }[screen] ?? '<p>Gold 120</p>';
+      stage.innerHTML = body ? `<h1>Fixture</h1>${body}` : '';
+      const main = document.createElement('main');
+      main.append(stage);
+      document.body.append(main);
+    </script>
+  </body>
+</html>
