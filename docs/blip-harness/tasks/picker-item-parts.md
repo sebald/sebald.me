@@ -24,6 +24,8 @@ containers are named by role and the container tells them what they can't know t
 **Included.** The parts, `PickerItem`'s page and an example (one of the three tickets' shapes), a
 story composition, tests; the keys and the note stay as they are.
 
+**Base UI.** No new primitive: the parts sit inside Blip's own `Picker`, which is not on Base UI. Whether `Picker` should move to Base UI's `Menu` or `Select` is out of scope; note in the Notes what such a move would have to keep (the key layer, the cursor, the sounds).
+
 **Not included.** A second kind of list. A table. Formatting a time or a date (see
 [`time-readout`](time-readout.md)).
 

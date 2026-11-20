@@ -23,6 +23,8 @@ if the behaviour is the same.
 **Included.** Component, styles, page, stories, tests. `value` and optional `max` as numbers,
 the label as children; a `changes` announcement through `useAnnounce` only when the value changes.
 
+**Base UI.** With a `max`, built on `@base-ui/react/meter` (`Meter.Root`, `Meter.Label`, `Meter.Value`), so current out of max has the meter role and its values for a screen reader; a single value without `max` has no Base UI primitive and stays plain markup. Blip's own `Meter` (the boxes) is not on Base UI; say in the Notes whether it should be.
+
 **Not included.** A bar (that is `Meter`). Formatting for time (see
 [`time-readout`](time-readout.md)). Any harness piece.
 

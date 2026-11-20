@@ -23,6 +23,8 @@ sidecar, an example file, stories (`Default`, `Overview`, compositions only wher
 something new), and the tests `foundations/uniformity.test.ts` runs. The candidate rules `P-FEEDBACK-103` ("Keep a notification until the player moves
 on") and `P-FEEDBACK-104` ("Keep a notification off the current row and the cursor").
 
+**Base UI.** Built on `@base-ui/react/toast` (`Toast.Provider`, `Toast.Viewport`, `Toast.Root`, `useToastManager`), which handles the live region, the stack and the timing; Blip turns the timer off by default (`P-FEEDBACK-103`).
+
 **Not included.** A queue manager beyond showing the latest. Errors that need an answer (`Confirm`).
 Any eval task change.
 

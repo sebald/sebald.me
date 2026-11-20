@@ -21,6 +21,8 @@ date. Proposed names `PlayTime` and `SavedAt`; the user decides between two comp
 the invalid-date case (shows the text it was given, as `no-cli/saves-2/saves.tsx:30` does), tests,
 a page with the guidelines.
 
+**Base UI.** No Base UI primitive formats time; plain markup with a `<time dateTime>` element.
+
 **Not included.** A clock that ticks (that is `Timer`). Any harness piece.
 
 **Acceptance criteria.**

@@ -20,6 +20,8 @@ sidecar, an example file, stories (`Default`, `Overview`, compositions only wher
 something new), and the tests `foundations/uniformity.test.ts` runs. The candidate rule `P-DIALOGUE-101` ("Name the speaker in words the first time they
 speak in a scene"), so a portrait is never the only sign of who speaks.
 
+**Base UI.** Built on `@base-ui/react/avatar` (`Avatar.Root`, `Avatar.Image`, `Avatar.Fallback`): the fallback (initials in the stage's font) shows while the art loads or when there is none.
+
 **Not included.** Art: Blip ships no assets, the game passes its own. The party card pattern (the
 `patterns` task). Any eval task change.
 
