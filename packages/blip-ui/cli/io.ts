@@ -12,6 +12,8 @@ export interface Parsed {
   positionals: string[];
   json: boolean;
   limit: number | null;
+  /** `--section <name>` of `blip docs` */
+  section: string | null;
   help: boolean;
   /** A usage error in the flags */
   error?: string;
@@ -23,6 +25,7 @@ export const parseArgs = (argv: readonly string[]): Parsed => {
     positionals: [],
     json: false,
     limit: null,
+    section: null,
     help: false,
   };
   const rest: string[] = [];
@@ -36,6 +39,13 @@ export const parseArgs = (argv: readonly string[]): Parsed => {
       if (!Number.isInteger(n) || n < 1) {
         parsed.error = '--limit takes a whole number, 1 or more';
       } else parsed.limit = n;
+    } else if (arg === '--section' || arg.startsWith('--section=')) {
+      const value = arg.includes('=')
+        ? arg.slice(arg.indexOf('=') + 1)
+        : argv[++i];
+      if (!value || value.startsWith('--'))
+        parsed.error = '--section takes a section name, such as props';
+      else parsed.section = value;
     } else if (arg.startsWith('--')) parsed.error = `Unknown flag ${arg}`;
     else rest.push(arg);
   }

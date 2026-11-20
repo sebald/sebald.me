@@ -15,11 +15,14 @@ import { basename, join } from 'node:path';
 import { mdxToMarkdown, summaryOf, titleOf } from './convert.ts';
 import { compoundParts, parseExports } from './exports.ts';
 import {
+  type Manifest,
   type PageKind,
   type PageSource,
   buildManifest,
   undocumented,
+  withoutDescription,
 } from './manifest.ts';
+import { propsSection, readProps } from './props.ts';
 
 /** Pages about the repo, not about using the kit */
 const NOT_SHIPPED = new Set(['building-components']);
@@ -93,7 +96,23 @@ if (statements.length !== blocks.length) {
   throw new Error('src/index.ts has an export the docs build does not read');
 }
 
-const manifest = buildManifest(version, pages, entries);
+// The props come from the type checker; a type that is not readable fails here
+const props = readProps(root, entries);
+const manifest: Manifest = buildManifest(version, pages, entries, props);
+
+// `<Controls />` becomes the props table, now that the page's exports are known
+for (const page of pages) {
+  const names = manifest.pages.find(({ id }) => id === page.id)!.exports;
+  const section = propsSection(
+    page.id,
+    names.map(name => [name, manifest.exports[name]!] as const),
+  );
+  const source = readFileSync(
+    join(src, files.find(({ id }) => id === page.id)!.file),
+    'utf8',
+  );
+  page.markdown = mdxToMarkdown(source, ids, section);
+}
 
 const docs = join(root, 'docs');
 rmSync(docs, { recursive: true, force: true });
@@ -107,9 +126,18 @@ writeFileSync(
 );
 
 const missing = undocumented(manifest);
-console.log(
-  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports`,
+const propCount = Object.values(manifest.exports).reduce(
+  (sum, entry) => sum + (entry.props?.length ?? 0),
+  0,
 );
+console.log(
+  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports, ${propCount} props`,
+);
+const bare = withoutDescription(manifest);
+if (bare.length > 0) {
+  console.log(`docs: ${bare.length} props have no description:`);
+  console.log(`  ${bare.join(', ')}`);
+}
 if (missing.length > 0) {
   console.log(`docs: ${missing.length} exports are on no page:`);
   console.log(`  ${missing.join(', ')}`);

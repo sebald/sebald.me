@@ -2,11 +2,14 @@ import type { Docs } from '../docs-dir.ts';
 import { recordEvent } from '../events.ts';
 import type { Io, Parsed } from '../io.ts';
 import { closestPage } from '../search.ts';
+import { sectionNames, sectionOf } from '../section.ts';
 
 export const docsCommand = (docs: Docs, args: Parsed, io: Io) => {
   const name = args.positionals[0];
   if (!name || args.positionals.length > 1) {
-    io.err('blip docs takes one page or export: blip docs <page | export>');
+    io.err(
+      'blip docs takes one page or export: blip docs <page | export> [--section <name>]',
+    );
     return 2;
   }
   const wanted = name.toLowerCase();
@@ -21,9 +24,25 @@ export const docsCommand = (docs: Docs, args: Parsed, io: Io) => {
     results: page ? [page] : [],
   });
   if (page) {
-    const markdown = docs.markdown(page);
+    const whole = docs.markdown(page);
+    const section = args.section;
+    const markdown = section ? sectionOf(whole, section) : whole;
+    if (markdown === null) {
+      const names = sectionNames(whole);
+      const message = `The ${page} page has no "${section}" section. Its sections: ${names.join(', ') || 'none'}.`;
+      if (args.json)
+        io.out(JSON.stringify({ error: message, sections: names }));
+      else io.err(message);
+      return 2;
+    }
     io.out(
-      args.json ? JSON.stringify({ id: page, markdown }) : markdown.trimEnd(),
+      args.json
+        ? JSON.stringify({
+            id: page,
+            ...(section ? { section } : {}),
+            markdown,
+          })
+        : markdown.trimEnd(),
     );
     return 0;
   }

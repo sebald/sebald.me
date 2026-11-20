@@ -1,4 +1,5 @@
 import type { ExportKind, PublicExport } from './exports.ts';
+import type { ExportProps, PropInfo } from './props.ts';
 
 export type PageKind = 'component' | 'pattern' | 'foundation';
 
@@ -18,6 +19,10 @@ export interface ManifestExport {
   /** The page it is on, or null when it is on none */
   page: string | null;
   kind: ExportKind;
+  /** What it passes on to a native element, as the source says it; null when nothing */
+  htmlProps?: string | null;
+  /** Its own props (components only) */
+  props?: PropInfo[];
 }
 
 export interface Manifest {
@@ -68,11 +73,16 @@ export const buildManifest = (
   version: string,
   pages: readonly PageSource[],
   entries: readonly PublicExport[],
+  props: ReadonlyMap<string, ExportProps> = new Map(),
 ): Manifest => {
   const exports: Record<string, ManifestExport> = Object.fromEntries(
     entries.map(entry => [
       entry.name,
-      { page: pageOf(entry, pages), kind: entry.kind },
+      {
+        page: pageOf(entry, pages),
+        kind: entry.kind,
+        ...(props.has(entry.name) ? props.get(entry.name) : {}),
+      },
     ]),
   );
   return {
@@ -99,3 +109,11 @@ export const undocumented = (manifest: Manifest) =>
   Object.entries(manifest.exports)
     .filter(([, entry]) => entry.page === null && entry.kind !== 'type')
     .map(([name]) => name);
+
+/** Own props with no description, as `Name.prop` */
+export const withoutDescription = (manifest: Manifest) =>
+  Object.entries(manifest.exports).flatMap(([name, entry]) =>
+    (entry.props ?? [])
+      .filter(prop => prop.description === '')
+      .map(prop => `${name}.${prop.name}`),
+  );
