@@ -343,10 +343,20 @@ const ensureBase = record => {
   rmSync(join(baseDir, 'pnpm-lock.yaml'), { force: true });
   cpSync(record.tarball.file, join(baseDir, 'blip-ui.tgz'));
   console.log("Installing the label's base (online) ...");
-  run('pnpm', ['install'], {
-    cwd: baseDir,
-    env: childEnv(process.env, { repo: REPO, cwd: baseDir }),
-  });
+  const env = childEnv(process.env, { repo: REPO, cwd: baseDir });
+  run('pnpm', ['install'], { cwd: baseDir, env });
+  // Every agent starts here, so it must be clean outside this repo too (in the
+  // repo, the template borrows types from the root's node_modules)
+  console.log("Checking the label's base (typecheck, build) ...");
+  try {
+    run('pnpm', ['typecheck'], { cwd: baseDir, env });
+    run('pnpm', ['build'], { cwd: baseDir, env });
+  } catch (error) {
+    // Not left looking installed, so the next call checks again
+    rmSync(baseDir, { recursive: true, force: true });
+    throw error;
+  }
+  rmSync(join(baseDir, 'dist'), { recursive: true, force: true });
 };
 
 // ---- The canary (Q7) ---------------------------------------------------
@@ -753,7 +763,7 @@ try {
   ensureBase(record);
 } catch (error) {
   fail(
-    `Could not install the label: ${String(error.stderr || error.message).slice(0, 500)}`,
+    `Could not install the label: ${String(error.stdout || error.stderr || error.message).slice(0, 500)}`,
   );
 }
 if (!pending.length) {

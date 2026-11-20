@@ -103,3 +103,8 @@ rubrics and `AGENTS.md`). Nothing blocking; every name and value matched. Minor:
 and `sell` moved an item's pack entry to the end, now entries keep their place; `camp.tsx`
 re-subscribes its listener on each arrow press, left as it is. It also asked to confirm the
 `pause` note against the `Dialog` finding above, which is stated there.
+
+**After merge.** The first real run (`eval-run`'s pilot) showed 39 `tsc` errors in Vite's types:
+outside this repo nothing provides `@types/node`, which the template had borrowed from the
+root's `node_modules`. `@types/node` is now a dev dependency, and `run.mjs` type-checks and
+builds each label's base install before an agent starts.
