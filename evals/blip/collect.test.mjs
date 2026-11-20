@@ -23,7 +23,12 @@ import {
   blipCalls,
   networkCalls,
 } from './lib/transcript.mjs';
-import { checkBuild, collectorEnv, places } from './lib/tree.mjs';
+import {
+  analyseSource,
+  checkBuild,
+  collectorEnv,
+  places,
+} from './lib/tree.mjs';
 
 const FIXTURES = join(fileURLToPath(import.meta.url), '../fixtures');
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'));
@@ -180,8 +185,11 @@ describe('the collector on the fixtures', () => {
 
   it('records the collector and the CLI version', () => {
     assert.deepEqual(first.results.collector, { version: 'test' });
-    assert.deepEqual(first.results.cli, { version: '0.0.0-fixture' });
-    assert.match(first.summary, /Collector `test`, Blip CLI `0.0.0-fixture`/);
+    assert.match(first.results.cli.version, /^0\.0\.0-fixture\+[0-9a-f]{12}$/);
+    assert.match(
+      first.summary,
+      /Collector `test`, Blip CLI `0\.0\.0-fixture\+[0-9a-f]{12}`/,
+    );
   });
 
   it('gives the same files twice and leaves every events.jsonl as the agent left it', () => {
@@ -238,7 +246,7 @@ describe('the collector on the fixtures', () => {
     const cli = collect({ ...options(), against: base });
     assert.match(
       cli.summary,
-      /the CLI differs \(9\.9\.9, this one 0\.0\.0-fixture\)/,
+      /the CLI differs \(9\.9\.9, this one 0\.0\.0-fixture\+[0-9a-f]{12}\)/,
     );
   });
 
@@ -290,6 +298,32 @@ describe('the transcript', () => {
     assert.deepEqual(networkCalls('pnpm install --offline'), []);
     assert.deepEqual(networkCalls('pnpm exec tsc --noEmit && ls src'), []);
     assert.deepEqual(networkCalls('echo curl'), []);
+  });
+
+  it('reads quotes, wrappers, nested shells and heredocs', () => {
+    assert.deepEqual(networkCalls('git commit -m "fix; gh actions"'), []);
+    assert.deepEqual(networkCalls('grep -r "a|curl" src'), []);
+    assert.deepEqual(
+      networkCalls("cat > x.sh <<'EOF'\ncurl http://x\nEOF"),
+      [],
+    );
+    assert.deepEqual(networkCalls('pnpm install -D left-pad'), [
+      'pnpm install',
+    ]);
+    assert.deepEqual(networkCalls('/usr/bin/curl x'), ['curl']);
+    assert.deepEqual(networkCalls('timeout 5 curl x'), ['curl']);
+    assert.deepEqual(networkCalls('env X=1 wget x'), ['wget']);
+    assert.deepEqual(networkCalls('bash -c "ls && curl x"'), ['curl']);
+    assert.deepEqual(networkCalls('npx left-pad'), ['npx']);
+    assert.deepEqual(networkCalls('npx tsc --noEmit'), []);
+    assert.deepEqual(networkCalls('node -e "fetch(\'https://x.test\')"'), [
+      'node (network code)',
+    ]);
+    assert.deepEqual(blipCalls('pnpm --silent exec blip docs button'), [
+      'docs',
+    ]);
+    assert.deepEqual(blipCalls('blip --cwd . search x'), ['search']);
+    assert.deepEqual(blipCalls('timeout 9 blip search x'), ['search']);
   });
 
   it('counts a message once however many events carry it, and survives a torn line', () => {
@@ -412,6 +446,14 @@ describe('the tree', () => {
     } finally {
       rmSync(run, { recursive: true, force: true });
     }
+  });
+
+  it('leaves a conditional\u2019s test out of a className\u2019s classes', () => {
+    const { elements } = analyseSource(
+      'a.tsx',
+      "export const A = ({ s }) => <div className={cn('a', s === 'open' ? 'b' : 'c')} />;",
+    );
+    assert.deepEqual(elements[0].classes.tokens, ['a', 'b', 'c']);
   });
 
   it('orders configurations as they add to one another', () => {

@@ -5,6 +5,7 @@
 // `.blip/`. See `evals/blip/README.md`.
 
 import { execFileSync } from 'node:child_process';
+import { createHash } from 'node:crypto';
 import {
   existsSync,
   mkdirSync,
@@ -13,7 +14,7 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { homedir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 
@@ -85,9 +86,34 @@ const transcriptPath = dir =>
 
 const readJson = path => JSON.parse(readFileSync(path, 'utf8'));
 
+const filesUnder = (dir, out = []) => {
+  if (!existsSync(dir)) return out;
+  for (const entry of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+    a.name < b.name ? -1 : 1,
+  )) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) filesUnder(path, out);
+    else out.push(path);
+  }
+  return out;
+};
+
+/**
+ * The CLI a run installed: the package's version (the same `0.0.0` for every
+ * tarball today) and a hash of its `dist` and `docs`, which is what tells
+ * two tarballs apart
+ */
 const cliVersionOf = dir => {
-  const path = join(dir, 'node_modules', PACKAGE, 'package.json');
-  return existsSync(path) ? readJson(path).version : null;
+  const pkg = join(dir, 'node_modules', PACKAGE);
+  if (!existsSync(join(pkg, 'package.json'))) return null;
+  const hash = createHash('sha256');
+  for (const folder of ['dist', 'docs']) {
+    for (const file of filesUnder(join(pkg, folder))) {
+      hash.update(`${relative(pkg, file)}\0`);
+      hash.update(readFileSync(file));
+    }
+  }
+  return `${readJson(join(pkg, 'package.json')).version}+${hash.digest('hex').slice(0, 12)}`;
 };
 
 export const collect = ({
@@ -98,6 +124,11 @@ export const collect = ({
   build = true,
   against = null,
 }) => {
+  if (!/^[\w.-]+$/.test(label) || label.startsWith('.')) {
+    throw new Error(
+      `Label "${label}" must be letters, digits, ".", "_" and "-"`,
+    );
+  }
   const labelDir = join(cache, label);
   if (!existsSync(labelDir))
     throw new Error(`No runs for "${label}" in ${cache}`);
@@ -110,7 +141,13 @@ export const collect = ({
       const path = join(tasksDir, task, 'rubric.json');
       if (!existsSync(path))
         throw new Error(`No rubric for task "${task}" (${path})`);
-      scopes[task] = readJson(path).scope ?? 'all';
+      const scope = readJson(path).scope ?? 'all';
+      if (scope !== 'all' && scope !== 'changed-lines') {
+        throw new Error(
+          `${path}: scope must be "all" or "changed-lines", not "${scope}"`,
+        );
+      }
+      scopes[task] = scope;
     }
     return scopes[task];
   };
@@ -163,6 +200,11 @@ export const collect = ({
   let comparison = null;
   if (against) {
     const other = readJson(join(against, 'results.json'));
+    if (other.schema !== SCHEMA) {
+      throw new Error(
+        `${against}: results of schema ${other.schema}, this collector writes ${SCHEMA}; collect it again`,
+      );
+    }
     const problems = [];
     if (other.collector.version !== results.collector.version) {
       problems.push(

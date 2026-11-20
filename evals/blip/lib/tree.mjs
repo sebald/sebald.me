@@ -15,6 +15,7 @@ export const PACKAGE = '@sebald/blip-ui';
 export const collectorEnv = (base = process.env) => ({
   ...base,
   BLIP_EVENTS: 'off',
+  GIT_OPTIONAL_LOCKS: '0',
   CI: '1',
 });
 
@@ -91,11 +92,18 @@ const walk = (node, visit) => {
 /** Every string the expression of a `className` is made of */
 const stringsOf = node => {
   const found = [];
+  const skip = [];
   walk(node, n => {
-    if (n.type === 'Literal' && typeof n.value === 'string')
-      found.push(n.value);
-    else if (n.type === 'TemplateElement')
-      found.push(n.value?.cooked ?? n.value?.raw ?? '');
+    // `state === 'open' ? 'a' : 'b'`: 'open' is not a class
+    if (n.type === 'ConditionalExpression')
+      skip.push([n.test.start, n.test.end]);
+    if (n.type === 'BinaryExpression') skip.push([n.start, n.end]);
+  });
+  walk(node, n => {
+    const isString = n.type === 'Literal' && typeof n.value === 'string';
+    if (!isString && n.type !== 'TemplateElement') return;
+    if (skip.some(([from, to]) => n.start >= from && n.end <= to)) return;
+    found.push(isString ? n.value : (n.value?.cooked ?? n.value?.raw ?? ''));
   });
   return found;
 };
@@ -223,10 +231,14 @@ export const changedLines = cwd => {
   const changed = new Map();
   let file = null;
   for (const line of git(cwd, [
+    '-c',
+    'core.quotePath=false',
     'diff',
     '-U0',
     '--no-color',
     '--no-renames',
+    '--src-prefix=a/',
+    '--dst-prefix=b/',
     root,
     '--',
     'src',
@@ -243,6 +255,8 @@ export const changedLines = cwd => {
     }
   }
   for (const added of git(cwd, [
+    '-c',
+    'core.quotePath=false',
     'ls-files',
     '-o',
     '--exclude-standard',
@@ -393,7 +407,11 @@ export const analyseTree = (cwd, scope) => {
     components: { ...components, blipByName: sorted(blipComponents) },
     classNames,
     inlineStyles,
-    imports: { fromBlip: importsFromBlip, invented: inventedImports.sort() },
+    // null: no manifest in the run, so not measured
+    imports: {
+      fromBlip: importsFromBlip,
+      invented: known ? inventedImports.sort() : null,
+    },
     overrides,
   };
 };

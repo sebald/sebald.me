@@ -92,6 +92,12 @@ export const writeSummary = ({ results, comparison }) => {
     );
   }
 
+  if (runs.some(run => run.tree.imports.invented === null)) {
+    out.push(
+      'Imports that are not exports were not measured in some runs: no `docs/manifest.json` in the installed package.',
+    );
+  }
+
   out.push('## Network use');
   const reached = runs.filter(run => run.transcript.network.length > 0);
   if (reached.length === 0) out.push('No run reached out.');

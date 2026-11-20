@@ -276,9 +276,11 @@ cache from the fixtures to try it by hand.
   contain hyphens (`camp-rest-1`): the repetition is the number after the last one
 - The stream goes to `<run>/transcript.jsonl`; `<run>.transcript.jsonl` beside the folder is read
   too, if the run keeps it out of the agent's reach
-- Blip's version is `node_modules/@sebald/blip-ui/package.json` in each run. A label with more than
-  one version is an error. The exports it checks imports against are
-  `node_modules/@sebald/blip-ui/docs/manifest.json`; without it, invented imports are not counted
+- Blip's identity is, per run, the `version` in `node_modules/@sebald/blip-ui/package.json` plus
+  a hash of the package's `dist` and `docs` (the version is `0.0.0` for every tarball today). A
+  label with more than one is an error. The exports imports are checked against are
+  `node_modules/@sebald/blip-ui/docs/manifest.json`; without it, invented imports are `null` (not
+  measured, and `summary.md` says so)
 - A run without a `result` event, or one that ended on the usage limit, is `incomplete`: listed,
   left out of every median
 - The task's `scope` is read from `tasks/<task>/rubric.json` in this repo
@@ -293,17 +295,19 @@ cache from the fixtures to try it by hand.
   time from the final `result` event; permission denials; `error_max_budget_usd` as over budget.
   A message split over several events is counted once (by `message.id`); a subagent's messages
   (those with a `parent_tool_use_id`) are summed apart as `subagents`
-- Network (Q2): a command whose first word is `curl`, `wget`, `gh`, `npm|pnpm|yarn|bun view`,
-  `info`, `show`, `search`, `add`, `install` or `i` with a package named (a bare `install` works
-  from the lockfile and is not flagged), `pnpm dlx`, `git clone|fetch|pull|push`, and the
-  `WebFetch` and `WebSearch` tools. Flagged runs are counted like the others and listed apart
+- Network (Q2): a command (found outside quotes and heredocs, through `env`, `timeout`, `xargs`,
+  `sudo` and `bash -c`) that is `curl`, `wget`, `gh`, `npm|pnpm|yarn|bun view`, `info`, `show`,
+  `search`, `add`, or `install`/`i` with a package named (a bare `install` works from the
+  lockfile and is not flagged), `pnpm dlx`, `npx <package>` (not `blip`, `tsc`, `vite`, `oxlint`),
+  `node|python -e/-c` code that fetches, `git clone|fetch|pull|push`, and the `WebFetch` and
+  `WebSearch` tools. Flagged runs are counted like the others and listed apart
 - Tree: `tsc --noEmit` and `vite build` with what the run installed (not run: `ran: false`, not a
   failure); raw tags, split into those Blip has a component for (`button`, `input`, `select`,
   `textarea`, `dialog`, `progress`, `meter`, `h1` to `h6`, `ul`, `ol`, `menu`, `table`, `nav`,
   `details`, `summary`: `controls`) and the rest (`wrappers`); JSX elements by where they come from
   (`blip`, `own`: a relative or `@/` import or one declared in the file, `other`); `className`s
   with their classes split into placing (position, size, grid, flex, margin, gap, overflow) and
-  restyling (everything else, padding included); `style` props; value imports from
+  restyling (everything else, padding included), without the test of a conditional (`s === 'open' ? 'a' : 'b'` has two); `style` props; value imports from
   `@sebald/blip-ui` that are not exports. The files are parsed (`oxc-parser`), not matched by regex
 - `scope: all` counts all of `src/`; `changed-lines` counts an element, a `className` or an import
   only when its line (the opening tag's, the attribute's) is added or changed since the run's root

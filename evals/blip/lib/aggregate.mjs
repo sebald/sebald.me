@@ -81,6 +81,7 @@ export const MEASURES = [
     id: 'invented',
     group: '5. It reuses',
     label: 'imports from Blip that are not exports',
+    of: run => run.tree.imports.invented !== null,
     value: run => run.tree.imports.invented.length,
   },
   {

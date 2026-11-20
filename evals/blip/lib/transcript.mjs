@@ -21,13 +21,60 @@ const text = content => {
     .join('\n');
 };
 
-/** The pieces of a shell command, split where a new command starts */
-export const segments = command =>
-  String(command)
-    .split(/&&|\|\||;|\||\n/)
-    .map(segment => segment.trim().split(/\s+/).filter(Boolean))
-    .map(tokens => tokens.map(token => token.replace(/^['"]|['"]$/g, '')))
-    .filter(tokens => tokens.length > 0);
+/**
+ * The commands of a shell line, each as its words: split at `&&`, `||`, `;`,
+ * `|` and newlines outside quotes; a heredoc's body is left out. Quotes are
+ * removed from words
+ */
+export const segments = command => {
+  const out = [];
+  let words = [];
+  let word = null;
+  let quote = null;
+  let heredoc = null;
+  const endWord = () => {
+    if (word !== null) words.push(word);
+    word = null;
+  };
+  const endCommand = () => {
+    endWord();
+    if (words.length) out.push(words);
+    words = [];
+  };
+  for (const line of String(command).split('\n')) {
+    if (heredoc) {
+      if (line.trim() === heredoc) heredoc = null;
+      continue;
+    }
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (quote) {
+        if (c === quote) quote = null;
+        else if (c === '\\' && quote === '"' && i + 1 < line.length)
+          word += line[++i];
+        else word += c;
+      } else if (c === "'" || c === '"') {
+        quote = c;
+        word ??= '';
+      } else if (c === '\\' && i + 1 < line.length) {
+        word = (word ?? '') + line[++i];
+      } else if (c === ';' || c === '|' || c === '&') {
+        if (c === '&' && line[i + 1] === '&') i++;
+        else if (c === '|' && line[i + 1] === '|') i++;
+        endCommand();
+      } else if (/\s/.test(c)) endWord();
+      else word = (word ?? '') + c;
+    }
+    if (quote) word += '\n';
+    else {
+      const here = /<<-?\s*['"]?(\w+)['"]?/.exec(line);
+      endCommand();
+      if (here) heredoc = here[1];
+    }
+  }
+  endCommand();
+  return out;
+};
 
 /** `FOO=bar cmd` is `cmd` */
 const withoutAssignments = tokens => {
@@ -36,48 +83,96 @@ const withoutAssignments = tokens => {
   return tokens.slice(i);
 };
 
+const base = token => token.split('/').at(-1);
+
+/** Words that start another command: `timeout 5 curl`, `env X=1 curl`, `xargs curl` */
+const WRAPPERS = new Set([
+  'sudo',
+  'env',
+  'nohup',
+  'time',
+  'xargs',
+  'command',
+  'exec',
+]);
+
+/** The command a segment runs, without wrappers, and its arguments */
+const unwrap = raw => {
+  let tokens = withoutAssignments(raw);
+  for (;;) {
+    const first = base(tokens[0] ?? '');
+    if (WRAPPERS.has(first)) {
+      tokens = withoutAssignments(
+        tokens.slice(1).filter(t => !t.startsWith('-')),
+      );
+    } else if (first === 'timeout') tokens = tokens.slice(2);
+    else break;
+  }
+  return tokens;
+};
+
+/** `bash -c "…"` and `sh -c "…"` run a command line of their own */
+const nested = tokens => {
+  const shell = /^(?:ba|z|da)?sh$/.test(base(tokens[0] ?? ''));
+  const at = tokens.indexOf('-c');
+  return shell && at > 0 && tokens[at + 1] ? tokens[at + 1] : null;
+};
+
 const PREFIX = new Set([
   'pnpm',
   'exec',
   'npx',
   'bunx',
   'node',
-  '--no',
-  '--yes',
-  '-y',
   'dlx',
+  'yarn',
+  'npm',
 ]);
+
+const SUBCOMMANDS = new Set(['search', 'docs', 'validate', 'index', 'help']);
 
 /** The `blip` calls of a Bash command, each as its subcommand (`help` for none) */
 export const blipCalls = command => {
   const calls = [];
   for (const raw of segments(command)) {
-    const tokens = withoutAssignments(raw);
+    const tokens = unwrap(raw);
+    const inner = nested(tokens);
+    if (inner) {
+      calls.push(...blipCalls(inner));
+      continue;
+    }
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
-      const isBlip =
-        /(^|\/)blip$/.test(token) || token.endsWith('blip-ui/dist/cli/bin.js');
-      if (isBlip) {
-        if (
-          tokens.slice(0, i).every(t => PREFIX.has(t) || t.endsWith('node'))
-        ) {
-          const next = tokens.slice(i + 1).find(t => !t.startsWith('-'));
-          calls.push(next ?? 'help');
-        }
+      if (base(token) === 'blip' || token.endsWith('blip-ui/dist/cli/bin.js')) {
+        calls.push(tokens.slice(i + 1).find(t => SUBCOMMANDS.has(t)) ?? 'help');
         break;
       }
-      if (!PREFIX.has(token) && !token.endsWith('node')) break;
+      const launcher =
+        PREFIX.has(base(token)) ||
+        token.startsWith('-') ||
+        token === '@sebald/blip-ui';
+      if (!launcher) break;
     }
   }
   return calls;
 };
 
+const LOCAL_BINS = /^(blip|tsc|vite|oxlint|oxfmt)$/;
+
 /** The network-reaching commands of a Bash command */
 export const networkCalls = command => {
   const found = [];
   for (const raw of segments(command)) {
-    const tokens = withoutAssignments(raw).filter(t => t !== 'sudo');
-    const [first = '', second = '', third = ''] = tokens;
+    const tokens = unwrap(raw);
+    const inner = nested(tokens);
+    if (inner) {
+      found.push(...networkCalls(inner));
+      continue;
+    }
+    const first = base(tokens[0] ?? '');
+    const second = tokens[1] ?? '';
+    const names = tokens.slice(1).filter(t => !t.startsWith('-'));
+    const code = tokens.join(' ');
     if (NETWORK_TOOLS.has(first)) found.push(first);
     else if (INSTALLERS.has(first) && VIEW_VERBS.has(second))
       found.push(`${first} ${second}`);
@@ -87,12 +182,25 @@ export const networkCalls = command => {
     else if (
       INSTALLERS.has(first) &&
       INSTALL_VERBS.has(second) &&
-      third &&
-      !third.startsWith('-')
+      tokens.slice(2).some(t => !t.startsWith('-'))
     ) {
       found.push(`${first} ${second}`);
     } else if (first === 'pnpm' && second === 'dlx') found.push('pnpm dlx');
+    // `npx <package>` may download it; `npx blip` and `npx tsc` run what is installed
     else if (
+      ['npx', 'bunx'].includes(first) &&
+      names[0] &&
+      !LOCAL_BINS.test(names[0]) &&
+      !names[0].startsWith('@sebald/blip-ui')
+    ) {
+      found.push(first);
+    } else if (
+      ['node', 'python', 'python3', 'deno', 'bun'].includes(first) &&
+      tokens.some(t => t === '-e' || t === '-c' || t === '--eval') &&
+      /\bfetch\s*\(|https?:\/\/|urllib|requests\.|http\.client/.test(code)
+    ) {
+      found.push(`${first} (network code)`);
+    } else if (
       first === 'git' &&
       ['clone', 'fetch', 'pull', 'push'].includes(second)
     ) {
