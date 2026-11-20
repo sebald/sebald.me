@@ -46,7 +46,7 @@ const UNREADABLE = /\btypeof\b|[\w)]\[\s*['"A-Za-z]/;
 const collapse = (text: string) => text.replace(/\s+/g, ' ').trim();
 
 const withoutUndefined = (text: string) =>
-  text.replace(/\s*\|\s*undefined\b/g, '').replace(/^undefined\s*\|\s*/, '');
+  text.replace(/\s*\|\s*undefined\s*$/, '').replace(/^undefined\s*\|\s*/, '');
 
 const fromLibrary = (fileName: string) => fileName.includes('/node_modules/');
 
@@ -79,7 +79,7 @@ const readProp = (
     | undefined;
   const type = checker.getTypeOfSymbol(prop)!;
   const resolved = collapse(withoutUndefined(checker.typeToString(type)));
-  const written = declaration?.type
+  const written = declaration?.type && !/\/[/*]/.test(declaration.type.getText())
     ? collapse(withoutUndefined(declaration.type.getText()))
     : resolved;
 
@@ -210,7 +210,11 @@ export const propsTable = (props: readonly PropInfo[]) => {
   const rows = props.map(prop =>
     [
       `\`${prop.name}\`${prop.required ? ' (required)' : ''}`,
-      `\`${cell(prop.type)}\``,
+      `\`${cell(prop.type)}\`${
+        prop.values.length > 0 && !prop.type.includes("'")
+          ? `: ${prop.values.map(value => `\`${value}\``).join(' \\| ')}`
+          : ''
+      }`,
       prop.default === null ? '' : `\`${cell(prop.default)}\``,
       cell(prop.description),
     ].join(' | '),

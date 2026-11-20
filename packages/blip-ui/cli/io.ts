@@ -40,7 +40,9 @@ export const parseArgs = (argv: readonly string[]): Parsed => {
         parsed.error = '--limit takes a whole number, 1 or more';
       } else parsed.limit = n;
     } else if (arg === '--section' || arg.startsWith('--section=')) {
-      const value = arg.includes('=') ? arg.split('=')[1] : argv[++i];
+      const value = arg.includes('=')
+        ? arg.slice(arg.indexOf('=') + 1)
+        : argv[++i];
       if (!value || value.startsWith('--'))
         parsed.error = '--section takes a section name, such as props';
       else parsed.section = value;
