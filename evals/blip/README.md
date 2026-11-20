@@ -363,7 +363,7 @@ Playwright image's on Linux).
 - On the stage (`section[data-slot="stage"]`): `escapes()` from
   `packages/blip-ui/tests/visual/layout.ts` (the file the Blip UI story tests use; its root is now a
   parameter, `#storybook-root` by default), and axe (`axe-core`, whole page). `escapes()` lists the first
-  three faults; they are split into **escapes** (a part outside the stage) and **cut text** (`"…" cut by …`).
+  50 faults (`limit`; the stories keep its default of 3); they are split into **escapes** (a part outside the stage) and **cut text** (`"…" cut by …`).
   Axe is recorded as `{ id, impact, nodes }` per violated rule
 - A URL that does not render (the page threw, the stage stayed empty, `No screen called …`, the project
   does not build) is `rendered: false` with its `reason`, has no faults, and does not stop the others

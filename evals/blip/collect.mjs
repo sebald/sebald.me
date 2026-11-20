@@ -306,8 +306,10 @@ export const write = ({ results, summary }, outRoot, date) => {
 };
 
 /** The rubric's URLs per task, for the rendered layer */
-export const rubricUrls = (task, tasksDir = join(HERE, 'tasks')) =>
-  readJson(join(tasksDir, task, 'rubric.json')).urls ?? [];
+export const rubricUrls = (task, tasksDir = join(HERE, 'tasks')) => {
+  const path = join(tasksDir, task, 'rubric.json');
+  return existsSync(path) ? (readJson(path).urls ?? []) : [];
+};
 
 /** Opens each result in a browser (`lib/rendered.mjs`); the runs it can't find a rubric for are left to `collect` to refuse */
 export const renderRuns = async ({
@@ -326,8 +328,11 @@ export const renderRuns = async ({
   // Loaded here: Playwright and the stage check are only needed by this layer
   const { renderLabel } = await import('./lib/rendered.mjs');
   const { runs } = findRuns(labelDir);
-  const scopeOf = task =>
-    readJson(join(tasksDir, task, 'rubric.json')).scope ?? 'all';
+  // A task without a rubric is for `collect` to refuse, not for this
+  const scopeOf = task => {
+    const path = join(tasksDir, task, 'rubric.json');
+    return existsSync(path) ? (readJson(path).scope ?? 'all') : 'all';
+  };
   return renderLabel({
     labelDir,
     runs: runs.map(run => ({

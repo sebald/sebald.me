@@ -54,9 +54,15 @@ const serve = dist =>
   new Promise((resolvePromise, reject) => {
     const root = resolve(dist);
     const server = createServer((request, response) => {
-      const path = decodeURIComponent(
-        new URL(request.url ?? '/', 'http://x').pathname,
-      );
+      let path;
+      try {
+        path = decodeURIComponent(
+          new URL(request.url ?? '/', 'http://x').pathname,
+        );
+      } catch {
+        response.writeHead(400).end();
+        return;
+      }
       let file = normalize(join(root, path));
       if (file !== root && !file.startsWith(root + sep)) {
         response.writeHead(403).end();
@@ -72,7 +78,9 @@ const serve = dist =>
       response.writeHead(200, {
         'content-type': TYPES[extname(file)] ?? 'application/octet-stream',
       });
-      createReadStream(file).pipe(response);
+      createReadStream(file)
+        .on('error', () => response.destroy())
+        .pipe(response);
     });
     server.on('error', reject);
     server.listen(0, '127.0.0.1', () =>
@@ -90,7 +98,11 @@ const faultKey = text => text.replace(/ by \d+px$/, '');
 
 const isCut = text => text.includes('" cut by ');
 
-const shorten = text => String(text).replace(/\s+/g, ' ').slice(0, 160);
+const shorten = text =>
+  String(text)
+    .replace(/http:\/\/127\.0\.0\.1:\d+/g, '<origin>')
+    .replace(/\s+/g, ' ')
+    .slice(0, 160);
 
 /** One URL in one viewport. A page that does not render is recorded as such and still gets its picture */
 const renderPage = async ({ context, origin, axe, root, url }) => {
@@ -128,7 +140,7 @@ const renderPage = async ({ context, origin, axe, root, url }) => {
     }
     if (!result.reason) {
       result.rendered = true;
-      for (const entry of await escapes(page, root)) {
+      for (const entry of await escapes(page, root, 50)) {
         (isCut(entry) ? result.cut : result.escapes).push(entry);
       }
       await page.addScriptTag({ content: axe });
@@ -282,7 +294,8 @@ export const subtract = (pages, template) => {
 
 /** `vite build` where there is no `dist` yet; false when it fails */
 const ensureBuilt = cwd => {
-  if (existsSync(join(cwd, 'dist', 'index.html'))) return true;
+  // Always fresh: a `dist` left from the agent's own build may predate its last edit
+  rmSync(join(cwd, 'dist'), { recursive: true, force: true });
   const bin = join(cwd, 'node_modules', '.bin', 'vite');
   if (!existsSync(bin)) return false;
   return (
@@ -372,17 +385,15 @@ export const renderLabel = async ({
       templates.set(task, pages);
       return pages;
     };
-    for (const run of runs) {
+    const renderRun = async run => {
       const urls = urlsOf(run.task);
       const outDir = join(labelDir, '.screenshots', run.id);
-      log(`rendering ${run.id}`);
       if (!ensureBuilt(run.dir)) {
         mkdirSync(outDir, { recursive: true });
         // No build to open: every URL is recorded as not rendered, each with a blank picture
         const blank = failed(urls, 'the project does not build');
         await blankShots({ browser, outDir, pages: blank });
-        out[run.id] = summarise(blank, run.scope, null, run);
-        continue;
+        return summarise(blank, run.scope, null, run);
       }
       let pages = await renderPages({
         dist: join(run.dir, 'dist'),
@@ -392,10 +403,28 @@ export const renderLabel = async ({
       });
       let template = null;
       if (run.scope === 'changed-lines') {
-        template = await baseline(run.task);
+        template = await baseline(run.task).catch(() => null);
         if (template) pages = subtract(pages, template);
       }
-      out[run.id] = summarise(pages, run.scope, template, run);
+      return summarise(pages, run.scope, template, run);
+    };
+    for (const run of runs) {
+      const urls = urlsOf(run.task);
+      const outDir = join(labelDir, '.screenshots', run.id);
+      log(`rendering ${run.id}`);
+      try {
+        out[run.id] = await renderRun(run);
+      } catch (error) {
+        // One run that cannot be opened does not stop the others
+        const pages = failed(urls, `error: ${shorten(error.message)}`);
+        try {
+          mkdirSync(outDir, { recursive: true });
+          await blankShots({ browser, outDir, pages });
+        } catch {
+          // The record says it
+        }
+        out[run.id] = summarise(pages, run.scope, null, run);
+      }
     }
   } finally {
     await browser.close();
@@ -422,7 +451,10 @@ const summarise = (pages, scope, template, run) => ({
   // Where the pictures are, in the label's folder
   screenshots: `.screenshots/${run.id}`,
   // Whether the untouched template was taken off (`changed-lines` only)
-  subtractedTemplate: scope === 'changed-lines' ? template !== null : false,
+  subtractedTemplate:
+    scope === 'changed-lines'
+      ? !!template?.every(page => page.rendered)
+      : false,
   pages,
   totals: count(pages),
 });
