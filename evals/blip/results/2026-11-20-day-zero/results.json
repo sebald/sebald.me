@@ -2,12 +2,12 @@
   "schema": 1,
   "label": "day-zero",
   "collector": {
-    "version": "09441c72ac17"
+    "version": "a064ed4a3fd4"
   },
   "cli": {
     "version": "0.0.0+925ec59d8f14"
   },
-  "layers": ["transcript", "tree"],
+  "layers": ["transcript", "tree", "rendered"],
   "runs": [
     {
       "id": "cli/camp-rest-1",
@@ -99,6 +99,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-1",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -194,6 +281,93 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-2",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -287,6 +461,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-3",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -422,6 +683,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -611,6 +939,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -773,6 +1168,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -877,6 +1339,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -984,6 +1523,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1089,6 +1705,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1270,6 +1963,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1396,6 +2156,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1553,6 +2380,85 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          }
+        }
       }
     },
     {
@@ -1664,6 +2570,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1777,6 +2772,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1888,6 +2972,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2027,6 +3200,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2155,6 +3417,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2288,6 +3639,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2379,6 +3819,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-1",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2472,6 +3999,93 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-2",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2562,6 +4176,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-3",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2703,6 +4404,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2879,6 +4647,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3057,6 +4892,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -3158,6 +5060,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3296,6 +5275,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -3397,6 +5453,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3539,6 +5672,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -3680,6 +5880,85 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          }
         }
       }
     },
@@ -3825,6 +6104,73 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -3969,6 +6315,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -4096,6 +6531,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -4218,6 +6742,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -4348,6 +6961,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -4473,6 +7175,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -4612,6 +7403,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     }
   ],
@@ -4632,6 +7512,46 @@
               "median": 0,
               "min": 0,
               "max": 0,
+              "n": 18
+            },
+            "renders": {
+              "yes": 18,
+              "of": 18
+            },
+            "escapes-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "escapes-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "axe-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "axe-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
               "n": 18
             },
             "blipComponents": {
@@ -4778,6 +7698,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 0,
                 "min": 0,
@@ -4913,6 +7873,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -5061,6 +8061,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 14,
                 "min": 14,
@@ -5202,6 +8242,46 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
                 "n": 3
               },
               "blipComponents": {
@@ -5347,6 +8427,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 12,
                 "min": 10,
@@ -5485,6 +8605,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -5636,6 +8796,46 @@
               "max": 0,
               "n": 18
             },
+            "renders": {
+              "yes": 18,
+              "of": 18
+            },
+            "escapes-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "escapes-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "axe-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "axe-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
             "blipComponents": {
               "median": 14,
               "min": 0,
@@ -5780,6 +8980,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 0,
                 "min": 0,
@@ -5915,6 +9155,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -6063,6 +9343,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 14,
                 "min": 14,
@@ -6204,6 +9524,46 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
                 "n": 3
               },
               "blipComponents": {
@@ -6349,6 +9709,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 15,
                 "min": 15,
@@ -6487,6 +9887,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
