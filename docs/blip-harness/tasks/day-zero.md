@@ -79,7 +79,7 @@ a run, `docs` reads 2 against 0). `no-cli` writes Tailwind classes in 6 of 18 ru
 - The collector's candidate-override check (Q11) lists nothing, because it counts `className` and
   17 of the 21 layout frames are inline `style`. Not fixed here; `screen-layout` names it.
 - `Stage.Center` is exported and on no page (`open-questions.md`, the list of undocumented exports),
-  yet 3 `cli` runs used it, so agents find parts by the `.d.ts`.
+  yet 3 `cli` runs used it (two as the screen frame, one for an empty state), so agents find parts by the `.d.ts`.
 - Claude Code sometimes loads a sixth built-in plugin, `cc-plugin-easel`, and the runner's `init`
   check then fails the run (2 of 64 attempts; the redo passed). The canary's baseline needs to
   allow it. Not changed here (`run.mjs` is `eval-run`'s).
