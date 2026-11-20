@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: F
 depends: [cli-lookup]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/203
 ---
 
 # `examples-and-patterns`: Move examples into files that stories and the CLI both read
@@ -42,8 +42,8 @@ compositions already show.
 **Changed.** `packages/blip-ui/src/**/examples/*.tsx`: 25 example files, one component each, with
 a doc comment that says it in a line. 23 on component pages (one each, `picker` and `window`
 two) and 2 on the new pattern pages `menu-screen` and `duel` (`src/patterns/<name>/<name>.mdx`,
-with `<name>/examples/`). Id = `<page>/<file>`, for example `dialog/options`. 14 composition
-stories (and `Dialog`, `Parts`, `Stage`'s `Default`, `Controls`' none) now render an example
+with `<name>/examples/`). Id = `<page>/<file>`, for example `dialog/options`. The composition
+stories (and the `Default` of `dialog`, `parts` and `stage`) now render an example
 instead of holding the JSX; the two `Together` stories render the pattern examples. The pack step
 (`cli/build/examples.ts`, called from `build/index.ts`) rewrites every relative import to one
 `import { … } from '@sebald/blip-ui'` (names sorted), and fails on a story, a test, another example,
