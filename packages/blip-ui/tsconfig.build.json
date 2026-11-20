@@ -9,5 +9,10 @@
     "incremental": false
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["src/**/*.stories.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"]
+  "exclude": [
+    "src/**/*.stories.tsx",
+    "src/**/examples/**",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx"
+  ]
 }

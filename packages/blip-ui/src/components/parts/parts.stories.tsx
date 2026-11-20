@@ -4,6 +4,7 @@ import { Button } from '../button/button';
 import { Tab, TabList, TabPanel, Tabs } from '../tabs/tabs';
 import { Text } from '../text/text';
 import { Legend, Window } from '../window/window';
+import { InAWindow } from './examples/in-a-window';
 import { Actions, Content, Title } from './parts';
 
 const meta = {
@@ -25,20 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 /** The three parts in a window, which places them */
 export const Default: Story = {
-  render: args => (
-    <Window>
-      <Title {...args} />
-      <Content>
-        <Text>The round so far is lost.</Text>
-      </Content>
-      <Actions>
-        <Button variant="secondary" size="small">
-          Stay
-        </Button>
-        <Button size="small">Leave</Button>
-      </Actions>
-    </Window>
-  ),
+  render: args => <InAWindow {...args} />,
 };
 
 /** The same parts in a window, a tab's panel, and on their own */

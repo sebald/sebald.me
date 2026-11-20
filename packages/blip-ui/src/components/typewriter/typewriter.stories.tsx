@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useState } from 'react';
 
 import { Line } from '../line/line';
 import { Window } from '../window/window';
+import { Running as RunningExample } from './examples/running';
 import { Typewriter } from './typewriter';
 
 const LINE = "Let's take this offline and circle back next sprint.";
@@ -62,30 +62,9 @@ export const Overview: Story = {
   ),
 };
 
-/** A line typing, 30 characters a second, then again after a pause */
-const Typing = () => {
-  const [typed, setTyped] = useState(0);
-  useEffect(() => {
-    const id = setInterval(
-      () => setTyped(n => (n > LINE.length + 30 ? 0 : n + 1)),
-      1000 / 30,
-    );
-    return () => clearInterval(id);
-  }, []);
-  return (
-    <Window>
-      <Line variant="secondary">
-        <Typewriter typed={typed} sound>
-          {LINE}
-        </Typewriter>
-      </Line>
-    </Window>
-  );
-};
-
 /** Typing in a dialogue line, 30 characters a second, then again */
 export const Running: Story = {
   tags: ['no-vrt'],
   parameters: { controls: { disable: true } },
-  render: () => <Typing />,
+  render: () => <RunningExample />,
 };

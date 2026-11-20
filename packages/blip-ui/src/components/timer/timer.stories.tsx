@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect, useState } from 'react';
 
+import { Running as RunningExample } from './examples/running';
 import { Timer } from './timer';
 
 const DURATION = 10_000;
@@ -77,24 +77,5 @@ export const Overview: Story = {
 export const Running: Story = {
   tags: ['no-vrt'],
   parameters: { controls: { disable: true } },
-  render: () => {
-    const Run = () => {
-      const [elapsed, setElapsed] = useState(0);
-      useEffect(() => {
-        const start = performance.now();
-        const id = setInterval(
-          () => setElapsed((performance.now() - start) % (DURATION + 1500)),
-          50,
-        );
-        return () => clearInterval(id);
-      }, []);
-      return (
-        <Timer
-          duration={DURATION}
-          remaining={Math.max(0, DURATION - elapsed)}
-        />
-      );
-    };
-    return <Run />;
-  },
+  render: () => <RunningExample />,
 };

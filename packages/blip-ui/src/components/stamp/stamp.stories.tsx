@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { OnAFace as OnAFaceExample } from './examples/on-a-face';
 import { Stamp } from './stamp';
 
 const meta = {
@@ -51,12 +52,5 @@ export const Overview: Story = {
 /** On a face, the inside darkened so the word reads */
 export const OnAFace: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="relative size-[calc(var(--px)*60)] bg-(--bui-paper)">
-      <Stamp
-        word="DONE"
-        className="absolute bottom-[calc(var(--px)*6)] left-[calc(var(--px)*8)]"
-      />
-    </div>
-  ),
+  render: () => <OnAFaceExample />,
 };
