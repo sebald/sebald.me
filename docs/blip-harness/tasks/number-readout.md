@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
 pr: https://github.com/sebald/sebald.me/pull/214
