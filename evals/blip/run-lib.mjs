@@ -169,18 +169,28 @@ export const parseLine = line => {
   }
 };
 
-// What `init` says was loaded, reduced to names.
+// Where a plugin entry says it comes from: "builtin" (`path: "builtin"` or a
+// `source` ending `@builtin`), "other" (it names a path or a source that is
+// not built in) or null (the entry says nothing). Judged per entry, never by
+// name: a user plugin may share a built-in one's name.
+const originOf = p => {
+  if (p?.path === 'builtin' || String(p?.source ?? '').endsWith('@builtin'))
+    return 'builtin';
+  return p?.path || p?.source ? 'other' : null;
+};
+
+// What `init` says was loaded, reduced to names. `pluginEntries` keeps each
+// plugin's origin; it is null when the event has no plugin list at all.
 export const summariseInit = event => ({
   apiKeySource: event.apiKeySource ?? null,
   model: event.model ?? null,
   plugins: names(event.plugins),
-  // Plugins say where they come from (`path: "builtin"`, `source:
-  // "<name>@builtin"`); skills and agents are bare names
-  builtinPlugins: (event.plugins ?? [])
-    .filter(
-      p => p?.path === 'builtin' || (p?.source ?? '').endsWith('@builtin'),
-    )
-    .map(p => p.name),
+  pluginEntries: Array.isArray(event.plugins)
+    ? event.plugins.map(p => ({
+        name: typeof p === 'string' ? p : (p?.name ?? ''),
+        origin: typeof p === 'string' ? null : originOf(p),
+      }))
+    : null,
   skills: names(event.skills),
   agents: names(event.agents),
   tools: names(event.tools),
@@ -190,10 +200,11 @@ export const summariseInit = event => ({
 // The init check (spec 3.3 step 5). Only what comes from ~/.claude fails a
 // run (`user`: the names found there at run time, not a fixed list), so a
 // built-in plugin, skill or agent is fine whatever its name: Claude Code adds
-// some every few releases. A plugin the event marks as built in
-// (`builtinPlugins`) is never checked; one that is neither built in, nor the
-// configuration's, nor from ~/.claude is still refused. Skills and agents have
-// no origin in the event, so they are compared with `user` by name.
+// some every few releases. A plugin is built in only when its own entry says
+// so (`pluginEntries[].origin`), so a user plugin with a built-in's name fails.
+// It fails closed: no plugin list in the event, or plugins without any origin
+// information, is a problem, not a pass. Skills and agents have no origin in
+// the event, so they are compared with `user` by name.
 // Returns the problems, empty when fine.
 export const checkInit = (init, { config, user }) => {
   const problems = [];
@@ -208,27 +219,101 @@ export const checkInit = (init, { config, user }) => {
     problems.push(`tools are ${init.tools.join(',')}, not ${want.join(',')}`);
   if (init.mcpServers?.length)
     problems.push(`MCP servers loaded: ${init.mcpServers.join(',')}`);
-  const builtin = init.builtinPlugins ?? null;
-  for (const [kind, loaded] of [
-    ['plugin', init.plugins],
-    ['skill', init.skills],
-    ['agent', init.agents],
-  ]) {
-    for (const name of loaded ?? []) {
-      if (kind === 'plugin' && builtin?.includes(name)) continue;
-      if (
-        [...(user[`${kind}s`] ?? []), ...(user.plugins ?? [])].some(
-          u => name === u || name.startsWith(`${u}:`),
-        )
-      )
-        problems.push(`${kind} "${name}" comes from ~/.claude`);
-      else if (kind === 'plugin' && builtin && !(plugin && name === plugin))
+  const fromUser = (kind, name) =>
+    [...(user[`${kind}s`] ?? []), ...(user.plugins ?? [])].some(
+      u => name === u || name.startsWith(`${u}:`),
+    );
+  const entries = init.pluginEntries;
+  if (!Array.isArray(entries))
+    problems.push(
+      'the init event has no plugin list, so built-in plugins cannot be told from others',
+    );
+  else {
+    if (entries.length && entries.every(e => !e.origin))
+      problems.push(
+        'no plugin carries an origin (path or source), so built-in plugins cannot be told from others',
+      );
+    for (const { name, origin } of entries) {
+      if (origin === 'builtin') continue;
+      if (fromUser('plugin', name))
+        problems.push(`plugin "${name}" comes from ~/.claude`);
+      else if (!(plugin && name === plugin))
         problems.push(
           `plugin "${name}" is neither built in nor the configuration's`,
         );
     }
   }
+  for (const [kind, loaded] of [
+    ['skill', init.skills],
+    ['agent', init.agents],
+  ])
+    for (const name of loaded ?? [])
+      if (fromUser(kind, name))
+        problems.push(`${kind} "${name}" comes from ~/.claude`);
   return problems;
+};
+
+// What Claude Code itself loads, as the label's baseline: names, sorted.
+export const baselineOf = init => {
+  const sorted = list => [...new Set(list ?? [])].sort();
+  return {
+    plugins: sorted(init.plugins),
+    skills: sorted(init.skills),
+    agents: sorted(init.agents),
+    tools: sorted(init.tools),
+    mcpServers: sorted(init.mcpServers),
+  };
+};
+
+// Added and removed names per kind between two baselines; empty when equal.
+// A kind the old record does not have (a label from before it was recorded)
+// is not compared.
+export const diffBaseline = (was, now) => {
+  const diff = {};
+  for (const kind of ['plugins', 'skills', 'agents', 'tools', 'mcpServers']) {
+    if (!Array.isArray(was?.[kind])) continue;
+    const old = new Set(was[kind]);
+    const cur = new Set(now[kind] ?? []);
+    const added = [...cur].filter(n => !old.has(n)).sort();
+    const removed = [...old].filter(n => !cur.has(n)).sort();
+    if (added.length || removed.length) diff[kind] = { added, removed };
+  }
+  return diff;
+};
+
+export const formatBaselineDiff = diff =>
+  Object.entries(diff)
+    .map(
+      ([kind, { added, removed }]) =>
+        `  ${kind}: ${[
+          added.length ? `added ${added.join(', ')}` : '',
+          removed.length ? `removed ${removed.join(', ')}` : '',
+        ]
+          .filter(Boolean)
+          .join('; ')}`,
+    )
+    .join('\n');
+
+// What the canary does with the label's recorded baseline. `record` is
+// label.json, `now` the canary's baseline. Returns { stop } with the message
+// (exit 3) when it differs and was not accepted, else { baseline, accepted }:
+// the baseline to record and, when a change was accepted, the entry for
+// `record.acceptedBaselines`.
+export const judgeBaseline = (
+  record,
+  now,
+  { accept = false, claudeVersion, at = new Date().toISOString(), label = '' },
+) => {
+  const diff = diffBaseline(record.baseline, now);
+  if (!Object.keys(diff).length) return { baseline: now, accepted: null };
+  if (!accept)
+    return {
+      stop: `What Claude Code loads differs from when label "${label}" began (${record.claudeVersion} then, ${claudeVersion} now):\n${formatBaselineDiff(diff)}\nRuns within one label would not be comparable. Use a new label, or pass --accept-baseline to continue and record the change in label.json.`,
+    };
+  return {
+    baseline: now,
+    accepted: { at, claudeVersion, from: record.baseline, to: now },
+  };
 };
 
 // The usage-limit error, wherever it shows: a result event that is an error
