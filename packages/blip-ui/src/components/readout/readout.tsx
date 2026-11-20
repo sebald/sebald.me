@@ -76,6 +76,7 @@ export const Readout = ({
       value={value}
       max={max}
       locale={LOCALE}
+      // Base UI formats the value, `formatNumber` the max: both en-US
       format={{}}
       getAriaValueText={formatted => `${formatted} of ${formatNumber(max)}`}
       className={readout.root({ className })}

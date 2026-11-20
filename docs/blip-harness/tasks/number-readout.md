@@ -44,3 +44,11 @@ component; `Heading` for a value should disappear.
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+- **Built:** `Readout` (`value`, optional `max`, `silent`, label as children), with page, rules sidecar (`C-READOUT-1..5`, all `[review]`), example `readout/party-status`, stories `Default`, `Overview`, `PartyStatus`, tests (`readout.test.ts`).
+- **Own component, not a `Ledger` variant (for the user):** a `Ledger` row is a term and value in a table of rows; `Readout` stands alone and has behaviour of its own (a change announcement through `useAnnounce`, the meter role with a `max`). `building-components.mdx` asks for a new component for new behaviour; the behaviour is not the same. Name `Readout` kept; the user may still rename it.
+- **`changes` announcement:** said on a change only, never on first render, nor when the value is set to what it was; `silent` (a boolean for the state) turns it off for a number that moves often. Text is `HP 34 of 50` / `Gold 150`.
+- **Base UI:** with a `max`, `Meter.Root`/`Label`/`Value` (role `meter`, `aria-valuetext` `42 of 50`); without one, plain markup. Numbers are formatted `en-US` so server and client agree.
+- **Should Blip's own `Meter` (the boxes) move to Base UI? (for the user):** not needed for now. It is a `span` with `role="meter"` and the same aria attributes, and the cells are drawn by the kit; moving it would only swap the root and the attributes for `Meter.Root` and `Meter.Label` (which would give it the label wiring it now asks for through `aria-label`). Worth doing when `Meter` is next touched, not for this task.
+- **Test gap:** the first-render criterion is tested through the pure `announcement()` and checked in Storybook (live region empty at load, `Gold 150` after a change); the repo has no DOM test setup to render the component with an announcer.
+- **Shared test touched:** `cli/build/sidecar.test.ts` listed the known pages by hand; it now reads every `.mdx` basename in `src`, so a new component needs no edit there.
