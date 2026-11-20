@@ -1,6 +1,6 @@
 # Blip eval: day-zero
 
-Collector `280faccdcc32`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layer 1 only: no `validate`, rendered or judged measures yet.
+Collector `09441c72ac17`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layer 1 only: no `validate`, rendered or judged measures yet.
 
 Write-ups: [`invented.md`](invented.md).
 

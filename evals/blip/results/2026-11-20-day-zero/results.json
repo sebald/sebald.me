@@ -2,7 +2,7 @@
   "schema": 1,
   "label": "day-zero",
   "collector": {
-    "version": "280faccdcc32"
+    "version": "09441c72ac17"
   },
   "cli": {
     "version": "0.0.0+925ec59d8f14"
@@ -3259,11 +3259,11 @@
         },
         "overrides": [
           {
-            "key": "raw:div|style:color:*;fontSize:*;fontWeight:\"bold\"",
+            "key": "raw:div|style:color:*;fontSize:*;fontWeight:'bold'",
             "kind": "raw",
             "element": "div",
             "classes": [],
-            "style": ["color:*", "fontSize:*", "fontWeight:\"bold\""],
+            "style": ["color:*", "fontSize:*", "fontWeight:'bold'"],
             "file": "src/screens/camp.tsx",
             "line": 70
           },
@@ -3277,11 +3277,11 @@
             "line": 74
           },
           {
-            "key": "raw:div|style:color:*;fontStyle:\"italic\";minHeight:*",
+            "key": "raw:div|style:color:*;fontStyle:'italic';minHeight:*",
             "kind": "raw",
             "element": "div",
             "classes": [],
-            "style": ["color:*", "fontStyle:\"italic\"", "minHeight:*"],
+            "style": ["color:*", "fontStyle:'italic'", "minHeight:*"],
             "file": "src/screens/camp.tsx",
             "line": 134
           }
