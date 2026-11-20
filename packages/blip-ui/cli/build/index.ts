@@ -149,7 +149,7 @@ const pages: PageSource[] = files.map(({ file, id }) => {
     id,
     kind,
     markdown,
-    prose: mdxToMarkdown(mdx, ids),
+    prose: mdxToMarkdown(mdx, ids, '', undefined, lookup),
     title: titleOf(markdown),
     summary: summaryOf(markdown),
   };

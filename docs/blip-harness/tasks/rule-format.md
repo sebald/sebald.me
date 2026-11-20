@@ -88,3 +88,10 @@ the one place, `checkSidecars`); `<Rule>` is also expanded inside an inline code
 ever documents the block syntax, so left; `--kind` and `--open` are accepted and ignored by other commands, left;
 `RULE_ID` matches any `x-foo-1` shape and clashes with no page or export today; `building-components.mdx` is the
 rules for building Blip and not shipped, and the spec carries the sidecar format, so no new prose there.
+
+**Rebase** onto `manifest-props` and `examples-and-patterns`. `mdxToMarkdown` takes the rules lookup as a 5th
+parameter (after `controls`, `canvas`), `buildManifest` takes `rules` after `examples`, search ranks page, rule,
+example, export, and `blip docs` takes a rule id, a page or an export, with `--section`. A rules block sits in a
+page's `## Usage` section, so `blip docs dialog --section usage` prints it; there is no separate `rules` section.
+A fresh tarball in a scratch app: `blip rules dialog`, `blip docs C-DIALOG-1`, `blip docs dialog --section props`,
+`blip examples dialog`, `blip search dialog title` all work; the packed dialog page has its rules, example and props.

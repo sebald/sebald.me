@@ -4,7 +4,6 @@ import { fileURLToPath } from 'node:url';
 
 import { headingsOf } from './build/convert.ts';
 import type { Manifest, ManifestExample } from './build/manifest.ts';
-import type { Manifest } from './build/manifest.ts';
 import type { Rule, RulesFile, WhenNot } from './rules.ts';
 import type { SearchExport, SearchPage } from './search.ts';
 
