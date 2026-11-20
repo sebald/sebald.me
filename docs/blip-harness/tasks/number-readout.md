@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
 pr:
