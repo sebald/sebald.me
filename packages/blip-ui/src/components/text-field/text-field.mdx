@@ -1,0 +1,80 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as TextFieldStories from './text-field.stories';
+
+<Meta of={TextFieldStories} />
+
+# TextField
+
+A text input, one line the player types: a name entry for the hero, a
+save, a pet. A label, the text in the stage's own font with a caret, and
+optionally the characters left. Built on Base UI's Field and Input, so the label is
+tied to a native `<input>` and the phone's keyboard opens on its own.
+
+<Canvas of={TextFieldStories.Default} />
+<Controls of={TextFieldStories.Default} />
+
+```tsx
+<TextField maxLength={10} onSubmit={name => start(name)}>
+  Name
+</TextField>
+```
+
+## Anatomy
+
+1. **Label**, its children, tied to the input
+2. **Characters left**, at the label's end, when there is a `maxLength`;
+   it turns to the primary colour once the field is full
+3. **The box**, drawn like a `Meter`'s cell: an ink line, the frame
+   inside it, the dark of an empty cell as its ground; the frame is bright
+   with the focus and red when invalid
+4. **Description**, under it, what to type or in what form
+5. **Error**, under it, what is wrong, in words
+
+<Canvas of={TextFieldStories.Overview} />
+
+## Usage
+
+A game rarely asks for text, and a name is the usual reason; every
+screen that does makes typing the exception to a game's own keys, so
+ask only where the player gains by it. The limit belongs to what the
+text is for: a name that is drawn in a fixed space gets the width it can
+hold, and the characters left show it before it is reached. A screen
+reader hears it too, when the field is full and again when more is typed.
+
+An error is a sentence, not a colour. The red frame helps whoever sees
+it; the sentence is what a screen reader and a colour-blind player get,
+and the field is linked to it, so it is read with the field. Say what to do
+about it, not only that it is wrong.
+
+<Canvas of={TextFieldStories.NamingTheHero} />
+
+<Rules for="text-field" />
+
+## Input
+
+- A focused field takes every key typed in it. The kit's key layer
+  (`useKeydown`, `useKeys`, a `Picker`) leaves a key alone while the focus
+  is in a text field, so letters and arrows are typed and the menu next to it
+  does not move
+- Enter submits (`onSubmit`, with the text) and the field keeps the focus;
+  the screen decides what happens next. It is not a form's submit: the
+  event is not prevented, so inside a `<form>` that submits too
+- Escape gives the keys back to the screen without leaving it: the field
+  lets go of the focus, the next Escape is the screen's own back. It does
+  not close a `Dialog` the field is in
+- A tap on the field focuses it and, on a phone, opens the keyboard; the
+  field scrolls into view, and its text is as large as the tall stage's,
+  which keeps the browser from zooming in on it
+- Sounds: `type` for a key typed, `confirm` for Enter, `back` for Escape
+  and `bump` for a key pressed at the limit
+
+## Accessibility
+
+- A native `<input type="text">`, labelled by its children
+- Described by its description and the limit (`Up to 10 characters`);
+  an error is linked to it and marked invalid (`aria-invalid`)
+- The limit is announced when it is reached, through the stage's live
+  region, not only drawn
+- The focus ring is the kit's own, `--bui-focus`, around the box
