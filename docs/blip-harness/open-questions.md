@@ -438,6 +438,19 @@ context ("this project's UI is Blip; look up the pattern first: `blip search`").
 this hook can add context. Decision 5 names two hooks, so this is your call when the number is
 in.
 
+### Q17. Does an index of the components in `CLAUDE.md` help?
+
+Marigold (DST-1991) put an index, one line per component (name, purpose, parts, variants, sizes),
+into the app's `CLAUDE.md` next to short per-component cards. Vercel measured an 8 KB docs index
+in `AGENTS.md` at 100% on new Next.js APIs, against 53–79% for a skill. Blip's pages are already
+about card size (median about 3 KB, `picker` the largest at 10.5 KB, packed on 2026-11-20), so
+cards add little; an index might still save the lookups that find the right page.
+
+**Recommendation.** Decide after day zero. If its runs spend several `blip search` or `blip docs`
+calls per task before reaching the right page, add an `index` configuration: `cli` plus about
+25 lines, one per page, written by the pack step and placed by `blip init`. Measure it against
+`cli` on lookups before the first write, turns and cost.
+
 ## Smaller things, settled from the code
 
 No answer needed unless you disagree. Each is in a task.
