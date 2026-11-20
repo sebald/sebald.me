@@ -16,10 +16,13 @@ import { after, before, describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { collect, write } from './collect.mjs';
+const SKIPPED = ['cli/quests-4', 'cli/quests-5', 'cli/quests-6'];
+
 import { buildCache, fixtureRuns } from './fixtures/build-cache.mjs';
 import { configOrder } from './lib/aggregate.mjs';
 import {
   analyseTranscript,
+  bashWritesSource,
   blipCalls,
   networkCalls,
 } from './lib/transcript.mjs';
@@ -79,9 +82,34 @@ describe('the collector on the fixtures', () => {
   it('finds every run the fixtures hold', () => {
     assert.deepEqual(
       first.results.runs.map(run => run.id),
-      fixtureRuns().sort(),
+      fixtureRuns()
+        .filter(id => !SKIPPED.includes(id))
+        .sort(),
     );
-    assert.equal(first.results.runs.length, 10);
+    assert.equal(first.results.runs.length, 11);
+  });
+
+  it('reads task and rep from meta.json and skips what is not a result', () => {
+    assert.deepEqual(
+      first.results.skipped.map(run => [run.id, run.reason]),
+      [
+        ['cli/quests-4', 'failed: init check: unexpected plugin'],
+        ['cli/quests-5', 'stopped: usage-limit'],
+        ['cli/quests-6', 'no meta.json: unfinished'],
+      ],
+    );
+    assert.match(
+      first.summary,
+      /## Skipped runs\s+- `cli\/quests-4`: failed: init check[^]*`cli\/quests-5`: stopped: usage-limit[^]*`cli\/quests-6`: no meta\.json/,
+    );
+    // The skipped runs are not in the counts: quests has its three results
+    assert.equal(first.results.aggregate.groups.cli.tasks.quests.runs, 3);
+  });
+
+  it('counts a heredoc into a .tsx in a Bash call as the first write', () => {
+    const run = first.results.runs.find(run => run.id === 'cli/pause-3');
+    assert.equal(run.transcript.toolCalls.byTool.Write, undefined);
+    assert.equal(run.transcript.lookupBeforeFirstTsxWrite, true);
   });
 
   it('matches the numbers written beside each fixture run', () => {
@@ -121,7 +149,7 @@ describe('the collector on the fixtures', () => {
     assert.deepEqual(flagged, ['cli/shop-2']);
     assert.match(
       first.summary,
-      /## Network use\s+1 of 10 runs[^]*`cli\/shop-2`: `curl`/,
+      /## Network use\s+1 of 11 runs[^]*`cli\/shop-2`: `curl`/,
     );
   });
 
@@ -171,7 +199,7 @@ describe('the collector on the fixtures', () => {
       summary,
       /## Runs\s+\| configuration \| all \| camp-rest \| fight-hud \| pause \| quests \| saves \| shop \|/,
     );
-    assert.match(summary, /\| cli \| 9 \| 1 \| 1 \| 2 \| 3 \| 0 \| 2 \|/);
+    assert.match(summary, /\| cli \| 10 \| 1 \| 1 \| 3 \| 3 \| 0 \| 2 \|/);
     assert.match(
       summary,
       /### output tokens\s+\| configuration \| all \| vs previous \|/,
@@ -250,25 +278,16 @@ describe('the collector on the fixtures', () => {
     );
   });
 
-  it('stops when the runs of a label used different CLI versions', () => {
-    const run = join(
-      cache,
-      'cli',
-      'shop-2',
-      'node_modules',
-      '@sebald',
-      'blip-ui',
-      'package.json',
-    );
-    const original = readFileSync(run, 'utf8');
-    writeFileSync(
-      run,
-      JSON.stringify({ name: '@sebald/blip-ui', version: '1.2.3' }),
-    );
+  it('stops when the runs of a label used different tarballs', () => {
+    const path = join(cache, 'cli', 'shop-2', 'meta.json');
+    const original = readFileSync(path, 'utf8');
+    const meta = JSON.parse(original);
+    meta.tarball.sha256 = 'a'.repeat(64);
+    writeFileSync(path, JSON.stringify(meta));
     try {
       assert.throws(() => collect(options()), /2 CLI versions/);
     } finally {
-      writeFileSync(run, original);
+      writeFileSync(path, original);
     }
   });
 });
@@ -324,6 +343,22 @@ describe('the transcript', () => {
     ]);
     assert.deepEqual(blipCalls('blip --cwd . search x'), ['search']);
     assert.deepEqual(blipCalls('timeout 9 blip search x'), ['search']);
+  });
+
+  it('sees a write to source in a Bash command', () => {
+    const writes = command => bashWritesSource(command);
+    assert.ok(writes("cat > src/a.tsx <<'EOF'\nx\nEOF"));
+    assert.ok(writes('echo x >> src/a.ts'));
+    assert.ok(writes('echo x >src/a.tsx'));
+    assert.ok(writes('echo x | tee -a src/a.tsx'));
+    assert.ok(writes('cp /tmp/x.tsx src/a.tsx'));
+    assert.ok(writes('mv a.tmp src/a.tsx'));
+    assert.ok(writes("sed -i '' 's/a/b/' src/a.tsx"));
+    assert.ok(writes('bash -c "echo x > src/a.tsx"'));
+    assert.ok(!writes('cat src/a.tsx'));
+    assert.ok(!writes('pnpm exec tsc --noEmit 2>&1 | head'));
+    assert.ok(!writes('echo x > notes.txt'));
+    assert.ok(!writes("cat > x.sh <<'EOF'\necho y > src/a.tsx\nEOF"));
   });
 
   it('counts a message once however many events carry it, and survives a torn line', () => {

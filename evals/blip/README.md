@@ -269,20 +269,22 @@ agent and never writes into a run (`tsc` and the build only add `dist/` there). 
 (`collect.test.mjs`) run in `pnpm test`; `node evals/blip/fixtures/build-cache.mjs <dir>` builds a
 cache from the fixtures to try it by hand.
 
-**The run layout it reads** (spec 3.3, with the details the spec leaves open):
+**The run layout it reads** is eval-run's ("What it leaves in the cache", above), nothing more:
 
-- `<cache>/<label>/<config>/<task>-<n>/` is the agent's project: `src/`, `node_modules/`, `.git`
-  (its first root commit is the template) and `.blip/` if the agent made one. Task ids may
-  contain hyphens (`camp-rest-1`): the repetition is the number after the last one
-- The stream goes to `<run>/transcript.jsonl`; `<run>.transcript.jsonl` beside the folder is read
-  too, if the run keeps it out of the agent's reach
-- Blip's identity is, per run, the `version` in `node_modules/@sebald/blip-ui/package.json` plus
-  a hash of the package's `dist` and `docs` (the version is `0.0.0` for every tarball today). A
-  label with more than one is an error. The exports imports are checked against are
+- `<cache>/<label>/<config>/<dir>/` is the agent's project, with `meta.json` written last and
+  `transcript.jsonl` beside `src/`. Task and rep come from `meta.task` and `meta.rep`, never from the
+  folder's name. `<label>/tarball/` and dot folders are not configurations
+- Only `meta.status` `done` and `timeout` are results. `failed`, `stopped`, a folder without
+  `meta.json` (unfinished) and a result run without `transcript.jsonl` are skipped, and
+  `summary.md` and `results.json` (`skipped`) list each with its reason
+- Blip's identity is `meta.tarball` (`version` and the first 12 characters of `sha256`), which is
+  the same for every run of a label; without it, the `version` in the installed package plus a hash
+  of its `dist` and `docs`. More than one in a label is an error. Imports are checked against
   `node_modules/@sebald/blip-ui/docs/manifest.json`; without it, invented imports are `null` (not
   measured, and `summary.md` says so)
-- A run without a `result` event, or one that ended on the usage limit, is `incomplete`: listed,
-  left out of every median
+- The first commit of the run's git repository is the template; changed lines are against it
+- A result run whose transcript has no `result` event, or ended on the usage limit, is `incomplete`:
+  listed, left out of every median
 - The task's `scope` is read from `tasks/<task>/rubric.json` in this repo
 
 **What it counts**
@@ -291,7 +293,8 @@ cache from the fixtures to try it by hand.
   `node_modules/.bin/blip`, in any `&&`, `;` or `|` part of a command); calls that look into
   `node_modules/@sebald/blip-ui/dist` or `/docs` (a Read, Glob, Grep or a Bash command naming the
   path); whether a lookup (a `blip` call other than `validate`, or such a read) came before the
-  first Write or Edit of a `.tsx` file; `error TS` lines in Bash results; turns, tokens, cost and
+  first write of a `.ts` or `.tsx` file (a Write or Edit, or a Bash command that redirects into one,
+  heredocs included, or uses `tee`, `cp`, `mv` onto one, or `sed -i`); `error TS` lines in Bash results; turns, tokens, cost and
   time from the final `result` event; permission denials; `error_max_budget_usd` as over budget.
   A message split over several events is counted once (by `message.id`); a subagent's messages
   (those with a `parent_tool_use_id`) are summed apart as `subagents`

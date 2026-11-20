@@ -49,36 +49,70 @@ export const collectorVersion = () => {
   }
 };
 
-/** `<config>/<task>-<n>` directories of a label, sorted */
+/** What eval-run keeps in a label's folder besides the configurations */
+const isConfigDir = entry =>
+  entry.isDirectory() &&
+  entry.name !== 'tarball' &&
+  !entry.name.startsWith('.');
+
+/** Only these are results; the others are listed as skipped (eval-run's `meta.json`) */
+const RESULTS = new Set(['done', 'timeout']);
+
+/**
+ * The run directories of a label (`<config>/<dir>` with a `meta.json`), sorted,
+ * and the ones that are not results: no `meta.json` is unfinished, `failed`
+ * and `stopped` could not be measured. Task and rep come from `meta.json`,
+ * never from the folder's name
+ */
 const findRuns = labelDir => {
   const runs = [];
+  const skipped = [];
   for (const config of readdirSync(labelDir, { withFileTypes: true })) {
-    if (!config.isDirectory()) continue;
+    if (!isConfigDir(config)) continue;
     for (const entry of readdirSync(join(labelDir, config.name), {
       withFileTypes: true,
     })) {
-      const match = entry.isDirectory() && /^(.+)-(\d+)$/.exec(entry.name);
-      if (!match) continue;
+      if (!entry.isDirectory() || entry.name.startsWith('.')) continue;
+      const id = `${config.name}/${entry.name}`;
+      const dir = join(labelDir, config.name, entry.name);
+      const metaPath = join(dir, 'meta.json');
+      if (!existsSync(metaPath)) {
+        skipped.push({ id, status: null, reason: 'no meta.json: unfinished' });
+        continue;
+      }
+      let meta;
+      try {
+        meta = readJson(metaPath);
+      } catch {
+        skipped.push({ id, status: null, reason: 'meta.json unreadable' });
+        continue;
+      }
+      if (!RESULTS.has(meta.status)) {
+        const why = meta.failure ?? meta.stoppedBy ?? null;
+        skipped.push({
+          id,
+          status: meta.status ?? null,
+          reason: why ? `${meta.status}: ${why}` : String(meta.status),
+        });
+        continue;
+      }
       runs.push({
-        id: `${config.name}/${entry.name}`,
-        config: config.name,
-        task: match[1],
-        rep: Number(match[2]),
-        dir: join(labelDir, config.name, entry.name),
+        id,
+        config: meta.config ?? config.name,
+        task: meta.task,
+        rep: meta.rep,
+        dir,
+        meta,
       });
     }
   }
-  return runs.sort((a, b) =>
-    a.config !== b.config
-      ? a.config < b.config
-        ? -1
-        : 1
-      : a.task !== b.task
-        ? a.task < b.task
-          ? -1
-          : 1
-        : a.rep - b.rep,
+  const order = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+  runs.sort(
+    (a, b) =>
+      order(a.config, b.config) || order(a.task, b.task) || a.rep - b.rep,
   );
+  skipped.sort((a, b) => order(a.id, b.id));
+  return { runs, skipped };
 };
 
 /** In the run's folder, or beside it (the layout spec 3.3 leaves open) */
@@ -104,7 +138,11 @@ const filesUnder = (dir, out = []) => {
  * tarball today) and a hash of its `dist` and `docs`, which is what tells
  * two tarballs apart
  */
-const cliVersionOf = dir => {
+const cliVersionOf = (dir, meta) => {
+  // eval-run records the tarball it packed once for the label
+  if (meta?.tarball?.sha256) {
+    return `${meta.tarball.version ?? '?'}+${meta.tarball.sha256.slice(0, 12)}`;
+  }
   const pkg = join(dir, 'node_modules', PACKAGE);
   if (!existsSync(join(pkg, 'package.json'))) return null;
   const hash = createHash('sha256');
@@ -133,8 +171,10 @@ export const collect = ({
   const labelDir = join(cache, label);
   if (!existsSync(labelDir))
     throw new Error(`No runs for "${label}" in ${cache}`);
-  const found = findRuns(labelDir);
-  if (found.length === 0) throw new Error(`No run directories in ${labelDir}`);
+  const { runs: found, skipped } = findRuns(labelDir);
+  if (found.length === 0 && skipped.length === 0) {
+    throw new Error(`No run directories in ${labelDir}`);
+  }
 
   const scopes = {};
   const scopeOf = task => {
@@ -154,9 +194,12 @@ export const collect = ({
   };
 
   const cliVersions = new Set();
-  const runs = found.map(({ id, config, task, rep, dir }) => {
+  const runs = found.flatMap(({ id, config, task, rep, dir, meta }) => {
     const path = transcriptPath(dir);
-    if (!path) throw new Error(`${id}: no transcript.jsonl`);
+    if (!path) {
+      skipped.push({ id, status: meta.status, reason: 'no transcript.jsonl' });
+      return [];
+    }
     const transcript = analyseTranscript(readFileSync(path, 'utf8'));
     const scope = scopeOf(task);
     const tree = analyseTree(dir, scope);
@@ -166,19 +209,23 @@ export const collect = ({
           tsc: { ran: false, ok: null, errors: null },
           build: { ran: false, ok: null, errors: null },
         };
-    const cli = cliVersionOf(dir);
+    const cli = cliVersionOf(dir, meta);
     if (cli) cliVersions.add(cli);
-    return {
-      id,
-      config,
-      task,
-      rep,
-      scope,
-      status: transcript.status,
-      transcript,
-      tree: { ...tree, ...checks },
-    };
+    return [
+      {
+        id,
+        config,
+        task,
+        rep,
+        scope,
+        runStatus: meta.status,
+        status: transcript.status,
+        transcript,
+        tree: { ...tree, ...checks },
+      },
+    ];
   });
+  skipped.sort((a, b) => (a.id < b.id ? -1 : 1));
 
   if (cliVersions.size > 1) {
     throw new Error(
@@ -194,6 +241,7 @@ export const collect = ({
     cli: { version: [...cliVersions][0] ?? null },
     layers: ['transcript', 'tree'],
     runs,
+    skipped,
     aggregate: stats,
     candidates: candidates(runs),
   };

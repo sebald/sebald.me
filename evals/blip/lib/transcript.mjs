@@ -210,6 +210,39 @@ export const networkCalls = command => {
   return found;
 };
 
+const SOURCE = /\.tsx?$/;
+
+/**
+ * Whether a Bash command writes a `.ts` or `.tsx` file: a `>` or `>>`
+ * redirect (a heredoc is one), `tee`, `cp` or `mv` onto one, `sed -i` on one
+ */
+export const bashWritesSource = command => {
+  for (const raw of segments(command)) {
+    const tokens = unwrap(raw);
+    const first = base(tokens[0] ?? '');
+    for (let i = 0; i < tokens.length; i++) {
+      const m = /^(?:\d*)>>?(?!&)(.*)$/.exec(tokens[i]);
+      if (m && SOURCE.test(m[1] || tokens[i + 1] || '')) return true;
+    }
+    const args = tokens.slice(1).filter(t => !t.startsWith('-'));
+    if (first === 'tee' && args.some(t => SOURCE.test(t))) return true;
+    if (
+      ['cp', 'mv', 'install'].includes(first) &&
+      SOURCE.test(args.at(-1) ?? '')
+    )
+      return true;
+    if (
+      first === 'sed' &&
+      tokens.some(t => /^-i|^--in-place/.test(t)) &&
+      args.some(t => SOURCE.test(t))
+    )
+      return true;
+    const inner = nested(tokens);
+    if (inner && bashWritesSource(inner)) return true;
+  }
+  return false;
+};
+
 const filePathOf = input =>
   String(input?.file_path ?? input?.path ?? input?.notebook_path ?? '');
 
@@ -359,9 +392,10 @@ export const analyseTranscript = source => {
       if (firstLookup < 0) firstLookup = index;
     }
     if (
-      WRITE_TOOLS.has(call.name) &&
-      filePathOf(call.input).endsWith('.tsx') &&
-      firstTsxWrite < 0
+      firstTsxWrite < 0 &&
+      ((WRITE_TOOLS.has(call.name) && SOURCE.test(filePathOf(call.input))) ||
+        (call.name === 'Bash' &&
+          bashWritesSource(String(call.input.command ?? ''))))
     ) {
       firstTsxWrite = index;
     }

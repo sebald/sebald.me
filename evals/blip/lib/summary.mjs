@@ -42,7 +42,15 @@ const table = (header, rows) =>
 const list = items => items.map(item => `- ${item}`).join('\n');
 
 export const writeSummary = ({ results, comparison }) => {
-  const { label, collector, cli, runs, aggregate, candidates } = results;
+  const {
+    label,
+    collector,
+    cli,
+    runs,
+    skipped = [],
+    aggregate,
+    candidates,
+  } = results;
   const { configs, tasks, groups } = aggregate;
   const out = [];
 
@@ -131,6 +139,13 @@ export const writeSummary = ({ results, comparison }) => {
     ...failed.map(run => `\`${run.id}\`: the run ended in an error`),
   ];
   out.push(notes.length ? list(notes) : 'None.');
+
+  out.push('## Skipped runs');
+  out.push(
+    skipped.length
+      ? list(skipped.map(run => `\`${run.id}\`: ${run.reason}`))
+      : 'None.',
+  );
 
   out.push('## Candidate variants, sizes or components');
   out.push(

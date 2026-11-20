@@ -98,3 +98,14 @@ line; `components.other` takes unresolvable names; whether `result.usage` alread
 subagents is unverified without a real transcript (`subagents.tokens` is reported apart, not
 subtracted); `error_max_turns` counts as `failed` not `incomplete`; the build writes `dist/` (a
 second collect sees it); determinism with `tsc` and `vite` running is only tested with stubs.
+
+**Follow-up** (after a real pilot run, `pilot/cli/pause-1`, collected from a copy). That agent made
+every call through Bash and wrote its screen with a heredoc, so the lookup measure was `null`:
+Bash writes into `.ts`/`.tsx` (redirects, heredocs, `tee`, `cp`/`mv`, `sed -i`, also inside
+`bash -c`, not inside a heredoc's body) now count as writes, with a fixture of that shape
+(`cli/pause-3`). The collector now reads eval-run's `meta.json`: task and rep from it, `done` and
+`timeout` are results, `failed`, `stopped`, no `meta.json` and no transcript are skipped and listed;
+the Blip identity is `meta.tarball`. The layout notes in the README point to eval-run's. On the pilot
+copy: 8 Bash calls, 12 `blip` calls, lookup before the first write true, 14 TS errors met, `tsc` 39
+errors (all in vite's `.d.ts`, needs `@types/node`: a template matter), build clean, 0 raw tags, 14
+Blip components, 9 turns, $0.1678; two collects are byte-identical.
