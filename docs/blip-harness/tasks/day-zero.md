@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: D
 depends: [eval-run, eval-collect, research-game-ui, readable-types]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/208
 ---
 
 # `day-zero`: Run the eval on today's Blip and decide what to build
