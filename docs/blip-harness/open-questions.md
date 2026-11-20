@@ -405,7 +405,7 @@ large effects only; `summary.md` gives counts and the spread, and makes no claim
 **Size (measured, day zero, 2026-11-20, Claude Code 2.1.329, `claude-sonnet-5-5`).** A run is far
 smaller than guessed: $0.13 to $0.15 of estimate on average, not $0.50 to $2. The 36 runs (6 tasks,
 3 repetitions) cost $4.98 of estimate and 26.7 minutes of wall clock; no run came near its limits
-(the largest was $0.20 and 108 s of the 10 minutes allowed). The pilot (3 runs, `cli`: `shop`,
+(the largest was $0.20; the longest took 89 s of agent time, 108 s with its install, of the 10 minutes allowed). The pilot (3 runs, `cli`: `shop`,
 `fight-hud`, `pause`) cost $0.39 of estimate and 30 to 38 s a run.
 
 | Config   | Estimate per run (mean, range) | Turns (mean) | Time (mean) | 18 runs         |
@@ -423,7 +423,7 @@ $0.06 / 4.5 / 22 (the cheapest: it edits one file), `fight-hud` $0.14 / 8 / 36, 
 about $0.01 (7 to 10% of the mean), at worst $0.04; turns vary by 2.
 
 Set from this: `--budget 2` per run (ten times the largest run; $4 stays the default in `run.mjs`)
-and `--timeout 10` minutes (five times the longest, the 108 s one, which is also its setup). Neither
+and `--timeout 10` minutes (five times the longest, 108 s with the install). Neither
 was reached, so no run is over budget or timed out. **The sweep** (180 runs, 5 repetitions, 5 more
 configurations that each add turns) projects to about $25 to $40 of estimate at day zero's per-run
 figure plus a margin for the plan and the reviewer, a fraction of the guessed $100 to $350; the

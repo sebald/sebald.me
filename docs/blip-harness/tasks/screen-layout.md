@@ -10,10 +10,10 @@ pr:
 **Problem.** Day zero: 21 of the 24 screens agents built for `shop`, `saves`, `fight-hud` and
 `quests` start with the same hand-written block, `position: absolute; inset: 0; display: flex;
 flex-direction: column; gap; padding; padding-bottom: calc(... + var(--bui-bar))`, as inline
-`style` in 17 and Tailwind classes in 4 (`cli/shop-1/shop.tsx:43-52`,
+`style` in 17 and Tailwind classes in 4 (`cli/shop-1/shop.tsx:31-40`,
 `no-cli/saves-2/saves.tsx:98`). Three guessed a top padding of 22 to 24 stage pixels to clear a
-`ScreenTitle` (`cli/shop-3/shop.tsx:49`). The three that did not wrapped their content in
-`Stage.Center` (`cli/saves-1/saves.tsx:119`). The catalog ranks "Screen layout" first (5 tasks) and
+`ScreenTitle` (`cli/shop-3/shop.tsx:49`). Two of the three that did not wrapped their content in
+`Stage.Center` (`cli/saves-1/saves.tsx:119`; the third has no frame). The catalog ranks "Screen layout" first (5 tasks) and
 Q11 left it as a day-zero decision.
 
 **Outcome.** One component that is the frame of a full screen: it fills the stage, keeps clear of

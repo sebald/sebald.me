@@ -225,11 +225,11 @@ cache as `day-zero-with-f`; they are not collected here.
 - **A full-screen layout block, written by hand in 21 of the 24 screens that need one.** The same
   object each time: `position: absolute; inset: 0; display: flex; flex-direction: column; gap;
   padding; padding-bottom: calc(... + var(--bui-bar))`, as inline `style` in 17 runs
-  (`cli/shop-1/shop.tsx:43-52`, `cli/fight-hud-2/fight.tsx:42-52`, `no-cli/shop-2/shop.tsx:69-79`)
+  (`cli/shop-1/shop.tsx:31-40`, `cli/fight-hud-2/fight.tsx:42-52`, `no-cli/shop-2/shop.tsx:69-79`)
   and as Tailwind classes in 4 (`no-cli/saves-2/saves.tsx:98`, `no-cli/quests-2/quests.tsx:62-65`).
   Three screens clear a fixed `ScreenTitle` with a guessed top padding of 22 to 24 stage pixels
   (`cli/shop-3/shop.tsx:49`, `cli/quests-3/quests.tsx:60`, `no-cli/saves-2/saves.tsx:98`). The three that did
-  not hand-build it are `cli/saves-1`, `-2`, `-3`, which wrap in `Stage.Center`
+  not hand-build it are `cli/saves-1`, `-2` (they wrap in `Stage.Center`) and `-3` (no frame at all)
   (`cli/saves-1/saves.tsx:119`). This is Q11's "first gap agents hit".
 - **Raw lists for the fight HUD.** `ul`/`li` with inline row styles in 3 of the 6 `fight-hud` runs
   (`no-cli/fight-hud-2/fight.tsx:52,57,78,86`, `no-cli/fight-hud-3/fight.tsx:46,51,73,78`,
@@ -289,7 +289,7 @@ The collector's counts agree in direction but are inflated by the template: the 
   `no-cli/shop-1` (`cli/shop-3/shop.tsx:33,36`): it is a screen-reader live region (`hooks.md:29`),
   so the player sees nothing change but the gold.
 - **`PickerSetting` for a Save/Load switch** (`no-cli/saves-2/saves.tsx:104-111`) next to `Tabs` for
-  the same job in 5 other runs (`cli/saves-1/saves.tsx:26`). Both work; they disagree.
+  the same job in 5 other runs (`cli/saves-1/saves.tsx:120`). Both work; they disagree.
 
 Nothing was invented for **pause**: all six runs compose `Dialog`, `Picker`, `PickerSetting`,
 `Confirm`, `Controls` and `IconButton` the same way (`no-cli/pause-3/pause-menu.tsx:44-105`), guard the
