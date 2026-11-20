@@ -437,7 +437,7 @@ Two measurement findings from day zero's runs. Two of 64 first attempts failed t
 because Claude Code itself (not `~/.claude`) sometimes lists a sixth built-in plugin,
 `cc-plugin-easel`, that the canary's baseline of five did not; the runs were redone with
 `--retry-failed` and passed, so the check is right to be strict but its baseline needs to allow
-that plugin (not changed here). The estimate for `no-cli` and `cli` differs by $0.02 a run, which is
+that plugin (since: built-in by origin per entry, and a changed baseline stops the label unless `--accept-baseline`; see tasks/eval-run.md). The estimate for `no-cli` and `cli` differs by $0.02 a run, which is
 inside the spread: layer 1 alone does not tell them apart (see the day-zero summary).
 
 The cap is an estimate on the client and can be overshot (**docs**); a run that hits it ends

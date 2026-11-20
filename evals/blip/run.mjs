@@ -540,7 +540,9 @@ const canary = async record => {
     config,
     user: userNames(),
   }).filter(p =>
-    /~\/\.claude|MCP|apiKeySource|plugin list|no plugin carries/.test(p),
+    /~\/\.claude|MCP|apiKeySource|plugin list|no plugin carries|neither built in/.test(
+      p,
+    ),
   );
   if (tainted.length)
     fail(`Canary failed: ${tainted.join('; ')}. Nothing was run.`, 3);

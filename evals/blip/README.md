@@ -227,7 +227,7 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 `label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
 `version`, `commit`, `dirty`), `baseline` (the plugins, skills, agents, tools and MCP servers Claude
 Code itself loaded in the canary's `init`; checked by the next canary),
-`acceptedBaselines` (only after `--accept-baseline`: `at`, `claudeVersion`, `from`, `to`, so a
+`acceptedBaselines` (the canary runs with no tools, so `tools` there is the canary's; the per-run tools check covers the runs; only after `--accept-baseline`: `at`, `claudeVersion`, `from`, `to`, so a
 reader sees that runs within the label differ) and `canary`. A
 label is built from one tarball for good: rerunning it reuses that file, and
 `--tarball` with another hash is refused. It is also built on one Claude Code:
