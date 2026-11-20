@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: D+ # common component: accept, change or cut
 depends: [rule-format, manifest-props, examples-and-patterns]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/216
 ---
 
 # `switch`: Turn an option on or off
