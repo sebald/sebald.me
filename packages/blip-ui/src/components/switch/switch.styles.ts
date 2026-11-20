@@ -13,14 +13,15 @@ export const switchStyles = {
   track: cva({
     base: [
       'relative inline-block h-[calc(var(--bui-px)*6)] w-[calc(var(--bui-px)*12)] shrink-0 bg-(--bui-ink) ring-[length:var(--bui-px)] ring-(--bui-frame-dim)',
+      'transition-[box-shadow] duration-150 ease-bui-out',
       'group-data-checked:ring-(--bui-primary)',
     ],
   }),
-  /** A square that moves from one end to the other, in whole stage pixels */
+  /** A square that moves from one end to the other, in whole stage pixels by `left` (a transform would blend its edges at a fractional scale); the frame and colour change in step with it */
   thumb: cva({
     base: [
       'absolute top-[calc(var(--bui-px)*1)] left-[calc(var(--bui-px)*1)] block size-[calc(var(--bui-px)*4)] bg-(--bui-muted)',
-      'transition-[left,background-color] duration-150 ease-bui-out motion-reduce:transition-none',
+      'transition-[left,background-color] duration-150 ease-bui-out motion-reduce:transition-[background-color]',
       'data-checked:left-[calc(var(--bui-px)*7)] data-checked:bg-(--bui-primary)',
     ],
   }),

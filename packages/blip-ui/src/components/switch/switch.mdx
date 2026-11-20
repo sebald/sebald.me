@@ -52,6 +52,16 @@ and snaps under reduced motion. A change plays the `move` sound through
 
 <Rules for="switch" />
 
+## Motion
+
+The thumb, its colour and the track's frame change together in 150 ms on
+`ease-bui-out`: a switch answers a tap, so it starts fast and settles, and
+it is interrupted cleanly when tapped again. The thumb moves by `left`, not
+`transform`, so it lands on whole device pixels and keeps its edges at any
+scale. There is no press scale: it would blur the pixel art. On and Off
+change at once, as list navigation does. Under reduced motion the thumb
+snaps and the colours still fade.
+
 ## Input
 
 - A tap anywhere on the row, Enter and Space flip it
