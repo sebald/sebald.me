@@ -1,6 +1,6 @@
 # Blip eval: day-zero
 
-Collector `a064ed4a3fd4`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layers 1 and 2: the rendered pass is in, no `validate` or judged measures yet.
+Collector `b0c18d5e003c`, Blip CLI `0.0.0+925ec59d8f14`. 36 runs, 36 complete. Medians, with the lowest and highest of the repetitions in brackets; a share is runs of the runs it applies to. Layers 1 and 2: the rendered pass is in. The judge is in. No `validate` measures yet.
 
 Write-ups: [`invented.md`](invented.md).
 
@@ -26,6 +26,22 @@ Write-ups: [`invented.md`](invented.md).
 | ------------- | --: | ----------: | --------: | --------: | ----: | -----: | ----: | ---: |
 | no-cli        |   0 |             |         0 |         0 |     0 |      0 |     0 |    0 |
 | cli           |   0 |           0 |         0 |         0 |     0 |      0 |     0 |    0 |
+
+## 3. It does the job
+
+### stated rubric statements passed (%)
+
+| configuration |                all | vs previous | camp-rest | fight-hud | pause |             quests | saves | shop |
+| ------------- | -----------------: | ----------: | --------: | --------: | ----: | -----------------: | ----: | ---: |
+| no-cli        | 100 (66.67 to 100) |             |       100 |       100 |   100 | 100 (66.67 to 100) |   100 |  100 |
+| cli           | 100 (33.33 to 100) |           0 |       100 |       100 |   100 | 100 (33.33 to 100) |   100 |  100 |
+
+### unstated rubric statements passed (%, reported on their own)
+
+| configuration |             all | vs previous | camp-rest | fight-hud |           pause | quests | saves | shop |
+| ------------- | --------------: | ----------: | --------: | --------: | --------------: | -----: | ----: | ---: |
+| no-cli        | 100 (50 to 100) |             |        50 |       100 | 100 (50 to 100) |    100 |   100 |  100 |
+| cli           | 100 (50 to 100) |           0 |        50 |       100 |             100 |    100 |   100 |  100 |
 
 ## 4. It renders
 
@@ -237,6 +253,43 @@ Write-ups: [`invented.md`](invented.md).
 | ------------- | --------: | ----------: | --------: | --------: | -------: | -------: | -------: | -------: |
 | no-cli        | 0% (0/18) |             |  0% (0/3) |  0% (0/3) | 0% (0/3) | 0% (0/3) | 0% (0/3) | 0% (0/3) |
 | cli           | 0% (0/18) |           0 |  0% (0/3) |  0% (0/3) | 0% (0/3) | 0% (0/3) | 0% (0/3) | 0% (0/3) |
+
+## Rubric (the judge)
+
+Judge `claude-opus-5-5`, prompt `d5c2bdfad060`, one question per statement. Cost of the answers recorded here: $4.20 (an estimate at API prices, not a charge). 36 of 36 runs judged.
+
+| statements                   | pass | fail | judge error | skipped |
+| ---------------------------- | ---: | ---: | ----------: | ------: |
+| stated, all                  |  111 |    3 |           0 |       0 |
+| unstated, all (on their own) |   77 |    7 |           0 |       0 |
+| camp-rest: stated            |   24 |    0 |           0 |       0 |
+| camp-rest: unstated          |    6 |    6 |           0 |       0 |
+| fight-hud: stated            |   24 |    0 |           0 |       0 |
+| fight-hud: unstated          |   12 |    0 |           0 |       0 |
+| pause: stated                |   18 |    0 |           0 |       0 |
+| pause: unstated              |   11 |    1 |           0 |       0 |
+| quests: stated               |   15 |    3 |           0 |       0 |
+| quests: unstated             |   12 |    0 |           0 |       0 |
+| saves: stated                |    6 |    0 |           0 |       0 |
+| saves: unstated              |   24 |    0 |           0 |       0 |
+| shop: stated                 |   24 |    0 |           0 |       0 |
+| shop: unstated               |   12 |    0 |           0 |       0 |
+
+### Failed statements
+
+- `cli/quests-1` `quests/open-and-done` (screenshot start@wide): The Lost Ferry and Wolves at Hollow Gate come before Herbs for Old Bess (done), but nothing clearly separates the two groups: there is no heading or divider. The only gap is about 10px more space than between the open quests, plus the '(done)' label, which is too slight to count as visibly apart.
+- `cli/quests-1` `quests/description` (diff): In src/screens/quests.tsx, each PickerItem's onSelect only calls say(quest), which passes the description to useAnnounce(). No state records the chosen quest, and no element renders its description when it is chosen. The description also appears in each item's `note` prop, but nothing in the diff shows that the note is displayed in response to choosing.
+- `no-cli/quests-3` `quests/open-and-done` (screenshot start@wide): The Lost Ferry and Wolves at Hollow Gate are listed above Herbs for Old Bess, so the order is right. But nothing clearly separates the two groups: there is no heading or divider, only a slightly bigger gap (about 41px instead of about 28px) and a small '· Done' after the giver's name.
+
+### Failed unstated statements
+
+- `cli/camp-rest-1` `camp-rest/broke-shown` (screenshot broke@wide): The screen shows 5 gold at the top right, and the menu lists "Rest (20 gold)" in the same style as the enabled "Talk" option. Nothing marks it as disabled or says the party can't afford it, so resting is offered as if it would work.
+- `cli/camp-rest-2` `camp-rest/broke-shown` (screenshot broke@wide): With 5 gold shown at the top right, the menu still lists "Rest (20 gold)" in the same style as "Talk". It is not greyed out, marked unavailable or labelled as needing more gold, so it is offered as if it would work.
+- `cli/camp-rest-3` `camp-rest/broke-shown` (screenshot broke@wide): With 5 gold in the top-right corner, 'Rest (20 gold)' looks exactly like the 'Talk' option. It isn't greyed out or marked unavailable, and nothing says 20 gold is needed. It only shows the price, so resting is offered as if it would work.
+- `no-cli/camp-rest-1` `camp-rest/broke-shown` (screenshot broke@wide): With '5 gold' shown at the top right, the menu lists 'Rest (20 gold)' in the same style as the 'Talk' option. Nothing greys it out, marks it as unavailable or says the party can't afford it, so resting is offered as if it would work.
+- `no-cli/camp-rest-2` `camp-rest/broke-shown` (screenshot broke@wide): With 5 gold in the top right, the menu lists "Rest (20 gold)" in the same style as the available "Talk" option. Nothing shows it as greyed out or disabled, and there is no message saying the party needs 20 gold, so resting is offered as if it would work.
+- `no-cli/camp-rest-3` `camp-rest/broke-shown` (screenshot broke@wide): The screen shows 5 gold in the top right, and 'Rest (20 gold)' looks exactly like the 'Talk' option. It is not greyed out, and nothing says it can't be done or that 20 gold is needed. The label only shows the price, so resting is offered as if it would work.
+- `no-cli/pause-3` `pause/camp-gets-no-keys` (diff): In src/screens/camp.tsx the camp's keys move to an unconditional `useKeys({ ArrowDown, ArrowUp, Enter: () => setSaid(...), Escape })` that never checks `paused`. Only the added comment says Blip's keys 'follow its layers', and nothing in the diff shows that Enter (or the arrows) are kept from the camp while PauseMenu's Dialog is open.
 
 ## Network use
 

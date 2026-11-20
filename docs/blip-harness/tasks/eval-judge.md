@@ -58,10 +58,13 @@ ticket, claim or note that names `.blip`, `CLAUDE.md` or `no-cli` is refused.
 screenshot, one probe, $0.030), about $0.056 a run on the 12 questions of a run with 2 diff
 statements. The 72 diff statements of day zero cost $2.02 of estimate. All 198 statements: about $5.6.
 
-**Not done.** Screenshots (`eval-rendered` not merged): 126 screenshot statements are `skipped` and
-left out of the shares; `screenshotPath` assumes `<run>/screenshots/<name>.png` or `<run>/<name>.png`
-and is tested on a fixture. The hand-label agreement (6 runs, 90%) waits for the user: `labels/<task>.json`.
-Run again with `--judge` once the screenshots exist; the 72 answers are cached.
+**Screenshots.** Read from the rendered pass (`<label>/.screenshots/<run id>/<url id>@wide|phone.png`,
+`lib/screenshots.mjs`, shared with `rendered.mjs`); the statement's `screenshot` names the viewport. A
+`--judge` collect renders first. Day zero, all 198 statements judged, no judge error: diff 35 of 36 stated
+and 35 of 36 unstated pass; screenshot 76 of 78 stated and 42 of 48 unstated pass (the six unstated
+failures are `camp-rest/broke-shown`, 6 of 6 runs: the rest entry looks the same with 5 gold). The 126
+screenshot answers cost $2.17 of estimate ($0.017 each), all 198 $4.20. The hand-label agreement (6 runs,
+90%) waits for the user: `labels/<task>.json`.
 Left open from the review: the judge's `init` is checked for `apiKeySource` only, not for plugins and
 skills as `run.mjs` does; measure 3 does not show coverage beside the share; the diff is cut at 80,000
 characters as a whole, not per file.
