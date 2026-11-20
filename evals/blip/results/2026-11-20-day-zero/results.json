@@ -1,0 +1,5971 @@
+{
+  "schema": 1,
+  "label": "day-zero",
+  "collector": {
+    "version": "096caa596261+dirty"
+  },
+  "cli": {
+    "version": "0.0.0+925ec59d8f14"
+  },
+  "layers": ["transcript", "tree"],
+  "runs": [
+    {
+      "id": "cli/camp-rest-1",
+      "config": "cli",
+      "task": "camp-rest",
+      "rep": 1,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 3,
+          "byTool": {
+            "Bash": 2,
+            "Read": 1
+          }
+        },
+        "blipCalls": {
+          "total": 1,
+          "byCommand": {
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 4,
+        "tokens": {
+          "input": 6,
+          "output": 1396,
+          "cacheRead": 39168,
+          "cacheCreation": 9851
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.0573,
+        "wallSeconds": 40.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/camp-rest-2",
+      "config": "cli",
+      "task": "camp-rest",
+      "rep": 2,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 5,
+          "byTool": {
+            "Bash": 3,
+            "Grep": 1,
+            "Read": 1
+          }
+        },
+        "blipCalls": {
+          "total": 2,
+          "byCommand": {
+            "help": 2
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 6,
+        "tokens": {
+          "input": 8,
+          "output": 1834,
+          "cacheRead": 56244,
+          "cacheCreation": 10365
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.0654,
+        "wallSeconds": 65.5,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/camp-rest-3",
+      "config": "cli",
+      "task": "camp-rest",
+      "rep": 3,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 5,
+          "byTool": {
+            "Bash": 3,
+            "Read": 2
+          }
+        },
+        "blipCalls": {
+          "total": 4,
+          "byCommand": {
+            "docs": 3,
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 6,
+        "tokens": {
+          "input": 8,
+          "output": 1701,
+          "cacheRead": 60452,
+          "cacheCreation": 13221
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.076,
+        "wallSeconds": 23.9,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/fight-hud-1",
+      "config": "cli",
+      "task": "fight-hud",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 9,
+          "byCommand": {
+            "docs": 7,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 14,
+          "output": 2780,
+          "cacheRead": 138124,
+          "cacheCreation": 20054
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1219,
+        "wallSeconds": 36.2,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 16,
+          "controls": 0,
+          "wrappers": 16,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 4
+          }
+        },
+        "components": {
+          "blip": 13,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Ledger": 2,
+            "LedgerRow": 2,
+            "Meter": 1,
+            "Stage": 1,
+            "Stage.Center": 2,
+            "Text": 1,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 12,
+        "imports": {
+          "fromBlip": 8,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/fight-hud-2",
+      "config": "cli",
+      "task": "fight-hud",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 5,
+          "byTool": {
+            "Bash": 5
+          }
+        },
+        "blipCalls": {
+          "total": 9,
+          "byCommand": {
+            "docs": 8,
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 6,
+        "tokens": {
+          "input": 12,
+          "output": 2974,
+          "cacheRead": 108630,
+          "cacheCreation": 19420
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1183,
+        "wallSeconds": 36.4,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 24,
+          "controls": 0,
+          "wrappers": 24,
+          "byTag": {
+            "div": 15,
+            "p": 2,
+            "span": 7
+          }
+        },
+        "components": {
+          "blip": 16,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Content": 3,
+            "Heading": 2,
+            "Meter": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 3,
+            "Title": 2,
+            "Window": 3
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 19,
+        "imports": {
+          "fromBlip": 7,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/fight-hud-3",
+      "config": "cli",
+      "task": "fight-hud",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 4,
+          "byTool": {
+            "Bash": 4
+          }
+        },
+        "blipCalls": {
+          "total": 4,
+          "byCommand": {
+            "docs": 2,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 5,
+        "tokens": {
+          "input": 10,
+          "output": 2904,
+          "cacheRead": 92393,
+          "cacheCreation": 21008
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1223,
+        "wallSeconds": 31,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 24,
+          "controls": 2,
+          "wrappers": 22,
+          "byTag": {
+            "div": 11,
+            "li": 2,
+            "p": 2,
+            "span": 7,
+            "ul": 2
+          }
+        },
+        "components": {
+          "blip": 13,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Meter": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 5,
+            "Window": 3
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 17,
+        "imports": {
+          "fromBlip": 5,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "file": "src/screens/fight.tsx",
+            "line": 67
+          },
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "file": "src/screens/fight.tsx",
+            "line": 91
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/pause-1",
+      "config": "cli",
+      "task": "pause",
+      "rep": 1,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 4,
+          "byCommand": {
+            "docs": 3,
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 2,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 4578,
+          "cacheRead": 167817,
+          "cacheCreation": 21467
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1485,
+        "wallSeconds": 47.3,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 14,
+          "own": 2,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/pause-2",
+      "config": "cli",
+      "task": "pause",
+      "rep": 2,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 13,
+          "byCommand": {
+            "docs": 11,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 4169,
+          "cacheRead": 172687,
+          "cacheCreation": 23120
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1515,
+        "wallSeconds": 40,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 14,
+          "own": 1,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/pause-3",
+      "config": "cli",
+      "task": "pause",
+      "rep": 3,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 6,
+          "byTool": {
+            "Bash": 6
+          }
+        },
+        "blipCalls": {
+          "total": 5,
+          "byCommand": {
+            "docs": 3,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 7,
+        "tokens": {
+          "input": 14,
+          "output": 3988,
+          "cacheRead": 136165,
+          "cacheCreation": 20821
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1368,
+        "wallSeconds": 40,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 14,
+          "own": 1,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/quests-1",
+      "config": "cli",
+      "task": "quests",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 11,
+          "byCommand": {
+            "docs": 9,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3148,
+          "cacheRead": 176500,
+          "cacheCreation": 25172
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1499,
+        "wallSeconds": 38.4,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 21,
+          "controls": 0,
+          "wrappers": 21,
+          "byTag": {
+            "div": 11,
+            "p": 2,
+            "span": 8
+          }
+        },
+        "components": {
+          "blip": 10,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 1,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 17,
+        "imports": {
+          "fromBlip": 9,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/quests-2",
+      "config": "cli",
+      "task": "quests",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 5,
+          "byTool": {
+            "Bash": 5
+          }
+        },
+        "blipCalls": {
+          "total": 7,
+          "byCommand": {
+            "docs": 5,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 6,
+        "tokens": {
+          "input": 12,
+          "output": 2774,
+          "cacheRead": 112694,
+          "cacheCreation": 18250
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.112,
+        "wallSeconds": 33,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 15,
+          "controls": 0,
+          "wrappers": 15,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 13,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 2,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 9,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/quests-3",
+      "config": "cli",
+      "task": "quests",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 10,
+          "byCommand": {
+            "docs": 7,
+            "help": 2,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 1
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3561,
+          "cacheRead": 176491,
+          "cacheCreation": 23481
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1472,
+        "wallSeconds": 43.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 18,
+          "controls": 0,
+          "wrappers": 18,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 6
+          }
+        },
+        "components": {
+          "blip": 15,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 5,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 14,
+        "imports": {
+          "fromBlip": 10,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/saves-1",
+      "config": "cli",
+      "task": "saves",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 13,
+          "byCommand": {
+            "docs": 10,
+            "help": 2,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 1
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 4829,
+          "cacheRead": 197238,
+          "cacheCreation": 24963
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1679,
+        "wallSeconds": 62,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 15,
+          "controls": 0,
+          "wrappers": 15,
+          "byTag": {
+            "div": 9,
+            "p": 2,
+            "span": 4
+          }
+        },
+        "components": {
+          "blip": 18,
+          "own": 3,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Legend": 2,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 2,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 10,
+        "imports": {
+          "fromBlip": 14,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/saves-2",
+      "config": "cli",
+      "task": "saves",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 7,
+            "bash": 1
+          }
+        },
+        "blipCalls": {
+          "total": 2,
+          "byCommand": {
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 1,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 4382,
+          "cacheRead": 200634,
+          "cacheCreation": 23179
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1566,
+        "wallSeconds": 47.4,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 14,
+          "controls": 0,
+          "wrappers": 14,
+          "byTag": {
+            "div": 9,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 15,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 2,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 1,
+            "Tabs": 1,
+            "Text": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 10,
+        "imports": {
+          "fromBlip": 14,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/saves-3",
+      "config": "cli",
+      "task": "saves",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 12,
+          "byCommand": {
+            "docs": 10,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 4239,
+          "cacheRead": 196130,
+          "cacheCreation": 23448
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1558,
+        "wallSeconds": 44.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 14,
+          "controls": 0,
+          "wrappers": 14,
+          "byTag": {
+            "div": 9,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 15,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 1,
+            "Tabs": 1,
+            "Text": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 10,
+        "imports": {
+          "fromBlip": 13,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/shop-1",
+      "config": "cli",
+      "task": "shop",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 6,
+            "Edit": 3
+          }
+        },
+        "blipCalls": {
+          "total": 9,
+          "byCommand": {
+            "docs": 8,
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 16,
+          "output": 3606,
+          "cacheRead": 165698,
+          "cacheCreation": 20319
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1339,
+        "wallSeconds": 35.5,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 16,
+          "controls": 0,
+          "wrappers": 16,
+          "byTag": {
+            "div": 11,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 18,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 2,
+            "Picker": 2,
+            "PickerItem": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 2,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 12,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/shop-2",
+      "config": "cli",
+      "task": "shop",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 9,
+          "byCommand": {
+            "docs": 7,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 1
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 3660,
+          "cacheRead": 204266,
+          "cacheCreation": 24197
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1539,
+        "wallSeconds": 38,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 15,
+          "controls": 0,
+          "wrappers": 15,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 18,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 2,
+            "Picker": 2,
+            "PickerItem": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 2,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 11,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "cli/shop-3",
+      "config": "cli",
+      "task": "shop",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 5,
+          "byTool": {
+            "Bash": 5
+          }
+        },
+        "blipCalls": {
+          "total": 10,
+          "byCommand": {
+            "docs": 8,
+            "help": 1,
+            "search": 1
+          }
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 6,
+        "tokens": {
+          "input": 12,
+          "output": 3311,
+          "cacheRead": 110929,
+          "cacheCreation": 20067
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1245,
+        "wallSeconds": 33.5,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 15,
+          "controls": 0,
+          "wrappers": 15,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 19,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Ledger": 1,
+            "LedgerRow": 1,
+            "Legend": 2,
+            "Picker": 2,
+            "PickerItem": 2,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 1,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 14,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/camp-rest-1",
+      "config": "no-cli",
+      "task": "camp-rest",
+      "rep": 1,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 4,
+          "byTool": {
+            "Bash": 1,
+            "Grep": 1,
+            "Read": 2
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 5,
+        "tokens": {
+          "input": 8,
+          "output": 1313,
+          "cacheRead": 54262,
+          "cacheCreation": 9553
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.0568,
+        "wallSeconds": 17.3,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/camp-rest-2",
+      "config": "no-cli",
+      "task": "camp-rest",
+      "rep": 2,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 3,
+          "byTool": {
+            "Bash": 1,
+            "Grep": 1,
+            "Read": 1
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 4,
+        "tokens": {
+          "input": 6,
+          "output": 1193,
+          "cacheRead": 37734,
+          "cacheCreation": 8296
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.0489,
+        "wallSeconds": 19.7,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/camp-rest-3",
+      "config": "no-cli",
+      "task": "camp-rest",
+      "rep": 3,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 3,
+          "byTool": {
+            "Bash": 1,
+            "Read": 2
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": null,
+        "tsErrors": 0,
+        "turns": 4,
+        "tokens": {
+          "input": 6,
+          "output": 1196,
+          "cacheRead": 38588,
+          "cacheCreation": 9217
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.0527,
+        "wallSeconds": 15.4,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 0,
+          "own": 0,
+          "other": 0,
+          "blipByName": {}
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 0,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/fight-hud-1",
+      "config": "no-cli",
+      "task": "fight-hud",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 2
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3623,
+          "cacheRead": 168104,
+          "cacheCreation": 25962
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1569,
+        "wallSeconds": 35.6,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 22,
+          "controls": 0,
+          "wrappers": 22,
+          "byTag": {
+            "div": 11,
+            "p": 2,
+            "span": 9
+          }
+        },
+        "components": {
+          "blip": 14,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Ledger": 2,
+            "LedgerRow": 2,
+            "Meter": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 2,
+            "Window": 3
+          }
+        },
+        "classNames": {
+          "total": 1,
+          "onBlip": 0,
+          "onRaw": 1,
+          "placing": 4,
+          "restyling": 0
+        },
+        "inlineStyles": 13,
+        "imports": {
+          "fromBlip": 7,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/fight-hud-2",
+      "config": "no-cli",
+      "task": "fight-hud",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 3
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3519,
+          "cacheRead": 167781,
+          "cacheCreation": 24974
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1519,
+        "wallSeconds": 37.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 26,
+          "controls": 2,
+          "wrappers": 24,
+          "byTag": {
+            "div": 12,
+            "li": 2,
+            "p": 2,
+            "span": 8,
+            "ul": 2
+          }
+        },
+        "components": {
+          "blip": 10,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Meter": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 3,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 18,
+        "imports": {
+          "fromBlip": 5,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "file": "src/screens/fight.tsx",
+            "line": 52
+          },
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "file": "src/screens/fight.tsx",
+            "line": 78
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/fight-hud-3",
+      "config": "no-cli",
+      "task": "fight-hud",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 10,
+          "byTool": {
+            "Bash": 9,
+            "Edit": 1
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 4
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 2,
+        "turns": 11,
+        "tokens": {
+          "input": 20,
+          "output": 3957,
+          "cacheRead": 236440,
+          "cacheCreation": 24777
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1624,
+        "wallSeconds": 39.6,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 28,
+          "controls": 2,
+          "wrappers": 26,
+          "byTag": {
+            "div": 11,
+            "li": 2,
+            "p": 2,
+            "span": 11,
+            "ul": 2
+          }
+        },
+        "components": {
+          "blip": 11,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Meter": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 2,
+            "Window": 3
+          }
+        },
+        "classNames": {
+          "total": 12,
+          "onBlip": 0,
+          "onRaw": 12,
+          "placing": 34,
+          "restyling": 9
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 5,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:div|p-3",
+            "kind": "raw",
+            "element": "div",
+            "classes": ["p-3"],
+            "file": "src/screens/fight.tsx",
+            "line": 41
+          },
+          {
+            "key": "raw:ul|list-none,p-0",
+            "kind": "raw",
+            "element": "ul",
+            "classes": ["list-none", "p-0"],
+            "file": "src/screens/fight.tsx",
+            "line": 46
+          },
+          {
+            "key": "raw:span|opacity-50",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-50"],
+            "file": "src/screens/fight.tsx",
+            "line": 52
+          },
+          {
+            "key": "raw:span|text-right",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["text-right"],
+            "file": "src/screens/fight.tsx",
+            "line": 62
+          },
+          {
+            "key": "raw:ul|list-none,p-0",
+            "kind": "raw",
+            "element": "ul",
+            "classes": ["list-none", "p-0"],
+            "file": "src/screens/fight.tsx",
+            "line": 73
+          },
+          {
+            "key": "raw:span|text-(--bui-primary)",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["text-(--bui-primary)"],
+            "file": "src/screens/fight.tsx",
+            "line": 83
+          },
+          {
+            "key": "raw:span|text-(--bui-danger-light)",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["text-(--bui-danger-light)"],
+            "file": "src/screens/fight.tsx",
+            "line": 87
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/pause-1",
+      "config": "no-cli",
+      "task": "pause",
+      "rep": 1,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 2,
+          "docs": 3
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 3986,
+          "cacheRead": 191527,
+          "cacheCreation": 27360
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1685,
+        "wallSeconds": 40.5,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 14,
+          "own": 1,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/pause-2",
+      "config": "no-cli",
+      "task": "pause",
+      "rep": 2,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 9
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 1
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 20,
+          "output": 4070,
+          "cacheRead": 218888,
+          "cacheCreation": 29053
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1788,
+        "wallSeconds": 39.9,
+        "denials": 0,
+        "network": [
+          {
+            "tool": "npx",
+            "command": "cd ~/.cache/blip-eval/day-zero/no-cli/pause-2 && cat > src/screens/pause-dialog.tsx <<'EOF'\nimport { useState } from 'react';\nimport {\n  Actions,…"
+          }
+        ]
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 1,
+          "controls": 0,
+          "wrappers": 1,
+          "byTag": {
+            "div": 1
+          }
+        },
+        "components": {
+          "blip": 14,
+          "own": 2,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 1,
+        "imports": {
+          "fromBlip": 12,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/pause-3",
+      "config": "no-cli",
+      "task": "pause",
+      "rep": 3,
+      "scope": "changed-lines",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 4475,
+          "cacheRead": 202540,
+          "cacheCreation": 28816
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1803,
+        "wallSeconds": 40,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "changed-lines",
+        "rawTags": {
+          "total": 0,
+          "controls": 0,
+          "wrappers": 0,
+          "byTag": {}
+        },
+        "components": {
+          "blip": 14,
+          "own": 2,
+          "other": 0,
+          "blipByName": {
+            "Actions": 1,
+            "Confirm": 1,
+            "Controls": 1,
+            "Dialog": 1,
+            "IconButton": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 2,
+            "PickerSetting": 3,
+            "Title": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 0,
+        "imports": {
+          "fromBlip": 13,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/quests-1",
+      "config": "no-cli",
+      "task": "quests",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 4
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 3292,
+          "cacheRead": 203923,
+          "cacheCreation": 26597
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1597,
+        "wallSeconds": 36.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 20,
+          "controls": 0,
+          "wrappers": 20,
+          "byTag": {
+            "div": 11,
+            "p": 2,
+            "span": 7
+          }
+        },
+        "components": {
+          "blip": 13,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 3,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 4,
+          "onBlip": 0,
+          "onRaw": 4,
+          "placing": 7,
+          "restyling": 5
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 8,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:span|opacity-80,text-[0.85em]",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-80", "text-[0.85em]"],
+            "file": "src/screens/quests.tsx",
+            "line": 40
+          },
+          {
+            "key": "raw:span|opacity-80,text-[0.85em]",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-80", "text-[0.85em]"],
+            "file": "src/screens/quests.tsx",
+            "line": 44
+          },
+          {
+            "key": "raw:div|p-[calc(var(--bui-px)*6)]",
+            "kind": "raw",
+            "element": "div",
+            "classes": ["p-[calc(var(--bui-px)*6)]"],
+            "file": "src/screens/quests.tsx",
+            "line": 55
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/quests-2",
+      "config": "no-cli",
+      "task": "quests",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 9
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 2
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 20,
+          "output": 3139,
+          "cacheRead": 219677,
+          "cacheCreation": 25275
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1545,
+        "wallSeconds": 29.8,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 19,
+          "controls": 0,
+          "wrappers": 19,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 7
+          }
+        },
+        "components": {
+          "blip": 15,
+          "own": 3,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 2,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 3,
+            "Window": 3
+          }
+        },
+        "classNames": {
+          "total": 3,
+          "onBlip": 0,
+          "onRaw": 3,
+          "placing": 8,
+          "restyling": 3
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 9,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:span|text-left",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["text-left"],
+            "file": "src/screens/quests.tsx",
+            "line": 24
+          },
+          {
+            "key": "raw:span|opacity-70",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-70"],
+            "file": "src/screens/quests.tsx",
+            "line": 26
+          },
+          {
+            "key": "raw:div|p-[calc(var(--px)*4)]",
+            "kind": "raw",
+            "element": "div",
+            "classes": ["p-[calc(var(--px)*4)]"],
+            "file": "src/screens/quests.tsx",
+            "line": 63
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/quests-3",
+      "config": "no-cli",
+      "task": "quests",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 1,
+          "docs": 3
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3424,
+          "cacheRead": 173692,
+          "cacheCreation": 28251
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1646,
+        "wallSeconds": 31.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 19,
+          "controls": 0,
+          "wrappers": 19,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 7
+          }
+        },
+        "components": {
+          "blip": 13,
+          "own": 3,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerGroup": 1,
+            "PickerItem": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 3,
+            "Window": 2
+          }
+        },
+        "classNames": {
+          "total": 3,
+          "onBlip": 0,
+          "onRaw": 3,
+          "placing": 2,
+          "restyling": 4
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 9,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:span|opacity-80,text-[0.85em]",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-80", "text-[0.85em]"],
+            "file": "src/screens/quests.tsx",
+            "line": 25
+          },
+          {
+            "key": "raw:span|opacity-80,text-[0.85em]",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["opacity-80", "text-[0.85em]"],
+            "file": "src/screens/quests.tsx",
+            "line": 30
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/saves-1",
+      "config": "no-cli",
+      "task": "saves",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 9
+          }
+        },
+        "blipCalls": {
+          "total": 1,
+          "byCommand": {
+            "help": 1
+          }
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 1
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 20,
+          "output": 4812,
+          "cacheRead": 227288,
+          "cacheCreation": 31613
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1973,
+        "wallSeconds": 46.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 17,
+          "controls": 0,
+          "wrappers": 17,
+          "byTag": {
+            "div": 12,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 12,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerItem": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 13,
+        "imports": {
+          "fromBlip": 10,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/saves-2",
+      "config": "no-cli",
+      "task": "saves",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 9
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 2,
+          "docs": 4
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 18,
+          "output": 4685,
+          "cacheRead": 202883,
+          "cacheCreation": 29774
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1863,
+        "wallSeconds": 49.2,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 18,
+          "controls": 0,
+          "wrappers": 18,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 6
+          }
+        },
+        "components": {
+          "blip": 10,
+          "own": 3,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerItem": 1,
+            "PickerSetting": 1,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Text": 1,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 3,
+          "onBlip": 0,
+          "onRaw": 3,
+          "placing": 9,
+          "restyling": 3
+        },
+        "inlineStyles": 10,
+        "imports": {
+          "fromBlip": 10,
+          "invented": []
+        },
+        "overrides": [
+          {
+            "key": "raw:span|text-(--bui-muted)",
+            "kind": "raw",
+            "element": "span",
+            "classes": ["text-(--bui-muted)"],
+            "file": "src/screens/saves.tsx",
+            "line": 51
+          },
+          {
+            "key": "raw:div|pb-[calc(var(--px)*6+var(--bui-bar))],pt-[calc(var(--px)*24)]",
+            "kind": "raw",
+            "element": "div",
+            "classes": [
+              "pb-[calc(var(--px)*6+var(--bui-bar))]",
+              "pt-[calc(var(--px)*24)]"
+            ],
+            "file": "src/screens/saves.tsx",
+            "line": 98
+          }
+        ],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/saves-3",
+      "config": "no-cli",
+      "task": "saves",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 8,
+          "byTool": {
+            "Bash": 8
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 2,
+          "docs": 3
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 9,
+        "tokens": {
+          "input": 18,
+          "output": 4444,
+          "cacheRead": 185113,
+          "cacheCreation": 24024
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1591,
+        "wallSeconds": 52.1,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 19,
+          "controls": 0,
+          "wrappers": 19,
+          "byTag": {
+            "div": 10,
+            "p": 4,
+            "span": 5
+          }
+        },
+        "components": {
+          "blip": 12,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Confirm": 1,
+            "Legend": 1,
+            "Picker": 1,
+            "PickerItem": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 10,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/shop-1",
+      "config": "no-cli",
+      "task": "shop",
+      "rep": 1,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 6,
+          "byTool": {
+            "Bash": 6
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 0,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": false,
+        "tsErrors": 0,
+        "turns": 7,
+        "tokens": {
+          "input": 14,
+          "output": 3448,
+          "cacheRead": 144619,
+          "cacheCreation": 28857
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1644,
+        "wallSeconds": 53.9,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 16,
+          "controls": 0,
+          "wrappers": 16,
+          "byTag": {
+            "div": 10,
+            "p": 2,
+            "span": 4
+          }
+        },
+        "components": {
+          "blip": 19,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 1,
+            "Ledger": 1,
+            "LedgerRow": 1,
+            "Legend": 1,
+            "Picker": 2,
+            "PickerItem": 2,
+            "ScreenTitle": 1,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 1,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 15,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/shop-2",
+      "config": "no-cli",
+      "task": "shop",
+      "rep": 2,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 9,
+          "byTool": {
+            "Bash": 8,
+            "bash": 1
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 3,
+          "docs": 3
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 10,
+        "tokens": {
+          "input": 20,
+          "output": 4953,
+          "cacheRead": 220137,
+          "cacheCreation": 27170
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1803,
+        "wallSeconds": 88.8,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 16,
+          "controls": 0,
+          "wrappers": 16,
+          "byTag": {
+            "div": 10,
+            "p": 3,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 17,
+          "own": 4,
+          "other": 1,
+          "blipByName": {
+            "Ledger": 1,
+            "LedgerRow": 1,
+            "Legend": 2,
+            "Picker": 2,
+            "PickerItem": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Window": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 11,
+        "imports": {
+          "fromBlip": 11,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    },
+    {
+      "id": "no-cli/shop-3",
+      "config": "no-cli",
+      "task": "shop",
+      "rep": 3,
+      "scope": "all",
+      "runStatus": "done",
+      "status": "complete",
+      "transcript": {
+        "status": "complete",
+        "reason": null,
+        "overBudget": false,
+        "failed": false,
+        "badLines": 0,
+        "toolCalls": {
+          "total": 7,
+          "byTool": {
+            "Bash": 7
+          }
+        },
+        "blipCalls": {
+          "total": 0,
+          "byCommand": {}
+        },
+        "reads": {
+          "dist": 2,
+          "docs": 0
+        },
+        "lookupBeforeFirstTsxWrite": true,
+        "tsErrors": 0,
+        "turns": 8,
+        "tokens": {
+          "input": 16,
+          "output": 3371,
+          "cacheRead": 169197,
+          "cacheCreation": 27403
+        },
+        "subagents": {
+          "messages": 0,
+          "tokens": {
+            "input": 0,
+            "output": 0,
+            "cacheRead": 0,
+            "cacheCreation": 0
+          }
+        },
+        "costUsd": 0.1603,
+        "wallSeconds": 36.4,
+        "denials": 0,
+        "network": []
+      },
+      "tree": {
+        "scope": "all",
+        "rawTags": {
+          "total": 16,
+          "controls": 0,
+          "wrappers": 16,
+          "byTag": {
+            "div": 11,
+            "p": 2,
+            "span": 3
+          }
+        },
+        "components": {
+          "blip": 17,
+          "own": 2,
+          "other": 1,
+          "blipByName": {
+            "Heading": 2,
+            "Legend": 2,
+            "Picker": 2,
+            "PickerItem": 2,
+            "Stage": 1,
+            "Stage.Center": 1,
+            "Tab": 2,
+            "TabList": 1,
+            "TabPanel": 2,
+            "Tabs": 1,
+            "Text": 1
+          }
+        },
+        "classNames": {
+          "total": 0,
+          "onBlip": 0,
+          "onRaw": 0,
+          "placing": 0,
+          "restyling": 0
+        },
+        "inlineStyles": 12,
+        "imports": {
+          "fromBlip": 10,
+          "invented": []
+        },
+        "overrides": [],
+        "tsc": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        },
+        "build": {
+          "ran": true,
+          "ok": true,
+          "errors": 0
+        }
+      }
+    }
+  ],
+  "skipped": [],
+  "aggregate": {
+    "configs": ["no-cli", "cli"],
+    "tasks": ["camp-rest", "fight-hud", "pause", "quests", "saves", "shop"],
+    "groups": {
+      "no-cli": {
+        "all": {
+          "runs": 18,
+          "measures": {
+            "builds": {
+              "yes": 18,
+              "of": 18
+            },
+            "tscErrors": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "blipComponents": {
+              "median": 13,
+              "min": 0,
+              "max": 19,
+              "n": 18
+            },
+            "ownComponents": {
+              "median": 2,
+              "min": 0,
+              "max": 4,
+              "n": 18
+            },
+            "rawControls": {
+              "median": 0,
+              "min": 0,
+              "max": 2,
+              "n": 18
+            },
+            "rawWrappers": {
+              "median": 16.5,
+              "min": 0,
+              "max": 26,
+              "n": 18
+            },
+            "restyling": {
+              "median": 0,
+              "min": 0,
+              "max": 9,
+              "n": 18
+            },
+            "placing": {
+              "median": 0,
+              "min": 0,
+              "max": 34,
+              "n": 18
+            },
+            "invented": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "lookupFirst": {
+              "yes": 14,
+              "of": 15
+            },
+            "blipCalls": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "readsDist": {
+              "median": 1,
+              "min": 0,
+              "max": 3,
+              "n": 18
+            },
+            "readsDocs": {
+              "median": 2,
+              "min": 0,
+              "max": 4,
+              "n": 18
+            },
+            "tsErrors": {
+              "median": 0,
+              "min": 0,
+              "max": 2,
+              "n": 18
+            },
+            "toolCalls": {
+              "median": 8,
+              "min": 3,
+              "max": 10,
+              "n": 18
+            },
+            "turns": {
+              "median": 9,
+              "min": 4,
+              "max": 11,
+              "n": 18
+            },
+            "inputTokens": {
+              "median": 18,
+              "min": 6,
+              "max": 20,
+              "n": 18
+            },
+            "outputTokens": {
+              "median": 3571,
+              "min": 1193,
+              "max": 4953,
+              "n": 18
+            },
+            "cacheTokens": {
+              "median": 214012,
+              "min": 46030,
+              "max": 261217,
+              "n": 18
+            },
+            "subagentTokens": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "costUsd": {
+              "median": 0.1613,
+              "min": 0.0489,
+              "max": 0.1973,
+              "n": 18
+            },
+            "wallSeconds": {
+              "median": 38.35,
+              "min": 15.4,
+              "max": 88.8,
+              "n": 18
+            },
+            "denials": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "overBudget": {
+              "yes": 0,
+              "of": 18
+            }
+          }
+        },
+        "tasks": {
+          "camp-rest": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": null,
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 3,
+                "min": 3,
+                "max": 4,
+                "n": 3
+              },
+              "turns": {
+                "median": 4,
+                "min": 4,
+                "max": 5,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 6,
+                "min": 6,
+                "max": 8,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 1196,
+                "min": 1193,
+                "max": 1313,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 47805,
+                "min": 46030,
+                "max": 63815,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.0527,
+                "min": 0.0489,
+                "max": 0.0568,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 17.3,
+                "min": 15.4,
+                "max": 19.7,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "fight-hud": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 11,
+                "min": 10,
+                "max": 14,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 2,
+                "min": 0,
+                "max": 2,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 24,
+                "min": 22,
+                "max": 26,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 9,
+                "n": 3
+              },
+              "placing": {
+                "median": 4,
+                "min": 0,
+                "max": 34,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 1,
+                "min": 1,
+                "max": 1,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 3,
+                "min": 2,
+                "max": 4,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 2,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 7,
+                "min": 7,
+                "max": 10,
+                "n": 3
+              },
+              "turns": {
+                "median": 8,
+                "min": 8,
+                "max": 11,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 16,
+                "min": 16,
+                "max": 20,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 3623,
+                "min": 3519,
+                "max": 3957,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 194066,
+                "min": 192755,
+                "max": 261217,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1569,
+                "min": 0.1519,
+                "max": 0.1624,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 37.1,
+                "min": 35.6,
+                "max": 39.6,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "pause": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 14,
+                "min": 14,
+                "max": 14,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 1,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 1,
+                "min": 0,
+                "max": 2,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 1,
+                "min": 0,
+                "max": 3,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 8,
+                "min": 8,
+                "max": 9,
+                "n": 3
+              },
+              "turns": {
+                "median": 9,
+                "min": 9,
+                "max": 10,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 18,
+                "min": 18,
+                "max": 20,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 4070,
+                "min": 3986,
+                "max": 4475,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 231356,
+                "min": 218887,
+                "max": 247941,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1788,
+                "min": 0.1685,
+                "max": 0.1803,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 40,
+                "min": 39.9,
+                "max": 40.5,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "quests": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 13,
+                "min": 13,
+                "max": 15,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 3,
+                "min": 2,
+                "max": 3,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 19,
+                "min": 19,
+                "max": 20,
+                "n": 3
+              },
+              "restyling": {
+                "median": 4,
+                "min": 3,
+                "max": 5,
+                "n": 3
+              },
+              "placing": {
+                "median": 7,
+                "min": 2,
+                "max": 8,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 1,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 3,
+                "min": 2,
+                "max": 4,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 8,
+                "min": 7,
+                "max": 9,
+                "n": 3
+              },
+              "turns": {
+                "median": 9,
+                "min": 8,
+                "max": 10,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 18,
+                "min": 16,
+                "max": 20,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 3292,
+                "min": 3139,
+                "max": 3424,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 230520,
+                "min": 201943,
+                "max": 244952,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1597,
+                "min": 0.1545,
+                "max": 0.1646,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 31.1,
+                "min": 29.8,
+                "max": 36.1,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "saves": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 12,
+                "min": 10,
+                "max": 12,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 3,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 18,
+                "min": 17,
+                "max": 19,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 3,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 9,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 2,
+                "min": 2,
+                "max": 3,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 3,
+                "min": 1,
+                "max": 4,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 9,
+                "min": 8,
+                "max": 9,
+                "n": 3
+              },
+              "turns": {
+                "median": 10,
+                "min": 9,
+                "max": 10,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 18,
+                "min": 18,
+                "max": 20,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 4685,
+                "min": 4444,
+                "max": 4812,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 232657,
+                "min": 209137,
+                "max": 258901,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1863,
+                "min": 0.1591,
+                "max": 0.1973,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 49.2,
+                "min": 46.1,
+                "max": 52.1,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "shop": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 17,
+                "min": 17,
+                "max": 19,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 4,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 16,
+                "min": 16,
+                "max": 16,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 2,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 2,
+                "min": 0,
+                "max": 3,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 3,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 7,
+                "min": 6,
+                "max": 9,
+                "n": 3
+              },
+              "turns": {
+                "median": 8,
+                "min": 7,
+                "max": 10,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 16,
+                "min": 14,
+                "max": 20,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 3448,
+                "min": 3371,
+                "max": 4953,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 196600,
+                "min": 173476,
+                "max": 247307,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1644,
+                "min": 0.1603,
+                "max": 0.1803,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 53.9,
+                "min": 36.4,
+                "max": 88.8,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          }
+        }
+      },
+      "cli": {
+        "all": {
+          "runs": 18,
+          "measures": {
+            "builds": {
+              "yes": 18,
+              "of": 18
+            },
+            "tscErrors": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "blipComponents": {
+              "median": 14,
+              "min": 0,
+              "max": 19,
+              "n": 18
+            },
+            "ownComponents": {
+              "median": 2,
+              "min": 0,
+              "max": 3,
+              "n": 18
+            },
+            "rawControls": {
+              "median": 0,
+              "min": 0,
+              "max": 2,
+              "n": 18
+            },
+            "rawWrappers": {
+              "median": 15,
+              "min": 0,
+              "max": 24,
+              "n": 18
+            },
+            "restyling": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "placing": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "invented": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "lookupFirst": {
+              "yes": 14,
+              "of": 14
+            },
+            "blipCalls": {
+              "median": 9,
+              "min": 1,
+              "max": 13,
+              "n": 18
+            },
+            "readsDist": {
+              "median": 1,
+              "min": 0,
+              "max": 3,
+              "n": 18
+            },
+            "readsDocs": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "tsErrors": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "toolCalls": {
+              "median": 7,
+              "min": 3,
+              "max": 9,
+              "n": 18
+            },
+            "turns": {
+              "median": 8,
+              "min": 4,
+              "max": 10,
+              "n": 18
+            },
+            "inputTokens": {
+              "median": 15,
+              "min": 6,
+              "max": 18,
+              "n": 18
+            },
+            "outputTokens": {
+              "median": 3436,
+              "min": 1396,
+              "max": 4829,
+              "n": 18
+            },
+            "cacheTokens": {
+              "median": 172097.5,
+              "min": 49019,
+              "max": 228463,
+              "n": 18
+            },
+            "subagentTokens": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "costUsd": {
+              "median": 0.1353,
+              "min": 0.0573,
+              "max": 0.1679,
+              "n": 18
+            },
+            "wallSeconds": {
+              "median": 39.2,
+              "min": 23.9,
+              "max": 65.5,
+              "n": 18
+            },
+            "denials": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "overBudget": {
+              "yes": 0,
+              "of": 18
+            }
+          }
+        },
+        "tasks": {
+          "camp-rest": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": null,
+              "blipCalls": {
+                "median": 2,
+                "min": 1,
+                "max": 4,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 5,
+                "min": 3,
+                "max": 5,
+                "n": 3
+              },
+              "turns": {
+                "median": 6,
+                "min": 4,
+                "max": 6,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 8,
+                "min": 6,
+                "max": 8,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 1701,
+                "min": 1396,
+                "max": 1834,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 66609,
+                "min": 49019,
+                "max": 73673,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.0654,
+                "min": 0.0573,
+                "max": 0.076,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 40.1,
+                "min": 23.9,
+                "max": 65.5,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "fight-hud": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 13,
+                "min": 13,
+                "max": 16,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 2,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 22,
+                "min": 16,
+                "max": 24,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 9,
+                "min": 4,
+                "max": 9,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 5,
+                "min": 4,
+                "max": 7,
+                "n": 3
+              },
+              "turns": {
+                "median": 6,
+                "min": 5,
+                "max": 8,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 12,
+                "min": 10,
+                "max": 14,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 2904,
+                "min": 2780,
+                "max": 2974,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 128050,
+                "min": 113401,
+                "max": 158178,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1219,
+                "min": 0.1183,
+                "max": 0.1223,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 36.2,
+                "min": 31,
+                "max": 36.4,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "pause": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 14,
+                "min": 14,
+                "max": 14,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 1,
+                "min": 1,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 2,
+                "of": 2
+              },
+              "blipCalls": {
+                "median": 5,
+                "min": 4,
+                "max": 13,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 3,
+                "min": 2,
+                "max": 3,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 7,
+                "min": 6,
+                "max": 7,
+                "n": 3
+              },
+              "turns": {
+                "median": 8,
+                "min": 7,
+                "max": 8,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 16,
+                "min": 14,
+                "max": 16,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 4169,
+                "min": 3988,
+                "max": 4578,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 189284,
+                "min": 156986,
+                "max": 195807,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1485,
+                "min": 0.1368,
+                "max": 0.1515,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 40,
+                "min": 40,
+                "max": 47.3,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "quests": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 13,
+                "min": 10,
+                "max": 15,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 18,
+                "min": 15,
+                "max": 21,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 10,
+                "min": 7,
+                "max": 11,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 1,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 7,
+                "min": 5,
+                "max": 7,
+                "n": 3
+              },
+              "turns": {
+                "median": 8,
+                "min": 6,
+                "max": 8,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 16,
+                "min": 12,
+                "max": 16,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 3148,
+                "min": 2774,
+                "max": 3561,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 199972,
+                "min": 130944,
+                "max": 201672,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1472,
+                "min": 0.112,
+                "max": 0.1499,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 38.4,
+                "min": 33,
+                "max": 43.1,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "saves": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 15,
+                "min": 15,
+                "max": 18,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 3,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 14,
+                "min": 14,
+                "max": 15,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 12,
+                "min": 2,
+                "max": 13,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 3,
+                "min": 1,
+                "max": 3,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 8,
+                "min": 8,
+                "max": 8,
+                "n": 3
+              },
+              "turns": {
+                "median": 9,
+                "min": 9,
+                "max": 9,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 18,
+                "min": 18,
+                "max": 18,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 4382,
+                "min": 4239,
+                "max": 4829,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 222201,
+                "min": 219578,
+                "max": 223813,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1566,
+                "min": 0.1558,
+                "max": 0.1679,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 47.4,
+                "min": 44.1,
+                "max": 62,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          },
+          "shop": {
+            "runs": 3,
+            "measures": {
+              "builds": {
+                "yes": 3,
+                "of": 3
+              },
+              "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "blipComponents": {
+                "median": 18,
+                "min": 18,
+                "max": 19,
+                "n": 3
+              },
+              "ownComponents": {
+                "median": 2,
+                "min": 2,
+                "max": 2,
+                "n": 3
+              },
+              "rawControls": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "rawWrappers": {
+                "median": 15,
+                "min": 15,
+                "max": 16,
+                "n": 3
+              },
+              "restyling": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "placing": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "invented": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "lookupFirst": {
+                "yes": 3,
+                "of": 3
+              },
+              "blipCalls": {
+                "median": 9,
+                "min": 9,
+                "max": 10,
+                "n": 3
+              },
+              "readsDist": {
+                "median": 1,
+                "min": 1,
+                "max": 1,
+                "n": 3
+              },
+              "readsDocs": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "tsErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "toolCalls": {
+                "median": 8,
+                "min": 5,
+                "max": 9,
+                "n": 3
+              },
+              "turns": {
+                "median": 9,
+                "min": 6,
+                "max": 10,
+                "n": 3
+              },
+              "inputTokens": {
+                "median": 16,
+                "min": 12,
+                "max": 18,
+                "n": 3
+              },
+              "outputTokens": {
+                "median": 3606,
+                "min": 3311,
+                "max": 3660,
+                "n": 3
+              },
+              "cacheTokens": {
+                "median": 186017,
+                "min": 130996,
+                "max": 228463,
+                "n": 3
+              },
+              "subagentTokens": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "costUsd": {
+                "median": 0.1339,
+                "min": 0.1245,
+                "max": 0.1539,
+                "n": 3
+              },
+              "wallSeconds": {
+                "median": 35.5,
+                "min": 33.5,
+                "max": 38,
+                "n": 3
+              },
+              "denials": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "overBudget": {
+                "yes": 0,
+                "of": 3
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "candidates": []
+}
