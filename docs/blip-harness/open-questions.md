@@ -242,6 +242,20 @@ there. The docs agree, and add that auto memory is separate and still loads.
 If you saw the leak on an earlier version or under other flags, tell me which, and the probe
 gets that case too.
 
+**Update (ran, 2.1.329).** The leak is back. The first real attempt of `run.mjs` stopped at its
+canary: in an empty folder with `--setting-sources project`, the child answered `LEAK:yes` and
+quoted the heading of `~/.claude/CLAUDE.md`. So `--setting-sources project` is no longer enough.
+The user plugins, skills and agents stayed out (the `init` event lists only Claude Code's own: 5
+plugins, 19 skills, 6 agents).
+
+The fix is `claudeMdExcludes` in the project's `.claude/settings.json`, listing
+`~/.claude/CLAUDE.md`, `~/.claude/rules/**`, `~/CLAUDE.md` and `~/.cache/CLAUDE.md`. Tried by
+hand: the same probe then answers `LEAK:no`, on the subscription, with no `CLAUDE_CONFIG_DIR` and
+no token. The home path is written in at run time. The canary uses the same file, so it tests what
+the runs get, and it now asks about the first heading of the user's own file instead of a fixed
+title. Claude Code ignores `permissions.allow` from this untrusted folder; `--allowedTools` does
+the approving.
+
 ## Questions the decisions leave open
 
 Q8, Q9, Q10, Q14, Q15 and Q16 are accepted as recommended; Q11 and Q12 carry their answer below
