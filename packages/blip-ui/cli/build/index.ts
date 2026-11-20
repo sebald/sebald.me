@@ -21,7 +21,10 @@ import {
   rewriteImports,
   summaryOfExample,
 } from './examples.ts';
+import { type Rule, sortRules } from '../rules.ts';
 import { compoundParts, parseExports } from './exports.ts';
+import { checkSidecars } from './sidecar.ts';
+import { buildRulesFile, loadCheckNames, loadSidecars } from './sidecars.ts';
 import {
   type Manifest,
   type PageKind,
@@ -48,6 +51,27 @@ const files = readdirSync(src, { recursive: true, encoding: 'utf8' })
   .sort((a, b) => a.id.localeCompare(b.id));
 
 const ids = files.map(({ id }) => id);
+
+// The sidecars first: a page's rule blocks print from them
+const sidecars = loadSidecars(src);
+const { errors, warnings } = checkSidecars(sidecars, {
+  pages: new Set(ids),
+  checks: loadCheckNames(root),
+});
+for (const warning of warnings) console.warn(`rules: warning: ${warning}`);
+if (errors.length > 0) {
+  throw new Error(
+    `The rule sidecars have ${errors.length} error${errors.length === 1 ? '' : 's'}:\n${errors.map(error => `  ${error}`).join('\n')}`,
+  );
+}
+const allRules: Rule[] = sidecars.flatMap(sidecar => sidecar.rules);
+const lookup = {
+  forPage: (page: string) =>
+    sortRules(allRules.filter(rule => rule.page === page)),
+  whenNotFor: (page: string) =>
+    sidecars.find(sidecar => sidecar.page === page)?.whenNot ?? [],
+  byId: (id: string) => allRules.find(rule => rule.id === id),
+};
 
 const PACKAGE_NAME = '@sebald/blip-ui';
 
@@ -114,7 +138,13 @@ const pages: PageSource[] = files.map(({ file, id }) => {
       ? 'pattern'
       : 'component';
   const mdx = readFileSync(join(src, file), 'utf8');
-  const markdown = mdxToMarkdown(mdx, ids, '', canvasOf(file.split('\\').join('/'), mdx));
+  const markdown = mdxToMarkdown(
+    mdx,
+    ids,
+    '',
+    canvasOf(file.split('\\').join('/'), mdx),
+    lookup,
+  );
   return {
     id,
     kind,
@@ -157,7 +187,7 @@ for (const page of pages) {
     .split(/^\s*(?:`{3,}|~{3,}).*$/m)
     .filter((_, index) => index % 2 === 0)
     .join('\n');
-  const leak = /^import\b|<(?:Meta|Canvas|Controls)\b/m.exec(outside);
+  const leak = /^import\b|<(?:Meta|Canvas|Controls|Rules?)\b/m.exec(outside);
   if (leak) throw new Error(`${page.id}: "${leak[0]}" is left after conversion`);
 }
 
@@ -182,6 +212,7 @@ const manifest: Manifest = buildManifest(
     summary,
     file,
   })),
+  allRules,
 );
 
 // `<Controls />` becomes the props table, now that the page's exports are known
@@ -198,6 +229,7 @@ for (const page of pages) {
     ids,
     section,
     canvasOf(file.split('\\').join('/'), source),
+    lookup,
   );
 }
 
@@ -216,13 +248,19 @@ writeFileSync(
   `${JSON.stringify(manifest, null, 2)}\n`,
 );
 
+const rulesFile = buildRulesFile(version, sidecars);
+writeFileSync(
+  join(docs, 'rules.json'),
+  `${JSON.stringify(rulesFile, null, 2)}\n`,
+);
+
 const missing = undocumented(manifest);
 const propCount = Object.values(manifest.exports).reduce(
   (sum, entry) => sum + (entry.props?.length ?? 0),
   0,
 );
 console.log(
-  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports, ${propCount} props, ${exampleFiles.length} examples`,
+  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports, ${propCount} props, ${exampleFiles.length} examples, ${rulesFile.rules.length} rules`,
 );
 const bare = withoutDescription(manifest);
 if (bare.length > 0) {
