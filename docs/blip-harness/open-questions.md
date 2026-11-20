@@ -331,6 +331,12 @@ listed in `summary.md` as a candidate variant, size or component, with its runs 
 Placing classes are left out: a margin on a `Button` says nothing about the `Button`. The
 thresholds are a guess for 36 runs; day zero adjusts them. In `eval-collect`.
 
+**Day zero (2026-11-20).** The layout gap was hit: 21 of 24 screens hand-build the same frame
+(`evals/blip/results/2026-11-20-day-zero/summary.md`). The recurring-override check found
+**nothing**, because 17 of those 21 write it as inline `style` and the check counts only `className`
+(Tailwind classes appear in 4). It has to count `style` groups too. Whether Blip grows a layout
+component is proposed as `tasks/screen-layout.md`, for the user to decide.
+
 ### Q12. Where do patterns live? There are none today
 
 The plan step looks up "a pattern", and `P` rules need a page. Blip has component pages only;
@@ -384,7 +390,7 @@ Confirmed:
    If the pilot shows a run uses too much of a usage window, the sweep can drop to 3
    repetitions, and its write-up says so: the spread gets wider and only large effects show.
 
-Nothing is measured yet, so these are starting values for the pilot in `day-zero` to replace.
+Both held. `day-zero` measured them (below).
 
 **Model.** One model for every run of a comparison, pinned by its full id:
 `claude-sonnet-5-5`. It is cheap enough for repetitions and leaves room for a harness piece to
@@ -396,11 +402,41 @@ every result: the agent's own harness changes too.
 5 statements each, a configuration in the sweep has about 150 judged statements. That shows
 large effects only; `summary.md` gives counts and the spread, and makes no claim inside it.
 
-**Size (guess).** At API prices I would expect a UI ticket to be worth $0.50 to $2 of tokens,
-so day zero is roughly $20 to $70 of estimate and the sweep $100 to $350, plus the judge (on
-Opus, one short pass per run). On a subscription that is a question of how many usage windows
-it takes, which only the pilot can answer: it records each run's tokens and how far it moved
-the usage shown by `/usage`.
+**Size (measured, day zero, 2026-11-20, Claude Code 2.1.329, `claude-sonnet-5-5`).** A run is far
+smaller than guessed: $0.13 to $0.15 of estimate on average, not $0.50 to $2. The 36 runs (6 tasks,
+3 repetitions) cost $4.98 of estimate and 26.7 minutes of wall clock; no run came near its limits
+(the largest was $0.20; the longest took 89 s of agent time, 108 s with its install, of the 10 minutes allowed). The pilot (3 runs, `cli`: `shop`,
+`fight-hud`, `pause`) cost $0.39 of estimate and 30 to 38 s a run.
+
+| Config   | Estimate per run (mean, range) | Turns (mean) | Time (mean) | 18 runs         |
+| -------- | ------------------------------ | ------------ | ----------- | --------------- |
+| `no-cli` | $0.149 ($0.05 to $0.20)        | 8.3          | 39 s        | $2.68, 13.2 min |
+| `cli`    | $0.128 ($0.06 to $0.17)        | 7.3          | 41 s        | $2.30, 13.5 min |
+
+Time is the agent's own wall clock (the `result` event); the 18-run column is `meta.json`'s
+`durationMs`, which adds each run's offline install.
+
+By task (median of the 6 runs of both configurations, estimate / turns / seconds): `camp-rest`
+$0.06 / 4.5 / 22 (the cheapest: it edits one file), `fight-hud` $0.14 / 8 / 36, `quests` $0.15 / 8 /
+35, `shop` $0.16 / 8.5 / 37, `pause` $0.16 / 8.5 / 40, `saves` $0.16 / 9 / 48. Per-run ranges are in
+`evals/blip/results/2026-11-20-day-zero/summary.md`. The estimate's spread between repetitions is
+about $0.01 (7 to 10% of the mean), at worst $0.04; turns vary by 2.
+
+Set from this: `--budget 2` per run (ten times the largest run; $4 stays the default in `run.mjs`)
+and `--timeout 10` minutes (five times the longest, 108 s with the install). Neither
+was reached, so no run is over budget or timed out. **The sweep** (180 runs, 5 repetitions, 5 more
+configurations that each add turns) projects to about $25 to $40 of estimate at day zero's per-run
+figure plus a margin for the plan and the reviewer, a fraction of the guessed $100 to $350; the
+subscription's usage limit was not met in 66 runs (36 on the day-zero Blip, 27 on step F's, 3 in the
+pilot), so its exact wording is still unseen and the runner's detection is untested on a real
+one. `/usage` was not read per run; the estimates are what is recorded.
+
+Two measurement findings from day zero's runs. Two of 64 first attempts failed the `init` check
+because Claude Code itself (not `~/.claude`) sometimes lists a sixth built-in plugin,
+`cc-plugin-easel`, that the canary's baseline of five did not; the runs were redone with
+`--retry-failed` and passed, so the check is right to be strict but its baseline needs to allow
+that plugin (not changed here). The estimate for `no-cli` and `cli` differs by $0.02 a run, which is
+inside the spread: layer 1 alone does not tell them apart (see the day-zero summary).
 
 The cap is an estimate on the client and can be overshot (**docs**); a run that hits it ends
 with `error_max_budget_usd` and is reported as over budget.
