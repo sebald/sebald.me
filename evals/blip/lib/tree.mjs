@@ -134,7 +134,20 @@ const declarationsOf = (attr, source) => {
   return expression.properties
     .map(property => {
       if (property.type !== 'Property') return text(property);
-      const value = text(property.value).trim();
+      // `'absolute' as const`, `(0)`: look through the wrappers; one quote style
+      let node = property.value;
+      while (
+        [
+          'TSAsExpression',
+          'TSSatisfiesExpression',
+          'ParenthesizedExpression',
+        ].includes(node.type)
+      )
+        node = node.expression;
+      const value = text(node)
+        .trim()
+        .replace(/^"(.*)"$/, "'$1'")
+        .replace(/^'0'$/, '0');
       return `${keyOf(property)}:${KEYWORD.test(value) ? value : '*'}`;
     })
     .sort();

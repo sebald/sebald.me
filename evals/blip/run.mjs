@@ -542,10 +542,14 @@ const canary = async record => {
   if (tainted.length)
     fail(`Canary failed: ${tainted.join('; ')}. Nothing was run.`, 3);
   // Built-in plugins, skills and agents may differ between runs and invocations
-  // (the check lets them through), so only another Claude Code stops a label
-  if (record.claudeVersion && record.claudeVersion !== claudeVersion)
+  // (the check lets them through), so only another Claude Code (major or minor version) stops a label
+  const minor = v => /\d+\.\d+/.exec(v ?? '')?.[0];
+  if (
+    record.claudeVersion &&
+    minor(record.claudeVersion) !== minor(claudeVersion)
+  )
     fail(
-      `Claude Code is ${claudeVersion} now, label "${opts.label}" began on ${record.claudeVersion}. Use a new label.`,
+      `Claude Code is ${claudeVersion} now, label "${opts.label}" began on ${record.claudeVersion} (another major or minor version). Use a new label.`,
       3,
     );
   record.baseline = baseline;

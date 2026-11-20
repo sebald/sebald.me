@@ -545,6 +545,7 @@ describe('the tree', () => {
       `export const A = () => (
         <div style={{ position: 'absolute',  inset: 0, 'z-index': 1, ...extra, padding: \`calc(\${a}px + var(--bui-bar))\` }} />
       );
+      export const D = () => <div style={{ position: "absolute" as const, inset: '0', gap }} />;
       export const B = () => <div style={frame} />;
       export const C = () => <div style={{}} />;`,
     );
@@ -558,10 +559,16 @@ describe('the tree', () => {
         '...extra',
       ].sort(),
     );
+    // double quotes, `as const` and '0' are the same as their plain forms
+    assert.deepEqual(elements[1].styleProp.declarations, [
+      'gap:*',
+      'inset:0',
+      "position:'absolute'",
+    ]);
     // not an object literal, or empty: counted as a style, nothing to compare
-    assert.equal(elements[1].style, true);
-    assert.equal(elements[1].styleProp, null);
+    assert.equal(elements[2].style, true);
     assert.equal(elements[2].styleProp, null);
+    assert.equal(elements[3].styleProp, null);
   });
 
   it('orders configurations as they add to one another', () => {

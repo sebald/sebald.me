@@ -65,7 +65,7 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
   // Hand-written files beside this one, which a new collect leaves alone
   if (writeups.length)
     out.push(
-      `Write-ups: ${writeups.map(name => `[\`${name}\`](${name})`).join(', ')}.`,
+      `Write-ups: ${writeups.map(name => `[\`${name}\`](${encodeURI(name)})`).join(', ')}.`,
     );
 
   out.push('## Runs');

@@ -229,7 +229,7 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 Code itself loaded in the canary's `init`; a record, not a check) and `canary`. A
 label is built from one tarball for good: rerunning it reuses that file, and
 `--tarball` with another hash is refused. It is also built on one Claude Code:
-another `claudeVersion` is refused.
+another major or minor `claudeVersion` is refused.
 
 ### Skipping and resuming
 
@@ -247,8 +247,9 @@ finish), and the exit code is 3.
   heading of `~/.claude/CLAUDE.md` (read at run time; with no such file it only
   reads `init`). If the answer is yes, the `init` event's `apiKeySource` is not
   `none`, or anything it loaded comes from `~/.claude` or an MCP server, nothing
-  runs. Its `init` becomes the label's `baseline`; a later invocation whose
-  baseline differs (another Claude Code) is refused. On Claude Code 2.1.329
+  runs. Its `init` is recorded as the label's `baseline` (informational,
+  overwritten by each canary); a later invocation on another major or minor Claude Code version than
+  the label began on is refused. On Claude Code 2.1.329
   `--setting-sources project` alone does **not** keep that file out (the canary
   said yes), so every run's and the canary's `.claude/settings.json` also lists
   `claudeMdExcludes` for `~/.claude/CLAUDE.md`, `~/.claude/rules/**`, `~/CLAUDE.md`
