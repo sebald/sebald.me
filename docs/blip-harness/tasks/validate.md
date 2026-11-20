@@ -46,3 +46,6 @@ split of raw tags and classes (**Q11**).
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+- From `rule-format`: an unknown or unused `check` only warns in `checkSidecars` while no checks
+  exist. Once `cli/validate/checks/` does, make both build errors.

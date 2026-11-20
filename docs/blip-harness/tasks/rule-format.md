@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: F
 depends: [cli-lookup]
 pr: https://github.com/sebald/sebald.me/pull/200
@@ -31,7 +31,7 @@ yet, and the build only warns until `validate` lands.
 - [x] `blip rules dialog` lists them; `blip docs C-DIALOG-1` prints the rule, the page's
       reasoning and the fix
 - [x] An `[open]` rule is in `rules.json` and absent from `blip rules`
-- [ ] I have reviewed the Dialog sidecar (yours; left open)
+- [x] I have reviewed the Dialog sidecar (approved as written, 2026-11-20)
 
 **Depends on.** [`cli-lookup`](cli-lookup.md).
 
