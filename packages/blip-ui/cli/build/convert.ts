@@ -9,7 +9,10 @@ const STORYBOOK_LINK =
   /\[([^\]]+)\]\(\?path=\/docs\/([a-z0-9-]+?)--[a-z0-9-]+\)/g;
 
 /** The blocks that exist only for Storybook, each on a line of its own */
-const BLOCK = /^<(?:Meta|Canvas|Controls)\b[^>]*\/>\s*$/;
+const BLOCK = /^<(?:Meta|Canvas)\b[^>]*\/>\s*$/;
+
+/** Storybook's props table, which the build replaces with the real one */
+const CONTROLS = /^<Controls\b[^>]*\/>\s*$/;
 
 /** The page a Storybook slug (`components-iconbutton`) points at, if it is shipped */
 export const pageForSlug = (slug: string, ids: readonly string[]) => {
@@ -22,10 +25,17 @@ export const pageForSlug = (slug: string, ids: readonly string[]) => {
  * become the command that opens its page (or just its text, when the page is
  * not shipped).
  */
-export const mdxToMarkdown = (mdx: string, ids: readonly string[] = []) => {
+export const mdxToMarkdown = (
+  mdx: string,
+  ids: readonly string[] = [],
+  /** What `<Controls />` becomes (the props table), or goes before the first `##` of a page without one */
+  controls = '',
+) => {
   const out: string[] = [];
   let fence: string | null = null;
   let skipping = false;
+  let placed = false;
+  let firstSection = -1;
 
   for (const line of mdx.replaceAll('\r\n', '\n').split('\n')) {
     const marker = /^\s*(`{3,}|~{3,})/.exec(line)?.[1];
@@ -50,6 +60,12 @@ export const mdxToMarkdown = (mdx: string, ids: readonly string[] = []) => {
       continue;
     }
     if (BLOCK.test(line)) continue;
+    if (CONTROLS.test(line)) {
+      if (controls && !placed) out.push(controls);
+      placed = true;
+      continue;
+    }
+    if (/^##\s/.test(line) && firstSection < 0) firstSection = out.length;
 
     out.push(
       line.replace(STORYBOOK_LINK, (_, text: string, slug: string) => {
@@ -57,6 +73,11 @@ export const mdxToMarkdown = (mdx: string, ids: readonly string[] = []) => {
         return id ? `${text} (\`blip docs ${id}\`)` : text;
       }),
     );
+  }
+
+  // A page with no `<Controls />` still gets its table, before its first section
+  if (controls && !placed) {
+    out.splice(firstSection < 0 ? out.length : firstSection, 0, controls, '');
   }
 
   // Dropping a block leaves its blank lines behind

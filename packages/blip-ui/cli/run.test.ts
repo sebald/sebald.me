@@ -28,22 +28,29 @@ const setup = () => {
     );
   }
   writeFileSync(
+    join(docsDir, 'pages', 'button.md'),
+    '# Button\n\nAn action.\n\n## Props\n\n| Prop |\n\n## Usage\n\n- Do\n',
+  );
+  writeFileSync(
     join(docsDir, 'manifest.json'),
     JSON.stringify({
       version: '0.0.0',
-      pages: pages.map(([id, title, summary]) => ({
-        id,
-        kind: 'component',
-        title,
-        summary,
-        file: `pages/${id}.md`,
-        exports: [title],
-        rules: [],
-        examples: [],
-      })),
+      pages: [...pages, ['button', 'Button', 'An action.'] as const].map(
+        ([id, title, summary]) => ({
+          id,
+          kind: 'component',
+          title,
+          summary,
+          file: `pages/${id}.md`,
+          exports: [title],
+          rules: [],
+          examples: [],
+        }),
+      ),
       exports: {
         Confirm: { page: 'confirm', kind: 'component' },
         Dialog: { page: 'dialog', kind: 'component' },
+        Button: { page: 'button', kind: 'component' },
       },
       examples: [],
     }),
@@ -87,6 +94,29 @@ describe('run', () => {
       '# Dialog\n\nA window over the stage.',
     );
     assert.equal(call(['docs', 'Dialog']).out, call(['docs', 'dialog']).out);
+  });
+
+  it('prints one section of a page with --section, by export name too', () => {
+    assert.equal(
+      call(['docs', 'button', '--section', 'props']).out,
+      '## Props\n\n| Prop |',
+    );
+    assert.equal(
+      call(['docs', 'Button', '--section=usage']).out,
+      '## Usage\n\n- Do',
+    );
+    const json = JSON.parse(
+      call(['docs', 'button', '--section', 'props', '--json']).out,
+    ) as { section: string; markdown: string };
+    assert.equal(json.section, 'props');
+    assert.match(json.markdown, /^## Props/);
+  });
+
+  it('exits 2 for a section the page lacks and lists the ones it has', () => {
+    const { code, err } = call(['docs', 'button', '--section', 'anatomy']);
+    assert.equal(code, 2);
+    assert.match(err, /no "anatomy" section.*Props, Usage/);
+    assert.equal(call(['docs', 'button', '--section']).code, 2);
   });
 
   it('exits 2 for an unknown page and names the closest', () => {

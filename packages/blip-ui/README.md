@@ -50,4 +50,5 @@ the same names on the stage:
 
 The package ships its docs for agents and humans alike: `pnpm exec blip` lists
 the pages, `pnpm exec blip search <words>` finds one and
-`pnpm exec blip docs <page>` prints it as markdown.
+`pnpm exec blip docs <page>` prints it as markdown (`--section props` prints only its
+props table: every prop's type, values, default and whether it is required).

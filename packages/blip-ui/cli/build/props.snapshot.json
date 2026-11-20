@@ -1,0 +1,195 @@
+{
+  "Button": {
+    "htmlProps": "ButtonHTMLAttributes<HTMLButtonElement>",
+    "props": [
+      {
+        "name": "variant",
+        "type": "'primary' | 'secondary' | 'destructive'",
+        "values": [
+          "primary",
+          "secondary",
+          "destructive"
+        ],
+        "default": "primary",
+        "required": false,
+        "description": "The action's weight: `primary` for the one action a screen is for, `secondary` beside it, `destructive` for what can't be undone"
+      },
+      {
+        "name": "size",
+        "type": "'default' | 'small'",
+        "values": [
+          "default",
+          "small"
+        ],
+        "default": "default",
+        "required": false,
+        "description": "`default` is a thumb's height (44 CSS pixels); `small` only where a pointer aims"
+      }
+    ]
+  },
+  "Dialog": {
+    "htmlProps": null,
+    "props": [
+      {
+        "name": "open",
+        "type": "boolean",
+        "values": [],
+        "default": null,
+        "required": false,
+        "description": "Whether it is open (controlled)"
+      },
+      {
+        "name": "defaultOpen",
+        "type": "boolean",
+        "values": [],
+        "default": "false",
+        "required": false,
+        "description": "Whether it is open at first (uncontrolled)"
+      },
+      {
+        "name": "onOpenChange",
+        "type": "(open: boolean) => void",
+        "values": [],
+        "default": null,
+        "required": false,
+        "description": "It opens or closes: Escape, a tap outside, or a part asking"
+      },
+      {
+        "name": "role",
+        "type": "'dialog' | 'alertdialog'",
+        "values": [
+          "dialog",
+          "alertdialog"
+        ],
+        "default": "dialog",
+        "required": false,
+        "description": "`alertdialog` asks before something that cannot be undone: a tap outside does not close it, only Escape or an answer does"
+      },
+      {
+        "name": "size",
+        "type": "'default' | 'large'",
+        "values": [
+          "default",
+          "large"
+        ],
+        "default": "default",
+        "required": false,
+        "description": "How much of the stage it takes"
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "values": [],
+        "default": null,
+        "required": true,
+        "description": "Its parts: a `Title` (it names the dialog), `Content`, `Actions`, a `Legend`"
+      },
+      {
+        "name": "className",
+        "type": "string",
+        "values": [],
+        "default": null,
+        "required": false,
+        "description": ""
+      }
+    ]
+  },
+  "IconButton": {
+    "htmlProps": "Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'aria-label' | 'slot'>",
+    "props": [
+      {
+        "name": "slot",
+        "type": "'leave' | 'system'",
+        "values": [
+          "leave",
+          "system"
+        ],
+        "default": "system",
+        "required": false,
+        "description": "What it is, for `Controls` to place it: `leave` (Back, Pause) goes to the start, `system` (the sound, fullscreen) to the end"
+      },
+      {
+        "name": "aria-label",
+        "type": "string",
+        "values": [],
+        "default": null,
+        "required": true,
+        "description": "What the button does, for assistive technology (and a hint of its key)"
+      },
+      {
+        "name": "icon",
+        "type": "IconName",
+        "values": [
+          "back",
+          "exitFullscreen",
+          "fullscreen",
+          "pause",
+          "soundOff",
+          "soundOn"
+        ],
+        "default": null,
+        "required": true,
+        "description": "Which icon, by name"
+      },
+      {
+        "name": "label",
+        "type": "ReactNode",
+        "values": [],
+        "default": null,
+        "required": false,
+        "description": "Text beside the icon on the tall stage's bar; in a corner the icon stands alone and the `aria-label` names it"
+      }
+    ]
+  },
+  "Meter": {
+    "htmlProps": "Omit<HTMLAttributes<HTMLSpanElement>, 'children'>",
+    "props": [
+      {
+        "name": "value",
+        "type": "number",
+        "values": [],
+        "default": null,
+        "required": true,
+        "description": "Cells lit; whole cells only, clamped to `0..max`"
+      },
+      {
+        "name": "max",
+        "type": "number",
+        "values": [],
+        "default": null,
+        "required": true,
+        "description": "Cells in all"
+      },
+      {
+        "name": "variant",
+        "type": "'primary' | 'secondary'",
+        "values": [
+          "primary",
+          "secondary"
+        ],
+        "default": "primary",
+        "required": false,
+        "description": "The lit cells' colour ramp"
+      },
+      {
+        "name": "size",
+        "type": "'default' | 'compact'",
+        "values": [
+          "default",
+          "compact"
+        ],
+        "default": "default",
+        "required": false,
+        "description": "The cells' size: `compact` fits a long pool where room is short"
+      },
+      {
+        "name": "blink",
+        "type": "boolean",
+        "values": [],
+        "default": "false",
+        "required": false,
+        "description": "Blink the lit cells, between their colour and its light, at the arcade rhythm: a full pool asking to be used. Steady under reduced motion"
+      }
+    ]
+  }
+}

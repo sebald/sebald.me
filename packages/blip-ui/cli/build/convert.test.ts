@@ -30,6 +30,29 @@ import { Dialog } from '@sebald/blip-ui';
 - **Do** use it.
 `;
 
+describe('mdxToMarkdown with a props table', () => {
+  const table = '## Props\n\n| Prop |';
+
+  it('puts the table where <Controls /> was, not twice', () => {
+    const markdown = mdxToMarkdown(PAGE, [], table);
+    assert.equal(markdown.split('## Props').length, 2);
+    assert.ok(markdown.indexOf('## Props') < markdown.indexOf('## Usage'));
+    assert.ok(markdown.indexOf('## Props') < markdown.indexOf('```tsx'));
+    assert.match(markdown, /<Controls of=\{nothing\} \/>/);
+  });
+
+  it('puts it before the first section of a page with no <Controls />', () => {
+    const page = PAGE.replace('<Controls of={DialogStories.Default} />\n', '');
+    const markdown = mdxToMarkdown(page, [], table);
+    assert.ok(markdown.indexOf('## Props') < markdown.indexOf('## Usage'));
+    assert.ok(markdown.indexOf('```tsx') < markdown.indexOf('## Props'));
+  });
+
+  it('adds nothing when there is no table', () => {
+    assert.doesNotMatch(mdxToMarkdown(PAGE), /## Props/);
+  });
+});
+
 describe('mdxToMarkdown', () => {
   const markdown = mdxToMarkdown(PAGE);
 
