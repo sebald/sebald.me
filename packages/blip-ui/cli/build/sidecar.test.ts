@@ -195,7 +195,15 @@ describe('the sidecars of src', () => {
 
   it('hold to the build rules (only unwritten checks warn)', () => {
     const { errors, warnings } = checkSidecars(sidecars, {
-      pages: new Set(['dialog', 'speech-bubble', 'introduction']),
+      pages: new Set([
+        'dialog',
+        'speech-bubble',
+        'introduction',
+        // Pages the sidecars name in a when-not, and the pages of newer sidecars
+        'picker',
+        'setting',
+        'text-field',
+      ]),
       checks: loadCheckNames(root),
     });
     assert.deepEqual(errors, []);

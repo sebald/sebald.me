@@ -1,0 +1,30 @@
+page: text-field
+rules:
+  - id: C-TEXT-FIELD-1
+    text: Give every TextField a label, as its children.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
+  - id: C-TEXT-FIELD-2
+    text: Set maxLength on a field whose text is stored or drawn in a fixed space, such as a name.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
+  - id: C-TEXT-FIELD-3
+    text: Say what is wrong with the text in the error prop, in words, and never by the red frame alone.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: C-TEXT-FIELD-4
+    text: Put a legend with the field's keys, Enter and Esc, on the screen it is in.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+  # Open: the source only says text entry must work with a controller; whether a
+  # save is named at all is Blip's own call. Moved here from the saves
+  # candidates (P-SAVES-107) because a sidecar's ids carry its own page's name.
+  - id: P-TEXT-FIELD-1
+    text: Don't ask for a name to save.
+    markers: [open]
+    source: https://partner.steamgames.com/doc/steamdeck/compat
+when-not:
+  - text: A choice among a few known options is a Picker, not a field to type in.
+    use: picker
+  - text: A value that steps between set values is a PickerSetting, not a field.
+    use: setting
