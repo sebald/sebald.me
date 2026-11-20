@@ -82,6 +82,9 @@ const PART_VARS = [
   '(--t-ring)',
   '(--t-over)',
   '(--t-inline)',
+  // The screen's: the bottom clears the bar, the top the title
+  '(--s-bottom)',
+  '(--s-top)',
 ];
 
 const spacingOk = (value: string) => {

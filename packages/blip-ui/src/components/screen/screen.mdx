@@ -1,0 +1,78 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as ScreenStories from './screen.stories';
+
+<Meta of={ScreenStories} />
+
+# Screen
+
+The frame of a full screen: a menu, a shop, a list of saves, a title card.
+It fills the stage, keeps clear of the bar of controls on the tall stage,
+and places what is in it as a column with the stage's spacing, so a screen
+has no `position`, `inset` or `--bui-bar` of its own.
+
+<Canvas of={ScreenStories.Default} />
+<Controls of={ScreenStories.Default} />
+
+```tsx
+<Stage>
+  <Screen>
+    <ScreenTitle blurb="Spend it before the sprint ends.">Shop</ScreenTitle>
+    <Window>…</Window>
+  </Screen>
+</Stage>
+```
+
+## Anatomy
+
+1. **The frame**, the stage's whole layer, padded by 6 `--bui-px`
+2. **The bottom**, which also clears the bar of controls (`--bui-bar`), 0 on
+   the wide stage
+3. **The title**, optional: a `ScreenTitle` as the first child is the
+   column's first row, 8 stage pixels from the top as it always was, and
+   the rows under it follow whatever its height (a blurb, the tall stage's
+   larger letters)
+4. **The column**, what else is in it, one under the other, 4 `--bui-px`
+   apart; a `Window` takes the full width
+
+<Canvas of={ScreenStories.Overview} />
+
+## Usage
+
+- **Do** make a screen's top-level box a `Screen`, the first child of the
+  `Stage`, and put the rest in it.
+- **Do** leave out the padding, the gap and the top clearance for the title:
+  the frame has them. A one-off placement is a `className` on the part, not
+  on the frame.
+- **Do** use `variant="centered"` for one group in the middle, a title card
+  or a message.
+- **Don't** write `position: absolute`, `inset` or `--bui-bar` on a screen's
+  box. The frame is the only box that knows the bar.
+- **Don't** put a `Screen` inside a `Window` or another `Screen`.
+- **Don't** put a `Dialog` in a `Screen`'s column to cover the stage; it
+  covers the stage wherever it is, and the frame is not a place for it to
+  sit.
+
+## Variants
+
+`default` is a column from the top down. `centered` puts one group in the
+middle of the stage and its text in the middle of the group, with 8
+`--bui-px` around it. It is the same frame, so a screen clears the bar either
+way. `Stage.Center` stays as it is, for a group that is not a screen's frame;
+a screen starts with `Screen`.
+
+<Canvas of={ScreenStories.Shop} />
+<Canvas of={ScreenStories.TitleCard} />
+
+<Rules for="screen" />
+
+## Input
+
+None: the screen is a box. Keys belong to what is in it (`Picker`, `useKeys`).
+
+## Accessibility
+
+- It renders a plain `div` with no role; the stage is the region and its
+  `ScreenTitle` is the heading
+- Reading order is the column's order, which is why the title is first
