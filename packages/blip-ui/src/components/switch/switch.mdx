@@ -7,7 +7,8 @@ import * as SwitchStories from './switch.stories';
 
 # Switch
 
-A toggle for one option that is on or off: Music, Hints, Screen shake. It
+A toggle switch, the checkbox of a menu: one option that is on or off
+(Music, Hints, Screen shake). It
 shows its name, a track with a square at one end, and the state in words
 (On, Off), and a tap, Left, Right, Enter or Space flips it. Built on Base
 UI's Switch (the switch role, `aria-checked`, the form value).
@@ -21,10 +22,10 @@ UI's Switch (the switch role, `aria-checked`, the form value).
 </Switch>
 ```
 
-## Why its own component
+## A toggle of its own, not a Setting
 
 `Setting` shows a value between two arrows and has no keys of its own; in a
-Picker, `PickerSetting` takes the arrows. A switch is different behaviour:
+Picker, `PickerSetting` takes the arrows. A toggle switch is different behaviour:
 it is a control you can focus (the `switch` role with `aria-checked`), it
 flips on Enter, Space and a tap as well as the arrows, and it holds a form
 value. That is semantics and keys no `Setting` variant has, and it is the
@@ -44,7 +45,7 @@ stays a `PickerSetting`.
 
 ## Usage
 
-The state is data on the root (`data-checked`), which the styles read, so a
+Every toggle works the same: the state is data on the root (`data-checked`), which the styles read, so a
 switch controlled by the caller (`checked`) and one that keeps its own
 (`defaultChecked`) look the same. The thumb moves with a short transition
 and snaps under reduced motion. A change plays the `move` sound through
