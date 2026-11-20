@@ -41,7 +41,7 @@ const table = (header, rows) =>
 
 const list = items => items.map(item => `- ${item}`).join('\n');
 
-export const writeSummary = ({ results, comparison }) => {
+export const writeSummary = ({ results, comparison, writeups = [] }) => {
   const {
     label,
     collector,
@@ -61,6 +61,12 @@ export const writeSummary = ({ results, comparison }) => {
       `lowest and highest of the repetitions in brackets; a share is runs of the runs it ` +
       `applies to. Layer 1 only: no \`validate\`, rendered or judged measures yet.`,
   );
+
+  // Hand-written files beside this one, which a new collect leaves alone
+  if (writeups.length)
+    out.push(
+      `Write-ups: ${writeups.map(name => `[\`${name}\`](${name})`).join(', ')}.`,
+    );
 
   out.push('## Runs');
   out.push(
@@ -149,18 +155,20 @@ export const writeSummary = ({ results, comparison }) => {
 
   out.push('## Candidate variants, sizes or components');
   out.push(
-    'Overrides written independently in at least 3 runs across at least 2 tasks (Q11), taken from the lines the agent wrote. Placing classes are left out.',
+    'Overrides written independently in at least 3 runs across at least 2 tasks (Q11), taken from the lines the agent wrote: the restyling classes of a `className` (placing classes are left out) and the whole of an inline `style` object, keys sorted, a tuned or computed value as `*` (`gap:*`).',
   );
   if (candidates.length === 0) out.push('None.');
   else {
     out.push(
       table(
-        ['on', 'classes', 'runs', 'tasks', 'lines'],
+        ['on', 'classes or style', 'runs', 'tasks', 'lines'],
         candidates.map(c => [
           `\`${c.element}\`${c.kind === 'raw' ? ' (raw tag)' : ''}`,
-          c.classes.length
-            ? c.classes.map(x => `\`${x}\``).join(' ')
-            : '(none)',
+          c.style?.length
+            ? `style: ${c.style.map(x => `\`${x.replace(/\|/g, '\\|')}\``).join(' ')}`
+            : c.classes.length
+              ? c.classes.map(x => `\`${x}\``).join(' ')
+              : '(none)',
           String(c.runs.length),
           c.tasks.join(', '),
           String(c.lines.length),

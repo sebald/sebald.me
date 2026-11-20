@@ -226,9 +226,10 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 
 `label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
 `version`, `commit`, `dirty`), `baseline` (the plugins, skills and agents Claude
-Code itself loads, from the canary's `init`) and `canary`. A label is built from
-one tarball for good: rerunning it reuses that file, and `--tarball` with another
-hash is refused.
+Code itself loaded in the canary's `init`; a record, not a check) and `canary`. A
+label is built from one tarball for good: rerunning it reuses that file, and
+`--tarball` with another hash is refused. It is also built on one Claude Code:
+another `claudeVersion` is refused.
 
 ### Skipping and resuming
 
@@ -254,18 +255,25 @@ finish), and the exit code is 3.
   and `~/.cache/CLAUDE.md` (the home directory written in at run time). A run's `settings.json` is therefore not
   "permissions only" as spec 3.3 says.
 - **The `init` event** of each run, as it arrives: `apiKeySource` must be
-  `none`, and every plugin, skill and agent must be one the canary's `init` listed
-  (Claude Code's own, the same everywhere) or the configuration's (`blip-ui`'s
-  plugin from `plan` on), none may come from `~/.claude`, the tools must be
-  exactly the eight of the command line (`Agent` shows as `Task`) and no MCP
-  server may be loaded. On a problem the
+  `none`, nothing may come from `~/.claude`, the tools must be exactly the eight of
+  the command line (`Agent` shows as `Task`) and no MCP server may be loaded.
+  Built-in plugins, skills and agents are allowed whatever their names (Claude
+  Code adds one every few releases; `cc-plugin-easel` failed 2 of 64 runs of day
+  zero when a list of names was checked). A plugin says where it comes from
+  (`path: "builtin"`, `source: "<name>@builtin"`), kept in `meta.init` as
+  `builtinPlugins`; a plugin that is neither built in nor `blip-ui` in a
+  configuration that has it fails. Skills and agents are bare names in the event, so
+  they are compared by name, at run time, with what lives in `~/.claude` (the
+  plugins in `installed_plugins.json`, `skills/`, `agents/`): a match fails the run On a problem the
   child is killed at once and the run is `failed` with the reasons in
   `initProblems`.
 
 ## Collecting
 
 `node evals/blip/collect.mjs --label <label>` reads a label's run directories and writes
-`results/<date>-<label>/results.json` and `summary.md`, nothing else in the repo. It never reruns an
+`results/<date>-<label>/results.json` and `summary.md`, nothing else in the repo; any other `*.md`
+in that folder is a hand-written write-up, left alone, and `summary.md` links to it ("Write-ups")
+so a re-collect doesn't lose it. It never reruns an
 agent and never writes into a run (`tsc` and the build only add `dist/` there). Options:
 `--cache <dir>` (default `~/.cache/blip-eval`), `--out <dir>` (default `evals/blip/results`),
 `--date`, `--skip-build` (no `tsc`, no build), `--against <results dir>`. Its tests
@@ -319,7 +327,11 @@ cache from the fixtures to try it by hand.
   only when its line (the opening tag's, the attribute's) is added or changed since the run's root
   commit, committed or not, and every line of a file the agent added
 - Overrides that recur (Q11): per changed `className` on a Blip component or a raw tag, the
-  element and its sorted restyling classes (variants kept); a bare raw control has none. A group
+  element and its sorted restyling classes (variants kept); a bare raw control has none. Per
+  changed inline `style` object literal, the element and its declarations, sorted by key; a value
+  that names something (`'absolute'`, `0`) as written, a tuned or computed one (`'calc(var(--px) * 4)'`,
+  `8`, `tall ? 'column' : 'row'`) as `*`, since the same frame is never written with the same gap
+  twice (day zero's 21 frames had 18 different ones); a spread as written; `style={frame}` has none to compare. A group
   in at least 3 runs of one label across at least 2 tasks is a candidate. Taken from changed
   lines whatever the scope, so a file the agent never touched can't make one
 

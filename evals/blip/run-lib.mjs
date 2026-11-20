@@ -174,16 +174,28 @@ export const summariseInit = event => ({
   apiKeySource: event.apiKeySource ?? null,
   model: event.model ?? null,
   plugins: names(event.plugins),
+  // Plugins say where they come from (`path: "builtin"`, `source:
+  // "<name>@builtin"`); skills and agents are bare names
+  builtinPlugins: (event.plugins ?? [])
+    .filter(
+      p => p?.path === 'builtin' || (p?.source ?? '').endsWith('@builtin'),
+    )
+    .map(p => p.name),
   skills: names(event.skills),
   agents: names(event.agents),
   tools: names(event.tools),
   mcpServers: names(event.mcp_servers),
 });
 
-// The init check (spec 3.3 step 5). `baseline` is what the canary's init
-// listed (Claude Code's own plugins, skills and agents, the same everywhere);
-// `user` is what lives in ~/.claude. Returns the problems, empty when fine.
-export const checkInit = (init, { config, baseline, user }) => {
+// The init check (spec 3.3 step 5). Only what comes from ~/.claude fails a
+// run (`user`: the names found there at run time, not a fixed list), so a
+// built-in plugin, skill or agent is fine whatever its name: Claude Code adds
+// some every few releases. A plugin the event marks as built in
+// (`builtinPlugins`) is never checked; one that is neither built in, nor the
+// configuration's, nor from ~/.claude is still refused. Skills and agents have
+// no origin in the event, so they are compared with `user` by name.
+// Returns the problems, empty when fine.
+export const checkInit = (init, { config, user }) => {
   const problems = [];
   if (init.apiKeySource !== 'none')
     problems.push(
@@ -196,25 +208,23 @@ export const checkInit = (init, { config, baseline, user }) => {
     problems.push(`tools are ${init.tools.join(',')}, not ${want.join(',')}`);
   if (init.mcpServers?.length)
     problems.push(`MCP servers loaded: ${init.mcpServers.join(',')}`);
+  const builtin = init.builtinPlugins ?? null;
   for (const [kind, loaded] of [
     ['plugin', init.plugins],
     ['skill', init.skills],
     ['agent', init.agents],
   ]) {
-    const allowed = new Set(baseline[`${kind}s`] ?? []);
-    for (const name of loaded) {
+    for (const name of loaded ?? []) {
+      if (kind === 'plugin' && builtin?.includes(name)) continue;
       if (
         [...(user[`${kind}s`] ?? []), ...(user.plugins ?? [])].some(
           u => name === u || name.startsWith(`${u}:`),
         )
       )
         problems.push(`${kind} "${name}" comes from ~/.claude`);
-      else if (
-        !allowed.has(name) &&
-        !(plugin && (name === plugin || name.startsWith(`${plugin}:`)))
-      )
+      else if (kind === 'plugin' && builtin && !(plugin && name === plugin))
         problems.push(
-          `${kind} "${name}" is not one the configuration should load`,
+          `plugin "${name}" is neither built in nor the configuration's`,
         );
     }
   }

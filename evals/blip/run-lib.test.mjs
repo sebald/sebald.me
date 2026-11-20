@@ -10,9 +10,9 @@ import {
   isDone,
   isUsageLimit,
   probeLine,
+  summariseInit,
 } from './run-lib.mjs';
 
-const baseline = { plugins: [], skills: ['simplify'], agents: ['Explore'] };
 const user = { plugins: ['productivity'], skills: ['brain'], agents: ['mine'] };
 const init = (extra = {}) => ({
   apiKeySource: 'none',
@@ -73,7 +73,7 @@ test('CLAUDE.md names the command from cli on, not before', () => {
 });
 
 test('init check', () => {
-  const ok = { config: 'cli', baseline, user };
+  const ok = { config: 'cli', user };
   assert.deepEqual(checkInit(init(), ok), []);
   assert.match(
     checkInit(init({ apiKeySource: 'ANTHROPIC_API_KEY' }), ok)[0],
@@ -87,14 +87,65 @@ test('init check', () => {
     checkInit(init({ skills: ['productivity:start'] }), ok)[0],
     /from ~\/\.claude/,
   );
+  // built in, whatever the name: not a baseline list
+  assert.deepEqual(
+    checkInit(init({ agents: ['other'], skills: ['brand-new'] }), ok),
+    [],
+  );
+});
+
+test('init check: plugins with an origin (the init event) and without', () => {
+  const ok = { config: 'cli', user };
+  const event = {
+    ...init(),
+    plugins: ['cc-plugin-easel', 'productivity', 'stray'],
+    builtinPlugins: ['cc-plugin-easel'],
+  };
+  // a sixth built-in plugin is fine; a user plugin and a stray one are not
+  assert.deepEqual(
+    checkInit({ ...event, plugins: ['cc-plugin-easel'] }, ok),
+    [],
+  );
+  const problems = checkInit(event, ok);
+  assert.equal(problems.length, 2);
+  assert.match(problems[0], /plugin "productivity" comes from ~\/\.claude/);
+  assert.match(problems[1], /plugin "stray" is neither built in/);
+  // a user plugin is refused even when the event calls it built in's neighbour
   assert.match(
-    checkInit(init({ agents: ['other'] }), ok)[0],
-    /not one the configuration/,
+    checkInit(init({ plugins: ['productivity'] }), ok)[0],
+    /from ~\/\.claude/,
+  );
+  // without origins (names only) a new plugin passes unless it is the user's
+  assert.deepEqual(checkInit(init({ plugins: ['cc-plugin-easel'] }), ok), []);
+  // the configuration's own plugin is allowed from `plan` on
+  assert.deepEqual(
+    checkInit(
+      { ...event, plugins: ['blip-ui'], builtinPlugins: [] },
+      { config: 'plan', user },
+    ),
+    [],
   );
   assert.match(
-    checkInit(init({ plugins: ['blip-ui'] }), ok)[0],
+    checkInit(
+      { ...event, plugins: ['blip-ui'], builtinPlugins: [] },
+      { config: 'cli', user },
+    )[0],
     /plugin "blip-ui"/,
   );
+});
+
+test('summariseInit tells built-in plugins from the rest', () => {
+  const s = summariseInit({
+    apiKeySource: 'none',
+    plugins: [
+      { name: 'a', path: 'builtin', source: 'a@builtin' },
+      { name: 'b', path: '/x/b', source: 'b@market' },
+      { name: 'c', source: 'c@builtin' },
+    ],
+    skills: ['s'],
+  });
+  assert.deepEqual(s.plugins, ['a', 'b', 'c']);
+  assert.deepEqual(s.builtinPlugins, ['a', 'c']);
 });
 
 test('usage-limit recognition', () => {
@@ -150,7 +201,7 @@ test('what a rerun skips', () => {
 });
 
 test('init check: tools and MCP servers', () => {
-  const ok = { config: 'cli', baseline, user };
+  const ok = { config: 'cli', user };
   const tools = [
     'Task',
     'Bash',

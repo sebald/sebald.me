@@ -45,11 +45,19 @@
       "placing": 0,
       "restyling": 0
     },
-    "inlineStyles": 0,
+    "inlineStyles": 1,
     "imports": {
       "fromBlip": 2,
       "invented": []
     },
-    "overrides": []
+    "overrides": [
+      {
+        "key": "blip:Button|style:color:'red'",
+        "style": [
+          "color:'red'"
+        ],
+        "line": 5
+      }
+    ]
   }
 }
