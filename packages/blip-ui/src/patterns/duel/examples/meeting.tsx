@@ -21,6 +21,7 @@ export function Meeting() {
       >
         Can we circle back on that after lunch?
       </SpeechBubble>
+      {/* A frozen moment: `paused`, fixed time and meter values. Drive them from the duel's state */}
       <Timer
         duration={10000}
         remaining={4000}
