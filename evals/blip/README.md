@@ -162,8 +162,7 @@ has `ANTHROPIC_API_KEY` set). Everything else is dropped: every key and token,
 It adds `PWD` (the run's folder) and `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. A tool
 that needs another variable fails visibly; add it to the list. `BLIP_EVAL_CACHE` moves the cache (never
 into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
-(a test stand-in). `node --test evals/blip` runs the pure helpers' tests
-(`run-lib.mjs`); it is not part of `pnpm test`.
+(a test stand-in). The pure helpers' tests (`run-lib.test.mjs`) run in `pnpm test`.
 
 ### What it leaves in the cache (what `collect.mjs` reads)
 
