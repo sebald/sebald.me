@@ -37,7 +37,7 @@ jobs:
         run: pnpm test
 
   # A pull request that changes a package's code (Blip UI, Pushback) adds
-  # a changeset; which files count is `changedFilePatterns` in
+  # a changeset naming it; which files count is `changedFilePatterns` in
   # `.changeset/config.json`. `pnpm changeset --empty` for none.
   changeset:
     runs-on: ubuntu-latest
@@ -60,8 +60,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check for a changeset
-        run: pnpm changeset status --since=origin/${{ github.base_ref }}
+      - name: Check the changesets
+        run: pnpm changeset:check origin/${{ github.base_ref }}
 
   # Every published note needs a narration that matches its current text.
   # Only needs Python, so it runs next to the tests without `pnpm install`
