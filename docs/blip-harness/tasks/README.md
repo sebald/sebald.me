@@ -50,20 +50,38 @@ user to accept, change or cut; each has `step: D+` and no place in the table abo
 | [`picker-item-parts`](picker-item-parts.md) | Price slot, save slot summary, done mark, objective reminder (1 task each) | a two-line item built by hand in 6 of 6 `quests`, 6 of 6 `saves` |
 | [`time-readout`](time-readout.md)           | Time and date readout (1)                                                  | two formatters in 6 of 6 `saves`                                 |
 
+## Common components
+
+Components almost every design system has and Blip lacks, drafted so the kit is closer to a real
+one and an agent has more to choose from. Also **proposals**; none of the six eval tasks needs them,
+so a new baseline is taken on the tarball that ships them:
+
+| Task                              | What it adds                                       | Step                                 |
+| --------------------------------- | -------------------------------------------------- | ------------------------------------ |
+| [`text-field`](text-field.md)     | A one-line text input (naming a hero or a save)    | D+                                   |
+| [`switch`](switch.md)             | On and off; first decides `Setting` variant or not | D+                                   |
+| [`portrait`](portrait.md)         | A framed face for dialogue and the party           | D+                                   |
+| [`divider`](divider.md)           | A rule between groups, with an optional label      | D+                                   |
+| [`notification`](notification.md) | A message that comes and goes                      | after L: gap drafts fire on it first |
+| [`empty-state`](empty-state.md)   | What a window shows instead of an empty list       | after L: gap drafts fire on it first |
+
+Left out: a tooltip (Blip is touch-first), a spinner (a pixel game rarely waits on a network), a
+layout primitive (folded into [`screen-layout`](screen-layout.md)).
+
 ### Gaps left open on purpose
 
 Every catalog gap that at least one task touches is above or here. These stay open so gap drafts
 have something to fire on, or because a pattern or what exists is enough:
 
-- **Empty list** (2 tasks): a pattern, not a component. 11 of 12 runs wrote a line of `Text` or `Heading`; nobody built anything
-- **Notification / Result of a transaction** (2): `useAnnounce` and the screen's own line cover it; the
+- **Empty list** (2 tasks): drafted as [`empty-state`](empty-state.md), held until after the sweep. A pattern, not a component, for now. 11 of 12 runs wrote a line of `Text` or `Heading`; nobody built anything
+- **Notification / Result of a transaction** (2): drafted as [`notification`](notification.md), held until after the sweep. `useAnnounce` and the screen's own line cover it; the
   shop's result is only announced to a screen reader, a candidate for a gap draft
 - **Bar, Enemy condition** (1): `Meter` in four cells fit in 6 of 6 runs; the missing piece is the HP-to-words mapping
 - **Party member card, Fallen member** (1): a `hud` pattern over `Window`, `Ledger`, `Meter` (the `patterns` task), not a component
 - **Turn indicator, Status icons** (1): all 6 runs wrote a `▶` prefix with `aria-current` and the word "Fallen" or the status as text. Left open for gap drafts, which is what they are for
 - **Objective reminder** (1): the "Next:" line is covered by `picker-item-parts`; no pattern on purpose (Q12)
 - **Pause menu as a pattern** (1): 6 of 6 composed it correctly; the `patterns` task writes it down
-- **Text entry** (1, only if asked), **Grid of choices**, **Floating numbers**, **Saving indicator** (0 tasks): no run reached for them
+- **Text entry** (1, only if asked): drafted as [`text-field`](text-field.md). **Grid of choices**, **Floating numbers**, **Saving indicator** (0 tasks): no run reached for them
 
 ## Working on a task
 
