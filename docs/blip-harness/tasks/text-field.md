@@ -19,6 +19,8 @@ keyboard on the tall stage. Proposed name `TextField`; the decision is the user'
 sidecar, an example file, stories (`Default`, `Overview`, compositions only where they show
 something new), and the tests `foundations/uniformity.test.ts` runs. A rule from the candidates: `P-SAVES-107` ("Don't ask for a name to save").
 
+**Base UI.** Built on `@base-ui/react/field` (`Field.Root`, `Field.Label`, `Field.Control`, `Field.Description`, `Field.Error`) and `@base-ui/react/input`, as `Dialog` and `Tabs` are on theirs; Blip adds the look, the caret and the key layer.
+
 **Not included.** An on-screen letter grid (the console way of typing). Multi-line text. Validation
 beyond a length limit. Any eval task change.
 

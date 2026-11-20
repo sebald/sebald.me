@@ -24,6 +24,8 @@ something new), and the tests `foundations/uniformity.test.ts` runs. The candida
 `P-EMPTY-102` ("Show the empty line instead of a Picker with no rows, so the cursor is never on
 nothing").
 
+**Base UI.** No Base UI primitive fits; plain markup, its action a Blip `Button`.
+
 **Not included.** Illustrations (Blip ships no art). Any eval task change.
 
 **Acceptance criteria.**

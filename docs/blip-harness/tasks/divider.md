@@ -19,6 +19,8 @@ optional label in the middle (`— Items —`), decorative or a real separator. 
 sidecar, an example file, stories (`Default`, `Overview`, compositions only where they show
 something new), and the tests `foundations/uniformity.test.ts` runs.
 
+**Base UI.** Built on `@base-ui/react/separator`, which gives `role="separator"` and its orientation.
+
 **Not included.** Section headings (`Text` covers them). Any eval task change.
 
 **Acceptance criteria.**

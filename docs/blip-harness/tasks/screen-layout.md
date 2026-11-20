@@ -25,6 +25,8 @@ Proposed name `Screen`; the decision is the user's.
 (a centred one, as `Stage.Center` does today; decide whether `Stage.Center` is then that variant).
 A rule for the sidecar that a screen's top-level box is this component.
 
+**Base UI.** No Base UI primitive fits a layout box; plain markup, as `Stage` is.
+
 **Not included.** Changing Pushback's screens. A grid. Any harness piece.
 
 **Acceptance criteria.**

@@ -21,6 +21,8 @@ sidecar, an example file, stories (`Default`, `Overview`, compositions only wher
 something new), and the tests `foundations/uniformity.test.ts` runs. If it becomes a `Setting` variant, no new page: the `setting` page gains a section, its
 example and its rules.
 
+**Base UI.** Built on `@base-ui/react/switch` (`Switch.Root`, `Switch.Thumb`), which gives the switch role, `aria-checked`, form value and keyboard. That settles the decision above toward its own component on Base UI; a `Setting` variant only if it can wrap the same primitive. Say which in the Notes.
+
 **Not included.** A checkbox list (a `Picker` with marks is `picker-item-parts`). Any eval task change.
 
 **Acceptance criteria.**
