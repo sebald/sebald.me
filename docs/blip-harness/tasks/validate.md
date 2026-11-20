@@ -33,6 +33,11 @@ every result with its own copy of the CLI.
 - Run over `packages/pushback/src/ui` as a reading exercise: the pull request lists every
   finding and says for each whether it is a real fault, a wrong rule or a wrong check
 - A 200-line file is checked in under 300 ms
+- Every configuration from `cli` on names `validate` in the run's `CLAUDE.md` (Q10), one line
+  next to the `blip` line, such as "`pnpm exec blip validate <file>` checks a file against Blip's
+  rules". In Marigold's study (DST-1991) agents with cards stopped reading `--help`, never found
+  `validate` (0 of 10 runs) and left 11 raw HTML tags; one line in the index brought it back in 10
+  of 10 with none left. `blip init` writes the same line
 - Day zero is collected again from the cache with `validate`, and its results now hold
   measure 2; the collector's calls leave the runs' event logs unchanged (`BLIP_EVENTS=off`)
 
