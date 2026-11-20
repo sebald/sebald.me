@@ -1,0 +1,59 @@
+{
+  "task": "saves",
+  "label": "day-zero",
+  "run": "cli/saves-3",
+  "runFolder": "~/.cache/blip-eval/day-zero/cli/saves-3",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in the run folder once eval-rendered has written it; until then run `pnpm exec vite` in the run folder and open the URL (wide: a 960 x 600 window, phone: 402 x 714). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "slot-details",
+      "text": "Three slots are shown, and slot 1 shows Mossy Ford, Wren, level 4, its play time and when it was saved.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=saves&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "readable-times",
+      "text": "Slot 1's play time and save date are written the way a player reads them (like 3:25 and a date), not as a number of seconds or an ISO timestamp.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=saves&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "no-saves",
+      "text": "With no saves at all, all three slots are shown and each says it is empty.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "empty@wide",
+        "url": "?screen=saves&state=empty"
+      },
+      "pass": null
+    },
+    {
+      "id": "empty-cant-load",
+      "text": "An empty slot can't be loaded: it can't be chosen for loading, or choosing it says it is empty and calls no `load`.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show saves",
+        "files": ["src/screens/index.ts", "src/screens/saves.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "overwrite-asks",
+      "text": "Saving into a slot that already holds a save asks the player first, and `save` is only called after they agree.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show saves",
+        "files": ["src/screens/index.ts", "src/screens/saves.tsx"]
+      },
+      "pass": null
+    }
+  ]
+}

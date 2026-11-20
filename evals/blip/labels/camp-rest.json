@@ -1,0 +1,70 @@
+{
+  "task": "camp-rest",
+  "label": "day-zero",
+  "run": "no-cli/camp-rest-3",
+  "runFolder": "~/.cache/blip-eval/day-zero/no-cli/camp-rest-3",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in the run folder once eval-rendered has written it; until then run `pnpm exec vite` in the run folder and open the URL (wide: a 960 x 600 window, phone: 402 x 714). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "same-screen",
+      "text": "Resting is added to `src/screens/camp.tsx`, and no new screen is registered for it.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show camp-rest",
+        "files": ["src/screens/camp.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "cost-shown",
+      "text": "The camp shows that resting costs 20 gold before the player rests.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=camp&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "uses-rest",
+      "text": "Resting calls the game's `rest`, and the screen changes no gold, HP or MP itself.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show camp-rest",
+        "files": ["src/screens/camp.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "told",
+      "text": "After resting, the screen tells the player the party has rested.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show camp-rest",
+        "files": ["src/screens/camp.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "broke-shown",
+      "text": "With 5 gold, resting is shown as not possible, or says it needs 20 gold, rather than being offered as if it would work.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "broke@wide",
+        "url": "?screen=camp&state=broke"
+      },
+      "pass": null
+    },
+    {
+      "id": "broke-refused",
+      "text": "Choosing to rest without enough gold doesn't rest the party and tells the player why.",
+      "note": "`rest` in state.ts already refuses and returns `{ ok: false, reason: 'gold' }`. Calling it and showing nothing when it is refused fails this.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show camp-rest",
+        "files": ["src/screens/camp.tsx"]
+      },
+      "pass": null
+    }
+  ]
+}

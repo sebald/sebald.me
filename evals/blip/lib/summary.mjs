@@ -41,6 +41,97 @@ const table = (header, rows) =>
 
 const list = items => items.map(item => `- ${item}`).join('\n');
 
+const oneLine = text => String(text).replace(/\s+/g, ' ').trim();
+
+const VERDICTS = ['pass', 'fail', 'error', 'skipped'];
+
+const sumOf = (runs, kind) => {
+  const sum = { pass: 0, fail: 0, error: 0, skipped: 0 };
+  for (const run of runs)
+    for (const verdict of VERDICTS) sum[verdict] += run.judge[kind][verdict];
+  return sum;
+};
+
+/**
+ * The judge's part (measure 3): what it was, the answers by task with the
+ * unstated statements on their own, and every statement it failed with its
+ * evidence, for reading
+ */
+const rubricSection = results => {
+  const { judge, runs } = results;
+  const judged = runs.filter(run => run.judge);
+  const out = ['## Rubric (the judge)'];
+  out.push(
+    `Judge ${judge.models.map(m => `\`${m}\``).join(', ')}, prompt \`${judge.prompt}\`, one question per statement. ` +
+      `Cost of the answers recorded here: $${judge.costUsd.toFixed(2)} (an estimate at API prices, not a charge). ` +
+      `${judged.length} of ${runs.length} runs judged.`,
+  );
+  const row = (name, t) => [
+    name,
+    String(t.pass),
+    String(t.fail),
+    String(t.error),
+    String(t.skipped),
+  ];
+  const tasks = [...new Set(judged.map(run => run.task))].sort();
+  out.push(
+    table(
+      ['statements', 'pass', 'fail', 'judge error', 'skipped'],
+      [
+        row('stated, all', sumOf(judged, 'stated')),
+        row('unstated, all (on their own)', sumOf(judged, 'unstated')),
+        ...tasks.flatMap(task => {
+          const mine = judged.filter(run => run.task === task);
+          return [
+            row(`${task}: stated`, sumOf(mine, 'stated')),
+            row(`${task}: unstated`, sumOf(mine, 'unstated')),
+          ];
+        }),
+      ],
+    ),
+  );
+  const answers = judged.flatMap(run =>
+    run.judge.statements.map(statement => ({ run, statement })),
+  );
+  const skipped = answers.filter(a => a.statement.verdict === 'skipped');
+  if (skipped.length)
+    out.push(
+      `${skipped.length} statements were not judged because their screenshot does not exist (the rendered layer writes them); they are left out of the shares.`,
+    );
+  const errors = answers.filter(a => a.statement.verdict === 'error');
+  if (errors.length) {
+    out.push('### Judge errors');
+    out.push(
+      list(
+        errors.map(
+          ({ run, statement }) =>
+            `\`${run.id}\` \`${statement.key}\`: ${oneLine(statement.evidence)}`,
+        ),
+      ),
+    );
+  }
+  for (const [unstated, heading] of [
+    [false, 'Failed statements'],
+    [true, 'Failed unstated statements'],
+  ]) {
+    const failed = answers.filter(
+      a => a.statement.verdict === 'fail' && a.statement.unstated === unstated,
+    );
+    out.push(`### ${heading}`);
+    out.push(
+      failed.length
+        ? list(
+            failed.map(
+              ({ run, statement }) =>
+                `\`${run.id}\` \`${statement.key}\` (${statement.from === 'screenshot' ? `screenshot ${statement.screenshot}` : 'diff'}): ${oneLine(statement.evidence)}`,
+            ),
+          )
+        : 'None.',
+    );
+  }
+  return out;
+};
+
 export const writeSummary = ({ results, comparison, writeups = [] }) => {
   const {
     label,
@@ -60,7 +151,11 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
     `Collector \`${collector.version}\`, Blip CLI \`${cli.version}\`. ${runs.length} runs, ` +
       `${runs.filter(run => run.status === 'complete').length} complete. Medians, with the ` +
       `lowest and highest of the repetitions in brackets; a share is runs of the runs it ` +
-      `applies to. ${layers.includes('rendered') ? 'Layers 1 and 2: the rendered pass is in, no `validate` or judged measures yet.' : 'Layer 1 only: no `validate`, rendered or judged measures yet.'}`,
+      `applies to. ${
+        layers.includes('rendered')
+          ? 'Layers 1 and 2: the rendered pass is in.'
+          : 'Layer 1 only.'
+      } ${results.judge ? 'The judge is in.' : 'No judged measures yet.'} No \`validate\` measures yet.`,
   );
 
   // Hand-written files beside this one, which a new collect leaves alone
@@ -112,6 +207,8 @@ export const writeSummary = ({ results, comparison, writeups = [] }) => {
       'Imports that are not exports were not measured in some runs: no `docs/manifest.json` in the installed package.',
     );
   }
+
+  if (results.judge) out.push(...rubricSection(results));
 
   out.push('## Network use');
   const reached = runs.filter(run => run.transcript.network.length > 0);

@@ -20,6 +20,12 @@ import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 
 import { aggregate, candidates } from './lib/aggregate.mjs';
+import {
+  DEFAULT_MODEL,
+  judgeInfo,
+  judgeRuns,
+  rubricOfTask,
+} from './lib/judge.mjs';
 import { writeSummary } from './lib/summary.mjs';
 import { analyseTranscript } from './lib/transcript.mjs';
 import { PACKAGE, analyseTree, checkBuild, collectorEnv } from './lib/tree.mjs';
@@ -165,6 +171,7 @@ export const collect = ({
   writeups = [],
   // `{ [run id]: rendered }` from `renderLabel`, the rendered layer (async, so done by the caller)
   rendered = null,
+  judged = null,
 }) => {
   if (!/^[\w.-]+$/.test(label) || label.startsWith('.')) {
     throw new Error(
@@ -223,6 +230,7 @@ export const collect = ({
         scope,
         runStatus: meta.status,
         status: transcript.status,
+        ...(judged?.[id] ? { judge: judged[id] } : {}),
         transcript,
         tree: { ...tree, ...checks },
         rendered: rendered?.[id] ?? { ran: false },
@@ -243,9 +251,13 @@ export const collect = ({
     label,
     collector: { version },
     cli: { version: [...cliVersions][0] ?? null },
-    layers: rendered
-      ? ['transcript', 'tree', 'rendered']
-      : ['transcript', 'tree'],
+    layers: [
+      'transcript',
+      'tree',
+      ...(rendered ? ['rendered'] : []),
+      ...(judged ? ['judge'] : []),
+    ],
+    ...(judged ? { judge: judgeInfo(judged) } : {}),
     runs,
     skipped,
     aggregate: stats,
@@ -346,6 +358,41 @@ export const renderRuns = async ({
   });
 };
 
+/**
+ * The judge's answers for a label's runs (spec 3.5, layer 3), from the label's
+ * `.judge/` cache and by asking for what is not in it. Spends the Claude
+ * subscription, so only `--judge` does it.
+ */
+export const judgeLabel = async ({
+  label,
+  cache,
+  tasksDir = join(HERE, 'tasks'),
+  model = DEFAULT_MODEL,
+  parallel = 2,
+  maxCostUsd = 15,
+  log = () => {},
+  askFn,
+}) => {
+  const labelDir = join(cache, label);
+  const { runs } = findRuns(labelDir);
+  const rubrics = {};
+  return judgeRuns({
+    runs: runs.filter(run => transcriptPath(run.dir)),
+    label,
+    rubricOf: task => (rubrics[task] ??= rubricOfTask(tasksDir, task)),
+    judgeDir: join(labelDir, '.judge'),
+    labelDir,
+    parallel,
+    maxCostUsd,
+    askOptions: { model },
+    askFn,
+    onAnswer: ({ run, record, cached }) =>
+      log(
+        `${run.id} ${record.key}: ${record.verdict}${cached ? ' (cached)' : ` ($${(record.costUsd ?? 0).toFixed(3)})`}`,
+      ),
+  });
+};
+
 const main = async () => {
   const { values } = parseArgs({
     options: {
@@ -357,11 +404,15 @@ const main = async () => {
       'collector-version': { type: 'string' },
       'skip-build': { type: 'boolean' },
       'skip-render': { type: 'boolean' },
+      judge: { type: 'boolean' },
+      'judge-model': { type: 'string' },
+      'judge-parallel': { type: 'string' },
+      'judge-max-usd': { type: 'string' },
     },
   });
   if (!values.label) {
     console.error(
-      'Usage: node evals/blip/collect.mjs --label <label> [--cache <dir>] [--out <dir>] [--date YYYY-MM-DD] [--against <results dir>] [--skip-build] [--skip-render]',
+      'Usage: node evals/blip/collect.mjs --label <label> [--cache <dir>] [--out <dir>] [--date YYYY-MM-DD] [--against <results dir>] [--skip-build] [--skip-render] [--judge [--judge-model <m>] [--judge-parallel <n>] [--judge-max-usd <n>]]',
     );
     process.exit(2);
   }
@@ -370,16 +421,29 @@ const main = async () => {
     const outRoot = values.out ? resolve(values.out) : join(HERE, 'results');
     const cache = values.cache ?? join(homedir(), '.cache', 'blip-eval');
     const render = !values['skip-build'] && !values['skip-render'];
+    // The rendered pass first: the judge reads its screenshots
+    const rendered = render
+      ? await renderRuns({ label: values.label, cache })
+      : null;
+    const judged = values.judge
+      ? await judgeLabel({
+          label: values.label,
+          cache,
+          model: values['judge-model'] ?? DEFAULT_MODEL,
+          parallel: Number(values['judge-parallel'] ?? 2),
+          maxCostUsd: Number(values['judge-max-usd'] ?? 15),
+          log: line => console.error(line),
+        })
+      : null;
     const done = collect({
       label: values.label,
       writeups: writeupsIn(outRoot, date, values.label),
       cache,
-      rendered: render
-        ? await renderRuns({ label: values.label, cache })
-        : null,
+      rendered,
       version: values['collector-version'] ?? collectorVersion(),
       build: !values['skip-build'],
       against: values.against ? resolve(values.against) : null,
+      judged,
     });
     const dir = write(done, outRoot, date);
     console.log(

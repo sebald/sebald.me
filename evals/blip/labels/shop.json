@@ -1,0 +1,70 @@
+{
+  "task": "shop",
+  "label": "day-zero",
+  "run": "no-cli/shop-3",
+  "runFolder": "~/.cache/blip-eval/day-zero/no-cli/shop-3",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in the run folder once eval-rendered has written it; until then run `pnpm exec vite` in the run folder and open the URL (wide: a 960 x 600 window, phone: 402 x 714). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "stock",
+      "text": "All six items of the shop's stock are listed, each with its name and price.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=shop&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "gold",
+      "text": "The player's gold is shown, as 120.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=shop&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "cant-afford",
+      "text": "The Iron Sword (150) is marked as one the player can't afford, and none of the items costing 120 or less is.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=shop&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "cant-buy",
+      "text": "An item that costs more than the player's gold can't be bought: it can't be chosen, or choosing it says why and calls no `buy`.",
+      "note": "`buy` in state.ts already refuses and returns `{ ok: false, reason: 'gold' }`. A shop that calls it and shows nothing when it is refused fails this.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show shop",
+        "files": ["src/screens/index.ts", "src/screens/shop.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "exact-gold",
+      "text": "With 25 gold, the Tonic (25) is shown as affordable, the same way as the cheaper items.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "exact@wide",
+        "url": "?screen=shop&state=exact"
+      },
+      "pass": null
+    },
+    {
+      "id": "nothing-to-sell",
+      "text": "With an empty pack, selling says there is nothing to sell, instead of showing an empty list or empty space.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show shop",
+        "files": ["src/screens/index.ts", "src/screens/shop.tsx"]
+      },
+      "pass": null
+    }
+  ]
+}

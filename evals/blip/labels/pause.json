@@ -1,0 +1,72 @@
+{
+  "task": "pause",
+  "label": "day-zero",
+  "run": "cli/pause-2",
+  "runFolder": "~/.cache/blip-eval/day-zero/cli/pause-2",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in the run folder once eval-rendered has written it; until then run `pnpm exec vite` in the run folder and open the URL (wide: a 960 x 600 window, phone: 402 x 714). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "choices",
+      "text": "The pause screen offers Resume, Options and Leave the run, and the camp is still visible behind it.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=pause&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "tap-to-pause",
+      "text": "The camp on a phone shows something to tap that pauses the game.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "camp@phone",
+        "url": "?screen=camp&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "options-kept",
+      "text": "Changing music volume, sound volume or message speed calls `setOption` as the value changes, not only when the pause screen closes.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show pause",
+        "files": [
+          "src/screens/camp.tsx",
+          "src/screens/index.ts",
+          "src/screens/pause-menu.tsx"
+        ]
+      },
+      "pass": null
+    },
+    {
+      "id": "leave-asks",
+      "text": "Leave the run asks the player first, and `leaveRun` is only called after they agree.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show pause",
+        "files": [
+          "src/screens/camp.tsx",
+          "src/screens/index.ts",
+          "src/screens/pause-menu.tsx"
+        ]
+      },
+      "pass": null
+    },
+    {
+      "id": "camp-gets-no-keys",
+      "text": "While the pause screen is open, keys don't reach the camp underneath: arrow keys and Enter move or choose nothing on the camp.",
+      "note": "camp.tsx, unchanged by the task, handles arrow keys and Enter in a `keydown` listener on `window`. A pause screen opened on top does not stop that listener on its own: a Blip `Dialog` keeps the arrow keys from it while focus is inside, but Enter still gets through. So the diff has to switch the listener off while paused or stop Enter (and the arrows, if the pause is not a `Dialog`) before it gets there; a diff that only handles Enter under a `Dialog` passes.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show pause",
+        "files": [
+          "src/screens/camp.tsx",
+          "src/screens/index.ts",
+          "src/screens/pause-menu.tsx"
+        ]
+      },
+      "pass": null
+    }
+  ]
+}
