@@ -21,6 +21,7 @@ import { extname, join, normalize, resolve, sep } from 'node:path';
 
 // The same check the Blip UI story tests run, on the game's stage
 import { escapes } from '../../../packages/blip-ui/tests/visual/layout.ts';
+import { screenshotsDir } from './screenshots.mjs';
 import { collectorEnv } from './tree.mjs';
 
 const require = createRequire(import.meta.url);
@@ -387,7 +388,7 @@ export const renderLabel = async ({
     };
     const renderRun = async run => {
       const urls = urlsOf(run.task);
-      const outDir = join(labelDir, '.screenshots', run.id);
+      const outDir = screenshotsDir(labelDir, run.id);
       if (!ensureBuilt(run.dir)) {
         mkdirSync(outDir, { recursive: true });
         // No build to open: every URL is recorded as not rendered, each with a blank picture
@@ -410,7 +411,7 @@ export const renderLabel = async ({
     };
     for (const run of runs) {
       const urls = urlsOf(run.task);
-      const outDir = join(labelDir, '.screenshots', run.id);
+      const outDir = screenshotsDir(labelDir, run.id);
       log(`rendering ${run.id}`);
       try {
         out[run.id] = await renderRun(run);

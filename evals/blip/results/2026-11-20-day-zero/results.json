@@ -2,12 +2,17 @@
   "schema": 1,
   "label": "day-zero",
   "collector": {
-    "version": "a064ed4a3fd4"
+    "version": "f94a66f1d55c"
   },
   "cli": {
     "version": "0.0.0+925ec59d8f14"
   },
-  "layers": ["transcript", "tree", "rendered"],
+  "layers": ["transcript", "tree", "rendered", "judge"],
+  "judge": {
+    "prompt": "d5c2bdfad060",
+    "models": ["claude-opus-5-5"],
+    "costUsd": 4.1953
+  },
   "runs": [
     {
       "id": "cli/camp-rest-1",
@@ -17,6 +22,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1412,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "Only src/screens/camp.tsx changes: it adds a `Rest (${REST_COST} gold)` entry to THINGS and a `choose` handler that calls `rest()`. No other file appears in the diff, so no new screen or screen registration was added.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.01956,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The camp menu has an option labelled \"Rest (20 gold)\" under \"Look around\" and \"Talk\". Party HP and MP are still below full, which shows the player hasn't rested yet.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0312514,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `choose` calls `rest()` imported from '../game/state' when the Rest item is chosen, from both Enter and click. The only state the screen sets is the `said` message: no added line changes gold, HP or MP.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.01952,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `choose` function calls `rest()`. When `result.ok` is true, it sets `said` to 'You rest by the fire. The party is back to full HP and MP.', the same `said` state the camp already used for its other lines. Both the Enter key and click handlers now call `choose`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.025727999999999997,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "The screen shows 5 gold at the top right, and the menu lists \"Rest (20 gold)\" in the same style as the enabled \"Talk\" option. Nothing marks it as disabled or says the party can't afford it, so resting is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.022542600000000003,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the new `choose` calls `rest()`. When `result.ok` is false it calls `setSaid` with \"Resting costs ${REST_COST} gold, and you don’t have enough.\" Both Enter and click go through `choose(i)`, and per the Note `rest` itself refuses without enough gold.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.022612,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -197,6 +288,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1395,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "The only file in the diff is src/screens/camp.tsx, which adds a `Rest (${REST_COST} gold)` entry to THINGS and a `choose` handler calling `rest()`. No screen registry or other file is touched, so no new screen is registered.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020900000000000002,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The camp screen menu has the option \"Rest (20 gold)\" below \"Look around\" and \"Talk\". The party is still below full HP/MP, so the cost is on screen before any rest.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0312114,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `choose` calls `rest()` imported from '../game/state' when the rest option is picked, and only sets the message from `rest().ok`. No added line in the diff changes gold, HP or MP directly.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020744,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `choose` calls `setSaid(rest().ok ? REST_DONE : REST_BROKE)`, with REST_DONE = 'You rest by the fire. The party is back to full HP and MP.'. Both the Enter key handler and the click handler now call `choose`, which sets this message in the same `said` text the screen already showed for 'Look around' and 'Talk'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.024944,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "With 5 gold shown at the top right, the menu still lists \"Rest (20 gold)\" in the same style as \"Talk\". It is not greyed out, marked unavailable or labelled as needing more gold, so it is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0181016,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `choose` calls `rest()` and, when `.ok` is false, sets `said` to REST_BROKE (\"Resting costs ${REST_COST} gold, and you don't have enough.\"). Per the Note, `rest` itself refuses without enough gold, so the party is not rested and the player is told why.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.023552,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -378,6 +555,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1199,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "Only src/screens/camp.tsx changes: it imports rest and REST_COST and adds a `Rest (${REST_COST} gold)` entry to THINGS that calls doRest. No other file (such as a screen registry or new screen file) appears in the diff, so no new screen is registered.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019396,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The camp screen's menu shows the option \"Rest (20 gold)\" under \"Look around\" and \"Talk\". The party is still below full HP/MP, so the cost is shown before any rest has happened.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015574000000000001,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `doRest` calls `rest()` imported from '../game/state' and only uses its `.ok` result to pick a message. No added line in the diff changes gold, HP or MP directly; the screen only sets the message text via `setSaid(act(...))`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019431999999999998,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `doRest` returns 'You rest by the fire. The party is back to full HP and MP.' when `rest().ok`. Both the Enter handler and the onClick now pass this to `setSaid(act(...))`, the same `said` state the screen already used to show the Look around and Talk lines.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.02538,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "With 5 gold in the top-right corner, 'Rest (20 gold)' looks exactly like the 'Talk' option. It isn't greyed out or marked unavailable, and nothing says 20 gold is needed. It only shows the price, so resting is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0184616,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `doRest` calls `rest()`. When it returns not ok, the screen shows \"Resting costs ${REST_COST} gold, and you don’t have enough.\" through `setSaid(act(...))` for both Enter and click. Per the note, `rest` itself refuses to rest without enough gold.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.021608,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -559,6 +822,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1182,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, all three members show HP and MP as current/max: Wren \"HP 42/50 · MP 6/10\", Oda \"HP 18/34 · MP 21/30\", and Pim \"HP 27/38 · MP 4/12\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0203046,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Wren's row reads \"Poisoned · HP 42/50 · MP 6/10\". Oda's and Pim's rows show only HP and MP with no status, and neither enemy row (Bog Rat \"Scratched\", Marsh Wisp \"Unhurt\") shows a poisoned status.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0204986,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Oda's row reads \"> Oda (turn)\" and the text \"Oda's turn\" appears below the list. The rows for Wren and Pim have no marker or turn label.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019712399999999998,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Enemies panel, Bog Rat shows \"Scratched\" next to a 5-segment bar with 4 filled, and Marsh Wisp shows \"Unhurt\" next to a fully filled bar. Neither enemy has an HP number.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0201546,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "Pim is listed in the Party panel with \"Down · HP 0/38 · MP 4/12\". The word \"Down\" marks Pim as fallen in text, so the screen doesn't rely only on colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0199564,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "In the phone-sized screenshot, the Party panel shows all three members, each with a readable name and HP: \"Wren … HP 42/50\", \"> Oda (turn) … HP 18/34\" and \"Pim … HP 0/38\". Every row fits inside the panel, and no text overlaps or is cut off.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.017529799999999998,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -761,6 +1114,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1143,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the party panel, each member's HP and MP are shown as current out of max: Wren reads HP 42/50 and MP 6/10, Oda reads HP 18/34 and MP 21/30, and Pim reads HP 27/38 and MP 4/12.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0202646,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "The party panel shows \"Poisoned\" only on Wren's row (Poisoned HP 42/50 MP 6/10). Oda and Pim have no status label, and the enemies are labeled only with how hurt they are (Scratched, Unhurt), not with any status.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0160564,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "The party panel's header reads \"Oda's turn\", and the Oda row has a ► marker in front of the name. The Wren and Pim rows have no marker or other highlight.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0195324,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Enemies panel, Bog Rat has a 4-segment bar with 3 segments filled and the word \"Scratched\". Marsh Wisp has a full 4-segment bar and the word \"Unhurt\". No HP number appears for either enemy.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020219,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "In the party panel, Pim still appears in the list (greyed) with the word \"Fallen\" next to \"HP 0/38  MP 4/12\". So the fallen state is shown in words, not only by the dimmed colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019992000000000003,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "The phone-width screenshot shows a party panel listing Wren (HP 42/50), Oda (HP 18/34) and Pim (HP 0/38). Each sits on its own row inside the panel, with no overlap or clipping. Pim's row is dimmed because Pim has fallen, but it is still legible.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0181898,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -1016,6 +1459,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0927,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, each member shows HP and MP as current out of max: Wren has \"HP 42/50 · MP 6/10\", Oda has \"HP 18/34 · MP 21/30\" and Pim has \"HP 27/38 · MP 4/12\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016019600000000002,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, \"Poisoned\" appears directly under Wren. Oda and Pim have no status text; the line \"Oda's turn\" under Pim shows whose turn it is, not a status.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015548,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Oda alone has a ▶ arrow and green highlighted text, and the panel also reads \"Oda's turn\". Wren and Pim appear in plain text with no marker.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0155356,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Enemies panel, Bog Rat shows \"Scratched\" with a 5-segment bar that has 4 segments filled, and Marsh Wisp shows \"Unhurt\" with a full 5-segment bar. Neither enemy has an HP number.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159608,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Pim is still listed with \"HP 0/38 · MP 4/12\", and the word \"Fallen\" appears directly under Pim's name, so the fallen state is shown in words, not only by colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0156996,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "The phone screenshot's Party panel shows Wren (HP 42/50), Oda (HP 18/34) and Pim (HP 0/38). Each name and HP value is fully visible and readable, with no text overlapping or cut off at the panel edges.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.013942800000000002,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -1245,6 +1778,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1428,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The 'Paused' panel lists Resume, the options (Music volume 7, Sound volume 5, Message speed Normal) and Leave the run. The options appear as settings inside the panel, not as a separate 'Options' button. Behind the panel, the dimmed camp is still visible: 'Camp at Mossy Ford', 120 gold, the rows for Wren, Oda and Pim, and the 'Look around' and 'Talk' actions.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.024267200000000003,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the camp at phone size (Camp at Mossy Ford, party list, Look around/Talk). A bottom bar holds a visible \"Pause\" control with a pause icon (‖) that can be tapped.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0172372,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In the new src/screens/pause.tsx, each PickerSetting's onStep calls setOption directly: setOption('music', options.music + step), setOption('sound', options.sound + step), and stepSpeed calls setOption('messageSpeed', ...). Nothing is saved up for when the dialog closes, so setOption runs on each change.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033236,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause.tsx the \"Leave the run\" PickerItem only calls setLeaving(true), which shows a Confirm titled \"Leave the run?\" with \"Keep playing\" (onCancel resets leaving). leaveRun() is called only in that Confirm's onConfirm handler.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.032984,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the window keydown effect now starts with `if (paused) return;` and has `paused` in its dependency list `[at, paused]`. While the pause screen is open, the camp's arrow and Enter listener is therefore removed and not re-added.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.035052,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -1427,6 +2035,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1296,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The \"Paused\" panel has a Resume entry, the three options (Music 7, Sound 5, Message speed Normal) and \"Leave the run\". Behind it the camp is still visible but dimmed: \"Camp at Mossy Ford\", 120 gold, the party rows for Wren, Oda and Pim, and the Look around and Talk menu.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0182948,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the Camp at Mossy Ford at a phone-sized width. A bar along the bottom holds a visible \"Pause\" control with a pause icon (two vertical bars) that can be tapped.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0126332,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-menu.tsx, each PickerSetting's onStep calls setOption directly: volume('music')/volume('sound') call setOption(key, options[key] + step) and speed calls setOption('messageSpeed', ...), so every step writes the option immediately; onClose does not call setOption.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.032496,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-menu.tsx, the 'Leave the run' PickerItem only calls setLeaving(true), which shows a Confirm titled 'Leave the run?' with 'Leave the run' and 'Stay' buttons. leaveRun() is called only in that Confirm's onConfirm handler, and onCancel just sets leaving back to false.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.032760000000000004,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the window keydown effect now starts with `if (paused) return;` and has `paused` in its dependency list `[at, paused]`, so the camp's arrow/Enter listener is removed while the pause screen is open.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033448,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -1610,6 +2293,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1253,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The 'Paused' panel shows Resume, then the options (Music volume 7, Sound volume 5, Message speed normal), then Leave the run. There is no item labelled 'Options', but the options themselves are on the panel. Behind it the dimmed camp is still visible: 'Camp at Mossy Ford', 120 gold, the party rows for Wren, Oda and Pim, and the 'Look around' and 'Talk' commands.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0189936,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the camp screen ('Camp at Mossy Ford') in a phone-sized portrait view. A bottom bar holds a pause control: a green '||' icon with the label 'Pause'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0125932,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, each PickerSetting's onStep calls setOption directly: music and sound via `volume(key)` → `setOption(key, options[key] + step)`, and message speed via `speed` → `setOption('messageSpeed', ...)`. onResume only closes the dialog and does not save options.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.031136,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the 'Leave the run' PickerItem only calls setLeaving(true), which renders a Confirm titled 'Leave the run?' with 'Leave the run' / 'Keep playing'; leaveRun() is called only in that Confirm's onConfirm, and onCancel just clears leaving.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03072,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the window keydown effect now begins with `if (open) return;` and depends on `[at, open]`, so the camp's arrow/Enter listener is removed while the pause screen is open; `open` starts as `paused` and is set true by Escape or the Pause button.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.031892000000000004,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -1793,6 +2551,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1078,
+        "stated": {
+          "pass": 1,
+          "fail": 2,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "fail",
+            "evidence": "The Lost Ferry and Wolves at Hollow Gate come before Herbs for Old Bess (done), but nothing clearly separates the two groups: there is no heading or divider. The only gap is about 10px more space than between the open quests, plus the '(done)' label, which is too slight to count as visibly apart.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0305014,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Both open quests show who gave them and the next step. The Lost Ferry shows 'From Ferrywoman Maud' and 'Next: Search the reeds south of the ford', and Wolves at Hollow Gate shows 'From Gatekeeper Tam' and 'Next: Speak to Tam at Hollow Gate'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016415199999999998,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the quest log, the done quest is labelled in words: \"Herbs for Old Bess (done)\". It is listed apart from the two open quests, under them, so it is not marked only by colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015427999999999999,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "fail",
+            "evidence": "In src/screens/quests.tsx, each PickerItem's onSelect only calls say(quest), which passes the description to useAnnounce(). No state records the chosen quest, and no element renders its description when it is chosen. The description also appears in each item's `note` prop, but nothing in the diff shows that the note is displayed in response to choosing.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.030151999999999998,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows a 'Quest log' panel with the text 'No quests yet.' right under the heading, so the panel isn't left empty and the heading isn't standing alone.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015328400000000002,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -2040,6 +2875,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1004,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The list shows 'The Lost Ferry' and 'Wolves at Hollow Gate' (both with 'Next:' steps) at the top. 'Herbs for Old Bess · Old Bess (done)' comes after them, set off by a visibly larger gap than the one between the two open quests.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.018238400000000002,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Both open quests show who gave them and the next step: 'The Lost Ferry · Ferrywoman Maud — Next: Search the reeds south of the ford' and 'Wolves at Hollow Gate · Gatekeeper Tam — Next: Speak to Tam at Hollow Gate'. The done quest is listed separately below them.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0202142,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the screenshot, the done quest's row reads \"Herbs for Old Bess · Old Bess (done)\". It is marked done by the word \"(done)\", not only by colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019153,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/quests.tsx, each PickerItem's onSelect calls setChosen(quest.id), and when `shown` is set a Window renders <Text>{shown.quest.description}</Text> under the quest name, with no truncation.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.023579999999999997,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "With no quests in the list, the screenshot shows the text \"No quests yet.\" inside the quest panel, under the QUESTS title. The panel is not empty space, and no section heading sits there with nothing under it.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019216200000000003,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -2234,6 +3146,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0903,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The list shows The Lost Ferry and Wolves at Hollow Gate at the top, with no header above them. Below them is a \"Done\" heading with a gap before it, and Herbs for Old Bess sits under that heading, so the done quest is visibly separate.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159184,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Both open quests show a giver and a next step. \"The Lost Ferry\" shows \"from Ferrywoman Maud\" and \"Next: Search the reeds south of the ford\", and \"Wolves at Hollow Gate\" shows \"from Gatekeeper Tam\" and \"Next: Speak to Tam at Hollow Gate\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016635200000000003,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the screenshot, the quest \"Herbs for Old Bess\" (from Old Bess) sits under a separate heading that reads \"Done\". So the quest is marked as done in words, not only by colour or by being greyed out.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016928,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In the new src/screens/quests.tsx, each PickerItem's onSelect calls setChosen(quest.id). When a quest is chosen, a second Window renders <Text>{shown.quest.description}</Text> with the full description, not shortened.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.025468,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the QUESTS screen. Its list panel reads \"No quests yet.\", so the empty state is shown instead of empty space or a heading with nothing under it.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015384800000000002,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -2469,6 +3458,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1302,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows three slots. Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\", which is the place, leader, level, play time and save time. Slots 2 and 3 read \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020442600000000002,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\". The play time is shown as 3:25 and the save date as a readable date, not as a count of seconds or an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020404000000000002,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The Save and Load screen lists all three slots, \"1. Empty\", \"2. Empty\" and \"3. Empty\", under the Save tab, so each slot shows that it is empty.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0195342,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx each load slot's PickerItem is rendered with `disabled={which === 'load' && !saved}`, so an empty slot can't be chosen in the Load tab and its `onSelect` never reaches `doLoad`/`load`. Its hint reads 'Nothing saved here.'",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03588,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, the save-mode onSelect calls setOverwrite(i) when the slot already holds a save (`else if (saved) setOverwrite(i)`) instead of saving, and a Confirm titled \"Overwrite slot N?\" then calls doSave(overwrite), and so save(slot), only in onConfirm; onCancel just clears overwrite.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033976,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -2670,6 +3735,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1128,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows three slots. Slot 1 reads \"1. Mossy Ford, Wren Lv 4, 3m, Nov 2, 2026, 7:40 PM\" (place, leader and level, play time, saved date), and slots 2 and 3 read \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020442600000000002,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Slot 1 shows 'Mossy Ford, Wren Lv 4, 3m, Nov 2, 2026, 7:40 PM'. The play time is written as '3m' rather than a count of seconds, and the save date is a normal date and time rather than an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0175304,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The SAVES screen is open on the Save tab and lists three slots, \"1. Empty\", \"2. Empty\" and \"3. Empty\", so each of the three slots is shown and says it is empty.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015568000000000002,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx each PickerItem gets `disabled={forMode === 'load' && !slot}` and the note 'Nothing saved here yet.', so an empty slot cannot be chosen in the load panel. Only an enabled item's onSelect calls `pick(i)`, which is where `load(index)` is called.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0305,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, `pick` in save mode calls `setAsking(index)` when `game.slots[index]` is filled instead of saving, which renders a `Confirm` titled `Overwrite slot N?`; `doSave(asking)` (which calls `save`) runs only in its `onConfirm`, while `onCancel` just clears `asking`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028739999999999998,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -2871,6 +4012,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1129,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows three slots. Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\", which gives the place, the leader and level, the play time and the save time. Slots 2 and 3 read \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162116,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\". The play time shows as 3:25 and the save date as \"Nov 2, 07:40 PM\", not as a count of seconds or an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162628,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the Save tab with three slots listed, \"1. Empty\", \"2. Empty\" and \"3. Empty\", so all three are visible and each one says it is empty.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015467999999999999,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, each PickerItem has `disabled={m === 'load' && !saved}` and the note 'Nothing saved here yet.', so an empty slot cannot be chosen in the Load tab. That keeps its onSelect, and so `doLoad`/`load`, from running.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033624,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, a save-mode onSelect on a filled slot only calls setAsking(slot) (`else if (saved) setAsking(slot)`), which opens a <Confirm title=\"Overwrite slot N?\">. doSave(asking), the only path that calls save(slot), runs only from onConfirm; onCancel just clears asking. Empty slots save directly.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.031304,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -3072,6 +4289,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0986,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab lists six items, each with a name and price: Herb · 8g, Rope · 12g, Lamp Oil · 15g, Tonic · 25g, Leather Cap · 60g and Iron Sword · 150g. Iron Sword is greyed out and marked \"(too expensive)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.021817800000000002,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The top-right corner of the Shop header bar reads \"Gold: 120\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0192962,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the Buy list, 'Iron Sword · 150g (too expensive)' is greyed out. Herb 8g, Rope 12g, Lamp Oil 15g, Tonic 25g and Leather Cap 60g are all shown in normal bright text with no marking, and the player has Gold: 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0209208,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx each buy PickerItem gets `disabled={!afford}`, where `afford = game.gold >= item.price`, so an item costing more than the player's gold can't be chosen. Its label adds ' (too expensive)' and its note reads 'Too expensive: {price} gold, you have {gold}.'",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0094752,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The header shows \"Gold: 25\". \"Tonic · 25g\" is in the same bright text as Herb, Rope and Lamp Oil, with no \"(too expensive)\" tag. Only Leather Cap (60g) and Iron Sword (150g) are greyed out and marked too expensive.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.020924400000000003,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx the sell TabPanel checks `pack.length === 0` and renders `<Text>Your pack is empty. Nothing to sell.</Text>` instead of the Picker, so an empty pack shows a message rather than an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0061852,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -3299,6 +4604,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1207,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab shows six items, each with a name and price: Herb · 8 gold, Rope · 12 gold, Lamp Oil · 15 gold, Tonic · 25 gold, Leather Cap · 60 gold, and Iron Sword · 150 gold. The Iron Sword is greyed out and marked \"too dear\" but is still listed.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0166584,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The shop header at the top of the screen reads \"Your gold: 120\", so the player's gold is shown with a value of 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015079200000000001,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab shows 'Iron Sword · 150 gold (too dear)' greyed out, while the player has 120 gold. Herb (8), Rope (12), Lamp Oil (15), Tonic (25) and Leather Cap (60) are all in normal bright text with no marker.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0161564,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx each stock PickerItem gets `disabled={short}` where `short = game.gold < item.price`, so an unaffordable item can't be chosen and its `buy` is never called. Its note also reads `Too expensive: you need … more gold`, and its label ends in '(too dear)'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028735999999999998,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The header reads \"Your gold: 25\". \"Tonic · 25 gold\" is drawn in the same bright white text as Herb, Rope and Lamp Oil, with no \"(too dear)\" tag. Only Leather Cap (60) and Iron Sword (150) are greyed out and marked \"(too dear)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016524,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx, the sell TabPanel checks `owned.length === 0` and renders `<Text>Your pack is empty.</Text>` in place of the Sell Picker. So an empty pack shows a message rather than an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.027552,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -3517,6 +4910,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1231,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab lists six items, each with a name and price: Herb · 8g, Rope · 12g, Lamp Oil · 15g, Tonic · 25g, Leather Cap · 60g and Iron Sword · 150g. The Iron Sword is greyed out and marked \"too dear\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.017106,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "At the top of the screen, under the SHOP title, a bar reads \"Your gold\" with the value 120 on the right.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015059200000000002,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab shows 120 gold. The Iron Sword row ('Iron Sword · 150g · too dear') is greyed out. Herb (8g), Rope (12g), Lamp Oil (15g), Tonic (25g) and Leather Cap (60g) are in normal bright text with no 'too dear' tag.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016384000000000003,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx each stock PickerItem sets `const short = game.gold < item.price` and passes `disabled={short}`, so an unaffordable item can't be chosen. Its note also says 'Too expensive: you need N more gold.'",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.029772,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows 'Your gold … 25', and 'Tonic · 25g' is in the same bright white text as Herb, Rope and Lamp Oil, with no 'too dear' tag. Only Leather Cap (60g) and Iron Sword (150g) are dimmed and marked 'too dear'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016339600000000003,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In the new file src/screens/shop.tsx, the sell TabPanel checks `pack.length === 0` and renders `<Text>Your pack is empty. Nothing to sell.</Text>` instead of the Picker, so an empty pack shows a message rather than an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028436,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -3738,6 +5219,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1159,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "The only file in the diff is src/screens/camp.tsx, which adds a `Rest (${REST_COST} gold)` entry to THINGS and an `act` helper calling `rest()`. No other file (such as a screen registry) is changed, so no new screen is registered.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0188,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The camp menu lists the option \"Rest (20 gold)\" under \"Look around\" and \"Talk\". The party is still below full HP/MP, so the player hasn't rested yet and can already see the cost.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0155496,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `act` helper calls the imported `rest()` from '../game/state' and only uses `.ok` to pick a message. The added lines contain no direct writes to gold, HP or MP.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.018552,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `act` helper returns `REST_DONE` ('You rest by the fire. The party is back to full HP and MP.') when `rest().ok` is true. Both the Enter handler and the onClick now call `setSaid(act(...))`, the same `said` message the screen already used for the Look and Talk lines.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.025467999999999998,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "With '5 gold' shown at the top right, the menu lists 'Rest (20 gold)' in the same style as the 'Talk' option. Nothing greys it out, marks it as unavailable or says the party can't afford it, so resting is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0177816,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `act` calls `rest()` and, when it returns not ok, returns REST_POOR (\"Resting costs ${REST_COST} gold, and you can’t afford it.\"), which is passed to setSaid on both Enter and click; per the Note, `rest` refuses without changing the party when gold is short.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019732000000000003,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -3917,6 +5484,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1209,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "The only file changed is src/screens/camp.tsx, which adds a `Rest (${REST_COST} gold)` entry to THINGS and a `choose` handler calling `rest()`. No other file in the diff registers a new screen.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019792,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Before any rest, the camp menu shows a \"Rest (20 gold)\" option below \"Look around\" and \"Talk\". The party is still below full HP and MP, and the gold counter reads 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015554000000000002,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the new `choose` calls `rest()` imported from '../game/state' and only uses `result.ok` to pick a message for `setSaid`. Nothing added in the diff touches gold, HP or MP directly.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019872,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `choose` calls `rest()` and, when `result.ok`, calls `setSaid('You rest through the night. The party is back to full HP and MP.')`. That uses the same `said` state the screen already used to show the 'Look around' and 'Talk' text.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.025736000000000002,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "With 5 gold in the top right, the menu lists \"Rest (20 gold)\" in the same style as the available \"Talk\" option. Nothing shows it as greyed out or disabled, and there is no message saying the party needs 20 gold, so resting is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0181816,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, `choose` calls `rest()`. When `result.ok` is false it sets said to `Resting costs ${REST_COST} gold, and you don’t have enough.` Per the note, `rest` refuses and does not heal, and both the Enter key and click handlers now go through `choose`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.02176,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -4096,6 +5749,92 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1187,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "camp-rest/same-screen",
+            "id": "same-screen",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "The diff changes only src/screens/camp.tsx: it adds a `Rest (${REST_COST} gold)` entry to THINGS and a `choose` handler that calls `rest()`. No other file under src/ is in the diff, so no new screen or screen registration was added.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.019276,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/cost-shown",
+            "id": "cost-shown",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The camp menu has a \"Rest (20 gold)\" option under \"Look around\" and \"Talk\". The party's HP and MP are still below max, so the player sees the cost before resting.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015453999999999999,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/uses-rest",
+            "id": "uses-rest",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the new `choose` calls `rest()` imported from '../game/state' and only uses `result.ok` to pick a message via `setSaid`; no added line touches gold, HP or MP.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.018936,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/told",
+            "id": "told",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx, the new `choose` calls `rest()` and, when `result.ok`, sets the camp's existing `said` message to 'You rest by the fire. The party is back to full HP and MP.' Both Enter and click on the new 'Rest (${REST_COST} gold)' entry now call `choose`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.02348,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-shown",
+            "id": "broke-shown",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "broke@wide",
+            "verdict": "fail",
+            "evidence": "The screen shows 5 gold in the top right, and 'Rest (20 gold)' looks exactly like the 'Talk' option. It is not greyed out, and nothing says it can't be done or that 20 gold is needed. The label only shows the price, so resting is offered as if it would work.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0192972,
+            "attempts": 1
+          },
+          {
+            "key": "camp-rest/broke-refused",
+            "id": "broke-refused",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the new `choose` calls `rest()`. When `result.ok` is false it sets the message `Resting costs ${REST_COST} gold, and you don’t have enough.`, and both Enter and click go through `choose`. Per the note, `rest` itself refuses to rest the party when gold is short.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.022248,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -4274,6 +6013,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0927,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, each member's row shows HP and MP as current out of max: Wren reads \"HP 42/50 MP 6/10\", Oda reads \"HP 18/34 MP 21/30\" and Pim reads \"HP 27/38 MP 4/12\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0161244,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Wren's row reads \"Poisoned HP 42/50 MP 6/10\". Oda's and Pim's rows show only HP and MP, and neither enemy row (Bog Rat \"Hurt\", Marsh Wisp \"Healthy\") shows poisoned.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016228,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, the heading says \"Party — Oda's turn\" and Oda's row reads \"> Oda Turn\" with a pointer and a green \"Turn\" label. The Wren and Pim rows have neither the pointer nor the label.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015895600000000003,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "The Enemies panel shows Bog Rat with the word \"Hurt\" and a 4-segment bar with 3 segments filled, and Marsh Wisp with \"Healthy\" and a full 4-segment bar. Neither enemy has an HP number.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159208,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "Pim is the third row in the Party panel at the bottom of the screen. The row reads \"Fallen HP 0/38 MP 4/12\", so the word \"Fallen\" marks Pim as down, not only colour or greying out.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0157596,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "The phone-sized screenshot shows the Party panel with Wren (HP 42/50), Oda (HP 18/34) and Pim (HP 0/38). All three are fully readable, and nothing overlaps or runs off the edge of the panel.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.012794400000000001,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -4482,6 +6311,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0917,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "The Party panel shows each member's HP and MP as current out of max: Wren \"HP 42/50 · MP 6/10\", Oda \"HP 18/34 · MP 21/30\" and Pim \"HP 27/38 · MP 4/12\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159396,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, \"Wren\" has \"Poisoned\" next to the name. Oda and Pim show no status, and the enemies (Bog Rat \"Scratched\", Marsh Wisp \"Unhurt\") show only how hurt they are, not a status.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016096400000000004,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Oda has a green ▶ arrow and green highlighted name, and the text under the panel says \"Oda's turn\". Wren and Pim have no arrow and no highlight.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0155356,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Enemies panel, Bog Rat shows \"Scratched\" with a segmented bar 3 of 4 full, and Marsh Wisp shows \"Unhurt\" with a full 4-segment bar. Neither enemy has an HP number.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159008,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "Pim is still listed in the Party panel with \"HP 0/38 · MP 4/12\", and the word \"Fallen\" appears next to the name, so the fallen state is shown in words.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0154352,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "The phone screenshot's Party panel shows Wren (HP 42/50), Oda (HP 18/34) and Pim (HP 0/38), each on its own row. All three names and HP values are readable, and nothing overlaps or is cut off.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.012774400000000002,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -4725,6 +6644,96 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0917,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "fight-hud/members",
+            "id": "members",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, every member's HP and MP appear as current out of max: Wren shows HP 42/50 and MP 6/10, Oda shows HP 18/34 and MP 21/30, and Pim shows HP 27/38 and MP 4/12.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0158996,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/status",
+            "id": "status",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, Wren has a red \"[Poisoned]\" tag next to the name. Oda and Pim have no status tag, and neither enemy (Bog Rat, Marsh Wisp) shows any status.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015668,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/turn",
+            "id": "turn",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Party panel, \"Oda's turn\" appears under the heading. Oda's row has a ▶ arrow and green highlighted text. Wren and Pim are in plain text with no arrow.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0155356,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/enemies",
+            "id": "enemies",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "fight@wide",
+            "verdict": "pass",
+            "evidence": "In the Enemies panel, Bog Rat has a 4-segment bar with 3 filled and the word \"Scratched\", and Marsh Wisp has a full 4-segment bar and the word \"Unharmed\". Neither enemy shows an HP number.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159208,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/fallen",
+            "id": "fallen",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@wide",
+            "verdict": "pass",
+            "evidence": "Pim is still listed in the Party panel, showing \"HP 0/38  MP 4/12\". Next to the name is the word label \"[Fallen]\", so the fallen state is shown in words, not only by colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015684,
+            "attempts": 1
+          },
+          {
+            "key": "fight-hud/phone",
+            "id": "phone",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "fallen@phone",
+            "verdict": "pass",
+            "evidence": "In the phone-width screenshot, the Party panel shows Wren (HP 42/50), Oda (HP 18/34) and Pim (HP 0/38). Each name and HP value is on its own line, and all of them are fully readable, with no text overlapping or cut off at the edges.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.012969999999999999,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -4969,6 +6978,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1265,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The 'Paused' panel shows Resume, the options (Music 7, Sound 5, Message speed normal) and Leave the run. There is no item labelled 'Options', but the options themselves are on the panel. Behind it, the dimmed camp is still visible: 'Camp at Mossy Ford', 120 gold, the Wren/Oda/Pim party rows and the Look around/Talk menu.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0181336,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the Camp at Mossy Ford screen at phone width, with a bar along the bottom holding a pause icon (two vertical bars) and the label \"Pause\", which a player can tap.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0124604,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the Music, Sound and Message speed PickerSettings each call setOption directly in their onStep handlers (setOption('music', options.music + step), setOption('sound', ...), setOption('messageSpeed', SPEEDS[...])), so the option is set on each step; nothing waits for the Dialog to close.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03114,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the 'Leave the run' PickerItem only calls setLeaving(true), which renders a <Confirm title=\"Leave the run?\" confirm=\"Leave the run\" cancel=\"Stay\">; leaveRun() is called only inside its onConfirm handler, while onCancel just sets leaving back to false.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.031164,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the camp's window keydown effect now starts with `if (paused) return;` and has `[at, paused]` as its dependencies. Opening the pause screen therefore removes the arrow/Enter listener, and it is only added back once the game is resumed.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033608,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -5148,6 +7232,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1838,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The 'Paused' panel shows Resume, the options (Music volume 7, Sound volume 5, Message speed normal) and Leave the run. The options are listed in the panel itself rather than under an 'Options' entry, and the ticket asks only for these settings. Behind the panel the camp shows through dimmed: 'Camp at Mossy Ford', 120 gold, Wren, Oda and Pim, and the Look around and Talk choices.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.018834,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the camp on a phone-sized screen (\"Camp at Mossy Ford\"). A bar along the bottom holds a \"Pause\" control with a pause icon (two vertical bars), which a player can tap.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.012753200000000001,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-dialog.tsx, each PickerSetting's onStep calls setOption directly: volume(\"music\")/volume(\"sound\") call setOption(key, options[key] + step) and speed calls setOption(\"messageSpeed\", ...). Nothing waits for the dialog to close; the onOpenChange/Resume handlers do not call setOption.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.050696000000000005,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-dialog.tsx, the \"Leave the run\" PickerItem only calls setLeaving(true), which shows a <Confirm title=\"Leave the run?\"> with \"Keep playing\" (onCancel resets leaving) and \"Leave the run\"; leaveRun() is called only inside onConfirm.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.050379999999999994,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/camp.tsx the window keydown useEffect now begins with `if (paused) return;` and has `paused` in its deps ([at, paused]), so the arrow/Enter listener is removed while the pause screen is open.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.051104000000000004,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -5362,6 +7521,81 @@
       "scope": "changed-lines",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1448,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 1,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "pause/choices",
+            "id": "choices",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows a 'Paused' panel with Resume, the option settings (Music volume 7, Sound volume 5, Message speed Normal) and Leave the run. It has no item labelled 'Options'; the settings sit in the panel itself, and I counted those as the Options part. Behind the panel the camp ('Camp at Mossy Ford', 120 gold, Wren/Oda/Pim stats, Look around/Talk) is still visible, dimmed.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0193452,
+            "attempts": 1
+          },
+          {
+            "key": "pause/tap-to-pause",
+            "id": "tap-to-pause",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "camp@phone",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the camp screen ('Camp at Mossy Ford') at phone width. A bar at the bottom holds a pause icon (two vertical bars) with the label 'Pause', which is a visible control to tap.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0126932,
+            "attempts": 1
+          },
+          {
+            "key": "pause/options-kept",
+            "id": "options-kept",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-menu.tsx, each PickerSetting's onStep calls setOption directly: `volume(key)` calls `setOption(key, options[key] + step)` for music and sound, and `speed` calls `setOption('messageSpeed', ...)`. So every step writes the option as it changes; onResume only calls the closing callback and has no setOption call.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.034468,
+            "attempts": 1
+          },
+          {
+            "key": "pause/leave-asks",
+            "id": "leave-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/pause-menu.tsx the 'Leave the run' PickerItem only calls setLeaving(true), which renders a Confirm titled 'Leave the run?'; leaveRun() is called only in that Confirm's onConfirm, while onCancel just sets leaving back to false.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033895999999999996,
+            "attempts": 1
+          },
+          {
+            "key": "pause/camp-gets-no-keys",
+            "id": "camp-gets-no-keys",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "fail",
+            "evidence": "In src/screens/camp.tsx the camp's keys move to an unconditional `useKeys({ ArrowDown, ArrowUp, Enter: () => setSaid(...), Escape })` that never checks `paused`. Only the added comment says Blip's keys 'follow its layers', and nothing in the diff shows that Enter (or the arrows) are kept from the camp while PauseMenu's Dialog is open.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.044444,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -5541,6 +7775,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0939,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot lists The Lost Ferry and Wolves at Hollow Gate first, each with a 'Next:' line, and Herbs for Old Bess (done) last. There is no heading or divider, but the gap before the done quest (about 40px) is clearly bigger than the gap between the two open quests (about 28px), so the done quest sits visibly apart.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.023126799999999996,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows both open quests with a giver line and a next step. The Lost Ferry shows 'Given by Ferrywoman Maud' and 'Next: Search the reeds south of the ford', and Wolves at Hollow Gate shows 'Given by Gatekeeper Tam' and 'Next: Speak to Tam at Hollow Gate'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0166152,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the quest log, the done quest is labelled in words: its title reads \"Herbs for Old Bess (done)\", with \"Given by Old Bess\" below it. It is not marked only by colour or greying.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015548000000000001,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/quests.tsx, each PickerItem's onSelect calls setChosen(quest.id), and the second Window renders <Text>{shown.description}</Text> for the chosen quest without truncating it.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.023244,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "With no quests, the screen shows the \"Quest log\" heading and right under it the text \"No quests yet.\" There is no empty space and no heading left with nothing below it.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015324800000000001,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -5749,6 +8060,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0885,
+        "stated": {
+          "pass": 3,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot lists The Lost Ferry and then Wolves at Hollow Gate at the top, each with a 'Next:' line. Below them a 'Done' heading and extra space separate Herbs for Old Bess, which comes last.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0157584,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Both open quests show a giver and a next step. The Lost Ferry shows \"From Ferrywoman Maud\" and \"Next: Search the reeds south of the ford\", and Wolves at Hollow Gate shows \"From Gatekeeper Tam\" and \"Next: Speak to Tam at Hollow Gate\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016406800000000003,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The done quest \"Herbs for Old Bess\" (From Old Bess) is listed under a written \"Done\" heading, set apart from the open quests. So it is marked as done in words, not only by colour.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0161524,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/quests.tsx, each PickerItem's onSelect calls setChosen(entry.quest.id), and when a quest is chosen (`shown`) a Window renders <Heading>{shown.name}</Heading> and <Text>{shown.description}</Text>, the quest's full description with no truncation.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.02496,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows a framed panel at the top that reads \"No quests yet. Talk to people to find some.\" There is no empty heading and no blank list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015224800000000002,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -5970,6 +8358,83 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.0942,
+        "stated": {
+          "pass": 2,
+          "fail": 1,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "quests/open-and-done",
+            "id": "open-and-done",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "fail",
+            "evidence": "The Lost Ferry and Wolves at Hollow Gate are listed above Herbs for Old Bess, so the order is right. But nothing clearly separates the two groups: there is no heading or divider, only a slightly bigger gap (about 41px instead of about 28px) and a small '· Done' after the giver's name.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0218984,
+            "attempts": 1
+          },
+          {
+            "key": "quests/giver-and-next",
+            "id": "giver-and-next",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Both open quests show who gave them and a next step. The Lost Ferry shows \"from Ferrywoman Maud\" and \"Next: Search the reeds south of the ford\". Wolves at Hollow Gate shows \"from Gatekeeper Tam\" and \"Next: Speak to Tam at Hollow Gate\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016475200000000002,
+            "attempts": 1
+          },
+          {
+            "key": "quests/done-mark",
+            "id": "done-mark",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The done quest \"Herbs for Old Bess\" says \"from Old Bess · Done\" under its name, so the word \"Done\" marks it in text and it isn't marked by colour alone.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015468,
+            "attempts": 1
+          },
+          {
+            "key": "quests/description",
+            "id": "description",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/quests.tsx each PickerItem's onSelect calls setPicked(e.quest.id), and the second Window renders <Text>{shown.quest.description}</Text> for the picked quest, the full description with no truncation.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.024711999999999998,
+            "attempts": 1
+          },
+          {
+            "key": "quests/no-quests",
+            "id": "no-quests",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "Under the QUESTS title, the screenshot shows a panel that says \"No quests yet.\" so the empty state is explained, not left blank. A second panel reads \"Choose a quest to read about it.\"",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015617200000000001,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -6181,6 +8646,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1153,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows three slots. Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · 2 Nov, 19:40\", which gives the place, leader, level, play time and save time, and slots 2 and 3 read \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162004,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · 2 Nov, 19:40\". The play time is shown as 3:25 and the save date as \"2 Nov, 19:40\", not as a count of seconds or an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0161828,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screen shows three slots, \"1. Empty\", \"2. Empty\" and \"3. Empty\", under the Save tab. The detail panel says \"An empty slot.\"",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0155168,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, each PickerItem has `disabled={m === 'load' && !slot}`, so an empty slot cannot be chosen in the Load picker and shows the note 'Nothing saved here yet.' doLoad itself would still call `load(index)` before checking the slot, but the disabled item keeps an empty slot from reaching it.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03578,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, onPick in save mode calls setAsking(index) when game.slots[index] already holds a save, and calls doSave directly only for an empty slot. The <Confirm> shown while asking !== null calls doSave(asking), and so save(index), only in onConfirm; onCancel just clears asking.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03164,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -6414,6 +8955,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1164,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows three slots. Slot 1 reads \"1. Mossy Ford\" with \"Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\" under it, which is the place, leader, level, play time and save time. Slots 2 and 3 read \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016316,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the screenshot, slot 1 reads \"Wren Lv 4 · 3:25 · Nov 2, 07:40 PM\". The play time is shown as 3:25 and the save date as a readable date and time, not as a count of seconds or an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0160028,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The Saves screen shows three slots listed as \"1. Empty\", \"2. Empty\" and \"3. Empty\" below the Mode/Save selector, so all three slots appear and each one says it is empty.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015608,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx each slot's PickerItem has `disabled={mode === 'load' && !slot}` and the note 'Nothing saved here yet.', so an empty slot can't be chosen while in load mode. (pick/doLoad itself would still call `load(index)`, but the disabled item keeps it from being selected.)",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.036488,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, `pick` calls `setAsking(index)` instead of `doSave` when `mode` is 'save' and `game.slots[index]` holds a save. A `Confirm` titled `Overwrite slot N?` then renders, and `doSave` (which calls `save(index)`) runs only from its `onConfirm`, while `onCancel` just clears `asking`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.032012,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -6630,6 +9247,82 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1144,
+        "stated": {
+          "pass": 1,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "saves/slot-details",
+            "id": "slot-details",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The screen lists three slots. Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 2026, 7:40 PM\", which gives the place, leader, level, play time and save time, and slots 2 and 3 are \"Empty\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162804,
+            "attempts": 1
+          },
+          {
+            "key": "saves/readable-times",
+            "id": "readable-times",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "Slot 1 reads \"1. Mossy Ford · Wren Lv 4 · 3:25 · Nov 2, 2026, 7:40 PM\". The play time is shown as 3:25 and the save date as a readable date and time, not as raw seconds or an ISO timestamp.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0161872,
+            "attempts": 1
+          },
+          {
+            "key": "saves/no-saves",
+            "id": "no-saves",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "empty@wide",
+            "verdict": "pass",
+            "evidence": "The screenshot shows the Save tab listing three slots, '1. Empty', '2. Empty' and '3. Empty', and a side panel reading 'An empty slot.' Every slot is shown and each one says it is empty.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015668,
+            "attempts": 1
+          },
+          {
+            "key": "saves/empty-cant-load",
+            "id": "empty-cant-load",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, the load-list PickerItem sets `disabled={which === 'load' && !saved}` with the note 'Nothing saved here yet.', so an empty slot can't be chosen for loading. The Picker's handling of a disabled item is not shown in the diff, but the claim also holds through the second branch: doLoad calls `load(slot)` itself and only reports `Slot N is empty.` when it fails.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.033308,
+            "attempts": 1
+          },
+          {
+            "key": "saves/overwrite-asks",
+            "id": "overwrite-asks",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/saves.tsx, `pick` sends a save into an occupied slot (`game.slots[slot]` set) to `setOverwrite(slot)` instead of calling `doSave`, which opens a `Confirm` titled \"Overwrite slot N?\". `doSave` (and so `save`) runs only in `onConfirm`; `onCancel` just clears `overwrite`.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.03294,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -6842,6 +9535,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1252,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab lists six items, each with a name and a price: Herb · 8g, Rope · 12g, Lamp Oil · 15g, Tonic · 25g, Leather Cap · 60g and Iron Sword · 150g. Iron Sword is greyed out and marked \"too dear\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0172348,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The panel at the top of the screen says \"Your gold ........ 120 gold\", so the player's gold is shown as 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.015079200000000001,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the Buy list, 'Iron Sword · 150g (too dear)' is greyed out and labelled as too dear. Herb 8g, Rope 12g, Lamp Oil 15g, Tonic 25g and Leather Cap 60g are all in normal bright text with no such label. The player has 120 gold.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016316400000000002,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx each stock PickerItem gets `disabled={short > 0}` where `short = item.price - game.gold`, so an item costing more than the player's gold is disabled and can't be chosen. Its note also explains why (\"Can't afford: … more needed\").",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.032016,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The gold bar reads 25 gold. 'Tonic · 25g' is drawn in the same bright white as Herb, Rope and Lamp Oil. Only Leather Cap (60g) and Iron Sword (150g) are greyed out and marked '(too dear)'.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0159668,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx, the sell TabPanel checks `pack.length === 0` and then renders `<Heading>Pack empty</Heading>` and `<Text>You have nothing to sell.</Text>` in place of the Sell Picker, so an empty pack shows a message instead of an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028555999999999998,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -7060,6 +9841,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.12,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab lists six items, each with a name and a price: Herb - 8g, Rope - 12g, Lamp Oil - 15g, Tonic - 25g, Leather Cap - 60g and Iron Sword - 150g. The Iron Sword is greyed out and marked \"(too dear)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.017106,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The panel at the top of the screen reads \"Your gold ........ 120 gold\", so the player's gold is shown as 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0150992,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "In the Buy list, only \"Iron Sword - 150g (too dear)\" is greyed out and labelled as too expensive. Herb 8g, Rope 12g, Lamp Oil 15g, Tonic 25g and Leather Cap 60g all appear in normal text with no marker, and the gold shown is 120.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.016364,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx the Buy list gives each PickerItem `disabled={short > 0}` (where `short = item.price - gold`), so an item dearer than the player's gold can't be chosen and `buy` is never reached. Its note also says why: \"Can't afford: ${short} gold short.\"",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028856,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The gold bar shows 25 gold, and \"Tonic - 25g\" is drawn in the same bright white text as Herb, Rope and Lamp Oil, with no \"(too dear)\" tag. Only Leather Cap and Iron Sword are greyed out and marked \"(too dear)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162996,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx the Sell component checks `pack.length === 0` and renders `<p>Your pack is empty. Nothing to sell.</p>` instead of the Picker, so an empty pack shows a message rather than an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.026232,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -7275,6 +10144,94 @@
       "scope": "all",
       "runStatus": "done",
       "status": "complete",
+      "judge": {
+        "model": "claude-opus-5-5",
+        "costUsd": 0.1204,
+        "stated": {
+          "pass": 4,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "unstated": {
+          "pass": 2,
+          "fail": 0,
+          "error": 0,
+          "skipped": 0
+        },
+        "statements": [
+          {
+            "key": "shop/stock",
+            "id": "stock",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy tab lists six items, each with a name and a price: Herb · 8g, Rope · 12g, Lamp Oil · 15g, Tonic · 25g, Leather Cap · 60g and Iron Sword · 150g. The Iron Sword is greyed out and marked \"(can't afford)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0174984,
+            "attempts": 1
+          },
+          {
+            "key": "shop/gold",
+            "id": "gold",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The top-right corner of the shop screen shows \"120 gold\", across from the \"Shop\" title.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.014959199999999999,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-afford",
+            "id": "cant-afford",
+            "unstated": false,
+            "from": "screenshot",
+            "screenshot": "start@wide",
+            "verdict": "pass",
+            "evidence": "The Buy list shows 'Iron Sword · 150g (can't afford)' in dimmed grey. Herb 8g, Rope 12g, Lamp Oil 15g, Tonic 25g and Leather Cap 60g are all in normal white text with no marker, and the player has 120 gold.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162164,
+            "attempts": 1
+          },
+          {
+            "key": "shop/cant-buy",
+            "id": "cant-buy",
+            "unstated": false,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx each stock PickerItem gets `disabled={short}` where `short = game.gold < item.price`, so items the player can't afford can't be chosen. The item's note also explains why (\"Too dear: N gold short.\") and its label adds \"(can’t afford)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.028948,
+            "attempts": 1
+          },
+          {
+            "key": "shop/exact-gold",
+            "id": "exact-gold",
+            "unstated": true,
+            "from": "screenshot",
+            "screenshot": "exact@wide",
+            "verdict": "pass",
+            "evidence": "The screen shows 25 gold at the top right. \"Tonic · 25g\" is in the same bright white text as Herb, Rope and Lamp Oil, with no \"(can't afford)\" tag. Only Leather Cap and Iron Sword are greyed out and marked \"(can't afford)\".",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.0162312,
+            "attempts": 1
+          },
+          {
+            "key": "shop/nothing-to-sell",
+            "id": "nothing-to-sell",
+            "unstated": true,
+            "from": "diff",
+            "verdict": "pass",
+            "evidence": "In src/screens/shop.tsx, the sell TabPanel checks `pack.length === 0` and renders `<Text>Your pack is empty. Nothing to sell.</Text>` instead of the Picker, so an empty pack shows a message rather than an empty list.",
+            "model": "claude-opus-5-5",
+            "costUsd": 0.026584,
+            "attempts": 1
+          }
+        ]
+      },
       "transcript": {
         "status": "complete",
         "reason": null,
@@ -7514,6 +10471,18 @@
               "max": 0,
               "n": 18
             },
+            "rubricStated": {
+              "median": 100,
+              "min": 66.6667,
+              "max": 100,
+              "n": 18
+            },
+            "rubricUnstated": {
+              "median": 100,
+              "min": 50,
+              "max": 100,
+              "n": 18
+            },
             "renders": {
               "yes": 18,
               "of": 18
@@ -7698,6 +10667,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 50,
+                "min": 50,
+                "max": 50,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -7876,6 +10857,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
@@ -8061,6 +11054,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 50,
+                "max": 100,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -8242,6 +11247,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 66.6667,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
@@ -8427,6 +11444,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -8608,6 +11637,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
@@ -8796,6 +11837,18 @@
               "max": 0,
               "n": 18
             },
+            "rubricStated": {
+              "median": 100,
+              "min": 33.3333,
+              "max": 100,
+              "n": 18
+            },
+            "rubricUnstated": {
+              "median": 100,
+              "min": 50,
+              "max": 100,
+              "n": 18
+            },
             "renders": {
               "yes": 18,
               "of": 18
@@ -8980,6 +12033,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 50,
+                "min": 50,
+                "max": 50,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -9158,6 +12223,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
@@ -9343,6 +12420,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -9524,6 +12613,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 33.3333,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
@@ -9709,6 +12810,18 @@
                 "max": 0,
                 "n": 3
               },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
               "renders": {
                 "yes": 3,
                 "of": 3
@@ -9890,6 +13003,18 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "rubricStated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
+                "n": 3
+              },
+              "rubricUnstated": {
+                "median": 100,
+                "min": 100,
+                "max": 100,
                 "n": 3
               },
               "renders": {
