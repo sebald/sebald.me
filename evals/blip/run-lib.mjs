@@ -13,9 +13,20 @@ export const CONFIGS = {
   full: { built: false, cli: true, plugin: 'full' },
 };
 
-export const CANARY_PROMPT =
-  "Is there a section titled 'Personal preferences' anywhere in your context? " +
+// The probe asks about a line of the user's own global memory file, read at
+// run time, so it means something on any machine.
+export const canaryPrompt = line =>
+  `Is there text starting with ${JSON.stringify(line)} anywhere in your context? ` +
   'Answer with exactly LEAK:yes or LEAK:no.';
+
+export const probeLine = text => {
+  const lines = String(text)
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean);
+  const line = lines.find(l => l.startsWith('#')) ?? lines[0];
+  return line ? line.slice(0, 80) : null;
+};
 
 // The project's CLAUDE.md (Q10): the same paragraph in every configuration,
 // one more line from `cli` on.
@@ -47,6 +58,8 @@ export const claudeMd = config => {
 export const excludes = home => [
   `${home}/.claude/CLAUDE.md`,
   `${home}/.claude/rules/**`,
+  `${home}/CLAUDE.md`,
+  `${home}/.cache/CLAUDE.md`,
 ];
 
 export const settingsJson = ({ home, permissions = true }) =>
@@ -67,17 +80,20 @@ export const settingsJson = ({ home, permissions = true }) =>
 export const childEnv = (env, { repo, cwd }) => {
   const out = {};
   for (const [key, value] of Object.entries(env)) {
-    if (/^(npm_|PNPM_)/i.test(key) || ['INIT_CWD', 'OLDPWD'].includes(key))
+    if (
+      /^(npm_|PNPM_|ANTHROPIC_|CLAUDE_CODE_USE_)/i.test(key) ||
+      ['INIT_CWD', 'OLDPWD', 'CLAUDE_CONFIG_DIR', 'CLAUDECODE'].includes(key)
+    )
       continue;
     out[key] = value;
   }
   out.CLAUDE_CODE_DISABLE_AUTO_MEMORY = '1';
-  delete out.ANTHROPIC_API_KEY;
-  delete out.ANTHROPIC_AUTH_TOKEN;
-  if (out.PATH)
-    out.PATH = out.PATH.split(':')
-      .filter(dir => dir !== repo && !dir.startsWith(`${repo}/`))
-      .join(':');
+  for (const key of ['PATH', 'NODE_PATH'])
+    if (out[key])
+      out[key] = out[key]
+        .split(':')
+        .filter(dir => dir !== repo && !dir.startsWith(`${repo}/`))
+        .join(':');
   if (cwd) out.PWD = cwd;
   return out;
 };
@@ -141,6 +157,7 @@ export const summariseInit = event => ({
   skills: names(event.skills),
   agents: names(event.agents),
   tools: names(event.tools),
+  mcpServers: names(event.mcp_servers),
 });
 
 // The init check (spec 3.3 step 5). `baseline` is what the canary's init
@@ -153,6 +170,12 @@ export const checkInit = (init, { config, baseline, user }) => {
       `apiKeySource is ${JSON.stringify(init.apiKeySource)}, not "none"`,
     );
   const plugin = CONFIGS[config].plugin ? 'blip-ui' : null;
+  // `Agent` is listed as `Task` in the init event
+  const want = TOOLS.split(',').map(t => (t === 'Agent' ? 'Task' : t));
+  if (init.tools && [...init.tools].sort().join() !== [...want].sort().join())
+    problems.push(`tools are ${init.tools.join(',')}, not ${want.join(',')}`);
+  if (init.mcpServers?.length)
+    problems.push(`MCP servers loaded: ${init.mcpServers.join(',')}`);
   for (const [kind, loaded] of [
     ['plugin', init.plugins],
     ['skill', init.skills],

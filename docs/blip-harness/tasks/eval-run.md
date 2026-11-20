@@ -118,5 +118,32 @@ paths, the `meta.json` fields, what `transcript.jsonl` is, when a directory coun
   skipped (`Every run ... is already done`).
 - On the real run: the rerun skips it; with `stoppedBy` set to `usage-limit` in a copy of its
   `meta.json`, `--dry` lists it as `redo (usage limit)`.
-- `node --test evals/blip` 6 pass; `pnpm lint`, `pnpm format:check`, `pnpm test`: see the
-  pull request.
+- `node --test evals/blip` 9 pass; `pnpm lint`, `pnpm format:check`, `pnpm test` (386 pass)
+  pass; root `pnpm typecheck` 34 errors, the same environmental ones as `origin/blip-harness`.
+
+**Review** (subagent, fresh context, against the task, spec 3.3/3.4, Q2, Q7, Q10, Q13, README,
+`AGENTS.md`). Fixed, each re-run with the stand-in `claude`:
+
+- Blocking: Ctrl-C or SIGTERM left detached agents running. Now a registry of live process groups
+  is killed on SIGINT, SIGTERM, SIGHUP, exit and uncaught errors (checked: a SIGINT to a hanging
+  stand-in leaves no process). An error result (login, API, 5xx) was recorded `done`; now
+  `failed` unless it is `error_max_budget_usd` or `error_max_turns`. The canary's `init` could
+  taint the baseline; it is now checked for `~/.claude` origins, MCP servers and a wrong
+  `apiKeySource`, and a later invocation with a different baseline is refused. The probe was
+  tied to one machine's heading; it now asks about the first heading of `~/.claude/CLAUDE.md`
+  read at run time (and only reads `init` when there is no such file); `~/CLAUDE.md` and
+  `~/.cache/CLAUDE.md` are excluded too.
+- Minor, fixed: UTF-8 split across chunks (`setEncoding`); `init` check now requires exactly the
+  eight tools (`Agent` is `Task` in the event) and no MCP server (stored in `meta.init`); the
+  environment also drops every `ANTHROPIC_*`, `CLAUDE_CODE_USE_*`, `CLAUDE_CONFIG_DIR`,
+  `CLAUDECODE` and `NODE_PATH` entries in the repo, and the repo and cache are `realpath`ed;
+  `init` is checked before the timeout (a hang before `init` is `failed`), timers are cleared;
+  `--tasks` deduplicated and non-empty, `--budget Infinity` refused, pack, install and missing
+  tarball failures exit 2, `--dry` checks a `--tarball` hash; `copyTree` filters only top-level
+  names; README corrected (`text`, truncated `stderr.log`, `meta.task` not the folder name,
+  enumerate `<config>`, only `meta.json` guaranteed) and `AGENTS.md` has the command.
+- Left, with the reason: other secrets in the environment (`GITHUB_TOKEN`, `AWS_*`) still pass
+  through, since the agent's `git`/`gh` use is outside this task and a list would be a guess; the
+  README now says the agent can read sibling run folders (Bash is not sandboxed) instead of
+  moving the records; a grandchild that detaches with `setsid` and holds the pipe could still
+  keep a run open past its limit (the process-group kill covers the normal case).

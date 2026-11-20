@@ -9,6 +9,7 @@ import {
   claudeMd,
   isDone,
   isUsageLimit,
+  probeLine,
 } from './run-lib.mjs';
 
 const baseline = { plugins: [], skills: ['simplify'], agents: ['Explore'] };
@@ -146,4 +147,50 @@ test('what a rerun skips', () => {
   assert.ok(!isDone({ status: 'failed' }, { retryFailed: true }));
   assert.ok(isDone({ status: 'failed' }));
   assert.ok(!isDone(null));
+});
+
+test('init check: tools and MCP servers', () => {
+  const ok = { config: 'cli', baseline, user };
+  const tools = [
+    'Task',
+    'Bash',
+    'Edit',
+    'Glob',
+    'Grep',
+    'Read',
+    'Skill',
+    'Write',
+  ];
+  assert.deepEqual(checkInit(init({ tools }), ok), []);
+  assert.match(
+    checkInit(init({ tools: [...tools, 'WebFetch'] }), ok)[0],
+    /tools are/,
+  );
+  assert.match(
+    checkInit(init({ tools, mcpServers: ['x'] }), ok)[0],
+    /MCP servers/,
+  );
+});
+
+test('the probe line is the first heading of the memory file', () => {
+  assert.equal(probeLine('\n\n# Prefs\n\n- a\n'), '# Prefs');
+  assert.equal(probeLine('just text\nmore'), 'just text');
+  assert.equal(probeLine('  \n'), null);
+});
+
+test('childEnv also drops other Anthropic variables and NODE_PATH inside the repo', () => {
+  const env = childEnv(
+    {
+      ANTHROPIC_BASE_URL: 'u',
+      CLAUDE_CONFIG_DIR: '/c',
+      CLAUDECODE: '1',
+      NODE_PATH: '/repo/node_modules/.pnpm:/other',
+      PATH: '/usr/bin',
+    },
+    { repo: '/repo', cwd: '/x' },
+  );
+  assert.equal(env.ANTHROPIC_BASE_URL, undefined);
+  assert.equal(env.CLAUDE_CONFIG_DIR, undefined);
+  assert.equal(env.CLAUDECODE, undefined);
+  assert.equal(env.NODE_PATH, '/other');
 });

@@ -19,12 +19,13 @@ import {
   writeFileSync,
 } from 'node:fs';
 import { homedir } from 'node:os';
-import { basename, dirname, join, resolve, sep } from 'node:path';
+import { basename, dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 
 import {
-  CANARY_PROMPT,
+  canaryPrompt,
+  probeLine,
   CONFIGS,
   canaryArgs,
   checkInit,
@@ -42,11 +43,12 @@ import {
 } from './run-lib.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const REPO = resolve(HERE, '../..');
+const REPO = realpathSync(resolve(HERE, '../..'));
 const TEMPLATE = join(HERE, 'template');
-const CACHE = resolve(
+const cacheWanted = resolve(
   process.env.BLIP_EVAL_CACHE ?? join(homedir(), '.cache', 'blip-eval'),
 );
+const CACHE = existsSync(cacheWanted) ? realpathSync(cacheWanted) : cacheWanted;
 // A test hook: another executable standing in for `claude`
 const CLAUDE = process.env.BLIP_EVAL_CLAUDE ?? 'claude';
 const CANARY_MODEL = 'haiku';
@@ -118,7 +120,7 @@ if (!CONFIGS[opts.config].built)
 for (const key of ['reps', 'budget', 'timeout', 'parallel']) {
   const n = Number(opts[key]);
   if (
-    !(n > 0) ||
+    !(n > 0 && Number.isFinite(n)) ||
     (key !== 'budget' && key !== 'timeout' && !Number.isInteger(n))
   )
     fail(`--${key} must be a positive number, got "${opts[key]}"`);
@@ -132,7 +134,8 @@ const allTasks = readdirSync(join(HERE, 'tasks'), { withFileTypes: true })
   )
   .map(e => e.name)
   .sort();
-const tasks = parseList(opts.tasks, allTasks);
+const tasks = [...new Set(parseList(opts.tasks, allTasks))];
+if (!tasks.length) fail('--tasks lists no task');
 for (const t of tasks)
   if (!allTasks.includes(t))
     fail(`No task "${t}". Tasks: ${allTasks.join(', ')}`);
@@ -205,8 +208,15 @@ if (opts.dry) {
   );
   console.log(`cache ${labelDir}`);
   console.log(`claude ${claudeVersion}`);
-  if (opts.tarball) console.log(`tarball ${resolve(opts.tarball)}`);
-  else if (label)
+  if (opts.tarball) {
+    const given = resolve(opts.tarball);
+    if (!existsSync(given)) fail(`No such tarball: ${given}`);
+    if (label && label.tarball.sha256 !== sha256(given))
+      fail(
+        `Label "${opts.label}" was built from another tarball. A comparison uses one tarball: pick a new label.`,
+      );
+    console.log(`tarball ${given}`);
+  } else if (label)
     console.log(`tarball ${label.tarball.file} (recorded for this label)`);
   else
     console.log(
@@ -215,7 +225,7 @@ if (opts.dry) {
   console.log(`base: ${show('pnpm', ['install'])} in ${baseDir}`);
   if (pending.length)
     console.log(
-      `canary: ${show(CLAUDE, canaryArgs({ model: CANARY_MODEL }))} in ${canaryDir} < "${CANARY_PROMPT.slice(0, 40)}..."`,
+      `canary: ${show(CLAUDE, canaryArgs({ model: CANARY_MODEL }))} in ${canaryDir} < (a question about the first heading of ~/.claude/CLAUDE.md)`,
     );
   for (const r of runs) {
     if (r.state === 'skip') {
@@ -255,6 +265,16 @@ const packageJsonOf = tgz =>
   JSON.parse(run('tar', ['-xOf', tgz, 'package/package.json']));
 
 const makeLabel = () => {
+  try {
+    return makeLabelUnsafe();
+  } catch (error) {
+    return fail(
+      `Could not prepare the label: ${String(error.stderr || error.message).slice(0, 500)}`,
+    );
+  }
+};
+
+const makeLabelUnsafe = () => {
   const found = ensureTarball();
   if (found?.label) return found;
   let file;
@@ -311,7 +331,8 @@ const copyTree = (from, to) =>
   cpSync(from, to, {
     recursive: true,
     filter: src =>
-      !COPY_SKIP.has(basename(src)) && !src.endsWith('.tsbuildinfo'),
+      !COPY_SKIP.has(relative(from, src).split(sep)[0]) &&
+      !src.endsWith('.tsbuildinfo'),
   });
 
 const ensureBase = record => {
@@ -351,6 +372,22 @@ const userNames = () => {
 
 // Starts claude, hands stdin over, feeds each stdout line to `onEvent`.
 // `onEvent` may return 'kill'. Resolves with how it ended.
+const live = new Set();
+const killAll = () => {
+  for (const kill of live) kill('SIGKILL');
+};
+for (const sig of ['SIGINT', 'SIGTERM', 'SIGHUP'])
+  process.on(sig, () => {
+    killAll();
+    process.exit(130);
+  });
+process.on('exit', killAll);
+process.on('uncaughtException', error => {
+  killAll();
+  console.error(error);
+  process.exit(1);
+});
+
 const spawnClaude = ({ argv, cwd, prompt, onLine, onEvent, limitMs }) =>
   new Promise(resolveRun => {
     const child = spawn(CLAUDE, argv, {
@@ -370,21 +407,29 @@ const spawnClaude = ({ argv, cwd, prompt, onLine, onEvent, limitMs }) =>
         /* already gone */
       }
     };
+    live.add(killGroup);
+    const timers = [];
+    const later = (fn, ms) => timers.push(setTimeout(fn, ms));
     const stop = reason => {
       if (killedFor || timedOut) return;
       killedFor = reason;
       killGroup('SIGTERM');
-      setTimeout(() => killGroup('SIGKILL'), 10_000).unref();
+      later(() => killGroup('SIGKILL'), 10_000);
     };
-    const timer = limitMs
-      ? setTimeout(() => {
-          timedOut = true;
-          killGroup('SIGTERM');
-          setTimeout(() => killGroup('SIGKILL'), 10_000).unref();
-        }, limitMs)
-      : null;
+    if (limitMs)
+      later(() => {
+        timedOut = true;
+        killGroup('SIGTERM');
+        later(() => killGroup('SIGKILL'), 10_000);
+      }, limitMs);
+    const done = () => {
+      timers.forEach(clearTimeout);
+      live.delete(killGroup);
+    };
+    child.stdout.setEncoding('utf8');
+    child.stderr.setEncoding('utf8');
     child.on('error', error => {
-      clearTimeout(timer);
+      done();
       resolveRun({
         error,
         code: null,
@@ -412,10 +457,10 @@ const spawnClaude = ({ argv, cwd, prompt, onLine, onEvent, limitMs }) =>
       }
     });
     child.on('close', (code, signal) => {
-      clearTimeout(timer);
       feed(buffer);
       // Anything the group left behind (a server the agent started)
       killGroup('SIGKILL');
+      done();
       resolveRun({ code, signal, timedOut, killedFor, stderr });
     });
   });
@@ -429,10 +474,22 @@ const canary = async record => {
   );
   let init = null;
   let result = null;
+  let line = null;
+  try {
+    line = probeLine(
+      readFileSync(join(homedir(), '.claude', 'CLAUDE.md'), 'utf8'),
+    );
+  } catch {
+    /* no global memory file: nothing can leak */
+  }
+  if (!line)
+    console.log(
+      'No ~/.claude/CLAUDE.md to probe for; the canary only reads init.',
+    );
   const ended = await spawnClaude({
     argv: canaryArgs({ model: CANARY_MODEL }),
     cwd: canaryDir,
-    prompt: CANARY_PROMPT,
+    prompt: line ? canaryPrompt(line) : 'Answer with exactly LEAK:no.',
     limitMs: 5 * 60_000,
     onEvent: e => {
       if (e.type === 'system' && e.subtype === 'init') init = summariseInit(e);
@@ -462,11 +519,27 @@ const canary = async record => {
       `Canary failed: apiKeySource is ${JSON.stringify(init.apiKeySource)}, not "none".`,
       3,
     );
-  record.baseline = {
+  const baseline = {
     plugins: init.plugins,
     skills: init.skills,
     agents: init.agents,
   };
+  // Whatever the canary loaded must not come from ~/.claude, or it would
+  // become part of the baseline every run is compared with
+  const tainted = checkInit(init, {
+    config,
+    baseline,
+    user: userNames(),
+  }).filter(p => /~\/\.claude|MCP|apiKeySource/.test(p));
+  if (tainted.length)
+    fail(`Canary failed: ${tainted.join('; ')}. Nothing was run.`, 3);
+  const was = record.baseline;
+  if (was && JSON.stringify(was) !== JSON.stringify(baseline))
+    fail(
+      `Claude Code loads other built-in plugins, skills or agents than when label "${opts.label}" began (${record.claudeVersion} then, ${claudeVersion} now). Use a new label.`,
+      3,
+    );
+  record.baseline = baseline;
   record.canary = {
     at: new Date().toISOString(),
     claudeVersion,
@@ -655,9 +728,17 @@ const execute = async (r, record, state) => {
     });
   if (limited || isUsageLimit(result))
     return finish({ ...base, status: 'stopped', stoppedBy: 'usage-limit' });
-  if (ended.timedOut) return finish({ ...base, status: 'timeout' });
   if (!init) return finish({ ...base, failure: 'no init event' });
+  if (ended.timedOut) return finish({ ...base, status: 'timeout' });
   if (!result) return finish({ ...base, failure: 'no result event' });
+  if (
+    result.is_error &&
+    !['error_max_budget_usd', 'error_max_turns'].includes(result.subtype)
+  )
+    return finish({
+      ...base,
+      failure: `error result: ${base.result.text ?? result.subtype}`,
+    });
   return finish({
     ...base,
     status: 'done',
@@ -668,7 +749,13 @@ const execute = async (r, record, state) => {
 // ---- Go ------------------------------------------------------------------
 
 const record = makeLabel();
-ensureBase(record);
+try {
+  ensureBase(record);
+} catch (error) {
+  fail(
+    `Could not install the label: ${String(error.stderr || error.message).slice(0, 500)}`,
+  );
+}
 if (!pending.length) {
   console.log(
     'Every run of this label and configuration is already done. Nothing to do.',

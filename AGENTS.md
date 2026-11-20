@@ -18,6 +18,7 @@ pnpm types:check      # Full type check (fumadocs + next + tsc)
 pnpm typecheck        # Quick tsc --noEmit
 pnpm test             # Run tests (Node test runner)
 pnpm test:lib:watch   # Watch mode for tests
+pnpm eval:blip        # Blip UI eval runner (evals/blip/README.md); by hand, spends subscription, never in CI. `node --test evals/blip` is outside `pnpm test`
 pnpm narrate          # Render narrations of changed notes (Python, see Narration)
 pnpm narrate:check    # Fail if a note's narration is missing or outdated
 pnpm test:game        # The game played through its screens (Playwright, against the dev server)

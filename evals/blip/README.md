@@ -172,12 +172,20 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
   the agent started; the agent's changes are `git status` / `git diff template`
   against it. `transcript.jsonl`, `meta.json` and `stderr.log` are in
   `.git/info/exclude`, `node_modules/`, `dist/` and `*.tgz` in `.gitignore`.
-  The records are moved in after the child ends, so the agent never sees them.
+  The records are moved in after the child ends, so the agent cannot read its own
+  transcript (Bash is not sandboxed, so it could still list sibling run folders
+  and `<label>/.tmp/`; nothing in a prompt points it there).
 - **A directory without `meta.json` is unfinished and is to be skipped.** A run
   is a result when `meta.status` is `done` or `timeout`; `failed` is a run that
-  could not be measured (setup, the `init` check, no result event), `stopped`
-  one that hit the subscription's usage limit. The collector counts only
-  `done` and `timeout`.
+  could not be measured (setup, the `init` check, no `init` or `result` event, an
+  error result such as a login or API error), `stopped` one that hit the
+  subscription's usage limit. The collector counts only `done` and `timeout`.
+  Only `meta.json` is guaranteed: a run that failed in setup has no
+  `transcript.jsonl` and maybe no `.git`; `stderr.log` keeps the last 2000
+  characters. Task names contain hyphens (`fight-hud-1`): read `meta.task` and
+  `meta.rep`, never parse the folder name. `<label>/` also holds `tarball/` and
+  `label.json`: list `<config>` by the configuration names, not by every
+  subdirectory.
 - `pnpm install` per run is offline from `pnpm-lock.yaml` (kept from the
   label's base install); `no-cli` has `node_modules/.bin/blip` removed.
   Nothing in the folder resolves into this repo (checked before the agent
@@ -185,23 +193,23 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 
 `meta.json`:
 
-| Field                                | Content                                                                                                                                                 |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`, `config`, `task`, `rep`     | Which run (`rep` from 1)                                                                                                                                |
-| `model`, `budgetUsd`, `timeoutMin`   | What was asked for                                                                                                                                      |
-| `tarball`                            | `sha256`, `version`, `commit` (null with `--tarball`): the same for every run of a label                                                                |
-| `claudeVersion`                      | `claude --version`                                                                                                                                      |
-| `startedAt`, `endedAt`, `durationMs` | ISO times, wall clock including setup                                                                                                                   |
-| `exitCode`, `signal`                 | The child's                                                                                                                                             |
-| `status`                             | `done`, `timeout`, `failed`, `stopped`                                                                                                                  |
-| `failure`                            | Why, when `failed`; else null                                                                                                                           |
-| `timedOut`                           | Ended by the wall-clock limit (`status: "timeout"`)                                                                                                     |
-| `stoppedBy`                          | `"usage-limit"` or null. A run with it is redone from a fresh copy, never a result                                                                      |
-| `overBudget`                         | The result event was `error_max_budget_usd`                                                                                                             |
-| `init`, `initProblems`               | What the `init` event loaded by name (`apiKeySource`, `model`, `plugins`, `skills`, `agents`, `tools`) and what the check found wrong (empty when fine) |
-| `result`                             | From the `result` event: `subtype`, `isError`, `costUsd` (an estimate at API prices), `turns`, `apiMs`, `usage`; null without one                       |
-| `installMs`, `baseCommit`            | The offline install's time; the `template` commit's hash                                                                                                |
-| `redoOf`                             | null for a first run; why it was redone otherwise                                                                                                       |
+| Field                                | Content                                                                                                                                                                          |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `config`, `task`, `rep`     | Which run (`rep` from 1)                                                                                                                                                         |
+| `model`, `budgetUsd`, `timeoutMin`   | What was asked for                                                                                                                                                               |
+| `tarball`                            | `sha256`, `version`, `commit` (null with `--tarball`): the same for every run of a label                                                                                         |
+| `claudeVersion`                      | `claude --version`                                                                                                                                                               |
+| `startedAt`, `endedAt`, `durationMs` | ISO times, wall clock including setup                                                                                                                                            |
+| `exitCode`, `signal`                 | The child's                                                                                                                                                                      |
+| `status`                             | `done`, `timeout`, `failed`, `stopped`                                                                                                                                           |
+| `failure`                            | Why, when `failed`; else null                                                                                                                                                    |
+| `timedOut`                           | Ended by the wall-clock limit (`status: "timeout"`)                                                                                                                              |
+| `stoppedBy`                          | `"usage-limit"` or null. A run with it is redone from a fresh copy, never a result                                                                                               |
+| `overBudget`                         | The result event was `error_max_budget_usd`                                                                                                                                      |
+| `init`, `initProblems`               | What the `init` event loaded by name (`apiKeySource`, `model`, `plugins`, `skills`, `agents`, `tools`) and what the check found wrong (empty when fine)                          |
+| `result`                             | From the `result` event: `subtype`, `isError`, `costUsd` (an estimate at API prices), `turns`, `apiMs`, `usage`, `text` (the message, on an error result only); null without one |
+| `installMs`, `baseCommit`            | The offline install's time; the `template` commit's hash                                                                                                                         |
+| `redoOf`                             | null for a first run; why it was redone otherwise                                                                                                                                |
 
 `label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
 `version`, `commit`, `dirty`), `baseline` (the plugins, skills and agents Claude
@@ -221,17 +229,22 @@ finish), and the exit code is 3.
 ### Two checks before and during a label
 
 - **The canary** (Q7), once per invocation that has work to do: an empty
-  folder in the label's cache, the same flags, one question about a section
-  of `~/.claude/CLAUDE.md`. If the answer is yes, or the `init` event's
-  `apiKeySource` is not `none`, nothing runs. On Claude Code 2.1.329
+  folder in the label's cache, the same flags, one question about the first
+  heading of `~/.claude/CLAUDE.md` (read at run time; with no such file it only
+  reads `init`). If the answer is yes, the `init` event's `apiKeySource` is not
+  `none`, or anything it loaded comes from `~/.claude` or an MCP server, nothing
+  runs. Its `init` becomes the label's `baseline`; a later invocation whose
+  baseline differs (another Claude Code) is refused. On Claude Code 2.1.329
   `--setting-sources project` alone does **not** keep that file out (the canary
   said yes), so every run's and the canary's `.claude/settings.json` also lists
-  `claudeMdExcludes` for `~/.claude/CLAUDE.md` and `~/.claude/rules/**` (the home
-  directory written in at run time). A run's `settings.json` is therefore not
+  `claudeMdExcludes` for `~/.claude/CLAUDE.md`, `~/.claude/rules/**`, `~/CLAUDE.md`
+  and `~/.cache/CLAUDE.md` (the home directory written in at run time). A run's `settings.json` is therefore not
   "permissions only" as spec 3.3 says.
 - **The `init` event** of each run, as it arrives: `apiKeySource` must be
   `none`, and every plugin, skill and agent must be one the canary's `init` listed
   (Claude Code's own, the same everywhere) or the configuration's (`blip-ui`'s
-  plugin from `plan` on), and none may come from `~/.claude`. On a problem the
+  plugin from `plan` on), none may come from `~/.claude`, the tools must be
+  exactly the eight of the command line (`Agent` shows as `Task`) and no MCP
+  server may be loaded. On a problem the
   child is killed at once and the run is `failed` with the reasons in
   `initProblems`.
