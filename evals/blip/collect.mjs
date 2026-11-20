@@ -11,6 +11,7 @@ import {
   mkdirSync,
   readFileSync,
   readdirSync,
+  statSync,
   writeFileSync,
 } from 'node:fs';
 import { homedir } from 'node:os';
@@ -92,7 +93,7 @@ const filesUnder = (dir, out = []) => {
     a.name < b.name ? -1 : 1,
   )) {
     const path = join(dir, entry.name);
-    if (entry.isDirectory()) filesUnder(path, out);
+    if (statSync(path).isDirectory()) filesUnder(path, out);
     else out.push(path);
   }
   return out;
