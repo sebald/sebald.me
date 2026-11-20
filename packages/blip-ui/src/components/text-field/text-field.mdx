@@ -45,12 +45,12 @@ reader hears it too, when the field is full and again when more is typed.
 
 An error is a sentence, not a colour. The red frame helps whoever sees
 it; the sentence is what a screen reader and a colour-blind player get,
-and the field points at it through its description. Say what to do
+and the field is linked to it, so it is read with the field. Say what to do
 about it, not only that it is wrong.
 
-<Rules for="text-field" />
-
 <Canvas of={TextFieldStories.NamingTheHero} />
+
+<Rules for="text-field" />
 
 ## Input
 
@@ -59,7 +59,8 @@ about it, not only that it is wrong.
   is in a text field, so letters and arrows are typed and the menu next to it
   does not move
 - Enter submits (`onSubmit`, with the text) and the field keeps the focus;
-  the screen decides what happens next
+  the screen decides what happens next. It is not a form's submit: the
+  event is not prevented, so inside a `<form>` that submits too
 - Escape gives the keys back to the screen without leaving it: the field
   lets go of the focus, the next Escape is the screen's own back. It does
   not close a `Dialog` the field is in

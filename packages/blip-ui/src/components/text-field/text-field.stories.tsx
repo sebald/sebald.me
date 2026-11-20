@@ -45,9 +45,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Type in it; the characters left count down when there is a limit */
+/** Type in it; set `maxLength` for the characters left to count down */
 export const Default: Story = {
-  args: { maxLength: 10, placeholder: 'Hero' },
   decorators: [
     Story => (
       <Stage>

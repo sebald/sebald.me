@@ -54,6 +54,6 @@ Filled in while the task is worked on: what changed, decisions, numbers.
 **Built.** `TextField` (`text-field/`): children are the label; `value`/`defaultValue`/`onValueChange`, `onSubmit(value)`,
 `maxLength`, `description`, `error` (its presence marks it invalid); the rest goes to the input. Base UI `Field.Root`,
 `Field.Label`, `Input`, `Field.Description`, `Field.Error`. No `variant` or `size`. Enter submits and keeps focus, Escape
-blurs (and does not reach a Dialog), the limit is announced through `useAnnounce`. Rules `C-TEXT-FIELD-1..4` and
+blurs (and does not reach a Dialog), the limit is announced through `useAnnounce`. Rules `C-TEXT-FIELD-1..3` (1 is `[open]`) and
 `P-TEXT-FIELD-1` (`[open]`, the candidate `P-SAVES-107`, renamed because a sidecar's ids carry its page).
 `sidecar.test.ts`'s fixed page list got `picker`, `setting`, `text-field`.

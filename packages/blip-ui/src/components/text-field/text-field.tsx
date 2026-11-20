@@ -111,7 +111,7 @@ export const TextField = ({
     <Field.Root
       data-slot="text-field"
       disabled={disabled}
-      invalid={error !== undefined || undefined}
+      invalid={!!error || undefined}
       className={styles.root({ className })}
     >
       <div className={styles.row()}>
@@ -121,6 +121,7 @@ export const TextField = ({
           <span
             aria-hidden
             data-full={full || undefined}
+            data-disabled={disabled || undefined}
             className={styles.count()}
           >
             {left}
@@ -145,7 +146,7 @@ export const TextField = ({
           });
         }}
         onValueChange={next => {
-          if (next !== text) play('type');
+          if (next.length > text.length) play('type', next.slice(text.length));
           setInner(next);
           onValueChange?.(next);
           if (maxLength !== undefined && next.length >= maxLength)
@@ -162,7 +163,7 @@ export const TextField = ({
           )}
         </Field.Description>
       )}
-      {error !== undefined && (
+      {!!error && (
         <Field.Error match className={styles.error()}>
           {error}
         </Field.Error>

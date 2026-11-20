@@ -20,7 +20,7 @@ export const textField = {
   count: cva({
     base: [
       'text-[0.85em] text-(--bui-dim) tabular-nums',
-      'data-[full]:text-(--bui-primary)',
+      'data-[full]:text-(--bui-primary) data-[disabled]:bui-disabled',
     ],
   }),
   input: cva({

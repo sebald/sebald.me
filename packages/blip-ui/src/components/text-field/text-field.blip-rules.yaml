@@ -1,18 +1,15 @@
 page: text-field
 rules:
+  # Open: no source asks for it; whether a limit is always set is Blip's own call.
   - id: C-TEXT-FIELD-1
-    text: Give every TextField a label, as its children.
-    markers: [review]
+    text: Set maxLength on a field whose text is stored or drawn in a fixed space, such as a name.
+    markers: [open]
     source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
   - id: C-TEXT-FIELD-2
-    text: Set maxLength on a field whose text is stored or drawn in a fixed space, such as a name.
-    markers: [review]
-    source: https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions.html
-  - id: C-TEXT-FIELD-3
     text: Say what is wrong with the text in the error prop, in words, and never by the red frame alone.
     markers: [review]
     source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
-  - id: C-TEXT-FIELD-4
+  - id: C-TEXT-FIELD-3
     text: Put a legend with the field's keys, Enter and Esc, on the screen it is in.
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
