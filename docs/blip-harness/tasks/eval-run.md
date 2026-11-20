@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: C
 depends: [template, cli-lookup]
 pr: https://github.com/sebald/sebald.me/pull/202
