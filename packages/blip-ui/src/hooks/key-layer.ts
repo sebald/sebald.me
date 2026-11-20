@@ -62,6 +62,7 @@ const WIDGETS: Record<string, 'row' | 'column' | 'both'> = {
   menu: 'column',
   radiogroup: 'both',
   slider: 'both',
+  switch: 'row',
   grid: 'both',
 };
 const SELECTOR = Object.keys(WIDGETS)
