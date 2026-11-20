@@ -151,7 +151,7 @@ from the root's `node_modules`, so only a check in the cache shows what an agent
 `--reps n` (default 1), `--model` (default `claude-sonnet-5-5`), `--budget`
 (`--max-budget-usd`, default 4), `--timeout` (minutes per run, default 30),
 `--tarball f` (else the workspace is packed), `--parallel n` (default 1),
-`--retry-failed`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
+`--retry-failed`, `--accept-baseline`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
 configuration not built, 3 when the label stopped (canary or usage limit).
 
 Runs on the logged-in subscription. The child's environment (also `pnpm`'s and
