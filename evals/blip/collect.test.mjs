@@ -15,7 +15,7 @@ import { join } from 'node:path';
 import { after, before, describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { collect, write } from './collect.mjs';
+import { collect, write, writeupsIn } from './collect.mjs';
 const SKIPPED = ['cli/quests-4', 'cli/quests-5', 'cli/quests-6'];
 
 import { buildCache, fixtureRuns } from './fixtures/build-cache.mjs';
@@ -248,6 +248,54 @@ describe('the collector on the fixtures', () => {
       'results.json',
       'summary.md',
     ]);
+  });
+
+  it('leaves hand-written files alone and links them from summary.md', () => {
+    const out = join(dir, 'writeups');
+    const folder = join(out, '2026-01-01-fx');
+    mkdirSync(folder, { recursive: true });
+    writeFileSync(join(folder, 'invented.md'), 'by hand\n');
+    writeFileSync(join(folder, 'summary.md'), 'old\n');
+    const writeups = writeupsIn(out, '2026-01-01', 'fx');
+    assert.deepEqual(writeups, ['invented.md']);
+    write(collect({ ...options(), writeups }), out, '2026-01-01');
+    assert.equal(
+      readFileSync(join(folder, 'invented.md'), 'utf8'),
+      'by hand\n',
+    );
+    const summary = readFileSync(join(folder, 'summary.md'), 'utf8');
+    assert.match(summary, /Write-ups: \[`invented\.md`\]\(invented\.md\)\./);
+    // nothing to link when there is no other file, and no folder yet
+    assert.deepEqual(writeupsIn(out, '2026-01-02', 'fx'), []);
+    assert.doesNotMatch(first.summary, /Write-ups/);
+    // a second collect reads the same list: same summary
+    assert.equal(
+      summary,
+      collect({ ...options(), writeups: writeupsIn(out, '2026-01-01', 'fx') })
+        .summary,
+    );
+  });
+
+  it('puts an inline style recurring in 3 runs of 2 tasks among the candidates', () => {
+    const style = first.results.candidates.find(c => c.style.length);
+    assert.equal(style.element, 'div');
+    assert.deepEqual(style.style, [
+      "display:'flex'",
+      'gap:*',
+      'inset:0',
+      "position:'absolute'",
+    ]);
+    // pause-1 and pause-2 wrote the keys in another order; pause-3's one-off
+    // `style` on Button is not a candidate
+    assert.deepEqual(style.runs, ['cli/pause-1', 'cli/pause-2', 'cli/shop-1']);
+    assert.equal(
+      first.results.candidates.filter(c => c.style.length).length,
+      1,
+    );
+    assert.match(
+      first.summary,
+      /\| `div` \(raw tag\) \| style: `display:'flex'` `gap:\*` `inset:0` `position:'absolute'` \| 3 \| pause, shop \| 3 \|/,
+    );
   });
 
   it('refuses to put results side by side when the collector or the CLI differs', () => {
@@ -489,6 +537,38 @@ describe('the tree', () => {
       "export const A = ({ s }) => <div className={cn('a', s === 'open' ? 'b' : 'c')} />;",
     );
     assert.deepEqual(elements[0].classes.tokens, ['a', 'b', 'c']);
+  });
+
+  it('normalises an inline style: sorted keys, tuned values as *, spreads kept', () => {
+    const { elements } = analyseSource(
+      'a.tsx',
+      `export const A = () => (
+        <div style={{ position: 'absolute',  inset: 0, 'z-index': 1, ...extra, padding: \`calc(\${a}px + var(--bui-bar))\` }} />
+      );
+      export const D = () => <div style={{ position: "absolute" as const, inset: '0', gap }} />;
+      export const B = () => <div style={frame} />;
+      export const C = () => <div style={{}} />;`,
+    );
+    assert.deepEqual(
+      elements[0].styleProp.declarations,
+      [
+        'inset:0',
+        'padding:*',
+        "position:'absolute'",
+        'z-index:*',
+        '...extra',
+      ].sort(),
+    );
+    // double quotes, `as const` and '0' are the same as their plain forms
+    assert.deepEqual(elements[1].styleProp.declarations, [
+      'gap:*',
+      'inset:0',
+      "position:'absolute'",
+    ]);
+    // not an object literal, or empty: counted as a style, nothing to compare
+    assert.equal(elements[2].style, true);
+    assert.equal(elements[2].styleProp, null);
+    assert.equal(elements[3].styleProp, null);
   });
 
   it('orders configurations as they add to one another', () => {

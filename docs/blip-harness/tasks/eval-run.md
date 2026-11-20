@@ -146,6 +146,13 @@ paths, the `meta.json` fields, what `transcript.jsonl` is, when a directory coun
   README says the agent can read sibling run folders (Bash is not sandboxed) instead of moving the records; a grandchild that detaches with `setsid` and holds the pipe could still
   keep a run open past its limit (the process-group kill covers the normal case).
 
+**Notes: strict init and baseline** (after #212 loosened both). The label baseline blocks again
+(plugins, skills, agents, tools, MCP servers; exit 3 with the difference, `--accept-baseline`
+records it as `acceptedBaselines` in `label.json`); a plugin is built in only by its own init
+entry, never by name; no plugin list or no origin fails closed. Logic in `run-lib.mjs`
+(`judgeBaseline`, `checkInit`), unit-tested; the runner path was not driven with a stand-in
+`claude` (the label's install needs the network).
+
 **Environment allowlist** (after the user's decision on the review). The child's environment
 (`claude`, `pnpm`, `git`) is now built from a list, `ENV_ALLOW` in `run-lib.mjs`, instead of
 the caller's minus a blocklist: `PATH` (this repo's entries removed), `HOME`, `USER`, `LOGNAME`,
