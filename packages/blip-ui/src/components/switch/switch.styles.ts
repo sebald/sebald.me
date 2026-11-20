@@ -17,12 +17,12 @@ export const switchStyles = {
       'group-data-checked:ring-(--bui-primary)',
     ],
   }),
-  /** A square that moves from one end to the other, in whole stage pixels by `left` (a transform would blend its edges at a fractional scale); the frame and colour change in step with it */
+  /** A square that moves from one end to the other, by `translate` in whole stage pixels; the frame and colour change in step with it */
   thumb: cva({
     base: [
       'absolute top-[calc(var(--bui-px)*1)] left-[calc(var(--bui-px)*1)] block size-[calc(var(--bui-px)*4)] bg-(--bui-muted)',
-      'transition-[left,background-color] duration-150 ease-bui-out motion-reduce:transition-[background-color]',
-      'data-checked:left-[calc(var(--bui-px)*7)] data-checked:bg-(--bui-primary)',
+      'transition-[translate,background-color] duration-150 ease-bui-out motion-reduce:transition-[background-color]',
+      'data-checked:translate-x-[calc(var(--bui-px)*6)] data-checked:bg-(--bui-primary)',
     ],
   }),
   /** On or Off, the same width either way so the row does not shift */

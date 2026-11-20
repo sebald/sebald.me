@@ -56,9 +56,11 @@ and snaps under reduced motion. A change plays the `move` sound through
 
 The thumb, its colour and the track's frame change together in 150 ms on
 `ease-bui-out`: a switch answers a tap, so it starts fast and settles, and
-it is interrupted cleanly when tapped again. The thumb moves by `left`, not
-`transform`, so it lands on whole device pixels and keeps its edges at any
-scale. There is no press scale: it would blur the pixel art. On and Off
+it is interrupted cleanly when tapped again. The thumb moves by `translate`
+of six stage pixels, which comes to whole device pixels at every scale
+(measured at 2.25x, 3x and a phone's 1.256x, at 1x and 2x device pixels), so
+at rest its edges are as sharp as with `left`; only mid-move does a partial
+pixel show. There is no press scale: it would blur the pixel art. On and Off
 change at once, as list navigation does. Under reduced motion the thumb
 snaps and the colours still fade.
 
