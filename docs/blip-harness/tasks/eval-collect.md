@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: C
 depends: [template]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/201
 ---
 
 # `eval-collect`: Turn a label's runs into `results.json` and `summary.md`
