@@ -1,6 +1,8 @@
 // Layer 1 of the collector, from a run's `transcript.jsonl` (Claude Code's
 // `--output-format stream-json`): what the agent did, counted
 
+import { homedir } from 'node:os';
+
 const DIST = '@sebald/blip-ui/dist';
 const DOCS = '@sebald/blip-ui/docs';
 
@@ -158,6 +160,9 @@ export const blipCalls = command => {
 };
 
 const LOCAL_BINS = /^(blip|tsc|vite|oxlint|oxfmt)$/;
+
+/** The home directory written as `~`, so a result never holds a user's path */
+const homeAsTilde = text => text.split(homedir()).join('~');
 
 /** The network-reaching commands of a Bash command */
 export const networkCalls = command => {
@@ -377,7 +382,9 @@ export const analyseTranscript = source => {
       for (const tool of networkCalls(command)) {
         network.push({
           tool,
-          command: command.length > 160 ? `${command.slice(0, 160)}…` : command,
+          command: homeAsTilde(
+            command.length > 160 ? `${command.slice(0, 160)}…` : command,
+          ),
         });
       }
       const output = results.get(call.id)?.text ?? '';
