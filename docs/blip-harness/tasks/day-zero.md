@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D
 depends: [eval-run, eval-collect, research-game-ui, readable-types]
 pr: https://github.com/sebald/sebald.me/pull/208
