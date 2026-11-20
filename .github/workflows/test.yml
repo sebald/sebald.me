@@ -36,6 +36,33 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+  # A pull request that changes a package's code (Blip UI, Pushback) adds
+  # a changeset naming it; which files count is `changedFilePatterns` in
+  # `.changeset/config.json`. `pnpm changeset --empty` for none.
+  changeset:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # The branch's history back to where it left the base
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check the changesets
+        run: pnpm changeset:check origin/${{ github.base_ref }}
+
   # Every published note needs a narration that matches its current text.
   # Only needs Python, so it runs next to the tests without `pnpm install`
   narrations:
@@ -45,7 +72,7 @@ jobs:
       - uses: actions/checkout@v7
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v10.3.2
+        uses: astral-sh/setup-uv@v10.3.3
 
       # Same as `pnpm narrate:check`, pnpm would install the Node
       # dependencies before running it

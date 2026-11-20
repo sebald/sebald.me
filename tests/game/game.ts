@@ -6,6 +6,10 @@ import {
 } from '@playwright/test';
 import { type Mode, bossIndex } from '@sebald/pushback/lib/characters';
 import {
+  PUSHBACK_EVENT,
+  type PushbackEvent,
+} from '@sebald/pushback/lib/events';
+import {
   BOSS_PAIRS,
   CLOSERS,
   PAIRS,
@@ -378,3 +382,23 @@ export const playDuel = async (
   }
   throw new Error('the duel did not end in 300 presses');
 };
+
+/**
+ * Collect what the game tells its host: every `PUSHBACK_EVENT` that
+ * bubbles up from its root, from the page's first script on. Call before
+ * the game opens; `eventsOf` reads them.
+ */
+export const recordEvents = (page: Page) =>
+  page.addInitScript(name => {
+    const events: unknown[] = [];
+    (window as unknown as { __events: unknown[] }).__events = events;
+    document.addEventListener(name, event =>
+      events.push((event as CustomEvent).detail),
+    );
+  }, PUSHBACK_EVENT);
+
+/** The events the game sent so far (`recordEvents`) */
+export const eventsOf = (page: Page) =>
+  page.evaluate(
+    () => (window as unknown as { __events: PushbackEvent[] }).__events,
+  );

@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { join } from 'node:path';
+import { readdirSync } from 'node:fs';
+import { basename, join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { checkSidecars, parseSidecar } from './sidecar.ts';
@@ -195,7 +196,12 @@ describe('the sidecars of src', () => {
 
   it('hold to the build rules (only unwritten checks warn)', () => {
     const { errors, warnings } = checkSidecars(sidecars, {
-      pages: new Set(['dialog', 'speech-bubble', 'introduction']),
+      // Every page of src, so a new component's sidecar needs no edit here
+      pages: new Set(
+        readdirSync(join(root, 'src'), { recursive: true, encoding: 'utf8' })
+          .filter(file => file.endsWith('.mdx'))
+          .map(file => basename(file, '.mdx')),
+      ),
       checks: loadCheckNames(root),
     });
     assert.deepEqual(errors, []);

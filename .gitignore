@@ -1,5 +1,7 @@
 # deps
 node_modules/
+# a pnpm store created in the repo (installs use the global one)
+/.pnpm-store/
 
 # generated content
 .source
