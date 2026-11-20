@@ -34,7 +34,7 @@ export const labelTemplate = ({ rubric, label, run, runDir, files }) => ({
   label,
   run,
   runFolder: runDir,
-  how: 'Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in ~/.cache/blip-eval/<label>/.screenshots/<run>/, written by a collect that renders (or open the URL on the run's built app). Do not open evals/blip/labels/judge/ before you are done.',
+  how: 'Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in ~/.cache/blip-eval/<label>/.screenshots/<run>/, written by a collect that renders (or open the URL on the built app of the run). Do not open evals/blip/labels/judge/ before you are done.',
   statements: rubric.statements.map(statement => ({
     id: statement.id,
     text: statement.text,

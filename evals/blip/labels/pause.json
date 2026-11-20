@@ -3,7 +3,7 @@
   "label": "day-zero",
   "run": "cli/pause-2",
   "runFolder": "~/.cache/blip-eval/day-zero/cli/pause-2",
-  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in the run folder once eval-rendered has written it; until then run `pnpm exec vite` in the run folder and open the URL (wide: a 960 x 600 window, phone: 402 x 714). Do not open evals/blip/labels/judge/ before you are done.",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in ~/.cache/blip-eval/<label>/.screenshots/<run>/, written by a collect that renders (or open the URL on the built app of the run). Do not open evals/blip/labels/judge/ before you are done.",
   "statements": [
     {
       "id": "choices",
