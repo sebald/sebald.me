@@ -1,0 +1,70 @@
+{
+  "_": "Three runs of one task with the same restyle on Tabs.Tab: not a candidate",
+  "transcript": {
+    "status": "complete",
+    "overBudget": false,
+    "toolCalls": {
+      "total": 1,
+      "byTool": {
+        "Write": 1
+      }
+    },
+    "blipCalls": {
+      "total": 0,
+      "byCommand": {}
+    },
+    "reads": {
+      "dist": 0,
+      "docs": 0
+    },
+    "lookupBeforeFirstTsxWrite": false,
+    "tsErrors": 0,
+    "turns": 2,
+    "tokens": {
+      "input": 10,
+      "output": 20,
+      "cacheRead": 0,
+      "cacheCreation": 0
+    },
+    "subagents": {
+      "messages": 0
+    },
+    "costUsd": 0.1,
+    "wallSeconds": 10,
+    "denials": 0,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 3,
+      "controls": 0,
+      "wrappers": 3,
+      "byTag": {
+        "div": 3
+      }
+    },
+    "components": {
+      "blip": 1,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 2,
+      "onBlip": 1,
+      "onRaw": 1,
+      "placing": 1,
+      "restyling": 3
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 1,
+      "invented": []
+    },
+    "overrides": [
+      {
+        "key": "blip:Tabs.Tab|border-4,border-amber-500",
+        "line": 3
+      }
+    ]
+  }
+}

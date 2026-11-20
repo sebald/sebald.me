@@ -1,0 +1,66 @@
+{
+  "_": "A bare `pnpm install --offline` is not network use. `ls ...blip-ui/dist` is a read of dist.",
+  "transcript": {
+    "status": "complete",
+    "overBudget": false,
+    "toolCalls": {
+      "total": 3,
+      "byTool": {
+        "Bash": 1,
+        "Read": 1,
+        "Write": 1
+      }
+    },
+    "blipCalls": {
+      "total": 0
+    },
+    "reads": {
+      "dist": 1,
+      "docs": 1
+    },
+    "lookupBeforeFirstTsxWrite": true,
+    "tsErrors": 0,
+    "turns": 4,
+    "tokens": {
+      "input": 30,
+      "output": 60
+    },
+    "costUsd": 0.25,
+    "wallSeconds": 30,
+    "denials": 0,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 3,
+      "controls": 0,
+      "wrappers": 3,
+      "byTag": {
+        "div": 3
+      }
+    },
+    "components": {
+      "blip": 1,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 2,
+      "onBlip": 1,
+      "onRaw": 1,
+      "placing": 1,
+      "restyling": 3
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 1,
+      "invented": []
+    },
+    "overrides": [
+      {
+        "key": "blip:Button|bg-red-700,text-white",
+        "line": 3
+      }
+    ]
+  }
+}
