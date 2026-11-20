@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/214
 ---
 
 # `number-readout`: A labelled number the player reads at a glance
