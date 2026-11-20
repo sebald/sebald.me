@@ -18,6 +18,27 @@
         "saves",
         "shop"
       ]
+    },
+    {
+      "key": "raw:div|style:display:'flex';gap:*;inset:0;position:'absolute'",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": [
+        "display:'flex'",
+        "gap:*",
+        "inset:0",
+        "position:'absolute'"
+      ],
+      "runs": [
+        "cli/pause-1",
+        "cli/pause-2",
+        "cli/shop-1"
+      ],
+      "tasks": [
+        "pause",
+        "shop"
+      ]
     }
   ],
   "runs": {

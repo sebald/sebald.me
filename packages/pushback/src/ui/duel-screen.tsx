@@ -55,6 +55,7 @@ import {
   toLose,
   toWin,
 } from '../lib/duel';
+import { duelLeft, duelPaused } from '../lib/events';
 import {
   BUDDY_MISS_BARK,
   HINT,
@@ -102,6 +103,7 @@ import { Hud } from './hud';
 import { type Call, RoundCall } from './round-call';
 import { TALL_BAR, px } from './stage';
 import { cn, cva } from './styles.utils';
+import { useTrack } from './tracking';
 import { feedback, useMusic, useSoundSettings, voiced } from './use-sound';
 
 // Styles
@@ -248,6 +250,8 @@ export const DuelScreen = ({
   // the menu's Back to the roster asks first
   const [pause, setPause] = useState<'off' | 'menu' | 'leave'>('off');
   const paused = pause !== 'off';
+  // The host hears of a pause and of leaving; the demo is nobody's
+  const track = useTrack();
   const [clock, setClock] = useState(0);
   // The exchange the buddy's whisper started on, for the miss line and
   // for sending it away afterwards
@@ -390,13 +394,14 @@ export const DuelScreen = ({
       () => ({
         Escape: () => {
           effect(paused ? 'cancel' : 'confirm');
+          if (!paused) track(duelPaused(stateRef.current));
           setPause(paused ? 'off' : 'menu');
         },
         ...(paused || step?.kind === 'menu'
           ? {}
           : { Enter: confirm, ' ': confirm }),
       }),
-      [paused, step?.kind, confirm],
+      [paused, step?.kind, confirm, track],
     ),
     !demo && pause !== 'leave',
     true,
@@ -1094,6 +1099,7 @@ export const DuelScreen = ({
                 kind: 'pause',
                 onPress: () => {
                   effect('confirm');
+                  track(duelPaused(stateRef.current));
                   setPause('menu');
                 },
               }
@@ -1107,7 +1113,10 @@ export const DuelScreen = ({
           title="Leave the duel?"
           confirm="Leave"
           onCancel={() => setPause('menu')}
-          onConfirm={onBack}
+          onConfirm={() => {
+            track(duelLeft(stateRef.current));
+            onBack();
+          }}
         >
           Back to the roster. The duel counts as neither a win nor a loss.
         </Confirm>

@@ -3,20 +3,23 @@ import { test } from 'node:test';
 
 import {
   CONFIGS,
+  baselineOf,
   checkInit,
   childEnv,
   claudeArgs,
   claudeMd,
   isDone,
   isUsageLimit,
+  judgeBaseline,
   probeLine,
+  summariseInit,
 } from './run-lib.mjs';
 
-const baseline = { plugins: [], skills: ['simplify'], agents: ['Explore'] };
 const user = { plugins: ['productivity'], skills: ['brain'], agents: ['mine'] };
 const init = (extra = {}) => ({
   apiKeySource: 'none',
   plugins: [],
+  pluginEntries: [],
   skills: ['simplify'],
   agents: ['Explore'],
   ...extra,
@@ -73,7 +76,7 @@ test('CLAUDE.md names the command from cli on, not before', () => {
 });
 
 test('init check', () => {
-  const ok = { config: 'cli', baseline, user };
+  const ok = { config: 'cli', user };
   assert.deepEqual(checkInit(init(), ok), []);
   assert.match(
     checkInit(init({ apiKeySource: 'ANTHROPIC_API_KEY' }), ok)[0],
@@ -87,14 +90,167 @@ test('init check', () => {
     checkInit(init({ skills: ['productivity:start'] }), ok)[0],
     /from ~\/\.claude/,
   );
-  assert.match(
-    checkInit(init({ agents: ['other'] }), ok)[0],
-    /not one the configuration/,
+  // built in, whatever the name: not a baseline list
+  assert.deepEqual(
+    checkInit(init({ agents: ['other'], skills: ['brand-new'] }), ok),
+    [],
   );
-  assert.match(
-    checkInit(init({ plugins: ['blip-ui'] }), ok)[0],
-    /plugin "blip-ui"/,
+});
+
+const entry = (name, origin) => ({ name, origin });
+const withPlugins = (...pluginEntries) =>
+  init({ plugins: pluginEntries.map(e => e.name), pluginEntries });
+
+test('init check: a plugin is built in by its own entry, not by name', () => {
+  const ok = { config: 'cli', user };
+  // a sixth built-in plugin is fine whatever its name
+  assert.deepEqual(
+    checkInit(
+      withPlugins(entry('cc-plugin-easel', 'builtin'), entry('x', 'builtin')),
+      ok,
+    ),
+    [],
   );
+  // a user plugin with a built-in one's name fails, entry by entry
+  const same = checkInit(
+    withPlugins(
+      entry('productivity', 'builtin'),
+      entry('productivity', 'other'),
+    ),
+    ok,
+  );
+  assert.equal(same.length, 1);
+  assert.match(same[0], /plugin "productivity" comes from ~\/\.claude/);
+  // a stray plugin that is not built in fails
+  assert.match(
+    checkInit(
+      withPlugins(entry('a', 'builtin'), entry('stray', 'other')),
+      ok,
+    )[0],
+    /plugin "stray" is neither built in/,
+  );
+  // an entry that says nothing is not built in, even next to ones that do
+  assert.match(
+    checkInit(withPlugins(entry('a', 'builtin'), entry('mute', null)), ok)[0],
+    /plugin "mute" is neither built in/,
+  );
+  // the configuration's own plugin is allowed from `plan` on
+  const blip = withPlugins(entry('a', 'builtin'), entry('blip-ui', 'other'));
+  assert.deepEqual(checkInit(blip, { config: 'plan', user }), []);
+  assert.match(checkInit(blip, ok)[0], /plugin "blip-ui"/);
+});
+
+test('init check fails closed without origins or a plugin list', () => {
+  const ok = { config: 'cli', user };
+  // no plugin list in the event
+  const none = checkInit(init({ plugins: undefined, pluginEntries: null }), ok);
+  assert.equal(none.length, 1);
+  assert.match(none[0], /no plugin list/);
+  // plugins, none with an origin (old shape: bare names)
+  const bare = checkInit(
+    withPlugins(entry('cc-plugin-easel', null), entry('b', null)),
+    ok,
+  );
+  assert.match(bare[0], /no plugin carries an origin/);
+  assert.ok(bare.length > 1);
+  // an empty list is a list: nothing loaded, nothing to judge
+  assert.deepEqual(checkInit(withPlugins(), ok), []);
+});
+
+test("summariseInit keeps each plugin entry's origin", () => {
+  const s = summariseInit({
+    apiKeySource: 'none',
+    plugins: [
+      { name: 'a', path: 'builtin', source: 'a@builtin' },
+      { name: 'b', path: '/x/b', source: 'b@market' },
+      { name: 'c', source: 'c@builtin' },
+      { name: 'd' },
+      'e',
+    ],
+    skills: ['s'],
+  });
+  assert.deepEqual(s.plugins, ['a', 'b', 'c', 'd', 'e']);
+  assert.deepEqual(
+    s.pluginEntries.map(e => e.origin),
+    ['builtin', 'other', 'builtin', null, null],
+  );
+  assert.equal(summariseInit({ apiKeySource: 'none' }).pluginEntries, null);
+  // a user plugin named like a built-in one is its own entry
+  assert.deepEqual(
+    summariseInit({
+      plugins: [{ name: 'p', path: '/home/u/p', source: 'p@user' }],
+    }).pluginEntries,
+    [{ name: 'p', origin: 'other' }],
+  );
+});
+
+const loaded = (extra = {}) =>
+  baselineOf({
+    plugins: ['a', 'b'],
+    skills: ['s2', 's1'],
+    agents: ['x'],
+    tools: ['Read'],
+    mcpServers: [],
+    ...extra,
+  });
+const label = (baseline = loaded()) => ({ claudeVersion: '2.1.329', baseline });
+const judge = (record, now, accept = false) =>
+  judgeBaseline(record, now, {
+    accept,
+    claudeVersion: '2.1.330',
+    at: 'T',
+    label: 'l',
+  });
+
+test('baselineOf sorts and dedupes', () => {
+  assert.deepEqual(loaded().skills, ['s1', 's2']);
+  assert.deepEqual(baselineOf({}).mcpServers, []);
+});
+
+test('baseline: the same set passes, in any order', () => {
+  const r = judge(label(), loaded({ skills: ['s1', 's2'] }));
+  assert.equal(r.stop, undefined);
+  assert.equal(r.accepted, null);
+});
+
+test('baseline: a difference stops with added and removed per kind', () => {
+  for (const [extra, expect] of [
+    [
+      { plugins: ['a', 'b', 'cc-plugin-easel'] },
+      /plugins: added cc-plugin-easel/,
+    ],
+    [{ skills: ['s1'] }, /skills: removed s2/],
+    [{ agents: ['y'] }, /agents: added y; removed x/],
+    [{ tools: ['Read', 'Edit'] }, /tools: added Edit/],
+    [{ mcpServers: ['m'] }, /mcpServers: added m/],
+  ]) {
+    const r = judge(label(), loaded(extra));
+    assert.match(r.stop, expect);
+    assert.match(r.stop, /--accept-baseline/);
+    assert.equal(r.baseline, undefined);
+  }
+});
+
+test('baseline: --accept-baseline continues and records old, new, version, time', () => {
+  const was = loaded();
+  const now = loaded({ plugins: ['a', 'b', 'c'] });
+  const r = judge(label(was), now, true);
+  assert.equal(r.stop, undefined);
+  assert.deepEqual(r.baseline, now);
+  assert.deepEqual(r.accepted, {
+    at: 'T',
+    claudeVersion: '2.1.330',
+    from: was,
+    to: now,
+  });
+  // nothing changed: the flag records nothing
+  assert.equal(judge(label(was), was, true).accepted, null);
+});
+
+test('baseline: kinds an old label never recorded are not compared', () => {
+  const old = { plugins: ['a', 'b'], skills: ['s1', 's2'], agents: ['x'] };
+  assert.equal(judge(label(old), loaded()).stop, undefined);
+  assert.equal(judge({ claudeVersion: '2.1.329' }, loaded()).stop, undefined);
 });
 
 test('usage-limit recognition', () => {
@@ -150,7 +306,7 @@ test('what a rerun skips', () => {
 });
 
 test('init check: tools and MCP servers', () => {
-  const ok = { config: 'cli', baseline, user };
+  const ok = { config: 'cli', user };
   const tools = [
     'Task',
     'Bash',

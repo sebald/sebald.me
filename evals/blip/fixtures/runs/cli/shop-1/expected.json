@@ -69,7 +69,7 @@
       "placing": 3,
       "restyling": 5
     },
-    "inlineStyles": 1,
+    "inlineStyles": 2,
     "imports": {
       "fromBlip": 3,
       "invented": [
@@ -78,12 +78,22 @@
     },
     "overrides": [
       {
+        "key": "raw:div|style:display:'flex';gap:*;inset:0;position:'absolute'",
+        "style": [
+          "display:'flex'",
+          "gap:*",
+          "inset:0",
+          "position:'absolute'"
+        ],
+        "line": 9
+      },
+      {
         "key": "blip:Button|bg-red-700,text-white",
-        "line": 8
+        "line": 11
       },
       {
         "key": "raw:button|px-2,text-sm",
-        "line": 9
+        "line": 12
       }
     ]
   }

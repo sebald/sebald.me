@@ -2,12 +2,12 @@
   "schema": 1,
   "label": "day-zero",
   "collector": {
-    "version": "096caa596261+dirty"
+    "version": "a064ed4a3fd4"
   },
   "cli": {
     "version": "0.0.0+925ec59d8f14"
   },
-  "layers": ["transcript", "tree"],
+  "layers": ["transcript", "tree", "rendered"],
   "runs": [
     {
       "id": "cli/camp-rest-1",
@@ -99,6 +99,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-1",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -194,6 +281,93 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-2",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -287,6 +461,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/camp-rest-3",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -384,7 +645,35 @@
           "fromBlip": 8,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 34
+          },
+          {
+            "key": "raw:span|style:alignItems:'center';display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["alignItems:'center'", "display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 54
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -394,6 +683,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -490,7 +846,89 @@
           "fromBlip": 7,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'grid';inset:0;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'grid'", "inset:0", "position:'absolute'"],
+            "file": "src/screens/fight.tsx",
+            "line": 29
+          },
+          {
+            "key": "blip:Window|style:margin:'auto'",
+            "kind": "blip",
+            "element": "Window",
+            "classes": [],
+            "style": ["margin:'auto'"],
+            "file": "src/screens/fight.tsx",
+            "line": 30
+          },
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 43
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "flexDirection:'column'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 58
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 71
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "flexDirection:'column'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 91
+          },
+          {
+            "key": "raw:div|style:...row;opacity:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["...row", "opacity:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 107
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 113
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -500,6 +938,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -599,18 +1104,56 @@
         },
         "overrides": [
           {
-            "key": "raw:ul|",
+            "key": "raw:div|style:inset:0;position:'absolute'",
             "kind": "raw",
-            "element": "ul",
+            "element": "div",
             "classes": [],
+            "style": ["inset:0", "position:'absolute'"],
             "file": "src/screens/fight.tsx",
-            "line": 67
+            "line": 42
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 54
           },
           {
             "key": "raw:ul|",
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
+            "file": "src/screens/fight.tsx",
+            "line": 67
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 74
+          },
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 91
           }
@@ -624,6 +1167,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/fight-hud-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -729,6 +1339,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -836,6 +1523,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -942,6 +1706,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/pause-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1039,7 +1880,79 @@
           "fromBlip": 9,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:alignItems:'flex-start';boxSizing:'border-box';display:'flex';inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'flex-start'",
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 31
+          },
+          {
+            "key": "raw:div|style:width:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["width:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 41
+          },
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 55
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 57
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 60
+          },
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 75
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 77
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1049,6 +1962,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1148,7 +2128,25 @@
           "fromBlip": 9,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 48
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1158,6 +2156,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1257,7 +2322,54 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 37
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*;opacity:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*", "opacity:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 38
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 42
+          },
+          {
+            "key": "raw:div|style:alignItems:'stretch';display:'flex';flexDirection:*;gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'stretch'",
+              "display:'flex'",
+              "flexDirection:*",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 53
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1267,6 +2379,85 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/quests-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          }
         }
       }
     },
@@ -1380,6 +2571,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1491,6 +2771,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1604,6 +2973,95 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/saves-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -1704,7 +3162,34 @@
           "fromBlip": 12,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 32
+          },
+          {
+            "key": "raw:div|style:display:'flex';justifyContent:'space-between'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "justifyContent:'space-between'"],
+            "file": "src/screens/shop.tsx",
+            "line": 43
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1714,6 +3199,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1815,7 +3389,25 @@
           "fromBlip": 11,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 29
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1825,6 +3417,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -1928,7 +3609,26 @@
           "fromBlip": 14,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 43
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1938,6 +3638,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/cli/shop-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2031,6 +3820,93 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-1",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2123,6 +3999,93 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-2",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2213,6 +4176,93 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/camp-rest-3",
+        "subtractedTemplate": true,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "broke",
+            "url": "?screen=camp&state=broke",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "broke@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2306,7 +4356,45 @@
           "fromBlip": 7,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;justifyContent:'space-between';overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "justifyContent:'space-between'",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 36
+          },
+          {
+            "key": "raw:span|style:alignItems:'center';display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["alignItems:'center'", "display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 58
+          },
+          {
+            "key": "raw:span|style:display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 103
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -2316,6 +4404,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2411,10 +4566,38 @@
         },
         "overrides": [
           {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';fontSize:*;gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "fontSize:*",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 39
+          },
+          {
             "key": "raw:ul|",
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
+            "file": "src/screens/fight.tsx",
+            "line": 52
+          },
+          {
+            "key": "raw:ul|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
             "file": "src/screens/fight.tsx",
             "line": 52
           },
@@ -2423,8 +4606,36 @@
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 78
+          },
+          {
+            "key": "raw:ul|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 78
+          },
+          {
+            "key": "raw:li|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "li",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 89
+          },
+          {
+            "key": "blip:Text|style:display:'inline'",
+            "kind": "blip",
+            "element": "Text",
+            "classes": [],
+            "style": ["display:'inline'"],
+            "file": "src/screens/fight.tsx",
+            "line": 99
           }
         ],
         "tsc": {
@@ -2436,6 +4647,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2536,14 +4814,25 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-3"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 41
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 42
           },
           {
             "key": "raw:ul|list-none,p-0",
             "kind": "raw",
             "element": "ul",
             "classes": ["list-none", "p-0"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 46
           },
@@ -2552,6 +4841,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-50"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 52
           },
@@ -2560,6 +4850,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-right"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 62
           },
@@ -2568,6 +4859,7 @@
             "kind": "raw",
             "element": "ul",
             "classes": ["list-none", "p-0"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 73
           },
@@ -2576,6 +4868,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-primary)"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 83
           },
@@ -2584,6 +4877,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-danger-light)"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 87
           }
@@ -2597,6 +4891,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/fight-hud-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@wide.png"
+          },
+          {
+            "id": "fight",
+            "url": "?screen=fight&state=fight",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fight@phone.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@wide.png"
+          },
+          {
+            "id": "fallen",
+            "url": "?screen=fight&state=fallen",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "fallen@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2700,6 +5061,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -2798,7 +5236,35 @@
           "fromBlip": 12,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:color:*;fontSize:*;fontWeight:'bold'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*", "fontSize:*", "fontWeight:'bold'"],
+            "file": "src/screens/camp.tsx",
+            "line": 70
+          },
+          {
+            "key": "raw:div|style:color:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*"],
+            "file": "src/screens/camp.tsx",
+            "line": 74
+          },
+          {
+            "key": "raw:div|style:color:*;fontStyle:'italic';minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*", "fontStyle:'italic'", "minHeight:*"],
+            "file": "src/screens/camp.tsx",
+            "line": 134
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -2808,6 +5274,83 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -2911,6 +5454,83 @@
           "ok": true,
           "errors": 0
         }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/pause-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@wide.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "camp",
+            "url": "?screen=camp&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "camp@phone.png",
+            "subtracted": {
+              "escapes": 0,
+              "cut": 0,
+              "axe": 1
+            }
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=pause&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
+        }
       }
     },
     {
@@ -3010,6 +5630,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 40
           },
@@ -3018,6 +5639,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 44
           },
@@ -3026,8 +5648,18 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-[calc(var(--bui-px)*6)]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 55
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 56
           }
         ],
         "tsc": {
@@ -3039,6 +5671,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3140,6 +5839,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-left"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 24
           },
@@ -3148,6 +5848,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-70"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 26
           },
@@ -3156,8 +5857,18 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-[calc(var(--px)*4)]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 63
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 64
           }
         ],
         "tsc": {
@@ -3169,6 +5880,85 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [
+              {
+                "id": "list",
+                "impact": "serious",
+                "nodes": 1
+              }
+            ],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 1
+          }
         }
       }
     },
@@ -3270,6 +6060,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 25
           },
@@ -3278,8 +6069,29 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 30
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;justifyContent:'center';overflow:'hidden';padding:*;paddingBottom:*;paddingTop:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "justifyContent:'center'",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "paddingTop:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 63
           }
         ],
         "tsc": {
@@ -3291,6 +6103,73 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/quests-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=quests&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=quests&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 2,
+            "rendered": 2,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3388,7 +6267,44 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/saves.tsx",
+            "line": 113
+          },
+          {
+            "key": "raw:div|style:minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["minHeight:*"],
+            "file": "src/screens/saves.tsx",
+            "line": 138
+          },
+          {
+            "key": "raw:div|style:minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["minHeight:*"],
+            "file": "src/screens/saves.tsx",
+            "line": 143
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3398,6 +6314,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3499,6 +6504,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-muted)"],
+            "style": [],
             "file": "src/screens/saves.tsx",
             "line": 51
           },
@@ -3510,6 +6516,7 @@
               "pb-[calc(var(--px)*6+var(--bui-bar))]",
               "pt-[calc(var(--px)*24)]"
             ],
+            "style": [],
             "file": "src/screens/saves.tsx",
             "line": 98
           }
@@ -3523,6 +6530,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3618,7 +6714,25 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';inset:0;justifyContent:'center';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "inset:0",
+              "justifyContent:'center'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/saves.tsx",
+            "line": 122
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3628,6 +6742,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/saves-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=saves&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@wide.png"
+          },
+          {
+            "id": "full",
+            "url": "?screen=saves&state=full",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "full@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=saves&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3728,7 +6931,26 @@
           "fromBlip": 15,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 54
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3738,6 +6960,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-1",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3836,7 +7147,25 @@
           "fromBlip": 11,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 70
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3846,6 +7175,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-2",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     },
@@ -3942,7 +7360,39 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 29
+          },
+          {
+            "key": "raw:div|style:alignItems:'baseline';display:'flex';justifyContent:'space-between'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'baseline'",
+              "display:'flex'",
+              "justifyContent:'space-between'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 41
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3952,6 +7402,95 @@
           "ran": true,
           "ok": true,
           "errors": 0
+        }
+      },
+      "rendered": {
+        "ran": true,
+        "screenshots": ".screenshots/no-cli/shop-3",
+        "subtractedTemplate": false,
+        "pages": [
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@wide.png"
+          },
+          {
+            "id": "start",
+            "url": "?screen=shop&state=start",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "start@phone.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@wide.png"
+          },
+          {
+            "id": "exact",
+            "url": "?screen=shop&state=exact",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "exact@phone.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "wide",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@wide.png"
+          },
+          {
+            "id": "empty",
+            "url": "?screen=shop&state=empty",
+            "viewport": "phone",
+            "rendered": true,
+            "reason": null,
+            "escapes": [],
+            "cut": [],
+            "axe": [],
+            "screenshot": "empty@phone.png"
+          }
+        ],
+        "totals": {
+          "wide": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          },
+          "phone": {
+            "pages": 3,
+            "rendered": 3,
+            "escapes": 0,
+            "cut": 0,
+            "axe": 0
+          }
         }
       }
     }
@@ -3973,6 +7512,46 @@
               "median": 0,
               "min": 0,
               "max": 0,
+              "n": 18
+            },
+            "renders": {
+              "yes": 18,
+              "of": 18
+            },
+            "escapes-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "escapes-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "axe-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "axe-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
               "n": 18
             },
             "blipComponents": {
@@ -4119,6 +7698,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 0,
                 "min": 0,
@@ -4254,6 +7873,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -4402,6 +8061,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 14,
                 "min": 14,
@@ -4543,6 +8242,46 @@
                 "median": 0,
                 "min": 0,
                 "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
                 "n": 3
               },
               "blipComponents": {
@@ -4688,6 +8427,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 12,
                 "min": 10,
@@ -4826,6 +8605,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -4977,6 +8796,46 @@
               "max": 0,
               "n": 18
             },
+            "renders": {
+              "yes": 18,
+              "of": 18
+            },
+            "escapes-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "escapes-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "cut-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 0,
+              "n": 18
+            },
+            "axe-wide": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
+            "axe-phone": {
+              "median": 0,
+              "min": 0,
+              "max": 1,
+              "n": 18
+            },
             "blipComponents": {
               "median": 14,
               "min": 0,
@@ -5121,6 +8980,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 0,
                 "min": 0,
@@ -5256,6 +9155,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -5404,6 +9343,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 14,
                 "min": 14,
@@ -5547,6 +9526,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 1,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 13,
                 "min": 10,
@@ -5685,6 +9704,46 @@
                 "of": 3
               },
               "tscErrors": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
                 "median": 0,
                 "min": 0,
                 "max": 0,
@@ -5833,6 +9892,46 @@
                 "max": 0,
                 "n": 3
               },
+              "renders": {
+                "yes": 3,
+                "of": 3
+              },
+              "escapes-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "escapes-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "cut-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-wide": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
+              "axe-phone": {
+                "median": 0,
+                "min": 0,
+                "max": 0,
+                "n": 3
+              },
               "blipComponents": {
                 "median": 18,
                 "min": 18,
@@ -5967,5 +10066,51 @@
       }
     }
   },
-  "candidates": []
+  "candidates": [
+    {
+      "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": [
+        "display:'flex'",
+        "flexDirection:'column'",
+        "gap:*",
+        "inset:0",
+        "overflow:'hidden'",
+        "padding:*",
+        "paddingBottom:*",
+        "position:'absolute'"
+      ],
+      "runs": [
+        "cli/fight-hud-1",
+        "cli/fight-hud-3",
+        "no-cli/saves-1",
+        "no-cli/shop-1",
+        "no-cli/shop-3"
+      ],
+      "tasks": ["fight-hud", "saves", "shop"],
+      "lines": [
+        "cli/fight-hud-1:src/screens/fight.tsx:34",
+        "cli/fight-hud-3:src/screens/fight.tsx:54",
+        "no-cli/saves-1:src/screens/saves.tsx:113",
+        "no-cli/shop-1:src/screens/shop.tsx:54",
+        "no-cli/shop-3:src/screens/shop.tsx:29"
+      ]
+    },
+    {
+      "key": "raw:div|style:paddingBottom:*",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": ["paddingBottom:*"],
+      "runs": ["no-cli/fight-hud-3", "no-cli/quests-1", "no-cli/quests-2"],
+      "tasks": ["fight-hud", "quests"],
+      "lines": [
+        "no-cli/fight-hud-3:src/screens/fight.tsx:42",
+        "no-cli/quests-1:src/screens/quests.tsx:56",
+        "no-cli/quests-2:src/screens/quests.tsx:64"
+      ]
+    }
+  ]
 }
