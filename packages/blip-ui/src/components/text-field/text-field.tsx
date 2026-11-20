@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 
+import { CORNERS, rounded } from '../../foundations/corners';
 import { useAnnounce } from '../../providers/announcer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
@@ -128,31 +129,45 @@ export const TextField = ({
           </span>
         )}
       </div>
-      <Input
-        {...props}
-        value={text}
-        maxLength={maxLength}
-        // The phone's keyboard shows its own "done" for Enter
-        enterKeyHint="done"
-        className={styles.input()}
-        onKeyDown={keydown}
-        onFocus={event => {
-          onFocus?.(event);
-          // Held upright the keyboard covers the lower stage: keep the
-          // field in view
-          event.currentTarget.scrollIntoView({
-            block: 'nearest',
-            inline: 'nearest',
-          });
-        }}
-        onValueChange={next => {
-          if (next.length > text.length) play('type', next.slice(text.length));
-          setInner(next);
-          onValueChange?.(next);
-          if (maxLength !== undefined && next.length >= maxLength)
-            announce(`Limit of ${maxLength} characters reached`);
-        }}
-      />
+      <span className={styles.box()}>
+        <span
+          className={styles.ink()}
+          style={{ clipPath: rounded(CORNERS[0], '--bui-px') }}
+        >
+          <span
+            className={styles.frame()}
+            style={{ clipPath: rounded(CORNERS[1], '--bui-px') }}
+          >
+            <Input
+              {...props}
+              value={text}
+              maxLength={maxLength}
+              // The phone's keyboard shows its own "done" for Enter
+              enterKeyHint="done"
+              className={styles.input()}
+              style={{ clipPath: rounded(CORNERS[2], '--bui-px') }}
+              onKeyDown={keydown}
+              onFocus={event => {
+                onFocus?.(event);
+                // Held upright the keyboard covers the lower stage: keep
+                // the field in view
+                event.currentTarget.scrollIntoView({
+                  block: 'nearest',
+                  inline: 'nearest',
+                });
+              }}
+              onValueChange={next => {
+                if (next.length > text.length)
+                  play('type', next.slice(text.length));
+                setInner(next);
+                onValueChange?.(next);
+                if (maxLength !== undefined && next.length >= maxLength)
+                  announce(`Limit of ${maxLength} characters reached`);
+              }}
+            />
+          </span>
+        </span>
+      </span>
       {(description || maxLength !== undefined) && (
         <Field.Description
           className={cn(styles.description(), !description && 'sr-only')}

@@ -26,9 +26,11 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 1. **Label**, its children, tied to the input
 2. **Characters left**, at the label's end, when there is a `maxLength`;
    it turns to the primary colour once the field is full
-3. **The box**, drawn like a `Meter`'s cell: an ink line, the frame
-   inside it, the dark of an empty cell as its ground; the frame is bright
-   with the focus and red when invalid
+3. **The box**, drawn like a secondary `Button`'s outline, with the same
+   stepped corners: an ink line, the frame inside it, the dark of an empty
+   cell as its ground; the frame is bright with the focus and red when
+   invalid. It is a thumb's height at least, so in one row with a default
+   `Button` the two are the same height
 4. **Description**, under it, what to type or in what form
 5. **Error**, under it, what is wrong, in words
 
@@ -77,4 +79,4 @@ about it, not only that it is wrong.
   an error is linked to it and marked invalid (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
-- The focus ring is the kit's own, `--bui-focus`, around the box
+- The focus ring is the kit's own, `--bui-focus`, around the box (a plain rectangle, as the stepped corners would cut an outline)
