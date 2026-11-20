@@ -142,6 +142,10 @@ puts the tarball in place and keeps the lockfile per run.
 pnpm eval:blip --label day-zero --config cli --tasks pause --reps 1   # --dry prints and spends nothing
 ```
 
+The label's base install is type-checked and built before any agent starts, and the
+label stops (exit 2) when either fails: inside this repo the template borrows types
+from the root's `node_modules`, so only a check in the cache shows what an agent gets.
+
 `run.mjs` (spec 3.3): `--label`, `--config` (`no-cli`, `cli`; `plan`, `hook`,
 `reviewer`, `full` stop with "not built yet"), `--tasks a,b` (default all),
 `--reps n` (default 1), `--model` (default `claude-sonnet-5-5`), `--budget`
