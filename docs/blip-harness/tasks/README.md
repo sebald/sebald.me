@@ -90,6 +90,8 @@ have something to fire on, or because a pattern or what exists is enough:
   `blip-harness`, and `pr:` to the pull request
 - Write what changed, decisions and numbers under **Notes** in the same file
 - `grep -H '^status:' docs/blip-harness/tasks/*.md` lists where everything stands
+- When a milestone lands, add an entry to [`journal.md`](../journal.md): what happened, decisions,
+  surprises, numbers, links. It is the thread a blog post will follow
 
 `blip-harness` lives as a draft pull request against `main`, so every workflow runs on each
 push to it. A pull request into `blip-harness` runs only the test workflow (lint, format,
