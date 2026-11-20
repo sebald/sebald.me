@@ -22,10 +22,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** A tap, Left, Right, Enter or Space flips it */
-export const Default: Story = {
-  args: { defaultChecked: true },
-};
+/** Off, as a switch starts: a tap, Left, Right, Enter or Space flips it */
+export const Default: Story = {};
 
 /** On, off, and disabled in both states, which a player cannot change */
 export const Overview: Story = {

@@ -8,8 +8,7 @@ import * as SwitchStories from './switch.stories';
 # Switch
 
 A toggle switch, the checkbox of a menu: one option that is on or off
-(Music, Hints, Screen shake). It
-shows its name, a track with a square at one end, and the state in words
+(Music, Hints, Screen shake). It shows its name, a track with a square at one end, and the state in words
 (On, Off), and a tap, Left, Right, Enter or Space flips it. Built on Base
 UI's Switch (the switch role, `aria-checked`, the form value).
 
@@ -24,14 +23,12 @@ UI's Switch (the switch role, `aria-checked`, the form value).
 
 ## A toggle of its own, not a Setting
 
-`Setting` shows a value between two arrows and has no keys of its own; in a
-Picker, `PickerSetting` takes the arrows. A toggle switch is different behaviour:
-it is a control you can focus (the `switch` role with `aria-checked`), it
-flips on Enter, Space and a tap as well as the arrows, and it holds a form
-value. That is semantics and keys no `Setting` variant has, and it is the
-primitive Base UI already provides, which a `Setting` could not wrap. So it
-is a component of its own; a menu row of two values that you step through
-stays a `PickerSetting`.
+A `Setting` only shows a value between arrows and has no keys; a toggle
+switch is a focusable control with the `switch` role, `aria-checked`, Enter,
+Space and tap, and a form value: new behaviour, and the primitive Base UI
+already provides. A menu row of two values inside a Picker stays a
+`PickerSetting`. A Switch inside a Picker is not for the Picker's keys:
+place it outside, where it has the focus.
 
 ## Anatomy
 

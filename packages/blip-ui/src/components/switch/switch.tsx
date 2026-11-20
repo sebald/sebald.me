@@ -54,6 +54,15 @@ export const Switch = ({
       onKeyDown={(event: KeyboardEvent<HTMLElement>) => {
         // The arrows flip it, as they step a Setting: a choice goes round
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        // Not the browser's Alt+Left, and not a held key flipping it again
+        if (
+          event.altKey ||
+          event.ctrlKey ||
+          event.metaKey ||
+          event.shiftKey ||
+          event.repeat
+        )
+          return;
         event.preventDefault();
         event.currentTarget.click();
       }}
