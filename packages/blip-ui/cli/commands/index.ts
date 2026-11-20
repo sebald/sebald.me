@@ -5,11 +5,12 @@ import { oneLine } from '../search.ts';
 
 export const COMMANDS = [
   ['blip', 'this index'],
-  ['blip search <words…> [--limit n]', 'find pages and exports'],
+  ['blip search <words…> [--limit n]', 'find pages, exports and examples'],
   [
     'blip docs <page | export> [--section <name>]',
     'print a page (or one section, such as props) as markdown',
   ],
+  ['blip examples [<page> | <id>]', 'list examples, or print one'],
 ] as const;
 
 const KINDS = [

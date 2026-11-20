@@ -19,8 +19,15 @@ export interface SearchExport {
   kind: string;
 }
 
+export interface SearchExample {
+  id: string;
+  page: string;
+  title: string;
+  summary: string;
+}
+
 export interface Hit {
-  type: 'page' | 'export';
+  type: 'page' | 'export' | 'example';
   id: string;
   kind: string;
   /** One line about it */
@@ -114,15 +121,28 @@ const scoreExport = (entry: SearchExport, terms: string[]) => {
   return terms.reduce((score, term) => score + (name.has(term) ? 8 : 0), 0);
 };
 
+/** An example scores by its id and title, a little by what it says it shows */
+const scoreExample = (example: SearchExample, terms: string[]) => {
+  const title = new Set([...words(example.title), ...words(example.id)]);
+  const summary = new Set(words(example.summary));
+  return terms.reduce(
+    (score, term) =>
+      score + (title.has(term) ? 6 : 0) + (summary.has(term) ? 2 : 0),
+    0,
+  );
+};
+
 /**
- * Pages and exports for a query, best first. A page wins a tie with an
- * export; an export that only repeats its page's title is left out.
+ * Pages, exports and examples for a query, best first. A page wins a tie with
+ * an example and an example with an export; an export that only repeats its
+ * page's title is left out.
  */
 export const search = (
   query: string,
   pages: readonly SearchPage[],
   exports: readonly SearchExport[],
   limit = 8,
+  examples: readonly SearchExample[] = [],
 ): Hit[] => {
   const terms = queryTerms(query);
   if (terms.length === 0) return [];
@@ -158,12 +178,28 @@ export const search = (
     }
   }
 
+  for (const example of examples) {
+    const score = scoreExample(example, terms);
+    if (score > 0) {
+      hits.push({
+        type: 'example',
+        id: example.id,
+        kind: 'example',
+        line: oneLine(example.summary || example.title),
+        command: `blip examples ${example.id}`,
+        score,
+      });
+    }
+  }
+
+  // A page wins a tie with an example, an example with an export
+  const rank = { page: 0, example: 1, export: 2 };
   return hits
     .map((hit, index) => ({ hit, index }))
     .sort(
       (a, b) =>
         b.hit.score - a.hit.score ||
-        Number(a.hit.type === 'export') - Number(b.hit.type === 'export') ||
+        rank[a.hit.type] - rank[b.hit.type] ||
         a.index - b.index,
     )
     .slice(0, limit)

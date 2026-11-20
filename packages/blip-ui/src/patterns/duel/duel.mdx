@@ -1,0 +1,39 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TogetherStories from '../../compositions/together.stories';
+
+<Meta title="Patterns/Duel" />
+
+# Duel
+
+A screen where two sides trade lines against a clock: what was said, the
+other side's bubble, how the exchange stands, and a log. Everything the
+player reads is on the one screen.
+
+## When to use
+
+- A turn-based exchange with a time limit and a score on each side, as in
+  an argument, a negotiation or a quiz.
+- The player needs the state at a glance (the pools) and the history one tap
+  away (the log), without leaving the screen.
+
+## Parts
+
+| Part                 | What it does here                                                                |
+| -------------------- | -------------------------------------------------------------------------------- |
+| `SpeechBubble`       | What the other side just said, tail down to them, in a corner at the top         |
+| `Timer`              | The clock for the answer, in the opposite top corner                             |
+| `Window` and `Line`  | The exchange: the line being answered is `past`, the reply is live               |
+| `Tabs`               | Two panels beside the exchange, the pools and the log                            |
+| `Ledger` and `Meter` | The pools: a label and a meter per side, the other side in `variant="secondary"` |
+
+## Layout
+
+Everything is placed on the stage in stage pixels. The exchange and the tabs
+sit side by side on the wide stage (3 to 2) and stack on the tall one, where
+the bottom edge also clears the bar of controls (`--bui-bar`), which the
+`Stage` sets. Put the screen on a `Stage` with its `Controls`.
+
+## Example
+
+<Canvas of={TogetherStories.Duel} />

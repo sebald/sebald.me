@@ -173,6 +173,25 @@ Two kinds of motion, told apart by what moves.
 A game's own art follows the same rule in its own stylesheet; where a
 piece of art glides on purpose, its comment says why.
 
+## Examples
+
+A use of the kit that a consumer could copy (a menu, a duel, a toggle with
+its state) is an **example**, not JSX in a story: a `.tsx` file in an
+`examples/` folder next to the page, one component per file, named for what
+it shows (`dialog/examples/options.tsx`, id `dialog/options`), with a doc
+comment that says it in a line. It imports the kit by relative path like
+any source file; the pack step rewrites those imports to `@sebald/blip-ui`
+in `docs/examples/`, and fails on one a consumer could not write (a story,
+another example, a name `index.ts` does not export). A composition story
+renders the example (`render: () => <PairExample />`, aliased where the
+story has the same name) and keeps only what Storybook needs around it: the
+stage in a decorator, controls, tags. A page's `<Canvas>` of that story
+becomes the example's source in `blip docs`, so the story and the page show
+one thing. `Default` and `Overview` stay stories. An example does not
+import from a story and no story repeats an example's JSX. Pattern pages
+(`src/patterns/<name>/<name>.mdx`) are the same, with their examples in
+`src/patterns/<name>/examples/`.
+
 ## Checked by tests
 
 `foundations/uniformity.test.ts` fails on spacing outside `SPACE`, a text

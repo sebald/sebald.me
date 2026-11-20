@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from './button';
+import { Pair as PairExample } from './examples/pair';
 
 const meta = {
   title: 'Components/Button',
@@ -65,10 +66,5 @@ export const Overview: Story = {
 /** A screen's actions: the main one first, the quieter one beside it */
 export const Pair: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="flex flex-wrap gap-3">
-      <Button>Start</Button>
-      <Button variant="secondary">Back</Button>
-    </div>
-  ),
+  render: () => <PairExample />,
 };

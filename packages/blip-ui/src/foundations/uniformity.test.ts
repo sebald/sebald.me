@@ -17,7 +17,12 @@ const ROOT = join(import.meta.dirname, '../components');
 
 /** Every class in a component's source, with the file it is in */
 const classes = readdirSync(ROOT, { recursive: true, encoding: 'utf8' })
-  .filter(file => /\.tsx?$/.test(file) && !/\.(stories|test)\.tsx?$/.test(file))
+  .filter(
+    file =>
+      /\.tsx?$/.test(file) &&
+      !/\.(stories|test)\.tsx?$/.test(file) &&
+      !file.includes('/examples/'),
+  )
   .flatMap(file =>
     [
       ...readFileSync(join(ROOT, file), 'utf8').matchAll(

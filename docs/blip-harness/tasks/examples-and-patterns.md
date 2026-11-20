@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: F
 depends: [cli-lookup]
 pr:

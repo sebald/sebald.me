@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useState } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
 import { Controls } from '../controls/controls';
 import { ICONS, type IconName } from '../pixel-icon/icons';
+import { SoundToggle as SoundToggleExample } from './examples/sound-toggle';
 import { IconButton, IconToggle } from './icon-button';
 
 const meta = {
@@ -105,21 +105,8 @@ export const Overview: Story = {
   ),
 };
 
-const SoundDemo = () => {
-  const [on, setOn] = useState(true);
-  return (
-    <IconToggle
-      pressed={on}
-      onPressedChange={setOn}
-      icon="soundOff"
-      pressedIcon="soundOn"
-      aria-label="Sound (M)"
-    />
-  );
-};
-
 /** A toggle whose state lives with the caller, like the sound button */
 export const SoundToggle: Story = {
   parameters: { controls: { disable: true } },
-  render: () => <SoundDemo />,
+  render: () => <SoundToggleExample />,
 };

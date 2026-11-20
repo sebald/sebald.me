@@ -10,9 +10,17 @@ import {
   rmSync,
   writeFileSync,
 } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, dirname, join, posix } from 'node:path';
 
 import { mdxToMarkdown, summaryOf, titleOf } from './convert.ts';
+import {
+  type ExampleFile,
+  exampleAt,
+  exampleOfStory,
+  humanize,
+  rewriteImports,
+  summaryOfExample,
+} from './examples.ts';
 import { compoundParts, parseExports } from './exports.ts';
 import {
   type Manifest,
@@ -41,13 +49,77 @@ const files = readdirSync(src, { recursive: true, encoding: 'utf8' })
 
 const ids = files.map(({ id }) => id);
 
+const PACKAGE_NAME = '@sebald/blip-ui';
+
+const indexSource = readFileSync(join(src, 'index.ts'), 'utf8');
+const exported = new Set(parseExports(indexSource).map(entry => entry.name));
+
+// Examples: `examples/*.tsx` next to a page, imports rewritten for a consumer
+const exampleFiles: ExampleFile[] = readdirSync(src, {
+  recursive: true,
+  encoding: 'utf8',
+})
+  .map(file => file.split('\\').join('/'))
+  .flatMap(path => {
+    const at = exampleAt(path);
+    if (!at) return [];
+    const source = readFileSync(join(src, path), 'utf8');
+    return [
+      {
+        id: `${at.page}/${at.name}`,
+        page: at.page,
+        path,
+        file: `examples/${at.page}/${at.name}.tsx`,
+        title: humanize(at.name),
+        summary: summaryOfExample(source),
+        source: rewriteImports(source, path, exported, PACKAGE_NAME),
+      },
+    ];
+  })
+  .sort((a, b) => a.id.localeCompare(b.id));
+
+const unknownPage = exampleFiles.find(example => !ids.includes(example.page));
+if (unknownPage) {
+  throw new Error(`${unknownPage.path}: there is no page "${unknownPage.page}"`);
+}
+
+/** The markdown of the example a story renders, for the `<Canvas>` of that story */
+const canvasOf = (mdxFile: string, mdx: string) => {
+  const stories = new Map(
+    [...mdx.matchAll(/^import \* as (\w+) from '([^']+)';/gm)].map(match => [
+      match[1]!,
+      posix.normalize(posix.join(posix.dirname(mdxFile), `${match[2]}.tsx`)),
+    ]),
+  );
+  return (namespace: string, story: string) => {
+    const path = stories.get(namespace);
+    if (!path) return undefined;
+    let storySource: string;
+    try {
+      storySource = readFileSync(join(src, path), 'utf8');
+    } catch {
+      return undefined;
+    }
+    const target = exampleOfStory(storySource, path, story);
+    const example = exampleFiles.find(example => example.path === target);
+    if (!example) return undefined;
+    return `\nExample \`${example.id}\` (\`blip examples ${example.id}\`):\n\n\`\`\`tsx\n${example.source.trimEnd()}\n\`\`\`\n`;
+  };
+};
+
 const pages: PageSource[] = files.map(({ file, id }) => {
-  const kind: PageKind = FOUNDATIONS.has(id) ? 'foundation' : 'component';
-  const markdown = mdxToMarkdown(readFileSync(join(src, file), 'utf8'), ids);
+  const kind: PageKind = FOUNDATIONS.has(id)
+    ? 'foundation'
+    : file.startsWith('patterns/')
+      ? 'pattern'
+      : 'component';
+  const mdx = readFileSync(join(src, file), 'utf8');
+  const markdown = mdxToMarkdown(mdx, ids, '', canvasOf(file.split('\\').join('/'), mdx));
   return {
     id,
     kind,
     markdown,
+    prose: mdxToMarkdown(mdx, ids),
     title: titleOf(markdown),
     summary: summaryOf(markdown),
   };
@@ -62,7 +134,7 @@ const readModule = (from: string) => {
   return '';
 };
 
-const entries = parseExports(readFileSync(join(src, 'index.ts'), 'utf8')).flatMap(
+const entries = parseExports(indexSource).flatMap(
   entry =>
     entry.kind === 'component'
       ? [
@@ -98,7 +170,19 @@ if (statements.length !== blocks.length) {
 
 // The props come from the type checker; a type that is not readable fails here
 const props = readProps(root, entries);
-const manifest: Manifest = buildManifest(version, pages, entries, props);
+const manifest: Manifest = buildManifest(
+  version,
+  pages,
+  entries,
+  props,
+  exampleFiles.map(({ id, page, title, summary, file }) => ({
+    id,
+    page,
+    title,
+    summary,
+    file,
+  })),
+);
 
 // `<Controls />` becomes the props table, now that the page's exports are known
 for (const page of pages) {
@@ -107,11 +191,14 @@ for (const page of pages) {
     page.id,
     names.map(name => [name, manifest.exports[name]!] as const),
   );
-  const source = readFileSync(
-    join(src, files.find(({ id }) => id === page.id)!.file),
-    'utf8',
+  const file = files.find(({ id }) => id === page.id)!.file;
+  const source = readFileSync(join(src, file), 'utf8');
+  page.markdown = mdxToMarkdown(
+    source,
+    ids,
+    section,
+    canvasOf(file.split('\\').join('/'), source),
   );
-  page.markdown = mdxToMarkdown(source, ids, section);
 }
 
 const docs = join(root, 'docs');
@@ -119,6 +206,10 @@ rmSync(docs, { recursive: true, force: true });
 mkdirSync(join(docs, 'pages'), { recursive: true });
 for (const page of pages) {
   writeFileSync(join(docs, 'pages', `${page.id}.md`), page.markdown);
+}
+for (const example of exampleFiles) {
+  mkdirSync(join(docs, dirname(example.file)), { recursive: true });
+  writeFileSync(join(docs, example.file), example.source);
 }
 writeFileSync(
   join(docs, 'manifest.json'),
@@ -131,7 +222,7 @@ const propCount = Object.values(manifest.exports).reduce(
   0,
 );
 console.log(
-  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports, ${propCount} props`,
+  `docs: ${pages.length} pages, ${Object.keys(manifest.exports).length} exports, ${propCount} props, ${exampleFiles.length} examples`,
 );
 const bare = withoutDescription(manifest);
 if (bare.length > 0) {

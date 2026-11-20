@@ -15,6 +15,17 @@ export interface Page {
   examples: string[];
 }
 
+export interface ManifestExample {
+  /** `dialog/options`: its page and its file's name */
+  id: string;
+  page: string;
+  title: string;
+  /** What its doc comment says */
+  summary: string;
+  /** Path of its source, relative to `docs/` */
+  file: string;
+}
+
 export interface ManifestExport {
   /** The page it is on, or null when it is on none */
   page: string | null;
@@ -29,7 +40,7 @@ export interface Manifest {
   version: string;
   pages: Page[];
   exports: Record<string, ManifestExport>;
-  examples: never[];
+  examples: ManifestExample[];
 }
 
 export interface PageSource {
@@ -37,6 +48,8 @@ export interface PageSource {
   kind: PageKind;
   /** The page as markdown */
   markdown: string;
+  /** The same without the examples' source, which names exports the page is not about */
+  prose?: string;
   title: string;
   summary: string;
 }
@@ -65,8 +78,11 @@ export const pageOf = (
 ): string | null => {
   const folder = /^components\/([^/]+)\//.exec(entry.from)?.[1];
   const own = pages.find(page => page.id === folder);
-  if (own && mentions(own.markdown, entry.name)) return own.id;
-  return pages.find(page => mentions(page.markdown, entry.name))?.id ?? null;
+  if (own && mentions(own.prose ?? own.markdown, entry.name)) return own.id;
+  return (
+    pages.find(page => mentions(page.prose ?? page.markdown, entry.name))?.id ??
+    null
+  );
 };
 
 export const buildManifest = (
@@ -74,6 +90,7 @@ export const buildManifest = (
   pages: readonly PageSource[],
   entries: readonly PublicExport[],
   props: ReadonlyMap<string, ExportProps> = new Map(),
+  examples: readonly ManifestExample[] = [],
 ): Manifest => {
   const exports: Record<string, ManifestExport> = Object.fromEntries(
     entries.map(entry => [
@@ -97,10 +114,12 @@ export const buildManifest = (
         .filter(([, entry]) => entry.page === page.id)
         .map(([name]) => name),
       rules: [],
-      examples: [],
+      examples: examples
+        .filter(example => example.page === page.id)
+        .map(example => example.id),
     })),
     exports,
-    examples: [],
+    examples: [...examples],
   };
 };
 

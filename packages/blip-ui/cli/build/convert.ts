@@ -14,6 +14,9 @@ const BLOCK = /^<(?:Meta|Canvas)\b[^>]*\/>\s*$/;
 /** Storybook's props table, which the build replaces with the real one */
 const CONTROLS = /^<Controls\b[^>]*\/>\s*$/;
 
+/** `<Canvas of={DialogStories.Default} />`: the stories' namespace and the story */
+const CANVAS = /^<Canvas\s+of=\{(\w+)\.(\w+)\}\s*\/>\s*$/;
+
 /** The page a Storybook slug (`components-iconbutton`) points at, if it is shipped */
 export const pageForSlug = (slug: string, ids: readonly string[]) => {
   const last = slug.split('-').pop() ?? slug;
@@ -23,13 +26,16 @@ export const pageForSlug = (slug: string, ids: readonly string[]) => {
 /**
  * The page as markdown. `ids` are the shipped pages, so a Storybook link can
  * become the command that opens its page (or just its text, when the page is
- * not shipped).
+ * not shipped). A `<Canvas>` becomes `canvas`'s answer for its story (the
+ * source of the example the story renders) and is dropped when there is none.
  */
 export const mdxToMarkdown = (
   mdx: string,
   ids: readonly string[] = [],
   /** What `<Controls />` becomes (the props table), or goes before the first `##` of a page without one */
   controls = '',
+  /** What a `<Canvas>` becomes: the markdown for a story's example, or nothing */
+  canvas?: (namespace: string, story: string) => string | undefined,
 ) => {
   const out: string[] = [];
   let fence: string | null = null;
@@ -57,6 +63,12 @@ export const mdxToMarkdown = (
     }
     if (/^import\b/.test(line)) {
       skipping = !/\bfrom\s+['"][^'"]+['"]|^import\s+['"]/.test(line);
+      continue;
+    }
+    const shown = CANVAS.exec(line);
+    if (shown && canvas) {
+      const example = canvas(shown[1]!, shown[2]!);
+      if (example) out.push(example);
       continue;
     }
     if (BLOCK.test(line)) continue;

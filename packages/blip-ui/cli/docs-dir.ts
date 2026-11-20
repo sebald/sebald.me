@@ -3,7 +3,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { headingsOf } from './build/convert.ts';
-import type { Manifest } from './build/manifest.ts';
+import type { Manifest, ManifestExample } from './build/manifest.ts';
 import type { SearchExport, SearchPage } from './search.ts';
 
 /**
@@ -26,8 +26,11 @@ export interface Docs {
   manifest: Manifest;
   pages: SearchPage[];
   exports: SearchExport[];
+  examples: ManifestExample[];
   /** A page's markdown */
   markdown: (id: string) => string;
+  /** An example's source */
+  source: (example: ManifestExample) => string;
 }
 
 export const loadDocs = (docsDir: string): Docs => {
@@ -54,6 +57,8 @@ export const loadDocs = (docsDir: string): Docs => {
       name,
       ...entry,
     })),
+    examples: manifest.examples ?? [],
     markdown: id => texts.get(id)!,
+    source: example => readFileSync(join(docsDir, example.file), 'utf8'),
   };
 };

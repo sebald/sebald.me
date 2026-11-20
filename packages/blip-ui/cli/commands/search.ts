@@ -9,7 +9,13 @@ export const searchCommand = (docs: Docs, args: Parsed, io: Io) => {
     io.err('blip search needs words to look for: blip search <words…>');
     return 2;
   }
-  const hits = search(query, docs.pages, docs.exports, args.limit ?? 8);
+  const hits = search(
+    query,
+    docs.pages,
+    docs.exports,
+    args.limit ?? 8,
+    docs.examples,
+  );
   recordEvent(io.cwd, io.env, {
     event: 'lookup',
     command: 'search',
