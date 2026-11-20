@@ -41,6 +41,7 @@ import { Options, type SaveSummary } from './options';
 import { preloadSprites } from './sheets';
 import { Stage, TALL_BAR, px } from './stage';
 import { cn } from './styles.utils';
+import { useTrack } from './tracking';
 
 interface TitleScreenProps {
   /** What it opens on: the splash, or the menu (back from the demo) */
@@ -197,6 +198,12 @@ export const TitleScreen = ({
     setView('menu');
   }, [view]);
   const open = view !== 'splash';
+  // How to play, Options and the glossary are screens to the host
+  const track = useTrack();
+  const show = (next: 'how' | 'options' | 'glossary') => {
+    track({ type: 'screen', name: next });
+    setView(next);
+  };
   // How to play and the options take the menu's place; the glossary and
   // the question before a new run go over it
   const over = view === 'how' || view === 'options';
@@ -344,7 +351,7 @@ export const TitleScreen = ({
                   ? 'Nothing collected yet. Counter a phrase in a duel and it lands here, for every run after.'
                   : undefined
               }
-              onSelect={() => setView('glossary')}
+              onSelect={() => show('glossary')}
             >
               <span className="flex items-center gap-[1ch]">
                 Glossary
@@ -353,10 +360,10 @@ export const TitleScreen = ({
                 </span>
               </span>
             </PickerItem>
-            <PickerItem id="how" onSelect={() => setView('how')}>
+            <PickerItem id="how" onSelect={() => show('how')}>
               How to play
             </PickerItem>
-            <PickerItem id="options" onSelect={() => setView('options')}>
+            <PickerItem id="options" onSelect={() => show('options')}>
               Options
             </PickerItem>
           </Picker>

@@ -1,9 +1,10 @@
-import { Game } from '@sebald/pushback';
 import type { Metadata } from 'next';
 
 import { labEntry } from '@/lib/lab';
 import { openGraphDefaults, twitterDefaults } from '@/lib/og';
 import { PageToolbar } from '@/ui/page-toolbar';
+
+import { TrackedGame } from './game';
 
 // Config
 // ---------------
@@ -37,7 +38,7 @@ const PushbackPage = () => (
       <h1 id="pushback-title" className="sr-only">
         {entry.title}
       </h1>
-      <Game />
+      <TrackedGame />
     </section>
   </>
 );

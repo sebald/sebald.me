@@ -30,6 +30,7 @@ import { Controls, useBack } from './controls';
 import { Portrait } from './portrait';
 import { canShareImage, resultImage, shareResult } from './share';
 import { Stage, px } from './stage';
+import { useTrack } from './tracking';
 
 interface ResultScreenProps {
   run: SavedRun;
@@ -93,11 +94,13 @@ export const ResultScreen = ({
   }, [run, glossary]);
   // One share at a time: a second press while a sheet is open would fail
   const busy = useRef(false);
+  const track = useTrack();
 
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
+      track({ type: 'result:share', method: 'copied', finished: run.finished });
     } catch {
       setCopied(false);
     }
@@ -112,6 +115,8 @@ export const ResultScreen = ({
         { picture: await picture.current },
       );
       setSent(done === 'cancelled' ? null : done);
+      if (done !== 'cancelled')
+        track({ type: 'result:share', method: done, finished: run.finished });
     } catch {
       setSent(null);
     } finally {
