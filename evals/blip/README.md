@@ -132,3 +132,106 @@ cd evals/blip/template && pnpm install && pnpm typecheck && pnpm build
 
 `blip-ui.tgz`, `node_modules`, `dist` and the lockfile are git-ignored; `run.mjs`
 puts the tarball in place and keeps the lockfile per run.
+
+## Running a task
+
+```bash
+pnpm eval:blip --label day-zero --config cli --tasks pause --reps 1   # --dry prints and spends nothing
+```
+
+`run.mjs` (spec 3.3): `--label`, `--config` (`no-cli`, `cli`; `plan`, `hook`,
+`reviewer`, `full` stop with "not built yet"), `--tasks a,b` (default all),
+`--reps n` (default 1), `--model` (default `claude-sonnet-5-5`), `--budget`
+(`--max-budget-usd`, default 4), `--timeout` (minutes per run, default 30),
+`--tarball f` (else the workspace is packed), `--parallel n` (default 1),
+`--retry-failed`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
+configuration not built, 3 when the label stopped (canary or usage limit).
+
+Runs on the logged-in subscription: the child's environment has no
+`ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN`, no `npm_*`/`PNPM_*` variables
+and none of this repo's `node_modules/.bin` on `PATH`, and
+`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. `BLIP_EVAL_CACHE` moves the cache (never
+into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
+(a test stand-in). `node --test evals/blip` runs the pure helpers' tests
+(`run-lib.mjs`); it is not part of `pnpm test`.
+
+### What it leaves in the cache (what `collect.mjs` reads)
+
+```
+~/.cache/blip-eval/<label>/
+  label.json                         the label's tarball and the canary's baseline (below)
+  tarball/*.tgz                      the one tarball every run of the label installs
+  .base/ .canary/ .tmp/              working folders, not runs
+  <config>/<task>-<n>/               one run, n from 1: the template, installed, with the agent's changes
+    transcript.jsonl                 the child's stdout, one stream-json event per line, unchanged
+    meta.json                        below; written last
+    stderr.log                       only when the child wrote to stderr
+```
+
+- A run directory is a git repository with one commit, `template`, made before
+  the agent started; the agent's changes are `git status` / `git diff template`
+  against it. `transcript.jsonl`, `meta.json` and `stderr.log` are in
+  `.git/info/exclude`, `node_modules/`, `dist/` and `*.tgz` in `.gitignore`.
+  The records are moved in after the child ends, so the agent never sees them.
+- **A directory without `meta.json` is unfinished and is to be skipped.** A run
+  is a result when `meta.status` is `done` or `timeout`; `failed` is a run that
+  could not be measured (setup, the `init` check, no result event), `stopped`
+  one that hit the subscription's usage limit. The collector counts only
+  `done` and `timeout`.
+- `pnpm install` per run is offline from `pnpm-lock.yaml` (kept from the
+  label's base install); `no-cli` has `node_modules/.bin/blip` removed.
+  Nothing in the folder resolves into this repo (checked before the agent
+  starts, symlinks and the lockfile's paths).
+
+`meta.json`:
+
+| Field                                | Content                                                                                                                                                 |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`, `config`, `task`, `rep`     | Which run (`rep` from 1)                                                                                                                                |
+| `model`, `budgetUsd`, `timeoutMin`   | What was asked for                                                                                                                                      |
+| `tarball`                            | `sha256`, `version`, `commit` (null with `--tarball`): the same for every run of a label                                                                |
+| `claudeVersion`                      | `claude --version`                                                                                                                                      |
+| `startedAt`, `endedAt`, `durationMs` | ISO times, wall clock including setup                                                                                                                   |
+| `exitCode`, `signal`                 | The child's                                                                                                                                             |
+| `status`                             | `done`, `timeout`, `failed`, `stopped`                                                                                                                  |
+| `failure`                            | Why, when `failed`; else null                                                                                                                           |
+| `timedOut`                           | Ended by the wall-clock limit (`status: "timeout"`)                                                                                                     |
+| `stoppedBy`                          | `"usage-limit"` or null. A run with it is redone from a fresh copy, never a result                                                                      |
+| `overBudget`                         | The result event was `error_max_budget_usd`                                                                                                             |
+| `init`, `initProblems`               | What the `init` event loaded by name (`apiKeySource`, `model`, `plugins`, `skills`, `agents`, `tools`) and what the check found wrong (empty when fine) |
+| `result`                             | From the `result` event: `subtype`, `isError`, `costUsd` (an estimate at API prices), `turns`, `apiMs`, `usage`; null without one                       |
+| `installMs`, `baseCommit`            | The offline install's time; the `template` commit's hash                                                                                                |
+| `redoOf`                             | null for a first run; why it was redone otherwise                                                                                                       |
+
+`label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
+`version`, `commit`, `dirty`), `baseline` (the plugins, skills and agents Claude
+Code itself loads, from the canary's `init`) and `canary`. A label is built from
+one tarball for good: rerunning it reuses that file, and `--tarball` with another
+hash is refused.
+
+### Skipping and resuming
+
+Rerunning a label and configuration skips every run whose `meta.json` says
+`done` or `timeout` (and `failed`, unless `--retry-failed`). A run that is
+`stopped` by the usage limit, has no `meta.json`, or is `failed` with
+`--retry-failed` is deleted and redone from a fresh copy. When one run hits the
+usage limit the label stops: no further run is started (those already running
+finish), and the exit code is 3.
+
+### Two checks before and during a label
+
+- **The canary** (Q7), once per invocation that has work to do: an empty
+  folder in the label's cache, the same flags, one question about a section
+  of `~/.claude/CLAUDE.md`. If the answer is yes, or the `init` event's
+  `apiKeySource` is not `none`, nothing runs. On Claude Code 2.1.329
+  `--setting-sources project` alone does **not** keep that file out (the canary
+  said yes), so every run's and the canary's `.claude/settings.json` also lists
+  `claudeMdExcludes` for `~/.claude/CLAUDE.md` and `~/.claude/rules/**` (the home
+  directory written in at run time). A run's `settings.json` is therefore not
+  "permissions only" as spec 3.3 says.
+- **The `init` event** of each run, as it arrives: `apiKeySource` must be
+  `none`, and every plugin, skill and agent must be one the canary's `init` listed
+  (Claude Code's own, the same everywhere) or the configuration's (`blip-ui`'s
+  plugin from `plan` on), and none may come from `~/.claude`. On a problem the
+  child is killed at once and the run is `failed` with the reasons in
+  `initProblems`.

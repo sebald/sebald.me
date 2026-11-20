@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: C
 depends: [template, cli-lookup]
 pr:
@@ -47,3 +47,76 @@ built yet". `--dry` prints the commands and spends nothing.
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+**Changed.** `evals/blip/run.mjs` (the runner), `run-lib.mjs` (its pure parts: command line,
+environment, `CLAUDE.md`, init check, usage-limit test, skip rule) and `run-lib.test.mjs`
+(`node --test evals/blip`, not in `pnpm test`), `pnpm eval:blip` in the root `package.json`, and
+`evals/blip/README.md` ("Running a task"), which is the layout `eval-collect` reads: the cache
+paths, the `meta.json` fields, what `transcript.jsonl` is, when a directory counts as a result.
+
+**Decisions.**
+
+- **The canary caught a real leak, and `--setting-sources project` is not enough on Claude Code
+  2.1.329 (Q7).** The first real attempt stopped at the canary: asked in an empty folder, the
+  child answered `LEAK:yes` and quoted the heading of `~/.claude/CLAUDE.md`. So Q7's finding (2.1.323)
+  no longer holds. Fix, tried by hand before it went in: `claudeMdExcludes` in the project's
+  `.claude/settings.json` listing `<home>/.claude/CLAUDE.md` and `<home>/.claude/rules/**`
+  gives `LEAK:no`, on the subscription, with no `CLAUDE_CONFIG_DIR` and no token. The home
+  path is written in at run time (the file is per run, never committed), and the canary uses the
+  same file, so it tests what the runs get. This departs from spec 3.3's "settings.json:
+  permissions only"; Q7 and the spec table need that line changed (not edited here, the task is
+  the runner).
+- Claude Code ignores `permissions.allow` from the run's `settings.json` ("this workspace has not
+  been trusted", in `stderr.log`); `--allowedTools` does the approving, and the run's Bash,
+  Edit and Write all worked. The file's permissions stay, harmless, as the spec says.
+- Layout: `<cache>/<label>/<config>/<task>-<n>/` (n from 1), the run's `transcript.jsonl`,
+  `meta.json` and `stderr.log` inside it but in `.git/info/exclude`, and written only after the
+  child ends (streamed to `<label>/.tmp/` meanwhile) so the agent cannot read its own transcript.
+  The directory is a git repo with one commit, `template`; the agent's change is the diff to it.
+  `<label>/label.json` holds the tarball (sha256, version, commit) and the canary's baseline;
+  one label is one tarball, a different `--tarball` is refused.
+- `meta.status`: `done`, `timeout` (both results), `failed` (setup, init check, no result event),
+  `stopped` (usage limit, `stoppedBy: "usage-limit"`, redone). No `meta.json` means unfinished,
+  redone. `failed` is skipped on rerun unless `--retry-failed`.
+- Init check: `apiKeySource` is `none`, and every plugin, skill and agent is one the canary's
+  `init` listed (Claude Code's own: 5 built-in plugins, 19 skills, 6 agents on 2.1.329) or the
+  configuration's, and none matches a name under `~/.claude` (skills, agents, installed
+  plugins and their `plugin:skill` names). On a problem the child is killed at once.
+- The child's environment drops `ANTHROPIC_API_KEY` and `ANTHROPIC_AUTH_TOKEN`, `npm_*`/`PNPM_*`
+  variables and this repo's `node_modules/.bin` entries on `PATH` (`pnpm eval:blip` adds
+  them, so `tsc` and `oxlint` of the repo would otherwise be on the agent's path). The prompt
+  goes in on stdin: `--tools` and `--allowedTools` take lists and swallow a trailing positional.
+- The canary's model is the alias `haiku` (the init event says `claude-sonnet-5` is served; the
+  answer is the same either way). The wall-clock limit kills the child's process group
+  (SIGTERM, SIGKILL after 10 s). Defaults: `--reps 1` (not day zero's 3, so a bare call is cheap),
+  `--model claude-sonnet-5-5`, `--budget 4`, `--timeout 30` min.
+- The usage-limit text is matched on its known wordings (`hit your limit`, `usage limit`,
+  `limit reached`, a `rejected` rate-limit event); no real one was seen, so the exact form is
+  still to confirm in the pilot (Q13). The stub run below proves the handling, not the wording.
+- Only `run.mjs` is wired to `pnpm eval:blip`; spec 3.3 says "then `collect.mjs`", which `eval-collect`
+  adds.
+
+**Checked.**
+
+- `--dry`: one `claude` command per task and repetition (4 for `--tasks pause,shop --reps 2`),
+  nothing written; `--config plan` exits 2 with "not built yet".
+- The one real run, `pnpm eval:blip --label pilot --config cli --tasks pause --reps 1`, started
+  with `ANTHROPIC_API_KEY` set in the calling shell: **55 s, 9 turns, estimated $0.17**, status
+  `done`. `init` said `"apiKeySource":"none"`, listed 5 built-in plugins, 19 skills, 6 agents and
+  nothing from `~/.claude`; `transcript.jsonl` has 35 events. The agent added
+  `src/screens/pause.tsx` and `paused-camp.tsx`, changed `camp.tsx` and `index.ts`, ran
+  `pnpm typecheck` and `pnpm build`, and used `blip search` and `blip docs`. 127 symlinks in the run
+  directory, none resolving into this repo; neither `package.json` nor the lockfile names its path.
+- With a stand-in executable for `claude` (`BLIP_EVAL_CLAUDE`, behaviours scripted), a real
+  pack, base install and offline per-run installs: `no-cli` has no `node_modules/.bin/blip` and
+  its `CLAUDE.md` has no `pnpm exec blip`, `cli` has both; a hanging child with `--timeout 0.05`
+  ended with SIGTERM and `status: "timeout"`, `timedOut: true`; a usage-limit result gave
+  `status: "stopped"`, `stoppedBy: "usage-limit"`, no further run started, and the rerun redid it
+  from a fresh copy (a marker file in the old copy was gone, `redoOf` set) and ran the next
+  task; an `init` with another `apiKeySource` or an unexpected plugin gave `failed` and the
+  reason; a `LEAK:yes` canary stopped the label before any run (exit 3); finished runs were
+  skipped (`Every run ... is already done`).
+- On the real run: the rerun skips it; with `stoppedBy` set to `usage-limit` in a copy of its
+  `meta.json`, `--dry` lists it as `redo (usage limit)`.
+- `node --test evals/blip` 6 pass; `pnpm lint`, `pnpm format:check`, `pnpm test`: see the
+  pull request.
