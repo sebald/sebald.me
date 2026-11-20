@@ -1,6 +1,6 @@
-import { Actions, Content, Title } from '../../parts/parts';
+import { Actions, Title } from '../../parts/parts';
 import { Picker, PickerGroup, PickerItem } from '../../picker/picker';
-import { ScreenTitle, Text } from '../../text/text';
+import { ScreenTitle } from '../../text/text';
 import { Legend, Window } from '../../window/window';
 import { Screen } from '../screen';
 
@@ -14,12 +14,9 @@ const noop = () => {};
 export function Shop() {
   return (
     <Screen>
-      <ScreenTitle blurb="Spend it before the sprint ends.">Shop</ScreenTitle>
+      <ScreenTitle>Shop</ScreenTitle>
       <Window>
         <Title>Gold: 120</Title>
-        <Content>
-          <Text>Pick something for the road.</Text>
-        </Content>
         <Actions>
           {/* `active={false}` is for the docs: leave it out and the picker takes the keys */}
           <Picker label="Shop" active={false}>
