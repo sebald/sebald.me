@@ -225,8 +225,10 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 | `redoOf`                             | null for a first run; why it was redone otherwise                                                                                                                                |
 
 `label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
-`version`, `commit`, `dirty`), `baseline` (the plugins, skills and agents Claude
-Code itself loaded in the canary's `init`; a record, not a check) and `canary`. A
+`version`, `commit`, `dirty`), `baseline` (the plugins, skills, agents, tools and MCP servers Claude
+Code itself loaded in the canary's `init`; checked by the next canary),
+`acceptedBaselines` (only after `--accept-baseline`: `at`, `claudeVersion`, `from`, `to`, so a
+reader sees that runs within the label differ) and `canary`. A
 label is built from one tarball for good: rerunning it reuses that file, and
 `--tarball` with another hash is refused. It is also built on one Claude Code:
 another major or minor `claudeVersion` is refused.
@@ -247,9 +249,13 @@ finish), and the exit code is 3.
   heading of `~/.claude/CLAUDE.md` (read at run time; with no such file it only
   reads `init`). If the answer is yes, the `init` event's `apiKeySource` is not
   `none`, or anything it loaded comes from `~/.claude` or an MCP server, nothing
-  runs. Its `init` is recorded as the label's `baseline` (informational,
-  overwritten by each canary); a later invocation on another major or minor Claude Code version than
-  the label began on is refused. On Claude Code 2.1.329
+  runs. Its `init` is the label's `baseline`. A later invocation stops
+  (exit 3, nothing runs) on another major or minor Claude Code version than the label began on, and
+  when what Claude Code loads (plugins including built-in ones, skills, agents, tools, MCP
+  servers) differs from the recorded baseline: it prints what was added and removed per kind.
+  Use a new label, or `--accept-baseline` to continue; the old and new set, the Claude Code
+  version and the time are then appended to `acceptedBaselines` in `label.json`. Nothing
+  changed (the usual `--retry-failed` rerun): no flag needed. On Claude Code 2.1.329
   `--setting-sources project` alone does **not** keep that file out (the canary
   said yes), so every run's and the canary's `.claude/settings.json` also lists
   `claudeMdExcludes` for `~/.claude/CLAUDE.md`, `~/.claude/rules/**`, `~/CLAUDE.md`
@@ -260,10 +266,13 @@ finish), and the exit code is 3.
   the command line (`Agent` shows as `Task`) and no MCP server may be loaded.
   Built-in plugins, skills and agents are allowed whatever their names (Claude
   Code adds one every few releases; `cc-plugin-easel` failed 2 of 64 runs of day
-  zero when a list of names was checked). A plugin says where it comes from
-  (`path: "builtin"`, `source: "<name>@builtin"`), kept in `meta.init` as
-  `builtinPlugins`; a plugin that is neither built in nor `blip-ui` in a
-  configuration that has it fails. Skills and agents are bare names in the event, so
+  zero when a list of names was checked). A plugin is built in only when its own
+  entry says so (`path: "builtin"` or a `source` ending `@builtin`; kept per entry in
+  `meta.init.pluginEntries`), never by its name: a user plugin named like a
+  built-in one fails. A plugin that is neither built in nor `blip-ui` in a
+  configuration that has it fails. The check fails closed: an event without a
+  plugin list, or whose plugins carry no `path` or `source` at all, fails the run
+  (and the canary) instead of assuming they are built in. Skills and agents are bare names in the event, so
   they are compared by name, at run time, with what lives in `~/.claude` (the
   plugins in `installed_plugins.json`, `skills/`, `agents/`): a match fails the run On a problem the
   child is killed at once and the run is `failed` with the reasons in
