@@ -369,8 +369,9 @@ more, see `evals/blip/README.md`), not the caller's.
 | `.blip/**`                               | Appears during the run: the event log, gap drafts                         |
 
 What it cannot see: this repo, its `AGENTS.md`, Blip's source, stories and tests, Pushback, the
-tasks' rubrics. Claude Code's built-in skills and agents load in every configuration (checked:
-19 skills and 6 agents with `--setting-sources project`), the same for all of them.
+tasks' rubrics. Claude Code's built-in plugins, skills and agents load in every configuration (checked:
+19 skills and 6 agents with `--setting-sources project`) and are not checked by name, since they
+change between releases; the `init` check fails a run only for what comes from `~/.claude`.
 
 ### 3.4 Configurations
 
