@@ -50,6 +50,9 @@ user to accept, change or cut; each has `step: D+` and no place in the table abo
 | [`picker-item-parts`](picker-item-parts.md) | Price slot, save slot summary, done mark, objective reminder (1 task each) | a two-line item built by hand in 6 of 6 `quests`, 6 of 6 `saves` |
 | [`time-readout`](time-readout.md)           | Time and date readout (1)                                                  | two formatters in 6 of 6 `saves`                                 |
 
+Follow-up: [`window-scroll`](window-scroll.md), a long list in a window scrolls instead of being cut off
+(found by `screen-layout`; before a game screen relies on `Screen`).
+
 ## Common components
 
 Components almost every design system has and Blip lacks, drafted so the kit is closer to a real

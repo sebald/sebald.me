@@ -129,6 +129,7 @@ export {
   PixelIcon,
   type PixelIconProps,
 } from './components/pixel-icon/pixel-icon';
+export { Screen, type ScreenProps } from './components/screen/screen';
 export { Stage, type StageProps, TALL_BAR } from './components/stage/stage';
 export { useScale } from './components/stage/use-scale';
 export { Confirm, type ConfirmProps } from './components/confirm/confirm';
