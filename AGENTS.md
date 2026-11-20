@@ -33,7 +33,7 @@ pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
 pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
-CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on every pull request (keep the job's command in sync with the script). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+CI runs `lint`, `format:check`, `test` and, in their own jobs, `narrate:check` and the changeset check (see Versioning) on every pull request (keep the jobs' commands in sync with the scripts). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
 
 ### The game's flows
 
@@ -99,7 +99,9 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 ### Versioning (packages only)
 
 - Blip UI and Pushback carry their own versions, kept with Changesets (`.changeset/`); the site (the root package) has none. Both are private: versions and `CHANGELOG.md` only, nothing is published or tagged
-- A pull request that changes what a package does adds a changeset: `pnpm changeset` (or a file `.changeset/<name>.md` with `'@sebald/<package>': patch | minor | major` in its frontmatter and one line for the changelog). Tests, docs and refactors without a visible change need none
+- A pull request that changes a package's code adds a changeset: `pnpm changeset` (or a file `.changeset/<name>.md` with `'@sebald/<package>': patch | minor | major` in its frontmatter and one line for the changelog). CI fails without one (`changeset status --since=origin/main`)
+- What counts is `changedFilePatterns` in `.changeset/config.json`: a package's `src/` and `cli/` (its MDX docs included), not its tests (`*.test.*`), stories, `package.json` (so Renovate's bumps pass) or config. The site's own files never count
+- A change there that needs no release (a refactor, a typo in a comment) adds an empty changeset: `pnpm changeset --empty`. One changeset satisfies the check, so a PR that changes both packages names both in it
 - While a package is below 1.0, a breaking change is `minor`, everything else `patch`
 - To release, run `pnpm version-packages` on `main`'s state and open its result as a pull request: it consumes the changesets, bumps `package.json` and writes each package's `CHANGELOG.md`
 
