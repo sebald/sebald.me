@@ -147,10 +147,17 @@ pnpm eval:blip --label day-zero --config cli --tasks pause --reps 1   # --dry pr
 `--retry-failed`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
 configuration not built, 3 when the label stopped (canary or usage limit).
 
-Runs on the logged-in subscription: the child's environment has no
-`ANTHROPIC_API_KEY` or `ANTHROPIC_AUTH_TOKEN`, no `npm_*`/`PNPM_*` variables
-and none of this repo's `node_modules/.bin` on `PATH`, and
-`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. `BLIP_EVAL_CACHE` moves the cache (never
+Runs on the logged-in subscription. The child's environment (also `pnpm`'s and
+`git`'s here) is an allowlist, `ENV_ALLOW` in `run-lib.mjs`: `PATH` (this repo's
+entries removed), `HOME`, `USER`, `LOGNAME`, `SHELL`, `LANG`, `LC_*`, `TERM`, `TZ`,
+`TMPDIR`, `__CF_USER_TEXT_ENCODING`, `XDG_{CONFIG,CACHE,DATA,STATE}_HOME`, the proxy
+variables (`HTTP(S)_PROXY`, `NO_PROXY`, either case), `SSL_CERT_FILE` and
+`NODE_EXTRA_CA_CERTS`. `HOME` and `USER` are how Claude Code finds the login (checked
+with the canary: `apiKeySource` is `none` with these alone, even when the caller
+has `ANTHROPIC_API_KEY` set). Everything else is dropped: every key and token,
+`ANTHROPIC_*`, `CLAUDE_*`, `GITHUB_TOKEN`, `AWS_*`, `NODE_PATH`, `npm_*`, `PNPM_*`.
+It adds `PWD` (the run's folder) and `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. A tool
+that needs another variable fails visibly; add it to the list. `BLIP_EVAL_CACHE` moves the cache (never
 into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 (a test stand-in). `node --test evals/blip` runs the pure helpers' tests
 (`run-lib.mjs`); it is not part of `pnpm test`.

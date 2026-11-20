@@ -142,8 +142,21 @@ paths, the `meta.json` fields, what `transcript.jsonl` is, when a directory coun
   tarball failures exit 2, `--dry` checks a `--tarball` hash; `copyTree` filters only top-level
   names; README corrected (`text`, truncated `stderr.log`, `meta.task` not the folder name,
   enumerate `<config>`, only `meta.json` guaranteed) and `AGENTS.md` has the command.
-- Left, with the reason: other secrets in the environment (`GITHUB_TOKEN`, `AWS_*`) still pass
-  through, since the agent's `git`/`gh` use is outside this task and a list would be a guess; the
-  README now says the agent can read sibling run folders (Bash is not sandboxed) instead of
-  moving the records; a grandchild that detaches with `setsid` and holds the pipe could still
+- Left, with the reason: other secrets in the environment first (now fixed, see the allowlist below). The
+  README says the agent can read sibling run folders (Bash is not sandboxed) instead of moving the records; a grandchild that detaches with `setsid` and holds the pipe could still
   keep a run open past its limit (the process-group kill covers the normal case).
+
+**Environment allowlist** (after the user's decision on the review). The child's environment
+(`claude`, `pnpm`, `git`) is now built from a list, `ENV_ALLOW` in `run-lib.mjs`, instead of
+the caller's minus a blocklist: `PATH` (this repo's entries removed), `HOME`, `USER`, `LOGNAME`,
+`SHELL`, `LANG`, `LC_*`, `TERM`, `TZ`, `TMPDIR`, `__CF_USER_TEXT_ENCODING`, `XDG_*_HOME` (config,
+cache, data, state), the proxy variables, `SSL_CERT_FILE`, `NODE_EXTRA_CA_CERTS`; plus `PWD` and
+`CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. Reasoning: the first group is what any process needs, `HOME`
+and `USER` are how Claude Code finds the macOS keychain login and `~/.claude`, the proxy and CA
+names keep the network working behind a proxy. Every key, token, `ANTHROPIC_*`, `CLAUDE_*`,
+`GITHUB_TOKEN`, `AWS_*`, `NODE_PATH`, `npm_*` and `PNPM_*` is dropped. A unit test checks the exact
+key set. Canary with the allowlist alone, real `claude`, `ANTHROPIC_API_KEY` set in the caller:
+env keys `CLAUDE_CODE_DISABLE_AUTO_MEMORY, HOME, LANG, LOGNAME, PATH, PWD, SHELL, TERM, TMPDIR, USER,
+__CF_USER_TEXT_ENCODING`, `apiKeySource: none`, answer `LEAK:no`, exit 0. No full agent run was
+spent. Also updated: spec 3.3 (the `settings.json` row and the probe paragraph) and Q7 (the leak on
+2.1.329 and the fix).

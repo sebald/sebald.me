@@ -347,13 +347,18 @@ The tool list is the same in every configuration, so adding the reviewer does no
 Claude Code's built-in subagents (**Q2**). The network is not sandboxed; the collector flags runs
 that reach out (3.5). A probe before each label checks that the global `~/.claude/CLAUDE.md`
 stays out, and stops the label if it doesn't (**Q7**).
+`--setting-sources project` alone does not keep it out on Claude Code 2.1.329, so `run.mjs` writes
+`claudeMdExcludes` into each run's `settings.json` (and the probe's) at run time: `~/.claude/CLAUDE.md`,
+`~/.claude/rules/**`, `~/CLAUDE.md` and `~/.cache/CLAUDE.md`. The home path is only known then, so
+the file is never committed. The child's environment is an allowlist (PATH, HOME, USER and a few
+more, see `evals/blip/README.md`), not the caller's.
 
 **What the agent sees**, file by file, in the full configuration:
 
 | Path                                     | What it is                                                                |
 | ---------------------------------------- | ------------------------------------------------------------------------- |
 | `CLAUDE.md`                              | The game in a paragraph, the commands, `?screen=`, one line naming `blip` |
-| `.claude/settings.json`                  | Permissions only                                                          |
+| `.claude/settings.json`                  | Permissions, and `claudeMdExcludes` for the user's global memory (below)  |
 | `src/**`                                 | The template (3.1)                                                        |
 | `blip.config.json`                       | Absent unless the configuration sets one                                  |
 | `node_modules/.bin/blip`                 | The CLI                                                                   |

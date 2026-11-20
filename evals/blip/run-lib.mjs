@@ -72,28 +72,48 @@ export const settingsJson = ({ home, permissions = true }) =>
     2,
   ) + '\n';
 
-// The child's environment: no API key of any kind, so a run uses the
-// logged-in subscription (Q13), and no auto memory (Q7). Nothing from this
-// repo leaks in through `pnpm eval:blip`: its `node_modules/.bin` entries on
-// PATH, the `npm_*` and `PNPM_*` variables, `INIT_CWD`, `OLDPWD`. `PWD` is set
-// to where the child runs.
+// The child's environment is an allowlist: only what a process needs to run,
+// find the user's login and reach the network. Everything else is dropped:
+// API keys and tokens of any kind (a run uses the logged-in subscription,
+// Q13), `ANTHROPIC_*`, `CLAUDE_*`, `GITHUB_TOKEN`, `AWS_*`, `NODE_PATH`, the
+// `npm_*` and `PNPM_*` variables `pnpm eval:blip` adds, `INIT_CWD`, `OLDPWD`.
+// The login is found through HOME and USER (the macOS keychain and
+// ~/.claude), so those stay. `PWD` is set to where the child runs, auto memory
+// is off (Q7), and this repo's own entries are taken off PATH.
+export const ENV_ALLOW = [
+  'PATH',
+  'HOME',
+  'USER',
+  'LOGNAME',
+  'SHELL',
+  'LANG',
+  'TERM',
+  'TZ',
+  'TMPDIR',
+  '__CF_USER_TEXT_ENCODING',
+  'XDG_CONFIG_HOME',
+  'XDG_CACHE_HOME',
+  'XDG_DATA_HOME',
+  'XDG_STATE_HOME',
+  'HTTP_PROXY',
+  'HTTPS_PROXY',
+  'NO_PROXY',
+  'http_proxy',
+  'https_proxy',
+  'no_proxy',
+  'SSL_CERT_FILE',
+  'NODE_EXTRA_CA_CERTS',
+];
+
 export const childEnv = (env, { repo, cwd }) => {
   const out = {};
-  for (const [key, value] of Object.entries(env)) {
-    if (
-      /^(npm_|PNPM_|ANTHROPIC_|CLAUDE_CODE_USE_)/i.test(key) ||
-      ['INIT_CWD', 'OLDPWD', 'CLAUDE_CONFIG_DIR', 'CLAUDECODE'].includes(key)
-    )
-      continue;
-    out[key] = value;
-  }
+  for (const [key, value] of Object.entries(env))
+    if (ENV_ALLOW.includes(key) || key.startsWith('LC_')) out[key] = value;
   out.CLAUDE_CODE_DISABLE_AUTO_MEMORY = '1';
-  for (const key of ['PATH', 'NODE_PATH'])
-    if (out[key])
-      out[key] = out[key]
-        .split(':')
-        .filter(dir => dir !== repo && !dir.startsWith(`${repo}/`))
-        .join(':');
+  if (out.PATH)
+    out.PATH = out.PATH.split(':')
+      .filter(dir => dir !== repo && !dir.startsWith(`${repo}/`))
+      .join(':');
   if (cwd) out.PWD = cwd;
   return out;
 };

@@ -178,19 +178,32 @@ test('the probe line is the first heading of the memory file', () => {
   assert.equal(probeLine('  \n'), null);
 });
 
-test('childEnv also drops other Anthropic variables and NODE_PATH inside the repo', () => {
-  const env = childEnv(
-    {
-      ANTHROPIC_BASE_URL: 'u',
-      CLAUDE_CONFIG_DIR: '/c',
-      CLAUDECODE: '1',
-      NODE_PATH: '/repo/node_modules/.pnpm:/other',
-      PATH: '/usr/bin',
-    },
-    { repo: '/repo', cwd: '/x' },
-  );
-  assert.equal(env.ANTHROPIC_BASE_URL, undefined);
-  assert.equal(env.CLAUDE_CONFIG_DIR, undefined);
-  assert.equal(env.CLAUDECODE, undefined);
-  assert.equal(env.NODE_PATH, '/other');
+test('childEnv is an allowlist: only listed names and LC_* pass', () => {
+  const given = {
+    ANTHROPIC_BASE_URL: 'u',
+    CLAUDE_CONFIG_DIR: '/c',
+    CLAUDECODE: '1',
+    GITHUB_TOKEN: 't',
+    AWS_SECRET_ACCESS_KEY: 's',
+    NODE_PATH: '/other',
+    PATH: '/usr/bin',
+    HOME: '/home',
+    USER: 'me',
+    LC_ALL: 'C',
+    HTTPS_PROXY: 'p',
+    SOMETHING_ELSE: 'x',
+  };
+  const env = childEnv(given, { repo: '/repo', cwd: '/x' });
+  assert.deepEqual(Object.keys(env).sort(), [
+    'CLAUDE_CODE_DISABLE_AUTO_MEMORY',
+    'HOME',
+    'HTTPS_PROXY',
+    'LC_ALL',
+    'PATH',
+    'PWD',
+    'USER',
+  ]);
+  for (const name of Object.keys(env))
+    if (!['CLAUDE_CODE_DISABLE_AUTO_MEMORY', 'PWD'].includes(name))
+      assert.equal(env[name], given[name]);
 });
