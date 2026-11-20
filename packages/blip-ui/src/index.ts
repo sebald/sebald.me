@@ -115,6 +115,7 @@ export {
   type LedgerRowProps,
 } from './components/ledger/ledger';
 export { Meter, type MeterProps } from './components/meter/meter';
+export { Readout, type ReadoutProps } from './components/readout/readout';
 export { Timer, TIMER_SIZE, type TimerProps } from './components/timer/timer';
 export { Controls, type ControlsProps } from './components/controls/controls';
 export {
