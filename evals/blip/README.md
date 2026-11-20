@@ -7,6 +7,9 @@ Measures what each piece of Blip UI's harness does for a coding agent
 evals/blip/
   tasks/<id>/task.md       the prompt, written like a ticket
   tasks/<id>/rubric.json   what the judge checks, and the URLs to screenshot
+  collect.mjs, lib/        the collector (below)
+  fixtures/                hand-made runs the collector's tests read
+  results/<date>-<label>/  results.json and summary.md, the only files committed
 ```
 
 The six tasks: `shop`, `saves`, `pause`, `fight-hud`, `quests`, `camp-rest`.
@@ -159,8 +162,7 @@ has `ANTHROPIC_API_KEY` set). Everything else is dropped: every key and token,
 It adds `PWD` (the run's folder) and `CLAUDE_CODE_DISABLE_AUTO_MEMORY=1`. A tool
 that needs another variable fails visibly; add it to the list. `BLIP_EVAL_CACHE` moves the cache (never
 into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
-(a test stand-in). `node --test evals/blip` runs the pure helpers' tests
-(`run-lib.mjs`); it is not part of `pnpm test`.
+(a test stand-in). The pure helpers' tests (`run-lib.test.mjs`) run in `pnpm test`.
 
 ### What it leaves in the cache (what `collect.mjs` reads)
 
@@ -255,3 +257,69 @@ finish), and the exit code is 3.
   server may be loaded. On a problem the
   child is killed at once and the run is `failed` with the reasons in
   `initProblems`.
+
+## Collecting
+
+`node evals/blip/collect.mjs --label <label>` reads a label's run directories and writes
+`results/<date>-<label>/results.json` and `summary.md`, nothing else in the repo. It never reruns an
+agent and never writes into a run (`tsc` and the build only add `dist/` there). Options:
+`--cache <dir>` (default `~/.cache/blip-eval`), `--out <dir>` (default `evals/blip/results`),
+`--date`, `--skip-build` (no `tsc`, no build), `--against <results dir>`. Its tests
+(`collect.test.mjs`) run in `pnpm test`; `node evals/blip/fixtures/build-cache.mjs <dir>` builds a
+cache from the fixtures to try it by hand.
+
+**The run layout it reads** is eval-run's ("What it leaves in the cache", above), nothing more:
+
+- `<cache>/<label>/<config>/<dir>/` is the agent's project, with `meta.json` written last and
+  `transcript.jsonl` beside `src/`. Task and rep come from `meta.task` and `meta.rep`, never from the
+  folder's name. `<label>/tarball/` and dot folders are not configurations
+- Only `meta.status` `done` and `timeout` are results. `failed`, `stopped`, a folder without
+  `meta.json` (unfinished) and a result run without `transcript.jsonl` are skipped, and
+  `summary.md` and `results.json` (`skipped`) list each with its reason
+- Blip's identity is `meta.tarball` (`version` and the first 12 characters of `sha256`), which is
+  the same for every run of a label; without it, the `version` in the installed package plus a hash
+  of its `dist` and `docs`. More than one in a label is an error. Imports are checked against
+  `node_modules/@sebald/blip-ui/docs/manifest.json`; without it, invented imports are `null` (not
+  measured, and `summary.md` says so)
+- The first commit of the run's git repository is the template; changed lines are against it
+- A result run whose transcript has no `result` event, or ended on the usage limit, is `incomplete`:
+  listed, left out of every median
+- The task's `scope` is read from `tasks/<task>/rubric.json` in this repo
+
+**What it counts**
+
+- Transcript: tool calls by tool; `blip` calls by command (`blip`, `pnpm exec blip`,
+  `node_modules/.bin/blip`, in any `&&`, `;` or `|` part of a command); calls that look into
+  `node_modules/@sebald/blip-ui/dist` or `/docs` (a Read, Glob, Grep or a Bash command naming the
+  path); whether a lookup (a `blip` call other than `validate`, or such a read) came before the
+  first write of a `.ts` or `.tsx` file (a Write or Edit, or a Bash command that redirects into one,
+  heredocs included, or uses `tee`, `cp`, `mv` onto one, or `sed -i`); `error TS` lines in Bash results; turns, tokens, cost and
+  time from the final `result` event; permission denials; `error_max_budget_usd` as over budget.
+  A message split over several events is counted once (by `message.id`); a subagent's messages
+  (those with a `parent_tool_use_id`) are summed apart as `subagents`
+- Network (Q2): a command (found outside quotes and heredocs, through `env`, `timeout`, `xargs`,
+  `sudo` and `bash -c`) that is `curl`, `wget`, `gh`, `npm|pnpm|yarn|bun view`, `info`, `show`,
+  `search`, `add`, or `install`/`i` with a package named (a bare `install` works from the
+  lockfile and is not flagged), `pnpm dlx`, `npx <package>` (not `blip`, `tsc`, `vite`, `oxlint`),
+  `node|python -e/-c` code that fetches, `git clone|fetch|pull|push`, and the `WebFetch` and
+  `WebSearch` tools. Flagged runs are counted like the others and listed apart
+- Tree: `tsc --noEmit` and `vite build` with what the run installed (not run: `ran: false`, not a
+  failure); raw tags, split into those Blip has a component for (`button`, `input`, `select`,
+  `textarea`, `dialog`, `progress`, `meter`, `h1` to `h6`, `ul`, `ol`, `menu`, `table`, `nav`,
+  `details`, `summary`: `controls`) and the rest (`wrappers`); JSX elements by where they come from
+  (`blip`, `own`: a relative or `@/` import or one declared in the file, `other`); `className`s
+  with their classes split into placing (position, size, grid, flex, margin, gap, overflow) and
+  restyling (everything else, padding included), without the test of a conditional (`s === 'open' ? 'a' : 'b'` has two); `style` props; value imports from
+  `@sebald/blip-ui` that are not exports. The files are parsed (`oxc-parser`), not matched by regex
+- `scope: all` counts all of `src/`; `changed-lines` counts an element, a `className` or an import
+  only when its line (the opening tag's, the attribute's) is added or changed since the run's root
+  commit, committed or not, and every line of a file the agent added
+- Overrides that recur (Q11): per changed `className` on a Blip component or a raw tag, the
+  element and its sorted restyling classes (variants kept); a bare raw control has none. A group
+  in at least 3 runs of one label across at least 2 tasks is a candidate. Taken from changed
+  lines whatever the scope, so a file the agent never touched can't make one
+
+`results.json` records the collector's commit (`+dirty` with uncommitted edits to it) and the
+CLI's version. `--against` puts another label's overall numbers beside this one in `summary.md`
+only when both match; otherwise it says which differs and to collect again. Every process the
+collector starts has `BLIP_EVENTS=off`; the collector never reads or writes `.blip/`.

@@ -1,0 +1,70 @@
+{
+  "_": "The Bash command is a curl: flagged as network use. Ends on the budget.",
+  "transcript": {
+    "status": "complete",
+    "overBudget": true,
+    "failed": false,
+    "toolCalls": {
+      "total": 2,
+      "byTool": {
+        "Bash": 1,
+        "Write": 1
+      }
+    },
+    "blipCalls": {
+      "total": 0
+    },
+    "reads": {
+      "dist": 0,
+      "docs": 0
+    },
+    "lookupBeforeFirstTsxWrite": false,
+    "tsErrors": 0,
+    "turns": 3,
+    "tokens": {
+      "input": 20,
+      "output": 40
+    },
+    "costUsd": 2,
+    "wallSeconds": 40,
+    "denials": 0,
+    "network": [
+      {
+        "tool": "curl"
+      }
+    ]
+  },
+  "tree": {
+    "rawTags": {
+      "total": 3,
+      "controls": 0,
+      "wrappers": 3,
+      "byTag": {
+        "div": 3
+      }
+    },
+    "components": {
+      "blip": 1,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 2,
+      "onBlip": 1,
+      "onRaw": 1,
+      "placing": 1,
+      "restyling": 3
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 1,
+      "invented": []
+    },
+    "overrides": [
+      {
+        "key": "blip:Button|bg-red-700,text-white",
+        "line": 3
+      }
+    ]
+  }
+}

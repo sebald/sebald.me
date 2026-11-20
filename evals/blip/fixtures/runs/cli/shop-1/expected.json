@@ -1,0 +1,90 @@
+{
+  "_": "scope all: shop.tsx plus the untouched camp.tsx. Bash calls t1, t3, t6, t10; Reads t2, t4 and the subagent's t8; Write t5; Edit t9; Agent t7. Two blip calls (search, docs). Reads of dist: t4, t8; of docs: t2. Two TS errors in t6. Usage of the subagent: m7 (10/20) and m8 (7/9).",
+  "transcript": {
+    "status": "complete",
+    "overBudget": false,
+    "toolCalls": {
+      "total": 10,
+      "byTool": {
+        "Agent": 1,
+        "Bash": 4,
+        "Edit": 1,
+        "Read": 3,
+        "Write": 1
+      }
+    },
+    "blipCalls": {
+      "total": 2,
+      "byCommand": {
+        "docs": 1,
+        "search": 1
+      }
+    },
+    "reads": {
+      "dist": 2,
+      "docs": 1
+    },
+    "lookupBeforeFirstTsxWrite": true,
+    "tsErrors": 2,
+    "turns": 9,
+    "tokens": {
+      "input": 700,
+      "output": 400,
+      "cacheRead": 9000,
+      "cacheCreation": 1500
+    },
+    "subagents": {
+      "messages": 2,
+      "tokens": {
+        "input": 17,
+        "output": 29,
+        "cacheRead": 0,
+        "cacheCreation": 0
+      }
+    },
+    "costUsd": 0.5123,
+    "wallSeconds": 91.2,
+    "denials": 1,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 5,
+      "controls": 1,
+      "wrappers": 4,
+      "byTag": {
+        "button": 1,
+        "div": 4
+      }
+    },
+    "components": {
+      "blip": 2,
+      "own": 1,
+      "other": 0
+    },
+    "classNames": {
+      "total": 4,
+      "onBlip": 1,
+      "onRaw": 3,
+      "placing": 3,
+      "restyling": 5
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 3,
+      "invented": [
+        "Frobnicate"
+      ]
+    },
+    "overrides": [
+      {
+        "key": "blip:Button|bg-red-700,text-white",
+        "line": 8
+      },
+      {
+        "key": "raw:button|px-2,text-sm",
+        "line": 9
+      }
+    ]
+  }
+}

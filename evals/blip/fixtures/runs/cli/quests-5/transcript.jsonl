@@ -1,0 +1,2 @@
+{"type":"system","subtype":"init","session_id":"s1","cwd":"/work","tools":["Bash","Read","Write","Edit","Glob","Grep","Skill","Agent"],"plugins":[],"apiKeySource":"none"}
+{"type":"result","subtype":"success","is_error":true,"result":"usage limit reached"}

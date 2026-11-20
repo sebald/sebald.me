@@ -1,0 +1,65 @@
+{
+  "_": "scope all. A margin on Button: placing, no override",
+  "transcript": {
+    "status": "complete",
+    "overBudget": false,
+    "toolCalls": {
+      "total": 1,
+      "byTool": {
+        "Write": 1
+      }
+    },
+    "blipCalls": {
+      "total": 0,
+      "byCommand": {}
+    },
+    "reads": {
+      "dist": 0,
+      "docs": 0
+    },
+    "lookupBeforeFirstTsxWrite": false,
+    "tsErrors": 0,
+    "turns": 2,
+    "tokens": {
+      "input": 10,
+      "output": 20,
+      "cacheRead": 0,
+      "cacheCreation": 0
+    },
+    "subagents": {
+      "messages": 0
+    },
+    "costUsd": 0.1,
+    "wallSeconds": 10,
+    "denials": 0,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 3,
+      "controls": 0,
+      "wrappers": 3,
+      "byTag": {
+        "div": 3
+      }
+    },
+    "components": {
+      "blip": 2,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 2,
+      "onBlip": 1,
+      "onRaw": 1,
+      "placing": 2,
+      "restyling": 1
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 2,
+      "invented": []
+    },
+    "overrides": []
+  }
+}

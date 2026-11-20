@@ -37,6 +37,7 @@
     "node_modules",
     "packages/blip-ui/dist",
     "packages/blip-ui/docs",
-    "evals/blip/template"
+    "evals/blip/template",
+    "evals/blip/fixtures"
   ]
 }
