@@ -2,7 +2,7 @@
   "schema": 1,
   "label": "day-zero",
   "collector": {
-    "version": "096caa596261+dirty"
+    "version": "09441c72ac17"
   },
   "cli": {
     "version": "0.0.0+925ec59d8f14"
@@ -384,7 +384,35 @@
           "fromBlip": 8,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 34
+          },
+          {
+            "key": "raw:span|style:alignItems:'center';display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["alignItems:'center'", "display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 54
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -490,7 +518,89 @@
           "fromBlip": 7,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'grid';inset:0;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'grid'", "inset:0", "position:'absolute'"],
+            "file": "src/screens/fight.tsx",
+            "line": 29
+          },
+          {
+            "key": "blip:Window|style:margin:'auto'",
+            "kind": "blip",
+            "element": "Window",
+            "classes": [],
+            "style": ["margin:'auto'"],
+            "file": "src/screens/fight.tsx",
+            "line": 30
+          },
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 43
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "flexDirection:'column'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 58
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 71
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "flexDirection:'column'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 91
+          },
+          {
+            "key": "raw:div|style:...row;opacity:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["...row", "opacity:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 107
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 113
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -599,18 +709,56 @@
         },
         "overrides": [
           {
-            "key": "raw:ul|",
+            "key": "raw:div|style:inset:0;position:'absolute'",
             "kind": "raw",
-            "element": "ul",
+            "element": "div",
             "classes": [],
+            "style": ["inset:0", "position:'absolute'"],
             "file": "src/screens/fight.tsx",
-            "line": 67
+            "line": 42
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 54
           },
           {
             "key": "raw:ul|",
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
+            "file": "src/screens/fight.tsx",
+            "line": 67
+          },
+          {
+            "key": "raw:span|style:...row;gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["...row", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 74
+          },
+          {
+            "key": "raw:ul|",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 91
           }
@@ -1039,7 +1187,79 @@
           "fromBlip": 9,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:alignItems:'flex-start';boxSizing:'border-box';display:'flex';inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'flex-start'",
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 31
+          },
+          {
+            "key": "raw:div|style:width:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["width:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 41
+          },
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 55
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 57
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 60
+          },
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 75
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 77
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1148,7 +1368,25 @@
           "fromBlip": 9,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 48
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1257,7 +1495,54 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:span|style:display:'block'",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'"],
+            "file": "src/screens/quests.tsx",
+            "line": 37
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*;opacity:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*", "opacity:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 38
+          },
+          {
+            "key": "raw:span|style:display:'block';fontSize:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'block'", "fontSize:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 42
+          },
+          {
+            "key": "raw:div|style:alignItems:'stretch';display:'flex';flexDirection:*;gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'stretch'",
+              "display:'flex'",
+              "flexDirection:*",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 53
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1704,7 +1989,34 @@
           "fromBlip": 12,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 32
+          },
+          {
+            "key": "raw:div|style:display:'flex';justifyContent:'space-between'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["display:'flex'", "justifyContent:'space-between'"],
+            "file": "src/screens/shop.tsx",
+            "line": 43
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1815,7 +2127,25 @@
           "fromBlip": 11,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 29
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -1928,7 +2258,26 @@
           "fromBlip": 14,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:boxSizing:'border-box';display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "boxSizing:'border-box'",
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 43
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -2306,7 +2655,45 @@
           "fromBlip": 7,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;justifyContent:'space-between';overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "justifyContent:'space-between'",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 36
+          },
+          {
+            "key": "raw:span|style:alignItems:'center';display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["alignItems:'center'", "display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 58
+          },
+          {
+            "key": "raw:span|style:display:'inline-flex';gap:*",
+            "kind": "raw",
+            "element": "span",
+            "classes": [],
+            "style": ["display:'inline-flex'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 103
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -2411,10 +2798,38 @@
         },
         "overrides": [
           {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';fontSize:*;gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "fontSize:*",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/fight.tsx",
+            "line": 39
+          },
+          {
             "key": "raw:ul|",
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
+            "file": "src/screens/fight.tsx",
+            "line": 52
+          },
+          {
+            "key": "raw:ul|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
             "file": "src/screens/fight.tsx",
             "line": 52
           },
@@ -2423,8 +2838,36 @@
             "kind": "raw",
             "element": "ul",
             "classes": [],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 78
+          },
+          {
+            "key": "raw:ul|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "ul",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 78
+          },
+          {
+            "key": "raw:li|style:display:'grid';gap:*",
+            "kind": "raw",
+            "element": "li",
+            "classes": [],
+            "style": ["display:'grid'", "gap:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 89
+          },
+          {
+            "key": "blip:Text|style:display:'inline'",
+            "kind": "blip",
+            "element": "Text",
+            "classes": [],
+            "style": ["display:'inline'"],
+            "file": "src/screens/fight.tsx",
+            "line": 99
           }
         ],
         "tsc": {
@@ -2536,14 +2979,25 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-3"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 41
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/fight.tsx",
+            "line": 42
           },
           {
             "key": "raw:ul|list-none,p-0",
             "kind": "raw",
             "element": "ul",
             "classes": ["list-none", "p-0"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 46
           },
@@ -2552,6 +3006,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-50"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 52
           },
@@ -2560,6 +3015,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-right"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 62
           },
@@ -2568,6 +3024,7 @@
             "kind": "raw",
             "element": "ul",
             "classes": ["list-none", "p-0"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 73
           },
@@ -2576,6 +3033,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-primary)"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 83
           },
@@ -2584,6 +3042,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-danger-light)"],
+            "style": [],
             "file": "src/screens/fight.tsx",
             "line": 87
           }
@@ -2798,7 +3257,35 @@
           "fromBlip": 12,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:color:*;fontSize:*;fontWeight:'bold'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*", "fontSize:*", "fontWeight:'bold'"],
+            "file": "src/screens/camp.tsx",
+            "line": 70
+          },
+          {
+            "key": "raw:div|style:color:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*"],
+            "file": "src/screens/camp.tsx",
+            "line": 74
+          },
+          {
+            "key": "raw:div|style:color:*;fontStyle:'italic';minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["color:*", "fontStyle:'italic'", "minHeight:*"],
+            "file": "src/screens/camp.tsx",
+            "line": 134
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3010,6 +3497,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 40
           },
@@ -3018,6 +3506,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 44
           },
@@ -3026,8 +3515,18 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-[calc(var(--bui-px)*6)]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 55
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 56
           }
         ],
         "tsc": {
@@ -3140,6 +3639,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-left"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 24
           },
@@ -3148,6 +3648,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-70"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 26
           },
@@ -3156,8 +3657,18 @@
             "kind": "raw",
             "element": "div",
             "classes": ["p-[calc(var(--px)*4)]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 63
+          },
+          {
+            "key": "raw:div|style:paddingBottom:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["paddingBottom:*"],
+            "file": "src/screens/quests.tsx",
+            "line": 64
           }
         ],
         "tsc": {
@@ -3270,6 +3781,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 25
           },
@@ -3278,8 +3790,29 @@
             "kind": "raw",
             "element": "span",
             "classes": ["opacity-80", "text-[0.85em]"],
+            "style": [],
             "file": "src/screens/quests.tsx",
             "line": 30
+          },
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;justifyContent:'center';overflow:'hidden';padding:*;paddingBottom:*;paddingTop:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "justifyContent:'center'",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "paddingTop:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/quests.tsx",
+            "line": 63
           }
         ],
         "tsc": {
@@ -3388,7 +3921,44 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/saves.tsx",
+            "line": 113
+          },
+          {
+            "key": "raw:div|style:minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["minHeight:*"],
+            "file": "src/screens/saves.tsx",
+            "line": 138
+          },
+          {
+            "key": "raw:div|style:minHeight:*",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": ["minHeight:*"],
+            "file": "src/screens/saves.tsx",
+            "line": 143
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3499,6 +4069,7 @@
             "kind": "raw",
             "element": "span",
             "classes": ["text-(--bui-muted)"],
+            "style": [],
             "file": "src/screens/saves.tsx",
             "line": 51
           },
@@ -3510,6 +4081,7 @@
               "pb-[calc(var(--px)*6+var(--bui-bar))]",
               "pt-[calc(var(--px)*24)]"
             ],
+            "style": [],
             "file": "src/screens/saves.tsx",
             "line": 98
           }
@@ -3618,7 +4190,25 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';inset:0;justifyContent:'center';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "inset:0",
+              "justifyContent:'center'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/saves.tsx",
+            "line": 122
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3728,7 +4318,26 @@
           "fromBlip": 15,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 54
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3836,7 +4445,25 @@
           "fromBlip": 11,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 70
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -3942,7 +4569,39 @@
           "fromBlip": 10,
           "invented": []
         },
-        "overrides": [],
+        "overrides": [
+          {
+            "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "display:'flex'",
+              "flexDirection:'column'",
+              "gap:*",
+              "inset:0",
+              "overflow:'hidden'",
+              "padding:*",
+              "paddingBottom:*",
+              "position:'absolute'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 29
+          },
+          {
+            "key": "raw:div|style:alignItems:'baseline';display:'flex';justifyContent:'space-between'",
+            "kind": "raw",
+            "element": "div",
+            "classes": [],
+            "style": [
+              "alignItems:'baseline'",
+              "display:'flex'",
+              "justifyContent:'space-between'"
+            ],
+            "file": "src/screens/shop.tsx",
+            "line": 41
+          }
+        ],
         "tsc": {
           "ran": true,
           "ok": true,
@@ -5967,5 +6626,51 @@
       }
     }
   },
-  "candidates": []
+  "candidates": [
+    {
+      "key": "raw:div|style:display:'flex';flexDirection:'column';gap:*;inset:0;overflow:'hidden';padding:*;paddingBottom:*;position:'absolute'",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": [
+        "display:'flex'",
+        "flexDirection:'column'",
+        "gap:*",
+        "inset:0",
+        "overflow:'hidden'",
+        "padding:*",
+        "paddingBottom:*",
+        "position:'absolute'"
+      ],
+      "runs": [
+        "cli/fight-hud-1",
+        "cli/fight-hud-3",
+        "no-cli/saves-1",
+        "no-cli/shop-1",
+        "no-cli/shop-3"
+      ],
+      "tasks": ["fight-hud", "saves", "shop"],
+      "lines": [
+        "cli/fight-hud-1:src/screens/fight.tsx:34",
+        "cli/fight-hud-3:src/screens/fight.tsx:54",
+        "no-cli/saves-1:src/screens/saves.tsx:113",
+        "no-cli/shop-1:src/screens/shop.tsx:54",
+        "no-cli/shop-3:src/screens/shop.tsx:29"
+      ]
+    },
+    {
+      "key": "raw:div|style:paddingBottom:*",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": ["paddingBottom:*"],
+      "runs": ["no-cli/fight-hud-3", "no-cli/quests-1", "no-cli/quests-2"],
+      "tasks": ["fight-hud", "quests"],
+      "lines": [
+        "no-cli/fight-hud-3:src/screens/fight.tsx:42",
+        "no-cli/quests-1:src/screens/quests.tsx:56",
+        "no-cli/quests-2:src/screens/quests.tsx:64"
+      ]
+    }
+  ]
 }

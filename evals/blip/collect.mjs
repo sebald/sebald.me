@@ -162,6 +162,7 @@ export const collect = ({
   version = collectorVersion(),
   build = true,
   against = null,
+  writeups = [],
 }) => {
   if (!/^[\w.-]+$/.test(label) || label.startsWith('.')) {
     throw new Error(
@@ -272,7 +273,20 @@ export const collect = ({
     };
   }
 
-  return { results, summary: writeSummary({ results, comparison }) };
+  return { results, summary: writeSummary({ results, comparison, writeups }) };
+};
+
+/**
+ * The hand-written files in a results folder: every `*.md` but `summary.md`.
+ * The collector writes only `results.json` and `summary.md`, so these survive
+ * a new collect, and `summary.md` links to them
+ */
+export const writeupsIn = (outRoot, date, label) => {
+  const dir = join(outRoot, `${date}-${label}`);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter(name => name.endsWith('.md') && name !== 'summary.md')
+    .sort();
 };
 
 export const write = ({ results, summary }, outRoot, date) => {
@@ -305,19 +319,17 @@ const main = () => {
     process.exit(2);
   }
   try {
+    const date = values.date ?? new Date().toISOString().slice(0, 10);
+    const outRoot = values.out ? resolve(values.out) : join(HERE, 'results');
     const done = collect({
       label: values.label,
+      writeups: writeupsIn(outRoot, date, values.label),
       cache: values.cache,
       version: values['collector-version'] ?? collectorVersion(),
       build: !values['skip-build'],
       against: values.against ? resolve(values.against) : null,
     });
-    const date = values.date ?? new Date().toISOString().slice(0, 10);
-    const dir = write(
-      done,
-      values.out ? resolve(values.out) : join(HERE, 'results'),
-      date,
-    );
+    const dir = write(done, outRoot, date);
     console.log(
       `Wrote ${join(dir, 'results.json')} and summary.md (${done.results.runs.length} runs)`,
     );

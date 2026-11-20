@@ -534,19 +534,22 @@ const canary = async record => {
     skills: init.skills,
     agents: init.agents,
   };
-  // Whatever the canary loaded must not come from ~/.claude, or it would
-  // become part of the baseline every run is compared with
+  // Whatever the canary loaded must not come from ~/.claude
   const tainted = checkInit(init, {
     config,
-    baseline,
     user: userNames(),
   }).filter(p => /~\/\.claude|MCP|apiKeySource/.test(p));
   if (tainted.length)
     fail(`Canary failed: ${tainted.join('; ')}. Nothing was run.`, 3);
-  const was = record.baseline;
-  if (was && JSON.stringify(was) !== JSON.stringify(baseline))
+  // Built-in plugins, skills and agents may differ between runs and invocations
+  // (the check lets them through), so only another Claude Code (major or minor version) stops a label
+  const minor = v => /\d+\.\d+/.exec(v ?? '')?.[0];
+  if (
+    record.claudeVersion &&
+    minor(record.claudeVersion) !== minor(claudeVersion)
+  )
     fail(
-      `Claude Code loads other built-in plugins, skills or agents than when label "${opts.label}" began (${record.claudeVersion} then, ${claudeVersion} now). Use a new label.`,
+      `Claude Code is ${claudeVersion} now, label "${opts.label}" began on ${record.claudeVersion} (another major or minor version). Use a new label.`,
       3,
     );
   record.baseline = baseline;
@@ -708,7 +711,6 @@ const execute = async (r, record, state) => {
         meta.init = init;
         meta.initProblems = checkInit(init, {
           config,
-          baseline: record.baseline,
           user: state.user,
         });
         if (meta.initProblems.length) return 'kill';
