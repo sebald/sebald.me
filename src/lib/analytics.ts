@@ -1,3 +1,4 @@
+import type { PushbackEvent } from '@sebald/pushback';
 import { track } from '@vercel/analytics';
 
 // Events
@@ -30,6 +31,12 @@ export interface AnalyticsEvents {
     note: string;
   };
   'Outbound Link': { url: string };
+  /** A Pushback run started or shipped (`pushbackAnalytics`), by role */
+  'Pushback Run': { action: 'start' | 'finish'; role: string };
+  /** A Pushback duel won, lost or left, by opponent */
+  'Pushback Duel': { result: 'won' | 'lost' | 'left'; opponent: string };
+  /** A Pushback result handed on */
+  'Pushback Share': { method: 'shared' | 'saved' | 'copied' };
   /**
    * `note` repeats the page URL on purpose: it lets the dashboard break
    * the event down across all notes in one list. Uses both property slots.
@@ -58,6 +65,45 @@ export const trackEvent = <Name extends AnalyticsEventName>(
     ? []
     : [AnalyticsEvents[Name]]
 ) => track(name, properties);
+
+/** An event with its properties, ready for `trackEvent` */
+export type AnalyticsCall = {
+  [Name in AnalyticsEventName]: AnalyticsEvents[Name] extends undefined
+    ? [Name]
+    : [Name, AnalyticsEvents[Name]];
+}[AnalyticsEventName];
+
+/**
+ * The few of Pushback's events worth a custom event, in two properties
+ * each; the rest (screens, pauses, mode switches) stay in the game
+ */
+export const pushbackAnalytics = (
+  event: PushbackEvent,
+): AnalyticsCall | null => {
+  switch (event.type) {
+    case 'run:start':
+      return ['Pushback Run', { action: 'start', role: event.role }];
+    case 'run:finish':
+      return ['Pushback Run', { action: 'finish', role: event.role }];
+    case 'duel:end':
+      return [
+        'Pushback Duel',
+        { result: event.result, opponent: event.opponent },
+      ];
+    case 'duel:leave':
+      return ['Pushback Duel', { result: 'left', opponent: event.opponent }];
+    case 'result:share':
+      return ['Pushback Share', { method: event.method }];
+    default:
+      return null;
+  }
+};
+
+/** Send what `pushbackAnalytics` keeps of a Pushback event */
+export const trackPushback = (event: PushbackEvent) => {
+  const call = pushbackAnalytics(event);
+  if (call) track(call[0], call[1]);
+};
 
 // Helpers
 // ---------------

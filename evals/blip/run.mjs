@@ -28,7 +28,9 @@ import {
   probeLine,
   CONFIGS,
   canaryArgs,
+  baselineOf,
   checkInit,
+  judgeBaseline,
   childEnv,
   claudeArgs,
   claudeMd,
@@ -73,6 +75,8 @@ const USAGE = `Usage: node evals/blip/run.mjs --label <l> --config <c> [options]
   --tarball <file>   Use this packed Blip UI instead of packing the workspace
   --parallel <n>     Runs at the same time (default 1)
   --retry-failed     Also redo runs marked failed
+  --accept-baseline  Continue although what Claude Code loads differs from the
+                     label's baseline; the change is recorded in label.json
   --dry              Print what would run, spend nothing`;
 
 const fail = (message, code = 2) => {
@@ -94,6 +98,7 @@ const { values: opts } = (() => {
         tarball: { type: 'string' },
         parallel: { type: 'string', default: '1' },
         'retry-failed': { type: 'boolean', default: false },
+        'accept-baseline': { type: 'boolean', default: false },
         dry: { type: 'boolean', default: false },
         help: { type: 'boolean', default: false },
       },
@@ -529,27 +534,46 @@ const canary = async record => {
       `Canary failed: apiKeySource is ${JSON.stringify(init.apiKeySource)}, not "none".`,
       3,
     );
-  const baseline = {
-    plugins: init.plugins,
-    skills: init.skills,
-    agents: init.agents,
-  };
-  // Whatever the canary loaded must not come from ~/.claude, or it would
-  // become part of the baseline every run is compared with
+  const baseline = baselineOf(init);
+  // Whatever the canary loaded must not come from ~/.claude
   const tainted = checkInit(init, {
     config,
-    baseline,
     user: userNames(),
-  }).filter(p => /~\/\.claude|MCP|apiKeySource/.test(p));
+  }).filter(p =>
+    /~\/\.claude|MCP|apiKeySource|plugin list|no plugin carries|neither built in/.test(
+      p,
+    ),
+  );
   if (tainted.length)
     fail(`Canary failed: ${tainted.join('; ')}. Nothing was run.`, 3);
-  const was = record.baseline;
-  if (was && JSON.stringify(was) !== JSON.stringify(baseline))
+  // Another major or minor Claude Code stops a label
+  const minor = v => /\d+\.\d+/.exec(v ?? '')?.[0];
+  if (
+    record.claudeVersion &&
+    minor(record.claudeVersion) !== minor(claudeVersion)
+  )
     fail(
-      `Claude Code loads other built-in plugins, skills or agents than when label "${opts.label}" began (${record.claudeVersion} then, ${claudeVersion} now). Use a new label.`,
+      `Claude Code is ${claudeVersion} now, label "${opts.label}" began on ${record.claudeVersion} (another major or minor version). Use a new label.`,
       3,
     );
-  record.baseline = baseline;
+  // So does a different set of plugins (built-ins included), skills, agents,
+  // tools or MCP servers, unless the change is accepted and recorded
+  const judged = judgeBaseline(record, baseline, {
+    accept: opts['accept-baseline'],
+    claudeVersion,
+    label: opts.label,
+  });
+  if (judged.stop) fail(judged.stop, 3);
+  if (judged.accepted) {
+    record.acceptedBaselines = [
+      ...(record.acceptedBaselines ?? []),
+      judged.accepted,
+    ];
+    console.log(
+      'Baseline change accepted and recorded in label.json (acceptedBaselines).',
+    );
+  }
+  record.baseline = judged.baseline;
   record.canary = {
     at: new Date().toISOString(),
     claudeVersion,
@@ -708,7 +732,6 @@ const execute = async (r, record, state) => {
         meta.init = init;
         meta.initProblems = checkInit(init, {
           config,
-          baseline: record.baseline,
           user: state.user,
         });
         if (meta.initProblems.length) return 'kill';

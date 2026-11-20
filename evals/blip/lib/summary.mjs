@@ -41,7 +41,7 @@ const table = (header, rows) =>
 
 const list = items => items.map(item => `- ${item}`).join('\n');
 
-export const writeSummary = ({ results, comparison }) => {
+export const writeSummary = ({ results, comparison, writeups = [] }) => {
   const {
     label,
     collector,
@@ -50,6 +50,7 @@ export const writeSummary = ({ results, comparison }) => {
     skipped = [],
     aggregate,
     candidates,
+    layers = [],
   } = results;
   const { configs, tasks, groups } = aggregate;
   const out = [];
@@ -59,8 +60,14 @@ export const writeSummary = ({ results, comparison }) => {
     `Collector \`${collector.version}\`, Blip CLI \`${cli.version}\`. ${runs.length} runs, ` +
       `${runs.filter(run => run.status === 'complete').length} complete. Medians, with the ` +
       `lowest and highest of the repetitions in brackets; a share is runs of the runs it ` +
-      `applies to. Layer 1 only: no \`validate\`, rendered or judged measures yet.`,
+      `applies to. ${layers.includes('rendered') ? 'Layers 1 and 2: the rendered pass is in, no `validate` or judged measures yet.' : 'Layer 1 only: no `validate`, rendered or judged measures yet.'}`,
   );
+
+  // Hand-written files beside this one, which a new collect leaves alone
+  if (writeups.length)
+    out.push(
+      `Write-ups: ${writeups.map(name => `[\`${name}\`](${encodeURI(name)})`).join(', ')}.`,
+    );
 
   out.push('## Runs');
   out.push(
@@ -140,6 +147,27 @@ export const writeSummary = ({ results, comparison }) => {
   ];
   out.push(notes.length ? list(notes) : 'None.');
 
+  if (layers.includes('rendered')) {
+    out.push('## Rendered pages to look at');
+    const lines = runs.flatMap(run =>
+      (run.rendered?.pages ?? []).flatMap(page => {
+        const at = `\`${run.id}\` ${page.id}@${page.viewport}`;
+        if (!page.rendered) return [`${at}: did not render (${page.reason})`];
+        return [
+          ...page.escapes.map(entry => `${at}: escapes: ${entry}`),
+          ...page.cut.map(entry => `${at}: cut text: ${entry}`),
+          ...page.axe.map(
+            v => `${at}: axe ${v.id} (${v.impact}), ${v.nodes} node(s)`,
+          ),
+        ];
+      }),
+    );
+    out.push(
+      `Screenshots are in the cache, \`<label>/.screenshots/<run>/<url id>@wide|phone.png\`. For a \`changed-lines\` task what the untouched template shows is taken off.`,
+    );
+    out.push(lines.length ? list(lines) : 'None.');
+  }
+
   out.push('## Skipped runs');
   out.push(
     skipped.length
@@ -149,18 +177,20 @@ export const writeSummary = ({ results, comparison }) => {
 
   out.push('## Candidate variants, sizes or components');
   out.push(
-    'Overrides written independently in at least 3 runs across at least 2 tasks (Q11), taken from the lines the agent wrote. Placing classes are left out.',
+    'Overrides written independently in at least 3 runs across at least 2 tasks (Q11), taken from the lines the agent wrote: the restyling classes of a `className` (placing classes are left out) and the whole of an inline `style` object, keys sorted, a tuned or computed value as `*` (`gap:*`).',
   );
   if (candidates.length === 0) out.push('None.');
   else {
     out.push(
       table(
-        ['on', 'classes', 'runs', 'tasks', 'lines'],
+        ['on', 'classes or style', 'runs', 'tasks', 'lines'],
         candidates.map(c => [
           `\`${c.element}\`${c.kind === 'raw' ? ' (raw tag)' : ''}`,
-          c.classes.length
-            ? c.classes.map(x => `\`${x}\``).join(' ')
-            : '(none)',
+          c.style?.length
+            ? `style: ${c.style.map(x => `\`${x.replace(/\|/g, '\\|')}\``).join(' ')}`
+            : c.classes.length
+              ? c.classes.map(x => `\`${x}\``).join(' ')
+              : '(none)',
           String(c.runs.length),
           c.tasks.join(', '),
           String(c.lines.length),
