@@ -1,10 +1,21 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { demoFor } from '../lib/attract';
 import { type Look, MODES } from '../lib/characters';
 import { type DuelState, createDuel } from '../lib/duel';
+import {
+  type ScreenName,
+  duelEnded,
+  duelStarted,
+  gameOpened,
+  modeChanged,
+  runContinued,
+  runFinished,
+  runStarted,
+  saveErased,
+} from '../lib/events';
 import { type Role, poolPairs } from '../lib/lines';
 import { duelSetupFor } from '../lib/run';
 import {
@@ -23,6 +34,7 @@ import { ResultScreen } from './result';
 import { RosterScreen } from './roster';
 import { SelectScreen } from './select';
 import { TitleScreen } from './title';
+import { useTrack } from './tracking';
 import { useMusic, useMuteKey, useSoundArm } from './use-sound';
 
 type Screen =
@@ -36,10 +48,34 @@ type Screen =
 
 /** The screens, the save and the duel */
 export const Pushback = () => {
-  const [save, setSave] = useState<Save>(() => loadSave() ?? emptySave());
+  const [loaded] = useState(loadSave);
+  const [save, setSave] = useState<Save>(() => loaded ?? emptySave());
   const [screen, setScreen] = useState<Screen>({ name: 'title' });
+  const track = useTrack();
 
   useEffect(() => writeSave(save), [save]);
+
+  // What the player sees, for the host: a screen without a run shows
+  // the select, and the demo is nobody's
+  const shown: ScreenName | null =
+    screen.name === 'attract'
+      ? null
+      : screen.name !== 'title' && screen.name !== 'select' && !save.run
+        ? 'select'
+        : screen.name;
+  // Once per screen shown (React may run an effect twice on mount; the
+  // refs stay), the game's opening before the first
+  const opened = useRef(false);
+  const lastShown = useRef<ScreenName | null>(null);
+  useEffect(() => {
+    if (!opened.current) {
+      opened.current = true;
+      track(gameOpened(loaded ?? emptySave(), loaded !== null));
+    }
+    if (!shown || shown === lastShown.current) return;
+    lastShown.current = shown;
+    track({ type: 'screen', name: shown });
+  }, [shown, track, loaded]);
 
   // The title's music through the menus, the select and the roster, a
   // little quieter under the demo, which is still the title; the duel
@@ -68,22 +104,23 @@ export const Pushback = () => {
   const toSelect = useCallback(() => setScreen({ name: 'select' }), []);
 
   // A role picked is a new run: it replaces the one in play
-  const confirmRole = useCallback(
-    (role: Role, look: Look) => {
-      setSave(previous => startRun(previous, role, look));
-      toRoster();
-    },
-    [toRoster],
-  );
+  const confirmRole = (role: Role, look: Look) => {
+    track(runStarted(save, role, look));
+    setSave(startRun(save, role, look));
+    toRoster();
+  };
 
-  const endDuel = useCallback((index: number, duel: DuelState) => {
-    setSave(previous => finishDuel(previous, index, duel));
+  const endDuel = (index: number, duel: DuelState) => {
+    const next = finishDuel(save, index, duel);
+    track(duelEnded(duel));
+    track(runFinished(save, next));
+    setSave(next);
     setScreen(
       duel.setup.character.role === 'boss'
         ? { name: 'result' }
         : { name: 'roster' },
     );
-  }, []);
+  };
 
   const select = (
     <SelectScreen
@@ -101,9 +138,15 @@ export const Pushback = () => {
         <TitleScreen
           start={screen.start}
           mode={save.mode}
-          onMode={mode => setSave(previous => setMode(previous, mode))}
+          onMode={mode => {
+            track(modeChanged(save, mode));
+            setSave(setMode(save, mode));
+          }}
           onStart={toSelect}
-          onContinue={toRoster}
+          onContinue={() => {
+            if (open) track(runContinued(open, save.mode));
+            toRoster();
+          }}
           running={
             open
               ? {
@@ -119,7 +162,10 @@ export const Pushback = () => {
             lines: poolPairs(save.glossary).length,
           }}
           glossary={save.glossary}
-          onErase={() => setSave(resetSave)}
+          onErase={() => {
+            track(saveErased(save));
+            setSave(resetSave(save));
+          }}
           onAttract={toAttract}
         />
       );
@@ -143,7 +189,10 @@ export const Pushback = () => {
       return (
         <RosterScreen
           run={run}
-          onPlay={index => setScreen({ name: 'duel', index, seed: Date.now() })}
+          onPlay={index => {
+            track(duelStarted(run, index, save.mode));
+            setScreen({ name: 'duel', index, seed: Date.now() });
+          }}
           onResult={() => setScreen({ name: 'result' })}
           onBack={toTitle}
         />

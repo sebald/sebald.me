@@ -1,7 +1,12 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { createVisibleClock, isOutboundUrl, playedSeconds } from './analytics';
+import {
+  createVisibleClock,
+  isOutboundUrl,
+  playedSeconds,
+  pushbackAnalytics,
+} from './analytics';
 
 const ORIGIN = 'https://sebald.me';
 
@@ -81,5 +86,59 @@ describe('playedSeconds', () => {
 
   it('adds up the played ranges', () => {
     assert.equal(playedSeconds(ranges([0, 30], [120, 150.5])), 60.5);
+  });
+});
+
+describe('pushbackAnalytics', () => {
+  const duel = {
+    role: 'pm',
+    opponent: 'intern',
+    tier: 1,
+    attempt: 'first',
+    mode: 'easy',
+    tutorial: true,
+  } as const;
+
+  it('sends runs, duels and shares in two properties', () => {
+    assert.deepEqual(
+      pushbackAnalytics({
+        type: 'run:start',
+        role: 'dev',
+        look: 'a',
+        mode: 'easy',
+        replaced: false,
+      }),
+      ['Pushback Run', { action: 'start', role: 'dev' }],
+    );
+    assert.deepEqual(
+      pushbackAnalytics({
+        type: 'duel:end',
+        ...duel,
+        result: 'won',
+        score: 100,
+        flawless: true,
+        exchangesWon: 3,
+        exchangesLost: 0,
+        micDrops: 0,
+      }),
+      ['Pushback Duel', { result: 'won', opponent: 'intern' }],
+    );
+    assert.deepEqual(
+      pushbackAnalytics({ type: 'duel:leave', ...duel, exchanges: 2 }),
+      ['Pushback Duel', { result: 'left', opponent: 'intern' }],
+    );
+    assert.deepEqual(
+      pushbackAnalytics({
+        type: 'result:share',
+        method: 'copied',
+        finished: true,
+      }),
+      ['Pushback Share', { method: 'copied' }],
+    );
+  });
+
+  it('keeps the rest in the game', () => {
+    assert.equal(pushbackAnalytics({ type: 'screen', name: 'roster' }), null);
+    assert.equal(pushbackAnalytics({ type: 'duel:start', ...duel }), null);
   });
 });
