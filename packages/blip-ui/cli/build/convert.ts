@@ -4,6 +4,8 @@
  * and Storybook links outside their code fences, and nothing else.
  */
 
+import { type Rule, type WhenNot, ruleInline, rulesMarkdown } from '../rules.ts';
+
 /** A Storybook docs link, such as `[IconButton](?path=/docs/components-iconbutton--docs)` */
 const STORYBOOK_LINK =
   /\[([^\]]+)\]\(\?path=\/docs\/([a-z0-9-]+?)--[a-z0-9-]+\)/g;
@@ -16,6 +18,19 @@ const CONTROLS = /^<Controls\b[^>]*\/>\s*$/;
 
 /** `<Canvas of={DialogStories.Default} />`: the stories' namespace and the story */
 const CANVAS = /^<Canvas\s+of=\{(\w+)\.(\w+)\}\s*\/>\s*$/;
+
+/** A page's rules, `<Rules for="dialog" />` on a line of its own */
+const RULES_BLOCK = /^<Rules\s+for="([^"]+)"\s*\/>\s*$/;
+
+/** One rule inline, `<Rule id="C-DIALOG-1" />` */
+const RULE_INLINE = /<Rule\s+id="([^"]+)"\s*\/>/g;
+
+/** The rules the blocks `<Rules>` and `<Rule>` print */
+export interface RulesLookup {
+  forPage: (page: string) => Rule[];
+  whenNotFor: (page: string) => WhenNot[];
+  byId: (id: string) => Rule | undefined;
+}
 
 /** The page a Storybook slug (`components-iconbutton`) points at, if it is shipped */
 export const pageForSlug = (slug: string, ids: readonly string[]) => {
@@ -36,6 +51,7 @@ export const mdxToMarkdown = (
   controls = '',
   /** What a `<Canvas>` becomes: the markdown for a story's example, or nothing */
   canvas?: (namespace: string, story: string) => string | undefined,
+  rules: RulesLookup = { forPage: () => [], whenNotFor: () => [], byId: () => undefined },
 ) => {
   const out: string[] = [];
   let fence: string | null = null;
@@ -79,11 +95,29 @@ export const mdxToMarkdown = (
     }
     if (/^##\s/.test(line) && firstSection < 0) firstSection = out.length;
 
+    const forPage = RULES_BLOCK.exec(line)?.[1];
+    if (forPage !== undefined) {
+      const list = rules.forPage(forPage);
+      const block = rulesMarkdown(list, rules.whenNotFor(forPage));
+      if (block === '')
+        throw new Error(
+          `<Rules for="${forPage}" />: the page has no rules to show`,
+        );
+      out.push(block);
+      continue;
+    }
+
     out.push(
-      line.replace(STORYBOOK_LINK, (_, text: string, slug: string) => {
-        const id = pageForSlug(slug, ids);
-        return id ? `${text} (\`blip docs ${id}\`)` : text;
-      }),
+      line
+        .replace(RULE_INLINE, (_, id: string) => {
+          const rule = rules.byId(id);
+          if (!rule) throw new Error(`<Rule id="${id}" />: no such rule`);
+          return ruleInline(rule);
+        })
+        .replace(STORYBOOK_LINK, (_, text: string, slug: string) => {
+          const id = pageForSlug(slug, ids);
+          return id ? `${text} (\`blip docs ${id}\`)` : text;
+        }),
     );
   }
 

@@ -1,3 +1,4 @@
+import type { Rule } from '../rules.ts';
 import type { ExportKind, PublicExport } from './exports.ts';
 import type { ExportProps, PropInfo } from './props.ts';
 
@@ -91,6 +92,7 @@ export const buildManifest = (
   entries: readonly PublicExport[],
   props: ReadonlyMap<string, ExportProps> = new Map(),
   examples: readonly ManifestExample[] = [],
+  rules: readonly Rule[] = [],
 ): Manifest => {
   const exports: Record<string, ManifestExport> = Object.fromEntries(
     entries.map(entry => [
@@ -113,7 +115,7 @@ export const buildManifest = (
       exports: Object.entries(exports)
         .filter(([, entry]) => entry.page === page.id)
         .map(([name]) => name),
-      rules: [],
+      rules: rules.filter(rule => rule.page === page.id).map(rule => rule.id),
       examples: examples
         .filter(example => example.page === page.id)
         .map(example => example.id),

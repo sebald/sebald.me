@@ -1,0 +1,25 @@
+page: dialog
+rules:
+  - id: C-DIALOG-1
+    text: Give every Dialog a Title.
+    severity: error
+    check: dialog-title
+    fix: |
+      <Dialog open={open} onOpenChange={setOpen}>
+        <Title>Options</Title>
+      </Dialog>
+  - id: C-DIALOG-2
+    text: Place a Dialog inside the Stage.
+    markers: [review]
+  - id: C-DIALOG-3
+    text: Use size="large" for a Dialog that is read, and the default size for a question or a few settings.
+    markers: [review]
+  - id: C-DIALOG-4
+    text: Use role="alertdialog" (or Confirm) before something that can't be undone.
+    markers: [review]
+  - id: C-DIALOG-5
+    text: Leave the screen's Picker active while a Dialog is open.
+    markers: [review]
+when-not:
+  - text: A line a character says is a SpeechBubble, not a Dialog.
+    use: speech-bubble

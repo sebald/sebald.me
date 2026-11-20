@@ -14,6 +14,10 @@ export interface Parsed {
   limit: number | null;
   /** `--section <name>` of `blip docs` */
   section: string | null;
+  /** `--kind C|P|A|T|F|X` of `blip rules` */
+  kind: string | null;
+  /** `--open` of `blip rules` */
+  open: boolean;
   help: boolean;
   /** A usage error in the flags */
   error?: string;
@@ -26,6 +30,8 @@ export const parseArgs = (argv: readonly string[]): Parsed => {
     json: false,
     limit: null,
     section: null,
+    kind: null,
+    open: false,
     help: false,
   };
   const rest: string[] = [];
@@ -46,6 +52,12 @@ export const parseArgs = (argv: readonly string[]): Parsed => {
       if (!value || value.startsWith('--'))
         parsed.error = '--section takes a section name, such as props';
       else parsed.section = value;
+    } else if (arg === '--open') parsed.open = true;
+    else if (arg === '--kind' || arg.startsWith('--kind=')) {
+      const value = arg.includes('=') ? arg.split('=')[1] : argv[++i];
+      if (value === undefined || !/^[CPATFX]$/.test(value))
+        parsed.error = '--kind takes one of C, P, A, T, F, X';
+      else parsed.kind = value;
     } else if (arg.startsWith('--')) parsed.error = `Unknown flag ${arg}`;
     else rest.push(arg);
   }

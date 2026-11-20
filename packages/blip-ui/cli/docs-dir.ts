@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 import { headingsOf } from './build/convert.ts';
 import type { Manifest, ManifestExample } from './build/manifest.ts';
+import type { Rule, RulesFile, WhenNot } from './rules.ts';
 import type { SearchExport, SearchPage } from './search.ts';
 
 /**
@@ -27,6 +28,9 @@ export interface Docs {
   pages: SearchPage[];
   exports: SearchExport[];
   examples: ManifestExample[];
+  /** Every rule, the open ones too; none when the docs have no `rules.json` */
+  rules: Rule[];
+  whenNot: Record<string, WhenNot[]>;
   /** A page's markdown */
   markdown: (id: string) => string;
   /** An example's source */
@@ -37,6 +41,10 @@ export const loadDocs = (docsDir: string): Docs => {
   const manifest = JSON.parse(
     readFileSync(join(docsDir, 'manifest.json'), 'utf8'),
   ) as Manifest;
+  const rulesPath = join(docsDir, 'rules.json');
+  const rules: RulesFile | null = existsSync(rulesPath)
+    ? (JSON.parse(readFileSync(rulesPath, 'utf8')) as RulesFile)
+    : null;
   const texts = new Map(
     manifest.pages.map(page => [
       page.id,
@@ -58,6 +66,8 @@ export const loadDocs = (docsDir: string): Docs => {
       ...entry,
     })),
     examples: manifest.examples ?? [],
+    rules: rules?.rules ?? [],
+    whenNot: rules?.whenNot ?? {},
     markdown: id => texts.get(id)!,
     source: example => readFileSync(join(docsDir, example.file), 'utf8'),
   };

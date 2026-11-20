@@ -1,6 +1,7 @@
 import type { Docs } from '../docs-dir.ts';
 import { recordEvent } from '../events.ts';
 import type { Io, Parsed } from '../io.ts';
+import { isOpen } from '../rules.ts';
 import { search } from '../search.ts';
 
 export const searchCommand = (docs: Docs, args: Parsed, io: Io) => {
@@ -15,6 +16,7 @@ export const searchCommand = (docs: Docs, args: Parsed, io: Io) => {
     docs.exports,
     args.limit ?? 8,
     docs.examples,
+    docs.rules.filter(rule => !isOpen(rule)),
   );
   recordEvent(io.cwd, io.env, {
     event: 'lookup',

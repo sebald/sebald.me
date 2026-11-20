@@ -5,12 +5,16 @@ import { oneLine } from '../search.ts';
 
 export const COMMANDS = [
   ['blip', 'this index'],
-  ['blip search <words…> [--limit n]', 'find pages, exports and examples'],
   [
-    'blip docs <page | export> [--section <name>]',
-    'print a page (or one section, such as props) as markdown',
+    'blip search <words…> [--limit n]',
+    'find pages, rules, examples and exports',
+  ],
+  [
+    'blip docs <page | export | rule-id> [--section <name>]',
+    'print a page (or one section, such as props) as markdown, or a rule with its fix',
   ],
   ['blip examples [<page> | <id>]', 'list examples, or print one'],
+  ['blip rules [<page>] [--kind C|P|A|T|F|X]', 'list the rules'],
 ] as const;
 
 const KINDS = [

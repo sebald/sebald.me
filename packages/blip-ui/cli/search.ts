@@ -26,8 +26,13 @@ export interface SearchExample {
   summary: string;
 }
 
+export interface SearchRule {
+  id: string;
+  text: string;
+}
+
 export interface Hit {
-  type: 'page' | 'export' | 'example';
+  type: 'page' | 'rule' | 'example' | 'export';
   id: string;
   kind: string;
   /** One line about it */
@@ -121,6 +126,11 @@ const scoreExport = (entry: SearchExport, terms: string[]) => {
   return terms.reduce((score, term) => score + (name.has(term) ? 8 : 0), 0);
 };
 
+const scoreRule = (rule: SearchRule, terms: string[]) => {
+  const text = new Set(words(rule.text));
+  return terms.reduce((score, term) => score + (text.has(term) ? 5 : 0), 0);
+};
+
 /** An example scores by its id and title, a little by what it says it shows */
 const scoreExample = (example: SearchExample, terms: string[]) => {
   const title = new Set([...words(example.title), ...words(example.id)]);
@@ -133,9 +143,9 @@ const scoreExample = (example: SearchExample, terms: string[]) => {
 };
 
 /**
- * Pages, exports and examples for a query, best first. A page wins a tie with
- * an example and an example with an export; an export that only repeats its
- * page's title is left out.
+ * Pages, rules, examples and exports for a query, best first. A page wins a tie with
+ * a rule, a rule with an example and an example with an export; an export that
+ * only repeats its page's title is left out.
  */
 export const search = (
   query: string,
@@ -143,6 +153,7 @@ export const search = (
   exports: readonly SearchExport[],
   limit = 8,
   examples: readonly SearchExample[] = [],
+  rules: readonly SearchRule[] = [],
 ): Hit[] => {
   const terms = queryTerms(query);
   if (terms.length === 0) return [];
@@ -157,6 +168,19 @@ export const search = (
         kind: page.kind,
         line: oneLine(page.summary),
         command: `blip docs ${page.id}`,
+        score,
+      });
+    }
+  }
+  for (const rule of rules) {
+    const score = scoreRule(rule, terms);
+    if (score > 0) {
+      hits.push({
+        type: 'rule',
+        id: rule.id,
+        kind: 'rule',
+        line: oneLine(rule.text),
+        command: `blip docs ${rule.id}`,
         score,
       });
     }
@@ -193,7 +217,7 @@ export const search = (
   }
 
   // A page wins a tie with an example, an example with an export
-  const rank = { page: 0, example: 1, export: 2 };
+  const rank = { page: 0, rule: 1, example: 2, export: 3 };
   return hits
     .map((hit, index) => ({ hit, index }))
     .sort(
