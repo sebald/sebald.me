@@ -26,6 +26,8 @@ pnpm vrt:game:update  # Regenerate the game's screenshot baselines (Docker)
 pnpm vrt              # Visual regression tests (Docker)
 pnpm vrt:update       # Regenerate screenshot baselines (Docker)
 pnpm vrt:update:ci    # Regenerate baselines in CI and commit them to the current branch (no Docker), Blip UI's too
+pnpm changeset        # Record a change to a package (Changesets), committed with it
+pnpm version-packages # Bump the packages' versions from the pending changesets, write their CHANGELOG.md
 pnpm storybook        # Blip UI's Storybook (port 6006)
 pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
 pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
@@ -93,6 +95,13 @@ CI runs `lint`, `format:check`, `test` and, in its own job, `narrate:check` on e
 - The site imports only `Game` and its event types from the package root (and its CSS); the game's flows read its rules by subpath (`@sebald/pushback/lib/<module>`). There is no workbench page: Blip UI's pieces are tuned in its Storybook, the game's in the game
 - Tracking: `Game`'s `onEvent` gets a typed `PushbackEvent` (`src/lib/events.ts`: the game opened, a screen or title view shown, a run started, continued or finished, a duel started, paused, left or ended, the mode switched, the save erased, the result shared); the same event bubbles from the game's root as the DOM event `pushback:event` (`PUSHBACK_EVENT`), which the flows record (`recordEvents`). Builders are pure, from the save and the duel; a screen sends through `useTrack()` from a handler, never inside a state updater. The demo sends nothing. The site's wrapper (`src/app/(page)/lab/pushback/game.tsx`) forwards a few to Vercel Analytics through `pushbackAnalytics` (`src/lib/analytics.ts`), two properties each
 - `pnpm test` runs the packages' tests too
+
+### Versioning (packages only)
+
+- Blip UI and Pushback carry their own versions, kept with Changesets (`.changeset/`); the site (the root package) has none. Both are private: versions and `CHANGELOG.md` only, nothing is published or tagged
+- A pull request that changes what a package does adds a changeset: `pnpm changeset` (or a file `.changeset/<name>.md` with `'@sebald/<package>': patch | minor | major` in its frontmatter and one line for the changelog). Tests, docs and refactors without a visible change need none
+- While a package is below 1.0, a breaking change is `minor`, everything else `patch`
+- To release, run `pnpm version-packages` on `main`'s state and open its result as a pull request: it consumes the changesets, bumps `package.json` and writes each package's `CHANGELOG.md`
 
 ### Content Frontmatter (notes)
 
