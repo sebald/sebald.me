@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
+import { TALL_BAR } from '../stage/stage';
 import { ScreenTitle, Text } from '../text/text';
 import { Window } from '../window/window';
 import { Shop as ShopExample } from './examples/shop';
@@ -22,7 +23,7 @@ const Stage = ({ children }: { children: ReactNode }) => {
       style={{
         width: 'calc(var(--px) * 320)',
         height: `calc(var(--px) * ${pixels.tall ? 500 : 214})`,
-        ['--bui-bar' as string]: `${pixels.tall ? 52 : 0}px`,
+        ['--bui-bar' as string]: `${pixels.tall ? TALL_BAR : 0}px`,
       }}
     >
       {children}

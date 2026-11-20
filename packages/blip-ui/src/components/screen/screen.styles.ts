@@ -13,7 +13,7 @@ export const screen = {
       // The title is the column's first row, in the flow instead of drawn
       // at the stage's top: what follows starts under it, whatever its
       // height (a blurb, the tall stage's larger letters)
-      'has-data-[slot=screen-title]:pt-(--s-top) *:data-[slot=screen-title]:static',
+      'has-[>[data-slot=screen-title]]:pt-(--s-top) *:data-[slot=screen-title]:static',
     ],
     variants: {
       variant: {
