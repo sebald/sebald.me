@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: F
 depends: [cli-lookup]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/199
 ---
 
 # `manifest-props`: Put every component's props, values and defaults into the docs
