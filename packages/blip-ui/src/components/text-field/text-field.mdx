@@ -26,17 +26,25 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 1. **Label**, its children, tied to the input
 2. **Characters left**, at the label's end, when there is a `maxLength`;
    it turns to the primary colour once the field is full
-3. **The box**, drawn like a secondary `Button`'s outline, with the same
-   stepped corners: an ink line, the frame inside it, the dark of an empty
-   cell as its ground; the frame is bright with the focus and red when
-   invalid. It is a thumb's height at least, so in one row with a default
-   `Button` the two are the same height
+3. **The slot**, the dark of an empty `Meter` cell with an ink edge along
+   its top and left and a line along its bottom. The line is thin and dim
+   at rest (thicker on a touch screen, so it looks tappable before it has
+   focus), thick and bright with the focus, dashed and red when invalid.
+   It is a thumb's height at least, so in one row with a default `Button`
+   the two are the same height
 4. **Description**, under it, what to type or in what form
 5. **Error**, under it, what is wrong, in words
 
 <Canvas of={TextFieldStories.Overview} />
 
 ## Usage
+
+A field is sunk, not framed. It lives in a `Window`, and a framed box
+there reads as a window inside a window, a container, where a field is a
+place to type. So it has no outline of its own, only the dark of an empty
+cell pressed into the surface with a shade along its top and left, as a
+`Meter`'s empty cell is. Its corners are square: a one-step cut was
+tried and hid the shade's hard edge for a corner too small to see at 1x.
 
 A game rarely asks for text, and a name is the usual reason; every
 screen that does makes typing the exception to a game's own keys, so
@@ -79,4 +87,7 @@ about it, not only that it is wrong.
   an error is linked to it and marked invalid (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
-- The focus ring is the kit's own, `--bui-focus`, around the box (a plain rectangle, as the stepped corners would cut an outline)
+- Focus shows three ways, not by colour alone: the kit's own ring
+  (`--bui-focus`) around the slot, the thick bright line under it, and the
+  caret. Invalid differs from focus in shape too: a dashed line, and the
+  error sentence under it

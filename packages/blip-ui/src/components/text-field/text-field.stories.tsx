@@ -2,10 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
+import { Window } from '../window/window';
 import { NameHero } from './examples/name-hero';
 import { TextField } from './text-field';
 
-/** A piece of stage to type in, wide enough for the field's text at 1x too */
+/** A piece of stage, wide enough for the field's text at 1x too */
 const Stage = ({ children }: { children: ReactNode }) => {
   const pixels = usePixels();
   return (
@@ -42,6 +43,13 @@ const meta = {
   },
 } satisfies Meta<typeof TextField>;
 
+/** A game puts its fields in a window, so the stories do */
+const InWindow = ({ children }: { children: ReactNode }) => (
+  <Stage>
+    <Window>{children}</Window>
+  </Stage>
+);
+
 export default meta;
 type Story = StoryObj<typeof meta>;
 
@@ -49,9 +57,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   decorators: [
     Story => (
-      <Stage>
+      <InWindow>
         <Story />
-      </Stage>
+      </InWindow>
     ),
   ],
 };
@@ -68,7 +76,7 @@ export const Overview: Story = {
   ],
   render: () => (
     <>
-      <Stage>
+      <InWindow>
         <TextField
           maxLength={10}
           placeholder="Hero"
@@ -76,18 +84,18 @@ export const Overview: Story = {
         >
           Empty
         </TextField>
-      </Stage>
-      <Stage>
+      </InWindow>
+      <InWindow>
         <TextField maxLength={10} defaultValue="Mira">
           Filled
         </TextField>
-      </Stage>
-      <Stage>
+      </InWindow>
+      <InWindow>
         <TextField maxLength={10} defaultValue="Bartholome">
           At its limit
         </TextField>
-      </Stage>
-      <Stage>
+      </InWindow>
+      <InWindow>
         <TextField
           maxLength={10}
           defaultValue="Mira!"
@@ -95,12 +103,12 @@ export const Overview: Story = {
         >
           Invalid
         </TextField>
-      </Stage>
-      <Stage>
+      </InWindow>
+      <InWindow>
         <TextField maxLength={10} defaultValue="Mira" disabled>
           Disabled
         </TextField>
-      </Stage>
+      </InWindow>
     </>
   ),
 };

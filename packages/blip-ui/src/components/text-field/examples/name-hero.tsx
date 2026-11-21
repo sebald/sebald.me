@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Picker, PickerItem } from '../../picker/picker';
 import { Heading, Text } from '../../text/text';
-import { Legend } from '../../window/window';
+import { Legend, Window } from '../../window/window';
 import { TextField } from '../text-field';
 
 /**
@@ -13,7 +13,7 @@ export function NameHero() {
   const [name, setName] = useState('');
   const [started, setStarted] = useState(false);
   return (
-    <>
+    <Window>
       <Heading>New game</Heading>
       <TextField
         className="mt-[calc(var(--bui-px)*3)] w-[min(100%,calc(var(--px)*120))] tall:w-full"
@@ -51,6 +51,6 @@ export function NameHero() {
         ]}
         touch="Tap the field to type"
       />
-    </>
+    </Window>
   );
 }
