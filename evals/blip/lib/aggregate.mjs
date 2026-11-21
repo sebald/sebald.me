@@ -21,7 +21,19 @@ const median = values => {
 const round = n => Number(n.toFixed(4));
 
 /**
- * Measures of spec 3.6 that exist so far (1, 5, 6, 7). `share` ones are a
+ * The share of a run's statements (`stated` or `unstated`) the judge passed,
+ * out of those it answered (errors and skipped ones are not answers); null
+ * without a judge or without such an answer
+ */
+const rubricShare = (run, kind) => {
+  const counts = run.judge?.[kind];
+  if (!counts) return null;
+  const answered = counts.pass + counts.fail;
+  return answered === 0 ? null : (100 * counts.pass) / answered;
+};
+
+/**
+ * Measures of spec 3.6 that exist so far (1, 3, 5, 6, 7). `share` ones are a
  * yes or no per run, reported as a fraction; the others as median and spread.
  * `of` picks the runs the measure is defined for
  */
@@ -41,6 +53,45 @@ export const MEASURES = [
     of: run => run.tree.tsc.ran,
     value: run => run.tree.tsc.errors,
   },
+  {
+    id: 'rubricStated',
+    group: '3. It does the job',
+    label: 'stated rubric statements passed (%)',
+    of: run => rubricShare(run, 'stated') !== null,
+    value: run => rubricShare(run, 'stated'),
+  },
+  {
+    id: 'rubricUnstated',
+    group: '3. It does the job',
+    label: 'unstated rubric statements passed (%, reported on their own)',
+    of: run => rubricShare(run, 'unstated') !== null,
+    value: run => rubricShare(run, 'unstated'),
+  },
+  {
+    id: 'renders',
+    group: '4. It renders',
+    label: 'every URL renders, wide and on a phone',
+    share: true,
+    of: run => run.rendered?.ran,
+    value: run =>
+      ['wide', 'phone'].every(
+        vp =>
+          run.rendered.totals[vp].rendered === run.rendered.totals[vp].pages,
+      ),
+  },
+  ...['escapes', 'cut', 'axe'].flatMap(kind =>
+    ['wide', 'phone'].map(viewport => ({
+      id: `${kind}-${viewport}`,
+      group: '4. It renders',
+      label: `${
+        { escapes: 'layout escapes', cut: 'cut text', axe: 'axe violations' }[
+          kind
+        ]
+      }, ${viewport}`,
+      of: run => run.rendered?.ran,
+      value: run => run.rendered.totals[viewport][kind],
+    })),
+  ),
   {
     id: 'blipComponents',
     group: '5. It reuses',
@@ -249,6 +300,7 @@ export const candidates = (runs, { minRuns = 3, minTasks = 2 } = {}) => {
         kind: override.kind,
         element: override.element,
         classes: override.classes,
+        style: override.style ?? [],
         runs: new Set(),
         tasks: new Set(),
         lines: [],
@@ -266,6 +318,7 @@ export const candidates = (runs, { minRuns = 3, minTasks = 2 } = {}) => {
       kind: group.kind,
       element: group.element,
       classes: group.classes,
+      style: group.style,
       runs: [...group.runs].sort(),
       tasks: [...group.tasks].sort(),
       lines: group.lines.sort(),

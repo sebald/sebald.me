@@ -55,11 +55,22 @@
       "placing": 2,
       "restyling": 0
     },
-    "inlineStyles": 0,
+    "inlineStyles": 1,
     "imports": {
       "fromBlip": 2,
       "invented": []
     },
-    "overrides": []
+    "overrides": [
+      {
+        "key": "raw:div|style:display:'flex';gap:*;inset:0;position:'absolute'",
+        "style": [
+          "display:'flex'",
+          "gap:*",
+          "inset:0",
+          "position:'absolute'"
+        ],
+        "line": 7
+      }
+    ]
   }
 }

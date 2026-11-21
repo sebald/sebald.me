@@ -43,8 +43,8 @@ the layers land, and the spread that defines "a piece helps".
 ## Notes
 
 **Changed.** `evals/blip/results/2026-11-20-day-zero/` (`results.json`, `summary.md`, and
-`invented.md`, the hand-written section that is also appended to `summary.md`: a re-collect
-rewrites `summary.md` and `invented.md` is what to append again); four proposed task files
+`invented.md`, the hand-written section; a re-collect rewrites `summary.md`, leaves `invented.md`
+alone and `summary.md` links to it); four proposed task files
 (`screen-layout`, `number-readout`, `picker-item-parts`, `time-readout`); `tasks/README.md` (the proposals and
 the gaps left open on purpose); Q11 and Q13 in `open-questions.md`. One code change, in the collector:
 `lib/transcript.mjs` writes the home directory as `~` in the network commands it records
@@ -76,13 +76,14 @@ a run, `docs` reads 2 against 0). `no-cli` writes Tailwind classes in 6 of 18 ru
 
 **Findings that are not about Blip.**
 
-- The collector's candidate-override check (Q11) lists nothing, because it counts `className` and
-  17 of the 21 layout frames are inline `style`. Not fixed here; `screen-layout` names it.
+- The collector's candidate-override check (Q11) listed nothing, because it counted `className` and
+  17 of the 21 layout frames are inline `style`. Fixed afterwards (`fix(evals)`): inline `style` objects count
+  too, a tuned value as `*`, and the frame is now a candidate (5 runs, 3 tasks).
 - `Stage.Center` is exported and on no page (`open-questions.md`, the list of undocumented exports),
   yet 3 `cli` runs used it (two as the screen frame, one for an empty state), so agents find parts by the `.d.ts`.
 - Claude Code sometimes loads a sixth built-in plugin, `cc-plugin-easel`, and the runner's `init`
-  check then fails the run (2 of 64 attempts; the redo passed). The canary's baseline needs to
-  allow it. Not changed here (`run.mjs` is `eval-run`'s).
+  check then fails the run (2 of 64 attempts; the redo passed). Fixed afterwards (`fix(evals)`): built-in
+  plugins, skills and agents are allowed whatever their names, only what comes from `~/.claude` fails a run.
 - The runner's `run.mjs --label` ran `day-zero` in two invocations (`no-cli` then `cli`) as asked; stopping
   between runs needed a SIGINT right after a run ended, since the runner has no "finish and stop".
 - `camp-rest` never touches Blip (6 of 6 matched the messy screen), so its `scope: changed-lines`

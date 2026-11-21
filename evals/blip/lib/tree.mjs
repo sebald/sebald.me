@@ -108,6 +108,51 @@ const stringsOf = node => {
   return found;
 };
 
+/**
+ * A value that names something (`'absolute'`, `'column'`, `0`) is kept as
+ * written; one that is tuned (`'calc(var(--px) * 4)'`, `8`, `'0.75em'`) or
+ * computed (`tall ? 'column' : 'row'`) becomes `*`: the same frame is never
+ * written with the same gap twice
+ */
+const KEYWORD = /^(['"][A-Za-z-]+['"]|0|['"]0['"])$/;
+
+/**
+ * The declarations of an inline `style={{ ... }}` as `key:value`, sorted by key
+ * (see `KEYWORD` for the values), so the same frame written in another order
+ * or with another gap is the same. A spread stays as written; a `style` that
+ * is not an object literal (`style={frame}`) has none to compare
+ */
+const declarationsOf = (attr, source) => {
+  const expression = attr.value?.expression;
+  if (expression?.type !== 'ObjectExpression') return null;
+  const text = node => source.slice(node.start, node.end).replace(/\s+/g, ' ');
+  const keyOf = property => {
+    if (property.type !== 'Property' || property.computed)
+      return text(property);
+    return property.key.name ?? String(property.key.value);
+  };
+  return expression.properties
+    .map(property => {
+      if (property.type !== 'Property') return text(property);
+      // `'absolute' as const`, `(0)`: look through the wrappers; one quote style
+      let node = property.value;
+      while (
+        [
+          'TSAsExpression',
+          'TSSatisfiesExpression',
+          'ParenthesizedExpression',
+        ].includes(node.type)
+      )
+        node = node.expression;
+      const value = text(node)
+        .trim()
+        .replace(/^"(.*)"$/, "'$1'")
+        .replace(/^'0'$/, '0');
+      return `${keyOf(property)}:${KEYWORD.test(value) ? value : '*'}`;
+    })
+    .sort();
+};
+
 const nameOf = node => {
   if (node.type === 'JSXIdentifier')
     return { root: node.name, path: [node.name] };
@@ -162,9 +207,15 @@ export const analyseSource = (file, source) => {
       const line = lineAt(starts, node.start);
       let classes = null;
       let style = false;
+      let styleProp = null;
       for (const attr of node.attributes ?? []) {
         if (attr.type !== 'JSXAttribute') continue;
-        if (attr.name.name === 'style') style = true;
+        if (attr.name.name === 'style') {
+          style = true;
+          const declarations = declarationsOf(attr, source);
+          if (declarations?.length)
+            styleProp = { line: lineAt(starts, attr.start), declarations };
+        }
         if (attr.name.name === 'className') {
           const tokens = (attr.value ? stringsOf(attr.value) : [])
             .flatMap(s => s.split(/\s+/))
@@ -173,9 +224,23 @@ export const analyseSource = (file, source) => {
         }
       }
       if (!name) {
-        elements.push({ kind: 'other', tag: '?', line, classes, style });
+        elements.push({
+          kind: 'other',
+          tag: '?',
+          line,
+          classes,
+          style,
+          styleProp,
+        });
       } else if (name.path.length === 1 && /^[a-z]/.test(name.root)) {
-        elements.push({ kind: 'raw', tag: name.root, line, classes, style });
+        elements.push({
+          kind: 'raw',
+          tag: name.root,
+          line,
+          classes,
+          style,
+          styleProp,
+        });
       } else {
         const from = imported.get(name.root);
         const origin = from ? originOf(from.from) : 'own';
@@ -190,7 +255,14 @@ export const analyseSource = (file, source) => {
                   ...name.path.slice(1),
                 ].join('.');
         }
-        elements.push({ kind: origin, tag: display, line, classes, style });
+        elements.push({
+          kind: origin,
+          tag: display,
+          line,
+          classes,
+          style,
+          styleProp,
+        });
       }
     }
   });
@@ -387,10 +459,25 @@ export const analyseTree = (cwd, scope) => {
               kind: element.kind,
               element: element.tag,
               classes: restyle,
+              style: [],
               file,
               line: element.classes?.line ?? element.line,
             });
           }
+        }
+        // An inline style object is an override too, grouped by what it sits
+        // on and its declarations (tuned values as `*`)
+        if (element.styleProp && isChanged(file, element.styleProp.line)) {
+          const { declarations, line } = element.styleProp;
+          overrides.push({
+            key: `${element.kind}:${element.tag}|style:${declarations.join(';')}`,
+            kind: element.kind,
+            element: element.tag,
+            classes: [],
+            style: declarations,
+            file,
+            line,
+          });
         }
       }
     }

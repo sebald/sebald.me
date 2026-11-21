@@ -151,7 +151,7 @@ from the root's `node_modules`, so only a check in the cache shows what an agent
 `--reps n` (default 1), `--model` (default `claude-sonnet-5-5`), `--budget`
 (`--max-budget-usd`, default 4), `--timeout` (minutes per run, default 30),
 `--tarball f` (else the workspace is packed), `--parallel n` (default 1),
-`--retry-failed`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
+`--retry-failed`, `--accept-baseline`, `--dry`. Exit 0, 1 when a run failed, 2 on bad input or a
 configuration not built, 3 when the label stopped (canary or usage limit).
 
 Runs on the logged-in subscription. The child's environment (also `pnpm`'s and
@@ -225,10 +225,13 @@ into the repo), `BLIP_EVAL_CLAUDE` names another executable for `claude`
 | `redoOf`                             | null for a first run; why it was redone otherwise                                                                                                                                |
 
 `label.json`: `label`, `createdAt`, `claudeVersion`, `tarball` (`file`, `sha256`,
-`version`, `commit`, `dirty`), `baseline` (the plugins, skills and agents Claude
-Code itself loads, from the canary's `init`) and `canary`. A label is built from
-one tarball for good: rerunning it reuses that file, and `--tarball` with another
-hash is refused.
+`version`, `commit`, `dirty`), `baseline` (the plugins, skills, agents, tools and MCP servers Claude
+Code itself loaded in the canary's `init`; checked by the next canary),
+`acceptedBaselines` (the canary runs with no tools, so `tools` there is the canary's; the per-run tools check covers the runs; only after `--accept-baseline`: `at`, `claudeVersion`, `from`, `to`, so a
+reader sees that runs within the label differ) and `canary`. A
+label is built from one tarball for good: rerunning it reuses that file, and
+`--tarball` with another hash is refused. It is also built on one Claude Code:
+another major or minor `claudeVersion` is refused.
 
 ### Skipping and resuming
 
@@ -246,29 +249,44 @@ finish), and the exit code is 3.
   heading of `~/.claude/CLAUDE.md` (read at run time; with no such file it only
   reads `init`). If the answer is yes, the `init` event's `apiKeySource` is not
   `none`, or anything it loaded comes from `~/.claude` or an MCP server, nothing
-  runs. Its `init` becomes the label's `baseline`; a later invocation whose
-  baseline differs (another Claude Code) is refused. On Claude Code 2.1.329
+  runs. Its `init` is the label's `baseline`. A later invocation stops
+  (exit 3, nothing runs) on another major or minor Claude Code version than the label began on, and
+  when what Claude Code loads (plugins including built-in ones, skills, agents, tools, MCP
+  servers) differs from the recorded baseline: it prints what was added and removed per kind.
+  Use a new label, or `--accept-baseline` to continue; the old and new set, the Claude Code
+  version and the time are then appended to `acceptedBaselines` in `label.json`. Nothing
+  changed (the usual `--retry-failed` rerun): no flag needed. On Claude Code 2.1.329
   `--setting-sources project` alone does **not** keep that file out (the canary
   said yes), so every run's and the canary's `.claude/settings.json` also lists
   `claudeMdExcludes` for `~/.claude/CLAUDE.md`, `~/.claude/rules/**`, `~/CLAUDE.md`
   and `~/.cache/CLAUDE.md` (the home directory written in at run time). A run's `settings.json` is therefore not
   "permissions only" as spec 3.3 says.
 - **The `init` event** of each run, as it arrives: `apiKeySource` must be
-  `none`, and every plugin, skill and agent must be one the canary's `init` listed
-  (Claude Code's own, the same everywhere) or the configuration's (`blip-ui`'s
-  plugin from `plan` on), none may come from `~/.claude`, the tools must be
-  exactly the eight of the command line (`Agent` shows as `Task`) and no MCP
-  server may be loaded. On a problem the
+  `none`, nothing may come from `~/.claude`, the tools must be exactly the eight of
+  the command line (`Agent` shows as `Task`) and no MCP server may be loaded.
+  Built-in plugins, skills and agents are allowed whatever their names (Claude
+  Code adds one every few releases; `cc-plugin-easel` failed 2 of 64 runs of day
+  zero when a list of names was checked). A plugin is built in only when its own
+  entry says so (`path: "builtin"` or a `source` ending `@builtin`; kept per entry in
+  `meta.init.pluginEntries`), never by its name: a user plugin named like a
+  built-in one fails. A plugin that is neither built in nor `blip-ui` in a
+  configuration that has it fails. The check fails closed: an event without a
+  plugin list, or whose plugins carry no `path` or `source` at all, fails the run
+  (and the canary) instead of assuming they are built in. Skills and agents are bare names in the event, so
+  they are compared by name, at run time, with what lives in `~/.claude` (the
+  plugins in `installed_plugins.json`, `skills/`, `agents/`): a match fails the run On a problem the
   child is killed at once and the run is `failed` with the reasons in
   `initProblems`.
 
 ## Collecting
 
 `node evals/blip/collect.mjs --label <label>` reads a label's run directories and writes
-`results/<date>-<label>/results.json` and `summary.md`, nothing else in the repo. It never reruns an
+`results/<date>-<label>/results.json` and `summary.md`, nothing else in the repo; any other `*.md`
+in that folder is a hand-written write-up, left alone, and `summary.md` links to it ("Write-ups")
+so a re-collect doesn't lose it. It never reruns an
 agent and never writes into a run (`tsc` and the build only add `dist/` there). Options:
 `--cache <dir>` (default `~/.cache/blip-eval`), `--out <dir>` (default `evals/blip/results`),
-`--date`, `--skip-build` (no `tsc`, no build), `--against <results dir>`. Its tests
+`--date`, `--skip-build` (no `tsc`, no build, and so no rendered pass), `--skip-render` (everything but the rendered pass), `--against <results dir>`. Its tests
 (`collect.test.mjs`) run in `pnpm test`; `node evals/blip/fixtures/build-cache.mjs <dir>` builds a
 cache from the fixtures to try it by hand.
 
@@ -319,7 +337,11 @@ cache from the fixtures to try it by hand.
   only when its line (the opening tag's, the attribute's) is added or changed since the run's root
   commit, committed or not, and every line of a file the agent added
 - Overrides that recur (Q11): per changed `className` on a Blip component or a raw tag, the
-  element and its sorted restyling classes (variants kept); a bare raw control has none. A group
+  element and its sorted restyling classes (variants kept); a bare raw control has none. Per
+  changed inline `style` object literal, the element and its declarations, sorted by key; a value
+  that names something (`'absolute'`, `0`) as written, a tuned or computed one (`'calc(var(--px) * 4)'`,
+  `8`, `tall ? 'column' : 'row'`) as `*`, since the same frame is never written with the same gap
+  twice (day zero's 21 frames had 18 different ones); a spread as written; `style={frame}` has none to compare. A group
   in at least 3 runs of one label across at least 2 tasks is a candidate. Taken from changed
   lines whatever the scope, so a file the agent never touched can't make one
 
@@ -327,3 +349,98 @@ cache from the fixtures to try it by hand.
 CLI's version. `--against` puts another label's overall numbers beside this one in `summary.md`
 only when both match; otherwise it says which differs and to collect again. Every process the
 collector starts has `BLIP_EVENTS=off`; the collector never reads or writes `.blip/`.
+
+### The rendered pass
+
+`lib/rendered.mjs` (spec 3.5, layer 2; measure 4), run by `collect.mjs` after the build unless
+`--skip-render` or `--skip-build`. Needs Chrome (the installed one, as the game's tests; the
+Playwright image's on Linux).
+
+- Per run: `vite build` where there is no `dist`, a static server on a free port over `dist`
+  (a path without a file is `index.html`), and each `urls[].url` of the task's `rubric.json` opened
+  in a fresh page wide (960 × 600) and on a phone (402 × 714, a touch device, `isMobile`),
+  `reducedMotion: reduce`, once the fonts are ready and 500 ms later
+- On the stage (`section[data-slot="stage"]`): `escapes()` from
+  `packages/blip-ui/tests/visual/layout.ts` (the file the Blip UI story tests use; its root is now a
+  parameter, `#storybook-root` by default), and axe (`axe-core`, whole page). `escapes()` lists the first
+  50 faults (`limit`; the stories keep its default of 3); they are split into **escapes** (a part outside the stage) and **cut text** (`"…" cut by …`).
+  Axe is recorded as `{ id, impact, nodes }` per violated rule
+- A URL that does not render (the page threw, the stage stayed empty, `No screen called …`, the project
+  does not build) is `rendered: false` with its `reason`, has no faults, and does not stop the others
+- Screenshots: `<cache>/<label>/.screenshots/<config>/<run dir>/<url id>@wide.png` and `@phone.png`, one
+  per URL and viewport, also for a page that did not render (what the judge is given). Rewritten on
+  every collect. `results.json` names them (`runs[].rendered.screenshots`, `pages[].screenshot`), no
+  absolute path
+- `scope: changed-lines`: the template (the run's first commit, built once per label with the run's
+  own `node_modules`) is opened on the same URLs, and what it shows is taken off: faults by what they
+  are without their distance, axe by rule and node count. `subtracted` on the page says how many
+  entries went. If the template itself cannot be rendered nothing is taken off
+- Measures: share of runs with every URL rendered, and escapes, cut text and axe violations (rules)
+  per run, wide and on a phone, medians over the runs of a task. Their detail is in
+  `summary.md`, "Rendered pages to look at"
+- Not covered: baselines or comparisons, and anything past the first screen of a URL (no input is sent)
+
+## Judging
+
+`node evals/blip/collect.mjs --label <label> --judge` adds layer 3 (spec 3.5, Q14): an LLM answers
+each rubric statement of each complete run. It **spends the Claude subscription** (an estimate of
+$0.03 a question on `claude-opus-5-5`, about $6 for day zero's 198 statements), so it only runs
+with `--judge`. Options: `--judge-model` (default `claude-opus-5-5`, Q14), `--judge-parallel n`
+(default 2), `--judge-max-usd n` (default 15: stops and says so when the estimate passes it).
+
+- **The prompt** is `judge.md`. One question per statement, from the one source its `from` names:
+  `diff` gets the ticket, the claim, its `note` and the diff of `src/` since the run's first commit
+  (the files the agent added included), `screenshot` gets the ticket, the claim and the one
+  screenshot its `screenshot` names, and no diff. `url` and `unstated` are for the human reader
+  and never sent. The judge answers `{"verdict": "pass" | "fail", "evidence": "..."}`, checked
+  against that schema; an invalid answer is asked for once more, then recorded as a judge error
+  (`verdict: "error"`, not counted as a pass or a fail). Results are keyed `<task>/<id>`
+- **Blind.** The judge sees nothing of the run's folder or its path, `.blip/`, `CLAUDE.md`, the
+  configuration or the label: it is started in an empty temporary folder (with the screenshot
+  copied in as `screenshot.png`), the diff is `src/` only, and anything in it that names those
+  (`.blip`, `CLAUDE.md`, `blip.config`, `no-cli` and the label as words; a ticket, claim or note that names one is refused) is
+  replaced by `[removed]` and the answer marked `redacted`. `judge.test.mjs` checks all of this
+- **Invoked like a run** (`lib/judge.mjs`): headless Claude Code on the subscription, the env
+  allowlist of `run-lib.mjs`, `--setting-sources project`, `claudeMdExcludes` for `~/.claude`'s
+  memory, `--strict-mcp-config`, `--disable-slash-commands`, its own short system prompt, and the
+  `init` event's `apiKeySource` must be `none`. A diff question gets no tools; a screenshot
+  question gets `Read` only. `BLIP_EVAL_CLAUDE` names another executable (the tests' stand-in)
+- **Cached** in `<cache>/<label>/.judge/<run>/<statement>.json`, keyed by the prompt, model and
+  exact input: collecting again costs nothing, changing a statement, the prompt or the model
+  asks again, an error is never cached
+- **Screenshots** are the rendered pass's (`<cache>/<label>/.screenshots/<config>/<run dir>/<url id>@wide|phone.png`,
+  "The rendered pass"); `lib/screenshots.mjs` is the one place that knows the path, shared with
+  `rendered.mjs`. The statement's `screenshot` names the viewport; a bare url id is taken as wide. A
+  `--judge` collect renders first, so the pictures are there. A statement with no screenshot is `skipped`
+  with its reason: listed, left out of every share, never failed
+- **In the results**: `runs[].judge` (model, estimated cost, counts of `stated` and `unstated`
+  statements by `pass`, `fail`, `error`, `skipped`, and each statement with its evidence), and
+  `judge` at the top (prompt hash, models, total cost). Measure 3 is the share of answered stated
+  statements passed, the unstated ones as a measure of their own. `summary.md` has a "Rubric (the
+  judge)" section: counts by task, judge errors, and **every failed statement with the judge's
+  evidence**, the unstated ones apart, for reading
+
+### Hand labels: does the judge agree with me?
+
+Before the judge's numbers mean anything, it is checked against statements labelled by hand:
+at least nine in ten must agree (eval-judge's first criterion); a statement it and the labeller
+disagree on is rewritten in `eval-tasks`. `labels/<task>.json` holds the run to label for each
+task (the third smallest `src/` diff of its six day-zero runs: not the barely-anything one, not
+the outlier, and it lands on three runs of each configuration), every statement with its text, its
+`note` and where to look, and `"pass": null`.
+
+1. `node evals/blip/labels.mjs show <task>` prints the ticket's path and the run's diff of `src/`
+   (new files included). For a `screenshot` statement open the named screenshot,
+   `~/.cache/blip-eval/<label>/.screenshots/<run>/<name>.png` (written by every collect that renders)
+2. Read the claim literally, as the judge does, and set `pass` to `true` or `false` in
+   `labels/<task>.json`. Answer from the diff or the screenshot only, without the judge's
+   answers: they are in `labels/judge/` and stay unopened until you are done
+3. `node evals/blip/labels.mjs compare` prints the agreement and every disagreement with the
+   judge's evidence, and which statements are not labelled or not judged yet. Screenshot
+   statements are compared once `node evals/blip/labels.mjs judge` has been run again after a collect has rendered them (the answers already given are cached, only the new ones cost)
+
+`labels.mjs judge` asks the judge about the labelled runs only and writes its answers apart, to
+`labels/judge/<task>.json` (git-ignored, so they are not in the pull request for you to see first; the answers
+are in the label's `.judge/` cache, run `labels.mjs judge` once to write the files, it costs nothing then).
+`compare` only says "met" when every statement is labelled and judged.
+`labels.mjs init --force` picks the runs again and **overwrites the labels**.

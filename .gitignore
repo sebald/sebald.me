@@ -1,5 +1,7 @@
 # deps
 node_modules/
+# a pnpm store created in the repo (installs use the global one)
+/.pnpm-store/
 
 # generated content
 .source
@@ -49,3 +51,4 @@ packages/pushback/src/assets/sources/contact/
 # Blip UI: emitted by its prepack step
 packages/blip-ui/dist/
 packages/blip-ui/docs/
+evals/blip/labels/judge/

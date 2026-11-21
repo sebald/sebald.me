@@ -1,0 +1,25 @@
+page: readout
+rules:
+  - id: C-READOUT-1
+    text: Show a single labelled number, gold or a count, with Readout, not a one-row Ledger, a Heading or a bare span.
+    markers: [review]
+    source: evals/blip/results/2026-11-20-day-zero/invented.md
+  - id: C-READOUT-2
+    text: Give a number out of a maximum, HP 42/50, a max on its Readout, not a value and a max written into the label.
+    markers: [review]
+    source: evals/blip/results/2026-11-20-day-zero/invented.md
+  - id: C-READOUT-3
+    text: Leave the live region to Readout, and add no aria-live of your own around it.
+    markers: [review]
+    source: evals/blip/results/2026-11-20-day-zero/invented.md
+  - id: C-READOUT-4
+    text: Put silent on a Readout whose value changes every few frames, so a screen reader is not told each change.
+    markers: [review]
+  - id: C-READOUT-5
+    text: Use Ledger for several numbers read across as rows, and Meter for a bar of cells; a Readout is for one number.
+    markers: [review]
+when-not:
+  - text: A bar of lit cells for a pool is a Meter, not a Readout.
+    use: meter
+  - text: Several labelled numbers in rows are a Ledger.
+    use: ledger

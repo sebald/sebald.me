@@ -328,8 +328,10 @@ independently is a variant or size Blip is missing. `collect.mjs` groups restyli
 the Blip component they sit on (normalised: sorted, the same tokenising as above), and raw tags
 by tag and classes. A group seen in at least 3 runs across at least 2 tasks of one label is
 listed in `summary.md` as a candidate variant, size or component, with its runs and lines.
-Placing classes are left out: a margin on a `Button` says nothing about the `Button`. The
-thresholds are a guess for 36 runs; day zero adjusts them. In `eval-collect`.
+Placing classes are left out: a margin on a `Button` says nothing about the `Button`. Inline
+`style` objects count too (day zero's most common invention was one), grouped by element and
+declarations sorted by key, a tuned or computed value as `*` so that `gap: 12` and `gap: 16`
+are one frame. The thresholds are a guess for 36 runs; day zero adjusts them. In `eval-collect`.
 
 **Day zero (2026-11-20).** The layout gap was hit: 21 of 24 screens hand-build the same frame
 (`evals/blip/results/2026-11-20-day-zero/summary.md`). The recurring-override check found
@@ -435,7 +437,7 @@ Two measurement findings from day zero's runs. Two of 64 first attempts failed t
 because Claude Code itself (not `~/.claude`) sometimes lists a sixth built-in plugin,
 `cc-plugin-easel`, that the canary's baseline of five did not; the runs were redone with
 `--retry-failed` and passed, so the check is right to be strict but its baseline needs to allow
-that plugin (not changed here). The estimate for `no-cli` and `cli` differs by $0.02 a run, which is
+that plugin (since: built-in by origin per entry, and a changed baseline stops the label unless `--accept-baseline`; see tasks/eval-run.md). The estimate for `no-cli` and `cli` differs by $0.02 a run, which is
 inside the spread: layer 1 alone does not tell them apart (see the day-zero summary).
 
 The cap is an estimate on the client and can be overshot (**docs**); a run that hits it ends

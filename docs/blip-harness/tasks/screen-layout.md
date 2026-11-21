@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/218
 ---
 
 # `screen-layout`: Give a full screen its frame, so agents stop writing it by hand
@@ -48,3 +48,12 @@ the 21 blocks are `style`: it needs to count `style` groups first (found in `day
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+- **Built:** `Screen` (`packages/blip-ui/src/components/screen/`): `variant: 'default' | 'centered'`, `className`, `style`, `children`. Fills the stage's layer (`absolute inset-0`), a flex column, 6 `--bui-px` padding and 4 `--bui-px` gap; the bottom padding adds `--bui-bar`. Plain markup, no Base UI, no `next/*`.
+- **Title clearance without a guessed number:** a `ScreenTitle` child is made `static` by the frame (`*:data-[slot=screen-title]:static`, the parent places it) and the frame's top padding becomes 8 stage pixels (`--s-top`, the title's own `TITLE_TOP`). The title is then the column's first row, so what follows starts under it whatever its blurb or size (default, `medium` on the tall stage). `ScreenTitle` itself is unchanged.
+- **Name `Screen`**, as proposed. **Variant:** `centered` for what `Stage.Center` does (title card, message), 8 `--bui-px` around it. `Stage.Center` is **kept**, not folded in: Pushback uses it and the task says not to change Pushback; `stage.mdx` now says a screen's frame is `Screen`. Retiring it later is a separate decision for the user.
+- Shared files touched, additively: `src/index.ts` (export), `uniformity.test.ts` (`PART_VARS` gets `(--s-bottom)`, `(--s-top)`, the part-length mechanism the button and tabs use), `cli/build/sidecar.test.ts` (its hard-coded page list gets `screen`), `stage.mdx` (a line naming `Stage.Center`, so the manifest keeps it on the stage's page and not on `screen`).
+- Rules `C-SCREEN-1` to `-5`, all `[review]` (no check exists yet), each with a source.
+- Acceptance: the `Shop` example is the day-zero shop shape written with `Screen` and no `position`, `inset` or `--bui-bar`; not a rewrite of a literal day-zero file.
+- Checked: lint, format, `pnpm test` (491), blip-ui typecheck, `test:game` (27 passed; 2 timeouts under load on the first run passed on rerun), `pnpm pack` into a scratch app: `blip docs screen` has props, example and rules, and the examples type-check there.
+- `pnpm vrt:blip-ui` not run (asked first, the user decides). New story ids needing baselines: `components-screen--default`, `--overview`, `--shop`, `--title-card`.
