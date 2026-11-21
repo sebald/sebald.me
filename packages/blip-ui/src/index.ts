@@ -158,6 +158,7 @@ export {
   Step,
   type StepProps,
 } from './components/setting/setting';
+export { Switch, type SwitchProps } from './components/switch/switch';
 export {
   Tab,
   TabList,

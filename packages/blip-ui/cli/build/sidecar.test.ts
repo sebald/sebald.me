@@ -196,7 +196,7 @@ describe('the sidecars of src', () => {
 
   it('hold to the build rules (only unwritten checks warn)', () => {
     const { errors, warnings } = checkSidecars(sidecars, {
-      // Every page of src, so a new component's sidecar needs no edit here
+      // The pages there are: a new component's page needs no edit here
       pages: new Set(
         readdirSync(join(root, 'src'), { recursive: true, encoding: 'utf8' })
           .filter(file => file.endsWith('.mdx'))
