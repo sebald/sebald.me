@@ -1,0 +1,69 @@
+{
+  "task": "fight-hud",
+  "label": "day-zero",
+  "run": "no-cli/fight-hud-2",
+  "runFolder": "~/.cache/blip-eval/day-zero/no-cli/fight-hud-2",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in ~/.cache/blip-eval/<label>/.screenshots/<run>/, written by a collect that renders (or open the URL on the built app of the run). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "members",
+      "text": "Each of Wren, Oda and Pim shows HP and MP as current out of max (as Wren's 42/50 HP and 6/10 MP).",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fight@wide",
+        "url": "?screen=fight&state=fight"
+      },
+      "pass": null
+    },
+    {
+      "id": "status",
+      "text": "Wren is shown as poisoned, and no one else is.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fight@wide",
+        "url": "?screen=fight&state=fight"
+      },
+      "pass": null
+    },
+    {
+      "id": "turn",
+      "text": "Oda is marked as the one whose turn it is, and Wren and Pim are not.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fight@wide",
+        "url": "?screen=fight&state=fight"
+      },
+      "pass": null
+    },
+    {
+      "id": "enemies",
+      "text": "The Bog Rat and the Marsh Wisp each show how hurt they are by a bar or in words, not as an HP number.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fight@wide",
+        "url": "?screen=fight&state=fight"
+      },
+      "pass": null
+    },
+    {
+      "id": "fallen",
+      "text": "Pim, at 0 HP, is still shown with the party and is marked as fallen in words or a symbol, not only by colour or by being greyed out.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fallen@wide",
+        "url": "?screen=fight&state=fallen"
+      },
+      "pass": null
+    },
+    {
+      "id": "phone",
+      "text": "On the phone, all three members' names and HP are on screen and readable, with nothing overlapping or cut off.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "fallen@phone",
+        "url": "?screen=fight&state=fallen"
+      },
+      "pass": null
+    }
+  ]
+}

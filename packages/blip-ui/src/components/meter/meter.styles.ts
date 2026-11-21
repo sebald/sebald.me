@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { MeterProps } from './meter';
 
 /**
  * The meter's parts. The variant sets the lit cells' ramp through `--m-*`
@@ -14,7 +15,7 @@ export const meter = {
         default: 'gap-[calc(var(--bui-px)*2)]',
         /** Cells 3 wide, their ink lines shared: a long pool on a phone */
         compact: 'gap-(--bui-px)',
-      },
+      } satisfies Record<NonNullable<MeterProps['size']>, ClassValue>,
       variant: {
         /** The player's side, the main pool */
         primary:
@@ -22,7 +23,7 @@ export const meter = {
         /** The other side */
         secondary:
           '[--m-light:var(--bui-secondary-light)] [--m-mid:var(--bui-secondary)] [--m-shade:var(--bui-secondary-shade)]',
-      },
+      } satisfies Record<NonNullable<MeterProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary', size: 'default' },
   }),

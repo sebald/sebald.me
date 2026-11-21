@@ -3,10 +3,7 @@
 import type { ButtonHTMLAttributes } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
-import type { VariantProps } from '../../utils/styles';
 import { button } from './button.styles';
-
-type Variants = VariantProps<typeof button.root>;
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -14,13 +11,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * `secondary` beside it, `destructive` for what can't be undone
    * @default 'primary'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'primary' | 'secondary' | 'destructive';
   /**
    * `default` is a thumb's height (44 CSS pixels); `small` only where a
    * pointer aims
    * @default 'default'
    */
-  size?: NonNullable<Variants['size']>;
+  size?: 'default' | 'small';
 }
 
 /**

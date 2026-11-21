@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { PickerItemProps } from './picker';
 
 /** The picker's parts, and the rail and description box beside it */
 export const picker = {
@@ -40,7 +41,7 @@ export const picker = {
         accent: 'text-(--bui-primary) hover:text-(--bui-primary-light)',
         /** It leaves: looks like any item, sounds like stepping back */
         back: '',
-      },
+      } satisfies Record<NonNullable<PickerItemProps['variant']>, ClassValue>,
     },
     compoundVariants: [
       {

@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+@import '@sebald/blip-ui/styles.css';
+@import './theme.css';
+
+html,
+body {
+  margin: 0;
+  background: #0b1712;
+}

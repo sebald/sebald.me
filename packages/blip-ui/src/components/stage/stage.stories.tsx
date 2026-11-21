@@ -1,18 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { usePixels } from '../../providers/pixels';
-import { Button } from '../button/button';
-import { Heading, Text } from '../text/text';
+import { Fitted as FittedExample } from './examples/fitted';
 import { Stage } from './stage';
-
-const Readout = () => {
-  const { scale, tall, rows, crop, crisp, backing } = usePixels();
-  return (
-    <Text className="absolute bottom-3 left-3">
-      {`${scale}x, ${rows} rows, ${tall ? 'tall' : 'wide'}, crop ${crop}, backing ${backing}${crisp ? ', crisp' : ''}`}
-    </Text>
-  );
-};
 
 const meta = {
   title: 'Components/Stage',
@@ -44,14 +33,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const Title = () => (
-  <Stage.Center>
-    <Heading>Pushback</Heading>
-    <Button>Start</Button>
-    <Readout />
-  </Stage.Center>
-);
-
 /**
  * The stage at a fixed scale: the toolbar's, unless `scale` is set in the
  * controls. Unset in a game, it fits the viewport (see Fitted)
@@ -66,9 +47,7 @@ export const Default: Story = {
     ),
   ],
   render: (args, { globals }) => (
-    <Stage {...args} scale={args.scale ?? Number(globals.scale ?? 3)}>
-      <Title />
-    </Stage>
+    <FittedExample {...args} scale={args.scale ?? Number(globals.scale ?? 3)} />
   ),
 };
 
@@ -81,17 +60,5 @@ export const Default: Story = {
  */
 export const Fitted: Story = {
   parameters: { controls: { disable: true }, layout: 'fullscreen' },
-  render: () => (
-    <Stage
-      label="Stage"
-      turned={
-        <>
-          <p className="m-0 text-(--bui-primary)">Turn your phone upright.</p>
-          <p className="m-0 text-(--bui-muted)">The meeting will wait.</p>
-        </>
-      }
-    >
-      <Title />
-    </Stage>
-  ),
+  render: () => <FittedExample />,
 };

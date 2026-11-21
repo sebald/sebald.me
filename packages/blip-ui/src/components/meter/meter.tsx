@@ -1,16 +1,16 @@
 import type { HTMLAttributes } from 'react';
 
 import { FLOOR, px } from '../../foundations/pixel';
-import type { VariantProps } from '../../utils/styles';
 import { meter } from './meter.styles';
-
-type Variants = VariantProps<typeof meter.root>;
 
 /** One cell by size, in stage pixels */
 const CELL = {
   default: { width: 4, height: 6 },
   compact: { width: 3, height: 6 },
-} as const;
+} as const satisfies Record<
+  NonNullable<MeterProps['size']>,
+  { width: number; height: number }
+>;
 
 export interface MeterProps extends Omit<
   HTMLAttributes<HTMLSpanElement>,
@@ -24,12 +24,12 @@ export interface MeterProps extends Omit<
    * The lit cells' colour ramp
    * @default 'primary'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'primary' | 'secondary';
   /**
    * The cells' size: `compact` fits a long pool where room is short
    * @default 'default'
    */
-  size?: NonNullable<Variants['size']>;
+  size?: 'default' | 'compact';
   /**
    * Blink the lit cells, between their colour and its light, at the
    * arcade rhythm: a full pool asking to be used. Steady under reduced

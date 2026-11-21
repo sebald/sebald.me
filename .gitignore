@@ -47,3 +47,8 @@ __pycache__/
 # Pushback: the full-size Gemini renders stay on disk, the committed sources are recompressed copies
 packages/pushback/src/assets/sources/originals/
 packages/pushback/src/assets/sources/contact/
+
+# Blip UI: emitted by its prepack step
+packages/blip-ui/dist/
+packages/blip-ui/docs/
+evals/blip/labels/judge/

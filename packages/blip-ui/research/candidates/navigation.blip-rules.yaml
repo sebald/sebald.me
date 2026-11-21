@@ -1,0 +1,35 @@
+# Pattern: moving between screens (a gap).
+page: navigation
+rules:
+  - id: P-NAVIGATION-101
+    text: Give every screen with something to choose a way back on every input.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: P-NAVIGATION-102
+    text: Put the way back in the same place on every screen.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  # Web track (research-web-ux), from 201
+  - id: A-NAVIGATION-201
+    text: Show on every screen that takes keys which item the keys act on.
+    severity: error
+    markers: [review]
+    wcag: 2.4.7 Focus Visible (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-visible.html
+  # Open: XAG 112 asks for navigation that is consistent and predictable, not
+  # for one key that closes every overlay. That key is Blip's own call.
+  - id: P-NAVIGATION-201
+    text: Close everything that opens over a screen with the same key on every screen.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  # 3.2.4 asks for consistent, not identical, names: one that adds what it acts on
+  # still names the same action.
+  - id: T-NAVIGATION-201
+    text: Call the same action by the same name on every screen, unless the name only adds what it acts on.
+    markers: [review]
+    wcag: 3.2.4 Consistent Identification (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/consistent-identification.html
+  - id: P-NAVIGATION-202
+    text: Come back to a menu with the cursor on the item the player left it from.
+    markers: [open]
+    source: https://www.w3.org/WAI/ARIA/apg/patterns/menubar/

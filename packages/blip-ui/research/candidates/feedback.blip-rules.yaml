@@ -1,0 +1,50 @@
+# Pattern: what the game says back (notifications and results are a gap).
+page: feedback
+rules:
+  - id: P-FEEDBACK-101
+    text: Update the readout an action changes as the action happens.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
+  - id: P-FEEDBACK-102
+    text: Say on screen what a buy, a sale or a rest did.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-sounds-alone/
+  - id: P-FEEDBACK-103
+    text: Keep a notification until the player moves on.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-players-to-progress-through-text-prompts-at-their-own-pace/
+  - id: P-FEEDBACK-104
+    text: Keep a notification off the current row and the cursor.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html
+  # Open: the source asks for separate volumes for effects, speech and music; it
+  # doesn't say how sounds are played. One path for every sound (useFeedback) is
+  # Blip's own call, and the check no-own-audio waits until it is settled.
+  - id: A-FEEDBACK-101
+    text: Play UI sounds through useFeedback, never an Audio of your own.
+    markers: [open]
+    source: https://gameaccessibilityguidelines.com/provide-separate-volume-controls-or-mutes-for-effects-speech-and-background-music/
+  - id: A-FEEDBACK-102
+    text: Announce the result of a purchase or a sale with useAnnounce.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  - id: A-FEEDBACK-105
+    text: Announce that the game saved with useAnnounce.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  - id: A-FEEDBACK-106
+    text: Announce that the party rested with useAnnounce.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html
+  # Web track (research-web-ux), from 201
+  # Open: WCAG 3.3.1 covers input errors that are detected automatically; a
+  # refused pick (can't afford, an empty slot) isn't one by its letter. Treating
+  # it as one is Blip's own call (conflict 13).
+  - id: P-FEEDBACK-201
+    text: Say in text why a choice was refused, not only with a sound or a shake.
+    markers: [open]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: T-FEEDBACK-202
+    text: Write a refusal without technical jargon, such as an error code.
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/

@@ -1,15 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { type ReactNode, useState } from 'react';
+import type { ReactNode } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
 import { Button } from '../button/button';
 import { Actions, Content, Title } from '../parts/parts';
-import { Picker, PickerItem, PickerSetting } from '../picker/picker';
-import { Heading, Text } from '../text/text';
+import { Text } from '../text/text';
 import { Legend } from '../window/window';
 import { Dialog } from './dialog';
-
-const noop = () => {};
+import { Options } from './examples/options';
 
 /** A stage to cover, in stage pixels; at least as big in em as its text needs (text has a floor, so at 1x it needs more room than the stage pixels give) */
 const Stage = ({ children }: { children: ReactNode }) => {
@@ -66,52 +64,7 @@ export const Default: Story = {
       </Stage>
     ),
   ],
-  render: function Render(args) {
-    const [open, setOpen] = useState(args.defaultOpen ?? false);
-    const [music, setMusic] = useState(true);
-    return (
-      <>
-        <Heading>Menu</Heading>
-        <Picker label="Menu" className="mt-[calc(var(--bui-px)*3)]">
-          <PickerItem id="start" variant="accent" onSelect={noop}>
-            Start
-          </PickerItem>
-          <PickerItem id="options" onSelect={() => setOpen(true)}>
-            Options
-          </PickerItem>
-        </Picker>
-        <Dialog {...args} open={open} onOpenChange={setOpen}>
-          <Title>Options</Title>
-          <Actions>
-            <Picker label="Options">
-              <PickerSetting
-                id="music"
-                value={music ? 'On' : 'Off'}
-                onStep={() => setMusic(!music)}
-              >
-                Music
-              </PickerSetting>
-              <PickerItem
-                id="back"
-                variant="back"
-                onSelect={() => setOpen(false)}
-              >
-                Back
-              </PickerItem>
-            </Picker>
-          </Actions>
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-              ['Esc', 'back'],
-            ]}
-            touch="Tap a line"
-          />
-        </Dialog>
-      </>
-    );
-  },
+  render: args => <Options {...args} />,
 };
 
 /** Both sizes, and every part: a title, what it says, what can be done, a legend */

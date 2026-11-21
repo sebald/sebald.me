@@ -1,0 +1,364 @@
+// Pure helpers of run.mjs: nothing here touches the disk, the network or a child
+// process, so `node --test evals/blip` covers them.
+
+export const TOOLS = 'Bash,Read,Write,Edit,Glob,Grep,Skill,Agent';
+
+// Configurations (spec 3.4). `built: false` ones stop with "not built yet".
+export const CONFIGS = {
+  'no-cli': { built: true, cli: false, plugin: null },
+  cli: { built: true, cli: true, plugin: null },
+  plan: { built: false, cli: true, plugin: 'plan' },
+  hook: { built: false, cli: true, plugin: 'hook' },
+  reviewer: { built: false, cli: true, plugin: 'reviewer' },
+  full: { built: false, cli: true, plugin: 'full' },
+};
+
+// The probe asks about a line of the user's own global memory file, read at
+// run time, so it means something on any machine.
+export const canaryPrompt = line =>
+  `Is there text starting with ${JSON.stringify(line)} anywhere in your context? ` +
+  'Answer with exactly LEAK:yes or LEAK:no.';
+
+export const probeLine = text => {
+  const lines = String(text)
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean);
+  const line = lines.find(l => l.startsWith('#')) ?? lines[0];
+  return line ? line.slice(0, 80) : null;
+};
+
+// The project's CLAUDE.md (Q10): the same paragraph in every configuration,
+// one more line from `cli` on.
+export const claudeMd = config => {
+  const lines = [
+    '# Ford',
+    '',
+    'Ford is a small 2D adventure game. Its UI is built with `@sebald/blip-ui`.',
+    '',
+    '## Commands',
+    '',
+    '- `pnpm typecheck` and `pnpm build` check your work. Do not start the dev server.',
+    '',
+    '## Screens',
+    '',
+    '`?screen=<name>&state=<fixture>` opens a screen from `src/screens/index.ts` on a game state from `src/game/data.ts` (`FIXTURES`). `?screen=camp&state=start` is the default.',
+  ];
+  if (CONFIGS[config].cli) {
+    lines.push('', "Blip UI's docs, examples and rules: `pnpm exec blip`");
+  }
+  return lines.join('\n') + '\n';
+};
+
+// The project's settings: the permissions, and the user's global memory
+// kept out. `--setting-sources project` alone does not do that on Claude Code
+// 2.1.329 (Q7: the canary caught it), `claudeMdExcludes` does. The home
+// directory is only known at run time, so this file is written per run and
+// never committed.
+export const excludes = home => [
+  `${home}/.claude/CLAUDE.md`,
+  `${home}/.claude/rules/**`,
+  `${home}/CLAUDE.md`,
+  `${home}/.cache/CLAUDE.md`,
+];
+
+export const settingsJson = ({ home, permissions = true }) =>
+  JSON.stringify(
+    {
+      ...(permissions ? { permissions: { allow: TOOLS.split(',') } } : {}),
+      claudeMdExcludes: excludes(home),
+    },
+    null,
+    2,
+  ) + '\n';
+
+// The child's environment is an allowlist: only what a process needs to run,
+// find the user's login and reach the network. Everything else is dropped:
+// API keys and tokens of any kind (a run uses the logged-in subscription,
+// Q13), `ANTHROPIC_*`, `CLAUDE_*`, `GITHUB_TOKEN`, `AWS_*`, `NODE_PATH`, the
+// `npm_*` and `PNPM_*` variables `pnpm eval:blip` adds, `INIT_CWD`, `OLDPWD`.
+// The login is found through HOME and USER (the macOS keychain and
+// ~/.claude), so those stay. `PWD` is set to where the child runs, auto memory
+// is off (Q7), and this repo's own entries are taken off PATH.
+export const ENV_ALLOW = [
+  'PATH',
+  'HOME',
+  'USER',
+  'LOGNAME',
+  'SHELL',
+  'LANG',
+  'TERM',
+  'TZ',
+  'TMPDIR',
+  '__CF_USER_TEXT_ENCODING',
+  'XDG_CONFIG_HOME',
+  'XDG_CACHE_HOME',
+  'XDG_DATA_HOME',
+  'XDG_STATE_HOME',
+  'HTTP_PROXY',
+  'HTTPS_PROXY',
+  'NO_PROXY',
+  'http_proxy',
+  'https_proxy',
+  'no_proxy',
+  'SSL_CERT_FILE',
+  'NODE_EXTRA_CA_CERTS',
+];
+
+export const childEnv = (env, { repo, cwd }) => {
+  const out = {};
+  for (const [key, value] of Object.entries(env))
+    if (ENV_ALLOW.includes(key) || key.startsWith('LC_')) out[key] = value;
+  out.CLAUDE_CODE_DISABLE_AUTO_MEMORY = '1';
+  if (out.PATH)
+    out.PATH = out.PATH.split(':')
+      .filter(dir => dir !== repo && !dir.startsWith(`${repo}/`))
+      .join(':');
+  if (cwd) out.PWD = cwd;
+  return out;
+};
+
+// The command line (spec 3.3 step 4). The prompt goes in on stdin: the tool
+// flags take lists, so a trailing positional would be swallowed by them.
+export const claudeArgs = ({ model, budget, plugins = [], tools = TOOLS }) => {
+  const args = [
+    '-p',
+    '--output-format',
+    'stream-json',
+    '--verbose',
+    '--setting-sources',
+    'project',
+    '--strict-mcp-config',
+    '--permission-mode',
+    'acceptEdits',
+    '--tools',
+    tools,
+    '--allowedTools',
+    tools,
+    '--max-budget-usd',
+    String(budget),
+    '--include-hook-events',
+  ];
+  if (model) args.push('--model', model);
+  for (const dir of plugins) args.push('--plugin-dir', dir);
+  return args;
+};
+
+export const canaryArgs = ({ model }) => [
+  '-p',
+  '--output-format',
+  'stream-json',
+  '--verbose',
+  '--setting-sources',
+  'project',
+  '--strict-mcp-config',
+  '--tools',
+  '',
+  '--model',
+  model,
+];
+
+const names = list =>
+  (list ?? []).map(x => (typeof x === 'string' ? x : (x?.name ?? '')));
+
+export const parseLine = line => {
+  try {
+    return JSON.parse(line);
+  } catch {
+    return null;
+  }
+};
+
+// Where a plugin entry says it comes from: "builtin" (`path: "builtin"` or a
+// `source` ending `@builtin`), "other" (it names a path or a source that is
+// not built in) or null (the entry says nothing). Judged per entry, never by
+// name: a user plugin may share a built-in one's name.
+const originOf = p => {
+  if (p?.path === 'builtin' || String(p?.source ?? '').endsWith('@builtin'))
+    return 'builtin';
+  return p?.path || p?.source ? 'other' : null;
+};
+
+// What `init` says was loaded, reduced to names. `pluginEntries` keeps each
+// plugin's origin; it is null when the event has no plugin list at all.
+export const summariseInit = event => ({
+  apiKeySource: event.apiKeySource ?? null,
+  model: event.model ?? null,
+  plugins: names(event.plugins),
+  pluginEntries: Array.isArray(event.plugins)
+    ? event.plugins.map(p => ({
+        name: typeof p === 'string' ? p : (p?.name ?? ''),
+        origin: typeof p === 'string' ? null : originOf(p),
+      }))
+    : null,
+  skills: names(event.skills),
+  agents: names(event.agents),
+  tools: names(event.tools),
+  mcpServers: names(event.mcp_servers),
+});
+
+// The init check (spec 3.3 step 5). Only what comes from ~/.claude fails a
+// run (`user`: the names found there at run time, not a fixed list), so a
+// built-in plugin, skill or agent is fine whatever its name: Claude Code adds
+// some every few releases. A plugin is built in only when its own entry says
+// so (`pluginEntries[].origin`), so a user plugin with a built-in's name fails.
+// It fails closed: no plugin list in the event, or plugins without any origin
+// information, is a problem, not a pass. Skills and agents have no origin in
+// the event, so they are compared with `user` by name.
+// Returns the problems, empty when fine.
+export const checkInit = (init, { config, user }) => {
+  const problems = [];
+  if (init.apiKeySource !== 'none')
+    problems.push(
+      `apiKeySource is ${JSON.stringify(init.apiKeySource)}, not "none"`,
+    );
+  const plugin = CONFIGS[config].plugin ? 'blip-ui' : null;
+  // `Agent` is listed as `Task` in the init event
+  const want = TOOLS.split(',').map(t => (t === 'Agent' ? 'Task' : t));
+  if (init.tools && [...init.tools].sort().join() !== [...want].sort().join())
+    problems.push(`tools are ${init.tools.join(',')}, not ${want.join(',')}`);
+  if (init.mcpServers?.length)
+    problems.push(`MCP servers loaded: ${init.mcpServers.join(',')}`);
+  const fromUser = (kind, name) =>
+    [...(user[`${kind}s`] ?? []), ...(user.plugins ?? [])].some(
+      u => name === u || name.startsWith(`${u}:`),
+    );
+  const entries = init.pluginEntries;
+  if (!Array.isArray(entries))
+    problems.push(
+      'the init event has no plugin list, so built-in plugins cannot be told from others',
+    );
+  else {
+    if (entries.length && entries.every(e => !e.origin))
+      problems.push(
+        'no plugin carries an origin (path or source), so built-in plugins cannot be told from others',
+      );
+    for (const { name, origin } of entries) {
+      if (origin === 'builtin') continue;
+      if (fromUser('plugin', name))
+        problems.push(`plugin "${name}" comes from ~/.claude`);
+      else if (!(plugin && name === plugin))
+        problems.push(
+          `plugin "${name}" is neither built in nor the configuration's`,
+        );
+    }
+  }
+  for (const [kind, loaded] of [
+    ['skill', init.skills],
+    ['agent', init.agents],
+  ])
+    for (const name of loaded ?? [])
+      if (fromUser(kind, name))
+        problems.push(`${kind} "${name}" comes from ~/.claude`);
+  return problems;
+};
+
+// What Claude Code itself loads, as the label's baseline: names, sorted.
+export const baselineOf = init => {
+  const sorted = list => [...new Set(list ?? [])].sort();
+  return {
+    plugins: sorted(init.plugins),
+    skills: sorted(init.skills),
+    agents: sorted(init.agents),
+    tools: sorted(init.tools),
+    mcpServers: sorted(init.mcpServers),
+  };
+};
+
+// Added and removed names per kind between two baselines; empty when equal.
+// A kind the old record does not have (a label from before it was recorded)
+// is not compared.
+export const diffBaseline = (was, now) => {
+  const diff = {};
+  for (const kind of ['plugins', 'skills', 'agents', 'tools', 'mcpServers']) {
+    if (!Array.isArray(was?.[kind])) continue;
+    const old = new Set(was[kind]);
+    const cur = new Set(now[kind] ?? []);
+    const added = [...cur].filter(n => !old.has(n)).sort();
+    const removed = [...old].filter(n => !cur.has(n)).sort();
+    if (added.length || removed.length) diff[kind] = { added, removed };
+  }
+  return diff;
+};
+
+export const formatBaselineDiff = diff =>
+  Object.entries(diff)
+    .map(
+      ([kind, { added, removed }]) =>
+        `  ${kind}: ${[
+          added.length ? `added ${added.join(', ')}` : '',
+          removed.length ? `removed ${removed.join(', ')}` : '',
+        ]
+          .filter(Boolean)
+          .join('; ')}`,
+    )
+    .join('\n');
+
+// What the canary does with the label's recorded baseline. `record` is
+// label.json, `now` the canary's baseline. Returns { stop } with the message
+// (exit 3) when it differs and was not accepted, else { baseline, accepted }:
+// the baseline to record and, when a change was accepted, the entry for
+// `record.acceptedBaselines`.
+export const judgeBaseline = (
+  record,
+  now,
+  { accept = false, claudeVersion, at = new Date().toISOString(), label = '' },
+) => {
+  const diff = diffBaseline(record.baseline, now);
+  if (!Object.keys(diff).length) return { baseline: now, accepted: null };
+  if (!accept)
+    return {
+      stop: `What Claude Code loads differs from when label "${label}" began (${record.claudeVersion} then, ${claudeVersion} now):\n${formatBaselineDiff(diff)}\nRuns within one label would not be comparable. Use a new label, or pass --accept-baseline to continue and record the change in label.json.`,
+    };
+  return {
+    baseline: now,
+    accepted: { at, claudeVersion, from: record.baseline, to: now },
+  };
+};
+
+// The usage-limit error, wherever it shows: a result event that is an error
+// saying so, or a rate-limit event that was rejected. The exact text is
+// unconfirmed (Q13: "checked in the pilot"), so the match is on wording that
+// the message has used.
+const LIMIT =
+  /usage limit|hit your limit|limit reached|out of extra usage|limit will reset/i;
+export const isUsageLimit = event => {
+  if (!event) return false;
+  if (event.type === 'result' && event.is_error)
+    return LIMIT.test(String(event.result ?? ''));
+  if (event.type === 'rate_limit_event')
+    return event.rate_limit_info?.status === 'rejected';
+  return false;
+};
+
+export const summariseResult = event =>
+  event
+    ? {
+        subtype: event.subtype ?? null,
+        isError: Boolean(event.is_error),
+        costUsd: event.total_cost_usd ?? null,
+        turns: event.num_turns ?? null,
+        apiMs: event.duration_api_ms ?? null,
+        usage: event.usage ?? null,
+        text: event.is_error
+          ? String(event.result ?? '').slice(0, 300)
+          : undefined,
+      }
+    : null;
+
+// A run's state from its meta.json: does a rerun skip it, or redo it?
+export const isDone = (meta, { retryFailed = false } = {}) => {
+  if (!meta || meta.stoppedBy === 'usage-limit') return false;
+  if (meta.status === 'failed') return !retryFailed;
+  return ['done', 'timeout'].includes(meta.status);
+};
+
+export const runName = (task, rep) => `${task}-${rep}`;
+
+export const parseList = (value, all) =>
+  value
+    ? value
+        .split(',')
+        .map(s => s.trim())
+        .filter(Boolean)
+    : all;

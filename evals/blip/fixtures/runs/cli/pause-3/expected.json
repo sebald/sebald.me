@@ -1,0 +1,63 @@
+{
+  "_": "Every call is Bash, the file is written with a heredoc: the three blip calls come first",
+  "transcript": {
+    "status": "complete",
+    "toolCalls": {
+      "total": 5,
+      "byTool": {
+        "Bash": 5
+      }
+    },
+    "blipCalls": {
+      "total": 3,
+      "byCommand": {
+        "docs": 2,
+        "search": 1
+      }
+    },
+    "reads": {
+      "dist": 0,
+      "docs": 0
+    },
+    "lookupBeforeFirstTsxWrite": true,
+    "tsErrors": 0,
+    "turns": 6,
+    "costUsd": 0.1,
+    "wallSeconds": 10,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 0,
+      "controls": 0,
+      "wrappers": 0,
+      "byTag": {}
+    },
+    "components": {
+      "blip": 2,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 0,
+      "onBlip": 0,
+      "onRaw": 0,
+      "placing": 0,
+      "restyling": 0
+    },
+    "inlineStyles": 1,
+    "imports": {
+      "fromBlip": 2,
+      "invented": []
+    },
+    "overrides": [
+      {
+        "key": "blip:Button|style:color:'red'",
+        "style": [
+          "color:'red'"
+        ],
+        "line": 5
+      }
+    ]
+  }
+}

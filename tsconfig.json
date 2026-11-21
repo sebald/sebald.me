@@ -13,6 +13,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "rewriteRelativeImportExtensions": true,
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
@@ -32,5 +33,11 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "packages/blip-ui/dist",
+    "packages/blip-ui/docs",
+    "evals/blip/template",
+    "evals/blip/fixtures"
+  ]
 }

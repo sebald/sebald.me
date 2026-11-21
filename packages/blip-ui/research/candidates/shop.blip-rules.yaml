@@ -1,0 +1,38 @@
+# Pattern: buying and selling (a gap).
+page: shop
+rules:
+  - id: P-SHOP-101
+    text: Show the player's gold on the shop screen the whole time.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
+  - id: P-SHOP-102
+    text: Put an item's price in its row.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-SHOP-103
+    text: Mark an item the player can't afford by more than its colour.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  # Open: XAG 115 asks for a way to review, confirm or undo a sale. Asking first or
+  # letting the player buy it back at the price they sold it for are the two ways;
+  # the choice is Blip's own call (see C-CONFIRM-102).
+  - id: P-SHOP-104
+    text: Ask before selling an item.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: P-SHOP-105
+    text: Show how many the player holds beside each item they can sell.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+  - id: P-SHOP-106
+    text: Stop a quantity at what the player can afford.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/
+  - id: T-SHOP-101
+    text: Say in an unaffordable item's note how much gold is missing.
+    markers: [review]
+    source: https://www.nngroup.com/articles/error-message-guidelines/
+  - id: P-SHOP-107
+    text: Stop a quantity at what the player holds when selling.
+    markers: [review]
+    source: https://www.nngroup.com/articles/ten-usability-heuristics/

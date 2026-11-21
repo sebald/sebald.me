@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { BitmapText } from './bitmap-text';
+import { Result } from './examples/result';
 
 const meta = {
   title: 'Components/BitmapText',
@@ -64,10 +65,5 @@ export const Overview: Story = {
 /** A result and the line under it */
 export const Title: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="grid w-fit justify-items-center gap-[calc(var(--px)*4)]">
-      <BitmapText size="large">YOU WIN</BitmapText>
-      <BitmapText variant="spark">FLAWLESS</BitmapText>
-    </div>
-  ),
+  render: () => <Result />,
 };

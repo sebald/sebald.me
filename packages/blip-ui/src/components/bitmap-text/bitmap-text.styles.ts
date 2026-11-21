@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { BitmapTextProps } from './bitmap-text';
 
 /**
  * The ramp is three variables the letters read: the top row lit
@@ -19,7 +20,7 @@ export const bitmapText = {
         /** White-hot, shaded in the primary colour */
         spark:
           '[--t-main:var(--bui-spark)] [--t-light:var(--bui-spark)] [--t-shade:var(--bui-primary)]',
-      },
+      } satisfies Record<NonNullable<BitmapTextProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary' },
   }),

@@ -14,10 +14,30 @@
       "default": "./src/styles.css"
     }
   },
+  "files": [
+    "dist",
+    "docs"
+  ],
+  "publishConfig": {
+    "bin": {
+      "blip": "./dist/cli/bin.js"
+    },
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "./styles.css": {
+        "style": "./dist/styles.css",
+        "default": "./dist/styles.css"
+      }
+    }
+  },
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build -o storybook-static --quiet",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepack": "rm -rf dist docs && tsc -p tsconfig.build.json && tsc -p tsconfig.cli.json && cp src/styles.css src/tokens.css dist/ && node dist/cli/build/index.js"
   },
   "dependencies": {
     "@base-ui/react": "1.9.0",
@@ -40,9 +60,11 @@
     "@types/react-dom": "19.3.0",
     "react": "19.3.1",
     "react-dom": "19.3.1",
+    "remark-gfm": "4.0.1",
     "storybook": "10.6.3",
     "tailwindcss": "4.3.3",
     "typescript": "7.0.2",
-    "vite": "8.3.5"
+    "vite": "8.3.5",
+    "yaml": "2.9.1"
   }
 }

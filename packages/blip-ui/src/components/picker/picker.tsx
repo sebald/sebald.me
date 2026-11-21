@@ -133,7 +133,7 @@ const useNotePlace = (
 /** What an item gives the picker, for the keys */
 interface Entry {
   disabled: boolean;
-  variant: ItemVariant;
+  variant: NonNullable<PickerItemProps['variant']>;
   onSelect: () => void;
   onStep?: (step: 1 | -1) => void;
 }
@@ -299,8 +299,6 @@ export const Picker = ({
   );
 };
 
-type ItemVariant = 'default' | 'accent' | 'back';
-
 export interface PickerItemProps {
   /** Names the item, for `initial` */
   id: string;
@@ -312,7 +310,7 @@ export interface PickerItemProps {
    * sounds like stepping back, not like confirming
    * @default 'default'
    */
-  variant?: ItemVariant;
+  variant?: 'default' | 'accent' | 'back';
   /**
    * Shown, dimmed, and reachable by the cursor, but picking it bumps:
    * nothing in a menu is hidden, so give it a `note` that says why

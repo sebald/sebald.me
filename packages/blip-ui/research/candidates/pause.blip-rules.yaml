@@ -1,0 +1,37 @@
+# Pattern: the pause menu (a gap).
+page: pause
+rules:
+  # Open: Blip's own call. XAG 113 only asks that focus start on the first control
+  # of a dialog (see P-PAUSE-107).
+  - id: P-PAUSE-101
+    text: Put Resume first in the pause menu.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113
+  - id: P-PAUSE-102
+    text: Stop the game's clock while the pause menu is open.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/do-not-make-precise-timing-essential-to-gameplay-offer-alternatives-actions-that-can-be-carried-out-while-paused-or-a-skip-mechanism/
+  - id: P-PAUSE-103
+    text: Open the pause menu with a key.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-that-all-areas-of-the-user-interface-can-be-accessed-using-the-same-input-method-as-the-gameplay/
+  - id: P-PAUSE-104
+    text: Ask with a Confirm before leaving ends a run.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/115
+  - id: P-PAUSE-105
+    text: Offer the controls from the pause menu.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/indicate-allow-reminder-of-controls-during-gameplay/
+  - id: P-PAUSE-106
+    text: Open the pause menu with a touch control.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  - id: P-PAUSE-107
+    text: Put the cursor on the pause menu's first row when it opens.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113
+  - id: A-PAUSE-108
+    text: Keep keys from reaching the screen under a dialog or pause menu, through the Dialog's key layer.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/113

@@ -47,6 +47,13 @@ does; how it looks follows from that.
   describe one thing between them, it is one string naming the options
   (`points: 'left' | 'right'`): it reads at the call site and cannot
   hold a combination that makes no sense.
+- **The options written out in the type.** A prop that picks from options
+  is a union of its values in the props interface
+  (`variant?: 'primary' | 'secondary'`), never derived from the styles
+  (`VariantProps`, `keyof typeof`): the declaration, a hover and a type
+  error then name the values. The cva variants are checked against it
+  (`satisfies Record<NonNullable<ButtonProps['variant']>, ClassValue>`),
+  so a value missing from either side fails the type check.
 - **No booleans that change the structure.** If a prop would render other
   parts or other logic, it is another component, or parts you compose.
 - **Every component takes `className`**, merged last, for the one-off
@@ -147,11 +154,12 @@ Two kinds of motion, told apart by what moves.
   `ease-bui-out` for what enters, leaves or answers the player and
   `ease-bui-in-out` for what moves across the stage. It names the
   properties it animates (never `transition` or `transition-all`) and
-  stays at 300 ms or under. `opacity` for a fade; for a move or a size,
-  the layout's own properties (`top`, `left`, `width`, `height`): the
-  layout lands on whole device pixels, where a transform or a clip draws
-  between them and blends the art's edges at a scale like 2.25 or a
-  phone's.
+  stays at 300 ms or under. `opacity` for a fade; for a move by whole
+  stage pixels, `translate` (`calc(var(--bui-px)*n)`), which rests on
+  whole device pixels; for a size, or a move whose result would rest
+  between device pixels, the layout's own properties (`top`, `left`,
+  `width`, `height`), which land on whole device pixels where a scale or
+  a clip draws between them and blends the art's edges.
 - **Game art moves like a sprite.** A character, a title slamming in, a
   blink, the stage jolted by a hit: keyframes, stepped (`steps()`), in
   whole stage pixels and whole frames. The kit's are `animate-bui-*`
@@ -163,8 +171,36 @@ Two kinds of motion, told apart by what moves.
 - **Reduced motion**, `motion-reduce:`: what moves snaps, and a fade may
   stay.
 
+New or changed motion follows the `emil-design-eng` skill
+(emilkowalski/skills: should it animate at all, its purpose, easing,
+duration) within these rules; where they are stricter they win. The layout
+properties above are for a move that would rest between device pixels on
+pixel art; a move by whole stage pixels (`translate` of `calc(var(--bui-px)*n)`)
+rests on whole device pixels at every scale measured (2.25x, 3x, a phone's
+1.256x, at 1x and 2x device pixels) and may use the transform, as the Switch's
+thumb does.
+
 A game's own art follows the same rule in its own stylesheet; where a
 piece of art glides on purpose, its comment says why.
+
+## Examples
+
+A use of the kit that a consumer could copy (a menu, a duel, a toggle with
+its state) is an **example**, not JSX in a story: a `.tsx` file in an
+`examples/` folder next to the page, one component per file, named for what
+it shows (`dialog/examples/options.tsx`, id `dialog/options`), with a doc
+comment that says it in a line. It imports the kit by relative path like
+any source file; the pack step rewrites those imports to `@sebald/blip-ui`
+in `docs/examples/`, and fails on one a consumer could not write (a story,
+another example, a name `index.ts` does not export). A composition story
+renders the example (`render: () => <PairExample />`, aliased where the
+story has the same name) and keeps only what Storybook needs around it: the
+stage in a decorator, controls, tags. A page's `<Canvas>` of that story
+becomes the example's source in `blip docs`, so the story and the page show
+one thing. `Default` and `Overview` stay stories. An example does not
+import from a story and no story repeats an example's JSX. Pattern pages
+(`src/patterns/<name>/<name>.mdx`) are the same, with their examples in
+`src/patterns/<name>/examples/`.
 
 ## Checked by tests
 
@@ -173,3 +209,7 @@ size outside the scale, an opacity of its own instead of `bui-disabled`,
 a component root without its `data-slot`, and motion that breaks the rule
 above: a transition without named properties, the kit's curve, or a
 duration of 300 ms or under, or keyframes that don't step.
+
+`foundations/story-options.test.ts` fails when a story's control offers
+other `options` than the prop's union, and when the `Overview` (what the
+visual tests compare) leaves one of those values out.
