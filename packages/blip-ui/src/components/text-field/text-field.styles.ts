@@ -5,8 +5,8 @@ import { cva } from '../../utils/styles';
  * not framed (a framed box in a window reads as a window in a window): the
  * ink, much darker than the window, with a light lip along its bottom
  * and right where the surface catches the light. The lip is the only
- * edge and says the state: dim at rest, bright and thicker with the
- * focus, red when invalid (focused or not; the caret alone shows the
+ * edge and says the state: dim at rest, then a bright edge all round,
+ * thicker, with the focus and a red one when invalid (focused or not; the caret alone shows the
  * focus then). Spacing in `--bui-px` and the text in em, so
  * a phone keeps it legible.
  */
@@ -42,13 +42,15 @@ export const textField = {
       // The lip along the bottom and the right (`--lip`: its colour,
       // `--lip-n`: how many pixels thick). It is the only edge, and it is
       // all the state shows: focus and invalid turn it, no outline
-      '[--lip:var(--bui-surface-light)] [--lip-n:1]',
-      'shadow-[inset_calc(var(--bui-px)*var(--lip-n)*-1)_calc(var(--bui-px)*var(--lip-n)*-1)_0_var(--lip)]',
-      // Bright and twice as thick with the focus
-      'focus:[--lip:var(--bui-primary)] focus:[--lip-n:2]',
+      // `--lip-top`: the top and the left, transparent at rest but as
+      // thick, so nothing moves between states
+      '[--lip:var(--bui-surface-light)] [--lip-top:transparent] [--lip-n:1]',
+      'shadow-[inset_calc(var(--bui-px)*var(--lip-n)*-1)_calc(var(--bui-px)*var(--lip-n)*-1)_0_var(--lip),inset_calc(var(--bui-px)*var(--lip-n))_calc(var(--bui-px)*var(--lip-n))_0_var(--lip-top)]',
+      // Bright and twice as thick with the focus, on all four sides
+      'focus:[--lip:var(--bui-primary)] focus:[--lip-top:var(--bui-primary)] focus:[--lip-n:2]',
       // Red when invalid, focused or not: no second cue in this state, the
       // red caret alone shows the focus
-      'data-[invalid]:[--lip:var(--bui-danger)] data-[invalid]:[--lip-n:1] data-[invalid]:caret-(--bui-danger-light)',
+      'data-[invalid]:[--lip:var(--bui-danger)] data-[invalid]:[--lip-top:var(--bui-danger)] data-[invalid]:[--lip-n:1] data-[invalid]:caret-(--bui-danger-light)',
       'data-[disabled]:bui-disabled',
       // A block for the caret where the browser can draw one
       'caret-(--bui-primary) [caret-shape:block]',

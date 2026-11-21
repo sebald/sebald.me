@@ -27,9 +27,10 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 2. **Characters left**, at the label's end, when there is a `maxLength`;
    it turns to the primary colour once the field is full
 3. **The slot**, in ink, much darker than the window, with a light lip
-   one pixel wide along its bottom and right as its only edge. The lip is
-   dim at rest, bright (`--bui-primary`) and twice as thick with the
-   focus, and red when invalid. It is a thumb's height at least, so in
+   one pixel wide along its bottom and right as its only edge at rest.
+   With the focus the edge is bright (`--bui-primary`), twice as thick and
+   all round; invalid it is red, all round. Nothing moves between states:
+   the top and left are drawn transparent at rest. It is a thumb's height at least, so in
    one row with a default `Button` the two are the same height
 4. **Description**, under it, what to type or in what form
 5. **Error**, under it, what is wrong, in words
@@ -46,11 +47,11 @@ read as a box on a box), and the surface catches the light along its
 bottom and right, the lip. Its corners are square: a one-step cut was
 tried and was too small to see at 1x.
 
-The state is the lip and nothing else, so focus and invalid work the same
-way: it turns bright with the focus (`--bui-primary`, the caret's colour,
+The state is the edge and nothing else, so focus and invalid work the same
+way: the edge turns all round, bright with the focus (`--bui-primary`, the caret's colour,
 at 11.6:1 on the ink; it is also the one colour that cannot be mistaken
 for the red) and red when invalid, with the caret turning red too.
-Invalid, focused or not, looks the same: the red lip, and the blinking
+Invalid, focused or not, looks the same: the red edge, and the blinking
 red caret is the only sign that the field has the focus.
 
 A game rarely asks for text, and a name is the usual reason; every
@@ -94,13 +95,13 @@ about it, not only that it is wrong.
   an error is linked to it and marked invalid (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
-- Focus is the lip turning bright and twice as thick (3 to 6 CSS pixels,
-  the stage's pixel is never finer than 3), and the caret. This field
+- Focus is the edge turning bright, twice as thick (3 to 6 CSS pixels,
+  the stage's pixel is never finer than 3) and all round, and the caret. This field
   has no `bui-focus` outline, unlike the kit's other focusable parts: an
   outline made the focused field look much larger than the rest. The lip
   is 11.6:1 against the ink and 8.3:1 against the unfocused lip, and
-  covers the bottom and right edges 6 CSS pixels thick, which is more
-  than the area WCAG 2.4.13 asks of a 2 pixel indicator
+  runs all round 6 CSS pixels thick, which is more than the area WCAG
+  2.4.13 asks of a 2 pixel indicator
 - Invalid has no focus cue of its own: the lip is red and the same
   whether the field is focused or not, so the caret (red, blinking) is the
   only sign of the focus. A browser that hides the caret, or a reader who
