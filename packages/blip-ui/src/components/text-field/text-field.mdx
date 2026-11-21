@@ -26,12 +26,11 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 1. **Label**, its children, tied to the input
 2. **Characters left**, at the label's end, when there is a `maxLength`;
    it turns to the primary colour once the field is full
-3. **The slot**, the dark of an empty `Meter` cell with an ink edge along
-   its top and left and a line along its bottom. The line is thin and dim
-   at rest (thicker on a touch screen, so it looks tappable before it has
-   focus), thick and bright with the focus, dashed and red when invalid.
-   It is a thumb's height at least, so in one row with a default `Button`
-   the two are the same height
+3. **The slot**, in ink, much darker than the window, with a light lip
+   one pixel wide along its bottom and right as its only edge. The lip is
+   dim at rest, bright (`--bui-primary`) and twice as thick with the
+   focus, and red when invalid. It is a thumb's height at least, so in
+   one row with a default `Button` the two are the same height
 4. **Description**, under it, what to type or in what form
 5. **Error**, under it, what is wrong, in words
 
@@ -41,10 +40,18 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 
 A field is sunk, not framed. It lives in a `Window`, and a framed box
 there reads as a window inside a window, a container, where a field is a
-place to type. So it has no outline of its own, only the dark of an empty
-cell pressed into the surface with a shade along its top and left, as a
-`Meter`'s empty cell is. Its corners are square: a one-step cut was
-tried and hid the shade's hard edge for a corner too small to see at 1x.
+place to type. So it has no outline of its own: it is ink, far darker
+than the window (a fill close to the window's was the first thing that
+read as a box on a box), and the surface catches the light along its
+bottom and right, the lip. Its corners are square: a one-step cut was
+tried and was too small to see at 1x.
+
+The state is the lip and nothing else, so focus and invalid work the same
+way: it turns bright with the focus (`--bui-primary`, the caret's colour,
+at 11.6:1 on the ink; it is also the one colour that cannot be mistaken
+for the red) and red when invalid, with the caret turning red too.
+Invalid, focused or not, looks the same: the red lip, and the blinking
+red caret is the only sign that the field has the focus.
 
 A game rarely asks for text, and a name is the usual reason; every
 screen that does makes typing the exception to a game's own keys, so
@@ -87,7 +94,20 @@ about it, not only that it is wrong.
   an error is linked to it and marked invalid (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
-- Focus shows three ways, not by colour alone: the kit's own ring
-  (`--bui-focus`) around the slot, the thick bright line under it, and the
-  caret. Invalid differs from focus in shape too: a dashed line, and the
-  error sentence under it
+- Focus is the lip turning bright and twice as thick (3 to 6 CSS pixels,
+  the stage's pixel is never finer than 3), and the caret. This field
+  has no `bui-focus` outline, unlike the kit's other focusable parts: an
+  outline made the focused field look much larger than the rest. The lip
+  is 11.6:1 against the ink and 8.3:1 against the unfocused lip, and
+  covers the bottom and right edges 6 CSS pixels thick, which is more
+  than the area WCAG 2.4.13 asks of a 2 pixel indicator
+- Invalid has no focus cue of its own: the lip is red and the same
+  whether the field is focused or not, so the caret (red, blinking) is the
+  only sign of the focus. A browser that hides the caret, or a reader who
+  can't see it blink, gets no focus indicator in that state: a known
+  limit of this design, short of 2.4.7 there
+- At rest the lip is 1.4:1 against the ink, and the ink 1.1:1 against the
+  window, below the 3:1 WCAG 1.4.11 asks for a control's edge; the label
+  above it and the text in it say what it is
+- The error is a sentence under the field and linked to it, so red is
+  never the only signal

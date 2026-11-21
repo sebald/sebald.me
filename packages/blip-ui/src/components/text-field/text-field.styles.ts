@@ -3,13 +3,12 @@ import { cva } from '../../utils/styles';
 /**
  * A label over a slot to type in. The slot is sunk into what it sits in,
  * not framed (a framed box in a window reads as a window in a window): the
- * dark of an empty meter cell, with an ink edge along its top and left
- * where the surface above it casts its shade, and a line along its
- * bottom. The line says what state it is in by more than its colour: a
- * thin dim one at rest (a thicker one on a touch screen, which has no
- * hover or focus to show it), a thick bright one with the focus, and a
- * dashed red one when it is invalid. Spacing in `--bui-px` and the text
- * in em, so a phone keeps it legible.
+ * ink, much darker than the window, with a light lip along its bottom
+ * and right where the surface catches the light. The lip is the only
+ * edge and says the state: dim at rest, bright and thicker with the
+ * focus, red when invalid (focused or not; the caret alone shows the
+ * focus then). Spacing in `--bui-px` and the text in em, so
+ * a phone keeps it legible.
  */
 export const textField = {
   root: cva({
@@ -34,21 +33,22 @@ export const textField = {
       // A field is typed in: the stage turns selecting off, and Safari
       // then lets nothing be typed
       'm-0 w-full min-w-0 select-text appearance-none rounded-none border-0 outline-none',
-      'bg-(--bui-empty) font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
+      'bg-(--bui-ink) font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
       'px-[calc(var(--bui-px)*4)] py-[calc(var(--bui-px)*3)]',
       // A thumb's height at least, with the outline the same as a default
       // `Button`'s (44 CSS pixels, ink line included), so a field and a
       // button in one row are one height
       'min-h-[calc(--spacing(11)+var(--bui-px)*2)]',
-      // The ink along the top and the left, the line along the bottom
-      // (`--f-*`: its colour, its height, its dash and where it repeats)
-      'shadow-[inset_var(--bui-px)_var(--bui-px)_0_var(--bui-ink)]',
-      '[--f-line:var(--bui-frame-dim)] [--f-h:var(--bui-px)] [--f-on:100%] [--f-per:100%]',
-      'touch:[--f-h:calc(var(--bui-px)*2)]',
-      'bg-no-repeat [background-position:bottom] [background-size:100%_var(--f-h)]',
-      '[background-image:repeating-linear-gradient(to_right,var(--f-line)_0_var(--f-on),transparent_var(--f-on)_var(--f-per))]',
-      'focus:bui-focus focus:[--f-line:var(--bui-frame)] focus:[--f-h:calc(var(--bui-px)*3)]',
-      'data-[invalid]:[--f-line:var(--bui-danger)] data-[invalid]:[--f-h:calc(var(--bui-px)*2)] data-[invalid]:[--f-on:calc(var(--bui-px)*2)] data-[invalid]:[--f-per:calc(var(--bui-px)*4)]',
+      // The lip along the bottom and the right (`--lip`: its colour,
+      // `--lip-n`: how many pixels thick). It is the only edge, and it is
+      // all the state shows: focus and invalid turn it, no outline
+      '[--lip:var(--bui-surface-light)] [--lip-n:1]',
+      'shadow-[inset_calc(var(--bui-px)*var(--lip-n)*-1)_calc(var(--bui-px)*var(--lip-n)*-1)_0_var(--lip)]',
+      // Bright and twice as thick with the focus
+      'focus:[--lip:var(--bui-primary)] focus:[--lip-n:2]',
+      // Red when invalid, focused or not: no second cue in this state, the
+      // red caret alone shows the focus
+      'data-[invalid]:[--lip:var(--bui-danger)] data-[invalid]:[--lip-n:1] data-[invalid]:caret-(--bui-danger-light)',
       'data-[disabled]:bui-disabled',
       // A block for the caret where the browser can draw one
       'caret-(--bui-primary) [caret-shape:block]',
