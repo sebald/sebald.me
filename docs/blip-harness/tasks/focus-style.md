@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N1 # forms and navigation
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/226
 ---
 
 # `focus-style`: One focus look per control, and it passes WCAG
