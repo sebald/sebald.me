@@ -4,7 +4,7 @@ import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import { useRef } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
-import { useKeydown } from '../../hooks/key-layer';
+import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { Step } from '../setting/setting';
@@ -70,7 +70,10 @@ export const Tabs = ({
 }: TabsProps) => {
   const play = useFeedback();
   const ref = useRef<HTMLDivElement>(null);
+  const { holds } = useKeyScope('tabs', ref, keys);
   useKeydown(event => {
+    // Another tabs on this layer has the keys
+    if (!holds()) return;
     const by = STEPS[event.key];
     if (by && stepTab(ref.current, by)) event.preventDefault();
   }, keys);

@@ -145,6 +145,8 @@ interface PickerContextValue {
   choose: (entry: Entry) => void;
   entries: Map<string, Entry>;
   active: boolean;
+  /** Another menu on the layer has the keys: no cursor, no note */
+  resting: boolean;
   touch: boolean;
   overflow: boolean;
   scrollTop: number;
@@ -207,7 +209,7 @@ export const Picker = ({
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
-  const hasKeys = useKeyScope(rootRef, active);
+  const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
@@ -284,6 +286,7 @@ export const Picker = ({
         choose: pick,
         entries,
         active,
+        resting,
         touch,
         overflow,
         scrollTop: scroll.top,
@@ -382,7 +385,8 @@ const Row = ({
       list.scrollTop = bottom - list.clientHeight;
   }, [isCurrent, picker.overflow, listRef]);
 
-  const shownNote = picker.active && isCurrent && Boolean(note);
+  const shownNote =
+    picker.active && !picker.resting && isCurrent && Boolean(note);
   // Read out as it shows, after the item's own name
   const announce = useAnnounce();
   useEffect(() => {
@@ -396,7 +400,8 @@ const Row = ({
   );
   // Under a finger there is no cursor to move, and a marked row would read
   // as chosen already: only the row a description is about is marked
-  const marked = isCurrent && (!picker.touch || Boolean(note));
+  const marked =
+    isCurrent && !picker.resting && (!picker.touch || Boolean(note));
 
   return (
     <li ref={rowRef} data-slot="picker-item" data-id={id}>
