@@ -1,7 +1,8 @@
 ---
 status: todo # todo | doing | done
 step: N5 # forms and navigation
-depends: [columns, list-position, window-scroll, menu-title, patterns]
+depends:
+  [columns, list-position, window-scroll, menu-title, form-navigation, patterns]
 pr:
 ---
 
@@ -9,11 +10,11 @@ pr:
 
 **Problem.** A shop or an inventory is a long list with more than one value, a way to narrow it (Show: All or Sale), a count and a price; the mocks hand-wrote the columns, the filter as a row and the count.
 
-**Outcome.** A pattern named for what it is: a menu window whose title names the list, a header row of columns, `PickerItem`s with price and owned in those columns, a `PickerSetting` as the filter, a position ("2 of 5"), scrolling inside the window. No text search field (a field is a form's, and a window is a menu or a form). Mocked as a shop's wares.
+**Outcome.** A pattern named for what it is: a menu window whose title names the list, a header row of columns, `PickerItem`s with price and owned in those columns, a `PickerSetting` as the filter, a position ("2 of 5"), scrolling inside the window. Search is its own step, like naming in pick then edit: a Search row in the menu opens a form window with a text field; Enter takes the query back to the list, whose title or position then says what it shows ("Wares: rope, 2 of 5"), and Esc returns without one. No text field inside the menu window (a window is a menu or a form). Mocked as a shop's wares.
 
 **Included.** The pattern page, example, rules, tests of the keys (filter changes the list and the cursor stays valid), the legend.
 
-**Not included.** A search field in the same window. Sorting.
+**Not included.** A search field in the same window as the list. Live filtering while typing. Sorting.
 
 **Acceptance criteria.**
 
@@ -24,7 +25,7 @@ pr:
 - Design review by the user before it is merged, because it is the reference an agent will copy
 - `pnpm test`, `pnpm typecheck`, `pnpm vrt:blip-ui` in Docker (asked first), a changeset, and a fresh-context review in the pull request
 
-**Depends on.** [`columns`](columns.md), [`list-position`](list-position.md), [`window-scroll`](window-scroll.md), [`menu-title`](menu-title.md), [`patterns`](patterns.md).
+**Depends on.** [`columns`](columns.md), [`list-position`](list-position.md), [`window-scroll`](window-scroll.md), [`menu-title`](menu-title.md), [`form-navigation`](form-navigation.md) (the search step's form), [`patterns`](patterns.md).
 
 ## Notes
 

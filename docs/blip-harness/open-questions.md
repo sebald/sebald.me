@@ -511,6 +511,8 @@ The Gamepad API reports button state and does not move focus or scroll
 ([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API)), so a
 game has to poll it. Standard mapping: the d-pad is buttons 12 to 15, A is 0, B is 1.
 
+Decided 2026-11-22: no controller key hints. If a bridge comes, legends keep naming keys.
+
 **Effort estimate.** Two parts of very different size:
 
 - **A polling bridge**, small (about a day with its tests): poll `navigator.getGamepads()` each frame, turn a d-pad or stick press into the same key events the key layer already handles (Up, Down, Left, Right, A as Enter, B as Esc), with a repeat delay. It works with `form-navigation` and `picker-key-scope` unchanged because both read the key layer.
