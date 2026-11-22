@@ -1,5 +1,5 @@
 import { Pixels, usePixels } from '../../../providers/pixels';
-import { Heading } from '../../text/text';
+import { Actions, Title } from '../../parts/parts';
 import { Legend, Window } from '../../window/window';
 import { Picker, PickerGroup, PickerItem, PickerSetting } from '../picker';
 
@@ -25,39 +25,41 @@ export function InAWindow() {
     >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
         <Window className="w-[19em] tall:w-full">
-          <Heading>Options</Heading>
-          <Picker label="Options" className="mt-[calc(var(--px)*3)]">
-            <PickerSetting
-              id="mode"
-              value="Easy"
-              note="A ghost helps you and nothing rushes you."
-              onStep={noop}
-            >
-              Mode
-            </PickerSetting>
-            <PickerItem
-              id="music"
-              note="M mutes everything, anywhere."
-              onSelect={noop}
-            >
-              Music
-            </PickerItem>
-            <PickerGroup>
+          <Title>Options</Title>
+          <Actions>
+            <Picker label="Options">
+              <PickerSetting
+                id="mode"
+                value="Easy"
+                note="A ghost helps you and nothing rushes you."
+                onStep={noop}
+              >
+                Mode
+              </PickerSetting>
               <PickerItem
-                id="erase"
-                disabled
-                note="Nothing saved yet."
+                id="music"
+                note="M mutes everything, anywhere."
                 onSelect={noop}
               >
-                Erase save
+                Music
               </PickerItem>
-            </PickerGroup>
-            <PickerGroup>
-              <PickerItem id="back" variant="back" onSelect={noop}>
-                Back
-              </PickerItem>
-            </PickerGroup>
-          </Picker>
+              <PickerGroup>
+                <PickerItem
+                  id="erase"
+                  disabled
+                  note="Nothing saved yet."
+                  onSelect={noop}
+                >
+                  Erase save
+                </PickerItem>
+              </PickerGroup>
+              <PickerGroup>
+                <PickerItem id="back" variant="back" onSelect={noop}>
+                  Back
+                </PickerItem>
+              </PickerGroup>
+            </Picker>
+          </Actions>
           <Legend
             keys={[
               ['↑↓', 'choose'],
