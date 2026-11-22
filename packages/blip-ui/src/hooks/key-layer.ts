@@ -72,9 +72,11 @@ export const joinKeyScope = (layer: symbol | null, element: HTMLElement) => {
     scope.claimed = element;
   };
   element.addEventListener('pointerdown', claim, true);
+  element.addEventListener('pointerenter', claim);
   element.addEventListener('focusin', claim);
   return () => {
     element.removeEventListener('pointerdown', claim, true);
+    element.removeEventListener('pointerenter', claim);
     element.removeEventListener('focusin', claim);
     scope.members.splice(scope.members.indexOf(element), 1);
     if (scope.claimed === element) scope.claimed = null;
@@ -96,7 +98,7 @@ export const holdsKeys = (layer: symbol | null, element: HTMLElement) => {
 /**
  * Whether the keys on a layer are this part's, for parts that take
  * navigation keys (a menu) and may share a layer with others. The keys
- * go to the one the player last pressed on or moved the focus into; until
+ * go to the one the player last pointed at, pressed on or moved the focus into; until
  * the player has done either, to the first of them on the page, so a
  * screen with one menu works with no click. A check for the moment a key
  * comes in. Only while `active`; the part's own `ref` is its edge.

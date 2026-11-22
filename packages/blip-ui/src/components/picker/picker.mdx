@@ -9,8 +9,8 @@ import * as PickerStories from './picker.stories';
 
 A list the player moves through with a cursor: the title menu, options,
 the choices in a duel. It is always open and always listening, and
-with several on a layer it listens for the one the player is in. Lists of choices are a Picker, not a column
-of buttons. It is built from its parts, so the JSX reads like the menu:
+with several on a layer it listens for the one the player is in. Lists of
+choices are a Picker, not a column of buttons. It is built from its parts, so the JSX reads like the menu:
 
 ```tsx
 <Picker label="Options">
@@ -81,8 +81,9 @@ focused has them.
 - **Don't** switch a picker off for a `Dialog` (or a `Confirm`) over it.
   A dialog is a layer of its own: the menu under it hears no keys until
   it closes, without turning its `active` off.
-- **Do** put each menu of a screen in its own Window. Pickers on one layer
-  share the keys by themselves (see Input).
+- **Do** leave several pickers on one layer as they are: they share the
+  keys by themselves (see Input). The list itself is what a click or the
+  pointer hands the keys over by, not the Window around it.
 
 <Rules for="picker" />
 
@@ -96,16 +97,24 @@ layout it goes under the window, as wide as it.
 
 ## Input
 
-- With several pickers on one layer, the keys go to one: the one the
-  player last clicked or moved the focus into, and until then the first
-  on the page. A screen with one menu needs no click. A click or the focus
-  on another hands the keys over, and a picker that goes away hands them
-  back. A `Dialog` is a layer of its own, with its own pick of the keys
 - Up and down, or W and S, move; the list wraps
 - Left and right, or A and D, step a `PickerSetting`
 - Enter or Space picks the current item
 - Hovering a row moves the cursor; a click or tap picks it
 - Under a finger there is no cursor: only a row with a note is marked
+
+### Several pickers on one layer
+
+The keys go to one: the one the player last pointed at, clicked or moved
+the focus into (it keeps them until another is), and until then the first
+on the page. A screen with one menu needs no click. A picker that goes
+away hands the keys back. A `Dialog` is a layer of its own, with its own
+pick of the keys, so the menu under it hears none.
+
+This follows the web: the keys change hands by pointer or focus (Tab). By
+directional input alone, with no pointer, a second menu cannot be
+reached; a screen that needs that switches `active` itself (directional
+handover waits for gamepad input, Q18).
 
 ## Sound
 
