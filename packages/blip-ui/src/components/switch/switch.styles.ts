@@ -12,7 +12,7 @@ export const switchStyles = {
   /** The slot the thumb runs in: its frame is dim, lit when on */
   track: cva({
     base: [
-      'relative inline-block h-[calc(var(--bui-px)*6)] w-[calc(var(--bui-px)*12)] shrink-0 bg-(--bui-ink) ring-[length:var(--bui-px)] ring-(--bui-frame-dim)',
+      'relative inline-block h-[calc(var(--bui-px)*6)] w-[calc(var(--bui-px)*12)] shrink-0 bg-(--bui-ink) ring-[length:var(--bui-px)] ring-(--bui-dim)',
       'transition-[box-shadow] duration-150 ease-bui-out',
       'group-data-checked:ring-(--bui-primary)',
     ],
