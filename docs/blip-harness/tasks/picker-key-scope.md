@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N1 # forms and navigation
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/225
 ---
 
 # `picker-key-scope`: A Picker takes keys only for the menu the player is in
