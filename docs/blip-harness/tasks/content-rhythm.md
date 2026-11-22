@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N1 # forms and navigation
 depends: []
 pr: https://github.com/sebald/sebald.me/pull/224
