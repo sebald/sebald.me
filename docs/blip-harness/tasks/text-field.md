@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # common component: accept, change or cut
 depends: [rule-format, manifest-props, examples-and-patterns]
 pr: https://github.com/sebald/sebald.me/pull/215
