@@ -183,6 +183,46 @@ thumb does.
 A game's own art follows the same rule in its own stylesheet; where a
 piece of art glides on purpose, its comment says why.
 
+## Orient on games, not only the web
+
+Web conventions answer how a control works in a browser. A game screen is
+also played with a d-pad or a thumb, where every row is a stop for one
+cursor and nothing has a pointer or a Tab key. When building a component,
+a screen or a pattern, check the game side first and the web side second,
+and where they differ say which one the component follows and why.
+
+- Xbox Accessibility Guidelines, one page each:
+  [112 navigation](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112)
+  (a menu is fully usable by directional input, logical focus order,
+  linear menus loop, the same prompts on every screen),
+  [101 text](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101)
+  (size and legibility),
+  [102 contrast](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102),
+  [103 additional channels](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103)
+  (never colour or sound alone).
+- [Game Accessibility Guidelines](https://gameaccessibilityguidelines.com/):
+  a checklist by level (basic, intermediate, advanced) of what a game
+  should offer, for a quick check of a screen against the whole.
+- [Unity UI navigation](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/script-SelectableNavigation.html):
+  how a directional move finds the next control (automatic from layout or
+  explicit), and that a control that uses a direction itself cannot be
+  left with it.
+- [Godot GUI navigation and focus](https://docs.godotengine.org/en/stable/tutorials/ui/gui_navigation.html):
+  focus as the model, per-direction neighbours, Tab as a secondary path.
+- [Unreal widget navigation](https://dev.epicgames.com/documentation/en-us/unreal-engine/widget-navigation-in-unreal-engine):
+  the same idea in UMG, with rules per widget (explicit, wrap, stop).
+- [Game UI Database](https://www.gameuidatabase.com/): screenshots of real
+  games' screens by kind (settings, inventory, shop, save), for what a
+  screen of that kind holds. The site blocks scripted requests; open it in
+  a browser.
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/): the web
+  side, the roles, names and keys a control needs for a screen reader
+  (its [keyboard interface](https://www.w3.org/WAI/ARIA/apg/practices/keyboard-interface/)
+  page says what Tab and the arrows each do).
+
+The research behind the form controls, with what is sourced and what is
+from memory, is `docs/blip-harness/research/forms-and-navigation.md`.
+
 ## Examples
 
 A use of the kit that a consumer could copy (a menu, a duel, a toggle with

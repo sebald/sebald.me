@@ -45,3 +45,5 @@ dividers. Take a new baseline once it ships.
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+**2026-11-22.** Part of the forms and navigation work (step N1 in the [README](README.md#forms-and-navigation)): the form and options patterns group rows with it.

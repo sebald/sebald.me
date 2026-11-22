@@ -70,3 +70,5 @@ Filled in while the task is worked on: what changed, decisions, numbers.
 - `pnpm test:game` needs port 3000 free; it was taken, so it ran with `GAME_PORT=3107`.
 - Needs baselines (not taken, the user decides): `components-switch--default`,
   `components-switch--overview`, `components-switch--music`.
+
+**Dropped 2026-11-22.** `Switch` is removed and the standalone stepper is the one choice control in forms (On and Off included); see [`stepper`](stepper.md), which also does the removal. A two-value menu row stays a `PickerSetting`. Reasons: [`research/forms-and-navigation.md`](../research/forms-and-navigation.md), section 4.
