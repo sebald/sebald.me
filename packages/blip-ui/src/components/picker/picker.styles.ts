@@ -21,11 +21,12 @@ export const picker = {
   }),
   item: cva({
     base: [
-      'flex w-full items-center gap-[calc(var(--bui-px)*3)] px-[calc(var(--bui-px)*2)] py-(--bui-px) text-left',
+      'group flex w-full items-center gap-[calc(var(--bui-px)*3)] px-[calc(var(--bui-px)*2)] py-(--bui-px) text-left',
       // The cursor's row lit at once: moved by the arrows, list
       // navigation doesn't animate
       'cursor-pointer',
-      'outline-none focus-visible:bui-focus',
+      // Focus is the cursor, in the primary colour, on this row (`cursor`)
+      'outline-none',
       'aria-disabled:cursor-default',
       // Held upright, a row is a thumb's height
       'tall:min-h-11',
@@ -54,7 +55,7 @@ export const picker = {
   }),
   /** The cursor: a stepped pixel triangle, in `--bui-px` like every control */
   cursor: cva({
-    base: 'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
+    base: 'text-(--bui-primary) group-focus-visible:opacity-100 h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({

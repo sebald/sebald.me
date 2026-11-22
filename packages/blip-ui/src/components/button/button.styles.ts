@@ -13,6 +13,11 @@ import type { ButtonProps } from './button';
  * top, and nothing moves: a swap of the two rows alone was too small a
  * change for a click's tenth of a second and read as a blink.
  *
+ * Focus is the kit's mark (`bui-focus`) on the face, so the button keeps
+ * its size: on a key one pixel in from the edge in the letters' colour (its
+ * face is the primary colour), on the frame at the edge in the primary
+ * colour, whose own line turns primary too.
+ *
  * The pixel is `--bui-px`, the stage's never finer than `--bui-min-px`:
  * on a phone's tall stage a stage pixel is barely more than one CSS
  * pixel, and the ink, the steps and the bevel would thin to nothing.
@@ -22,7 +27,6 @@ export const button = {
     base: [
       '[--b-px:var(--bui-px)]',
       'group inline-block cursor-pointer bg-(--bui-ink) p-(--b-px) align-middle outline-none',
-      'focus-visible:bui-focus',
       'disabled:cursor-default disabled:bui-disabled',
     ],
     variants: {
@@ -31,6 +35,7 @@ export const button = {
         primary: [
           '[--b-face:var(--bui-primary)] [--b-light:var(--bui-primary-light)] [--b-shade:var(--bui-primary-shade)]',
           '[--b-text:var(--bui-primary-foreground)] [--b-text-down:var(--bui-primary-foreground)]',
+          '[--bui-focus-color:var(--bui-primary-foreground)] [--bui-focus-inset:-2]',
           '[--b-pad:0px]',
           '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
           '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
@@ -39,6 +44,7 @@ export const button = {
         secondary: [
           '[--b-face:var(--bui-ground)] [--b-ring:var(--bui-neutral)]',
           '[--b-text:var(--bui-neutral)] [--b-text-down:var(--bui-neutral-foreground)]',
+          'focus-visible:[--b-ring:var(--bui-primary)]',
           '[--b-pad:var(--b-px)]',
           '[--b-rest:none] [--b-down:inset_0_0_0_999px_var(--bui-neutral)]',
         ],
@@ -46,6 +52,7 @@ export const button = {
         destructive: [
           '[--b-face:var(--bui-danger)] [--b-light:var(--bui-danger-light)] [--b-shade:var(--bui-danger-shade)]',
           '[--b-text:var(--bui-danger-foreground)] [--b-text-down:var(--bui-danger-foreground)]',
+          '[--bui-focus-color:var(--bui-danger-foreground)] [--bui-focus-inset:-2]',
           '[--b-pad:0px]',
           '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
           '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
@@ -69,6 +76,9 @@ export const button = {
       // Less the ring, so the outline and the key come out one size
       '[--b-x:calc(var(--b-inline)-var(--b-pad))] min-h-[calc(var(--b-height)-var(--b-pad)*2)] px-(--b-x)',
       'flex items-center justify-center',
+      // The mark, drawn over the face: the root's own outline would sit
+      // under it
+      'relative after:pointer-events-none after:absolute after:inset-0 after:content-[""] group-focus-visible:after:bui-focus',
       'bg-(--b-face) text-(--b-text) shadow-(--b-rest)',
       'group-enabled:group-hover:brightness-110 group-enabled:group-active:brightness-100',
       'group-enabled:group-active:bg-(--b-face-down,var(--b-face)) group-enabled:group-active:text-(--b-text-down) group-enabled:group-active:shadow-(--b-down)',

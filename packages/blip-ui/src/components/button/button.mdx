@@ -62,6 +62,11 @@ Pressed, the whole face goes a step darker with the shade along its top, and not
 ## Accessibility
 
 - A native `<button>`, `type="button"` unless set otherwise
-- The focus ring shows for the keyboard only (`:focus-visible`)
+- The focus mark (`foundations/focus.mdx`) shows for the keyboard only
+  (`:focus-visible`), a frame inside the face so the button never grows:
+  an ink line one pixel in on the primary key (11.55:1 on its face), a
+  light one on the destructive key (4.17:1), a second primary line inside
+  the secondary's frame, whose own line turns primary (10.51:1 on the
+  window). 2.4.13 (AAA) passes: a frame all round, 3 CSS pixels thick
 - Disabled buttons fade and lose their colour; prefer explaining why
   something is locked next to it

@@ -198,6 +198,78 @@ describe('the kit’s styles', () => {
   });
 });
 
+/**
+ * Focus is one mark (`foundations/focus.mdx`): `bui-focus` or
+ * `bui-focus-line`, or one of the few lines below that each control's
+ * row in that table names. A style under a focus variant outside them
+ * (an outline of its own, a ring, a fill) fails here.
+ */
+const FOCUS_ALLOWED: Record<string, string> = {
+  // A field's underline: its colour and thickness turn, nothing moves
+  'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
+    'underline',
+  'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
+  'text-field/text-field.styles.ts data-[invalid]:focus:[--ul-n:2]':
+    'underline',
+  // The frame button's own line turns primary
+  'button/button.styles.ts focus-visible:[--b-ring:var(--bui-primary)]':
+    'frame',
+  // An icon button's mark sits on the ink
+  'icon-button/icon-button.styles.ts bg-(--bui-ink)': 'ink',
+  // A picker row's cursor shows, in the primary colour
+  'picker/picker.styles.ts opacity-100': 'cursor',
+};
+
+const FOCUS_VARIANT = /(?:^|:)(?:group-)?focus(?:-visible|-within)?:/;
+
+describe('the kit’s focus', () => {
+  const focused = classes.filter(c => FOCUS_VARIANT.test(c.token));
+
+  it('looks one way: the mark, or a line the table names', () => {
+    const off = focused.filter(
+      c =>
+        !['bui-focus', 'bui-focus-line', 'outline-none'].includes(c.utility) &&
+        !(`${c.file.replaceAll('\\', '/')} ${c.utility}` in FOCUS_ALLOWED) &&
+        !(`${c.file.replaceAll('\\', '/')} ${c.token}` in FOCUS_ALLOWED),
+    );
+    assert.deepEqual(
+      off.map(c => `${c.file}: ${c.token}`),
+      [],
+      'focus is bui-focus or bui-focus-line, inside the box (foundations/focus.mdx)',
+    );
+  });
+
+  it('is never an outline outside the box', () => {
+    const grows = classes.filter(c =>
+      /^(?:outline-(?:offset-)?\d|outline-solid|-?outline-offset)/.test(
+        c.utility,
+      ),
+    );
+    assert.deepEqual(
+      grows.map(c => `${c.file}: ${c.token}`),
+      [],
+    );
+  });
+
+  it('has a row in the focus table for every control that shows it', () => {
+    const page = readFileSync(join(import.meta.dirname, 'focus.mdx'), 'utf8');
+    const missing = [
+      ...new Set(
+        focused
+          // A control's name is its folder's, in Pascal case
+          .map(c =>
+            c.file
+              .split('/')[0]!
+              .replace(/(^|-)(\w)/g, (_, __, letter: string) =>
+                letter.toUpperCase(),
+              ),
+          ),
+      ),
+    ].filter(name => !page.includes(`| \`${name}\``));
+    assert.deepEqual(missing, [], 'add the control to the table');
+  });
+});
+
 describe('the kit’s components', () => {
   it('mark their root with their name, so a parent can place them', () => {
     // Whose root is another of the kit's components, marked by that one

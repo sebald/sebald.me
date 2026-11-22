@@ -78,9 +78,6 @@
   /* The ground behind an overlay, the stage dimmed */
   --bui-scrim: rgb(7 8 13 / 0.8);
 
-  /* The keyboard's focus ring */
-  --bui-focus: oklch(0.74 0.1 65 / 0.8);
-
   /* The finest a control's pixel gets, in CSS pixels */
   --bui-min-px: 3px;
 

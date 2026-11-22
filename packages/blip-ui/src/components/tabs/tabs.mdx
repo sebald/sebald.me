@@ -71,3 +71,10 @@ set a fixed size from outside when the pages differ in length.
 
 Base UI provides `tablist`, `tab` and `tabpanel`, with `aria-selected`,
 `aria-controls` and a roving tab stop.
+
+The focus mark (`foundations/focus.mdx`) shows for the keyboard only. On a
+tab it is a primary underline under the label, one pixel thick (11.53:1 on a
+tab's shade, 10.51:1 on the open tab), which lengthens nothing; on the
+panel, when it takes the focus, a primary frame inside its edge. 2.4.7 and
+1.4.11 pass; 2.4.13 (AAA) fails on the tab, whose line is shorter than a
+2 pixel line round it, and passes on the panel.

@@ -49,8 +49,8 @@ one underline is the edge. The underline's rest colour is the one of a
 it is `--bui-dim`, the dimmest tone that still holds 3:1 against the
 window. The state is the underline and nothing else, so focus and invalid
 work the same way: it thickens and turns bright with the focus, and turns
-red when invalid. Invalid, focused or not, looks the same, and the red
-caret is then the only sign that the field has the focus.
+red when invalid. Invalid and focused, the red line is two pixels thick as
+the primary one is, so the focus never rests on the red alone.
 
 **Where the label goes.** Beside the field in a window's rows, above it on
 a phone. Labels above their fields are the faster form to complete and the
@@ -123,16 +123,15 @@ about it, not only that it is wrong.
   muted, 5.78:1 on the window
 - Focus is the underline going from one stage pixel to two (3 to 6 CSS
   pixels, as the stage's pixel is never finer than 3), dim to bright, and
-  the caret, which meets 2.4.7. This field has no `bui-focus` outline,
-  unlike the kit's other focusable parts: an outline made the focused field
-  look much larger than the rest. For 2.4.13 (AAA) the change of contrast
+  the caret, which meets 2.4.7. This is the field's form of the kit's one
+  focus mark (`foundations/focus.mdx`: primary, inside the box); an outline
+  outside it made the focused field look much larger than the rest. For 2.4.13 (AAA) the change of contrast
   passes (3.44:1); the area passes for a field wider than about 150 CSS
   pixels, whose 6 pixel line is larger than a 2 pixel line round its
   perimeter
-- Invalid has no focus cue of its own: the underline is red and the same
-  whether the field is focused or not, so the caret (red, blinking) is the
-  only sign of the focus. A browser that hides the caret, or a reader who
-  can't see it blink, gets no focus indicator in that state: a known
-  limit of this design, short of 2.4.7 there
+- Invalid keeps the red, and the focus is the line going from one stage
+  pixel to two, as in primary, so the red caret is not the only sign: the
+  line is 4.56:1 against the ink and 2 pixels thick, the change from 1
+  pixel meets 2.4.7 and 1.4.11
 - The error is a sentence under the field and linked to it, so red is
   never the only signal

@@ -32,7 +32,7 @@ const SCROLL_STEP = 0.3;
 const styles = {
   tab: cva({
     base: [
-      'cursor-pointer px-[calc(var(--px)*2)] pb-[var(--px)] outline-none focus-visible:pb-focus',
+      'cursor-pointer px-[calc(var(--px)*2)] pb-[var(--px)] outline-none focus-visible:bui-focus',
       'border-b-[length:var(--px)]',
     ],
     variants: {
