@@ -1,6 +1,6 @@
 import { type ComponentProps, useState } from 'react';
 
-import { Actions, Title } from '../../parts/parts';
+import { Actions, Content, Title } from '../../parts/parts';
 import { Picker, PickerItem, PickerSetting } from '../../picker/picker';
 import { Heading } from '../../text/text';
 import { Legend } from '../../window/window';
@@ -17,15 +17,17 @@ export function Options(props: Partial<ComponentProps<typeof Dialog>>) {
   const [music, setMusic] = useState(true);
   return (
     <>
-      <Heading>Menu</Heading>
-      <Picker label="Menu" className="mt-[calc(var(--bui-px)*3)]">
-        <PickerItem id="start" variant="accent" onSelect={noop}>
-          Start
-        </PickerItem>
-        <PickerItem id="options" onSelect={() => setOpen(true)}>
-          Options
-        </PickerItem>
-      </Picker>
+      <Content>
+        <Heading>Menu</Heading>
+        <Picker label="Menu">
+          <PickerItem id="start" variant="accent" onSelect={noop}>
+            Start
+          </PickerItem>
+          <PickerItem id="options" onSelect={() => setOpen(true)}>
+            Options
+          </PickerItem>
+        </Picker>
+      </Content>
       <Dialog {...props} open={open} onOpenChange={setOpen}>
         <Title>Options</Title>
         <Actions>

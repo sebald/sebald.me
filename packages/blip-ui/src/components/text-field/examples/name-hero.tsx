@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Content, Title } from '../../parts/parts';
+import { Actions, Content, Title } from '../../parts/parts';
 import { Picker, PickerItem } from '../../picker/picker';
 import { Text } from '../../text/text';
 import { Legend, Window } from '../../window/window';
@@ -28,24 +28,22 @@ export function NameHero() {
         >
           Name
         </TextField>
+        {started && <Text>{name.trim()} sets out.</Text>}
       </Content>
-      <Picker label="New game" className="mt-[calc(var(--bui-px)*4)]">
-        <PickerItem
-          id="start"
-          variant="accent"
-          onSelect={() => setStarted(name.trim() !== '')}
-        >
-          Start
-        </PickerItem>
-        <PickerItem id="back" variant="back" onSelect={() => setName('')}>
-          Clear
-        </PickerItem>
-      </Picker>
-      {started && (
-        <Text className="mt-[calc(var(--bui-px)*3)]">
-          {name.trim()} sets out.
-        </Text>
-      )}
+      <Actions>
+        <Picker label="New game">
+          <PickerItem
+            id="start"
+            variant="accent"
+            onSelect={() => setStarted(name.trim() !== '')}
+          >
+            Start
+          </PickerItem>
+          <PickerItem id="back" variant="back" onSelect={() => setName('')}>
+            Clear
+          </PickerItem>
+        </Picker>
+      </Actions>
       <Legend
         keys={[
           ['Enter', 'take the name'],
