@@ -9,6 +9,8 @@ export const switchStyles = {
       'data-disabled:cursor-default data-disabled:bui-disabled data-disabled:hover:text-(--bui-text-bright)',
     ],
   }),
+  /** The name, as wide as the container's label column when it has one (`--bui-label-width`) */
+  name: cva({ base: 'w-(--bui-label-width,auto) shrink-0' }),
   /** The slot the thumb runs in: its frame is dim, lit when on */
   track: cva({
     base: [

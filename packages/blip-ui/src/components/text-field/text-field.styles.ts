@@ -1,30 +1,35 @@
 import { cva } from '../../utils/styles';
 
 /**
- * A label over a slot to type in. The slot is sunk into what it sits in,
- * not framed (a framed box in a window reads as a window in a window): the
- * ink, much darker than the window, with a light lip along its bottom
- * and right where the surface catches the light. The lip is the only
- * edge and says the state: dim at rest, then a bright edge all round,
- * thicker, with the focus and a red one when invalid (focused or not; the caret alone shows the
- * focus then). Spacing in `--bui-px` and the text in em, so
- * a phone keeps it legible.
+ * A label and a line to type in. The field is ink, darker than the
+ * window, with one underline as its only edge: dim at rest, thicker and
+ * bright with the focus, red when invalid (focused or not; the caret
+ * alone shows the focus then). The label is the name of a `Switch`, to
+ * the left of the field where the container gives a label width
+ * (`--bui-label-width`, set by `Content` on a wide stage) and above it
+ * where it doesn't. Spacing in `--bui-px` and the text in em, so a phone
+ * keeps it legible.
  */
 export const textField = {
   root: cva({
-    base: 'flex min-w-0 flex-col gap-[calc(var(--bui-px)*2)]',
+    base: 'flex min-w-0 flex-wrap items-baseline gap-x-[calc(var(--bui-px)*3)] gap-y-[calc(var(--bui-px)*2)]',
   }),
-  /** The label and, at its end, the characters left */
-  row: cva({
+  /** The name, as a Switch's: as wide as the container's label column, or the whole row */
+  label: cva({
+    base: 'w-(--bui-label-width,100%) shrink-0 text-(--bui-text-bright) data-[disabled]:bui-disabled',
+  }),
+  /** The field with what is under it, in the column after the label */
+  control: cva({
+    base: 'flex min-w-0 flex-1 flex-col gap-[calc(var(--bui-px)*2)]',
+  }),
+  /** The description or the error, and at its end the characters left */
+  meta: cva({
     base: 'flex items-baseline justify-between gap-[calc(var(--bui-px)*3)]',
   }),
-  label: cva({
-    base: 'text-[0.85em] text-(--bui-muted) data-[disabled]:bui-disabled',
-  }),
-  /** Dim while there is room, in the primary colour once it is full */
+  /** Muted while there is room, in the primary colour once it is full */
   count: cva({
     base: [
-      'text-[0.85em] text-(--bui-dim) tabular-nums',
+      'ml-auto text-[0.85em] text-(--bui-muted) tabular-nums',
       'data-[full]:text-(--bui-primary) data-[disabled]:bui-disabled',
     ],
   }),
@@ -35,26 +40,23 @@ export const textField = {
       'm-0 w-full min-w-0 select-text appearance-none rounded-none border-0 outline-none',
       'bg-(--bui-ink) font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
       'px-[calc(var(--bui-px)*4)] py-[calc(var(--bui-px)*3)]',
-      // A thumb's height at least, with the outline the same as a default
-      // `Button`'s (44 CSS pixels, ink line included), so a field and a
-      // button in one row are one height
+      // A default `Button`'s height (44 CSS pixels and its ink line), so a
+      // field and a button in one row are one height
       'min-h-[calc(--spacing(11)+var(--bui-px)*2)]',
-      // The lip along the bottom and the right (`--lip`: its colour,
-      // `--lip-n`: how many pixels thick). It is the only edge, and it is
-      // all the state shows: focus and invalid turn it, no outline
-      // `--lip-top`: the top and the left, transparent at rest but as
-      // thick, so nothing moves between states
-      '[--lip:var(--bui-surface-light)] [--lip-top:transparent] [--lip-n:1]',
-      'shadow-[inset_calc(var(--bui-px)*var(--lip-n)*-1)_calc(var(--bui-px)*var(--lip-n)*-1)_0_var(--lip),inset_calc(var(--bui-px)*var(--lip-n))_calc(var(--bui-px)*var(--lip-n))_0_var(--lip-top)]',
-      // Bright and twice as thick with the focus, on all four sides
-      'focus:[--lip:var(--bui-primary)] focus:[--lip-top:var(--bui-primary)] focus:[--lip-n:2]',
+      // The underline (`--ul`: its colour, `--ul-n`: how many pixels
+      // thick), inside the box so nothing moves between states. It is the
+      // only edge and all the state shows: focus and invalid turn it, no
+      // outline. Dim is what a Switch's track is when off
+      '[--ul:var(--bui-dim)] [--ul-n:1]',
+      'shadow-[inset_0_calc(var(--bui-px)*var(--ul-n)*-1)_0_var(--ul)]',
+      'focus:[--ul:var(--bui-primary)] focus:[--ul-n:2]',
       // Red when invalid, focused or not: no second cue in this state, the
       // red caret alone shows the focus
-      'data-[invalid]:[--lip:var(--bui-danger)] data-[invalid]:[--lip-top:var(--bui-danger)] data-[invalid]:[--lip-n:1] data-[invalid]:caret-(--bui-danger-light)',
+      'data-[invalid]:[--ul:var(--bui-danger)] data-[invalid]:[--ul-n:1] data-[invalid]:caret-(--bui-danger-light)',
       'data-[disabled]:bui-disabled',
       // A block for the caret where the browser can draw one
       'caret-(--bui-primary) [caret-shape:block]',
-      'placeholder:text-(--bui-dim)',
+      'placeholder:text-(--bui-muted)',
       'data-[disabled]:cursor-default',
     ],
   }),

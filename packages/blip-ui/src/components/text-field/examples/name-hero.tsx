@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { Content } from '../../parts/parts';
 import { Picker, PickerItem } from '../../picker/picker';
 import { Heading, Text } from '../../text/text';
 import { Legend, Window } from '../../window/window';
@@ -15,18 +16,19 @@ export function NameHero() {
   return (
     <Window>
       <Heading>New game</Heading>
-      <TextField
-        className="mt-[calc(var(--bui-px)*3)] w-[min(100%,calc(var(--px)*120))] tall:w-full"
-        maxLength={10}
-        placeholder="Hero"
-        autoComplete="off"
-        description="Up to ten letters."
-        value={name}
-        onValueChange={setName}
-        onSubmit={() => setStarted(name.trim() !== '')}
-      >
-        Name
-      </TextField>
+      <Content className="mt-[calc(var(--bui-px)*3)]">
+        <TextField
+          maxLength={10}
+          placeholder="Hero"
+          autoComplete="off"
+          description="Up to ten letters."
+          value={name}
+          onValueChange={setName}
+          onSubmit={() => setStarted(name.trim() !== '')}
+        >
+          Name
+        </TextField>
+      </Content>
       <Picker label="New game" className="mt-[calc(var(--bui-px)*4)]">
         <PickerItem
           id="start"

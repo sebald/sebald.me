@@ -23,36 +23,54 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 
 ## Anatomy
 
-1. **Label**, its children, tied to the input
-2. **Characters left**, at the label's end, when there is a `maxLength`;
-   it turns to the primary colour once the field is full
-3. **The slot**, in ink, much darker than the window, with a light lip
-   one pixel wide along its bottom and right as its only edge at rest.
-   With the focus the edge is bright (`--bui-primary`), twice as thick and
-   all round; invalid it is red, all round. Nothing moves between states:
-   the top and left are drawn transparent at rest. It is a thumb's height at least, so in
-   one row with a default `Button` the two are the same height
-4. **Description**, under it, what to type or in what form
-5. **Error**, under it, what is wrong, in words
+1. **Label**, its children, tied to the input, in the style of a
+   `Switch`'s name. To the left of the field on a wide stage, above it on
+   a tall one
+2. **The field**, ink (`--bui-ink`), darker than the window, square, with
+   one underline as its only edge: one stage pixel in `--bui-dim` at rest,
+   two in `--bui-primary` with the focus, one in `--bui-danger` when
+   invalid. It is a default `Button`'s height, so in one row they are the
+   same height
+3. **Description** or **error**, under the field in the field's column:
+   what to type, or what is wrong, in words
+4. **Characters left**, at the end of that line when there is a
+   `maxLength`; it turns to the primary colour once the field is full
 
 <Canvas of={TextFieldStories.Overview} />
 
 ## Usage
 
-A field is sunk, not framed. It lives in a `Window`, and a framed box
-there reads as a window inside a window, a container, where a field is a
-place to type. So it has no outline of its own: it is ink, far darker
-than the window (a fill close to the window's was the first thing that
-read as a box on a box), and the surface catches the light along its
-bottom and right, the lip. Its corners are square: a one-step cut was
-tried and was too small to see at 1x.
+**Why ink and an underline.** A field lives in a `Window`, and a framed
+box there reads as a window inside a window, a container, where a field is
+a place to type. So it has no outline: the fill does the work, far darker
+than the window (a fill close to the window's read as a box on a box), and
+one underline is the edge. The underline's rest colour is the one of a
+`Switch`'s track when it is off, so the two controls read as one family;
+it is `--bui-dim`, the dimmest tone that still holds 3:1 against the
+window. The state is the underline and nothing else, so focus and invalid
+work the same way: it thickens and turns bright with the focus, and turns
+red when invalid. Invalid, focused or not, looks the same, and the red
+caret is then the only sign that the field has the focus.
 
-The state is the edge and nothing else, so focus and invalid work the same
-way: the edge turns all round, bright with the focus (`--bui-primary`, the caret's colour,
-at 11.6:1 on the ink; it is also the one colour that cannot be mistaken
-for the red) and red when invalid, with the caret turning red too.
-Invalid, focused or not, looks the same: the red edge, and the blinking
-red caret is the only sign that the field has the focus.
+**Where the label goes.** Beside the field in a window's rows, above it on
+a phone. Labels above their fields are the faster form to complete and the
+one that works on a narrow screen (Baymard's checkout research, and
+Wroblewski's _Web Form Design_ before it), which is why a tall stage
+stacks them. Wroblewski's own caveat is the case here too: a list of
+settings, where the player scans the names down one column and the fields
+are short, is better with the labels in a column to their left. So a wide
+stage gives the rows one label column, and a field's label lines up with
+the name of the `Switch` and the `Readout` above it.
+
+The column is the window's: `Content` sets `--bui-label-width` for what is
+in it, and a `TextField`, a `Switch` and a `Readout` take it as the width
+of their label. Outside a `Content`, or on a tall stage, where there is no
+room for a column, the variable is not set and each label is as wide as
+its text (a field's takes the whole row, so the field is under it).
+`Content` places nothing itself: each row decides only its own label's
+width.
+
+<Canvas of={TextFieldStories.OptionsRows} />
 
 A game rarely asks for text, and a name is the usual reason; every
 screen that does makes typing the exception to a game's own keys, so
@@ -61,7 +79,7 @@ text is for: a name that is drawn in a fixed space gets the width it can
 hold, and the characters left show it before it is reached. A screen
 reader hears it too, when the field is full and again when more is typed.
 
-An error is a sentence, not a colour. The red frame helps whoever sees
+An error is a sentence, not a colour. The red underline helps whoever sees
 it; the sentence is what a screen reader and a colour-blind player get,
 and the field is linked to it, so it is read with the field. Say what to do
 about it, not only that it is wrong.
@@ -95,20 +113,26 @@ about it, not only that it is wrong.
   an error is linked to it and marked invalid (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
-- Focus is the edge turning bright, twice as thick (3 to 6 CSS pixels,
-  the stage's pixel is never finer than 3) and all round, and the caret. This field
-  has no `bui-focus` outline, unlike the kit's other focusable parts: an
-  outline made the focused field look much larger than the rest. The lip
-  is 11.6:1 against the ink and 8.3:1 against the unfocused lip, and
-  runs all round 6 CSS pixels thick, which is more than the area WCAG
-  2.4.13 asks of a 2 pixel indicator
-- Invalid has no focus cue of its own: the lip is red and the same
+- Contrast: the text is 12.7:1 on the ink and the placeholder
+  (`--bui-muted`) 6.35:1 (WCAG 1.4.3). The underline at rest is 3.35:1
+  against the ink and 3.05:1 against the window, the 3:1 that 1.4.11 asks
+  of a control's edge. Focus (`--bui-primary`) is 11.55:1 against the ink,
+  10.5:1 against the window and 3.44:1 against the rest underline. Red is
+  4.56:1 against the ink and 4.15:1 against the window; the caret
+  (`--bui-danger-light`) 7.1:1 against the ink. The characters left are
+  muted, 5.78:1 on the window
+- Focus is the underline going from one stage pixel to two (3 to 6 CSS
+  pixels, as the stage's pixel is never finer than 3), dim to bright, and
+  the caret, which meets 2.4.7. This field has no `bui-focus` outline,
+  unlike the kit's other focusable parts: an outline made the focused field
+  look much larger than the rest. For 2.4.13 (AAA) the change of contrast
+  passes (3.44:1); the area passes for a field wider than about 150 CSS
+  pixels, whose 6 pixel line is larger than a 2 pixel line round its
+  perimeter
+- Invalid has no focus cue of its own: the underline is red and the same
   whether the field is focused or not, so the caret (red, blinking) is the
   only sign of the focus. A browser that hides the caret, or a reader who
   can't see it blink, gets no focus indicator in that state: a known
   limit of this design, short of 2.4.7 there
-- At rest the lip is 1.4:1 against the ink, and the ink 1.1:1 against the
-  window, below the 3:1 WCAG 1.4.11 asks for a control's edge; the label
-  above it and the text in it say what it is
 - The error is a sentence under the field and linked to it, so red is
   never the only signal

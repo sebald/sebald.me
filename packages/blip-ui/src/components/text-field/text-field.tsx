@@ -114,60 +114,68 @@ export const TextField = ({
       invalid={!!error || undefined}
       className={styles.root({ className })}
     >
-      <div className={styles.row()}>
-        <Field.Label className={styles.label()}>{children}</Field.Label>
-        {left !== undefined && (
-          // The limit is in the description; this is only for the eyes
-          <span
-            aria-hidden
-            data-full={full || undefined}
-            data-disabled={disabled || undefined}
-            className={styles.count()}
-          >
-            {left}
-          </span>
+      <Field.Label className={styles.label()}>{children}</Field.Label>
+      <div className={styles.control()}>
+        <Input
+          {...props}
+          value={text}
+          maxLength={maxLength}
+          // The phone's keyboard shows its own "done" for Enter
+          enterKeyHint="done"
+          className={styles.input()}
+          onKeyDown={keydown}
+          onFocus={event => {
+            onFocus?.(event);
+            // Held upright the keyboard covers the lower stage: keep the
+            // field in view
+            event.currentTarget.scrollIntoView({
+              block: 'nearest',
+              inline: 'nearest',
+            });
+          }}
+          onValueChange={next => {
+            if (next.length > text.length)
+              play('type', next.slice(text.length));
+            setInner(next);
+            onValueChange?.(next);
+            if (maxLength !== undefined && next.length >= maxLength)
+              announce(`Limit of ${maxLength} characters reached`);
+          }}
+        />
+        {(description || !!error || maxLength !== undefined) && (
+          <div className={styles.meta()}>
+            {(description || maxLength !== undefined) && (
+              <Field.Description
+                className={cn(styles.description(), !description && 'sr-only')}
+              >
+                {description}
+                {maxLength !== undefined && (
+                  <span className="sr-only">
+                    {' '}
+                    Up to {maxLength} characters.
+                  </span>
+                )}
+              </Field.Description>
+            )}
+            {!!error && (
+              <Field.Error match className={styles.error()}>
+                {error}
+              </Field.Error>
+            )}
+            {left !== undefined && (
+              // The limit is in the description; this is only for the eyes
+              <span
+                aria-hidden
+                data-full={full || undefined}
+                data-disabled={disabled || undefined}
+                className={styles.count()}
+              >
+                {left}
+              </span>
+            )}
+          </div>
         )}
       </div>
-      <Input
-        {...props}
-        value={text}
-        maxLength={maxLength}
-        // The phone's keyboard shows its own "done" for Enter
-        enterKeyHint="done"
-        className={styles.input()}
-        onKeyDown={keydown}
-        onFocus={event => {
-          onFocus?.(event);
-          // Held upright the keyboard covers the lower stage: keep
-          // the field in view
-          event.currentTarget.scrollIntoView({
-            block: 'nearest',
-            inline: 'nearest',
-          });
-        }}
-        onValueChange={next => {
-          if (next.length > text.length) play('type', next.slice(text.length));
-          setInner(next);
-          onValueChange?.(next);
-          if (maxLength !== undefined && next.length >= maxLength)
-            announce(`Limit of ${maxLength} characters reached`);
-        }}
-      />
-      {(description || maxLength !== undefined) && (
-        <Field.Description
-          className={cn(styles.description(), !description && 'sr-only')}
-        >
-          {description}
-          {maxLength !== undefined && (
-            <span className="sr-only"> Up to {maxLength} characters.</span>
-          )}
-        </Field.Description>
-      )}
-      {!!error && (
-        <Field.Error match className={styles.error()}>
-          {error}
-        </Field.Error>
-      )}
     </Field.Root>
   );
 };

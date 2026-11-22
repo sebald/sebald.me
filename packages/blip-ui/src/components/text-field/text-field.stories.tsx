@@ -2,8 +2,10 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReactNode } from 'react';
 
 import { Pixels, usePixels } from '../../providers/pixels';
+import { Content } from '../parts/parts';
 import { Window } from '../window/window';
 import { NameHero } from './examples/name-hero';
+import { OptionsRows as OptionsRowsExample } from './examples/options-rows';
 import { TextField } from './text-field';
 
 /** A piece of stage, wide enough for the field's text at 1x too */
@@ -46,7 +48,9 @@ const meta = {
 /** A game puts its fields in a window, so the stories do */
 const InWindow = ({ children }: { children: ReactNode }) => (
   <Stage>
-    <Window>{children}</Window>
+    <Window>
+      <Content>{children}</Content>
+    </Window>
   </Stage>
 );
 
@@ -111,6 +115,19 @@ export const Overview: Story = {
       </InWindow>
     </>
   ),
+};
+
+/** Beside a switch and a readout: the window's content gives the rows one label column */
+export const OptionsRows: Story = {
+  parameters: { controls: { disable: true } },
+  decorators: [
+    Story => (
+      <Stage>
+        <Story />
+      </Stage>
+    ),
+  ],
+  render: () => <OptionsRowsExample />,
 };
 
 /** Over a menu: Enter takes the name, Escape gives the keys back to the menu */

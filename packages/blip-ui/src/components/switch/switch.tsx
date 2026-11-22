@@ -67,7 +67,7 @@ export const Switch = ({
         event.currentTarget.click();
       }}
     >
-      {children}
+      <span className={styles.name()}>{children}</span>
       <span aria-hidden className={styles.track()}>
         <BaseSwitch.Thumb className={styles.thumb()} />
       </span>
