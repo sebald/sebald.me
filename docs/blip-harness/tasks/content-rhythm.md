@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: N1 # forms and navigation
 depends: []
 pr:
@@ -33,3 +33,11 @@ pr:
 Filled in while the task is worked on: what changed, decisions, numbers.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+### Worked 2026-11-22
+
+- `Content` is now `grid` with `gap-[calc(var(--bui-px)*4)]`: one value, no prop. 4 is what the one hand-written copy (`options-rows.tsx`) used, what `Actions` and `Picker` already put between their children, and the window's own padding, so a title, rows and actions share one rhythm. 3 would have been the title's room, which the window's body already places by slot. Grid rather than flex so a row (a field) takes the full width like before
+- Moved onto it: `text-field/examples/options-rows.tsx` (gap, and the `mt-3` under the heading, now a `Title` so the window places it) and `name-hero.tsx` (the same `mt-3`). No other example, story or pattern hand-spaced a `Content`; `dialog` and `parts` stories have one child per `Content`, so the gap does not show. Pushback does not use `Content` and wrote no such gap, so no game screen changes; `pnpm test:game` passes (33 passed, 33 screen shots skipped on macOS)
+- `parts.mdx` has a Do and a Don't for it; new `parts.blip-rules.yaml` (C-PARTS-1, C-PARTS-2, a when-not to `picker`), so `blip docs parts` and `blip rules parts` say it
+- `parts.test.ts`: `Content` renders the gap, and no source in `packages/blip-ui/src` writes `grid gap-[calc(var(--bui-px)*4)]` outside `parts.styles.ts`
+- Looked at in Storybook at 3x, 1x and the phone (402 x 714, scale 402/320): textfield default, overview, options-rows, naming-the-hero, dialog default and overview, confirm, parts default and overview, menu-screen. Every screenshot is byte-identical to before (30 of 30), child rects equal; `escapes()` finds nothing. So no story's look changes and `pnpm vrt:blip-ui` is not needed

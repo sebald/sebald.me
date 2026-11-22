@@ -1,0 +1,11 @@
+page: parts
+rules:
+  - id: C-PARTS-1
+    text: Put the rows of a window as children of its Content and write no grid, gap or margin between them; Content sets the gap.
+    markers: [review]
+  - id: C-PARTS-2
+    text: Put the room under a Title and above the Actions in the window, not as a margin on the Content or the Title.
+    markers: [review]
+when-not:
+  - text: A list of choices the player moves through is a Picker in Actions, not rows in a Content.
+    use: picker

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { Content } from '../../parts/parts';
+import { Content, Title } from '../../parts/parts';
 import { Picker, PickerItem } from '../../picker/picker';
-import { Heading, Text } from '../../text/text';
+import { Text } from '../../text/text';
 import { Legend, Window } from '../../window/window';
 import { TextField } from '../text-field';
 
@@ -15,8 +15,8 @@ export function NameHero() {
   const [started, setStarted] = useState(false);
   return (
     <Window>
-      <Heading>New game</Heading>
-      <Content className="mt-[calc(var(--bui-px)*3)]">
+      <Title>New game</Title>
+      <Content>
         <TextField
           maxLength={10}
           placeholder="Hero"
