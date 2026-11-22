@@ -53,6 +53,8 @@ along the bottom edge.
 - **Do** put the rows as children of the `Content` and write no `grid`,
   `gap` or margin between them: it sets the same gap, 4 stage pixels,
   between its children, so every screen's rows are as far apart as the others'.
+- **Do** put text inside a `Text`: every direct child of the `Content` is
+  a row, so loose words beside an inline element would split into rows.
 - **Do** put rows of a `TextField`, a `Switch` and a `Readout` in a
   `Content`: it sets `--bui-label-width` (a label column on a wide stage,
   not set on a tall one) which each takes as the width of its label, so the

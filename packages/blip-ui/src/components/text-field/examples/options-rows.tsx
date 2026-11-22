@@ -7,8 +7,8 @@ import { TextField } from '../text-field';
 /**
  * Rows of an options screen: the window's `Content` gives them one label
  * column and the gap between rows, so the names of a switch, a readout and
- * a field line up and the field takes the rest of its row. On a tall stage the labels stack above
- * their fields instead
+ * a field line up and the field takes the rest of its row. On a tall
+ * stage the labels stack above their fields instead
  */
 export function OptionsRows() {
   return (

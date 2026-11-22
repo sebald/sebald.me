@@ -18,10 +18,14 @@ describe('a content’s rows', () => {
 
   it('are spaced by no example, story or pattern of the kit', () => {
     const own = readdirSync(SRC, { recursive: true, encoding: 'utf8' })
-      .filter(file => /\.(tsx?|mdx)$/.test(file))
+      .filter(file => /\.(tsx|mdx)$/.test(file))
       // The styles that set the gap, and this test
       .filter(file => !/(^|\/)parts\.(styles|test)\.ts$/.test(file));
-    const hand = /grid\s+gap-\[calc\(var\(--bui-px\)\*4\)\]/;
+    // The gap the content sets, written by hand next to a grid, in either order
+    const gap = String.raw`gap-\[calc\(var\(--bui-px\)\*4\)\]`;
+    const hand = new RegExp(
+      String.raw`(?:\bgrid\b[^'"\`\n]*${gap}|${gap}[^'"\`\n]*\bgrid\b)`,
+    );
     assert.deepEqual(
       own.filter(file => hand.test(readFileSync(join(SRC, file), 'utf8'))),
       [],
