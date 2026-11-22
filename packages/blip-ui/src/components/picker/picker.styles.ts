@@ -55,7 +55,7 @@ export const picker = {
   }),
   /** The cursor: a stepped pixel triangle, in `--bui-px` like every control */
   cursor: cva({
-    base: 'text-(--bui-primary) group-focus-visible:opacity-100 h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
+    base: 'text-(--bui-primary) h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({

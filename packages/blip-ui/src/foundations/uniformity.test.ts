@@ -217,7 +217,6 @@ const FOCUS_ALLOWED: Record<string, string> = {
   // An icon button's mark sits on the ink
   'icon-button/icon-button.styles.ts bg-(--bui-ink)': 'ink',
   // A picker row's cursor shows, in the primary colour
-  'picker/picker.styles.ts opacity-100': 'cursor',
 };
 
 const FOCUS_VARIANT = /(?:^|:)(?:group-)?focus(?:-visible|-within)?:/;

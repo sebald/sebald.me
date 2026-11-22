@@ -32,7 +32,7 @@ changes the mark by changing `--bui-primary`, not by a role of its own; it
 has the same colour as the game's accent everywhere.
 
 `foundations/uniformity.test.ts` fails on a focus style outside this table:
-an outline outside the box, a ring, a fill that lifts, a colour of its own.
+an outline outside the box, a ring, a fill that lifts (an icon button's ink fill darkens), a colour of its own.
 
 ## Decisions
 
@@ -43,7 +43,7 @@ luminance formula. Window is `--bui-surface`, `#131829`; ink is `--bui-ink`,
 
 - **2.4.7 Focus Visible (AA):** every control below shows the mark.
 - **1.4.11 Non-text Contrast (AA):** the mark is 3:1 or more against what
-  is next to it, here 6.0:1 to 17.1:1 (one case at 2.7:1 on one side, noted).
+  is next to it, here 4.17:1 to 11.92:1 (the destructive key's frame is 2.68:1 against the light row on its outside, so one side carries it).
 - **1.4.1 Use of Color, Xbox 103:** never colour alone. A line, a frame or a
   cursor _appears_ where there was none, or gets thicker.
 - **2.4.13 Focus Appearance (AAA):** noted per control, not a gate. It asks
