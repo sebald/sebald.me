@@ -50,6 +50,10 @@ along the bottom edge.
   a dialog needs its title to have a name.
 - **Do** use `Heading` for a heading inside the content (a pool's name):
   a `Title` in a `Content` is only a heading, never the container's name.
+- **Do** put rows of a `TextField`, a `Switch` and a `Readout` in a
+  `Content`: it sets `--bui-label-width` (a label column on a wide stage,
+  not set on a tall one) which each takes as the width of its label, so the
+  names line up.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new
   container provides `PartsContext` (what the parts can't know) and
   places them by their slot.

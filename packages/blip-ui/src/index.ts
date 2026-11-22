@@ -170,6 +170,10 @@ export {
   type TabsProps,
 } from './components/tabs/tabs';
 export {
+  TextField,
+  type TextFieldProps,
+} from './components/text-field/text-field';
+export {
   Heading,
   type HeadingProps,
   ScreenTitle,

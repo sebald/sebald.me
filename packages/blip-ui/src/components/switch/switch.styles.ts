@@ -9,10 +9,12 @@ export const switchStyles = {
       'data-disabled:cursor-default data-disabled:bui-disabled data-disabled:hover:text-(--bui-text-bright)',
     ],
   }),
+  /** The name, as wide as the container's label column when it has one (`--bui-label-width`) */
+  name: cva({ base: 'w-(--bui-label-width,auto) shrink-0' }),
   /** The slot the thumb runs in: its frame is dim, lit when on */
   track: cva({
     base: [
-      'relative inline-block h-[calc(var(--bui-px)*6)] w-[calc(var(--bui-px)*12)] shrink-0 bg-(--bui-ink) ring-[length:var(--bui-px)] ring-(--bui-frame-dim)',
+      'relative inline-block h-[calc(var(--bui-px)*6)] w-[calc(var(--bui-px)*12)] shrink-0 bg-(--bui-ink) ring-[length:var(--bui-px)] ring-(--bui-dim)',
       'transition-[box-shadow] duration-150 ease-bui-out',
       'group-data-checked:ring-(--bui-primary)',
     ],
