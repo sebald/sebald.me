@@ -209,8 +209,6 @@ const FOCUS_ALLOWED: Record<string, string> = {
   'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
     'underline',
   'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
-  'text-field/text-field.styles.ts data-[invalid]:focus:[--ul-n:2]':
-    'underline',
   // The frame button's own line turns primary
   'button/button.styles.ts focus-visible:[--b-ring:var(--bui-primary)]':
     'frame',
