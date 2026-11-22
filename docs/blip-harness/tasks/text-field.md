@@ -57,3 +57,5 @@ Filled in while the task is worked on: what changed, decisions, numbers.
 blurs (and does not reach a Dialog), the limit is announced through `useAnnounce`. Rules `C-TEXT-FIELD-1..3` (1 is `[open]`) and
 `P-TEXT-FIELD-1` (`[open]`, the candidate `P-SAVES-107`, renamed because a sidecar's ids carry its page).
 `sidecar.test.ts`'s fixed page list got `picker`, `setting`, `text-field`.
+
+**Revisited 2026-11-22.** The design review of this component raised the label, the focus look and the keyboard model for all form controls. [`field`](field.md) takes the label, description, error and count out of `TextField` and rebuilds it as the input inside `Field`; [`focus-style`](focus-style.md) and [`form-navigation`](form-navigation.md) change its focus and keys. Research: [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).

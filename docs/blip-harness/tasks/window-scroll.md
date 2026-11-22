@@ -36,3 +36,5 @@ change.
 - A fresh-context review against `AGENTS.md` and `building-components.mdx`, in the pull request
 
 **Depends on.** [`screen-layout`](screen-layout.md).
+
+**2026-11-22.** Part of the forms and navigation work (step N1 in the [README](README.md#forms-and-navigation)): `window-layout` and the filtered-list pattern need it.

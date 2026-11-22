@@ -137,6 +137,36 @@ tarball of Blip after steps A and B.
   request (with the user's yes), a first pass checks them against Blip's conventions, then the
   user looks at all of them in one local Storybook.
 
+## 2026-11-22 · Design review of TextField becomes a forms milestone
+
+The review of `TextField` (#215) in Storybook found more than a text field. Each finding was
+researched and mocked in a throwaway Storybook before a decision
+([`research/forms-and-navigation.md`](research/forms-and-navigation.md)).
+
+- **What the review found:** the label is stacked and muted on `TextField` but sits in a column
+  on `Switch` and `Readout`, and on the tall stage the column is off, so rows are ragged. Focus
+  looks are mixed (orange outline on some controls, gold on others). A `Picker` anywhere on a page
+  takes Up and Down globally, so a docs page with several menus cannot be used. A window that
+  mixes a `Picker` with `Switch` or `TextField` has two keyboard models, and On and Off has two
+  homes (`Switch`, `PickerSetting`).
+- **Research, four rounds:** how 16-bit games entered text (letter grids, fixed slots, one bright
+  cursor); label placement (web eye-tracking studies disagree, a left column suits a settings
+  list); menu or select (SNES lists took their name from the window title); `Switch` or a stepper
+  (era options screens are rows of words you step between); Up and Down between form rows
+  (Unity, Godot, Xbox guideline 112; Tab as the secondary path). Some of it is from memory, and the
+  document says which.
+- **Decisions (the user, 2026-11-22):** a window is a menu or a form, with no `Picker` in a form;
+  `Switch` is dropped for one standalone stepper; one form key model (Up and Down between rows,
+  Left and Right change the value, Tab untouched); a `Field` component owns labels; patterns are
+  named for the pattern, not the screen; gamepad is a later question (Q18).
+- **Tasks:** 15 todo files in steps N1 to N5 of [`tasks/README.md`](tasks/README.md#forms-and-navigation):
+  the Picker key bug, focus look, content rhythm, `Field`, menu title, columns, window layout,
+  list position, the stepper, Back, form navigation, and four reference patterns; `divider` and
+  `window-scroll` are linked in. Guidance for agents to orient on game-engine and game-platform UI
+  guidelines, not only web conventions, went into `building-components.mdx`.
+- _Caught while checking the links:_ the Game UI Database answers scripted requests with a
+  browser challenge (HTTP 403), so it is listed as "open it in a browser".
+
 ## Numbers so far
 
 |                                          |                                                            |

@@ -489,6 +489,38 @@ calls per task before reaching the right page, add an `index` configuration: `cl
 25 lines, one per page, written by the pack step and placed by `blip init`. Measure it against
 `cli` on lookups before the first write, turns and cost.
 
+## Decisions of 2026-11-22: forms and navigation
+
+Taken by the user after the design review of `TextField` and the research in
+[`research/forms-and-navigation.md`](research/forms-and-navigation.md); the tasks are in
+[`tasks/README.md`](tasks/README.md#forms-and-navigation).
+
+- **Menu or form.** A window is a menu (`Picker`; the window's title names the list) or a form (separate controls). No `Picker` in a form window; a list beside a form gets its own window or step.
+- **One choice control.** `Switch` is dropped; the standalone stepper is the one choice control in forms (On and Off included); `PickerSetting` stays for menus.
+- **Form keys.** For all form controls: Up and Down move between rows (wrap at the ends), Left and Right change the value (Space and Enter also flip a two-valued one), Enter submits or presses, Esc leaves a field or goes back; Tab keeps working unchanged. A many-valued stepper is a slider taking Left and Right only. Landing on the nearest button when moving down onto a button row is accepted for now.
+- **`Field`.** A component owns placement (label column on the wide stage through `Content`'s `--bui-label-width`, stacked on the tall), label, description, error and the characters-left count; its child renders the control. All form controls' labels go through it.
+- **Pattern names.** Patterns are named for the pattern (a form window, pick then edit, a filtered list, an options screen), not the concrete screen they were mocked as.
+- **Gaps.** The gaps found are closed, as tasks. Gamepad support is not now: Q18.
+
+### Q18. Gamepad support
+
+A controller is how the genre's players expect to play, and Xbox guideline 112 asks for menus to
+be fully usable by directional input. Blip takes keys only; a gamepad is not now.
+
+The Gamepad API reports button state and does not move focus or scroll
+([MDN](https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API)), so a
+game has to poll it. Standard mapping: the d-pad is buttons 12 to 15, A is 0, B is 1.
+
+Decided 2026-11-22: no controller key hints. If a bridge comes, legends keep naming keys.
+
+**Effort estimate.** Two parts of very different size:
+
+- **A polling bridge**, small (about a day with its tests): poll `navigator.getGamepads()` each frame, turn a d-pad or stick press into the same key events the key layer already handles (Up, Down, Left, Right, A as Enter, B as Esc), with a repeat delay. It works with `form-navigation` and `picker-key-scope` unchanged because both read the key layer.
+- **Controller-glyph prompts in legends**, the larger part (several days): the legend names keys today (`↑↓ choose · Enter pick`); with a pad it must name its buttons, which differ by controller, so it needs glyphs (pixel art, so assets, though the kit has none), a way to know which input the player used last, and a switch back when the keyboard is touched.
+
+**Recommendation.** Decide after the form tasks ship. Build the bridge first (it makes every
+menu playable on a pad), and the glyphs only if a game asks for them.
+
 ## Smaller things, settled from the code
 
 No answer needed unless you disagree. Each is in a task.

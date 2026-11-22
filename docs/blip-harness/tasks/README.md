@@ -86,6 +86,61 @@ have something to fire on, or because a pattern or what exists is enough:
 - **Pause menu as a pattern** (1): 6 of 6 composed it correctly; the `patterns` task writes it down
 - **Text entry** (1, only if asked): drafted as [`text-field`](text-field.md). **Grid of choices**, **Floating numbers**, **Saving indicator** (0 tasks): no run reached for them
 
+## Forms and navigation
+
+Decided 2026-11-22 after the design review of `TextField` (#215) and a research round on text
+entry, labels, menus, switches and keyboard navigation in game UIs
+([`research/forms-and-navigation.md`](../research/forms-and-navigation.md)). All are `todo`, each
+one pull request into `blip-harness`, and none changes the eval's six tasks; take a new baseline
+once they ship. Steps N1 to N5 follow the same rule as A to M: tasks in one row can run in
+parallel, a row starts when the rows it needs are merged.
+
+**Decisions.**
+
+- A window is a **menu** (`Picker`: actions and navigation; the window's title names the list) or a **form** (separate controls). No `Picker` in a form window; a list beside a form gets its own window or step.
+- `Switch` is dropped. The standalone stepper is the one choice control in forms, On and Off included. `PickerSetting` stays for menus.
+- Form keys, for all form controls: Up and Down move between rows (wrap at the ends), Left and Right change the value (Space and Enter also flip a two-valued one), Enter submits or presses, Esc leaves a field or goes back. Tab is unchanged for browsers and screen readers. A many-valued stepper is a slider taking Left and Right only. Landing on the nearest button when moving down onto a button row is accepted for now.
+- A `Field` component owns placement (label column on the wide stage, stacked on the tall), label, description, error and the characters-left count; its child renders the control. All form controls' labels go through it.
+- Patterns are named for the pattern, not the screen: a form window, pick then edit, a filtered list, an options screen.
+- The gaps found are closed, as the tasks below. Gamepad support is not now, and there are no controller key hints: [Q18](../open-questions.md#q18-gamepad-support).
+- A form window is a `Form` component: the design system moves focus by Up and Down for its users, nobody hooks keys up.
+- Search over a list is its own step (a form window), like naming in pick then edit.
+- The decisions reach the agents that use Blip: every task here updates its control's page and rules sidecar, so `blip docs` and `blip rules` serve them, and [`menus-and-forms-guide`](menus-and-forms-guide.md) ships the overview. `building-components.mdx` is for building the kit and does not ship.
+
+| Step | Tasks                                                                                                                                                                                                     | Needs                                                                                                                                                                          |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| N1   | [`picker-key-scope`](picker-key-scope.md), [`focus-style`](focus-style.md), [`content-rhythm`](content-rhythm.md), [`divider`](divider.md), [`window-scroll`](window-scroll.md)                           | nothing new (`divider` and `window-scroll` as before)                                                                                                                          |
+| N2   | [`field`](field.md), [`menu-title`](menu-title.md), [`columns`](columns.md), [`window-layout`](window-layout.md), [`list-position`](list-position.md)                                                     | `field`: `content-rhythm`, `focus-style`; `menu-title`, `list-position`: `picker-key-scope`; `columns`: `picker-item-parts`; `window-layout`: `screen-layout`, `window-scroll` |
+| N3   | [`stepper`](stepper.md), [`back-action`](back-action.md)                                                                                                                                                  | `stepper`: `field`, `focus-style`; `back-action`: `menu-title`                                                                                                                 |
+| N4   | [`form-navigation`](form-navigation.md), then [`menus-and-forms-guide`](menus-and-forms-guide.md)                                                                                                         | `stepper`, `field`, `picker-key-scope`                                                                                                                                         |
+| N5   | [`pattern-form-window`](pattern-form-window.md), then [`pattern-pick-then-edit`](pattern-pick-then-edit.md); [`pattern-filtered-list`](pattern-filtered-list.md); [`pattern-options`](pattern-options.md) | see each: the components it uses, and `patterns` (step G)                                                                                                                      |
+
+| Task                                                  | One line                                                                                                         |
+| ----------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| [`picker-key-scope`](picker-key-scope.md)             | A Picker takes keys only for the menu the player is in (the Storybook bug: any Picker took Up and Down globally) |
+| [`focus-style`](focus-style.md)                       | One focus look per control, built on the gold, passing WCAG 2.4.7 and 1.4.11, noting 2.4.13                      |
+| [`content-rhythm`](content-rhythm.md)                 | `Content` sets the row gap, so patterns write no grid (kept its own task, not folded into `field`)               |
+| [`field`](field.md)                                   | Label, description, error and count for any control; `TextField` rebuilt on it; fixes the phone's ragged rows    |
+| [`menu-title`](menu-title.md)                         | The menu-or-form rule; the window title names the menu                                                           |
+| [`columns`](columns.md)                               | Column headers and columned rows for lists such as wares                                                         |
+| [`window-layout`](window-layout.md)                   | Windows side by side on the wide stage, stacked on the tall                                                      |
+| [`list-position`](list-position.md)                   | "2 of 5" for a list                                                                                              |
+| [`stepper`](stepper.md)                               | The one choice control in a form; removes `Switch`                                                               |
+| [`back-action`](back-action.md)                       | Back as a `PickerItem` in menus, a `Button` in forms: one rule                                                   |
+| [`form-navigation`](form-navigation.md)               | A `Form` moves between its rows by Up and Down and changes values by Left and Right; Tab unchanged               |
+| [`menus-and-forms-guide`](menus-and-forms-guide.md)   | A shipped page and rules, so `blip docs` and `blip rules` tell a game's agent about menus, forms and keys        |
+| [`pattern-form-window`](pattern-form-window.md)       | Reference pattern: a form window                                                                                 |
+| [`pattern-pick-then-edit`](pattern-pick-then-edit.md) | Reference pattern: pick an item in a menu, edit it in a form                                                     |
+| [`pattern-filtered-list`](pattern-filtered-list.md)   | Reference pattern: a list with columns, a filter, a position and scrolling                                       |
+| [`pattern-options`](pattern-options.md)               | Reference pattern: an options screen                                                                             |
+
+The pattern tasks are meant to be good enough for an agent to copy: built only from components,
+every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model
+tested, and reviewed by the user before they merge.
+
+[`switch`](switch.md) is superseded (done, then removed by `stepper`); [`text-field`](text-field.md)
+is reworked by `field`.
+
 ## Working on a task
 
 - Start the session with the task's file (`@docs/blip-harness/tasks/<handle>.md`)
