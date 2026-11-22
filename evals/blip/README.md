@@ -379,3 +379,68 @@ Playwright image's on Linux).
   per run, wide and on a phone, medians over the runs of a task. Their detail is in
   `summary.md`, "Rendered pages to look at"
 - Not covered: baselines or comparisons, and anything past the first screen of a URL (no input is sent)
+
+## Judging
+
+`node evals/blip/collect.mjs --label <label> --judge` adds layer 3 (spec 3.5, Q14): an LLM answers
+each rubric statement of each complete run. It **spends the Claude subscription** (an estimate of
+$0.03 a question on `claude-opus-5-5`, about $6 for day zero's 198 statements), so it only runs
+with `--judge`. Options: `--judge-model` (default `claude-opus-5-5`, Q14), `--judge-parallel n`
+(default 2), `--judge-max-usd n` (default 15: stops and says so when the estimate passes it).
+
+- **The prompt** is `judge.md`. One question per statement, from the one source its `from` names:
+  `diff` gets the ticket, the claim, its `note` and the diff of `src/` since the run's first commit
+  (the files the agent added included), `screenshot` gets the ticket, the claim and the one
+  screenshot its `screenshot` names, and no diff. `url` and `unstated` are for the human reader
+  and never sent. The judge answers `{"verdict": "pass" | "fail", "evidence": "..."}`, checked
+  against that schema; an invalid answer is asked for once more, then recorded as a judge error
+  (`verdict: "error"`, not counted as a pass or a fail). Results are keyed `<task>/<id>`
+- **Blind.** The judge sees nothing of the run's folder or its path, `.blip/`, `CLAUDE.md`, the
+  configuration or the label: it is started in an empty temporary folder (with the screenshot
+  copied in as `screenshot.png`), the diff is `src/` only, and anything in it that names those
+  (`.blip`, `CLAUDE.md`, `blip.config`, `no-cli` and the label as words; a ticket, claim or note that names one is refused) is
+  replaced by `[removed]` and the answer marked `redacted`. `judge.test.mjs` checks all of this
+- **Invoked like a run** (`lib/judge.mjs`): headless Claude Code on the subscription, the env
+  allowlist of `run-lib.mjs`, `--setting-sources project`, `claudeMdExcludes` for `~/.claude`'s
+  memory, `--strict-mcp-config`, `--disable-slash-commands`, its own short system prompt, and the
+  `init` event's `apiKeySource` must be `none`. A diff question gets no tools; a screenshot
+  question gets `Read` only. `BLIP_EVAL_CLAUDE` names another executable (the tests' stand-in)
+- **Cached** in `<cache>/<label>/.judge/<run>/<statement>.json`, keyed by the prompt, model and
+  exact input: collecting again costs nothing, changing a statement, the prompt or the model
+  asks again, an error is never cached
+- **Screenshots** are the rendered pass's (`<cache>/<label>/.screenshots/<config>/<run dir>/<url id>@wide|phone.png`,
+  "The rendered pass"); `lib/screenshots.mjs` is the one place that knows the path, shared with
+  `rendered.mjs`. The statement's `screenshot` names the viewport; a bare url id is taken as wide. A
+  `--judge` collect renders first, so the pictures are there. A statement with no screenshot is `skipped`
+  with its reason: listed, left out of every share, never failed
+- **In the results**: `runs[].judge` (model, estimated cost, counts of `stated` and `unstated`
+  statements by `pass`, `fail`, `error`, `skipped`, and each statement with its evidence), and
+  `judge` at the top (prompt hash, models, total cost). Measure 3 is the share of answered stated
+  statements passed, the unstated ones as a measure of their own. `summary.md` has a "Rubric (the
+  judge)" section: counts by task, judge errors, and **every failed statement with the judge's
+  evidence**, the unstated ones apart, for reading
+
+### Hand labels: does the judge agree with me?
+
+Before the judge's numbers mean anything, it is checked against statements labelled by hand:
+at least nine in ten must agree (eval-judge's first criterion); a statement it and the labeller
+disagree on is rewritten in `eval-tasks`. `labels/<task>.json` holds the run to label for each
+task (the third smallest `src/` diff of its six day-zero runs: not the barely-anything one, not
+the outlier, and it lands on three runs of each configuration), every statement with its text, its
+`note` and where to look, and `"pass": null`.
+
+1. `node evals/blip/labels.mjs show <task>` prints the ticket's path and the run's diff of `src/`
+   (new files included). For a `screenshot` statement open the named screenshot,
+   `~/.cache/blip-eval/<label>/.screenshots/<run>/<name>.png` (written by every collect that renders)
+2. Read the claim literally, as the judge does, and set `pass` to `true` or `false` in
+   `labels/<task>.json`. Answer from the diff or the screenshot only, without the judge's
+   answers: they are in `labels/judge/` and stay unopened until you are done
+3. `node evals/blip/labels.mjs compare` prints the agreement and every disagreement with the
+   judge's evidence, and which statements are not labelled or not judged yet. Screenshot
+   statements are compared once `node evals/blip/labels.mjs judge` has been run again after a collect has rendered them (the answers already given are cached, only the new ones cost)
+
+`labels.mjs judge` asks the judge about the labelled runs only and writes its answers apart, to
+`labels/judge/<task>.json` (git-ignored, so they are not in the pull request for you to see first; the answers
+are in the label's `.judge/` cache, run `labels.mjs judge` once to write the files, it costs nothing then).
+`compare` only says "met" when every statement is labelled and judged.
+`labels.mjs init --force` picks the runs again and **overwrites the labels**.

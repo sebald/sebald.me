@@ -21,7 +21,19 @@ const median = values => {
 const round = n => Number(n.toFixed(4));
 
 /**
- * Measures of spec 3.6 that exist so far (1, 5, 6, 7). `share` ones are a
+ * The share of a run's statements (`stated` or `unstated`) the judge passed,
+ * out of those it answered (errors and skipped ones are not answers); null
+ * without a judge or without such an answer
+ */
+const rubricShare = (run, kind) => {
+  const counts = run.judge?.[kind];
+  if (!counts) return null;
+  const answered = counts.pass + counts.fail;
+  return answered === 0 ? null : (100 * counts.pass) / answered;
+};
+
+/**
+ * Measures of spec 3.6 that exist so far (1, 3, 5, 6, 7). `share` ones are a
  * yes or no per run, reported as a fraction; the others as median and spread.
  * `of` picks the runs the measure is defined for
  */
@@ -40,6 +52,20 @@ export const MEASURES = [
     label: 'tsc errors left',
     of: run => run.tree.tsc.ran,
     value: run => run.tree.tsc.errors,
+  },
+  {
+    id: 'rubricStated',
+    group: '3. It does the job',
+    label: 'stated rubric statements passed (%)',
+    of: run => rubricShare(run, 'stated') !== null,
+    value: run => rubricShare(run, 'stated'),
+  },
+  {
+    id: 'rubricUnstated',
+    group: '3. It does the job',
+    label: 'unstated rubric statements passed (%, reported on their own)',
+    of: run => rubricShare(run, 'unstated') !== null,
+    value: run => rubricShare(run, 'unstated'),
   },
   {
     id: 'renders',

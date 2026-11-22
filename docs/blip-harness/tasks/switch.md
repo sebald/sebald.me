@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: D+ # common component: accept, change or cut
 depends: [rule-format, manifest-props, examples-and-patterns]
-pr:
+pr: https://github.com/sebald/sebald.me/pull/216
 ---
 
 # `switch`: Turn an option on or off
@@ -47,3 +47,26 @@ Take a new baseline once it ships.
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+- **Decision: its own component, `Switch`, on `@base-ui/react/switch`.** A `Setting` variant could
+  not wrap the same primitive: `Setting` is a presentational span with no focus, no role and no
+  keys (`PickerSetting` supplies them in a Picker), while a switch is a focusable control with the
+  `switch` role, `aria-checked`, Enter/Space/tap and a form value, which is new behaviour in the
+  sense of `building-components.mdx`. A two-value menu row stays a `PickerSetting`; the page and
+  the rules (`C-SWITCH-1`, `C-SWITCH-2`, `when-not: setting, picker`) say so.
+- API: `checked` / `defaultChecked` / `onCheckedChange(checked)`, `disabled`, `name`, `children`
+  (the name), `className`. No `variant` or `size`: one look until a screen needs another.
+- Left and Right both flip it (as they step a two-value `Setting`, which goes round), through an
+  `onKeyDown` on the root. `focusTakes` in `key-layer.ts` now lists `switch` as a row widget, so a
+  screen's `useKeys` or a Picker does not also hear the arrows while a Switch has the focus.
+- A change plays `move` (a value stepped), checked with a provider in a throwaway story: tap,
+  Left, Enter and Space each played it once.
+- The state in words (`On`/`Off`) is drawn from the root's `data-checked` with CSS, so it follows a
+  controlled or uncontrolled switch; it is `aria-hidden`, `aria-checked` says it to assistive tech.
+- `cli/build/sidecar.test.ts` took a hard-coded page list; it now reads the `.mdx` pages, so a new
+  component's sidecar needs no edit there (parallel component PRs would otherwise collide).
+- `blip search toggle`: `switch` is second, after `icon-button` (its text says toggle more often);
+  `checkbox` and `on off switch` land on it first.
+- `pnpm test:game` needs port 3000 free; it was taken, so it ran with `GAME_PORT=3107`.
+- Needs baselines (not taken, the user decides): `components-switch--default`,
+  `components-switch--overview`, `components-switch--music`.

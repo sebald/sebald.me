@@ -62,6 +62,7 @@ const WIDGETS: Record<string, 'row' | 'column' | 'both'> = {
   menu: 'column',
   radiogroup: 'both',
   slider: 'both',
+  switch: 'row',
   grid: 'both',
 };
 const SELECTOR = Object.keys(WIDGETS)
@@ -79,6 +80,12 @@ export const focusTakes = (event: KeyboardEvent) => {
   const target = event.target as HTMLElement | null;
   if (!target?.closest) return false;
   if (target.closest('input,textarea,select,[contenteditable=true]'))
+    return true;
+  // A focused switch flips on Enter and Space itself
+  if (
+    (event.key === 'Enter' || event.key === ' ') &&
+    target.closest('[role=switch]')
+  )
     return true;
   const widget = target.closest<HTMLElement>(SELECTOR);
   if (!widget) return false;

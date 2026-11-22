@@ -1,0 +1,80 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as SwitchStories from './switch.stories';
+
+<Meta of={SwitchStories} />
+
+# Switch
+
+A toggle switch, the checkbox of a menu: one option that is on or off
+(Music, Hints, Screen shake). It shows its name, a track with a square at one end, and the state in words
+(On, Off), and a tap, Left, Right, Enter or Space flips it. Built on Base
+UI's Switch (the switch role, `aria-checked`, the form value).
+
+<Canvas of={SwitchStories.Default} />
+<Controls of={SwitchStories.Default} />
+
+```tsx
+<Switch checked={music} onCheckedChange={setMusic}>
+  Music
+</Switch>
+```
+
+## A toggle of its own, not a Setting
+
+A `Setting` only shows a value between arrows and has no keys; a toggle
+switch is a focusable control with the `switch` role, `aria-checked`, Enter,
+Space and tap, and a form value: new behaviour, and the primitive Base UI
+already provides. A menu row of two values inside a Picker stays a
+`PickerSetting`. A Switch inside a Picker is not for the Picker's keys:
+place it outside, where it has the focus.
+
+## Anatomy
+
+1. **Name**, the children: the option, which is also what a screen reader
+   reads
+2. **Track**, a slot with a frame that lights when on
+3. **Thumb**, a square that moves from one end to the other
+4. **State**, On or Off, in words, so the state never rests on colour
+
+<Canvas of={SwitchStories.Overview} />
+
+## Usage
+
+Every toggle works the same: the state is data on the root (`data-checked`), which the styles read, so a
+switch controlled by the caller (`checked`) and one that keeps its own
+(`defaultChecked`) look the same. The thumb moves with a short transition
+and snaps under reduced motion. A change plays the `move` sound through
+`useFeedback()`, like a value stepping.
+
+<Canvas of={SwitchStories.Music} />
+
+<Rules for="switch" />
+
+## Motion
+
+The thumb, its colour and the track's frame change together in 150 ms on
+`ease-bui-out`: a switch answers a tap, so it starts fast and settles, and
+it is interrupted cleanly when tapped again. The thumb moves by `translate`
+of six stage pixels, which comes to whole device pixels at every scale
+(measured at 2.25x, 3x and a phone's 1.256x, at 1x and 2x device pixels), so
+at rest its edges are as sharp as with `left`; only mid-move does a partial
+pixel show. There is no press scale: it would blur the pixel art. On and Off
+change at once, as list navigation does. Under reduced motion the thumb
+snaps and the colours still fade.
+
+## Input
+
+- A tap anywhere on the row, Enter and Space flip it
+- Left and Right flip it too, as the arrows step a two-value Setting; the
+  screen's own keys do not also hear them while it has the focus
+- A disabled switch ignores all of them
+
+## Accessibility
+
+- `role="switch"` with `aria-checked`, named by its children; the On and Off
+  words are hidden from assistive technology as `aria-checked` says the
+  same
+- Takes the focus and shows the kit's focus ring from the keyboard
+- A touch screen gets a row at least 44 CSS pixels high
