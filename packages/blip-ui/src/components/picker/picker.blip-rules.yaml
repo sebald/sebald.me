@@ -1,0 +1,8 @@
+page: picker
+rules:
+  - id: C-PICKER-1
+    text: Leave `active` on for every Picker of a screen. Pickers on one layer share the keys by themselves, the one the player last clicked or focused having them (the first until then); a Dialog over them is a layer of its own.
+    markers: [review]
+  - id: C-PICKER-2
+    text: Put a second menu that must work at the same time in its own Window, so a click or the focus can hand the keys over; one that must not listen yet gets `active={false}`.
+    markers: [review]

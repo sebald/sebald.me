@@ -1,5 +1,6 @@
 import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
 
+import { Rules } from '../../../.storybook/blocks';
 import * as PickerStories from './picker.stories';
 
 <Meta of={PickerStories} />
@@ -7,8 +8,8 @@ import * as PickerStories from './picker.stories';
 # Picker
 
 A list the player moves through with a cursor: the title menu, options,
-the choices in a duel. It is always open and always listening, so one
-picker at a time is `active`. Lists of choices are a Picker, not a column
+the choices in a duel. It is always open and always listening, and
+with several on a layer it listens for the one the player is in. Lists of choices are a Picker, not a column
 of buttons. It is built from its parts, so the JSX reads like the menu:
 
 ```tsx
@@ -67,14 +68,23 @@ shows the rail.
 
 <Canvas of={PickerStories.ScrollingList} />
 
+Menus side by side share the keys: the one the player last clicked or
+focused has them.
+
+<Canvas of={PickerStories.TwoMenus} />
+
 ## Usage
 
 - **Do** put a picker in a Window, with a Legend that names the keys.
 - **Do** keep a disabled item in the list and say why in its note.
 - **Don't** hide what is not available. Nothing in a menu is hidden.
-- **Don't** have two active pickers on one layer. One in a `Dialog` (or
-  a `Confirm`) is on a layer of its own: the menu under it hears no keys
-  until it closes, without turning its `active` off.
+- **Don't** switch a picker off for a `Dialog` (or a `Confirm`) over it.
+  A dialog is a layer of its own: the menu under it hears no keys until
+  it closes, without turning its `active` off.
+- **Do** put each menu of a screen in its own Window. Pickers on one layer
+  share the keys by themselves (see Input).
+
+<Rules for="picker" />
 
 ## The description box
 
@@ -86,6 +96,11 @@ layout it goes under the window, as wide as it.
 
 ## Input
 
+- With several pickers on one layer, the keys go to one: the one the
+  player last clicked or moved the focus into, and until then the first
+  on the page. A screen with one menu needs no click. A click or the focus
+  on another hands the keys over, and a picker that goes away hands them
+  back. A `Dialog` is a layer of its own, with its own pick of the keys
 - Up and down, or W and S, move; the list wraps
 - Left and right, or A and D, step a `PickerSetting`
 - Enter or Space picks the current item

@@ -8,6 +8,7 @@ import {
   useEffectEvent,
   useLayoutEffect,
   useState,
+  type RefObject,
 } from 'react';
 
 /**
@@ -47,6 +48,73 @@ export const useKeyLayer = (open: boolean) => {
     };
   }, [open, layer]);
   return layer;
+};
+
+/**
+ * The menus listening on one layer, in the order they mounted, and the
+ * one the player last pointed at or focused within
+ */
+interface Scope {
+  members: HTMLElement[];
+  claimed: HTMLElement | null;
+}
+const scopes = new Map<symbol | null, Scope>();
+
+/** `Node.DOCUMENT_POSITION_FOLLOWING`, which is not there outside a page */
+const FOLLOWING = 4;
+
+/** Take part in a layer's keys; the returned function leaves again */
+export const joinKeyScope = (layer: symbol | null, element: HTMLElement) => {
+  const scope = scopes.get(layer) ?? { members: [], claimed: null };
+  scopes.set(layer, scope);
+  scope.members.push(element);
+  const claim = () => {
+    scope.claimed = element;
+  };
+  element.addEventListener('pointerdown', claim, true);
+  element.addEventListener('focusin', claim);
+  return () => {
+    element.removeEventListener('pointerdown', claim, true);
+    element.removeEventListener('focusin', claim);
+    scope.members.splice(scope.members.indexOf(element), 1);
+    if (scope.claimed === element) scope.claimed = null;
+    if (!scope.members.length) scopes.delete(layer);
+  };
+};
+
+/** Whether the keys on a layer are this element's right now */
+export const holdsKeys = (layer: symbol | null, element: HTMLElement) => {
+  const scope = scopes.get(layer);
+  if (!scope) return false;
+  // Members mount in render order, which is not always the page's
+  const [first] = [...scope.members].sort((a, b) =>
+    a.compareDocumentPosition(b) & FOLLOWING ? -1 : 1,
+  );
+  return (scope.claimed ?? first) === element;
+};
+
+/**
+ * Whether the keys on a layer are this part's, for parts that take
+ * navigation keys (a menu) and may share a layer with others. The keys
+ * go to the one the player last pressed on or moved the focus into; until
+ * the player has done either, to the first of them on the page, so a
+ * screen with one menu works with no click. A check for the moment a key
+ * comes in. Only while `active`; the part's own `ref` is its edge.
+ */
+export const useKeyScope = (
+  ref: RefObject<HTMLElement | null>,
+  active = true,
+) => {
+  const layer = useContext(KeyLayerContext);
+  useEffect(() => {
+    const element = ref.current;
+    if (!active || !element) return;
+    return joinKeyScope(layer, element);
+  }, [ref, active, layer]);
+  return useCallback(() => {
+    const element = ref.current;
+    return element ? holdsKeys(layer, element) : false;
+  }, [ref, layer]);
 };
 
 /** The keys a focused widget moves along a row with, and down a column */

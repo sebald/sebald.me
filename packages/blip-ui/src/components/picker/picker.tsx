@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useKeydown } from '../../hooks/key-layer';
+import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
@@ -174,8 +174,9 @@ export interface PickerProps {
   /** The item the cursor is on at first, by id; the first enabled one by default */
   initial?: string;
   /**
-   * Keyboard handling on (one menu at a time on a layer; a `Dialog` over
-   * it takes the keys by itself)
+   * Keyboard handling on. With several on one layer the keys go to the
+   * one the player last clicked or focused (the first until then); a
+   * `Dialog` over it takes the keys by itself
    * @default true
    */
   active?: boolean;
@@ -205,6 +206,8 @@ export const Picker = ({
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const hasKeys = useKeyScope(rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
@@ -232,6 +235,8 @@ export const Picker = ({
   const pick = (entry: Entry) => choose(entry, play);
 
   useKeydown(event => {
+    // Another menu on this layer has the keys
+    if (!hasKeys()) return;
     const move = (step: number) => {
       const ids = order();
       if (!ids.length) return;
@@ -285,7 +290,7 @@ export const Picker = ({
         listRef,
       }}
     >
-      <div data-slot="picker" className={styles.root()}>
+      <div ref={rootRef} data-slot="picker" className={styles.root()}>
         <ul
           ref={listRef}
           className={styles.menu({ className })}

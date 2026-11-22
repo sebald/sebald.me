@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { InAWindow as InAWindowExample } from './examples/in-a-window';
 import { ScrollingList as ScrollingListExample } from './examples/scrolling-list';
+import { TwoMenus as TwoMenusExample } from './examples/two-menus';
 import { Picker, PickerItem } from './picker';
 
 const noop = () => {};
@@ -119,4 +120,14 @@ export const ScrollingList: Story = {
   parameters: { controls: { disable: true } },
   // Upright the window spans the stage and shows more rows
   render: () => <ScrollingListExample />,
+};
+
+/**
+ * Two menus on one screen: Up and Down move the one the player clicked
+ * or focused, the first until then; clicking the other hands the keys over
+ */
+export const TwoMenus: Story = {
+  name: 'Two menus',
+  parameters: { controls: { disable: true } },
+  render: () => <TwoMenusExample />,
 };
