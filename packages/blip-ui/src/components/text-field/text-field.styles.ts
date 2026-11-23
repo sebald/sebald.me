@@ -39,10 +39,9 @@ export const textField = {
       // then lets nothing be typed
       'm-0 w-full min-w-0 select-text appearance-none rounded-none border-0 outline-none',
       'bg-(--bui-ink) font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
-      'px-[calc(var(--bui-px)*4)] py-[calc(var(--bui-px)*3)]',
-      // A default `Button`'s height (44 CSS pixels and its ink line), so a
-      // field and a button in one row are one height
-      'min-h-[calc(--spacing(11)+var(--bui-px)*2)]',
+      // Low, a line of text with two pixels above and below: not a
+      // Button's height, which made it read as a second window
+      'px-[calc(var(--bui-px)*4)] py-[calc(var(--bui-px)*2)]',
       // The underline (`--ul`: its colour, `--ul-n`: how many pixels
       // thick), inside the box so nothing moves between states. It is the
       // only edge and all the state shows: focus and invalid turn it, no
