@@ -21,9 +21,10 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 /**
- * A pixel button, for the actions a screen offers outside its menus:
- * stepped corners like the windows', `primary` for the main action,
- * `secondary` beside it and `destructive` for what can't be undone.
+ * A pixel button, for the actions a screen offers outside its menus: a
+ * key with stepped corners like the windows', `primary` for the main
+ * action, `secondary` beside it and `destructive` for what can't be undone.
+ * Focused, the menus' cursor points at it from the left.
  * Sized in the stage's pixel (`--px`), never finer than 3 CSS pixels.
  */
 export const Button = ({
@@ -33,31 +34,26 @@ export const Button = ({
   style,
   children,
   ...props
-}: ButtonProps) => {
-  // The outline's face rounds its own corners a step in, or it would
-  // square the frame's
-  const framed = variant === 'secondary';
-  return (
-    <button
-      type="button"
-      data-slot="button"
-      className={button.root({ variant, size, className })}
-      style={{ clipPath: rounded(CORNERS[0], '--b-px'), ...style }}
-      {...props}
+}: ButtonProps) => (
+  <button
+    type="button"
+    data-slot="button"
+    className={button.root({ variant, size, className })}
+    style={style}
+    {...props}
+  >
+    {/* The ink and the key in spans: the button itself is not clipped, so
+        the focus cursor beside it shows */}
+    <span
+      className={button.ink()}
+      style={{ clipPath: rounded(CORNERS[0], '--b-px') }}
     >
       <span
-        className={button.ring()}
+        className={button.face()}
         style={{ clipPath: rounded(CORNERS[1], '--b-px') }}
       >
-        <span
-          className={button.face()}
-          style={
-            framed ? { clipPath: rounded(CORNERS[2], '--b-px') } : undefined
-          }
-        >
-          {children}
-        </span>
+        {children}
       </span>
-    </button>
-  );
-};
+    </span>
+  </button>
+);

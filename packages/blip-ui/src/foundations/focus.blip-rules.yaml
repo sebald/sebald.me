@@ -1,7 +1,7 @@
 page: focus
 rules:
   - id: C-FOCUS-1
-    text: Leave a control's focus mark to the kit (bui-focus, bui-focus-line, a field's underline, a Picker's cursor); add no outline, ring, fill or colour of your own for focus.
+    text: Leave a control's focus mark to the kit (bui-focus, bui-focus-line, a field's underline, the cursor of a Picker row or a Button); add no outline, ring, fill or colour of your own for focus.
     source: a mark outside the box made a focused field look much larger than the rest (design review of TextField)
     markers: [review]
   - id: A-FOCUS-1

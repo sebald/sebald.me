@@ -188,12 +188,16 @@ piece of art glides on purpose, its comment says why.
 One mark for "you are here", in the primary colour, and a table of each
 control's look and its ratios (`foundations/focus.mdx`).
 
-- **Inside the box, never outside.** A focused control is exactly as big as
-  an unfocused one: `bui-focus` is an outline one `--bui-px` thick with a
-  negative offset (a frame inside the edge), `bui-focus-line` an underline
-  of the label, a field's underline gets thicker, a `Picker` row shows its
-  cursor. No outline with a positive offset, no ring that adds a pixel, no
-  fill that lifts.
+- **Nothing grows.** A focused control is exactly as big as an unfocused
+  one: `bui-focus` is an outline one `--bui-px` thick with a negative
+  offset (a frame inside the edge), `bui-focus-line` an underline of the
+  label, a field's underline gets thicker, a `Picker` row and a `Button`
+  show the cursor, in room the layout leaves for it (a row's cursor
+  column, `Actions`). No outline with a positive offset, no ring that adds
+  a pixel, no fill that lifts.
+- **One mark whatever the fill.** A control that comes in several colours
+  (`Button`'s variants) takes a mark outside its face, the cursor, not one
+  per colour: that is how games mark a selected button.
 - **Primary, or its inverse.** The mark is the primary colour (3:1 against
   the window, WCAG 1.4.11). Where the control's own face is the primary
   colour (the key), the mark is the letters' colour on it

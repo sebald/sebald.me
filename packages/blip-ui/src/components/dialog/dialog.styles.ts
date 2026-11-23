@@ -7,8 +7,9 @@ export const dialog = {
     base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-(--bui-layer-dialog) flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
   }),
   popup: cva({
-    // What can be done, centred under what it says
-    base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center',
+    // What can be done, centred under what it says: no cursor column
+    // then, the room either side holds the first button's cursor
+    base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:pl-0',
     variants: {
       size: {
         /** A question, a few settings */

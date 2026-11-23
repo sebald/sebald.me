@@ -209,9 +209,8 @@ const FOCUS_ALLOWED: Record<string, string> = {
   'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
     'underline',
   'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
-  // The frame button's own line turns primary
-  'button/button.styles.ts focus-visible:[--b-ring:var(--bui-primary)]':
-    'frame',
+  // A button's cursor, left of it, shows: the menus' mark, on every variant
+  'button/button.styles.ts focus-visible:before:opacity-100': 'cursor',
   // An icon button's mark sits on the ink
   'icon-button/icon-button.styles.ts bg-(--bui-ink)': 'ink',
   // A picker row's cursor shows, in the primary colour

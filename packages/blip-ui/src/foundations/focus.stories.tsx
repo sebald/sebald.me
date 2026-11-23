@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from '../components/button/button';
 import { IconButton } from '../components/icon-button/icon-button';
-import { Content } from '../components/parts/parts';
+import { Actions, Content } from '../components/parts/parts';
 import { Picker, PickerItem } from '../components/picker/picker';
 import { Switch } from '../components/switch/switch';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
@@ -36,7 +36,7 @@ export const Overview: Story = {
         <TabPanel value="controls">
           <Window>
             <Content>
-              <div className="flex flex-wrap items-center gap-[calc(var(--bui-px)*3)]">
+              <Actions>
                 <Button>Primary</Button>
                 <Button variant="secondary">Secondary</Button>
                 <Button variant="destructive">Destructive</Button>
@@ -46,7 +46,7 @@ export const Overview: Story = {
                   aria-label="Back"
                   slot="leave"
                 />
-              </div>
+              </Actions>
               <TextField defaultValue="Ada">Name</TextField>
               <TextField defaultValue="" error="Needs a name">
                 Invalid
