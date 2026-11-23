@@ -8,6 +8,8 @@ import {
   useEffectEvent,
   useLayoutEffect,
   useState,
+  useSyncExternalStore,
+  type RefObject,
 } from 'react';
 
 /**
@@ -47,6 +49,136 @@ export const useKeyLayer = (open: boolean) => {
     };
   }, [open, layer]);
   return layer;
+};
+
+/**
+ * The menus listening on one layer, in the order they mounted, and the
+ * one the player last pointed at or focused within
+ */
+interface Scope {
+  members: HTMLElement[];
+  claimed: HTMLElement | null;
+}
+/**
+ * A scope per layer and per kind of keys: a menu takes up and down, tabs
+ * left and right, and a menu inside tabs must not take them from it
+ */
+const scopes = new Map<string, Map<symbol | null, Scope>>();
+const scopeOf = (kind: string) => {
+  const found = scopes.get(kind);
+  if (found) return found;
+  const created = new Map<symbol | null, Scope>();
+  scopes.set(kind, created);
+  return created;
+};
+
+/** The kinds of keys a part can share a layer for */
+export type KeyKind = 'menu' | 'tabs';
+
+/** `Node.DOCUMENT_POSITION_FOLLOWING`, which is not there outside a page */
+const FOLLOWING = 4;
+
+/** Who to tell when the keys change hands */
+const listeners = new Set<() => void>();
+const emit = () => listeners.forEach(listener => listener());
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+};
+
+/** Take part in a layer's keys; the returned function leaves again */
+export const joinKeyScope = (
+  kind: KeyKind,
+  layer: symbol | null,
+  element: HTMLElement,
+) => {
+  const layers = scopeOf(kind);
+  const scope = layers.get(layer) ?? { members: [], claimed: null };
+  layers.set(layer, scope);
+  scope.members.push(element);
+  const claim = () => {
+    if (scope.claimed === element) return;
+    scope.claimed = element;
+    emit();
+  };
+  element.addEventListener('pointerdown', claim, true);
+  element.addEventListener('pointerenter', claim);
+  element.addEventListener('focusin', claim);
+  emit();
+  return () => {
+    element.removeEventListener('pointerdown', claim, true);
+    element.removeEventListener('pointerenter', claim);
+    element.removeEventListener('focusin', claim);
+    scope.members.splice(scope.members.indexOf(element), 1);
+    if (scope.claimed === element) scope.claimed = null;
+    if (!scope.members.length) layers.delete(layer);
+    emit();
+  };
+};
+
+/** Whether the keys on a layer are this element's right now */
+export const holdsKeys = (
+  kind: KeyKind,
+  layer: symbol | null,
+  element: HTMLElement,
+) => {
+  const scope = scopeOf(kind).get(layer);
+  if (!scope) return false;
+  // Members mount in render order, which is not always the page's
+  const [first] = [...scope.members].sort((a, b) =>
+    a.compareDocumentPosition(b) & FOLLOWING ? -1 : 1,
+  );
+  return (scope.claimed ?? first) === element;
+};
+
+/** In the scope and without the keys: another has them */
+export const restsInScope = (
+  kind: KeyKind,
+  layer: symbol | null,
+  element: HTMLElement,
+) =>
+  Boolean(scopeOf(kind).get(layer)?.members.includes(element)) &&
+  !holdsKeys(kind, layer, element);
+
+/**
+ * Whether the keys on a layer are this part's, for parts that take
+ * navigation keys (a menu) and may share a layer with others. The keys
+ * go to the one the player last pointed at, pressed on or moved the
+ * focus into; until the player has done any, to the first of them on the
+ * page, so a screen with one menu works with no click. Only while
+ * `active`; the part's own `ref` is its edge.
+ *
+ * `holds()` is the check for the moment a key comes in; `resting` is
+ * render state, true while another part on the layer has the keys, for
+ * showing this one at rest (no cursor): a menu that does not answer
+ * must not look as if it does.
+ */
+export const useKeyScope = (
+  kind: KeyKind,
+  ref: RefObject<HTMLElement | null>,
+  active = true,
+) => {
+  const layer = useContext(KeyLayerContext);
+  useLayoutEffect(() => {
+    const element = ref.current;
+    if (!active || !element) return;
+    return joinKeyScope(kind, layer, element);
+  }, [kind, ref, active, layer]);
+  const holds = useCallback(() => {
+    const element = ref.current;
+    return element ? holdsKeys(kind, layer, element) : false;
+  }, [kind, ref, layer]);
+  const resting = useSyncExternalStore(
+    subscribe,
+    () => {
+      const element = ref.current;
+      return element ? restsInScope(kind, layer, element) : false;
+    },
+    () => false,
+  );
+  return { holds, resting };
 };
 
 /** The keys a focused widget moves along a row with, and down a column */

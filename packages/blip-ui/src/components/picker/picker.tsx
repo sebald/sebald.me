@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useKeydown } from '../../hooks/key-layer';
+import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
@@ -145,6 +145,8 @@ interface PickerContextValue {
   choose: (entry: Entry) => void;
   entries: Map<string, Entry>;
   active: boolean;
+  /** Another menu on the layer has the keys: no cursor, no note */
+  resting: boolean;
   touch: boolean;
   overflow: boolean;
   scrollTop: number;
@@ -174,8 +176,9 @@ export interface PickerProps {
   /** The item the cursor is on at first, by id; the first enabled one by default */
   initial?: string;
   /**
-   * Keyboard handling on (one menu at a time on a layer; a `Dialog` over
-   * it takes the keys by itself)
+   * Keyboard handling on. With several on one layer the keys go to the
+   * one the player last clicked or focused (the first until then); a
+   * `Dialog` over it takes the keys by itself
    * @default true
    */
   active?: boolean;
@@ -205,6 +208,8 @@ export const Picker = ({
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
@@ -232,6 +237,8 @@ export const Picker = ({
   const pick = (entry: Entry) => choose(entry, play);
 
   useKeydown(event => {
+    // Another menu on this layer has the keys
+    if (!hasKeys()) return;
     const move = (step: number) => {
       const ids = order();
       if (!ids.length) return;
@@ -279,13 +286,14 @@ export const Picker = ({
         choose: pick,
         entries,
         active,
+        resting,
         touch,
         overflow,
         scrollTop: scroll.top,
         listRef,
       }}
     >
-      <div data-slot="picker" className={styles.root()}>
+      <div ref={rootRef} data-slot="picker" className={styles.root()}>
         <ul
           ref={listRef}
           className={styles.menu({ className })}
@@ -377,7 +385,8 @@ const Row = ({
       list.scrollTop = bottom - list.clientHeight;
   }, [isCurrent, picker.overflow, listRef]);
 
-  const shownNote = picker.active && isCurrent && Boolean(note);
+  const shownNote =
+    picker.active && !picker.resting && isCurrent && Boolean(note);
   // Read out as it shows, after the item's own name
   const announce = useAnnounce();
   useEffect(() => {
@@ -391,7 +400,8 @@ const Row = ({
   );
   // Under a finger there is no cursor to move, and a marked row would read
   // as chosen already: only the row a description is about is marked
-  const marked = isCurrent && (!picker.touch || Boolean(note));
+  const marked =
+    isCurrent && !picker.resting && (!picker.touch || Boolean(note));
 
   return (
     <li ref={rowRef} data-slot="picker-item" data-id={id}>
