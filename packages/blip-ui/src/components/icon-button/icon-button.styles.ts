@@ -4,9 +4,10 @@ import { cva } from '../../utils/styles';
  * The round of the controls: a corner button of the wide stage, or a
  * button on the tall stage's bar. Both at least 44 CSS pixels to touch.
  *
- * Focus is the menus' cursor, as on a `Button`, two pixels from the icon:
- * just outside the box in a corner (`Controls` leaves the room), inside its
- * left padding on the bar, where the stage's edge leaves none outside.
+ * Focus is the menus' cursor, as on a `Button`, left of the icon: in a
+ * corner one pixel into the box and two out of it (`Controls` leaves those
+ * two), on the bar inside its left padding, where the stage's edge leaves
+ * no room outside.
  */
 export const iconButton = cva({
   base: [
@@ -22,7 +23,7 @@ export const iconButton = cva({
     layout: {
       /** Icon only, in a corner of the wide stage */
       corner:
-        'p-[calc(var(--bui-px)*2)] hover:brightness-125 before:right-full',
+        'p-[calc(var(--bui-px)*2)] hover:brightness-125 before:right-[calc(100%-var(--bui-px))]',
       /** In the bar along the bottom, with its label beside the icon */
       bar: 'gap-2 px-4 text-[0.85em] whitespace-nowrap text-(--bui-muted) active:text-(--bui-text-bright) before:left-0',
     },
