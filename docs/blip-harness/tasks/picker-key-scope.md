@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: N1 # forms and navigation
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/225
 ---
 
 # `picker-key-scope`: A Picker takes keys only for the menu the player is in
@@ -33,5 +33,13 @@ pr:
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+**Mechanism.** A key scope per key layer (`useKeyScope`, `joinKeyScope`, `holdsKeys` in `key-layer.ts`). Every active `Picker` joins the scope of its layer by its root element. The keys go to the one the player last pointed at (`pointerenter`), pressed on (`pointerdown`) or moved the focus into (`focusin`); until then to the first on the page, so a game screen with one menu needs no click. A picker that goes away or turns `active` off leaves, and the keys fall back to the first. Scopes are per layer, so a `Dialog` keeps its own and still mutes the menu below. Chosen over "focus within only" (a game screen has no focus until a click) and over a global "last used" (a Dialog's picker would lose to the screen's). Users write no key code.
+
+**Game.** Unchanged: every Pushback screen has one active Picker per layer (the pause menu is in a Dialog). `pnpm test:game` passes.
+
+**Checked in Storybook (own port, Playwright).** `Two menus`: Down with no click moves the first, a click on the second hands the keys over and back. Picker docs page (8 pickers): each active one is usable after a click. `Default` works with no click. `Dialog` Default: Down moves the dialog's menu only.
+
+**Review (fresh subagent).** Fixed: hover now claims the keys (the cursor moves on hover); the page and rules say the list, not the Window, hands the keys over, that directional input alone cannot reach a second menu (follows the web; Q18), and C-PICKER-1/2 no longer contradict each other or C-DIALOG-5; changeset split. Also done after the review: the menu without the keys is at rest (no cursor, no note; `useKeyScope` gives `resting` as render state through `useSyncExternalStore`), one cursor on a screen as in a game, and a menu that is not `active` keeps its cursor (the Overview story); `Tabs` with `keys` uses the same mechanism, in a scope of its own kind (`'tabs'`, so a Picker inside tabs does not take the left and right from them). Not done: the `TwoMenus` story has baselines still to come (`pnpm vrt:blip-ui:update:ci`, to be asked first); a click on a portalled note does not claim; `useKeyScope` stays internal.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).

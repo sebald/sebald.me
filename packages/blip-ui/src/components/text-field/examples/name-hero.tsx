@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { Content } from '../../parts/parts';
+import { Actions, Content, Title } from '../../parts/parts';
 import { Picker, PickerItem } from '../../picker/picker';
-import { Heading, Text } from '../../text/text';
+import { Text } from '../../text/text';
 import { Legend, Window } from '../../window/window';
 import { TextField } from '../text-field';
 
@@ -15,8 +15,8 @@ export function NameHero() {
   const [started, setStarted] = useState(false);
   return (
     <Window>
-      <Heading>New game</Heading>
-      <Content className="mt-[calc(var(--bui-px)*3)]">
+      <Title>New game</Title>
+      <Content>
         <TextField
           maxLength={10}
           placeholder="Hero"
@@ -28,24 +28,22 @@ export function NameHero() {
         >
           Name
         </TextField>
+        {started && <Text>{name.trim()} sets out.</Text>}
       </Content>
-      <Picker label="New game" className="mt-[calc(var(--bui-px)*4)]">
-        <PickerItem
-          id="start"
-          variant="accent"
-          onSelect={() => setStarted(name.trim() !== '')}
-        >
-          Start
-        </PickerItem>
-        <PickerItem id="back" variant="back" onSelect={() => setName('')}>
-          Clear
-        </PickerItem>
-      </Picker>
-      {started && (
-        <Text className="mt-[calc(var(--bui-px)*3)]">
-          {name.trim()} sets out.
-        </Text>
-      )}
+      <Actions>
+        <Picker label="New game">
+          <PickerItem
+            id="start"
+            variant="accent"
+            onSelect={() => setStarted(name.trim() !== '')}
+          >
+            Start
+          </PickerItem>
+          <PickerItem id="back" variant="back" onSelect={() => setName('')}>
+            Clear
+          </PickerItem>
+        </Picker>
+      </Actions>
       <Legend
         keys={[
           ['Enter', 'take the name'],
