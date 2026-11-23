@@ -5,12 +5,14 @@ export const switchStyles = {
   root: cva({
     base: [
       'group inline-flex cursor-pointer items-center gap-[calc(var(--bui-px)*3)] text-(--bui-text-bright) outline-none',
-      'touch:min-h-11 hover:text-(--bui-text-selected) focus-visible:bui-focus',
+      'touch:min-h-11 hover:text-(--bui-text-selected)',
       'data-disabled:cursor-default data-disabled:bui-disabled data-disabled:hover:text-(--bui-text-bright)',
     ],
   }),
   /** The name, as wide as the container's label column when it has one (`--bui-label-width`) */
-  name: cva({ base: 'w-(--bui-label-width,auto) shrink-0' }),
+  name: cva({
+    base: 'w-(--bui-label-width,auto) shrink-0 group-focus-visible:bui-focus-line',
+  }),
   /** The slot the thumb runs in: its frame is dim, lit when on */
   track: cva({
     base: [
@@ -29,6 +31,6 @@ export const switchStyles = {
   }),
   /** On or Off, the same width either way so the row does not shift */
   state: cva({
-    base: 'inline-block w-[3ch] text-[0.85em] text-(--bui-muted) group-data-checked:text-(--bui-primary)',
+    base: 'inline-block w-[3ch] text-[0.85em] text-(--bui-muted) group-data-checked:text-(--bui-primary) group-focus-visible:bui-focus-line',
   }),
 };

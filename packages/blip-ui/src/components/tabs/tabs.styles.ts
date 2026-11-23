@@ -34,7 +34,7 @@ export const tabs = {
   }),
   tab: cva({
     base: [
-      'cursor-pointer outline-none focus-visible:bui-focus',
+      'cursor-pointer outline-none',
       'data-[disabled]:cursor-default data-[disabled]:bui-disabled',
       // The label's box clear of the rings: their height on top, and
       // beside it the rings and four pixels
@@ -62,8 +62,14 @@ export const tabs = {
   foot: cva({
     base: 'absolute bottom-0 hidden size-(--t-ring) group-data-[active]:block',
   }),
-  label: cva({ base: 'relative' }),
+  /** The focus mark is an underline of the label (`bui-focus-line`) */
+  label: cva({ base: 'relative group-focus-visible:bui-focus-line' }),
   panel: cva({
-    base: 'flex min-h-0 flex-1 flex-col outline-none focus-visible:bui-focus',
+    base: [
+      'relative flex min-h-0 flex-1 flex-col outline-none',
+      // The mark over the window's own edge: the window is the panel's
+      // child and would cover an outline of the panel's
+      'after:pointer-events-none after:absolute after:inset-0 after:content-[""] focus-visible:after:bui-focus',
+    ],
   }),
 };

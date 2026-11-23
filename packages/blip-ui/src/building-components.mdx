@@ -183,6 +183,32 @@ thumb does.
 A game's own art follows the same rule in its own stylesheet; where a
 piece of art glides on purpose, its comment says why.
 
+## Focus
+
+One mark for "you are here", in the primary colour, and a table of each
+control's look and its ratios (`foundations/focus.mdx`).
+
+- **Nothing grows.** A focused control is exactly as big as an unfocused
+  one: `bui-focus` is an outline one `--bui-px` thick with a negative
+  offset (a frame inside the edge), `bui-focus-line` an underline of the
+  label, a field's underline gets thicker, a `Picker` row and a `Button`
+  show the cursor, in room the layout leaves for it (a row's cursor
+  column, `Actions`). No outline with a positive offset, no ring that adds
+  a pixel, no fill that lifts.
+- **One mark whatever the fill.** A control that comes in several colours
+  (`Button`'s variants) takes a mark outside its face, the cursor, not one
+  per colour: that is how games mark a selected button.
+- **Primary, or its inverse.** The mark is the primary colour (3:1 against
+  the window, WCAG 1.4.11). Where the control's own face is the primary
+  colour (the key), the mark is the letters' colour on it
+  (`--bui-focus-color`).
+- **Never colour alone.** A line, a cursor or a thicker line appears where
+  there was none (WCAG 1.4.1, Xbox
+  [103](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103)),
+  and it must not rely on a hue a player may not tell apart.
+- **A new control picks its row in the table**, with its ratios, and
+  `foundations/uniformity.test.ts` fails on a focus style outside it.
+
 ## Orient on games, not only the web
 
 Web conventions answer how a control works in a browser. A game screen is

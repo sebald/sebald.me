@@ -29,8 +29,8 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 2. **The field**, ink (`--bui-ink`), darker than the window, square, with
    one underline as its only edge: one stage pixel in `--bui-dim` at rest,
    two in `--bui-primary` with the focus, one in `--bui-danger` when
-   invalid. It is a default `Button`'s height, so in one row they are the
-   same height
+   invalid. Low: a line of text with two stage pixels above and below,
+   lower than a `Button`
 3. **Description** or **error**, under the field in the field's column:
    what to type, or what is wrong, in words
 4. **Characters left**, at the end of that line when there is a
@@ -123,9 +123,9 @@ about it, not only that it is wrong.
   muted, 5.78:1 on the window
 - Focus is the underline going from one stage pixel to two (3 to 6 CSS
   pixels, as the stage's pixel is never finer than 3), dim to bright, and
-  the caret, which meets 2.4.7. This field has no `bui-focus` outline,
-  unlike the kit's other focusable parts: an outline made the focused field
-  look much larger than the rest. For 2.4.13 (AAA) the change of contrast
+  the caret, which meets 2.4.7. This is the field's form of the kit's one
+  focus mark (`foundations/focus.mdx`: primary, inside the box); an outline
+  outside it made the focused field look much larger than the rest. For 2.4.13 (AAA) the change of contrast
   passes (3.44:1); the area passes for a field wider than about 150 CSS
   pixels, whose 6 pixel line is larger than a 2 pixel line round its
   perimeter
@@ -133,6 +133,6 @@ about it, not only that it is wrong.
   whether the field is focused or not, so the caret (red, blinking) is the
   only sign of the focus. A browser that hides the caret, or a reader who
   can't see it blink, gets no focus indicator in that state: a known
-  limit of this design, short of 2.4.7 there
+  limit of this design (decided), short of 2.4.7 there
 - The error is a sentence under the field and linked to it, so red is
   never the only signal

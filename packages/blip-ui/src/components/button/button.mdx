@@ -17,15 +17,16 @@ choices are a Picker, not a column of buttons.
 
 1. **Ink**, the outline every sprite and window has, with the window's
    stepped corners (`[3, 1, 1]`)
-2. **Ring**, one step in: the key's side, or the outline's frame
-3. **Face**, with a light edge along its top on the key
+2. **Key**, one step in: the face, with a light row along its top and a
+   shade row along its bottom
+3. **Cursor**, focused only: the menus' gold pointer, left of the button
 
 ## Variants
 
 | Variant       | Looks like                                          | When to use                                                         |
 | ------------- | --------------------------------------------------- | ------------------------------------------------------------------- |
-| `primary`     | A key on its side, in the primary colour            | The one action the screen is for. One per screen                    |
-| `secondary`   | A frame in the neutral colour, filled while pressed | Beside a primary: back, options, cancel                             |
+| `primary`     | A key in the primary colour                         | The one action the screen is for. One per screen                    |
+| `secondary`   | A key a step lighter than the window, light letters | Beside a primary: back, options, cancel                             |
 | `destructive` | The key in the danger colour                        | What can't be undone: quitting a run, resetting progress. Ask first |
 
 <Canvas of={ButtonStories.Overview} />
@@ -40,6 +41,8 @@ screen can be touched.
 
 - **Do** give a screen one primary button. Pair it with a secondary for the
   way back.
+- **Do** put buttons in `Actions`: it leaves the room the focus cursor
+  needs, left of the first button and between two.
 - **Do** start the label with a verb, or name what starts: _Start_, _Retry_,
   _Play fullscreen_.
 - **Don't** use buttons for a list of choices. That's a Picker, with a
@@ -62,6 +65,13 @@ Pressed, the whole face goes a step darker with the shade along its top, and not
 ## Accessibility
 
 - A native `<button>`, `type="button"` unless set otherwise
-- The focus ring shows for the keyboard only (`:focus-visible`)
+- Focus (`foundations/focus.mdx`) shows for the keyboard only
+  (`:focus-visible`): the menus' cursor, 3 by 5 pixels in the primary
+  colour, two pixels left of the button, the same on every variant (a mark
+  on the face would change with its colour). It takes no room, so the
+  button never grows. 10.51:1 on the window; 2.4.13 (AAA) fails, as a
+  `Picker`'s cursor does: it is smaller than the button's perimeter
+- The secondary's letters are 6.44:1 on its face; the face is 1.79:1 to
+  the window, and the label is what tells it is a button
 - Disabled buttons fade and lose their colour; prefer explaining why
   something is locked next to it

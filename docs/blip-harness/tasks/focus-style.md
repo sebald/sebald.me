@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: N1 # forms and navigation
 depends: []
-pr:
+pr: https://github.com/sebald/sebald.me/pull/226
 ---
 
 # `focus-style`: One focus look per control, and it passes WCAG
@@ -35,3 +35,26 @@ pr:
 Filled in while the task is worked on: what changed, decisions, numbers.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+### Worked on 2026-11-22
+
+**Decision.** One mark: the primary colour, one `--bui-px` (3 CSS px at least) thick, inside the control's own box, so nothing is bigger focused than not. `bui-focus` is now a negative-offset outline (a frame inside the edge); `bui-focus-line` an underline; the orange `--bui-focus` token is gone. A key whose own face is primary uses its letters' colour, one pixel in (`--bui-focus-color`, `--bui-focus-inset`). The look and ratios are in `src/foundations/focus.mdx`; `uniformity.test.ts` fails on a focus style outside it and on a control missing from its table.
+
+| Control            | Mark                                                                                                                             | Contrast                                            | 2.4.13 (AAA)                     |
+| ------------------ | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------------------------- |
+| Button primary     | ink frame 1 px in from the face edge                                                                                             | ink on gold 11.55 (light row 17.10, shade row 6.02) | pass                             |
+| Button destructive | cream frame, same place                                                                                                          | cream on danger 4.17 (on the light row 2.68)        | pass                             |
+| Button secondary   | ring turns primary + 1 px primary line inside                                                                                    | gold on window 10.51, on ground 11.92               | pass                             |
+| IconButton         | primary frame at the edge on an ink fill                                                                                         | gold on ink 11.55, window 10.51                     | pass                             |
+| TextField          | underline 1 px dim to 2 px primary; invalid unchanged (1 px red, the caret is the only cue; user decision, short of 2.4.7 there) | gold on ink 11.55                                   | pass above about 150 CSS px wide |
+| Tab                | primary underline under the label                                                                                                | 11.53 on a tab, 10.51 on the open one               | fail (short line)                |
+| TabPanel           | frame over the window's edge                                                                                                     | 10.51                                               | pass                             |
+| Picker row         | the cursor, now always primary; Tab puts the cursor on the row                                                                   | 10.51                                               | fail (small)                     |
+| Switch             | underline under name and state                                                                                                   | 10.51                                               | fail                             |
+| Dialog, Confirm    | no mark on the window (keys pick); the control inside shows it; a Dialog has no close button                                     |                                                     |                                  |
+
+No links in the kit. Pushback's palette has the same values as the defaults, so the numbers hold; its `pb-focus` (orange) is removed and the select tiles and glossary tabs use `bui-focus`.
+
+**Found.** An outline on a parent is painted under an opaque child (the button's face, the window), so the button and the panel draw the mark on a pseudo-element of the face and the panel. A negative `outline-offset` measures to the outline's inner edge, so `-1` is the outermost pixel. TextField invalid and focused keeps only the caret as its cue, by the user's decision. The `Picker` cursor was white; it is primary now, so a baseline change.
+
+**Review (fresh-context subagent), answered.** Fixed: the gold-cursor fallback on a focused row is gone (Tab sets the cursor through `onFocus`), the dead `--bui-focus` in the eval template removed, docs reworded (range 4.17 to 11.92; the icon button's ink fill darkens). Left open: after Tab, the arrow keys still move the Picker's cursor while DOM focus stays on the row Tab reached, so Enter acts natively on the focused row (existed before; belongs to `picker-key-scope`); the focus tests scan only `*.styles.ts` (not Pushback, not `peer-`/`has-` variants); `bui-focus-line` shows nothing on a wrapped label; a forced-colors check of the cursor is not done; touch plus a keyboard shows no cursor on a Tabbed row.

@@ -7,7 +7,9 @@ import { cva } from '../../utils/styles';
 export const iconButton = cva({
   base: [
     'flex min-h-11 min-w-11 cursor-pointer items-center justify-center outline-none',
-    'focus-visible:bui-focus',
+    // The mark inside the box, on the ink: the stage behind a corner may
+    // be anything, so the primary line always has the ink beside it
+    'focus-visible:bui-focus focus-visible:bg-(--bui-ink)',
     'disabled:cursor-default disabled:bui-disabled',
   ],
   variants: {

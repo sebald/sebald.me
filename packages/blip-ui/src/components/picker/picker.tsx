@@ -411,6 +411,12 @@ const Row = ({
         aria-current={isCurrent ? 'true' : undefined}
         className={styles.item({ selected: marked, variant })}
         onPointerEnter={() => picker.setCurrent(id)}
+        // Tab (or any keyboard focus) puts the cursor here, so there is one
+        // cursor, not the keys' and another where the focus is
+        onFocus={event => {
+          if (event.currentTarget.matches(':focus-visible'))
+            picker.setCurrent(id);
+        }}
         onClick={() => {
           picker.setCurrent(id);
           picker.choose(entry);

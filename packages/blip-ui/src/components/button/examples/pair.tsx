@@ -1,11 +1,15 @@
+import { Actions } from '../../parts/parts';
 import { Button } from '../button';
 
-/** A screen's actions: the main one first, the quieter one beside it */
+/**
+ * A screen's actions: the main one first, the quieter one beside it, in
+ * `Actions`, which leaves room for the focus cursor between them
+ */
 export function Pair() {
   return (
-    <div className="flex flex-wrap gap-3">
+    <Actions>
       <Button>Start</Button>
       <Button variant="secondary">Back</Button>
-    </div>
+    </Actions>
   );
 }

@@ -1,0 +1,84 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as FocusStories from './focus.stories';
+
+<Meta title="Foundations/Focus" />
+
+# Focus
+
+One mark says "you are here", on every control: **the primary colour, one
+`--bui-px` thick, inside the control's own box.** A focused control is exactly
+as big as an unfocused one, so nothing jumps and nothing covers its
+neighbour. The mark takes the shape the control has: a frame for a box, an
+underline for a line of text, the cursor for a row of a menu.
+
+It shows for the keyboard only (`:focus-visible`), and in a game the keys
+and the d-pad move a cursor of their own (`Picker`), which is the same sign.
+Tab through the examples below to see each one.
+
+<Canvas of={FocusStories.Overview} />
+
+## The mark
+
+| Class            | Is                                                                                                  | For                                                |
+| ---------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `bui-focus`      | An outline one `--bui-px` thick with a negative offset: a frame inside the edge                     | A box: `IconButton`, a tab's panel                 |
+| `bui-focus-line` | An underline one `--bui-px` thick, two under the letters (text decoration, so it lengthens nothing) | A line of text: a `Tab`'s label, a `Switch`'s name |
+
+A `Button` shows the menus' cursor instead, left of it: one mark on every
+variant, where a frame on the face would have to change with its colour
+(gold on gold shows nothing). `Actions` leaves it room. A control whose own
+face is the primary colour can still set `--bui-focus-color` to its
+letters' colour and move the frame further in (`--bui-focus-inset`). A game
+changes the mark by changing `--bui-primary`, not by a role of its own; it
+has the same colour as the game's accent everywhere.
+
+`foundations/uniformity.test.ts` fails on a focus style outside this table:
+an outline outside the box, a ring, a fill that lifts (an icon button's ink fill darkens), a colour of its own.
+
+## Decisions
+
+Numbers are WCAG contrast ratios for the default palette, which Pushback's
+palette equals (its colours are the same values), measured with the relative
+luminance formula. Window is `--bui-surface`, `#131829`; ink is `--bui-ink`,
+`#0b0d16`; primary is `#f2c14e`.
+
+- **2.4.7 Focus Visible (AA):** every control below shows the mark.
+- **1.4.11 Non-text Contrast (AA):** the mark is 3:1 or more against what
+  is next to it, here 4.17:1 to 11.92:1 (the destructive key's frame is 2.68:1 against the light row on its outside, so one side carries it).
+- **1.4.1 Use of Color, Xbox 103:** never colour alone. A line, a frame or a
+  cursor _appears_ where there was none, or gets thicker.
+- **2.4.13 Focus Appearance (AAA):** noted per control, not a gate. It asks
+  for a mark whose area is at least a 2 CSS pixel perimeter of the control,
+  with a 3:1 change between the focused and the unfocused pixels. The mark is
+  1 `--bui-px` = 3 CSS pixels or more at every scale (`--bui-min-px`), so
+  thickness always passes; area passes for a frame and fails for a line under
+  a short label or a small cursor.
+
+| Control                  | Focus look                                                                                                                                               | Against the window and own fill                                                                | 2.4.13 (AAA)                                                                                               |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `Button` (every variant) | The menus' cursor, 3 by 5 px in primary, 2 px left of the button, in the room `Actions` leaves                                                           | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the button's perimeter; the change is 10.51:1                    |
+| `IconButton`             | A 1 px primary frame at the box's edge, on an ink fill                                                                                                   | Primary on ink 11.55:1, on the window 10.51:1, on the stage's ground 11.92:1                   | Pass: frame all round, change from the window 10.51:1                                                      |
+| `TextField`              | The underline goes from 1 px dim to 2 px primary; invalid stays a 1 px red line, focused or not (decided: the red caret is the only cue, short of 2.4.7) | Primary on the ink field 11.55:1, on the window 10.51:1; was dim, 3.44:1; danger on ink 4.56:1 | Pass for a field wider than about 150 CSS px: its 6 px line is larger than a 2 px line round the perimeter |
+| `Tabs` (`Tab`)           | A 1 px primary underline under the label, two px below the letters                                                                                       | Primary on a tab's shade 11.53:1, on the open tab's face 10.51:1                               | Fail: the line is shorter than a 2 px perimeter of the tab; the change itself is 11.5:1                    |
+| `Tabs` (`TabPanel`)      | The frame, inside the panel's edge                                                                                                                       | Primary on the window 10.51:1                                                                  | Pass: frame all round, 3 CSS px                                                                            |
+| `Picker`                 | The row's cursor, in primary, as the keys show it: Tab puts the cursor on the row it reaches                                                             | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the row's perimeter; the change is 10.51:1                       |
+| `Switch`                 | A 1 px primary underline under the name and under On or Off                                                                                              | Primary on the window 10.51:1                                                                  | Fail: short lines. Removed by the stepper later; its look follows the tab's                                |
+| `Dialog`, `Confirm`      | The window takes the focus and shows none: the keys pick, and the cursor of its `Picker` or of its `Button`s is the mark. A `Dialog` has no close button | As the control inside                                                                          | As the control inside                                                                                      |
+| `Controls`               | `IconButton`s                                                                                                                                            | As `IconButton`                                                                                | As `IconButton`                                                                                            |
+
+There are no links in the kit. A link in a docs page is the browser's.
+
+Pushback's own controls (a role's tile on the select screen, a glossary
+tab) use the same `bui-focus` frame, inside the tile, in the gold of the
+game, instead of the orange outline it had.
+
+## Accessibility
+
+- Every focusable part of the kit shows the mark under `:focus-visible`:
+  from the keyboard and not after a tap or a click
+- Shown by a line, frame or cursor that appears or thickens, and by its
+  colour besides: never by colour alone
+- No part is bigger focused than not, so zoom and layout are not disturbed
+- Under forced colours the mark is an outline, which the browser keeps; the
+  underline and the cursor follow the text colour

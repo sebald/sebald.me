@@ -1,0 +1,14 @@
+page: focus
+rules:
+  - id: C-FOCUS-1
+    text: Leave a control's focus mark to the kit (bui-focus, bui-focus-line, a field's underline, the cursor of a Picker row or a Button); add no outline, ring, fill or colour of your own for focus.
+    source: a mark outside the box made a focused field look much larger than the rest (design review of TextField)
+    markers: [review]
+  - id: A-FOCUS-1
+    text: Show focus with a line, frame or cursor that appears or thickens, never by a change of colour alone, and keep it 3:1 against what is next to it.
+    source: https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html
+    markers: [review]
+  - id: A-FOCUS-2
+    text: A focused control is the same size as an unfocused one, so nothing jumps or covers its neighbour.
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103
+    markers: [review]

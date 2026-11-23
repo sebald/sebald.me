@@ -62,6 +62,7 @@ const preview: Preview = {
         order: [
           'Introduction',
           'Building components',
+          'Foundations',
           'Hooks',
           'Components',
           'Patterns',
