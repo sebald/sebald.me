@@ -13,14 +13,16 @@ export function InAWindow() {
   const pixels = usePixels();
   // Upright the rows are a thumb's height and the note goes under the
   // window: more rows, the full width. Text has a floor, so at 1x the
-  // stage needs more room (in em) than its stage pixels give
+  // stage needs more room (in em) than its stage pixels give: the
+  // window's title sits a whole stage pixel (3px at the floor) above its
+  // list, so it is taller than its stage pixels say
   return (
     <Pixels
       {...pixels}
       className="bg-(--bui-ground)"
       style={{
         width: 'max(calc(var(--px) * 320), 34em)',
-        height: `max(calc(var(--px) * ${pixels.tall ? 300 : 110}), 14em)`,
+        height: `max(calc(var(--px) * ${pixels.tall ? 300 : 110}), 14.5em)`,
       }}
     >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
