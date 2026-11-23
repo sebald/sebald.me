@@ -49,7 +49,7 @@ const ALLOWED: Record<string, string> = {
   // The tall bar and its buttons: a thumb's size, the same on every phone
   'controls/controls.styles.ts px-2': 'touch',
   'icon-button/icon-button.styles.ts gap-2': 'touch',
-  'icon-button/icon-button.styles.ts px-3': 'touch',
+  'icon-button/icon-button.styles.ts px-4': 'touch',
   // Shown instead of the stage, outside its pixels
   'stage/stage.styles.ts gap-2': 'outside the stage',
   'stage/stage.styles.ts p-6': 'outside the stage',
@@ -211,8 +211,9 @@ const FOCUS_ALLOWED: Record<string, string> = {
   'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
   // A button's cursor, left of it, shows: the menus' mark, on every variant
   'button/button.styles.ts focus-visible:before:opacity-100': 'cursor',
-  // An icon button's mark sits on the ink
-  'icon-button/icon-button.styles.ts bg-(--bui-ink)': 'ink',
+  // An icon button's cursor shows, as a button's
+  'icon-button/icon-button.styles.ts focus-visible:before:opacity-100':
+    'cursor',
   // A picker row's cursor shows, in the primary colour
 };
 

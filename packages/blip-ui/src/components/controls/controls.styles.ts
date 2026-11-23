@@ -17,9 +17,14 @@ export const controls = {
           // At the bar's right the label comes first, the icon at the edge
           '[&>:not([slot=leave])]:flex-row-reverse',
         ],
-        /** Along the wide stage's top, the buttons in its corners; the row between lets taps through */
+        /**
+         * Along the wide stage's top, the buttons in its corners; the row
+         * between lets taps through. Room for a focused button's cursor:
+         * between two, and left of the first, on the stage
+         */
         corner: [
-          'pointer-events-none absolute inset-x-[calc(var(--px)*5)] top-[calc(var(--px)*5)] z-(--bui-layer-controls)',
+          'pointer-events-none absolute inset-x-[max(calc(var(--px)*5),calc(var(--bui-px)*6))] top-[calc(var(--px)*5)] z-(--bui-layer-controls)',
+          'gap-x-[calc(var(--bui-px)*6)]',
           '[&>*]:pointer-events-auto',
         ],
       },
