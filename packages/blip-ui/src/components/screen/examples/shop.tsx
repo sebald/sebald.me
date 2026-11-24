@@ -18,8 +18,7 @@ export function Shop() {
       <Window>
         <Title>Gold: 120</Title>
         <Actions>
-          {/* `active={false}` is for the docs: leave it out and the picker takes the keys */}
-          <Picker label="Shop" active={false}>
+          <Picker label="Shop">
             <PickerItem id="coffee" onSelect={noop}>
               Coffee
             </PickerItem>

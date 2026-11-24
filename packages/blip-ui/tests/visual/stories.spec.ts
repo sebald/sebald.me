@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { cursorRoom, escapes } from './layout';
+import { cursorRoom, escapes, windowsInWindows } from './layout';
 
 /**
  * Every story, screenshotted the ways a game shows it: wide at 3x (a
@@ -84,4 +84,28 @@ test('stories', async ({ page, baseURL }) => {
       });
     }
   }
+});
+
+/**
+ * No story draws a window in a window, those left out of the screenshots
+ * (`no-vrt`) included: a frame in a frame is never right, so each is
+ * opened once, wide, and looked at for one
+ */
+test('no window in a window', async ({ page, baseURL }) => {
+  const index = (await (await fetch(`${baseURL}/index.json`)).json()) as {
+    entries: Record<string, Entry>;
+  };
+  const stories = Object.values(index.entries).filter(
+    entry => entry.type === 'story',
+  );
+  test.setTimeout(stories.length * 10_000);
+  await page.setViewportSize({ width: 960, height: 600 });
+  const found: string[] = [];
+  for (const { id } of stories) {
+    await page.goto(`/iframe.html?id=${id}&viewMode=story&globals=scale:3`);
+    await page.locator('#storybook-root > *').first().waitFor();
+    for (const fault of await windowsInWindows(page))
+      found.push(`${id}: ${fault}`);
+  }
+  expect(found).toEqual([]);
 });
