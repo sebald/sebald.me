@@ -93,6 +93,11 @@ is wrong. Show it while it is true, so it goes when the player fixes it.
 
 - The label is a `<label>` tied to the control, which takes its name from
   it; a tap on the label focuses the control
+- Focus is the menus' cursor, 3 stage pixels left of the label, while the
+  control has the keyboard's focus (`foundations/focus.mdx`); the control
+  may add a second cue of its own (a `TextInput`'s underline). Under a
+  finger there is no cursor. A `Content` starts its fields 8 in, so the
+  cursor has its room and lines up with a menu's
 - The description, the limit (`Up to 10 characters.`, said, not shown) and
   the error are linked to the control (`aria-describedby`), so a screen
   reader reads them when it gets there

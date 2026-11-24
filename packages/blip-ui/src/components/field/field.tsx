@@ -104,12 +104,17 @@ export interface FieldPartProps {
   className?: string;
 }
 
-/** What the control asks for or sets, its name: `Name`, `Music` */
+/**
+ * What the control asks for or sets, its name: `Name`, `Music`. The
+ * cursor points at it while the control has the focus
+ */
 export const FieldLabel = ({ children, className }: FieldPartProps) => (
   <BaseField.Label
     data-slot="field-label"
+    data-cursor-target
     className={styles.label({ className })}
   >
+    <span aria-hidden data-slot="cursor" className={styles.cursor()} />
     {children}
   </BaseField.Label>
 );

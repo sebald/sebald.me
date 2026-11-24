@@ -57,10 +57,11 @@ than the window (a fill close to the window's read as a box on a box), and
 one underline is the edge. The underline's rest colour is the one of a
 `Switch`'s track when it is off, so the two controls read as one family;
 it is `--bui-dim`, the dimmest tone that still holds 3:1 against the
-window. The state is the underline and nothing else, so focus and invalid
-work the same way: it thickens and turns bright with the focus, and turns
-red when invalid. Invalid, focused or not, looks the same, and the red
-caret is then the only sign that the field has the focus.
+window. The field's own state is the underline: it thickens and turns bright
+with the focus, and turns red when invalid. The focus itself is the
+`Field`'s cursor, left of the label, as on every control; the underline is
+its second cue. So an invalid field, whose underline stays red, still
+shows the focus by the cursor.
 
 **Where the label goes** is the `Field`'s: beside the field in a window's
 label column, above it on a phone ([Field](?path=/docs/components-field--docs)).
@@ -116,18 +117,17 @@ characters.`); an error is linked to it and marked invalid
   4.56:1 against the ink and 4.15:1 against the window; the caret
   (`--bui-danger-light`) 7.1:1 against the ink. The characters left are
   the `Field`'s, muted, 5.78:1 on the window
-- Focus is the underline going from one stage pixel to two (3 to 6 CSS
-  pixels, as the stage's pixel is never finer than 3), dim to bright, and
-  the caret, which meets 2.4.7. This is the field's form of the kit's one
-  focus mark (`foundations/focus.mdx`: primary, inside the box); an outline
-  outside it made the focused field look much larger than the rest. For 2.4.13 (AAA) the change of contrast
+- Focus is the `Field`'s cursor left of the label (the kit's one mark,
+  `foundations/focus.mdx`), with the underline going from one stage pixel
+  to two (3 to 6 CSS pixels, as the stage's pixel is never finer than 3),
+  dim to bright, as a second cue, and the caret; together they meet 2.4.7.
+  An outline outside the field made the focused field look much larger
+  than the rest. For 2.4.13 (AAA) the change of contrast
   passes (3.44:1); the area passes for a field wider than about 150 CSS
   pixels, whose 6 pixel line is larger than a 2 pixel line round its
   perimeter
-- Invalid has no focus cue of its own: the underline is red and the same
-  whether the field is focused or not, so the caret (red, blinking) is the
-  only sign of the focus. A browser that hides the caret, or a reader who
-  can't see it blink, gets no focus indicator in that state: a known
-  limit of this design (decided), short of 2.4.7 there
+- Invalid, the underline is red whether the field is focused or not; the
+  cursor and the caret show the focus. Under a finger there is no cursor,
+  and the open keyboard and the caret show it
 - The error is a sentence under the field and linked to it, so red is
   never the only signal

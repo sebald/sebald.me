@@ -12,7 +12,7 @@ import { cva } from '../../utils/styles';
 export const field = {
   root: cva({
     base: [
-      'grid min-w-0 items-baseline gap-x-[calc(var(--bui-px)*3)]',
+      'group/field grid min-w-0 items-baseline gap-x-[calc(var(--bui-px)*3)]',
       'grid-cols-[minmax(0,1fr)_auto]',
       "[grid-template-areas:'label_label'_'control_control'_'description_count'_'error_count']",
       // The control is whatever is not one of the words
@@ -27,9 +27,22 @@ export const field = {
       '*:data-[slot=field-count]:mt-[calc(var(--bui-px)*2)]',
     ],
   }),
-  /** The name, in the window's bright text */
+  /** The name, in the window's bright text; what the cursor points at */
   label: cva({
-    base: 'text-(--bui-text-bright) data-[disabled]:bui-disabled',
+    base: 'relative text-(--bui-text-bright) data-[disabled]:bui-disabled',
+  }),
+  /**
+   * The menus' cursor, 3 stage pixels left of the label, while the control
+   * has the keys' focus (the field's focus mark, `foundations/focus.mdx`).
+   * Under a finger there is no cursor, as on a menu: the caret and the
+   * control's own mark show the focus
+   */
+  cursor: cva({
+    base: [
+      'pointer-events-none absolute top-1/2 right-[calc(100%+var(--bui-px)*3)] -translate-y-1/2',
+      'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] text-(--bui-primary) bui-point-right',
+      'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100',
+    ],
   }),
   /** What to type or in what form, small and muted */
   description: cva({ base: 'm-0 text-[0.75em] text-(--bui-muted)' }),

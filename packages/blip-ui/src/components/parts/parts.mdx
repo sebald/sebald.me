@@ -60,7 +60,9 @@ along the bottom edge.
 - **Do** put rows of a `Field` (a `TextField` is one), a `Switch` and a
   `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
   a wide stage, not set on a tall one) which each takes as the width of its
-  label, so the names line up.
+  label, so the names line up, and starts them 8 in, the cursor column a
+  `Picker` and `Actions` have, so a focused field's cursor has room and
+  the labels line up with a menu's.
 - **Don't** wrap rows in a `div` to space them or give the `Content` a
   `className` for a gap: the gap is its own.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new
