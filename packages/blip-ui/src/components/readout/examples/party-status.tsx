@@ -21,7 +21,7 @@ export function PartyStatus() {
           MP
         </Readout>
       </div>
-      <div className="flex gap-[calc(var(--bui-px)*2)]">
+      <div className="flex gap-[calc(var(--bui-px)*12)]">
         <Button size="small" onClick={() => setGold(gold + 30)}>
           Sell
         </Button>

@@ -106,9 +106,9 @@ export const escapes = (
  * The focus cursor's room (`foundations/focus.mdx`): every cursor
  * (`data-slot="cursor"`, a `Picker` row's, a `Button`'s, an `IconButton`'s)
  * is 3 stage pixels from what it points at (`data-cursor-target`, or the
- * start of its host's content); nothing else it could point at (another
- * cursor's target) is closer on its side than twice that, so it is plain
- * which one it means; and the frame it sits in (a window's body, a box
+ * start of its host's content); nothing else that shows (another cursor's
+ * target, text, a field, an icon) is closer on its side than twice that,
+ * so it is plain which one it means; and the frame it sits in (a window's body, a box
  * that clips, not a list that scrolls) is no closer than the 3. Measured
  * whether the cursor shows or not, so a screen is checked for the focus it
  * can take, not the one it has. The story's own edge is `escapes`'. A
@@ -164,18 +164,55 @@ export const cursorRoom = (
           );
           continue;
         }
-        // The nearest other target on the cursor's side, in its row
+        // The nearest thing on the cursor's side, in its row: another
+        // cursor's target, or anything else that shows (text, a field, an
+        // icon), outside the control the cursor belongs to
         let near = Infinity;
         let what = '';
-        for (const other of cursors) {
-          if (other === cursor) continue;
-          const o = target(other);
-          if (o.bottom <= c.top || o.top >= c.bottom) continue;
-          if (o.right > c.left + 0.5) continue;
+        const consider = (o: DOMRect, label: string) => {
+          if (!o.width || !o.height) return;
+          if (o.bottom <= c.top || o.top >= c.bottom) return;
+          if (o.right > c.left + 0.5) return;
           if (c.left - o.right < near) {
             near = c.left - o.right;
-            what = `"${name(other)}"`;
+            what = label;
           }
+        };
+        for (const other of cursors)
+          if (other !== cursor) consider(target(other), `"${name(other)}"`);
+        const control =
+          cursor.closest('button, [role="option"], li') ??
+          cursor.parentElement!;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+          if (!node.textContent?.trim() || control.contains(node)) continue;
+          const el = node.parentElement;
+          if (
+            !el ||
+            !el.checkVisibility({
+              opacityProperty: true,
+              visibilityProperty: true,
+            })
+          )
+            continue;
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          for (const r of range.getClientRects())
+            consider(r, `"${node.textContent.trim().slice(0, 20)}"`);
+        }
+        for (const el of root.querySelectorAll(
+          'input, textarea, select, svg, img, canvas',
+        )) {
+          if (control.contains(el) || el.closest('[data-slot="cursor"]'))
+            continue;
+          if (
+            !el.checkVisibility({
+              opacityProperty: true,
+              visibilityProperty: true,
+            })
+          )
+            continue;
+          consider(el.getBoundingClientRect(), el.tagName.toLowerCase());
         }
         if (near / px < 2 * gap - 0.5) {
           found.push(

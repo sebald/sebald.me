@@ -38,7 +38,9 @@ So focusable things side by side are 12 apart (`Actions`, a `SPACE`
 step for this), and a row of them leaves room for the first one's cursor
 (`Actions` starts 8 in, where a menu's labels start). The Blip visual tests
 check every story at every scale for it, focused or not (`cursorRoom` in
-`tests/visual/layout.ts`): a screen breaks the rule only by failing them.
+`tests/visual/layout.ts`): against other cursors' targets, text, fields,
+icons and the frame. Art and shapes drawn with borders or backgrounds are
+not measured, so look at a new screen's cursors too.
 
 ## The mark
 
