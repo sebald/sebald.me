@@ -8,7 +8,6 @@ import { Switch } from '../components/switch/switch';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
 import { TextField } from '../components/text-field/text-field';
 import { Text } from '../components/text/text';
-import { Window } from '../components/window/window';
 
 const noop = () => {};
 
@@ -20,7 +19,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Every control in one window, to Tab through: each shows the mark
+ * Every control in a tab's panel, to Tab through: each shows the mark
  * (foundations/focus.mdx). Looked at by hand, so no visual test takes it
  */
 export const Overview: Story = {
@@ -33,42 +32,41 @@ export const Overview: Story = {
           <Tab value="controls">Controls</Tab>
           <Tab value="menu">Menu</Tab>
         </TabList>
+        {/* A tab's panel is drawn as a window: its parts go straight in */}
         <TabPanel value="controls">
-          <Window>
-            <Content>
-              <Actions>
-                <Button>Primary</Button>
-                <Button variant="secondary">Secondary</Button>
-                <Button variant="destructive">Destructive</Button>
-                <IconButton
-                  icon="back"
-                  label="Back"
-                  aria-label="Back"
-                  slot="leave"
-                />
-              </Actions>
-              <TextField defaultValue="Ada">Name</TextField>
-              <TextField defaultValue="" error="Needs a name">
-                Invalid
-              </TextField>
-              <Switch>Music</Switch>
-            </Content>
-          </Window>
+          <Content>
+            <TextField defaultValue="Ada">Name</TextField>
+            <TextField defaultValue="" error="Needs a name">
+              Invalid
+            </TextField>
+            <Switch>Music</Switch>
+          </Content>
+          <Actions>
+            <Button>Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="destructive">Destructive</Button>
+            <IconButton
+              icon="back"
+              label="Back"
+              aria-label="Back"
+              slot="leave"
+            />
+          </Actions>
         </TabPanel>
         <TabPanel value="menu">
-          <Window>
-            <Content>
-              <Text>Tab to a row: its cursor shows in the primary colour.</Text>
-              <Picker label="Menu" active={false}>
-                <PickerItem id="start" onSelect={noop}>
-                  Start
-                </PickerItem>
-                <PickerItem id="options" onSelect={noop}>
-                  Options
-                </PickerItem>
-              </Picker>
-            </Content>
-          </Window>
+          <Content>
+            <Text>Tab to a row, or use the arrows: the cursor marks it.</Text>
+          </Content>
+          <Actions>
+            <Picker label="Menu">
+              <PickerItem id="start" onSelect={noop}>
+                Start
+              </PickerItem>
+              <PickerItem id="options" onSelect={noop}>
+                Options
+              </PickerItem>
+            </Picker>
+          </Actions>
         </TabPanel>
       </Tabs>
     </div>
