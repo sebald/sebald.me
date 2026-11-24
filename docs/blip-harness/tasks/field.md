@@ -44,4 +44,4 @@ Decided 2026-11-22, after the design review of `TextField` (#215) and the resear
 
 **Readout stays out.** It shows a number and takes nothing in, so it has no label element to tie to a control; its label takes the same column through `Content`. **Switch stays out**: its name is inside it (the whole row is its tap target) and it is being replaced by the stepper (research decision 2).
 
-**Outside a `Content` on a wide stage** the label sits beside the control, as wide as its text (before: a `TextField` stacked its label there). The task left this open; one rule per stage reads simpler than one per container.
+**Outside a `Content` the label goes above** (decided by the user, 2026-11-24, after a side review noticed the draft put it beside): as `TextField` had it. Stacked is the field's own layout; `Content` puts the fields in it side by side on a wide stage, by their slot (the parent places), so a field anywhere else never changes look on its own.

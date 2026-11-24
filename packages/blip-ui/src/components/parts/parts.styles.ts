@@ -14,7 +14,14 @@ export const parts = {
    * screen would otherwise spell for itself
    */
   content: cva({
-    base: 'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
+    base: [
+      'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
+      // A field in it has its label in the column, the words under the
+      // control after it; on a tall stage it stays stacked, as anywhere
+      'not-tall:*:data-[slot=field]:grid-cols-[var(--bui-label-width)_minmax(0,1fr)_auto]',
+      "not-tall:*:data-[slot=field]:[grid-template-areas:'label_control_control'_'._description_count'_'._error_count']",
+      'not-tall:*:data-[slot=field]:*:data-[slot=field-label]:mb-0',
+    ],
   }),
   /**
    * Side by side 12 stage pixels apart, the room a focused `Button`'s

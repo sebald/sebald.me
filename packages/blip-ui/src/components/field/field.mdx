@@ -59,9 +59,11 @@ scans the names down one column and the controls are short, is better with
 the labels in a column to their left, as option screens in games have them.
 
 The column is the window's: `Content` sets `--bui-label-width` for what is
-in it, and a field's label takes it as its width, as a `Readout`'s and a
-`Switch`'s name do, so all three line up. Outside a `Content` the label is
-as wide as its text and the control follows it.
+in it and, on a wide stage, places a field in it with its label in that
+column and the words under the control after it; a `Readout`'s and a
+`Switch`'s name take the same width, so all three line up. Anywhere else, a
+field in a dialog's body or on the stage, the label goes above the control,
+as on a phone: a column is only worth it where there are rows to line up.
 
 **Which controls go in one.** Every control the player fills in or sets,
 so one rule places all their labels:
