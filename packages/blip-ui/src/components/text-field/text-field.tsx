@@ -147,6 +147,7 @@ export interface TextFieldProps extends Omit<TextInputProps, 'className'> {
   description?: string;
   /** What is wrong with the text. Its presence marks the field invalid */
   error?: string;
+  /** Goes on the `Field`, the row; a `TextInput` takes its own */
   className?: string;
 }
 
