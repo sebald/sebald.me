@@ -16,7 +16,9 @@ const Stage = ({ children }: { children: ReactNode }) => {
       {...pixels}
       className="bg-(--bui-ground) p-[calc(var(--bui-px)*6)] text-(--bui-text)"
       style={{
-        width: `max(calc(var(--px) * ${pixels.tall ? 134 : 160}), 22em)`,
+        width: pixels.tall
+          ? 'max(calc(var(--px) * 134), 20em)'
+          : 'max(calc(var(--px) * 160), 22em)',
       }}
     >
       {children}
