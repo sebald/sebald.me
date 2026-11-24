@@ -17,9 +17,12 @@ export const parts = {
     base: [
       'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
       // A field in it has its label in the column, the words under the
-      // control after it; on a tall stage it stays stacked, as anywhere
+      // control after it; on a tall stage it stays stacked, as anywhere.
+      // The label spans the rows and a last row takes what a label on two
+      // lines adds, so the words stay right under the control
       'not-tall:*:data-[slot=field]:grid-cols-[var(--bui-label-width)_minmax(0,1fr)_auto]',
-      "not-tall:*:data-[slot=field]:[grid-template-areas:'label_control_control'_'._description_count'_'._error_count']",
+      "not-tall:*:data-[slot=field]:[grid-template-areas:'label_control_control'_'label_description_count'_'label_error_count'_'label_._.']",
+      'not-tall:*:data-[slot=field]:grid-rows-[auto_auto_auto_minmax(0,1fr)]',
       'not-tall:*:data-[slot=field]:*:data-[slot=field-label]:mb-0',
     ],
   }),
