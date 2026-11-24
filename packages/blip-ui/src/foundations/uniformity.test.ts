@@ -207,15 +207,23 @@ const FOCUS_ALLOWED: Record<string, string> = {
   // A field's underline: its colour and thickness turn, nothing moves
   'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
     'underline',
-  'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
   // A button's cursor, left of it, shows: the menus' mark, on every variant
   'button/button.styles.ts group-focus-visible:opacity-100': 'cursor',
   // An icon button's cursor shows, as a button's
   'icon-button/icon-button.styles.ts group-focus-visible:opacity-100': 'cursor',
   // A picker row's cursor shows, in the primary colour
+  // A field's cursor shows while its control has the keys' focus
+  'field/field.styles.ts [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100':
+    'cursor',
 };
 
-const FOCUS_VARIANT = /(?:^|:)(?:group-)?focus(?:-visible|-within)?:/;
+/**
+ * A variant that reacts to the focus: `focus:`, `focus-visible:`,
+ * `group-focus-visible:`, a group's `has-[:focus-visible]`, a named group
+ * (`/field`) or Base UI's `data-[focused]`
+ */
+const FOCUS_VARIANT =
+  /(?:^|:|-|\[:?)focus(?:ed|-visible|-within)?\]?(?:\/[\w-]+)?:/;
 
 describe('the kit’s focus', () => {
   const focused = classes.filter(c => FOCUS_VARIANT.test(c.token));

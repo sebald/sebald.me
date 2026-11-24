@@ -6,25 +6,35 @@ import * as FocusStories from './focus.stories';
 
 # Focus
 
-One mark says "you are here", on every control: **the primary colour, one
-`--bui-px` thick, inside the control's own box.** A focused control is exactly
-as big as an unfocused one, so nothing jumps and nothing covers its
-neighbour. The mark takes the shape the control has: a frame for a box, an
-underline for a line of text, the cursor for a row of a menu.
+One mark says "you are here": **the menus' cursor, in the primary colour,
+3 stage pixels left of what it points at.** A menu row, a button, an icon
+button and a form field (left of its label) all show it, so a player
+stepping through a screen follows one sign, as on a game's menus, where the
+pointer stays at the row's name whatever the row holds. Nothing grows: the
+cursor sits in room the layout leaves for it, and a focused control is
+exactly as big as an unfocused one.
+
+A control may add a second cue of its own, inside its box, that changes
+colour without growing: a field's underline turns gold. The second cue is
+for whoever misses a small pointer (the Xbox guidelines ask for more than
+one cue). A few controls can't hold a cursor yet and keep
+a line or a frame (Exceptions, below).
 
 It shows for the keyboard only (`:focus-visible`), and in a game the keys
 and the d-pad move a cursor of their own (`Picker`), which is the same sign.
+Under a finger there is no cursor: a tap is its own pointer, and a field
+shows its caret and its underline.
 Tab through the examples below to see each one.
 
 <Canvas of={FocusStories.Overview} />
 
 ## The cursor's room
 
-A cursor (a `Picker` row's, a `Button`'s, an `IconButton`'s) has to show
+A cursor (a `Picker` row's, a `Button`'s, an `IconButton`'s, a `Field`'s) has to show
 plainly what it points at, and it needs room to do that:
 
 1. **One gap.** It sits 3 stage pixels from what it points at: a menu
-   row's label, a button's face (its dark ink edge counts as space, it
+   row's label, a field's label, a button's face (its dark ink edge counts as space, it
    barely shows on the window), an icon.
 2. **Twice as far from the rest.** Nothing else it could point at is
    closer than twice that, 6, on its side: grouping by nearness asks for
@@ -36,7 +46,9 @@ plainly what it points at, and it needs room to do that:
 
 So focusable things side by side are 12 apart (`Actions`, a `SPACE`
 step for this), and a row of them leaves room for the first one's cursor
-(`Actions` starts 8 in, where a menu's labels start). The Blip visual tests
+(`Actions` starts 8 in, where a menu's labels start). `Content` starts its
+form rows 8 in too (a `Field`, a `Switch`, a `Readout`), so a window's
+labels, menu items and buttons share one cursor column. The Blip visual tests
 check every story at every scale for it, focused or not (`cursorRoom` in
 `tests/visual/layout.ts`): against other cursors' targets, text, fields,
 icons and the frame. Art and shapes drawn with borders or backgrounds are
@@ -49,8 +61,8 @@ not measured, so look at a new screen's cursors too.
 | `bui-focus`      | An outline one `--bui-px` thick with a negative offset: a frame inside the edge                     | A box: a tab's panel                               |
 | `bui-focus-line` | An underline one `--bui-px` thick, two under the letters (text decoration, so it lengthens nothing) | A line of text: a `Tab`'s label, a `Switch`'s name |
 
-A `Button` and an `IconButton` show the menus' cursor instead, left of
-them: one mark on every variant and over any scene, where a frame on the face would have to change with its colour
+The cursor is the mark; these two are for the exceptions. A `Button` and
+an `IconButton` show the cursor, not a frame: one mark on every variant and over any scene, where a frame on the face would have to change with its colour
 (gold on gold shows nothing). `Actions` leaves it room. A control whose own
 face is the primary colour can still set `--bui-focus-color` to its
 letters' colour and move the frame further in (`--bui-focus-inset`). A game
@@ -79,17 +91,33 @@ luminance formula. Window is `--bui-surface`, `#131829`; ink is `--bui-ink`,
   thickness always passes; area passes for a frame and fails for a line under
   a short label or a small cursor.
 
-| Control                   | Focus look                                                                                                                                               | Against the window and own fill                                                                | 2.4.13 (AAA)                                                                                               |
-| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `Button` (every variant)  | The menus' cursor, 3 by 5 px in primary, 2 px left of the button, in the room `Actions` leaves                                                           | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the button's perimeter; the change is 10.51:1                    |
-| `IconButton`              | The menus' cursor, 3 px left of the icon in a corner (`Controls` leaves room), at its left padding's edge on the bar, 3 px from its content              | Primary on the bar's ground 11.92:1; in a corner over the scene, as the icons are              | Fail: a pointer 3 by 5 px is smaller than the button's perimeter                                           |
-| `TextField` (`TextInput`) | The underline goes from 1 px dim to 2 px primary; invalid stays a 1 px red line, focused or not (decided: the red caret is the only cue, short of 2.4.7) | Primary on the ink field 11.55:1, on the window 10.51:1; was dim, 3.44:1; danger on ink 4.56:1 | Pass for a field wider than about 150 CSS px: its 6 px line is larger than a 2 px line round the perimeter |
-| `Tabs` (`Tab`)            | A 1 px primary underline under the label, two px below the letters                                                                                       | Primary on a tab's shade 11.53:1, on the open tab's face 10.51:1                               | Fail: the line is shorter than a 2 px perimeter of the tab; the change itself is 11.5:1                    |
-| `Tabs` (`TabPanel`)       | The frame, inside the panel's edge                                                                                                                       | Primary on the window 10.51:1                                                                  | Pass: frame all round, 3 CSS px                                                                            |
-| `Picker`                  | The row's cursor, in primary, as the keys show it: Tab puts the cursor on the row it reaches                                                             | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the row's perimeter; the change is 10.51:1                       |
-| `Switch`                  | A 1 px primary underline under the name and under On or Off                                                                                              | Primary on the window 10.51:1                                                                  | Fail: short lines. Removed by the stepper later; its look follows the tab's                                |
-| `Dialog`, `Confirm`       | The window takes the focus and shows none: the keys pick, and the cursor of its `Picker` or of its `Button`s is the mark. A `Dialog` has no close button | As the control inside                                                                          | As the control inside                                                                                      |
-| `Controls`                | `IconButton`s                                                                                                                                            | As `IconButton`                                                                                | As `IconButton`                                                                                            |
+| Control                   | Focus look                                                                                                                                                  | Against the window and own fill                                                                | 2.4.13 (AAA)                                                                                                                  |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `Button` (every variant)  | The menus' cursor, 3 by 5 px in primary, 2 px left of the button, in the room `Actions` leaves                                                              | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the button's perimeter; the change is 10.51:1                                       |
+| `IconButton`              | The menus' cursor, 3 px left of the icon in a corner (`Controls` leaves room), at its left padding's edge on the bar, 3 px from its content                 | Primary on the bar's ground 11.92:1; in a corner over the scene, as the icons are              | Fail: a pointer 3 by 5 px is smaller than the button's perimeter                                                              |
+| `Field`                   | The menus' cursor, 3 px left of the label, while its control has the keys' focus; none under a finger. `Content` leaves it room (form rows start 8 in)      | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px; the change is 10.51:1                                                                              |
+| `TextField` (`TextInput`) | Its `Field`'s cursor, and the underline turning from dim to primary, 1 px, as a second cue; invalid, the underline stays red and the cursor shows the focus | Primary on the ink field 11.55:1, on the window 10.51:1; was dim, 3.44:1; danger on ink 4.56:1 | Fail: a 1 px line is less than a 2 px line round the field (a 2 px line passed and looked odd: decided); the change is 3.44:1 |
+| `Tabs` (`Tab`)            | A 1 px primary underline under the label, two px below the letters                                                                                          | Primary on a tab's shade 11.53:1, on the open tab's face 10.51:1                               | Fail: the line is shorter than a 2 px perimeter of the tab; the change itself is 11.5:1                                       |
+| `Tabs` (`TabPanel`)       | The frame, inside the panel's edge                                                                                                                          | Primary on the window 10.51:1                                                                  | Pass: frame all round, 3 CSS px                                                                                               |
+| `Picker`                  | The row's cursor, in primary, as the keys show it: Tab puts the cursor on the row it reaches                                                                | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the row's perimeter; the change is 10.51:1                                          |
+| `Switch`                  | A 1 px primary underline under the name and under On or Off                                                                                                 | Primary on the window 10.51:1                                                                  | Fail: short lines. Removed by the stepper later; its look follows the tab's                                                   |
+| `Dialog`, `Confirm`       | The window takes the focus and shows none: the keys pick, and the cursor of its `Picker` or of its `Button`s is the mark. A `Dialog` has no close button    | As the control inside                                                                          | As the control inside                                                                                                         |
+| `Controls`                | `IconButton`s                                                                                                                                               | As `IconButton`                                                                                | As `IconButton`                                                                                                               |
+
+## Exceptions
+
+Where a cursor doesn't fit yet, the control keeps a line or a frame
+(decided 2026-11-24, to be redrawn later if a screen asks for it):
+
+- **`Tab`**: a cursor needs 9 stage pixels left of a label and the next tab
+  is closer; on a tall stage, where the tabs' art is finer, closer still. It
+  keeps `bui-focus-line`
+- **`TabPanel`**: what it marks is a whole window, nothing to point at. It
+  keeps `bui-focus`
+- **`Switch`**: being replaced by the stepper, which has the cursor. It
+  keeps `bui-focus-line` until then
+- **Pushback's role tiles and glossary tabs**: 8 apart where the cursor's
+  room asks for 12, and the tile's frame already reads as the selection
 
 There are no links in the kit. A link in a docs page is the browser's.
 

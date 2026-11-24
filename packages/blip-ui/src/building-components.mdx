@@ -187,15 +187,22 @@ piece of art glides on purpose, its comment says why.
 
 ## Focus
 
-One mark for "you are here", in the primary colour, and a table of each
-control's look and its ratios (`foundations/focus.mdx`).
+One mark for "you are here", the menus' cursor in the primary colour, and
+a table of each control's look and its ratios (`foundations/focus.mdx`).
+
+- **The cursor on everything a player steps through.** A `Picker` row, a
+  `Button`, an `IconButton` and a `Field` (left of its label) show it; a
+  new control does too, pointing at its name. A control may add a second
+  cue inside its box that changes colour, never size (a field's underline
+  turns gold). Only the exceptions
+  the focus page lists (`Tab`, `TabPanel`, `Switch`) keep a line or a frame.
 
 - **Nothing grows.** A focused control is exactly as big as an unfocused
   one: `bui-focus` is an outline one `--bui-px` thick with a negative
   offset (a frame inside the edge), `bui-focus-line` an underline of the
-  label, a field's underline gets thicker, a `Picker` row and a `Button`
-  show the cursor, in room the layout leaves for it (a row's cursor
-  column, `Actions`). No outline with a positive offset, no ring that adds
+  label, a field's underline turns gold, the cursor sits in room the
+  layout leaves for it (a row's cursor column, `Actions`, `Content`'s form
+  rows 8 in). No outline with a positive offset, no ring that adds
   a pixel, no fill that lifts.
 - **One mark whatever the fill.** A control that comes in several colours
   (`Button`'s variants), or sits over any scene (`IconButton` in a corner),
