@@ -8,7 +8,7 @@ import { Window } from '../window/window';
 import { NewRun } from './examples/new-run';
 import { Field, FieldDescription, FieldError, FieldLabel } from './field';
 
-/** A piece of stage, wide enough for a field's text at 1x too */
+/** A piece of stage, wide enough for a field's text at 1x too, its form rows 8 in */
 const Stage = ({ children }: { children: ReactNode }) => {
   const pixels = usePixels();
   return (
@@ -16,7 +16,7 @@ const Stage = ({ children }: { children: ReactNode }) => {
       {...pixels}
       className="bg-(--bui-ground) p-[calc(var(--bui-px)*6)] text-(--bui-text)"
       style={{
-        width: `max(calc(var(--px) * ${pixels.tall ? 134 : 160}), 20em)`,
+        width: `max(calc(var(--px) * ${pixels.tall ? 134 : 160}), 22em)`,
       }}
     >
       {children}

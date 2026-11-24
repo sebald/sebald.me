@@ -8,7 +8,7 @@ import { NameHero } from './examples/name-hero';
 import { OptionsRows as OptionsRowsExample } from './examples/options-rows';
 import { TextField } from './text-field';
 
-/** A piece of stage, wide enough for the field's text at 1x too */
+/** A piece of stage, wide enough for the field's text at 1x too, its form rows 8 in */
 const Stage = ({ children }: { children: ReactNode }) => {
   const pixels = usePixels();
   return (
@@ -16,7 +16,7 @@ const Stage = ({ children }: { children: ReactNode }) => {
       {...pixels}
       className="bg-(--bui-ground) p-[calc(var(--bui-px)*6)] text-(--bui-text)"
       style={{
-        width: `max(calc(var(--px) * ${pixels.tall ? 134 : 160}), 20em)`,
+        width: `max(calc(var(--px) * ${pixels.tall ? 134 : 160}), 22em)`,
       }}
     >
       {children}
