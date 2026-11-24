@@ -1,8 +1,8 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N2 # forms and navigation
 depends: [field, focus-style]
-pr:
+pr: 233
 ---
 
 # `field-cursor`: The cursor is the focus mark of every control, fields too
