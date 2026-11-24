@@ -47,7 +47,7 @@ export function NameHero() {
       <Legend
         keys={[
           ['Enter', 'take the name'],
-          ['Tab', 'to the buttons'],
+          ['Tab', 'next'],
         ]}
         touch="Tap the field to type"
       />
