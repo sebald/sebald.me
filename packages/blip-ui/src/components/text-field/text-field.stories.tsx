@@ -130,7 +130,7 @@ export const OptionsRows: Story = {
   render: () => <OptionsRowsExample />,
 };
 
-/** Over a menu: Enter takes the name, Escape gives the keys back to the menu */
+/** A form window: the field and its buttons, no menu; Enter takes the name */
 export const NamingTheHero: Story = {
   parameters: { controls: { disable: true } },
   decorators: [
