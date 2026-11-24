@@ -24,7 +24,7 @@ pr:
 Decided with the user, 2026-11-24, after research by three subagents (games, WCAG and design systems, an audit of the kit):
 
 - **At the label**, not the input: games keep the pointer at a row's name whatever the row holds, the cursors stay in one column, and beside the input it would sit next to its own label's text, against the cursor's room
-- **Underline kept** as a second cue: XAG 113 asks for redundant cues, and the 3 × 5 cursor alone fails 2.4.13's area where the 2 px line passes. The caret counts for 2.4.7 (W3C's Understanding page) but blinks, which a mark may not
+- **Underline kept** as a second cue: XAG 113 asks for redundant cues. **No longer thickens** (the user, after review: "looks weird"): it stays one pixel and only turns gold, so 2.4.13's area, which the 2 px line passed, now fails for fields; AAA, noted, not a gate. The caret counts for 2.4.7 (W3C's Understanding page) but blinks, which a mark may not
 - **Hidden under a finger**, as a `Picker`'s and a `Button`'s: the open keyboard, the caret and the underline show it
 - **Exceptions for now**: `Tab` (no room: 9 stage px per side needed, tabs closer, closer still on a tall stage), `TabPanel` (marks a whole window), `Switch` (replaced by the stepper, which gets the cursor), Pushback's role tiles and glossary tabs (8 apart, not 12)
 

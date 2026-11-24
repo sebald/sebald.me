@@ -36,9 +36,9 @@ input. Where the field needs anything else around the input, compose the
 1. **Label**, its children, the `Field`'s label: to the left of the field
    on a wide stage, above it on a tall one
 2. **The field**, the `TextInput`, ink (`--bui-ink`), darker than the window, square, with
-   one underline as its only edge: one stage pixel in `--bui-dim` at rest,
-   two in `--bui-primary` with the focus, one in `--bui-danger` when
-   invalid. Low: a line of text with two stage pixels above and below,
+   one underline as its only edge, one stage pixel: `--bui-dim` at rest,
+   `--bui-primary` with the focus, `--bui-danger` when invalid; it never
+   grows. Low: a line of text with two stage pixels above and below,
    lower than a `Button`
 3. **Description** and **error**, the `Field`'s, under the field: what to
    type, and what is wrong, in words
@@ -57,8 +57,9 @@ than the window (a fill close to the window's read as a box on a box), and
 one underline is the edge. The underline's rest colour is the one of a
 `Switch`'s track when it is off, so the two controls read as one family;
 it is `--bui-dim`, the dimmest tone that still holds 3:1 against the
-window. The field's own state is the underline: it thickens and turns bright
-with the focus, and turns red when invalid. The focus itself is the
+window. The field's own state is the underline's colour: bright with the focus,
+red when invalid, the same one pixel in every state (a line that thickened
+with the focus looked odd, decided). The focus itself is the
 `Field`'s cursor, left of the label, as on every control; the underline is
 its second cue. So an invalid field, whose underline stays red, still
 shows the focus by the cursor.
@@ -118,14 +119,12 @@ characters.`); an error is linked to it and marked invalid
   (`--bui-danger-light`) 7.1:1 against the ink. The characters left are
   the `Field`'s, muted, 5.78:1 on the window
 - Focus is the `Field`'s cursor left of the label (the kit's one mark,
-  `foundations/focus.mdx`), with the underline going from one stage pixel
-  to two (3 to 6 CSS pixels, as the stage's pixel is never finer than 3),
-  dim to bright, as a second cue, and the caret; together they meet 2.4.7.
-  An outline outside the field made the focused field look much larger
-  than the rest. For 2.4.13 (AAA) the change of contrast
-  passes (3.44:1); the area passes for a field wider than about 150 CSS
-  pixels, whose 6 pixel line is larger than a 2 pixel line round its
-  perimeter
+  `foundations/focus.mdx`), with the underline turning from dim to
+  primary as a second cue, and the caret; together they meet 2.4.7. An
+  outline outside the field made the focused field look much larger than
+  the rest. For 2.4.13 (AAA) the change of contrast passes (3.44:1); the
+  area fails: a one pixel line (3 CSS pixels) is less than a 2 pixel line
+  round the field (a thicker line passed, and looked odd: decided)
 - Invalid, the underline is red whether the field is focused or not; the
   cursor and the caret show the focus. Under a finger there is no cursor,
   and the open keyboard and the caret show it

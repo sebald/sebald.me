@@ -207,7 +207,6 @@ const FOCUS_ALLOWED: Record<string, string> = {
   // A field's underline: its colour and thickness turn, nothing moves
   'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
     'underline',
-  'text-field/text-field.styles.ts focus:[--ul-n:2]': 'underline',
   // A button's cursor, left of it, shows: the menus' mark, on every variant
   'button/button.styles.ts group-focus-visible:opacity-100': 'cursor',
   // An icon button's cursor shows, as a button's
