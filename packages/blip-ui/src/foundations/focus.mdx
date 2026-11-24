@@ -18,15 +18,39 @@ Tab through the examples below to see each one.
 
 <Canvas of={FocusStories.Overview} />
 
+## The cursor's room
+
+A cursor (a `Picker` row's, a `Button`'s, an `IconButton`'s) has to show
+plainly what it points at, and it needs room to do that:
+
+1. **One gap.** It sits 3 stage pixels from what it points at: a menu
+   row's label, a button's face (its dark ink edge counts as space, it
+   barely shows on the window), an icon.
+2. **Twice as far from the rest.** Nothing else it could point at is
+   closer than twice that, 6, on its side: grouping by nearness asks for
+   1.5 to 2 times the space between groups as within one, and this takes
+   the top of it. At 1.3 times (buttons 8 apart) it read as the button
+   before's.
+3. **Clear of its frame.** The window or box it sits in is no closer than
+   the 3: it shows, it doesn't touch the frame.
+
+So focusable things side by side are 12 apart (`Actions`, a `SPACE`
+step for this), and a row of them leaves room for the first one's cursor
+(`Actions` starts 8 in, where a menu's labels start). The Blip visual tests
+check every story at every scale for it, focused or not (`cursorRoom` in
+`tests/visual/layout.ts`): against other cursors' targets, text, fields,
+icons and the frame. Art and shapes drawn with borders or backgrounds are
+not measured, so look at a new screen's cursors too.
+
 ## The mark
 
 | Class            | Is                                                                                                  | For                                                |
 | ---------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| `bui-focus`      | An outline one `--bui-px` thick with a negative offset: a frame inside the edge                     | A box: `IconButton`, a tab's panel                 |
+| `bui-focus`      | An outline one `--bui-px` thick with a negative offset: a frame inside the edge                     | A box: a tab's panel                               |
 | `bui-focus-line` | An underline one `--bui-px` thick, two under the letters (text decoration, so it lengthens nothing) | A line of text: a `Tab`'s label, a `Switch`'s name |
 
-A `Button` shows the menus' cursor instead, left of it: one mark on every
-variant, where a frame on the face would have to change with its colour
+A `Button` and an `IconButton` show the menus' cursor instead, left of
+them: one mark on every variant and over any scene, where a frame on the face would have to change with its colour
 (gold on gold shows nothing). `Actions` leaves it room. A control whose own
 face is the primary colour can still set `--bui-focus-color` to its
 letters' colour and move the frame further in (`--bui-focus-inset`). A game
@@ -58,7 +82,7 @@ luminance formula. Window is `--bui-surface`, `#131829`; ink is `--bui-ink`,
 | Control                  | Focus look                                                                                                                                               | Against the window and own fill                                                                | 2.4.13 (AAA)                                                                                               |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
 | `Button` (every variant) | The menus' cursor, 3 by 5 px in primary, 2 px left of the button, in the room `Actions` leaves                                                           | Primary on the window 10.51:1                                                                  | Fail: a pointer 3 by 5 px is smaller than the button's perimeter; the change is 10.51:1                    |
-| `IconButton`             | A 1 px primary frame at the box's edge, on an ink fill                                                                                                   | Primary on ink 11.55:1, on the window 10.51:1, on the stage's ground 11.92:1                   | Pass: frame all round, change from the window 10.51:1                                                      |
+| `IconButton`             | The menus' cursor, 3 px left of the icon in a corner (`Controls` leaves room), at its left padding's edge on the bar, 3 px from its content              | Primary on the bar's ground 11.92:1; in a corner over the scene, as the icons are              | Fail: a pointer 3 by 5 px is smaller than the button's perimeter                                           |
 | `TextField`              | The underline goes from 1 px dim to 2 px primary; invalid stays a 1 px red line, focused or not (decided: the red caret is the only cue, short of 2.4.7) | Primary on the ink field 11.55:1, on the window 10.51:1; was dim, 3.44:1; danger on ink 4.56:1 | Pass for a field wider than about 150 CSS px: its 6 px line is larger than a 2 px line round the perimeter |
 | `Tabs` (`Tab`)           | A 1 px primary underline under the label, two px below the letters                                                                                       | Primary on a tab's shade 11.53:1, on the open tab's face 10.51:1                               | Fail: the line is shorter than a 2 px perimeter of the tab; the change itself is 11.5:1                    |
 | `Tabs` (`TabPanel`)      | The frame, inside the panel's edge                                                                                                                       | Primary on the window 10.51:1                                                                  | Pass: frame all round, 3 CSS px                                                                            |

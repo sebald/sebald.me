@@ -422,8 +422,13 @@ const Row = ({
           picker.choose(entry);
         }}
       >
-        <span aria-hidden className={styles.cursor({ shown: marked })} />
         <span
+          aria-hidden
+          data-slot="cursor"
+          className={styles.cursor({ shown: marked })}
+        />
+        <span
+          data-cursor-target
           className={styles.label({ disabled })}
           style={ruledOut ? { opacity: 1 - 0.75 * ruledOut } : undefined}
         >

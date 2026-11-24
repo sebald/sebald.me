@@ -42,13 +42,15 @@ export const Button = ({
     style={style}
     {...props}
   >
-    {/* The ink and the key in spans: the button itself is not clipped, so
-        the focus cursor beside it shows */}
+    {/* The focus cursor, left of the button; the ink and the key in spans
+        below it, so the button itself is not clipped and the cursor shows */}
+    <span aria-hidden data-slot="cursor" className={button.cursor()} />
     <span
       className={button.ink()}
       style={{ clipPath: rounded(CORNERS[0], '--b-px') }}
     >
       <span
+        data-cursor-target
         className={button.face()}
         style={{ clipPath: rounded(CORNERS[1], '--b-px') }}
       >

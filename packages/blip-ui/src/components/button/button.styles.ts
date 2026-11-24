@@ -14,8 +14,9 @@ import type { ButtonProps } from './button';
  *
  * Focus is the menus' cursor, left of the button, the same on every
  * variant: a mark on the face would have to change with its colour. It
- * sits outside the box, so the button keeps its size, and a row of
- * buttons leaves it room (`Actions`).
+ * sits outside the box, so the button keeps its size: two pixels from the
+ * ink, three from the face you see, as a menu's from its label. A row of
+ * buttons leaves it room (`Actions`, `foundations/focus.mdx`).
  *
  * The pixel is `--bui-px`, the stage's never finer than `--bui-min-px`:
  * on a phone's tall stage a stage pixel is barely more than one CSS
@@ -27,10 +28,6 @@ export const button = {
       '[--b-px:var(--bui-px)]',
       'group relative inline-block cursor-pointer border-0 bg-transparent p-0 align-middle outline-none',
       'disabled:cursor-default disabled:bui-disabled',
-      // The cursor: a stepped triangle as a Picker's, two pixels to the left
-      "before:pointer-events-none before:absolute before:top-1/2 before:right-[calc(100%+var(--b-px)*2)] before:content-['']",
-      'before:h-[calc(var(--b-px)*5)] before:w-[calc(var(--b-px)*3)] before:-translate-y-1/2',
-      'before:text-(--bui-primary) before:bui-point-right before:opacity-0 focus-visible:before:opacity-100',
       // Pressed, a key goes a step darker with the shade along its top
       '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
       '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
@@ -64,6 +61,14 @@ export const button = {
       } satisfies Record<NonNullable<ButtonProps['size']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary', size: 'default' },
+  }),
+  /** The cursor: a stepped triangle as a Picker's, 3 seen pixels from the face */
+  cursor: cva({
+    base: [
+      'pointer-events-none absolute top-1/2 right-[calc(100%+var(--b-px)*2)] -translate-y-1/2',
+      'h-[calc(var(--b-px)*5)] w-[calc(var(--b-px)*3)] text-(--bui-primary) bui-point-right',
+      'opacity-0 group-focus-visible:opacity-100',
+    ],
   }),
   /** The ink line round the key */
   ink: cva({ base: 'block bg-(--bui-ink) p-(--b-px)' }),

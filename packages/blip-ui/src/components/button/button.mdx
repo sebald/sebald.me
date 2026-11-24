@@ -42,7 +42,8 @@ screen can be touched.
 - **Do** give a screen one primary button. Pair it with a secondary for the
   way back.
 - **Do** put buttons in `Actions`: it leaves the room the focus cursor
-  needs, left of the first button and between two.
+  needs, left of the first button and between two (12 apart; see
+  `foundations/focus.mdx`, the cursor's room).
 - **Do** start the label with a verb, or name what starts: _Start_, _Retry_,
   _Play fullscreen_.
 - **Don't** use buttons for a list of choices. That's a Picker, with a
@@ -67,7 +68,7 @@ Pressed, the whole face goes a step darker with the shade along its top, and not
 - A native `<button>`, `type="button"` unless set otherwise
 - Focus (`foundations/focus.mdx`) shows for the keyboard only
   (`:focus-visible`): the menus' cursor, 3 by 5 pixels in the primary
-  colour, two pixels left of the button, the same on every variant (a mark
+  colour, 3 seen pixels left of the face (2 from the ink), the same on every variant (a mark
   on the face would change with its colour). It takes no room, so the
   button never grows. 10.51:1 on the window; 2.4.13 (AAA) fails, as a
   `Picker`'s cursor does: it is smaller than the button's perimeter
