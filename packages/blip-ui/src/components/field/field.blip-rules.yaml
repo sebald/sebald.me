@@ -1,0 +1,18 @@
+page: field
+rules:
+  - id: C-FIELD-1
+    text: Put every form control a player fills in or sets in a Field, with a FieldLabel, so its label lines up with the others and is tied to it.
+    markers: [review]
+    source: docs/blip-harness/research/forms-and-navigation.md
+  - id: C-FIELD-2
+    text: Say what is wrong in a FieldError, a sentence that says what to do, rendered only while it is true; never by the red line alone.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/error-identification.html
+  - id: C-FIELD-3
+    text: Leave the label's place to the Field and its container, Content on a wide stage; don't set its width or stack it yourself.
+    markers: [review]
+when-not:
+  - text: A number the player only reads is a Readout, not a Field.
+    use: readout
+  - text: A choice among actions or places is a Picker in a menu window, not a Field.
+    use: picker

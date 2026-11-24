@@ -170,8 +170,18 @@ export {
   type TabsProps,
 } from './components/tabs/tabs';
 export {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  type FieldPartProps,
+  type FieldProps,
+} from './components/field/field';
+export {
   TextField,
   type TextFieldProps,
+  TextInput,
+  type TextInputProps,
 } from './components/text-field/text-field';
 export {
   Heading,

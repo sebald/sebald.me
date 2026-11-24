@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: N2 # forms and navigation
 depends: [content-rhythm, focus-style]
 pr:
@@ -35,3 +35,13 @@ pr:
 Filled in while the task is worked on: what changed, decisions, numbers.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+**TextField: (a), kept as a thin composition** (decided with the user, 2026-11-24). `TextField` is a `Field` with a `FieldLabel` holding a `TextInput`, its `description` and `error` props the field's parts; no logic of its own. Kept because naming a hero is the commonest form and an agent looks for "text field". The input itself is `TextInput` (Base UI's Input), with the keys, sounds and announcements that were `TextField`'s, unchanged. The user added: the wrapper is for every control that has a label with a description, help text or error, so `Field` is the one place a control's label goes.
+
+**The parts.** `Field`, `FieldLabel`, `FieldDescription`, `FieldError`, named like `PickerItem` and `TabList` (a field's parts, not shared ones; `Error` would also shadow the global). Children in any order, placed by slot on a grid: on a wide stage `label control control / . description count / . error count`, the label column `var(--bui-label-width, max-content)`; on a tall stage `label label / control control / description count / error count`. Rows without content take no room: the words keep their distance by margin, not the grid's gap.
+
+**What the field learns from inside.** Through `FieldContext`: a control with a limit reports its length and maximum, and the field draws the characters left and a hidden description `Up to N characters.`; a `FieldError` registers while mounted, and the field is invalid while one is there. So "its presence marks the control invalid" holds for a composed field too.
+
+**Readout stays out.** It shows a number and takes nothing in, so it has no label element to tie to a control; its label takes the same column through `Content`. **Switch stays out**: its name is inside it (the whole row is its tap target) and it is being replaced by the stepper (research decision 2).
+
+**Outside a `Content` on a wide stage** the label sits beside the control, as wide as its text (before: a `TextField` stacked its label there). The task left this open; one rule per stage reads simpler than one per container.

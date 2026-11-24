@@ -7,7 +7,7 @@ export const parts = {
   title: text.heading,
   /**
    * `--bui-label-width`: the width of the label column the rows in it
-   * share (a `TextField`, a `Switch`, a `Readout` take it for their
+   * share (a `Field`, a `Switch`, a `Readout` take it for their
    * label). Not on a tall stage, where there is no room for a column:
    * the labels are as wide as their text and a field's goes above it.
    * Its children are rows, 4 stage pixels apart: the one gap every
