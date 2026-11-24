@@ -1,20 +1,27 @@
 'use client';
 
-import { Field } from '@base-ui/react/field';
 import { Input } from '@base-ui/react/input';
 import {
   type ComponentProps,
   type KeyboardEvent,
   type ReactNode,
+  useContext,
+  useLayoutEffect,
   useState,
 } from 'react';
 
 import { useAnnounce } from '../../providers/announcer';
 import { useFeedback } from '../../providers/feedback';
-import { cn } from '../../utils/styles';
+import {
+  Field,
+  FieldContext,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '../field/field';
 import { textField as styles } from './text-field.styles';
 
-export interface TextFieldProps extends Omit<
+export interface TextInputProps extends Omit<
   ComponentProps<'input'>,
   | 'children'
   | 'className'
@@ -26,8 +33,6 @@ export interface TextFieldProps extends Omit<
   | 'type'
   | 'value'
 > {
-  /** What it asks for, its label: `Name` */
-  children: ReactNode;
   /** The text (controlled) */
   value?: string;
   /**
@@ -40,48 +45,46 @@ export interface TextFieldProps extends Omit<
   /** Enter was pressed, with the text; the field keeps the focus */
   onSubmit?: (value: string) => void;
   /**
-   * The most characters it takes. The characters left are shown beside
-   * the label, and a screen reader hears when it is full
+   * The most characters it takes. Its `Field` shows the characters left,
+   * and a screen reader hears when it is full
    */
   maxLength?: number;
-  /** A line under it that says what to type or in what form */
-  description?: string;
-  /** What is wrong with the text. Its presence marks the field invalid */
-  error?: string;
   className?: string;
 }
 
 /**
- * One line of text the player types, such as a name: a label, the text
- * in the stage's font with a caret, and optionally the characters left.
- * A native `<input>` tied to its label, so the phone's keyboard opens on
- * the tall stage. The kit's keys leave a focused field alone, so letters
- * are typed and not taken for moves; Enter submits and Escape gives the
- * keys back to the screen without leaving it. Other props go to the
- * input (`name`, `placeholder`, `autoComplete`, `disabled`). Built on
- * Base UI's Field and Input.
+ * The line a player types in, as the control of a `Field`: the text in
+ * the stage's font with a caret. A native `<input>`, so the phone's
+ * keyboard opens on the tall stage. The kit's keys leave a focused input
+ * alone, so letters are typed and not taken for moves; Enter submits and
+ * Escape gives the keys back to the screen without leaving it. Other
+ * props go to the input (`placeholder`, `autoComplete`). Built on Base
+ * UI's Input.
  */
-export const TextField = ({
-  children,
+export const TextInput = ({
   value,
   defaultValue = '',
   onValueChange,
   onSubmit,
   maxLength,
-  description,
-  error,
-  disabled,
   className,
   onKeyDown,
   onFocus,
   ...props
-}: TextFieldProps) => {
+}: TextInputProps) => {
   const play = useFeedback();
   const announce = useAnnounce();
+  const field = useContext(FieldContext);
   const [inner, setInner] = useState(defaultValue);
   const text = value ?? inner;
-  const left = maxLength === undefined ? undefined : maxLength - text.length;
-  const full = left !== undefined && left <= 0;
+  const full = maxLength !== undefined && text.length >= maxLength;
+
+  // The field shows the characters left and says the limit
+  useLayoutEffect(() => {
+    if (!field || maxLength === undefined) return;
+    field.count({ max: maxLength, length: text.length });
+    return () => field.count(null);
+  }, [field, maxLength, text.length]);
 
   const keydown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
@@ -108,74 +111,66 @@ export const TextField = ({
   };
 
   return (
-    <Field.Root
-      data-slot="text-field"
-      disabled={disabled}
-      invalid={!!error || undefined}
-      className={styles.root({ className })}
-    >
-      <Field.Label className={styles.label()}>{children}</Field.Label>
-      <div className={styles.control()}>
-        <Input
-          {...props}
-          value={text}
-          maxLength={maxLength}
-          // The phone's keyboard shows its own "done" for Enter
-          enterKeyHint="done"
-          className={styles.input()}
-          onKeyDown={keydown}
-          onFocus={event => {
-            onFocus?.(event);
-            // Held upright the keyboard covers the lower stage: keep the
-            // field in view
-            event.currentTarget.scrollIntoView({
-              block: 'nearest',
-              inline: 'nearest',
-            });
-          }}
-          onValueChange={next => {
-            if (next.length > text.length)
-              play('type', next.slice(text.length));
-            setInner(next);
-            onValueChange?.(next);
-            if (maxLength !== undefined && next.length >= maxLength)
-              announce(`Limit of ${maxLength} characters reached`);
-          }}
-        />
-        {(description || !!error || maxLength !== undefined) && (
-          <div className={styles.meta()}>
-            {(description || maxLength !== undefined) && (
-              <Field.Description
-                className={cn(styles.description(), !description && 'sr-only')}
-              >
-                {description}
-                {maxLength !== undefined && (
-                  <span className="sr-only">
-                    {' '}
-                    Up to {maxLength} characters.
-                  </span>
-                )}
-              </Field.Description>
-            )}
-            {!!error && (
-              <Field.Error match className={styles.error()}>
-                {error}
-              </Field.Error>
-            )}
-            {left !== undefined && (
-              // The limit is in the description; this is only for the eyes
-              <span
-                aria-hidden
-                data-full={full || undefined}
-                data-disabled={disabled || undefined}
-                className={styles.count()}
-              >
-                {left}
-              </span>
-            )}
-          </div>
-        )}
-      </div>
-    </Field.Root>
+    <Input
+      {...props}
+      data-slot="text-input"
+      value={text}
+      maxLength={maxLength}
+      // The phone's keyboard shows its own "done" for Enter
+      enterKeyHint="done"
+      className={styles.input({ className })}
+      onKeyDown={keydown}
+      onFocus={event => {
+        onFocus?.(event);
+        // Held upright the keyboard covers the lower stage: keep the
+        // field in view
+        event.currentTarget.scrollIntoView({
+          block: 'nearest',
+          inline: 'nearest',
+        });
+      }}
+      onValueChange={next => {
+        if (next.length > text.length) play('type', next.slice(text.length));
+        setInner(next);
+        onValueChange?.(next);
+        if (maxLength !== undefined && next.length >= maxLength)
+          announce(`Limit of ${maxLength} characters reached`);
+      }}
+    />
   );
 };
+
+export interface TextFieldProps extends Omit<TextInputProps, 'className'> {
+  /** What it asks for, its label: `Name` */
+  children: ReactNode;
+  /** A line under it that says what to type or in what form */
+  description?: string;
+  /** What is wrong with the text. Its presence marks the field invalid */
+  error?: string;
+  /** Goes on the `Field`, the row; a `TextInput` takes its own */
+  className?: string;
+}
+
+/**
+ * One line of text the player types, such as a name, with its label: a
+ * `Field` holding a `TextInput`, the commonest form a game asks for in
+ * one element. `description` and `error` are its `FieldDescription` and
+ * `FieldError`; other props go to the input. For anything else around
+ * the input, compose the `Field` yourself.
+ */
+export const TextField = ({
+  children,
+  description,
+  error,
+  disabled,
+  name,
+  className,
+  ...props
+}: TextFieldProps) => (
+  <Field disabled={disabled} name={name} className={className}>
+    <FieldLabel>{children}</FieldLabel>
+    <TextInput {...props} />
+    {description && <FieldDescription>{description}</FieldDescription>}
+    {error && <FieldError>{error}</FieldError>}
+  </Field>
+);

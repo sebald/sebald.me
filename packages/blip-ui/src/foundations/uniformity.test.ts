@@ -268,8 +268,9 @@ describe('the kit’s focus', () => {
 describe('the kit’s components', () => {
   it('mark their root with their name, so a parent can place them', () => {
     // Whose root is another of the kit's components, marked by that one
-    // (Confirm's is a Dialog), or parts each marked by its own name
-    const COMPOSED = new Set(['confirm', 'parts']);
+    // (Confirm's is a Dialog, TextField's a Field), or parts each marked
+    // by its own name
+    const COMPOSED = new Set(['confirm', 'parts', 'text-field']);
     const unmarked = readdirSync(ROOT).filter(
       name =>
         !COMPOSED.has(name) &&

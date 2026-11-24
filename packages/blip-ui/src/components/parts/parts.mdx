@@ -57,10 +57,10 @@ along the bottom edge.
   between its children, so every screen's rows are as far apart as the others'.
 - **Do** put text inside a `Text`: every direct child of the `Content` is
   a row, so loose words beside an inline element would split into rows.
-- **Do** put rows of a `TextField`, a `Switch` and a `Readout` in a
-  `Content`: it sets `--bui-label-width` (a label column on a wide stage,
-  not set on a tall one) which each takes as the width of its label, so the
-  names line up.
+- **Do** put rows of a `Field` (a `TextField` is one), a `Switch` and a
+  `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
+  a wide stage, not set on a tall one) which each takes as the width of its
+  label, so the names line up.
 - **Don't** wrap rows in a `div` to space them or give the `Content` a
   `className` for a gap: the gap is its own.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new

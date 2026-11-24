@@ -7,14 +7,24 @@ export const parts = {
   title: text.heading,
   /**
    * `--bui-label-width`: the width of the label column the rows in it
-   * share (a `TextField`, a `Switch`, a `Readout` take it for their
+   * share (a `Field`, a `Switch`, a `Readout` take it for their
    * label). Not on a tall stage, where there is no room for a column:
    * the labels are as wide as their text and a field's goes above it.
    * Its children are rows, 4 stage pixels apart: the one gap every
    * screen would otherwise spell for itself
    */
   content: cva({
-    base: 'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
+    base: [
+      'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
+      // A field in it has its label in the column, the words under the
+      // control after it; on a tall stage it stays stacked, as anywhere.
+      // The label spans the rows and a last row takes what a label on two
+      // lines adds, so the words stay right under the control
+      'not-tall:*:data-[slot=field]:grid-cols-[var(--bui-label-width)_minmax(0,1fr)_auto]',
+      "not-tall:*:data-[slot=field]:[grid-template-areas:'label_control_control'_'label_description_count'_'label_error_count'_'label_._.']",
+      'not-tall:*:data-[slot=field]:grid-rows-[auto_auto_auto_minmax(0,1fr)]',
+      'not-tall:*:data-[slot=field]:*:data-[slot=field-label]:mb-0',
+    ],
   }),
   /**
    * Side by side 12 stage pixels apart, the room a focused `Button`'s

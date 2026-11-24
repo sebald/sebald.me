@@ -1,38 +1,15 @@
 import { cva } from '../../utils/styles';
 
 /**
- * A label and a line to type in. The field is ink, darker than the
- * window, with one underline as its only edge: dim at rest, thicker and
- * bright with the focus (the kit's mark for a field: two pixels, primary),
- * red when invalid (focused or not; the caret alone shows the focus then). The label is the name of a `Switch`, to
- * the left of the field where the container gives a label width
- * (`--bui-label-width`, set by `Content` on a wide stage) and above it
- * where it doesn't. Spacing in `--bui-px` and the text in em, so a phone
- * keeps it legible.
+ * A line to type in, the control of a `Field`. The field is ink, darker
+ * than the window, with one underline as its only edge: dim at rest,
+ * thicker and bright with the focus (the kit's mark for a field: two
+ * pixels, primary), red when invalid (focused or not; the caret alone
+ * shows the focus then). Its label and what is under it are the
+ * `Field`'s. Spacing in `--bui-px` and the text in em, so a phone keeps
+ * it legible.
  */
 export const textField = {
-  root: cva({
-    base: 'flex min-w-0 flex-wrap items-baseline gap-x-[calc(var(--bui-px)*3)] gap-y-[calc(var(--bui-px)*2)]',
-  }),
-  /** The name, as a Switch's: as wide as the container's label column, or the whole row */
-  label: cva({
-    base: 'w-(--bui-label-width,100%) shrink-0 text-(--bui-text-bright) data-[disabled]:bui-disabled',
-  }),
-  /** The field with what is under it, in the column after the label */
-  control: cva({
-    base: 'flex min-w-0 flex-1 flex-col gap-[calc(var(--bui-px)*2)]',
-  }),
-  /** The description or the error, and at its end the characters left */
-  meta: cva({
-    base: 'flex items-baseline justify-between gap-[calc(var(--bui-px)*3)]',
-  }),
-  /** Muted while there is room, in the primary colour once it is full */
-  count: cva({
-    base: [
-      'ml-auto text-[0.85em] text-(--bui-muted) tabular-nums',
-      'data-[full]:text-(--bui-primary) data-[disabled]:bui-disabled',
-    ],
-  }),
   input: cva({
     base: [
       // A field is typed in: the stage turns selecting off, and Safari
@@ -59,6 +36,4 @@ export const textField = {
       'data-[disabled]:cursor-default',
     ],
   }),
-  description: cva({ base: 'm-0 text-[0.75em] text-(--bui-muted)' }),
-  error: cva({ base: 'm-0 text-[0.85em] text-(--bui-danger-light)' }),
 };

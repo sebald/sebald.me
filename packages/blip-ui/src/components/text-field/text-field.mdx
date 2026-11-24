@@ -8,9 +8,13 @@ import * as TextFieldStories from './text-field.stories';
 # TextField
 
 A text input, one line the player types: a name entry for the hero, a
-save, a pet. A label, the text in the stage's own font with a caret, and
-optionally the characters left. Built on Base UI's Field and Input, so the label is
-tied to a native `<input>` and the phone's keyboard opens on its own.
+save, a pet. `TextInput` is the line itself, the text in the stage's own
+font with a caret, a native `<input>`, so the phone's keyboard opens on its
+own; built on Base UI's Input. `TextField` is the commonest form of it, a
+`Field` with a label holding a `TextInput`, in one element: its children are
+the label, `description` and `error` the field's words, the rest goes to the
+input. Where the field needs anything else around the input, compose the
+`Field` yourself.
 
 <Canvas of={TextFieldStories.Default} />
 <Controls of={TextFieldStories.Default} />
@@ -19,22 +23,28 @@ tied to a native `<input>` and the phone's keyboard opens on its own.
 <TextField maxLength={10} onSubmit={name => start(name)}>
   Name
 </TextField>
+
+// the same, composed
+<Field>
+  <FieldLabel>Name</FieldLabel>
+  <TextInput maxLength={10} onSubmit={name => start(name)} />
+</Field>
 ```
 
 ## Anatomy
 
-1. **Label**, its children, tied to the input, in the style of a
-   `Switch`'s name. To the left of the field on a wide stage, above it on
-   a tall one
-2. **The field**, ink (`--bui-ink`), darker than the window, square, with
+1. **Label**, its children, the `Field`'s label: to the left of the field
+   on a wide stage, above it on a tall one
+2. **The field**, the `TextInput`, ink (`--bui-ink`), darker than the window, square, with
    one underline as its only edge: one stage pixel in `--bui-dim` at rest,
    two in `--bui-primary` with the focus, one in `--bui-danger` when
    invalid. Low: a line of text with two stage pixels above and below,
    lower than a `Button`
-3. **Description** or **error**, under the field in the field's column:
-   what to type, or what is wrong, in words
-4. **Characters left**, at the end of that line when there is a
-   `maxLength`; it turns to the primary colour once the field is full
+3. **Description** and **error**, the `Field`'s, under the field: what to
+   type, and what is wrong, in words
+4. **Characters left**, drawn by the `Field` at the end of that line when
+   there is a `maxLength`; it turns to the primary colour once the field is
+   full
 
 <Canvas of={TextFieldStories.Overview} />
 
@@ -52,23 +62,8 @@ work the same way: it thickens and turns bright with the focus, and turns
 red when invalid. Invalid, focused or not, looks the same, and the red
 caret is then the only sign that the field has the focus.
 
-**Where the label goes.** Beside the field in a window's rows, above it on
-a phone. Labels above their fields are the faster form to complete and the
-one that works on a narrow screen (Baymard's checkout research, and
-Wroblewski's _Web Form Design_ before it), which is why a tall stage
-stacks them. Wroblewski's own caveat is the case here too: a list of
-settings, where the player scans the names down one column and the fields
-are short, is better with the labels in a column to their left. So a wide
-stage gives the rows one label column, and a field's label lines up with
-the name of the `Switch` and the `Readout` above it.
-
-The column is the window's: `Content` sets `--bui-label-width` for what is
-in it, and a `TextField`, a `Switch` and a `Readout` take it as the width
-of their label. Outside a `Content`, or on a tall stage, where there is no
-room for a column, the variable is not set and each label is as wide as
-its text (a field's takes the whole row, so the field is under it).
-`Content` places nothing itself: each row decides only its own label's
-width.
+**Where the label goes** is the `Field`'s: beside the field in a window's
+label column, above it on a phone ([Field](?path=/docs/components-field--docs)).
 
 <Canvas of={TextFieldStories.OptionsRows} />
 
@@ -79,9 +74,7 @@ text is for: a name that is drawn in a fixed space gets the width it can
 hold, and the characters left show it before it is reached. A screen
 reader hears it too, when the field is full and again when more is typed.
 
-An error is a sentence, not a colour. The red underline helps whoever sees
-it; the sentence is what a screen reader and a colour-blind player get,
-and the field is linked to it, so it is read with the field. Say what to do
+An error is a sentence, not a colour, as on any `Field`: say what to do
 about it, not only that it is wrong.
 
 <Canvas of={TextFieldStories.NamingTheHero} />
@@ -108,9 +101,11 @@ about it, not only that it is wrong.
 
 ## Accessibility
 
-- A native `<input type="text">`, labelled by its children
-- Described by its description and the limit (`Up to 10 characters`);
-  an error is linked to it and marked invalid (`aria-invalid`)
+- A native `<input type="text">`, labelled by its `Field`'s label (a
+  `TextField`'s children)
+- Described by the field's description and the limit (`Up to 10
+characters.`); an error is linked to it and marked invalid
+  (`aria-invalid`)
 - The limit is announced when it is reached, through the stage's live
   region, not only drawn
 - Contrast: the text is 12.7:1 on the ink and the placeholder
@@ -120,7 +115,7 @@ about it, not only that it is wrong.
   10.5:1 against the window and 3.44:1 against the rest underline. Red is
   4.56:1 against the ink and 4.15:1 against the window; the caret
   (`--bui-danger-light`) 7.1:1 against the ink. The characters left are
-  muted, 5.78:1 on the window
+  the `Field`'s, muted, 5.78:1 on the window
 - Focus is the underline going from one stage pixel to two (3 to 6 CSS
   pixels, as the stage's pixel is never finer than 3), dim to bright, and
   the caret, which meets 2.4.7. This is the field's form of the kit's one

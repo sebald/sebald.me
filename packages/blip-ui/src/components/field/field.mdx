@@ -1,0 +1,106 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as FieldStories from './field.stories';
+
+<Meta of={FieldStories} />
+
+# Field
+
+A form control with the words around it: its label, a line that says what
+to type, what is wrong, and the characters left. Every control a player
+fills in or sets goes in one, so the labels of a window's rows line up and
+read alike, and each control is tied to its words for a screen reader
+whatever the control is. Built on Base UI's Field.
+
+<Canvas of={FieldStories.Default} />
+<Controls of={FieldStories.Default} />
+
+```tsx
+<Field>
+  <FieldLabel>Seed</FieldLabel>
+  <TextInput maxLength={6} value={seed} onValueChange={setSeed} />
+  <FieldDescription>Leave it empty for a random run.</FieldDescription>
+  {wrong && <FieldError>Digits only, such as 1987.</FieldError>}
+</Field>
+```
+
+For the commonest case, one line of text with a label, `TextField` is this
+in one element.
+
+## Anatomy
+
+1. **`FieldLabel`**, the control's name, in the window's bright text
+2. **The control**, any child that is not one of the words: a `TextInput`
+   today, the stepper when it comes
+3. **`FieldDescription`**, under the control: what to type or in what form,
+   small and muted
+4. **`FieldError`**, under that: what is wrong, a sentence in red. While it
+   is there the control is invalid
+5. **Characters left**, at the end of the line under the control, for a
+   control with a limit (a `TextInput` with `maxLength`); it turns to the
+   primary colour once the control is full. The field draws it itself, from
+   what the control tells it
+
+The parts are children in any order; the field places them by their slots.
+A line with nothing in it takes no room.
+
+<Canvas of={FieldStories.Overview} />
+
+## Usage
+
+**Where the label goes.** Beside the control in a window's rows, above it on
+a phone. Labels above their fields are the faster form to complete and the
+one that works on a narrow screen (Baymard's checkout research, and
+Wroblewski's _Web Form Design_ before it), which is why a tall stage stacks
+them, every label and control starting at the row's left edge. Wroblewski's
+own caveat is the case on a wide stage: a list of settings, where the player
+scans the names down one column and the controls are short, is better with
+the labels in a column to their left, as option screens in games have them.
+
+The column is the window's: `Content` sets `--bui-label-width` for what is
+in it and, on a wide stage, places a field in it with its label in that
+column and the words under the control after it; a `Readout`'s and a
+`Switch`'s name take the same width, so all three line up. Anywhere else, a
+field in a dialog's body or on the stage, the label goes above the control,
+as on a phone: a column is only worth it where there are rows to line up.
+
+**Which controls go in one.** Every control the player fills in or sets,
+so one rule places all their labels:
+
+- A `TextInput`, through a `Field` or as a `TextField`
+- The stepper, when it comes, for a value between set values (On and Off
+  included)
+- Not a `Switch`: its name is inside it, the whole row its tap target, and
+  it is being replaced by the stepper (`docs/blip-harness/research/forms-and-navigation.md`,
+  decision 2). It takes the label column on its own until then
+- Not a `Readout`: it shows a number and takes nothing in, so it has no
+  label element to tie to a control. Its label takes the same column, so a
+  readout's row lines up with the fields'
+- Not a `Picker`: a menu's window title names the list, and a window is a
+  menu or a form, never both
+
+**An error is a sentence, not a colour.** The control turns red for whoever
+sees it; the sentence is what a screen reader and a colour-blind player get,
+and it is read with the control. Say what to do about it, not only that it
+is wrong. Show it while it is true, so it goes when the player fixes it.
+
+<Canvas of={FieldStories.NewRunForm} />
+
+<Rules for="field" />
+
+## Accessibility
+
+- The label is a `<label>` tied to the control, which takes its name from
+  it; a tap on the label focuses the control
+- The description, the limit (`Up to 10 characters.`, said, not shown) and
+  the error are linked to the control (`aria-describedby`), so a screen
+  reader reads them when it gets there
+- A `FieldError` marks the control invalid (`aria-invalid`), and the
+  control shows it in its own way (a `TextInput`'s underline turns red)
+- The characters left are only for the eyes: the limit is in the
+  description, and the control says when it is reached
+- Contrast on the window (`--bui-surface`): the label 11.56:1, the description and the count
+  (`--bui-muted`) 5.78:1, the error (`--bui-danger-light`) 6.46:1
+- Disabled dims the label, the count and the control together
+  (`bui-disabled`), and the control takes no input
