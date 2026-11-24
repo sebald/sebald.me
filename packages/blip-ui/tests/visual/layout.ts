@@ -246,3 +246,29 @@ export const cursorRoom = (
     },
     [rootSelector, limit] as const,
   );
+
+/**
+ * Windows inside a window: a `Window`, a tab's panel or a dialog drawn
+ * inside another. Each is a frame of its own (`data-slot="window"`), so
+ * a second one in it reads as a container in a container, never a
+ * screen's (`building-components.mdx`: a tab's panel and a dialog are
+ * the window, their parts go straight in). Each as the inner window's
+ * first words.
+ */
+export const windowsInWindows = (
+  page: Page,
+  rootSelector = '#storybook-root',
+) =>
+  page.evaluate(
+    selector =>
+      [
+        ...(document
+          .querySelector(selector)
+          ?.querySelectorAll('[data-slot="window"] [data-slot="window"]') ??
+          []),
+      ].map(
+        inner =>
+          `a window in a window: "${(inner.textContent ?? '').trim().slice(0, 30)}"`,
+      ),
+    rootSelector,
+  );

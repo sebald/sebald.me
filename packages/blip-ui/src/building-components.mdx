@@ -80,7 +80,9 @@ does; how it looks follows from that.
   state that concerns all parts (`Tabs`' value); the parts read it and take no prop for it.
 - **The look is shared by internal parts, not by exported styles.** A tab's
   panel and a `Dialog` are drawn by the same `WindowFrame` as a `Window`,
-  so there is no `Window` to put in them. Style objects are
+  so there is no `Window` to put in them: their parts go straight in. A
+  window in a window is never right, and the Blip visual tests fail on one
+  in any story. Style objects are
   not part of the kit's API.
 
 ## Placement: the parent places, the child marks itself
