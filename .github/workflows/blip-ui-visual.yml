@@ -5,7 +5,10 @@ name: Blip UI Visual Regression
 # the kit, its dependencies or this workflow change.
 on:
   pull_request:
-    branches: [main]
+    # blip-harness: its task pull requests get the layout checks (overflow,
+    # the focus cursor's room) before they merge, not after on the branch's
+    # own pull request into main. Drop it once the branch has merged
+    branches: [main, blip-harness]
     paths:
       - 'packages/blip-ui/**'
       - 'pnpm-lock.yaml'

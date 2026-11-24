@@ -199,6 +199,10 @@ control's look and its ratios (`foundations/focus.mdx`).
   (`Button`'s variants), or sits over any scene (`IconButton` in a corner),
   takes a mark outside its face, the cursor, not one per colour: that is
   how games mark a selected button. Every button shows it.
+- **A cursor has room.** 3 stage pixels from what it points at, nothing
+  else it could point at closer than 6 on its side, clear of its frame:
+  side by side, focusable things are 12 apart (`foundations/focus.mdx`,
+  the cursor's room). The visual tests check it in every story.
 - **Primary, or its inverse.** The mark is the primary colour (3:1 against
   the window, WCAG 1.4.11). Where the control's own face is the primary
   colour (the key), the mark is the letters' colour on it

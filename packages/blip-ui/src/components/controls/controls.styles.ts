@@ -20,9 +20,9 @@ export const controls = {
         /** Along the wide stage's top, the buttons in its corners; the row between lets taps through */
         corner: [
           'pointer-events-none absolute inset-x-[calc(var(--px)*5)] top-[calc(var(--px)*5)] z-(--bui-layer-controls)',
-          // Room for a focused button's cursor, two pixels left of its box:
-          // between two buttons, and at the stage's left edge
-          'left-[max(calc(var(--px)*5),calc(var(--bui-px)*2))] [&>*+*]:ml-[calc(var(--bui-px)*2)]',
+          // Room for a focused button's cursor, three pixels left of its
+          // icon: twice that from the icon before, and on the stage
+          'left-[max(calc(var(--px)*5),calc(var(--bui-px)*6))] [&>*+*]:ml-[calc(var(--bui-px)*8)]',
           '[&>*]:pointer-events-auto',
         ],
       },

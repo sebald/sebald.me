@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { escapes } from './layout';
+import { cursorRoom, escapes } from './layout';
 
 /**
  * Every story, screenshotted the ways a game shows it: wide at 3x (a
@@ -13,7 +13,8 @@ import { escapes } from './layout';
  * A screenshot only says a story looks as it did when its baseline was
  * taken, a fault included. So each shot is also checked for what a
  * picture can't show is wrong: nothing of the story may lie outside the
- * box the screenshot takes.
+ * box the screenshot takes, and every focus cursor has its room, focused
+ * or not.
  */
 interface Entry {
   id: string;
@@ -69,6 +70,12 @@ test('stories', async ({ page, baseURL }) => {
           .soft(
             await escapes(page),
             'parts outside the story, cut off in the screenshot',
+          )
+          .toEqual([]);
+        expect
+          .soft(
+            await cursorRoom(page),
+            'a focus cursor without its room (foundations/focus.mdx)',
           )
           .toEqual([]);
         await expect

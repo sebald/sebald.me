@@ -17,15 +17,16 @@ export const parts = {
     base: 'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
   }),
   /**
-   * Side by side 8 stage pixels apart, room for a focused `Button`'s
-   * cursor between two (3 wide, 2 from its button); a row under another 4.
-   * Holding buttons, it starts 8 in, a cursor column like a `Picker`'s:
+   * Side by side 12 stage pixels apart, the room a focused `Button`'s
+   * cursor needs between two (`foundations/focus.mdx`): 3 seen from its
+   * button, at least twice that from the one before; a row under another
+   * 4. Holding buttons, it starts 8 in, a cursor column like a `Picker`'s:
    * the first button's cursor has room, and the buttons line up with a
    * menu's labels
    */
   actions: cva({
     base: [
-      'flex flex-wrap items-center gap-x-[calc(var(--bui-px)*8)] gap-y-[calc(var(--bui-px)*4)] *:data-[slot=picker]:basis-full',
+      'flex flex-wrap items-center gap-x-[calc(var(--bui-px)*12)] gap-y-[calc(var(--bui-px)*4)] *:data-[slot=picker]:basis-full',
       'has-[>[data-slot=button]]:pl-[calc(var(--bui-px)*8)]',
     ],
   }),

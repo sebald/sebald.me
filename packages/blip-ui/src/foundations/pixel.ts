@@ -19,7 +19,7 @@ export const DOT = 2 / 3;
  * The spacing scale, in `FLOOR` pixels: every padding, gap and margin in
  * the kit is one of these (`uniformity.test.ts` checks the styles)
  */
-export const SPACE = [1, 2, 3, 4, 6, 8] as const;
+export const SPACE = [1, 2, 3, 4, 6, 8, 12] as const;
 
 /** A length in pixels of the unit, for inline styles: `px(3)` is three */
 export const px = (n: number, unit: string = UNIT) =>
