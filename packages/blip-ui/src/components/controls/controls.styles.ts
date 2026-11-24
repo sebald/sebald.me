@@ -17,8 +17,9 @@ export const controls = {
           // At the bar's right the label comes first, the icon at the edge
           '[&>:not([slot=leave])]:flex-row-reverse',
           // Two side by side: a focused one's cursor, in its own padding,
-          // twice as far from the one before as from its own content
-          '[&>*+*]:ml-[calc(var(--bui-px)*2)]',
+          // twice as far from the one before as from its own content (3,
+          // not 2: a label's letters fall a little differently per system)
+          '[&>*+*]:ml-[calc(var(--bui-px)*3)]',
         ],
         /** Along the wide stage's top, the buttons in its corners; the row between lets taps through */
         corner: [
