@@ -7,9 +7,11 @@ import * as TogetherStories from '../../compositions/together.stories';
 # Menu screen
 
 A whole screen that asks the player to choose: pick a role, start the run,
-set an option. The screen's title sits along the top, one window holds the
-choice (what it is about, the picker, the keys), and the buttons for
-leaving or confirming sit under the window.
+set an option. The screen's title sits along the top, and one window holds
+the choice: what it is about, the picker, the keys. Starting and going back
+are the menu's own items, not buttons beside it: a window is a menu or a
+form, and the arrow keys reach everything on a menu screen, where buttons
+under it would be reached by Tab alone.
 
 ## When to use
 
@@ -21,13 +23,12 @@ leaving or confirming sit under the window.
 
 ## Parts
 
-| Part                    | What it does here                                                                   |
-| ----------------------- | ----------------------------------------------------------------------------------- |
-| `ScreenTitle`           | The screen's name in bitmap letters along the top, with a one-line blurb under it   |
-| `Window`                | Holds the choice; `Title`, `Content` and `Actions` place themselves inside it       |
-| `Picker`                | The list: items, a setting, a disabled item with a `note`, a `PickerGroup` for Back |
-| `Legend`                | The keys at the window's bottom, or the one line a touch screen shows               |
-| `Button` (size `small`) | What the screen does besides the list, under the window: the quiet one first        |
+| Part          | What it does here                                                                   |
+| ------------- | ----------------------------------------------------------------------------------- |
+| `ScreenTitle` | The screen's name in bitmap letters along the top, with a one-line blurb under it   |
+| `Window`      | Holds the choice; `Title`, `Content` and `Actions` place themselves inside it       |
+| `Picker`      | The list: items, a setting, a disabled item with a `note`, a `PickerGroup` for Back |
+| `Legend`      | The keys at the window's bottom, or the one line a touch screen shows               |
 
 The picker's `Back` item is a `PickerItem` with `variant="back"` in its own
 `PickerGroup`, so it has room above it. The main item is `variant="accent"`.

@@ -1,4 +1,3 @@
-import { Button } from '../../../components/button/button';
 import { Actions, Content, Title } from '../../../components/parts/parts';
 import {
   Picker,
@@ -60,12 +59,6 @@ export function PickARole() {
             touch="Tap a line"
           />
         </Window>
-        <div className="flex justify-center gap-[calc(var(--px)*4)]">
-          <Button variant="secondary" size="small">
-            Cancel
-          </Button>
-          <Button size="small">Play</Button>
-        </div>
       </div>
     </>
   );
