@@ -28,8 +28,7 @@ export function PickARole() {
             <Text>Ships on Friday. Regrets nothing.</Text>
           </Content>
           <Actions>
-            {/* `active={false}` is for the docs: leave it out and the picker takes the keys */}
-            <Picker label="Menu" active={false}>
+            <Picker label="Menu">
               <PickerItem id="start" variant="accent" onSelect={noop}>
                 Start the run
               </PickerItem>
