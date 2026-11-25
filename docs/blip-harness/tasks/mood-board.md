@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N+ # a check on the kit as a whole, any time
 depends: [stepper]
-pr:
+pr: 240
 ---
 
 # `mood-board`: Every control on one sheet, to keep the kit one look
