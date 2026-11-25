@@ -90,8 +90,9 @@ about it, not only that it is wrong.
   is in a text field, so letters and arrows are typed and a menu elsewhere
   on the screen does not move
 - Enter submits (`onSubmit`, with the text) and the field keeps the focus;
-  the screen decides what happens next. It is not a form's submit: the
-  event is not prevented, so inside a `<form>` that submits too
+  the screen decides what happens next. Inside a `Form`, Enter sends the
+  form instead and `onSubmit` is not called (a console error says so
+  while building): read the value in the form's `onSubmit`
 - Escape gives the keys back to the screen without leaving it: the field
   lets go of the focus, the next Escape is the screen's own back. It does
   not close a `Dialog` the field is in
