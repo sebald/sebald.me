@@ -34,12 +34,16 @@ export const picker = {
     variants: {
       selected: {
         true: 'text-(--bui-text-selected)',
-        false: [
-          'text-(--bui-text-bright) hover:text-(--bui-text-selected)',
-          // A setting's arrows only on the cursor's row, where Left and
-          // Right work; under a finger they stay, the sign a tap steps it
-          '[@media(hover:hover),(pointer:fine)]:[&_[data-slot=step]]:opacity-0',
-        ],
+        false: 'text-(--bui-text-bright) hover:text-(--bui-text-selected)',
+      },
+      /**
+       * Whether a setting's arrows show: on the cursor's row, where Left
+       * and Right work, and on every row under a finger (the picker's own
+       * input kind, so a touch on a laptop counts), the sign a tap steps it
+       */
+      stepsShown: {
+        true: '',
+        false: '[&_[data-slot=step]]:opacity-0',
       },
       variant: {
         default: '',
@@ -56,7 +60,7 @@ export const picker = {
         className: 'text-(--bui-primary-light)',
       },
     ],
-    defaultVariants: { selected: false, variant: 'default' },
+    defaultVariants: { selected: false, stepsShown: true, variant: 'default' },
   }),
   /** The cursor: a stepped pixel triangle, in `--bui-px` like every control */
   cursor: cva({

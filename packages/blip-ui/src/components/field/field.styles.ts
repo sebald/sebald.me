@@ -36,6 +36,10 @@ export const field = {
       // (about half the room the next row has, with its leading)
       'has-[>[data-slot=stepper]]:*:data-[slot=field-description]:mt-joined',
       'has-[>[data-slot=stepper]]:*:data-[slot=field-error]:mt-joined',
+      // Over the stepper's touch target, which reaches into the gap above
+      // them: a tap on the words is not a tap on the value
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-description]:relative',
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-error]:relative',
     ],
   }),
   /** The name, in the window's bright text; what the cursor points at */

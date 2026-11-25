@@ -63,6 +63,22 @@ test.describe('a stepper', () => {
     await expect(music).toBeFocused();
   });
 
+  test('its arrows are its focus: its field shows no cursor', async ({
+    page,
+  }) => {
+    await page.keyboard.press('ArrowDown');
+    const row = page.locator('[data-slot=field]', {
+      has: page.getByRole('switch', { name: 'Music' }),
+    });
+    // What the player sees of the marks: the field's cursor stays out,
+    // the arrows either side of the value show
+    await expect(row.locator('[data-slot=cursor]')).toHaveCSS('opacity', '0');
+    await expect(row.locator('[data-slot=step]').first()).toHaveCSS(
+      'opacity',
+      '1',
+    );
+  });
+
   test('a tap on its label steps it, and the form sends its value', async ({
     page,
   }) => {
