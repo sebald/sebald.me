@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N+ # design adjustment from the mood board
 depends: [mood-board]
-pr:
+pr: 242
 ---
 
 # `window-edge`: One left edge and one right edge in a window
