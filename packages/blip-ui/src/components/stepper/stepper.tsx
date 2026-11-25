@@ -124,6 +124,8 @@ export const StepperControl = ({
     <div
       ref={ref}
       data-slot="stepper"
+      // Its arrows are its focus: its field shows no cursor beside them
+      data-marks-focus
       {...getDescriptionProps({})}
       role={toggle ? 'switch' : 'slider'}
       {...(toggle

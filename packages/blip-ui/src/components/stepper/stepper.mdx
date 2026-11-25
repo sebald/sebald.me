@@ -36,11 +36,12 @@ it, a `Field` with a label holding one: its children are the label,
 1. **Label**, its children, the `Field`'s label: in the window's label
    column on a wide stage; on a tall one, or outside a window's rows,
    beside the value too, the value at the row's end, as on a phone's
-   settings screen. The cursor
-   points at it while the stepper has the keys' focus
+   settings screen. No cursor points at it: the arrows are the
+   stepper's focus
 2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`),
    shown only where Left and Right work: in `--bui-primary` while it has
-   the keys' focus, a second cue beside the cursor, and under the pointer.
+   the keys' focus, its focus mark in place of the `Field`'s cursor (one
+   mark on the row, not a cursor and two arrows), and under the pointer.
    At rest a row is its name and value, as on a game's
    options screen, so a window of steppers is not a column of arrows; their room
    is kept, so nothing shifts when they show. Under a finger there is no
@@ -99,8 +100,10 @@ it, a `Field` with a label holding one: its children are the label,
 - A change is said by the role's own state, which a screen reader reads
   for the control it is on, not by the stage's live region, which would
   say it twice
-- A Tab stop; the focus is the `Field`'s cursor left of the label and the
-  arrows showing beside the value, in primary (`foundations/focus.mdx`)
+- A Tab stop; the focus is the arrows showing either side of the value,
+  in primary, in place of the `Field`'s cursor (`data-marks-focus`,
+  `foundations/focus.mdx`). Not dim: 3.05:1 is too close to the 3:1 of
+  WCAG 1.4.11 for the only mark
 - The value is in words, so the state never rests on colour. The arrows
   are 10.51:1 on the window with the focus (primary) and 3.05:1 at rest
   under a finger (dim, the 3:1 of WCAG 1.4.11); the value is bright,
