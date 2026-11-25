@@ -65,6 +65,11 @@ works as on the web.
   back to that row
 - **Onto a row of buttons**, the first one; Left and Right go along it and
   round
+- **Enter is the form's.** In a field inside a `Form` it sends the form,
+  and the field's own `onSubmit` is not called
+- **A control that steps on Up and Down keeps them**: a number, a date, a
+  `select`. Tab leaves it; the stepper, once there, is a field the arrows
+  pass
 - **Tab is the web's**: it visits every control in reading order and
   leaves the window, so a screen reader and a keyboard user lose nothing
 - **One screen, one set of arrows.** A form and a menu on the same screen

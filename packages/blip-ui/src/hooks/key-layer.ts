@@ -234,9 +234,13 @@ export const focusTakes = (event: KeyboardEvent) => {
   );
 };
 
-/** A single line of text: of the arrows, only Left and Right move its caret */
+/**
+ * A single line of text: of the arrows, only Left and Right move its
+ * caret, and Enter does nothing. Not a number or a date, which step on
+ * Up and Down, nor a file or a colour, which open on Enter
+ */
 export const LINE =
-  'input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=button]):not([type=submit]):not([type=reset])';
+  'input:not([type]), input[type=text], input[type=search], input[type=email], input[type=tel], input[type=url], input[type=password]';
 
 export interface KeydownOptions {
   /**
@@ -267,7 +271,9 @@ export const useKeydown = (
     const listener = (event: KeyboardEvent) => {
       if (!onTop()) return;
       const target = event.target as HTMLElement | null;
-      const line = keys.has(event.key) && !!target?.matches?.(LINE);
+      // While an input method composes, its keys pick the candidate
+      const line =
+        keys.has(event.key) && !event.isComposing && !!target?.matches?.(LINE);
       if (line || !focusTakes(event)) handle(event);
     };
     window.addEventListener('keydown', listener, true);

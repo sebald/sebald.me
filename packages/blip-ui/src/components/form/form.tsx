@@ -18,15 +18,21 @@ export interface FormProps {
 const ROWS = '[data-slot=field], [data-slot=actions]';
 /** What in a row takes the focus */
 const FOCUSABLE =
-  'input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  'input:not([type=hidden]), select, textarea, button, [tabindex]:not([tabindex="-1"])';
+
+/** Takes the focus: not disabled (by itself or its fieldset), not hidden */
+const reachable = (element: HTMLElement) =>
+  !element.matches(':disabled') &&
+  !element.closest('[inert]') &&
+  (element.checkVisibility?.({ visibilityProperty: true }) ?? true);
 
 /** A row's stops: a field's one control, or each button in a row of them */
-const stops = (row: Element) =>
-  row.matches('[data-slot=actions]')
-    ? [...row.querySelectorAll<HTMLElement>(FOCUSABLE)]
-    : [row.querySelector<HTMLElement>(FOCUSABLE)].filter(
-        (stop): stop is HTMLElement => stop !== null,
-      );
+const stops = (row: Element) => {
+  const all = [...row.querySelectorAll<HTMLElement>(FOCUSABLE)].filter(
+    reachable,
+  );
+  return row.matches('[data-slot=actions]') ? all : all.slice(0, 1);
+};
 
 /**
  * A form window's controls, moved between as a game does: Up and Down go
@@ -57,6 +63,8 @@ export const Form = ({ children, onSubmit, className }: FormProps) => {
       // Keys on something outside the form are its own
       if (!inside && target !== document.body) return;
       if (event.altKey || event.ctrlKey || event.metaKey) return;
+      // While an input method composes, its keys pick the candidate
+      if (event.isComposing) return;
 
       const rows = [...root.querySelectorAll(ROWS)].filter(
         row => stops(row).length > 0,
@@ -97,7 +105,10 @@ export const Form = ({ children, onSubmit, className }: FormProps) => {
       }
 
       // Enter in a line of text sends the form, as a game's "done"
+      // (once: the browser's own submit on Enter is held back)
       if (event.key === 'Enter' && inside && target!.matches(LINE)) {
+        event.preventDefault();
+        play('confirm');
         root.requestSubmit();
       }
     },
@@ -125,7 +136,7 @@ export const Form = ({ children, onSubmit, className }: FormProps) => {
       console.error(
         'Blip UI: a Picker inside a Form. A window is a menu or a form (`docs/blip-harness/research/forms-and-navigation.md`, decision 1): give the menu its own window, or make its choices fields.',
       );
-  });
+  }, []);
 
   return (
     <form

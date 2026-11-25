@@ -97,10 +97,21 @@ test.describe('a form window', () => {
   test('Enter in a field sends the form, and so does the submit button', async ({
     page,
   }) => {
+    // Each send counted, so a second one (the browser's own) shows
+    await page.evaluate(() => {
+      const w = window as unknown as { sends: number };
+      w.sends = 0;
+      document
+        .querySelector('[data-slot=form]')!
+        .addEventListener('submit', () => (w.sends += 1));
+    });
+    const sends = () =>
+      page.evaluate(() => (window as unknown as { sends: number }).sends);
     await page.keyboard.press('ArrowDown');
     await page.keyboard.type('Cave');
     await page.keyboard.press('Enter');
     await expect(page.getByText('Saved as Cave.')).toBeVisible();
+    expect(await sends()).toBe(1);
     await page.keyboard.press('ArrowUp');
     await page.keyboard.press('ArrowRight');
     await page.keyboard.press('Enter');
@@ -108,6 +119,7 @@ test.describe('a form window', () => {
     await page.keyboard.press('ArrowLeft');
     await page.keyboard.press('Enter');
     await expect(page.getByText('Saved as Cave.')).toBeVisible();
+    expect(await sends()).toBe(2);
   });
 
   test('Tab visits every control in reading order, unchanged', async ({
