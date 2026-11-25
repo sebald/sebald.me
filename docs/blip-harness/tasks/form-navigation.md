@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: N4 # forms and navigation
 depends: [stepper, field, picker-key-scope]
 pr:
@@ -37,3 +37,17 @@ pr:
 Filled in while the task is worked on: what changed, decisions, numbers.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+**Built before the stepper** (decided with the user, 2026-11-25, after they found Up and Down doing nothing in the "New run" form and the focus overview): the model works for text fields and buttons now; the stepper joins when it is built (it must be a `row` widget for `focusTakes` and a `Field`'s control, then Left and Right are its own and Up and Down pass to the form).
+
+**Where it goes: inside the window's `Content`**, as planned, not around the window: a `<form>` between a window's body and its parts would break their placement by slot, and around a `Dialog` the portal would leave it. So `Form` lays its rows out as `Content` does, from one shared list (`rows` in `parts.styles.ts`), and `Actions` go inside it.
+
+**Rows are found by slot in the DOM** (`[data-slot=field]`, `[data-slot=actions]`, in document order), not by registration through context: the same order, nothing declared per control, nothing measured, and less code. A row with nothing focusable (disabled) is skipped.
+
+**Keys through `useKeydown`**, which takes `fromLine`: keys heard even in a single line of text, which has no use for them (Up, Down, Enter). The form joins the menus' key scope (`'menu'`), so a form and a `Picker` on one page never both move: the one last pointed at, pressed on or focused has the arrows, the first on the page until then (on a docs page with several examples, click or Tab into the form first).
+
+**Onto a row of buttons, the first one** (not the nearest: simpler and predictable). **After Esc, the next arrow goes back to the row left.**
+
+**Not done here:** the legend is still the screen's (`Form` writing the window's `Legend` would be a child placing itself outside its parent); the Picker-in-a-Form refusal is a `console.error` while building, not a throw.
+
+**Tests:** `tests/visual/form-keys.spec.ts` runs the research's table against the `Form` example in the Blip visual workflow (no screenshots): Down from nothing visits each row and wraps, Up reverses; Left in a field moves the caret; Esc and back; Left and Right along the buttons; Enter sends; Tab unchanged.

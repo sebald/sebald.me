@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from '../components/button/button';
+import { Form } from '../components/form/form';
 import { IconButton } from '../components/icon-button/icon-button';
 import { Actions, Content } from '../components/parts/parts';
 import { Picker, PickerItem } from '../components/picker/picker';
@@ -35,23 +36,27 @@ export const Overview: Story = {
         {/* A tab's panel is drawn as a window: its parts go straight in */}
         <TabPanel value="controls">
           <Content>
-            <TextField defaultValue="Ada">Name</TextField>
-            <TextField defaultValue="" error="Needs a name">
-              Invalid
-            </TextField>
+            <Form>
+              <TextField defaultValue="Ada">Name</TextField>
+              <TextField defaultValue="" error="Needs a name">
+                Invalid
+              </TextField>
+              <Actions>
+                <Button>Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="destructive">Destructive</Button>
+              </Actions>
+            </Form>
             <Switch>Music</Switch>
+            <Actions>
+              <IconButton
+                icon="back"
+                label="Back"
+                aria-label="Back"
+                slot="leave"
+              />
+            </Actions>
           </Content>
-          <Actions>
-            <Button>Primary</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="destructive">Destructive</Button>
-            <IconButton
-              icon="back"
-              label="Back"
-              aria-label="Back"
-              slot="leave"
-            />
-          </Actions>
         </TabPanel>
         <TabPanel value="menu">
           <Content>

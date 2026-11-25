@@ -1,0 +1,20 @@
+page: form
+rules:
+  - id: C-FORM-1
+    text: Put a form window's fields and its buttons in one Form inside the window's Content, and write no key handling of your own for Up, Down, Left or Right.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: C-FORM-2
+    text: Give the form's main button type="submit" and read the values from onSubmit's FormData by each field's name.
+    markers: [review]
+  - id: C-FORM-3
+    text: Keep a Picker out of a Form; a window is a menu or a form.
+    markers: [review]
+    source: docs/blip-harness/research/forms-and-navigation.md
+  - id: C-FORM-4
+    text: Name the form's keys in the window's Legend, the arrows for the rows and what Enter does.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/107
+when-not:
+  - text: A list of actions or places to go is a Picker in a menu window, not a Form.
+    use: picker

@@ -234,6 +234,18 @@ export const focusTakes = (event: KeyboardEvent) => {
   );
 };
 
+/** A single line of text: of the arrows, only Left and Right move its caret */
+export const LINE =
+  'input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=button]):not([type=submit]):not([type=reset])';
+
+export interface KeydownOptions {
+  /**
+   * Keys heard even while the focus is in a single line of text, which
+   * has no use for them: a form's Up and Down, its Enter
+   */
+  fromLine?: string[];
+}
+
 /**
  * The kit's one way to listen for keys: `onKey` hears a key while
  * `active`, only on its layer, and never one the focus handles itself.
@@ -244,15 +256,21 @@ export const focusTakes = (event: KeyboardEvent) => {
 export const useKeydown = (
   onKey: (event: KeyboardEvent) => void,
   active = true,
+  { fromLine = [] }: KeydownOptions = {},
 ) => {
   const onTop = useOnTop();
   const handle = useEffectEvent(onKey);
+  const lineKeys = fromLine.join(' ');
   useEffect(() => {
     if (!active) return;
+    const keys = new Set(lineKeys.split(' '));
     const listener = (event: KeyboardEvent) => {
-      if (onTop() && !focusTakes(event)) handle(event);
+      if (!onTop()) return;
+      const target = event.target as HTMLElement | null;
+      const line = keys.has(event.key) && !!target?.matches?.(LINE);
+      if (line || !focusTakes(event)) handle(event);
     };
     window.addEventListener('keydown', listener, true);
     return () => window.removeEventListener('keydown', listener, true);
-  }, [active, onTop]);
+  }, [active, onTop, lineKeys]);
 };
