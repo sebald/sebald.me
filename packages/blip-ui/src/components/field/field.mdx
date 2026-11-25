@@ -60,20 +60,24 @@ the labels in a column to their left, as option screens in games have them.
 
 The column is the window's: `Content` sets `--bui-label-width` for what is
 in it and, on a wide stage, places a field in it with its label in that
-column and the words under the control after it; a `Readout`'s and a
-`Switch`'s name take the same width, so all three line up. Anywhere else, a
+column and the words under the control after it (a `Stepper`'s under the
+whole row, from the label, as a setting's); a `Readout`'s name takes
+the same width, so they line up. Anywhere else, a
 field in a dialog's body or on the stage, the label goes above the control,
 as on a phone: a column is only worth it where there are rows to line up.
+
+A `Stepper` is the exception everywhere: its row is a setting's, as on a
+phone's settings screen (Android's and iOS's alike), so its name and value
+stay on one line, the value at the row's end, on a tall stage too. Its
+value is a word or two, which a phone's width has room for, and a value
+stacked under its name reads as the next row's.
 
 **Which controls go in one.** Every control the player fills in or sets,
 so one rule places all their labels:
 
 - A `TextInput`, through a `Field` or as a `TextField`
-- The stepper, when it comes, for a value between set values (On and Off
-  included)
-- Not a `Switch`: its name is inside it, the whole row its tap target, and
-  it is being replaced by the stepper (`docs/blip-harness/research/forms-and-navigation.md`,
-  decision 2). It takes the label column on its own until then
+- A `StepperControl`, through a `Field` or as a `Stepper`, for every
+  choice (On and Off included)
 - Not a `Readout`: it shows a number and takes nothing in, so it has no
   label element to tie to a control. Its label takes the same column, so a
   readout's row lines up with the fields'
@@ -95,7 +99,10 @@ is wrong. Show it while it is true, so it goes when the player fixes it.
   it; a tap on the label focuses the control
 - Focus is the menus' cursor, 3 stage pixels left of the label, while the
   control has the keyboard's focus (`foundations/focus.mdx`); the control
-  may add a second cue of its own (a `TextInput`'s underline). Under a
+  may add a second cue of its own (a `TextInput`'s underline). A control
+  whose own mark is its focus sets `data-marks-focus` on its root, and the
+  field shows no cursor for it: a `Stepper`'s arrows, either side of its
+  value, would make three pointers with it. Under a
   finger there is no cursor. A `Content` starts its fields 8 in, so the
   cursor has its room and lines up with a menu's
 - The description, the limit (`Up to 10 characters.`, said, not shown) and

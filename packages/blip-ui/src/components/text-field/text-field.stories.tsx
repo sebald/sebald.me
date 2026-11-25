@@ -119,7 +119,7 @@ export const Overview: Story = {
   ),
 };
 
-/** Beside a switch and a readout: the window's content gives the rows one label column */
+/** Beside a stepper and a readout: the window's content gives the rows one label column */
 export const OptionsRows: Story = {
   parameters: { controls: { disable: true } },
   decorators: [

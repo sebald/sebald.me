@@ -25,6 +25,17 @@ export const field = {
       '*:data-[slot=field-error]:mt-related',
       '*:data-[slot=field-count]:[grid-area:count]',
       '*:data-[slot=field-count]:mt-related',
+      // A stepper's row is a setting's, as on a phone's settings screen:
+      // the name and the value on one line, the value at its end, its
+      // words under the whole row. A container with a label column
+      // stretches it across that column instead (`Content`, wide)
+      "has-[>[data-slot=stepper]]:[grid-template-areas:'label_control'_'description_description'_'error_error']",
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-label]:mb-0',
+      // A stepper's words sit right under its row, a line's leading
+      // already above them, so they read as its and not the next row's
+      // (about half the room the next row has, with its leading)
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-description]:mt-joined',
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-error]:mt-joined',
     ],
   }),
   /** The name, in the window's bright text; what the cursor points at */
@@ -34,6 +45,8 @@ export const field = {
   /**
    * The menus' cursor, 3 stage pixels left of the label, while the control
    * has the keys' focus (the field's focus mark, `foundations/focus.mdx`).
+   * A control that marks its own focus (`data-marks-focus`: a stepper's
+   * arrows) gets none, so a row shows one mark, never two.
    * Under a finger there is no cursor, as on a menu: the caret and the
    * control's own mark show the focus
    */
@@ -41,7 +54,7 @@ export const field = {
     base: [
       'pointer-events-none absolute top-1/2 right-[calc(100%+--theme(--spacing-cursor))] -translate-y-1/2',
       'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] text-(--bui-primary) bui-point-right',
-      'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100',
+      'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible:not([data-marks-focus])]/field:opacity-100',
     ],
   }),
   /** What to type or in what form, small and muted */

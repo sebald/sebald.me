@@ -34,7 +34,12 @@ export const picker = {
     variants: {
       selected: {
         true: 'text-(--bui-text-selected)',
-        false: 'text-(--bui-text-bright) hover:text-(--bui-text-selected)',
+        false: [
+          'text-(--bui-text-bright) hover:text-(--bui-text-selected)',
+          // A setting's arrows only on the cursor's row, where Left and
+          // Right work; under a finger they stay, the sign a tap steps it
+          '[@media(hover:hover),(pointer:fine)]:[&_[data-slot=step]]:opacity-0',
+        ],
       },
       variant: {
         default: '',

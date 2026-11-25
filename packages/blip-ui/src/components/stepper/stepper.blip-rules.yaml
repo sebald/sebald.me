@@ -1,0 +1,24 @@
+page: stepper
+rules:
+  - id: C-STEPPER-1
+    text: Use a Stepper for every choice in a form, two values or more; in a Picker the same row is a PickerSetting.
+    markers: [review]
+    source: docs/blip-harness/research/forms-and-navigation.md
+  - id: C-STEPPER-2
+    text: Write a setting that is on or off as ['Off', 'On'], never Yes and No, Enabled and Disabled or a tick, the only values read as a switch; name a row of two other values for the choice (Difficulty), not for one of them.
+    markers: [review]
+    source: https://www.w3.org/WAI/ARIA/apg/patterns/switch/
+  - id: C-STEPPER-3
+    text: Order more values the way Right steps through them, from least to most where they have an order.
+    markers: [review]
+  - id: A-STEPPER-1
+    text: Keep the label the same whatever the value; the value is said in words, never by colour alone.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html
+when-not:
+  - text: A setting in a menu row, moved to with the Picker's keys, is a PickerSetting.
+    use: picker
+  - text: A number the player only reads is a Readout.
+    use: readout
+  - text: A choice among actions or places is a Picker in a menu window.
+    use: picker
