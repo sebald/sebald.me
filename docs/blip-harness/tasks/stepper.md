@@ -46,3 +46,5 @@ Decided 2026-11-22, after the design review of `TextField` (#215) and the resear
 - Label and description wired through Base UI's exported internals (`labelable-provider`, `field-root-context`)
 - `focusTakes`: Enter and Space on a focused stepper are its own
 - Also fixed: the pack build (`prepack`) failed since #235 on `process` in Form's and TextField's dev errors; `utils/dev.ts` declares what it reads
+- Review (PR comment): logic moved to `stepper.keys.ts` with unit tests; `focusTakes` tested for a focused stepper; Home and End on every stepper; the label tap heard on the field (a label rendered later counts); a dev error for a value not in `values`; `.blip/events.jsonl` untracked and ignored
+- The Base UI internals (`@base-ui/react/internals/*`) are not covered by its semver: `tests/visual/stepper.spec.ts` checks the name, description, keys and form value the browser computes, in the Blip visual workflow, which a Renovate bump of Base UI runs
