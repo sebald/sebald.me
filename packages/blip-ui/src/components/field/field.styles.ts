@@ -25,6 +25,12 @@ export const field = {
       '*:data-[slot=field-error]:mt-related',
       '*:data-[slot=field-count]:[grid-area:count]',
       '*:data-[slot=field-count]:mt-related',
+      // A stepper's row is a setting's, as on a phone's settings screen:
+      // the name and the value on one line, the value at its end, its
+      // words under the whole row. A container with a label column
+      // stretches it across that column instead (`Content`, wide)
+      "has-[>[data-slot=stepper]]:[grid-template-areas:'label_control'_'description_description'_'error_error']",
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-label]:mb-0',
       // A stepper's words sit right under its row, a line's leading
       // already above them, so they read as its and not the next row's
       // (about half the room the next row has, with its leading)
