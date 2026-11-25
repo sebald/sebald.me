@@ -21,7 +21,7 @@ export const tabs = {
   row: cva({
     base: [
       '[--t-ring:calc(var(--px)*3)] [--t-over:calc(var(--px)*4)] [--t-label:calc(var(--bui-px)*9)]',
-      'flex items-end gap-[calc(var(--bui-px)*3)]',
+      'flex items-end gap-related',
       '-mb-(--t-over) ml-(--t-over)',
     ],
   }),
@@ -38,7 +38,7 @@ export const tabs = {
       'data-[disabled]:cursor-default data-[disabled]:bui-disabled',
       // The label's box clear of the rings: their height on top, and
       // beside it the rings and four pixels
-      '[--t-inline:calc(var(--t-ring)+var(--bui-px)*4)]',
+      '[--t-inline:calc(var(--t-ring)+--theme(--spacing-control-x))]',
       'group relative flex h-[calc(var(--t-ring)+var(--t-label))] items-center pt-(--t-ring) px-(--t-inline) mb-(--t-over)',
       'text-(--bui-muted) hover:text-(--bui-text-bright)',
       '[--t-frame:var(--bui-frame-dim)] [--t-inner:var(--bui-surface-shade)] [--t-face:var(--bui-surface-shade)] [--t-light:none]',

@@ -8,7 +8,7 @@ import type { TextProps } from './text';
 export const text = {
   heading: cva({ base: 'm-0 font-semibold text-(--bui-heading)' }),
   title: cva({
-    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-[calc(var(--bui-px)*2)] text-center',
+    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-related text-center',
   }),
   // The heading under the bitmap letters, for assistive technology
   titleText: cva({ base: 'sr-only' }),

@@ -6,22 +6,22 @@ export const picker = {
   root: cva({ base: 'flex min-h-0' }),
   menu: cva({
     base: [
-      'grid min-h-0 flex-1 content-start gap-(--bui-px) overflow-y-auto',
+      'grid min-h-0 flex-1 content-start gap-joined overflow-y-auto',
       // The native scrollbar is off: the pixel one beside it shows the rest
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
       // A group after other items: room above it
-      '*:data-[slot=picker-group]:not-first:mt-[calc(var(--bui-px)*4)]',
+      '*:data-[slot=picker-group]:not-first:mt-regular',
     ],
   }),
   /** A group's items, spaced as the menu's */
-  group: cva({ base: 'grid gap-(--bui-px)' }),
+  group: cva({ base: 'grid gap-joined' }),
   /** A setting's row: its name, the value at the end */
   setting: cva({
-    base: 'flex w-full items-center gap-[calc(var(--bui-px)*4)]',
+    base: 'flex w-full items-center gap-regular',
   }),
   item: cva({
     base: [
-      'group flex w-full items-center gap-[calc(var(--bui-px)*3)] px-[calc(var(--bui-px)*2)] py-(--bui-px) text-left',
+      'group flex w-full items-center gap-cursor px-control py-joined text-left',
       // The cursor's row lit at once: moved by the arrows, list
       // navigation doesn't animate
       'cursor-pointer',
@@ -65,7 +65,7 @@ export const picker = {
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
-    base: 'ml-[calc(var(--bui-px)*2)] flex w-[calc(var(--bui-px)*5)] shrink-0 flex-col items-center',
+    base: 'ml-related flex w-[calc(var(--bui-px)*5)] shrink-0 flex-col items-center',
   }),
   arrow: cva({
     base: 'h-[calc(var(--bui-px)*3)] w-[calc(var(--bui-px)*5)] shrink-0',
@@ -81,7 +81,7 @@ export const picker = {
     },
   }),
   track: cva({
-    base: 'relative my-(--bui-px) w-(--bui-px) flex-1 bg-(--bui-empty-dots)',
+    base: 'relative my-joined w-(--bui-px) flex-1 bg-(--bui-empty-dots)',
   }),
   thumb: cva({ base: 'absolute inset-x-0 bg-(--bui-neutral)' }),
   /** The description box beside the menu's window */

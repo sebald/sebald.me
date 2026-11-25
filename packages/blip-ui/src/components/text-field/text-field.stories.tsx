@@ -14,7 +14,7 @@ const Stage = ({ children }: { children: ReactNode }) => {
   return (
     <Pixels
       {...pixels}
-      className="bg-(--bui-ground) p-[calc(var(--bui-px)*6)] text-(--bui-text)"
+      className="bg-(--bui-ground) p-edge text-(--bui-text)"
       style={{
         width: pixels.tall
           ? 'max(calc(var(--px) * 134), 20em)'
@@ -75,7 +75,7 @@ export const Overview: Story = {
   parameters: { controls: { disable: true } },
   decorators: [
     Story => (
-      <div className="flex flex-wrap gap-[calc(var(--bui-px)*6)]">
+      <div className="flex flex-wrap gap-section">
         <Story />
       </div>
     ),

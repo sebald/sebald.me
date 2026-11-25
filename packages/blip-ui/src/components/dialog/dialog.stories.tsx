@@ -15,7 +15,7 @@ const Stage = ({ children }: { children: ReactNode }) => {
   return (
     <Pixels
       {...pixels}
-      className="overflow-hidden bg-(--bui-ground) p-[calc(var(--bui-px)*6)] text-(--bui-text)"
+      className="overflow-hidden bg-(--bui-ground) p-edge text-(--bui-text)"
       style={{
         width: `max(calc(var(--px) * 320), 30em)`,
         height: `max(calc(var(--px) * ${pixels.tall ? 400 : 180}), 18em)`,
@@ -72,7 +72,7 @@ export const Overview: Story = {
   parameters: { controls: { disable: true } },
   decorators: [
     Story => (
-      <div className="flex flex-wrap gap-[calc(var(--bui-px)*6)]">
+      <div className="flex flex-wrap gap-section">
         <Story />
       </div>
     ),
@@ -97,7 +97,7 @@ export const Overview: Story = {
         <Dialog defaultOpen size="large">
           <Title>How it works</Title>
           <Content>
-            <ol className="m-0 grid list-none gap-[calc(var(--bui-px)*2)] p-0">
+            <ol className="m-0 grid list-none gap-related p-0">
               <li>
                 1. They say something. You answer before the clock runs out.
               </li>

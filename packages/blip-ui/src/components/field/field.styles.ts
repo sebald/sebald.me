@@ -12,19 +12,19 @@ import { cva } from '../../utils/styles';
 export const field = {
   root: cva({
     base: [
-      'group/field grid min-w-0 items-baseline gap-x-[calc(var(--bui-px)*3)]',
+      'group/field grid min-w-0 items-baseline gap-x-regular',
       'grid-cols-[minmax(0,1fr)_auto]',
       "[grid-template-areas:'label_label'_'control_control'_'description_count'_'error_count']",
       // The control is whatever is not one of the words
       '*:[grid-area:control]',
       '*:data-[slot=field-label]:[grid-area:label]',
-      '*:data-[slot=field-label]:mb-[calc(var(--bui-px)*2)]',
+      '*:data-[slot=field-label]:mb-related',
       '*:data-[slot=field-description]:[grid-area:description]',
-      '*:data-[slot=field-description]:mt-[calc(var(--bui-px)*2)]',
+      '*:data-[slot=field-description]:mt-related',
       '*:data-[slot=field-error]:[grid-area:error]',
-      '*:data-[slot=field-error]:mt-[calc(var(--bui-px)*2)]',
+      '*:data-[slot=field-error]:mt-related',
       '*:data-[slot=field-count]:[grid-area:count]',
-      '*:data-[slot=field-count]:mt-[calc(var(--bui-px)*2)]',
+      '*:data-[slot=field-count]:mt-related',
     ],
   }),
   /** The name, in the window's bright text; what the cursor points at */
@@ -39,7 +39,7 @@ export const field = {
    */
   cursor: cva({
     base: [
-      'pointer-events-none absolute top-1/2 right-[calc(100%+var(--bui-px)*3)] -translate-y-1/2',
+      'pointer-events-none absolute top-1/2 right-[calc(100%+--theme(--spacing-cursor))] -translate-y-1/2',
       'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] text-(--bui-primary) bui-point-right',
       'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100',
     ],

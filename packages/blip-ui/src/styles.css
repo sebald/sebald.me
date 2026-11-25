@@ -95,6 +95,25 @@
  * a UI element moves smoothly, by a transition on the curves below;
  * art moves like a sprite, by stepped keyframes, in whole pixels.
  */
+/* The spacing roles (`foundations/pixel.ts` SPACING, `spacing.mdx`), in
+   stage pixels: `gap-related`, `p-window`, `--theme(--spacing-cursor)`. Inline,
+   so --bui-px is the stage's where the class is used. Not `screen`, which
+   would take over `h-screen` */
+@theme inline {
+  --spacing-joined: var(--bui-px);
+  --spacing-related: calc(var(--bui-px) * 2);
+  --spacing-regular: calc(var(--bui-px) * 4);
+  --spacing-section: calc(var(--bui-px) * 8);
+  --spacing-control: calc(var(--bui-px) * 2);
+  --spacing-control-x: calc(var(--bui-px) * 4);
+  --spacing-window: calc(var(--bui-px) * 4);
+  --spacing-edge: calc(var(--bui-px) * 8);
+  --spacing-cursor: calc(var(--bui-px) * 3);
+  --spacing-cursor-clear: calc(var(--bui-px) * 6);
+  --spacing-cursor-apart: calc(var(--bui-px) * 12);
+  --spacing-cursor-column: calc(var(--bui-px) * 8);
+}
+
 @theme {
   /* The curves for a UI element: out for what enters, leaves or answers
      the player, in-out for what moves across the stage */

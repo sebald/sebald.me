@@ -33,7 +33,7 @@ A rule for the sidecar that a screen's top-level box is this component.
 
 - The `shop`, `saves`, `fight-hud` and `quests` screens day zero's agents wrote can be written with
   it and no `position`, `inset` or `--bui-bar` of their own (checked by rewriting one by hand)
-- Follows `building-components.mdx`: `data-slot`, `className` merged last, spacing from `SPACE`,
+- Follows `building-components.mdx`: `data-slot`, `className` merged last, spacing by role (`foundations/spacing.mdx`),
   no `next/*`
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker since the
   story's look is new (asked first, never started in CI)

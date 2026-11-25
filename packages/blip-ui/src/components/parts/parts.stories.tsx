@@ -33,7 +33,7 @@ export const Default: Story = {
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid gap-[calc(var(--bui-px)*8)]">
+    <div className="grid gap-section">
       <Window>
         <Title>In a window</Title>
         <Content>

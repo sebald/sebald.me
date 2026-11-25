@@ -9,7 +9,7 @@ export const rows = [
   // Form rows start 8 in, a cursor column as a Picker's and Actions':
   // a focused field's cursor has room left of its label, and the
   // names line up with a menu's labels and the buttons
-  '*:data-[slot=field]:ml-[calc(var(--bui-px)*8)] *:data-[slot=switch]:ml-[calc(var(--bui-px)*8)] *:data-[slot=readout]:ml-[calc(var(--bui-px)*8)]',
+  '*:data-[slot=field]:ml-cursor-column *:data-[slot=switch]:ml-cursor-column *:data-[slot=readout]:ml-cursor-column',
   // A field in it has its label in the column, the words under the
   // control after it; on a tall stage it stays stacked, as anywhere.
   // The label spans the rows and a last row takes what a label on two
@@ -34,7 +34,7 @@ export const parts = {
    */
   content: cva({
     base: [
-      'm-0 grid gap-[calc(var(--bui-px)*4)] [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
+      'm-0 grid gap-regular [--bui-label-width:11ch] tall:[--bui-label-width:initial]',
       ...rows,
     ],
   }),
@@ -48,8 +48,8 @@ export const parts = {
    */
   actions: cva({
     base: [
-      'flex flex-wrap items-center gap-x-[calc(var(--bui-px)*12)] gap-y-[calc(var(--bui-px)*4)] *:data-[slot=picker]:basis-full',
-      'has-[>[data-slot=button]]:pl-[calc(var(--bui-px)*8)]',
+      'flex flex-wrap items-center gap-x-cursor-apart gap-y-regular *:data-[slot=picker]:basis-full',
+      'has-[>[data-slot=button]]:pl-cursor-column',
     ],
   }),
 };

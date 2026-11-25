@@ -31,7 +31,7 @@ example and its rules.
 - It has the switch role and `aria-checked` (or the Setting's equivalent), and says its state in words, not by colour alone
 - Left, right, Enter and a tap all change it, and a change plays the feedback sound through `useFeedback()`
 - Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged
-  last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+  last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by
   what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker, since the

@@ -22,7 +22,7 @@ pr: https://github.com/sebald/sebald.me/pull/225
 - A Dialog on top still mutes the menu below it, as today
 - A focused text field still keeps its keys
 - The docs page of a component with several stories can be used story by story; `pnpm test:game` plays on unchanged
-- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker when a story's look changes (asked first, never started in CI)
 - A changeset naming `@sebald/blip-ui`

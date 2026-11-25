@@ -22,7 +22,7 @@ pr: https://github.com/sebald/sebald.me/pull/226
 - Focus is never shown by colour alone: place or shape changes too (Xbox guideline 103)
 - `foundations/uniformity.test.ts` (or a sibling test) fails on a focus style outside the table
 - Looked at on a stage with Pushback's palette as well as the default, since the game maps its own colours
-- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker when a story's look changes (asked first, never started in CI)
 - A changeset naming `@sebald/blip-ui`

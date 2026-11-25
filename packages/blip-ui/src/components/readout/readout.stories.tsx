@@ -28,7 +28,7 @@ export const Default: Story = {};
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit gap-[calc(var(--bui-px)*3)]">
+    <div className="grid w-fit gap-related">
       <Readout value={0}>Gold</Readout>
       <Readout value={1200}>Gold</Readout>
       <Readout value={42} max={50}>

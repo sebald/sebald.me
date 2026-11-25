@@ -3,7 +3,7 @@ import type { StepProps } from './setting';
 
 export const setting = {
   root: cva({
-    base: 'ml-auto flex items-center gap-[calc(var(--bui-px)*2)]',
+    base: 'ml-auto flex items-center gap-related',
   }),
   /** Left or right of the value: a pixel triangle, dim at the end it cannot go past */
   step: cva({

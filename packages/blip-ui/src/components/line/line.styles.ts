@@ -3,7 +3,7 @@ import type { LineProps } from './line';
 
 export const line = {
   line: cva({
-    base: 'm-0 flex items-start gap-[calc(var(--bui-px)*3)]',
+    base: 'm-0 flex items-start gap-related',
     variants: { past: { true: 'text-(--bui-muted)' } },
   }),
   mark: cva({

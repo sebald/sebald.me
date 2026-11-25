@@ -21,7 +21,14 @@ export {
   glidingArt,
   transitionFaults,
 } from './foundations/motion';
-export { DOT, FLOOR, SPACE, UNIT, px } from './foundations/pixel';
+export {
+  DOT,
+  FLOOR,
+  SPACING,
+  type SpacingRole,
+  UNIT,
+  px,
+} from './foundations/pixel';
 export {
   BACKING,
   MAX_CROP,

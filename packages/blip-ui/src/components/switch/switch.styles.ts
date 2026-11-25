@@ -4,7 +4,7 @@ export const switchStyles = {
   /** The row's name, the track and the state in words; a tap anywhere on it changes it */
   root: cva({
     base: [
-      'group inline-flex cursor-pointer items-center gap-[calc(var(--bui-px)*3)] text-(--bui-text-bright) outline-none',
+      'group inline-flex cursor-pointer items-center gap-regular text-(--bui-text-bright) outline-none',
       'touch:min-h-11 hover:text-(--bui-text-selected)',
       'data-disabled:cursor-default data-disabled:bui-disabled data-disabled:hover:text-(--bui-text-bright)',
     ],
@@ -24,7 +24,7 @@ export const switchStyles = {
   /** A square that moves from one end to the other, by `translate` in whole stage pixels; the frame and colour change in step with it */
   thumb: cva({
     base: [
-      'absolute top-[calc(var(--bui-px)*1)] left-[calc(var(--bui-px)*1)] block size-[calc(var(--bui-px)*4)] bg-(--bui-muted)',
+      'absolute top-joined left-joined block size-[calc(var(--bui-px)*4)] bg-(--bui-muted)',
       'transition-[translate,background-color] duration-150 ease-bui-out motion-reduce:transition-[background-color]',
       'data-checked:translate-x-[calc(var(--bui-px)*6)] data-checked:bg-(--bui-primary)',
     ],

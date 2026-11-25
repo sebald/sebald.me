@@ -23,7 +23,7 @@ pr:
 - A form `name` submits its current value; it plays the move sound and announces the change
 - `Switch` is gone from the code, the docs, the stories, the sidecars, the baselines and the exports; a grep for `Switch` outside this task's notes finds only unrelated words
 - `setting.mdx` says the stepper is the form's choice and `PickerSetting` the menu's, with no On and Off exception
-- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker when a story's look changes (asked first, never started in CI)
 - A changeset naming `@sebald/blip-ui`

@@ -43,7 +43,7 @@ const SIZES = ['default', 'small'] as const;
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[auto_repeat(3,auto)] items-center gap-x-[calc(var(--bui-px)*12)] gap-y-4">
+    <div className="grid w-fit grid-cols-[auto_repeat(3,auto)] items-center gap-x-cursor-apart gap-y-4">
       {[...SIZES, 'disabled' as const].flatMap(row => [
         <span key={row} className="text-[0.75em] text-(--bui-dim)">
           {row}
