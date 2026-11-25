@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N+ # a check on the kit as a whole, any time
 depends: [stepper]
 pr: 240
