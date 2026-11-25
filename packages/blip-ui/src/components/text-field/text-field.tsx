@@ -42,7 +42,10 @@ export interface TextInputProps extends Omit<
   defaultValue?: string;
   /** The text changed */
   onValueChange?: (value: string) => void;
-  /** Enter was pressed, with the text; the field keeps the focus */
+  /**
+   * Enter was pressed, with the text; the field keeps the focus. Not
+   * inside a `Form`: there Enter sends the form, and this is not called
+   */
   onSubmit?: (value: string) => void;
   /**
    * The most characters it takes. Its `Field` shows the characters left,
@@ -88,7 +91,22 @@ export const TextInput = ({
 
   const keydown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented || event.nativeEvent.isComposing) return;
+    if (event.defaultPrevented || event.nativeEvent.isComposing) {
+      // Inside a Form, Enter is the form's: say so to whoever passed one
+      if (
+        event.key === 'Enter' &&
+        onSubmit &&
+        event.currentTarget.closest('[data-slot=form]') &&
+        !(
+          typeof process !== 'undefined' &&
+          process.env.NODE_ENV === 'production'
+        )
+      )
+        console.error(
+          "Blip UI: a TextField's onSubmit inside a Form is not called; Enter sends the form. Read the value in the Form's onSubmit.",
+        );
+      return;
+    }
     if (event.key === 'Enter') {
       play('confirm');
       onSubmit?.(text);

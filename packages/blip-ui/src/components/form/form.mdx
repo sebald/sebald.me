@@ -1,0 +1,108 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as FormStories from './form.stories';
+
+<Meta of={FormStories} />
+
+# Form
+
+A form window's controls, moved between as a game does: Up and Down go from
+row to row, Left and Right along a row of buttons, Enter in a field sends
+the form. A game writes no key code for it: each `Field` is a row and an
+`Actions` its buttons, in the order they are written. A native `<form>`, so
+`name`s and a button with `type="submit"` work as in a browser, and Tab
+works as on the web.
+
+<Canvas of={FormStories.Default} />
+<Controls of={FormStories.Default} />
+
+```tsx
+<Window>
+  <Title>Save</Title>
+  <Content>
+    <Form onSubmit={data => save(data.get('name'))}>
+      <TextField name="name">Name</TextField>
+      <Actions>
+        <Button type="submit">Save</Button>
+        <Button variant="secondary" onClick={back}>
+          Back
+        </Button>
+      </Actions>
+    </Form>
+  </Content>
+  <Legend
+    keys={[
+      ['↑↓', 'row'],
+      ['Enter', 'save'],
+    ]}
+  />
+</Window>
+```
+
+## Anatomy
+
+1. **Rows**: each `Field` (a `TextField` is one), and each `Actions`, its
+   buttons one row. Nothing else is a stop for the arrows: a `Text` or a
+   `Readout` between them is skipped
+2. **The form** lays them out as the window's `Content` does, 4 stage
+   pixels apart, the labels in the window's label column, so it goes
+   inside the `Content` and looks as its rows
+
+<Canvas of={FormStories.Overview} />
+
+## Input
+
+| On                | Up, Down                | Left, Right     | Enter          | Esc               | Tab           |
+| ----------------- | ----------------------- | --------------- | -------------- | ----------------- | ------------- |
+| A line of text    | the row above, below    | the caret       | sends the form | lets go of it     | next control  |
+| A button in a row | the row above, below    | the next button | presses it     | the screen's back | next control  |
+| Nothing focused   | the first row, the last | —               | —              | the screen's back | first control |
+
+- **Round at the ends.** Down from the last row goes to the first, Up from
+  the first to the last, as a game's menu does (Xbox guideline 112)
+- **Back where it was.** After Esc lets go of a field, the next arrow goes
+  back to that row
+- **Onto a row of buttons**, the first one; Left and Right go along it and
+  round
+- **Enter is the form's.** In a field inside a `Form` it sends the form,
+  and the field's own `onSubmit` is not called
+- **A control that steps on Up and Down keeps them**: a number, a date, a
+  `select`. Tab leaves it; the stepper, once there, is a field the arrows
+  pass
+- **Tab is the web's**: it visits every control in reading order and
+  leaves the window, so a screen reader and a keyboard user lose nothing
+- **One screen, one set of arrows.** A form and a menu on the same screen
+  share the arrows as two menus do: the one the player last pointed at,
+  pressed on or moved the focus into has them, and the first on the page
+  until then. A `Dialog` on top takes them from the form under it
+- Sounds: `move` for a step between rows or buttons; a field and a button
+  play their own
+
+## Usage
+
+- **A window is a menu or a form.** A form holds fields and buttons; a list
+  of actions or places is a `Picker` in a window of its own. A `Picker`
+  inside a `Form` is refused while building, with a message in the console
+- **Give the primary button `type="submit"`**, so Enter in a field and the
+  button do the same thing, and read the values from `onSubmit`'s
+  `FormData` by the fields' `name`s
+- **Say the keys in the window's legend**, `↑↓ row` and what Enter does;
+  a form doesn't write it for you, as a window's other keys are the
+  screen's
+
+<Canvas of={FormStories.SavingAGame} />
+
+<Rules for="form" />
+
+## Accessibility
+
+- A native `<form>`: a screen reader announces it with its fields, and a
+  submit button and Enter send it as on any page
+- The arrows are an addition: every control stays a Tab stop in reading
+  order and nothing traps the focus (WCAG 2.1.1, 2.1.2, 2.4.3)
+- A field keeps Left and Right for its caret and its typing; only the
+  arrows a single line of text has no use for, Up and Down, move between
+  rows
+- The focus is each control's own mark (`foundations/focus.mdx`): a
+  field's cursor at its label, a button's at its face

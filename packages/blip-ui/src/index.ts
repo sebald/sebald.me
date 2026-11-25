@@ -169,6 +169,7 @@ export {
   Tabs,
   type TabsProps,
 } from './components/tabs/tabs';
+export { Form, type FormProps } from './components/form/form';
 export {
   Field,
   FieldDescription,
