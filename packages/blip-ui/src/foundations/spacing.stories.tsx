@@ -29,7 +29,7 @@ export const Overview: Story = {
           {group.roles.map(role => (
             <div
               key={role}
-              className="grid grid-cols-[12ch_2ch_auto] items-center gap-x-regular"
+              className="grid grid-cols-[max-content_2ch_auto] items-center gap-x-regular whitespace-nowrap"
             >
               <code>{role}</code>
               <span className="text-right text-(--bui-dim)">
