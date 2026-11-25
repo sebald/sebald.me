@@ -3,10 +3,6 @@ import type { ReactNode } from 'react';
 import { BitmapText } from '../../components/bitmap-text/bitmap-text';
 import { Button } from '../../components/button/button';
 import { Form } from '../../components/form/form';
-import {
-  IconButton,
-  IconToggle,
-} from '../../components/icon-button/icon-button';
 import { Ledger, LedgerRow } from '../../components/ledger/ledger';
 import { Line } from '../../components/line/line';
 import { Meter } from '../../components/meter/meter';
@@ -19,7 +15,6 @@ import {
 } from '../../components/picker/picker';
 import { PixelIcon } from '../../components/pixel-icon/pixel-icon';
 import { Readout } from '../../components/readout/readout';
-import { Setting } from '../../components/setting/setting';
 import { SpeechBubble } from '../../components/speech-bubble/speech-bubble';
 import { Stamp } from '../../components/stamp/stamp';
 import { Stepper } from '../../components/stepper/stepper';
@@ -55,7 +50,7 @@ const Group = ({
  */
 export function MoodBoard() {
   return (
-    <div className="columns-2 gap-[calc(var(--px)*8)] *:mb-[calc(var(--px)*8)] *:break-inside-avoid tall:columns-1">
+    <div className="columns-2 gap-section *:mb-section *:break-inside-avoid tall:columns-1">
       <Group caption="Choose: a menu, a place or an action. Focus: the cursor on the row; a setting's arrows on that row only.">
         <Window>
           <Title>Menu</Title>
@@ -138,10 +133,17 @@ export function MoodBoard() {
               </Actions>
             </Form>
           </Content>
+          <Legend
+            keys={[
+              ['↑↓', 'row'],
+              ['←→', 'change'],
+            ]}
+            touch="Tap a row to change it"
+          />
         </Window>
       </Group>
 
-      <Group caption="Act: buttons in their variants and sizes, and the icon buttons of the bar. Focus: the cursor left of the button.">
+      <Group caption="Act: buttons in their variants and sizes, two to a row. Focus: the cursor left of the button.">
         <Window>
           <Title>Buttons</Title>
           <Content>
@@ -158,18 +160,6 @@ export function MoodBoard() {
               <Button size="small" variant="secondary">
                 Keep
               </Button>
-            </Actions>
-            <Actions>
-              <IconButton icon="back" aria-label="Back" label="Back" />
-              <IconToggle
-                pressed
-                onPressedChange={noop}
-                icon="soundOff"
-                pressedIcon="soundOn"
-                aria-label="Sound"
-                label="Sound off"
-                pressedLabel="Sound on"
-              />
             </Actions>
           </Content>
         </Window>
@@ -226,7 +216,22 @@ export function MoodBoard() {
         </SpeechBubble>
       </Group>
 
-      <Group caption="Words and art: headings, text, a value between its arrows, tabs, icons and bitmap letters. Focus: a tab's own mark.">
+      <Group caption="Pages: a window with tabs, the window itself. Focus: a tab's underline, a panel's frame.">
+        <Tabs defaultValue="pools">
+          <TabList aria-label="Duel">
+            <Tab value="pools">Pools</Tab>
+            <Tab value="log">Log</Tab>
+          </TabList>
+          <TabPanel value="pools">
+            <Text>Momentum 3, theirs 1.</Text>
+          </TabPanel>
+          <TabPanel value="log">
+            <Text>Nothing yet.</Text>
+          </TabPanel>
+        </Tabs>
+      </Group>
+
+      <Group caption="Words and art: headings, text, icons and bitmap letters. No focus.">
         <Window>
           <Title>Text</Title>
           <Content>
@@ -234,19 +239,6 @@ export function MoodBoard() {
             <Text>Plain text, as the window says it.</Text>
             <Text variant="hint">A hint, quieter.</Text>
             <Text variant="call">Press Enter to play</Text>
-            <Setting>Normal</Setting>
-            <Tabs defaultValue="pools">
-              <TabList aria-label="Duel">
-                <Tab value="pools">Pools</Tab>
-                <Tab value="log">Log</Tab>
-              </TabList>
-              <TabPanel value="pools">
-                <Text>Momentum 3, theirs 1.</Text>
-              </TabPanel>
-              <TabPanel value="log">
-                <Text>Nothing yet.</Text>
-              </TabPanel>
-            </Tabs>
             <div className="flex items-center gap-regular">
               <PixelIcon icon="back" />
               <PixelIcon icon="pause" />

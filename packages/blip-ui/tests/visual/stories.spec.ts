@@ -65,6 +65,16 @@ test('stories', async ({ page, baseURL }) => {
           `/iframe.html?id=${id}&viewMode=story&globals=scale:${shot.scale};layout:${shot.layout}`,
         );
         await page.locator('#storybook-root > *').first().waitFor();
+        // A story's `play` (a focus set, as the mood board's) runs after it
+        // renders: shoot it once Storybook says the story is finished
+        await page.waitForFunction(
+          () =>
+            (
+              window as {
+                __STORYBOOK_PREVIEW__?: { currentRender?: { phase?: string } };
+              }
+            ).__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
+        );
         await page.evaluate(() => document.fonts.ready);
         expect
           .soft(

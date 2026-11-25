@@ -38,6 +38,6 @@ task. Any eval task change.
 
 **Notes.**
 
-- Left out, each with its reason: `Stage`, `Screen` and `Controls` frame a whole screen and are seen in `Compositions/Together`; `Dialog` and `Confirm` lie over the screen and would cover the board; `ScreenTitle` is a screen's header, placed by the screen. `Window`, `Parts` (`Title`, `Content`, `Actions`), `Field` and `Form` are the board's own frame, so they are on it in every group
-- The focus is on the Form's first stepper (`play`), so the board shows the newest mark, the arrows; the menu shows no cursor until it is used
+- Left out, each with its reason: `Stage`, `Screen` and `Controls` frame a whole screen and are seen in `Compositions/Together`; `Dialog` and `Confirm` lie over the screen and would cover the board; `ScreenTitle` is a screen's header, placed by the screen. `IconButton` and `IconToggle` stand alone in a corner or in `Controls`, not in a window's `Actions` (`icon-button.mdx`), so they are seen in `Together`'s bar; a bare `Setting` has no keys of its own (`setting.mdx`), so the board shows its look through `PickerSetting` and `Stepper` `Window`, `Parts` (`Title`, `Content`, `Actions`), `Field` and `Form` are the board's own frame, so they are on it in every group
+- The focus is on the Form's first stepper (`play`); the visual tests wait for Storybook's `finished` phase, so the shot has it, so the board shows the newest mark, the arrows; the menu shows no cursor until it is used
 - First look, two things to decide in their own tasks: a `Ledger`'s rows start at the window's edge while readouts and form rows start 8 in (the cursor column); a menu setting's value sits at the row's end, a stepper's in the middle of its column
