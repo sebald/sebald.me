@@ -25,6 +25,11 @@ export const field = {
       '*:data-[slot=field-error]:mt-related',
       '*:data-[slot=field-count]:[grid-area:count]',
       '*:data-[slot=field-count]:mt-related',
+      // A stepper's words sit right under its row, a line's leading
+      // already above them, so they read as its and not the next row's
+      // (about half the room the next row has, with its leading)
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-description]:mt-joined',
+      'has-[>[data-slot=stepper]]:*:data-[slot=field-error]:mt-joined',
     ],
   }),
   /** The name, in the window's bright text; what the cursor points at */
