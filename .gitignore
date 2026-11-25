@@ -52,3 +52,4 @@ packages/pushback/src/assets/sources/contact/
 packages/blip-ui/dist/
 packages/blip-ui/docs/
 evals/blip/labels/judge/
+packages/blip-ui/.blip/

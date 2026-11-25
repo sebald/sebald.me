@@ -15,6 +15,7 @@ import {
 } from 'react';
 
 import { useFeedback } from '../../providers/feedback';
+import { building } from '../../utils/dev';
 import {
   Field,
   FieldDescription,
@@ -22,6 +23,7 @@ import {
   FieldLabel,
 } from '../field/field';
 import { Step } from '../setting/setting';
+import { isToggle, stepTo } from './stepper.keys';
 import { stepper as styles } from './stepper.styles';
 
 export interface StepperControlProps {
@@ -71,62 +73,49 @@ export const StepperControl = ({
   const at = Math.max(0, values.indexOf(current ?? ''));
   const disabled = disabledProp || !!field.disabled;
   const name = field.name ?? nameProp;
-  // Only Off and On are on or off; Normal and Hard read as their words
-  const toggle =
-    values.length === 2 && values[0] === 'Off' && values[1] === 'On';
-  // Two values flip, whatever their words
-  const binary = values.length === 2;
+  const toggle = isToggle(values);
 
-  const step = (by: number) => {
-    if (disabled || values.length < 2) return;
-    const next = values[(at + by + values.length) % values.length]!;
-    play('move');
-    setInner(next);
-    onValueChange?.(next);
-  };
-  const to = (index: number) => {
-    if (disabled || index === at) return;
+  // A value it does not have shows and sends the first: say so while building
+  useEffect(() => {
+    if (building() && current !== undefined && !values.includes(current))
+      console.error(
+        `Blip UI: a Stepper's value "${current}" is not one of its values (${values.join(', ')}); it shows the first.`,
+      );
+  }, [current, values]);
+
+  const go = (index: number | null) => {
+    if (disabled || index === null || index === at) return;
     play('move');
     setInner(values[index]!);
     onValueChange?.(values[index]!);
   };
 
-  // A tap on the field's label steps it as a tap on the value does: the
-  // label is not tied to it by `for`, which only a native control takes
-  const tapLabel = useEffectEvent(() => {
+  // A tap on its field's label steps it as a tap on the value does: the
+  // label is not tied to it by `for`, which only a native control takes.
+  // Heard on the field, so a label rendered later counts too
+  const tapLabel = useEffectEvent((event: Event) => {
+    if (!(event.target as Element | null)?.closest?.('[data-slot=field-label]'))
+      return;
     ref.current?.focus({ preventScroll: true });
-    step(1);
+    go(stepTo('ArrowRight', at, values.length));
   });
   useEffect(() => {
-    const label = ref.current
-      ?.closest('[data-slot=field]')
-      ?.querySelector('[data-slot=field-label]');
-    if (!label) return;
-    const tap = () => tapLabel();
-    label.addEventListener('click', tap);
-    return () => label.removeEventListener('click', tap);
+    const row = ref.current?.closest('[data-slot=field]');
+    if (!row) return;
+    const tap = (event: Event) => tapLabel(event);
+    row.addEventListener('click', tap);
+    return () => row.removeEventListener('click', tap);
   }, []);
 
   const keydown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey)
       return;
-    // A held key runs through the steps; it would only blink a switch
-    if (binary && event.repeat) return;
-    const by =
-      event.key === 'ArrowLeft'
-        ? -1
-        : event.key === 'ArrowRight' ||
-            event.key === 'Enter' ||
-            event.key === ' '
-          ? 1
-          : 0;
-    if (by) {
-      event.preventDefault();
-      step(by);
-    } else if (!binary && (event.key === 'Home' || event.key === 'End')) {
-      event.preventDefault();
-      to(event.key === 'Home' ? 0 : values.length - 1);
-    }
+    const next = stepTo(event.key, at, values.length);
+    if (next === null) return;
+    event.preventDefault();
+    // A held key runs through the steps; it would only blink two values
+    if (values.length === 2 && event.repeat) return;
+    go(next);
   };
 
   return (
@@ -151,7 +140,7 @@ export const StepperControl = ({
       tabIndex={disabled ? undefined : 0}
       className={styles.root({ className })}
       onKeyDown={keydown}
-      onClick={() => step(1)}
+      onClick={() => go(stepTo('ArrowRight', at, values.length))}
     >
       <Step points="left" className={styles.step()} />
       <span className={styles.value()}>{values[at]}</span>

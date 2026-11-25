@@ -8,7 +8,7 @@ import * as SettingStories from './setting.stories';
 
 A value between two step arrows, for a row that is a setting: Mode
 ◀ Normal ▶. It shows the value; in a menu, `PickerSetting` draws it and
-takes the `Picker`'s keys, and in a form a `Stepper` does, with its own.
+takes the `Picker`'s keys, and in a form a `Stepper` draws the same arrows (`Step`) and takes its own.
 The same look in both, so a choice reads alike wherever it is.
 
 <Canvas of={SettingStories.Default} />
@@ -26,10 +26,10 @@ The same look in both, so a choice reads alike wherever it is.
 
 - **Do** use `PickerSetting` in a Picker: it draws the Setting and takes
   the keys.
-- **Do** use `Stepper` in a form: it draws the Setting, takes the focus
-  and the keys, and sends its value with the form.
-- **Do** use it for every setting, even one of two values (On and Off),
-  in a menu and in a form, so they all read and work alike.
+- **Do** use `Stepper` in a form: it draws the same arrows, takes the
+  focus and the keys, and sends its value with the form.
+- **Do** show every setting this way, even one of two values (On and
+  Off), in a menu and in a form, so they all read and work alike.
 - **Do** let a choice go round: left from the first value goes to the
   last, both arrows lit (Mode, Music On/Off). Leave `first` and `last`
   unset.

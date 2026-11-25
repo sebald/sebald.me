@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
 
-import { holdsKeys, joinKeyScope } from './key-layer.ts';
+import { focusTakes, holdsKeys, joinKeyScope } from './key-layer.ts';
 
 /** A stand-in for an element: events, and a place on the page */
 class Fake extends EventTarget {
@@ -98,4 +98,36 @@ describe('keys between menus on one layer', () => {
     joinKeyScope('menu', null, only)();
     assert.equal(holdsKeys('menu', null, only), false);
   });
+});
+
+/** A focused stepper, as `focusTakes` reads it: its slot, role and attributes */
+const stepper = (role: 'switch' | 'slider') => {
+  const attributes: Record<string, string> = {
+    role,
+    'data-slot': 'stepper',
+    ...(role === 'slider' ? { 'aria-orientation': 'horizontal' } : {}),
+  };
+  const element = {
+    getAttribute: (name: string) => attributes[name] ?? null,
+    closest: (selector: string) =>
+      selector
+        .split(',')
+        .some(one => one === `[role=${role}]` || one === '[data-slot=stepper]')
+        ? element
+        : null,
+  };
+  return element;
+};
+const keyOn = (target: unknown, key: string) =>
+  ({ key, target }) as unknown as KeyboardEvent;
+
+describe('a focused stepper', () => {
+  for (const role of ['switch', 'slider'] as const)
+    it(`takes Left, Right, Enter and Space, and leaves Up and Down (${role})`, () => {
+      const target = stepper(role);
+      for (const key of ['ArrowLeft', 'ArrowRight', 'Enter', ' '])
+        assert.equal(focusTakes(keyOn(target, key)), true, key);
+      for (const key of ['ArrowUp', 'ArrowDown'])
+        assert.equal(focusTakes(keyOn(target, key)), false, key);
+    });
 });

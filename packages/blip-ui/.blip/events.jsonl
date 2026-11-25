@@ -1,7 +1,0 @@
-{"ts":"2026-11-25T13:10:05.126Z","event":"lookup","command":"search","arguments":["toggle"],"results":["icon-button","icon-button/sound-toggle","toggleFullscreen","IconToggle","controls","hooks"]}
-{"ts":"2026-11-25T13:10:05.178Z","event":"lookup","command":"search","arguments":["on off"],"results":["icon-button","stepper","pixel-icon","picker","C-PICKER-1","C-STEPPER-2","field","stage"]}
-{"ts":"2026-11-25T13:10:05.228Z","event":"lookup","command":"search","arguments":["difficulty"],"results":["C-STEPPER-2","stepper"]}
-{"ts":"2026-11-25T13:10:05.279Z","event":"lookup","command":"search","arguments":["settings"],"results":["C-DIALOG-3","dialog","field"]}
-{"ts":"2026-11-25T13:10:05.325Z","event":"lookup","command":"docs","arguments":["stepper"],"results":["stepper"]}
-{"ts":"2026-11-25T13:10:14.413Z","event":"lookup","command":"search","arguments":["toggle"],"results":["icon-button","icon-button/sound-toggle","toggleFullscreen","IconToggle","stepper","controls","hooks"]}
-{"ts":"2026-11-25T13:10:14.469Z","event":"lookup","command":"search","arguments":["settings"],"results":["stepper","C-DIALOG-3","dialog","field"]}
