@@ -21,7 +21,7 @@ export const stepper = {
       'aria-disabled:cursor-default aria-disabled:bui-disabled',
     ],
   }),
-  /** A `Setting`'s arrows, centred on the line; at the start of the cell, not at the row's end as in a menu. Hidden at rest where there is a pointer */
+  /** A `Setting`'s arrows, centred on the line, at the ends of the control's column, so they line up with a text field's box. Hidden at rest where there is a pointer */
   step: cva({
     base: [
       'self-center',
@@ -29,6 +29,12 @@ export const stepper = {
       'group-hover/stepper:opacity-100 group-focus-visible/stepper:opacity-100',
     ],
   }),
-  /** As a `Setting`'s value: centred in six characters so the arrows stay put */
-  value: cva({ base: 'w-[6ch] text-center text-(--bui-text-bright)' }),
+  /**
+   * Centred in the room between the arrows, the whole column: every
+   * stepper's value on one centre whatever its length, and the arrows
+   * stay put. Six characters at least, where the column is narrow
+   */
+  value: cva({
+    base: 'min-w-[6ch] flex-1 text-center text-(--bui-text-bright)',
+  }),
 };
