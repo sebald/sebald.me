@@ -30,13 +30,26 @@ const noop = () => {};
 /** One group of the board: its window, and under it what the group is for */
 const Group = ({
   caption,
+  noted = false,
   children,
 }: {
   caption: ReactNode;
+  /** Its menu shows a note beside it: across both columns, the window and its caption in the left half and the note in the right; on a phone, room under the window, where the note goes */
+  noted?: boolean;
   children: ReactNode;
 }) => (
-  <section className="grid content-start gap-related">
-    {children}
+  <section
+    className={
+      noted
+        ? 'grid content-start gap-related [column-span:all] *:w-[calc((100%-var(--spacing-section))/2)] tall:*:w-full'
+        : 'grid content-start gap-related'
+    }
+  >
+    {noted ? (
+      <div className="tall:pb-[calc(var(--px)*44)]">{children}</div>
+    ) : (
+      children
+    )}
     <Text variant="hint">{caption}</Text>
   </section>
 );
@@ -51,18 +64,26 @@ const Group = ({
 export function MoodBoard() {
   return (
     <div className="columns-2 gap-section *:mb-section *:break-inside-avoid tall:columns-1">
-      <Group caption="Choose: a menu, a place or an action. Focus: the cursor on the row; a setting's arrows on that row only.">
+      <Group
+        noted
+        caption="Choose: a menu, a place or an action. Focus: the cursor on the row, a setting's arrows on that row only, and its note in a window beside the menu."
+      >
         <Window>
           <Title>Menu</Title>
           <Actions>
-            <Picker label="Menu">
+            <Picker label="Menu" initial="mode">
               <PickerItem id="new" variant="accent" onSelect={noop}>
                 New run
               </PickerItem>
               <PickerItem id="continue" onSelect={noop}>
                 Continue
               </PickerItem>
-              <PickerSetting id="mode" value="Normal" onStep={noop}>
+              <PickerSetting
+                id="mode"
+                value="Normal"
+                note="Ghosts help you; nothing rushes you."
+                onStep={noop}
+              >
                 Mode
               </PickerSetting>
               <PickerItem id="erase" disabled onSelect={noop}>

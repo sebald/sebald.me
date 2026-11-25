@@ -21,7 +21,9 @@ export const picker = {
   }),
   item: cva({
     base: [
-      'group flex w-full items-center gap-cursor px-control py-joined text-left',
+      // No room on the right: a setting's value ends at the row's end, where
+      // every value in a window ends
+      'group flex w-full items-center gap-cursor pl-control py-joined text-left',
       // The cursor's row lit at once: moved by the arrows, list
       // navigation doesn't animate
       'cursor-pointer',

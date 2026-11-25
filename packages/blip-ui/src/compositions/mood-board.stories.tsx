@@ -34,12 +34,12 @@ const Sheet = () => {
   );
 };
 
-/** The sheet, the Form's first stepper focused as by the keys */
+/** The sheet, the menu's setting focused as by the keys: its cursor, arrows and note */
 export const MoodBoard: Story = {
   render: () => <Sheet />,
   play: async ({ canvasElement }) => {
-    canvasElement.querySelector<HTMLElement>('[data-slot=stepper]')?.focus({
-      focusVisible: true,
-    } as FocusOptions);
+    canvasElement
+      .querySelector<HTMLElement>('[data-slot=picker-item] [aria-current=true]')
+      ?.focus({ focusVisible: true } as FocusOptions);
   },
 };
