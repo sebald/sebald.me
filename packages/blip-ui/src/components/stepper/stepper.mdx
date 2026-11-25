@@ -103,11 +103,15 @@ it, a `Field` with a label holding one: its children are the label,
 - A Tab stop; the focus is the arrows showing either side of the value,
   in primary, in place of the `Field`'s cursor (`data-marks-focus`,
   `foundations/focus.mdx`). Not dim: 3.05:1 is too close to the 3:1 of
-  WCAG 1.4.11 for the only mark
+  WCAG 1.4.11 for the only mark. On a touch screen with a keyboard
+  attached the arrows are already there, dim: the focus is their turn to
+  primary, a change of 3.44:1, and no cursor shows there (as on a menu)
 - The value is in words, so the state never rests on colour. The arrows
   are 10.51:1 on the window with the focus (primary) and 3.05:1 at rest
   under a finger (dim, the 3:1 of WCAG 1.4.11); the value is bright,
   11.56:1
-- A touch screen gets a target at least 44 CSS pixels high, reaching into
-  the gaps around the row, so the row keeps its line's height
+- A touch screen gets a target at least 44 CSS pixels high (a line and 4
+  stage pixels above and below it, at least 3 CSS pixels each), reaching
+  into the gaps around the row, so the row keeps its line's height; the
+  description and error lie over it, so a tap on them steps nothing
 - `name` sends the value shown (`On`, `Fast`) with the form

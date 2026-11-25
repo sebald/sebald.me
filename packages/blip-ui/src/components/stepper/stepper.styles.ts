@@ -21,7 +21,8 @@ export const stepper = {
       // gaps around the row instead of making it taller: a taller row
       // would push its value and arrows apart and its words away from it
       "relative touch:before:absolute touch:before:inset-x-0 touch:before:-inset-y-regular touch:before:content-['']",
-      'aria-disabled:cursor-default aria-disabled:bui-disabled',
+      // Disabled, it ignores the pointer too: no arrows on hover
+      'aria-disabled:pointer-events-none aria-disabled:bui-disabled',
     ],
   }),
   /** A `Setting`'s arrows, centred on the line, at the ends of the control's column, so they line up with a text field's box. Hidden at rest where there is a pointer */

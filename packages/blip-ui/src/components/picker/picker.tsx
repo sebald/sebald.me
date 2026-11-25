@@ -409,7 +409,11 @@ const Row = ({
         type="button"
         aria-disabled={disabled || undefined}
         aria-current={isCurrent ? 'true' : undefined}
-        className={styles.item({ selected: marked, variant })}
+        className={styles.item({
+          selected: marked,
+          stepsShown: marked || picker.touch,
+          variant,
+        })}
         onPointerEnter={() => picker.setCurrent(id)}
         // Tab (or any keyboard focus) puts the cursor here, so there is one
         // cursor, not the keys' and another where the focus is
