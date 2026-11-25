@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N3 # forms and navigation
 depends: [field, focus-style]
 pr: 238
