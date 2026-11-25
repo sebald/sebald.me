@@ -18,6 +18,11 @@ export const rows = [
   "not-tall:*:data-[slot=field]:[grid-template-areas:'label_control_control'_'label_description_count'_'label_error_count'_'label_._.']",
   'not-tall:*:data-[slot=field]:grid-rows-[auto_auto_auto_minmax(0,1fr)]',
   'not-tall:*:data-[slot=field]:*:data-[slot=field-label]:mb-0',
+  // A stepper's row is a setting, as on a phone's settings screen: its
+  // description and error explain the row, so they start at the label and
+  // take the row's width. A text field's stay under its box, with the count
+  "not-tall:*:data-[slot=field]:has-[>[data-slot=stepper]]:[grid-template-areas:'label_control_control'_'description_description_description'_'error_error_error']",
+  'not-tall:*:data-[slot=field]:has-[>[data-slot=stepper]]:grid-rows-none',
 ];
 
 /** The parts' own look; where they sit is the container's */
