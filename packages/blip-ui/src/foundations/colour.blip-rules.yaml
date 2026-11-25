@@ -1,0 +1,14 @@
+page: colour
+rules:
+  - id: C-COLOUR-1
+    text: Keep yellow (--bui-primary) for "look here" alone, the cursor, the focus and its second cue, and the next step (an accent menu item, a call to press a key); never a button face, a frame, a heading or a large area. The game's art (a meter of the player's side, a timer, bitmap letters) is art, not UI, and keeps its palette.
+    source: https://en.wikipedia.org/wiki/Yellow_paint_debate
+    markers: [review]
+  - id: C-COLOUR-2
+    text: Show one yellow sign that asks for the player per screen, the focus or the next step; make something important by placing it first or giving it the focus, not by colouring it yellow.
+    source: https://lkrsova.github.io/blog/vonrestorff-effect
+    markers: [review]
+  - id: A-COLOUR-1
+    text: Never let yellow carry a meaning alone; the cursor is a shape and the call is in words.
+    source: https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html
+    markers: [review]
