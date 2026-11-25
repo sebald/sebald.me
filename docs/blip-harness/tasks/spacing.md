@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: S # design system: foundations
 depends: []
 pr:
@@ -38,3 +38,15 @@ An agent building a screen has to read the code and guess, and two windows built
 - The spacing page lists every role, with a picture of each.
 - The baselines were reviewed and only the intended changes moved.
 - A new window built from the docs alone, as an eval or by hand, uses only roles.
+
+**Notes.**
+
+- Research in `research/spacing.md`; the user took its table: two ladders (1-2-4-8 layout, 3-6-12 cursor), Marigold-style relation names for gaps, insets by what holds them, the cursor's own roles. No `Stack`/`Inline`: Blip places children by `data-slot`, so tokens are enough. Window padding stays 4
+- `screen` became `edge`: `--spacing-screen` would turn Tailwind's `h-screen`/`w-screen` into 8 stage pixels, site-wide
+- The control inset is two roles, `control` (2, block) and `control-x` (4, inline), for a field's 2 × 4
+- Buttons take `control-x` (4) at both sizes: the default button's 6 was off the layout ladder. They are 2 stage pixels narrower each side
+- In a calc a role is `--theme(--spacing-<role>)`, inlined by Tailwind: `var(--spacing-<role>)` would be computed on `:root` with `--bui-px`'s 3px fallback, not the stage's pixel
+- `tailwind-merge` is extended with the roles as spacing, so a caller's `p-4` replaces `p-window`
+- The test now covers offsets (`top-`, `right-`, `inset-` …) and the parts' own lengths (`[--b-inline:…]`), not only `p`/`m`/`gap`
+- Bar buttons keep 3 between them (`ml-cursor`): their padding is `cursor-clear` each, and the 3 more keeps the cursor more than twice its gap from the button before (`focus.mdx`)
+- Meter cells: `related` by default, `joined` compact. Ledger lines stay `related`
