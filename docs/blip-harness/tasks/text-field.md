@@ -32,7 +32,7 @@ beyond a length limit. Any eval task change.
 - On the tall stage the phone's keyboard opens and the field stays in view
 - The length limit is announced when reached, not only drawn
 - Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged
-  last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+  last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by
   what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker, since the

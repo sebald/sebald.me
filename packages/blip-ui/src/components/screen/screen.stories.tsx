@@ -74,7 +74,7 @@ export const Overview: Story = {
   parameters: { controls: { disable: true } },
   decorators: [
     Story => (
-      <div className="flex flex-wrap gap-[calc(var(--bui-px)*6)]">
+      <div className="flex flex-wrap gap-section">
         <Story />
       </div>
     ),

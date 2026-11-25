@@ -8,13 +8,13 @@ import type { MeterProps } from './meter';
  */
 export const meter = {
   root: cva({
-    base: 'inline-flex items-center p-(--bui-px) align-middle',
+    base: 'inline-flex items-center p-joined align-middle',
     variants: {
       size: {
         /** Cells 4 wide, two pixels apart */
-        default: 'gap-[calc(var(--bui-px)*2)]',
+        default: 'gap-related',
         /** Cells 3 wide, their ink lines shared: a long pool on a phone */
-        compact: 'gap-(--bui-px)',
+        compact: 'gap-joined',
       } satisfies Record<NonNullable<MeterProps['size']>, ClassValue>,
       variant: {
         /** The player's side, the main pool */
@@ -49,7 +49,7 @@ export const meter = {
   }),
   dots: cva({
     base: [
-      'absolute inset-(--bui-px)',
+      'absolute inset-joined',
       'bg-[repeating-conic-gradient(var(--bui-empty-dots)_0_25%,transparent_0_50%)]',
       'bg-size-[calc(var(--bui-px)*2)_calc(var(--bui-px)*2)]',
     ],

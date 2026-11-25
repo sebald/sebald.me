@@ -18,9 +18,9 @@ export const iconButton = cva({
     /** Where it is, from `Controls`: never set by hand */
     layout: {
       /** Icon only, in a corner of the wide stage */
-      corner: 'p-[calc(var(--bui-px)*2)] hover:brightness-125',
+      corner: 'p-control hover:brightness-125',
       /** In the bar along the bottom, with its label beside the icon */
-      bar: 'gap-2 px-[calc(var(--bui-px)*6)] text-[0.85em] whitespace-nowrap text-(--bui-muted) active:text-(--bui-text-bright)',
+      bar: 'gap-2 px-cursor-clear text-[0.85em] whitespace-nowrap text-(--bui-muted) active:text-(--bui-text-bright)',
     },
   },
   defaultVariants: { layout: 'corner' },
@@ -36,7 +36,7 @@ export const iconButtonCursor = cva({
   variants: {
     layout: {
       /** Three pixels left of the icon it sits beside */
-      corner: 'right-[calc(100%+var(--bui-px)*3)]',
+      corner: 'right-[calc(100%+--theme(--spacing-cursor))]',
       /** In the left padding, three pixels from the first content */
       bar: 'left-0',
     },

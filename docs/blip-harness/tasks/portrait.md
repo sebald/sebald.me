@@ -33,7 +33,7 @@ speak in a scene"), so a portrait is never the only sign of who speaks.
 - `Line` and `SpeechBubble` can place one beside the text without new props of their own (through
   `data-slot`, as the kit places parts)
 - Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged
-  last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+  last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by
   what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker, since the

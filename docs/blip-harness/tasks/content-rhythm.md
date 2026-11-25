@@ -20,7 +20,7 @@ pr: https://github.com/sebald/sebald.me/pull/224
 - `Content`'s rows are `SPACE` apart with no `className` or `style` from the caller
 - No example, story or pattern in the kit writes `grid gap-[calc(var(--bui-px)*4)]` any more (a test greps for it)
 - Pushback's screens that wrote the same gap are moved over, and `pnpm test:game` passes
-- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker when a story's look changes (asked first, never started in CI)
 - A changeset naming `@sebald/blip-ui`

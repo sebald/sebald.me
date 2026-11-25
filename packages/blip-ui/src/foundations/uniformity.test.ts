@@ -4,7 +4,7 @@ import { join } from 'node:path';
 import { describe, it } from 'node:test';
 
 import { glidingArt, transitionFaults } from './motion';
-import { SPACE } from './pixel';
+import { SPACING } from './pixel';
 
 /**
  * The kit's components look like one set: their styles take spacing,
@@ -65,8 +65,9 @@ const ALLOWED: Record<string, string> = {
 const allowed = ({ file, utility }: { file: string; utility: string }) =>
   `${file.replaceAll('\\', '/')} ${utility}` in ALLOWED;
 
-const SPACING =
-  /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy])-(.+)$/;
+/** The utilities that space or place: padding, margin, gap, and offsets */
+const SPACES =
+  /^-?(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end)-(.+)$/;
 
 /**
  * A part's own lengths, each made of the stage's pixels: the button's
@@ -86,23 +87,31 @@ const PART_VARS = [
   '(--s-top)',
 ];
 
+/** A number of stage pixels written out instead of a role */
+const RAW = /--bui-px\)\s*\*|^\(--bui-px\)$/;
+
 const spacingOk = (value: string) => {
-  if (value === '0' || value === 'auto') return true;
-  if (value === '(--bui-px)' || PART_VARS.includes(value)) return true;
-  const n = /^\[calc\(var\(--bui-px\)\*(\d+)\)\]$/.exec(value)?.[1];
-  return n !== undefined && (SPACE as readonly number[]).includes(Number(n));
+  if (['0', 'auto', 'full', 'px'].includes(value)) return true;
+  if (/^\d+\/\d+$/.test(value)) return true; // a fraction: top-1/2
+  if (value in SPACING || PART_VARS.includes(value)) return true;
+  // A token (art in `(--px)`, `(--bui-bar)`), or arbitrary: roles by
+  // --theme(), art in --px, part variables; never a raw step
+  return /^[[(]/.test(value) && !RAW.test(value);
 };
 
 describe('the kit’s styles', () => {
-  it('space everything from the scale, in --bui-px', () => {
+  it('space everything by its role, never a number', () => {
     const off = classes.filter(c => {
-      const value = SPACING.exec(c.utility)?.[1];
-      return value !== undefined && !spacingOk(value) && !allowed(c);
+      const value = SPACES.exec(c.utility)?.[1];
+      const spaced = value !== undefined && !spacingOk(value);
+      // A part's own length set from a raw step: `[--b-inline:calc(var(--bui-px)*6)]`
+      const part = /^\[--[bts]-[\w-]+:/.test(c.utility) && RAW.test(c.utility);
+      return (spaced || part) && !allowed(c);
     });
     assert.deepEqual(
       off.map(c => `${c.file}: ${c.token}`),
       [],
-      `spacing is calc(var(--bui-px)*n) with n in ${SPACE.join(', ')}`,
+      `spacing is a role (${Object.keys(SPACING).join(', ')}): gap-related, p-window, --theme(--spacing-cursor); foundations/spacing.mdx`,
     );
   });
 

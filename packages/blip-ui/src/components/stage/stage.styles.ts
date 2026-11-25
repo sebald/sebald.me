@@ -32,11 +32,11 @@ export const stage = {
       'data-settled:transition-[top,height] data-settled:duration-250 data-settled:ease-bui-out motion-reduce:transition-none',
       // A legend on the stage itself: the bottom right corner; held
       // upright, centred over the bar of controls
-      '*:data-[slot=legend]:absolute *:data-[slot=legend]:right-[calc(var(--bui-px)*4)] *:data-[slot=legend]:bottom-[calc(var(--bui-px)*3)] *:data-[slot=legend]:text-right',
-      'tall:*:data-[slot=legend]:inset-x-[calc(var(--bui-px)*4)] tall:*:data-[slot=legend]:bottom-[calc(var(--bui-bar)+var(--bui-px)*3)] tall:*:data-[slot=legend]:text-center',
+      '*:data-[slot=legend]:absolute *:data-[slot=legend]:right-regular *:data-[slot=legend]:bottom-regular *:data-[slot=legend]:text-right',
+      'tall:*:data-[slot=legend]:inset-x-regular tall:*:data-[slot=legend]:bottom-[calc(var(--bui-bar)+--theme(--spacing-regular))] tall:*:data-[slot=legend]:text-center',
     ],
   }),
   center: cva({
-    base: 'absolute inset-0 flex flex-col items-center justify-center gap-[calc(var(--bui-px)*4)] p-[calc(var(--bui-px)*8)] text-center',
+    base: 'absolute inset-0 flex flex-col items-center justify-center gap-regular p-edge text-center',
   }),
 };

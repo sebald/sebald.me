@@ -7,7 +7,7 @@ import { Switch } from '../switch';
 export function Music() {
   const [music, setMusic] = useState(true);
   return (
-    <div className="grid gap-[calc(var(--bui-px)*2)]">
+    <div className="grid gap-related">
       <Switch checked={music} onCheckedChange={setMusic}>
         Music
       </Switch>

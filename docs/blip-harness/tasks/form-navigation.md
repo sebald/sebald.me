@@ -24,7 +24,7 @@ pr: 235
 - A stepper changes with Left and Right while focus stays; a two-valued one also flips on Enter and Space; a button row moves with Left and Right and presses on Enter
 - Readouts and meters are skipped; a Dialog on top mutes the window below it
 - The research's table is the test's table; `pnpm test:game` passes
-- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing from `SPACE`, motion only as the foundations allow, no `next/*`
+- Follows `building-components.mdx`: named by what it does, `data-slot`, `className` merged last, colours from `--bui-*`, spacing by role (`foundations/spacing.mdx`), motion only as the foundations allow, no `next/*`
 - `blip docs <page>` shows its props table, its example and its rules; `blip search` finds it by what a player would call it
 - `pnpm test`, `pnpm typecheck`, `pnpm test:game` pass; `pnpm vrt:blip-ui` run in Docker when a story's look changes (asked first, never started in CI)
 - A changeset naming `@sebald/blip-ui`

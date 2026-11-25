@@ -17,7 +17,7 @@ export const textField = {
       'bg-(--bui-ink) font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
       // Low, a line of text with two pixels above and below: not a
       // Button's height, which made it read as a second window
-      'px-[calc(var(--bui-px)*4)] py-[calc(var(--bui-px)*2)]',
+      'px-control-x py-control',
       // The underline (`--ul`: its colour), one pixel, inside the box so
       // nothing moves between states. It is the only edge: focus and
       // invalid turn its colour, no outline. Dim is what a Switch's track

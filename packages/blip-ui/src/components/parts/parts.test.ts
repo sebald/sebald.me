@@ -10,10 +10,10 @@ import { Content } from './parts';
 const SRC = join(import.meta.dirname, '../..');
 
 describe('a content’s rows', () => {
-  it('are a gap apart that the content sets, from the scale', () => {
+  it('are a gap apart that the content sets, by its role', () => {
     const html = renderToStaticMarkup(createElement(Content, null, 'a'));
     assert.match(html, /\bgrid\b/);
-    assert.match(html, /gap-\[calc\(var\(--bui-px\)\*4\)\]/);
+    assert.match(html, /\bgap-regular\b/);
   });
 
   it('are spaced by no example, story or pattern of the kit', () => {
@@ -22,7 +22,7 @@ describe('a content’s rows', () => {
       // The styles that set the gap, and this test
       .filter(file => !/(^|\/)parts\.(styles|test)\.ts$/.test(file));
     // The gap the content sets, written by hand next to a grid, in either order
-    const gap = String.raw`gap-\[calc\(var\(--bui-px\)\*4\)\]`;
+    const gap = String.raw`gap-regular\b`;
     const hand = new RegExp(
       String.raw`(?:\bgrid\b[^'"\`\n]*${gap}|${gap}[^'"\`\n]*\bgrid\b)`,
     );

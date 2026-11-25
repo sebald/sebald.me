@@ -8,6 +8,6 @@ export const form = {
    * window's own rows. `Actions` in it start 8 in, as anywhere
    */
   root: cva({
-    base: ['m-0 grid gap-[calc(var(--bui-px)*4)]', ...rows],
+    base: ['m-0 grid gap-regular', ...rows],
   }),
 };

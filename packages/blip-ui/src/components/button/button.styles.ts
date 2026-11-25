@@ -54,10 +54,10 @@ export const button = {
       size: {
         /** A thumb's height, 44 CSS pixels at least */
         default:
-          '[--b-height:--spacing(11)] [--b-inline:calc(var(--bui-px)*6)] text-[1em]',
+          '[--b-height:--spacing(11)] [--b-inline:--theme(--spacing-control-x)] text-[1em]',
         /** Dense menus where a pointer aims */
         small:
-          '[--b-height:--spacing(8)] [--b-inline:calc(var(--bui-px)*4)] text-[0.85em]',
+          '[--b-height:--spacing(8)] [--b-inline:--theme(--spacing-control-x)] text-[0.85em]',
       } satisfies Record<NonNullable<ButtonProps['size']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary', size: 'default' },
@@ -65,7 +65,7 @@ export const button = {
   /** The cursor: a stepped triangle as a Picker's, 3 seen pixels from the face */
   cursor: cva({
     base: [
-      'pointer-events-none absolute top-1/2 right-[calc(100%+var(--b-px)*2)] -translate-y-1/2',
+      'pointer-events-none absolute top-1/2 right-[calc(100%+--theme(--spacing-cursor)-var(--b-px))] -translate-y-1/2',
       'h-[calc(var(--b-px)*5)] w-[calc(var(--b-px)*3)] text-(--bui-primary) bui-point-right',
       'opacity-0 group-focus-visible:opacity-100',
     ],

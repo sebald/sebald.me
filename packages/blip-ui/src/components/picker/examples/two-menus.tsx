@@ -10,10 +10,10 @@ const noop = () => {};
  */
 export function TwoMenus() {
   return (
-    <div className="flex flex-wrap gap-[calc(var(--bui-px)*4)]">
+    <div className="flex flex-wrap gap-regular">
       <Window className="w-[12em]">
         <Heading>Party</Heading>
-        <Picker label="Party" className="mt-[calc(var(--bui-px)*3)]">
+        <Picker label="Party" className="mt-regular">
           <PickerItem id="status" onSelect={noop}>
             Status
           </PickerItem>
@@ -24,7 +24,7 @@ export function TwoMenus() {
       </Window>
       <Window className="w-[12em]">
         <Heading>Bag</Heading>
-        <Picker label="Bag" className="mt-[calc(var(--bui-px)*3)]">
+        <Picker label="Bag" className="mt-regular">
           <PickerItem id="use" onSelect={noop}>
             Use
           </PickerItem>

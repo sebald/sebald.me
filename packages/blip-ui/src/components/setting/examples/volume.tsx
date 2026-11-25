@@ -7,7 +7,7 @@ import { Setting } from '../setting';
 export function Volume() {
   const [volume, setVolume] = useState(5);
   return (
-    <div className="flex items-center gap-[calc(var(--bui-px)*2)] text-(--bui-text-bright)">
+    <div className="flex items-center gap-related text-(--bui-text-bright)">
       <Button
         size="small"
         variant="secondary"

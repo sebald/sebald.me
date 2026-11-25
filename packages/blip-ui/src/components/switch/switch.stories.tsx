@@ -29,7 +29,7 @@ export const Default: Story = {};
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid gap-[calc(var(--bui-px)*3)]">
+    <div className="grid gap-related">
       <Switch defaultChecked>Music</Switch>
       <Switch>Music</Switch>
       <Switch disabled defaultChecked>

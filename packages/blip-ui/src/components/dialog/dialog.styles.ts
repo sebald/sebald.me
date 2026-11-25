@@ -4,7 +4,7 @@ import type { DialogProps } from './dialog';
 export const dialog = {
   /** The stage dimmed down to the bar of controls, and over the controls (`--bui-layer-dialog` to their `--bui-layer-controls`), which a tap only closes it from; the window in the middle */
   root: cva({
-    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-(--bui-layer-dialog) flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
+    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-(--bui-layer-dialog) flex items-center justify-center bg-(--bui-scrim) p-edge',
   }),
   popup: cva({
     // What can be done, centred under what it says: no cursor column

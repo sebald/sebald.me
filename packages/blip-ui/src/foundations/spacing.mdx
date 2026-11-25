@@ -1,0 +1,90 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as SpacingStories from './spacing.stories';
+
+<Meta title="Foundations/Spacing" />
+
+# Spacing
+
+Every space in the kit is named for **what it is for**, never by a
+number. `gap-related` says "a thing and its own parts", `p-window` says
+"inside a window". Whoever builds a screen picks by meaning, and two
+windows built on different days come out the same.
+
+The lengths are in stage pixels (`--bui-px`, never finer than
+`--bui-min-px`). They sit on two ladders, each step double the last:
+
+- **1, 2, 4, 8 lays things out:** every gap and every padding.
+- **3, 6, 12 is the cursor's** (`focus.mdx`), and nothing else's.
+
+So a 3 or a 6 outside the cursor's room is a mistake, and two neighbouring
+choices are never a pixel apart.
+
+<Canvas of={SpacingStories.Overview} />
+
+## The roles
+
+| Role            | Step | For                                                                                                                                                         |
+| --------------- | ---- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Gap**         |      | between neighbours, by how related they are                                                                                                                 |
+| `joined`        | 1    | Repeats of one thing: a menu's rows, a meter's cells (compact)                                                                                              |
+| `related`       | 2    | A thing and its own parts: a label and its control, a control and its description, a title and its blurb, a mark and its text, the lines of a ledger        |
+| `regular`       | 4    | Separate items of one group: a form's fields, a menu's groups, a name and its value, the content and the buttons under it, a title and its window's content |
+| `section`       | 8    | Regions: the stage's parts, windows side by side                                                                                                            |
+| **Inset**       |      | the padding inside, by what holds it                                                                                                                        |
+| `control`       | 2    | Inside a control, on its block axis: a field, a menu row, a corner button                                                                                   |
+| `control-x`     | 4    | Inside a control, on its inline axis: a field's text, a button's label, a tab's                                                                             |
+| `window`        | 4    | Inside a window or a speech bubble                                                                                                                          |
+| `edge`          | 8    | From the stage's or a screen's edge, and round a dialog                                                                                                     |
+| **Cursor**      |      | the cursor's room, for nothing else                                                                                                                         |
+| `cursor`        | 3    | The cursor to what it points at                                                                                                                             |
+| `cursor-clear`  | 6    | Nothing else nearer the cursor on its side; the room a bar button keeps for it                                                                              |
+| `cursor-apart`  | 12   | Between focusable neighbours (`Actions`)                                                                                                                    |
+| `cursor-column` | 8    | The column left of a row or the first button, which the cursor sits in                                                                                      |
+
+## Which one?
+
+1. **Is it the cursor's room?** Then it is a `cursor-*`, whatever else is
+   near.
+2. **Is it inside something** (between a box's edge and what it holds)?
+   Then it is an inset: `control`/`control-x` in a control, `window` in a
+   window, `edge` at the stage or a screen.
+3. **Otherwise it is a gap.** Ask how related the two are: the same thing
+   repeated is `joined`, a thing and its own part is `related`, two items
+   of a group are `regular`, two regions are `section`.
+
+When none fits, the layout is asking for a new role: say so, don't pick the
+nearest number.
+
+## Writing them
+
+- **As a class:** any spacing or offset utility takes the role's name:
+  `gap-related`, `p-window`, `px-control-x`, `ml-cursor-column`,
+  `right-regular`.
+- **In a calc:** `--theme(--spacing-cursor)`, for example
+  `right-[calc(100%+--theme(--spacing-cursor))]`. Not `var(--spacing-…)`:
+  that takes the page root's `--bui-px` instead of the stage's.
+- **In code:** `SPACING` and `SpacingRole` from `@sebald/blip-ui`, with
+  `px(SPACING.regular, FLOOR)` for an inline style.
+- A `className` passed to a component replaces its role as any Tailwind
+  class would (`p-4` replaces `p-window`).
+- There is no role called `screen`: `--spacing-screen` would take over
+  Tailwind's `h-screen` and `w-screen`.
+
+## What stays outside
+
+- **Art on the grid** (a window's frame, a tab's rings, bitmap letters)
+  counts in `--px`, the stage's own pixel, not in spacing roles.
+- **Set against the letters:** a speaker's mark and a ledger's dots sit on
+  the text in `em` (`mt-[0.4em]`, `mb-[0.3em]`).
+- **Touch parts** are sized for a thumb in CSS pixels: the tall stage's bar
+  of controls and its icon buttons.
+
+## Checked by tests
+
+`foundations/uniformity.test.ts` fails on any padding, margin, gap or
+offset in a component written as a number (`calc(var(--bui-px)*4)`,
+`(--bui-px)`, `p-6`) instead of a role. It also fails on a part's own length set from one
+(`[--b-inline:calc(var(--bui-px)*6)]`). The few exceptions above are listed
+in it, each with its reason. The cursor's room is measured on every story
+by the visual tests (`cursorRoom`).

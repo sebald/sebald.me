@@ -16,8 +16,10 @@ Pushback is its first game.
   `--bui-min-px`, so a phone's tall stage doesn't thin them to nothing. A
   component never invents a CSS pixel value of its own; only the touch
   parts are sized in CSS pixels, for a thumb.
-- **One scale each.** Every padding, gap and margin is 1, 2, 3, 4, 6 or 8
-  `--bui-px` (`SPACE`). Text is 0.75em (a legend), 0.85em (small: a note, a
+- **One scale each.** Every padding, gap and margin is named for what it
+  is for (`gap-related`, `p-window`, `ml-cursor-column`), on two ladders of
+  `--bui-px`: 1, 2, 4, 8 for layout, 3, 6, 12 for the cursor
+  (`foundations/spacing.mdx`). Text is 0.75em (a legend), 0.85em (small: a note, a
   blurb, a small button), 1em, or 2em. Anything that can't be used right
   now looks the same everywhere (`bui-disabled`: faded and grey). A test
   (`foundations/uniformity.test.ts`) fails on a style from outside them.

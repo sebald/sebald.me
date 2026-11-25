@@ -11,9 +11,9 @@ export function PartyStatus() {
   const [gold, setGold] = useState(120);
   const [hp, setHp] = useState(42);
   return (
-    <div className="grid w-fit gap-[calc(var(--bui-px)*3)]">
+    <div className="grid w-fit gap-related">
       <Readout value={gold}>Gold</Readout>
-      <div className="flex gap-[calc(var(--bui-px)*4)]">
+      <div className="flex gap-regular">
         <Readout value={hp} max={50}>
           HP
         </Readout>
@@ -21,7 +21,7 @@ export function PartyStatus() {
           MP
         </Readout>
       </div>
-      <div className="flex gap-[calc(var(--bui-px)*12)]">
+      <div className="flex gap-cursor-apart">
         <Button size="small" onClick={() => setGold(gold + 30)}>
           Sell
         </Button>
