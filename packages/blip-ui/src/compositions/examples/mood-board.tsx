@@ -46,7 +46,7 @@ const Group = ({
     }
   >
     {noted ? (
-      <div className="tall:pb-[calc(var(--px)*44)]">{children}</div>
+      <div className="tall:pb-[calc(var(--px)*60)]">{children}</div>
     ) : (
       children
     )}
