@@ -17,7 +17,10 @@ export const stepper = {
       // On the value's baseline, so it lines up with the label beside it
       'group/stepper flex min-w-0 cursor-pointer items-baseline gap-related outline-none select-none',
       'text-(--bui-dim) focus-visible:text-(--bui-primary)',
-      'touch:min-h-11',
+      // A thumb's target (44 CSS pixels and more) that reaches into the
+      // gaps around the row instead of making it taller: a taller row
+      // would push its value and arrows apart and its words away from it
+      "relative touch:before:absolute touch:before:inset-x-0 touch:before:-inset-y-regular touch:before:content-['']",
       'aria-disabled:cursor-default aria-disabled:bui-disabled',
     ],
   }),
