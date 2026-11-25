@@ -1,8 +1,8 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N4 # forms and navigation
 depends: [stepper, field, picker-key-scope]
-pr:
+pr: 235
 ---
 
 # `form-navigation`: A `Form` that moves between its rows by Up and Down
