@@ -1,8 +1,8 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: S # design system: foundations
 depends: []
-pr:
+pr: 237
 ---
 
 # `spacing`: One spacing schema, always used, easy to follow
@@ -44,7 +44,7 @@ An agent building a screen has to read the code and guess, and two windows built
 - Research in `research/spacing.md`; the user took its table: two ladders (1-2-4-8 layout, 3-6-12 cursor), Marigold-style relation names for gaps, insets by what holds them, the cursor's own roles. No `Stack`/`Inline`: Blip places children by `data-slot`, so tokens are enough. Window padding stays 4
 - `screen` became `edge`: `--spacing-screen` would turn Tailwind's `h-screen`/`w-screen` into 8 stage pixels, site-wide
 - The control inset is two roles, `control` (2, block) and `control-x` (4, inline), for a field's 2 × 4
-- Buttons take `control-x` (4) at both sizes: the default button's 6 was off the layout ladder. They are 2 stage pixels narrower each side
+- Buttons take `control-x` (4) at both sizes: the default button's 6 was off the layout ladder. They are 2 stage pixels narrower each side; the user kept them on the scale
 - In a calc a role is `--theme(--spacing-<role>)`, inlined by Tailwind: `var(--spacing-<role>)` would be computed on `:root` with `--bui-px`'s 3px fallback, not the stage's pixel
 - `tailwind-merge` is extended with the roles as spacing, so a caller's `p-4` replaces `p-window`
 - The test now covers offsets (`top-`, `right-`, `inset-` …) and the parts' own lengths (`[--b-inline:…]`), not only `p`/`m`/`gap`
