@@ -23,8 +23,8 @@ export function Fitted(props: Partial<StageProps>) {
       label="Stage"
       turned={
         <>
-          <p className="m-0 text-(--bui-primary)">Turn your phone upright.</p>
-          <p className="m-0 text-(--bui-muted)">The meeting will wait.</p>
+          <Text variant="call">Turn your phone upright.</Text>
+          <Text variant="hint">The meeting will wait.</Text>
         </>
       }
       {...props}

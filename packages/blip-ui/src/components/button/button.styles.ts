@@ -38,7 +38,8 @@ export const button = {
          * The main action: a paper key, ink letters. It stands out on a
          * window (15.9:1) and on the bare stage (18:1) alike, and leaves
          * yellow to the cursor (`foundations/colour.mdx`: yellow says
-         * "look here")
+         * "look here"). Its light row is barely lighter than paper: the
+         * shade row along the bottom carries the bevel
          */
         primary: [
           '[--b-face:var(--bui-paper)] [--b-light:var(--bui-spark)] [--b-shade:var(--bui-paper-shade)]',
@@ -51,7 +52,9 @@ export const button = {
          */
         secondary: [
           '[--b-ink:transparent] [--b-face:transparent] [--b-light:transparent] [--b-shade:transparent]',
-          '[--b-text:var(--bui-text-bright)] group-enabled:hover:[--b-text:var(--bui-text-selected)]',
+          // Hover brightens it, a press dims it: the key's own feedback, since
+          // it has no face to light or darken
+          '[--b-text:var(--bui-text-bright)] enabled:hover:[--b-text:var(--bui-heading)] enabled:active:[--b-text:var(--bui-muted)]',
         ],
         /** What can't be undone: the key, in the danger colour */
         destructive: [

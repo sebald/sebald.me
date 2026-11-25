@@ -29,7 +29,7 @@ export const tabs = {
   arrow: cva({
     base: [
       'flex h-[calc(var(--t-ring)+var(--t-label))] cursor-pointer items-center pt-(--t-ring) mb-(--t-over)',
-      'text-(--bui-muted) hover:text-(--bui-primary)',
+      'text-(--bui-muted) hover:text-(--bui-text-bright)',
     ],
   }),
   tab: cva({
@@ -43,7 +43,7 @@ export const tabs = {
       'text-(--bui-muted) hover:text-(--bui-text-bright)',
       '[--t-frame:var(--bui-frame-dim)] [--t-inner:var(--bui-surface-shade)] [--t-face:var(--bui-surface-shade)] [--t-light:none]',
       // The current tab: over the window's edge, in the window's colours
-      'data-[active]:z-1 data-[active]:mb-0 data-[active]:h-[calc(var(--t-ring)+var(--t-label)+var(--t-over))] data-[active]:pb-(--t-over) data-[active]:text-(--bui-primary)',
+      'data-[active]:z-1 data-[active]:mb-0 data-[active]:h-[calc(var(--t-ring)+var(--t-label)+var(--t-over))] data-[active]:pb-(--t-over) data-[active]:text-(--bui-heading)',
       'data-[active]:[--t-frame:var(--bui-frame)] data-[active]:[--t-inner:var(--bui-frame-inner)] data-[active]:[--t-face:var(--bui-surface)]',
       'data-[active]:[--t-light:inset_0_var(--px)_0_var(--bui-surface-light)]',
     ],
