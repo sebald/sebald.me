@@ -4,6 +4,7 @@ import { type FormEvent, type ReactNode, useEffect, useRef } from 'react';
 
 import { LINE, useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
+import { building } from '../../utils/dev';
 import { form as styles } from './form.styles';
 
 export interface FormProps {
@@ -130,8 +131,7 @@ export const Form = ({ children, onSubmit, className }: FormProps) => {
 
   // A window is a menu or a form: say so while building one
   useEffect(() => {
-    if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production')
-      return;
+    if (!building()) return;
     if (ref.current?.querySelector('[data-slot=picker]'))
       console.error(
         'Blip UI: a Picker inside a Form. A window is a menu or a form (`docs/blip-harness/research/forms-and-navigation.md`, decision 1): give the menu its own window, or make its choices fields.',

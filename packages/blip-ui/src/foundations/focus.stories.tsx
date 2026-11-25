@@ -5,7 +5,6 @@ import { Form } from '../components/form/form';
 import { IconButton } from '../components/icon-button/icon-button';
 import { Actions, Content } from '../components/parts/parts';
 import { Picker, PickerItem } from '../components/picker/picker';
-import { Switch } from '../components/switch/switch';
 import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
 import { TextField } from '../components/text-field/text-field';
 import { Text } from '../components/text/text';
@@ -47,7 +46,6 @@ export const Overview: Story = {
                 <Button variant="destructive">Destructive</Button>
               </Actions>
             </Form>
-            <Switch>Music</Switch>
             <Actions>
               <IconButton
                 icon="back"

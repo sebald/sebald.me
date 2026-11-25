@@ -60,8 +60,8 @@ the labels in a column to their left, as option screens in games have them.
 
 The column is the window's: `Content` sets `--bui-label-width` for what is
 in it and, on a wide stage, places a field in it with its label in that
-column and the words under the control after it; a `Readout`'s and a
-`Switch`'s name take the same width, so all three line up. Anywhere else, a
+column and the words under the control after it; a `Readout`'s name takes
+the same width, so they line up. Anywhere else, a
 field in a dialog's body or on the stage, the label goes above the control,
 as on a phone: a column is only worth it where there are rows to line up.
 
@@ -69,11 +69,8 @@ as on a phone: a column is only worth it where there are rows to line up.
 so one rule places all their labels:
 
 - A `TextInput`, through a `Field` or as a `TextField`
-- The stepper, when it comes, for a value between set values (On and Off
-  included)
-- Not a `Switch`: its name is inside it, the whole row its tap target, and
-  it is being replaced by the stepper (`docs/blip-harness/research/forms-and-navigation.md`,
-  decision 2). It takes the label column on its own until then
+- A `StepperControl`, through a `Field` or as a `Stepper`, for every
+  choice (On and Off included)
 - Not a `Readout`: it shows a number and takes nothing in, so it has no
   label element to tie to a control. Its label takes the same column, so a
   readout's row lines up with the fields'

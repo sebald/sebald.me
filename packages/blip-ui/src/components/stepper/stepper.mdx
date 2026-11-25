@@ -1,0 +1,96 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as StepperStories from './stepper.stories';
+
+<Meta of={StepperStories} />
+
+# Stepper
+
+The form's one choice control: a setting with its value between two step
+arrows, `Music ◀ On ▶`, `Text speed ◀ Normal ▶`. On and Off, Normal and
+Hard, Slow and Fast are all a stepper, as on an era game's options screen,
+so there is nothing to choose between: the toggle, the option and the
+settings row of a form are this. `StepperControl` is the value and
+its arrows, the control of a `Field`; `Stepper` is the commonest form of
+it, a `Field` with a label holding one: its children are the label,
+`description` and `error` the field's words, the rest goes to the control.
+
+<Canvas of={StepperStories.Default} />
+<Controls of={StepperStories.Default} />
+
+```tsx
+<Stepper name="music" values={['Off', 'On']} defaultValue="On">
+  Music
+</Stepper>
+
+// the same, composed
+<Field name="music">
+  <FieldLabel>Music</FieldLabel>
+  <StepperControl values={['Off', 'On']} defaultValue="On" />
+</Field>
+```
+
+## Anatomy
+
+1. **Label**, its children, the `Field`'s label: in the window's label
+   column on a wide stage, above the value on a tall one. The cursor
+   points at it while the stepper has the keys' focus
+2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`):
+   `--bui-dim` at rest, `--bui-primary` with the focus, a second cue to
+   the cursor in the colours of a field's underline
+3. **Value**, bright, centred in six characters so the arrows stay put
+4. **Description** and **error**, the `Field`'s, under it
+
+<Canvas of={StepperStories.Overview} />
+
+## Usage
+
+- **Do** use it for every choice in a form, two values or seven. A menu
+  row that is a setting is a `PickerSetting`, which looks the same and
+  takes the `Picker`'s keys.
+- **Do** write a setting that is on or off as `['Off', 'On']`, in that
+  order: only those words make it a switch to a screen reader. Two other
+  values (`['Normal', 'Hard']`) are read as their words, so name the row
+  for the choice: `Difficulty`, not `Hard mode`.
+- **Do** write more values in the order Right goes through them: Slow,
+  Normal, Fast. It goes round: Right from the last is the first again.
+- **Don't** use it for a number the player only reads (a `Readout`), or a
+  choice among actions or places (a `Picker` in a menu window).
+
+<Canvas of={StepperStories.Options} />
+
+<Rules for="stepper" />
+
+## Input
+
+- Left and Right step it, back and on, and go round at the ends
+- Enter, Space and a tap step it on; on two values that is a flip. A tap
+  on its label does the same, so the whole row is the target
+- Home and End go to the first and the last of three or more values
+- Up and Down are not its own: in a `Form` they move to the row above or
+  below
+- A disabled stepper takes none of them and is not a stop
+- Each step plays the `move` sound through `useFeedback()`; the value
+  changes at once, as list navigation does: no motion
+
+## Accessibility
+
+- `['Off', 'On']`: `role="switch"`, `aria-checked` when on. Any other
+  values, two included: a `role="slider"` across
+  (`aria-orientation="horizontal"`), its value in words
+  (`aria-valuetext`), so Normal and Hard are heard as Normal and Hard, not
+  as off and on. The words on the stage are the same and are read once
+- Named by its `Field`'s label (`aria-labelledby`), the name the same in
+  every state; described by the field's description and error
+- A change is said by the role's own state, which a screen reader reads
+  for the control it is on, not by the stage's live region, which would
+  say it twice
+- A Tab stop; the focus is the `Field`'s cursor left of the label and the
+  arrows turning primary (`foundations/focus.mdx`)
+- The value is in words, so the state never rests on colour. The arrows
+  are 3.05:1 on the window at rest (dim, the 3:1 of WCAG 1.4.11) and
+  10.51:1 with the focus (primary), a change of 3.44:1; the value is
+  bright, 11.56:1
+- A touch screen gets a row at least 44 CSS pixels high
+- `name` sends the value shown (`On`, `Fast`) with the form

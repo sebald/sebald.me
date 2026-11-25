@@ -165,7 +165,12 @@ export {
   Step,
   type StepProps,
 } from './components/setting/setting';
-export { Switch, type SwitchProps } from './components/switch/switch';
+export {
+  Stepper,
+  StepperControl,
+  type StepperControlProps,
+  type StepperProps,
+} from './components/stepper/stepper';
 export {
   Tab,
   TabList,

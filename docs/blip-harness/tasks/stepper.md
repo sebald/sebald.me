@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: N3 # forms and navigation
 depends: [field, focus-style]
 pr:
@@ -36,3 +36,13 @@ pr:
 Filled in while the task is worked on: what changed, decisions, numbers.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+- `Stepper` is the row (`Field` + `FieldLabel` + `StepperControl`, `description`/`error` as `TextField` has); `StepperControl` the value between two `Step`s, for a `Field` composed by hand
+- **Only `['Off', 'On']` is a switch** (user's choice, over "every two values"): Normal/Hard as a switch read "Difficulty, switch, off" and never said Normal. Every other set, two values included, is a horizontal slider with `aria-valuetext`, so it says its value. Matched by the words, so another spelling or language reads as a slider (it still works; a screen reader hears the word, not on/off)
+- Two values flip on Left, Right, Enter, Space and a tap; more step and wrap, Home and End to the ends. A tap on the label steps it too (the label is tied by `aria-labelledby`, not `for`: a `div` is not labelable), so the whole row is the target
+- The change is said by the role's own state (`aria-checked`, `aria-valuetext`), not the live region, which would say it twice
+- Arrows dim at rest and primary with the focus, the field underline's colours (3.44:1 change); muted would have been 1.82:1. Listed in `uniformity.test.ts`'s focus table
+- On the value's baseline: built from `Step`s and the value, not `Setting`, whose empty first arrow set the row's baseline 2 px high
+- Label and description wired through Base UI's exported internals (`labelable-provider`, `field-root-context`)
+- `focusTakes`: Enter and Space on a focused stepper are its own
+- Also fixed: the pack build (`prepack`) failed since #235 on `process` in Form's and TextField's dev errors; `utils/dev.ts` declares what it reads

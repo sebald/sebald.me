@@ -20,8 +20,8 @@ export const textField = {
       'px-control-x py-control',
       // The underline (`--ul`: its colour), one pixel, inside the box so
       // nothing moves between states. It is the only edge: focus and
-      // invalid turn its colour, no outline. Dim is what a Switch's track
-      // is when off
+      // invalid turn its colour, no outline. Dim, the dimmest tone that
+      // holds 3:1 against the window
       '[--ul:var(--bui-dim)]',
       'shadow-[inset_0_calc(var(--bui-px)*-1)_0_var(--ul)]',
       'focus:[--ul:var(--bui-primary)]',

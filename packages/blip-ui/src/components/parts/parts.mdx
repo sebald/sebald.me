@@ -57,8 +57,8 @@ along the bottom edge.
   between its children, so every screen's rows are as far apart as the others'.
 - **Do** put text inside a `Text`: every direct child of the `Content` is
   a row, so loose words beside an inline element would split into rows.
-- **Do** put rows of a `Field` (a `TextField` is one), a `Switch` and a
-  `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
+- **Do** put rows of a `Field` (a `TextField` and a `Stepper` are one) and
+  a `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
   a wide stage, not set on a tall one) which each takes as the width of its
   label, so the names line up, and starts them 8 in, the cursor column a
   `Picker` and `Actions` have, so a focused field's cursor has room and

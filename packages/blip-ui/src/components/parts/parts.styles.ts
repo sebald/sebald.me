@@ -9,7 +9,7 @@ export const rows = [
   // Form rows start 8 in, a cursor column as a Picker's and Actions':
   // a focused field's cursor has room left of its label, and the
   // names line up with a menu's labels and the buttons
-  '*:data-[slot=field]:ml-cursor-column *:data-[slot=switch]:ml-cursor-column *:data-[slot=readout]:ml-cursor-column',
+  '*:data-[slot=field]:ml-cursor-column *:data-[slot=readout]:ml-cursor-column',
   // A field in it has its label in the column, the words under the
   // control after it; on a tall stage it stays stacked, as anywhere.
   // The label spans the rows and a last row takes what a label on two
@@ -26,7 +26,7 @@ export const parts = {
   title: text.heading,
   /**
    * `--bui-label-width`: the width of the label column the rows in it
-   * share (a `Field`, a `Switch`, a `Readout` take it for their
+   * share (a `Field` and a `Readout` take it for their
    * label). Not on a tall stage, where there is no room for a column:
    * the labels are as wide as their text and a field's goes above it.
    * Its children are rows, 4 stage pixels apart: the one gap every

@@ -12,6 +12,7 @@ import {
 
 import { useAnnounce } from '../../providers/announcer';
 import { useFeedback } from '../../providers/feedback';
+import { building } from '../../utils/dev';
 import {
   Field,
   FieldContext,
@@ -97,10 +98,7 @@ export const TextInput = ({
         event.key === 'Enter' &&
         onSubmit &&
         event.currentTarget.closest('[data-slot=form]') &&
-        !(
-          typeof process !== 'undefined' &&
-          process.env.NODE_ENV === 'production'
-        )
+        building()
       )
         console.error(
           "Blip UI: a TextField's onSubmit inside a Form is not called; Enter sends the form. Read the value in the Form's onSubmit.",

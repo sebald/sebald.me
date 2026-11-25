@@ -213,10 +213,10 @@ export const focusTakes = (event: KeyboardEvent) => {
   if (!target?.closest) return false;
   if (target.closest('input,textarea,select,[contenteditable=true]'))
     return true;
-  // A focused switch flips on Enter and Space itself
+  // A focused stepper steps on Enter and Space itself
   if (
     (event.key === 'Enter' || event.key === ' ') &&
-    target.closest('[role=switch]')
+    target.closest('[role=switch],[data-slot=stepper]')
   )
     return true;
   const widget = target.closest<HTMLElement>(SELECTOR);
