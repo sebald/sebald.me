@@ -66,15 +66,28 @@ test('stories', async ({ page, baseURL }) => {
         );
         await page.locator('#storybook-root > *').first().waitFor();
         // A story's `play` (a focus set, as the mood board's) runs after it
-        // renders: shoot it once Storybook says the story is finished
-        await page.waitForFunction(
-          () =>
-            (
-              window as {
-                __STORYBOOK_PREVIEW__?: { currentRender?: { phase?: string } };
-              }
-            ).__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
-        );
+        // renders: shoot it once Storybook says the story is finished. Its
+        // render phase is Storybook's internal, not an API: a short wait of
+        // its own, so a rename (look here after a Storybook bump) or a story
+        // that errors fails this one story, not the whole run by its timeout
+        await page
+          .waitForFunction(
+            () =>
+              (
+                window as {
+                  __STORYBOOK_PREVIEW__?: {
+                    currentRender?: { phase?: string };
+                  };
+                }
+              ).__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
+            undefined,
+            { timeout: 5_000 },
+          )
+          .catch(() => {
+            throw new Error(
+              `${id}: Storybook never said the story finished (its play failed, or __STORYBOOK_PREVIEW__.currentRender.phase changed in a Storybook update)`,
+            );
+          });
         await page.evaluate(() => document.fonts.ready);
         expect
           .soft(
