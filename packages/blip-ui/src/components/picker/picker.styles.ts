@@ -17,13 +17,17 @@ export const picker = {
   group: cva({ base: 'grid gap-joined' }),
   /** A setting's row: its name, the value at the end */
   setting: cva({
-    base: 'flex w-full items-center gap-regular',
+    base: [
+      'flex w-full items-center gap-regular',
+      // The value reaches into the row's right room, so it ends where
+      // every value in a window ends; the row keeps its room, which a
+      // neighbour's cursor needs
+      '*:data-[slot=setting]:-mr-control',
+    ],
   }),
   item: cva({
     base: [
-      // No room on the right: a setting's value ends at the row's end, where
-      // every value in a window ends
-      'group flex w-full items-center gap-cursor pl-control py-joined text-left',
+      'group flex w-full items-center gap-cursor px-control py-joined text-left',
       // The cursor's row lit at once: moved by the arrows, list
       // navigation doesn't animate
       'cursor-pointer',
