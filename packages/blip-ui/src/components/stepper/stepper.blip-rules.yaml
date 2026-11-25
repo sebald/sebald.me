@@ -5,7 +5,7 @@ rules:
     markers: [review]
     source: docs/blip-harness/research/forms-and-navigation.md
   - id: C-STEPPER-2
-    text: Write a setting that is on or off as ['Off', 'On'], the only values read as a switch; name a row of two other values for the choice (Difficulty), not for one of them.
+    text: Write a setting that is on or off as ['Off', 'On'], never Yes and No, Enabled and Disabled or a tick, the only values read as a switch; name a row of two other values for the choice (Difficulty), not for one of them.
     markers: [review]
     source: https://www.w3.org/WAI/ARIA/apg/patterns/switch/
   - id: C-STEPPER-3

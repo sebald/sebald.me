@@ -36,9 +36,13 @@ it, a `Field` with a label holding one: its children are the label,
 1. **Label**, its children, the `Field`'s label: in the window's label
    column on a wide stage, above the value on a tall one. The cursor
    points at it while the stepper has the keys' focus
-2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`):
-   `--bui-dim` at rest, `--bui-primary` with the focus, a second cue to
-   the cursor in the colours of a field's underline
+2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`),
+   shown only where Left and Right work: in `--bui-primary` while it has
+   the keys' focus, a second cue beside the cursor, and under the pointer.
+   At rest a row is its name and value, as on a game's
+   options screen, so a window of steppers is not a column of arrows; their room
+   is kept, so nothing shifts when they show. Under a finger there is no
+   cursor to show them: they stay, dim, as the sign that a tap steps it
 3. **Value**, bright, centred in six characters so the arrows stay put
 4. **Description** and **error**, the `Field`'s, under it
 
@@ -50,7 +54,8 @@ it, a `Field` with a label holding one: its children are the label,
   row that is a setting is a `PickerSetting`, which looks the same and
   takes the `Picker`'s keys.
 - **Do** write a setting that is on or off as `['Off', 'On']`, in that
-  order: only those words make it a switch to a screen reader. Two other
+  order, never Yes and No or Enabled and Disabled: only those words
+  make it a switch to a screen reader. Two other
   values (`['Normal', 'Hard']`) are read as their words, so name the row
   for the choice: `Difficulty`, not `Hard mode`.
 - **Do** write more values in the order Right goes through them: Slow,
@@ -87,10 +92,10 @@ it, a `Field` with a label holding one: its children are the label,
   for the control it is on, not by the stage's live region, which would
   say it twice
 - A Tab stop; the focus is the `Field`'s cursor left of the label and the
-  arrows turning primary (`foundations/focus.mdx`)
+  arrows showing beside the value, in primary (`foundations/focus.mdx`)
 - The value is in words, so the state never rests on colour. The arrows
-  are 3.05:1 on the window at rest (dim, the 3:1 of WCAG 1.4.11) and
-  10.51:1 with the focus (primary), a change of 3.44:1; the value is
-  bright, 11.56:1
+  are 10.51:1 on the window with the focus (primary) and 3.05:1 at rest
+  under a finger (dim, the 3:1 of WCAG 1.4.11); the value is bright,
+  11.56:1
 - A touch screen gets a row at least 44 CSS pixels high
 - `name` sends the value shown (`On`, `Fast`) with the form
