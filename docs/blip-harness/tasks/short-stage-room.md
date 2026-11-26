@@ -7,6 +7,8 @@ pr: 254
 
 # `short-stage-room`: A list gets more rows on the short stage
 
+**Dropped, not built**: see Notes. The criteria below were never met on purpose.
+
 **Problem.** At 1x the stage is 214 stage pixels high. In a `Screen`, the screen's title (bitmap letters), the window's title and the legend under the list take most of it: after `window-scroll` (#252) a long shop shows two and a half rows, the three-item shop two. Nothing is cut off, but a list through a slot that small is cramped.
 
 **Outcome.** On the short stage the frame gives the list more room, by two changes the user agreed to (2026-11-26):
