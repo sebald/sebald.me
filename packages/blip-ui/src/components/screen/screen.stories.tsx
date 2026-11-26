@@ -5,6 +5,7 @@ import { Pixels, usePixels } from '../../providers/pixels';
 import { TALL_BAR } from '../stage/stage';
 import { ScreenTitle, Text } from '../text/text';
 import { Window } from '../window/window';
+import { LongList as LongListExample } from './examples/long-list';
 import { Shop as ShopExample } from './examples/shop';
 import { TitleCard as TitleCardExample } from './examples/title-card';
 import { Screen } from './screen';
@@ -112,6 +113,13 @@ export const Shop: Story = {
   decorators: onAStage,
   parameters: { controls: { disable: true } },
   render: () => <ShopExample />,
+};
+
+/** More rows than room: the window's list scrolls, its title and legend stay */
+export const LongList: Story = {
+  decorators: onAStage,
+  parameters: { controls: { disable: true } },
+  render: () => <LongListExample />,
 };
 
 /** A title card: one group in the middle of the stage */

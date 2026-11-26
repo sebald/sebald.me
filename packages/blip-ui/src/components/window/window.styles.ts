@@ -1,7 +1,9 @@
 import { cva } from '../../utils/styles';
 
 export const window = {
-  root: cva({ base: 'relative flex flex-col' }),
+  // In a bounded column (a `Screen`) it may get less room than it would
+  // take: `min-h-0` lets it, and its menu takes the cut by scrolling
+  root: cva({ base: 'relative flex min-h-0 flex-col' }),
   // The ink and the frame's rings, each a pixel further in
   ring: cva({ base: 'absolute' }),
   body: cva({

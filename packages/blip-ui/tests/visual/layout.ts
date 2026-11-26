@@ -76,10 +76,12 @@ export const escapes = (
           up = up.parentElement
         ) {
           const { overflowX, overflowY } = getComputedStyle(up);
-          if (![overflowX, overflowY].some(o => o === 'hidden' || o === 'clip'))
-            continue;
+          // A list that scrolls first: its overflow is `auto` both ways, so
+          // the clipping test below would pass over it to the stage
           if ([overflowX, overflowY].some(o => o === 'auto' || o === 'scroll'))
             break;
+          if (![overflowX, overflowY].some(o => o === 'hidden' || o === 'clip'))
+            continue;
           const clip = up.getBoundingClientRect();
           // Hidden on purpose, for assistive technology only (`sr-only`)
           if (clip.width <= 1 || clip.height <= 1) break;
