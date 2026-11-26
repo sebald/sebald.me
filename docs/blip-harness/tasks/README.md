@@ -143,7 +143,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`menu-white`](menu-white.md)                         | The menu row under the cursor is bright, not gold; a setting's arrows always bright                              |
 | [`min-width-reset`](min-width-reset.md)               | A `min-w-*` class wins over the site's reset: the reset in the base layer                                        |
 | [`secondary-key`](secondary-key.md)                   | The secondary button is a muted key again, not its label alone                                                   |
-| [`short-stage-room`](short-stage-room.md)             | A list gets more rows on the short stage: a smaller screen title, the legend in the window's frame               |
+| [`short-stage-room`](short-stage-room.md)             | Dropped: the cramped list is only at 1x, which no game shows (`MIN_SCALE` 2.25 shows 11.7 of 12 rows)            |
 | [`simplify-components`](simplify-components.md)       | A /simplify pass over every component, found by agents, checked and integrated by hand                           |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
