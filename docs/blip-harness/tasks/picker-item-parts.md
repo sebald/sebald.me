@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
 pr: 255
@@ -44,6 +44,8 @@ story composition, tests; the keys and the note stay as they are.
 a `PickerItem`) should fall in `quests`, `saves`, `shop`.
 
 ## Notes
+
+**Accepted** by the user (2026-11-26), as written.
 
 **Parts.** Three, exported from the picker: `PickerItemDetail` (a line of its own under the name, 0.85em, muted; one per line, so a quest's giver and next step are two), `PickerItemValue` (at the row's end, where a `PickerSetting`'s value ends, tabular figures) and `PickerItemMark` (beside the name, 0.75em, `variant: 'new' | 'done'`: the second accent or muted, its words saying it, never the colour alone). The item's own text stays its name: no name part.
 
