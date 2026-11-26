@@ -45,7 +45,11 @@ export const tabs = {
       // The current tab: over the window's edge, in the window's colours
       'data-[active]:z-1 data-[active]:mb-0 data-[active]:h-[calc(var(--t-ring)+var(--t-label)+var(--t-over))] data-[active]:pb-(--t-over) data-[active]:text-(--bui-primary)',
       'data-[active]:[--t-frame:var(--bui-frame)] data-[active]:[--t-inner:var(--bui-frame-inner)] data-[active]:[--t-face:var(--bui-surface)]',
+      // Open, it carries the window's light from its top edge, and its face
+      // runs on over the panel's top room, so the panel's own light does
+      // not cross under it: one light, falling from the tab into the window
       'data-[active]:[--t-light:inset_0_var(--px)_0_var(--bui-surface-light)]',
+      'data-[active]:[--t-below:calc(--theme(--spacing-window)*-1)]',
     ],
   }),
   /** A ring of a window tab, like the window's: square at the bottom, where it stands */
@@ -54,6 +58,8 @@ export const tabs = {
   face: cva({
     base: 'absolute bg-(--t-face) shadow-(--t-light)',
   }),
+  /** Over the face of the open tab only: the window's light, solid row and fade */
+  light: cva({ base: 'absolute hidden group-data-[active]:block' }),
   /**
    * The current tab's feet, over its ink, frame and inner columns where
    * it meets the window: the window's frame row, inner line and light
