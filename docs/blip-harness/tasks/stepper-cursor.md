@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N+ # design adjustment from the mood board
 depends: [look-here, mood-board]
-pr:
+pr: 244
 ---
 
 # `stepper-cursor`: A stepper shows its field's cursor; its arrows turn white
