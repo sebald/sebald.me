@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N2 # forms and navigation
 depends: [picker-key-scope]
 pr: 249
