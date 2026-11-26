@@ -27,7 +27,7 @@ choices are a Picker, not a column of buttons.
 | Variant       | Looks like                                                              | When to use                                                                                                      |
 | ------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | `primary`     | A paper key, ink letters: stands out on a window and on the stage alike | The one action the screen is for. One per screen. Not yellow: yellow says "look here" (`foundations/colour.mdx`) |
-| `secondary`   | Its label alone, no key, the same size                                  | Beside a primary: back, options, cancel                                                                          |
+| `secondary`   | A muted key a step lighter than the window, light letters               | Beside a primary: back, options, cancel                                                                          |
 | `destructive` | The key in the danger colour                                            | What can't be undone: quitting a run, resetting progress. Ask first                                              |
 
 <Canvas of={ButtonStories.Overview} />
@@ -87,7 +87,7 @@ Pressed, the whole face goes a step darker with the shade along its top, and not
   on the face would change with its colour). It takes no room, so the
   button never grows. 10.51:1 on the window; 2.4.13 (AAA) fails, as a
   `Picker`'s cursor does: it is smaller than the button's perimeter
-- The secondary's letters are 6.44:1 on its face; the face is 1.79:1 to
-  the window, and the label is what tells it is a button
+- The secondary's letters are 6.47:1 on its face; the face is 1.79:1 to
+  the window, so its bevel and its label tell it is a button
 - Disabled buttons fade and lose their colour; prefer explaining why
   something is locked next to it

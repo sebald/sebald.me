@@ -142,6 +142,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`help-column`](help-column.md)                       | Every description and error in a form starts on one edge, the control column's                                   |
 | [`menu-white`](menu-white.md)                         | The menu row under the cursor is bright, not gold; a setting's arrows always bright                              |
 | [`min-width-reset`](min-width-reset.md)               | A `min-w-*` class wins over the site's reset: the reset in the base layer                                        |
+| [`secondary-key`](secondary-key.md)                   | The secondary button is a muted key again, not its label alone                                                   |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
 every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model

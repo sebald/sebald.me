@@ -35,26 +35,30 @@ export const button = {
     variants: {
       variant: {
         /**
-         * The main action: a paper key, ink letters. It stands out on a
-         * window (15.9:1) and on the bare stage (18:1) alike, and leaves
-         * yellow to the cursor (`foundations/colour.mdx`: yellow says
-         * "look here"). Its light row is barely lighter than paper: the
-         * shade row along the bottom carries the bevel
+         * The main action: a paper key, ink letters, the face a step down
+         * from paper so it doesn't glare beside the muted key. It stands
+         * out on a window (12.9:1) and on the bare stage (14.6:1) alike,
+         * and leaves yellow to the cursor (`foundations/colour.mdx`:
+         * yellow says "look here"). Full paper is its light row, a shade
+         * a step past paper's its bottom row: the bevel
          */
         primary: [
-          '[--b-face:var(--bui-paper)] [--b-light:var(--bui-spark)] [--b-shade:var(--bui-paper-shade)]',
+          '[--b-face:color-mix(in_srgb,var(--bui-paper),var(--bui-paper-shade)_55%)] [--b-light:var(--bui-paper)]',
+          '[--b-shade:color-mix(in_srgb,var(--bui-paper-shade),var(--bui-ink)_22%)]',
           '[--b-text:var(--bui-paper-foreground)]',
         ],
         /**
-         * A quieter one beside it: its label alone, no key and no ink, as
-         * a game menu's choices; the same size, so a row lines up, and
-         * the cursor shows its focus as a key's
+         * A quieter one beside it: a muted key a step lighter than the
+         * window, light letters, so it reads as a key beside the paper one
+         * without pulling the eye from it. Its shade row is halfway to the
+         * window's shade, not all the way: that is the stage's own dark,
+         * and on the bare stage the key's bottom edge would vanish
          */
         secondary: [
-          '[--b-ink:transparent] [--b-face:transparent] [--b-light:transparent] [--b-shade:transparent]',
-          // Hover brightens it, a press dims it: the key's own feedback, since
-          // it has no face to light or darken
-          '[--b-text:var(--bui-text-bright)] enabled:hover:[--b-text:var(--bui-heading)] enabled:active:[--b-text:var(--bui-muted)]',
+          '[--b-face:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_22%)]',
+          '[--b-light:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_45%)]',
+          '[--b-shade:color-mix(in_srgb,var(--b-face),var(--bui-surface-shade)_55%)]',
+          '[--b-text:var(--bui-text-bright)]',
         ],
         /** What can't be undone: the key, in the danger colour */
         destructive: [
@@ -82,7 +86,7 @@ export const button = {
     ],
   }),
   /** The ink line round the key */
-  ink: cva({ base: 'block bg-(--b-ink,var(--bui-ink)) p-(--b-px)' }),
+  ink: cva({ base: 'block bg-(--bui-ink) p-(--b-px)' }),
   face: cva({
     base: [
       'min-h-(--b-height) px-(--b-inline)',
