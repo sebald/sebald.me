@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: D+ # follow-up of screen-layout, before a game screen relies on Screen
 depends: [screen-layout]
 pr:
@@ -38,3 +38,13 @@ change.
 **Depends on.** [`screen-layout`](screen-layout.md).
 
 **2026-11-22.** Part of the forms and navigation work (step N1 in the [README](README.md#forms-and-navigation)): `window-layout` and the filtered-list pattern need it.
+
+## Notes
+
+2026-11-26:
+
+- The `Picker` already scrolled, kept its row in view by setting `scrollTop` (a jump, no glide) and showed its rail; what was missing was a window that gives it less room. Two `min-h-0`s did it: the `Window` (a flex item in the `Screen`'s column) and `Actions` in its body; `Actions` holding a `Picker` is a column, so the menu shrinks in it. The window's other parts don't shrink (`shrink-0`): the title, the content and the legend keep their size
+- `Screen`'s new `LongList` story: twelve rows in a shop. At 1x two and a half rows show with the rail; upright (402 / 320) the rows are a thumb high and it scrolls too
+- `tests/visual/window-scroll.spec.ts`, at 1x and upright: the window stays inside the stage, its title and legend in view, the list scrolls; the arrows bring every row into view in the frame they move the cursor; scrolled to its end, a tap picks a row. `tests/visual/layout.ts` already leaves a scrolling list's clipped row alone
+- Docs: `screen.mdx` (a list longer than the stage), `picker.mdx`, `window.mdx`; rule `C-WINDOW-3` (no height or overflow of one's own to fit a screen)
+- The scroll by wheel or drag is the browser's: the test sets `scrollTop`, it doesn't drag

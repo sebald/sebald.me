@@ -55,6 +55,9 @@ export const parts = {
   actions: cva({
     base: [
       'flex flex-wrap items-center gap-x-cursor-apart gap-y-regular *:data-[slot=picker]:basis-full',
+      // Holding a menu, a column it can shrink in, so the menu scrolls
+      // when its window has less room than its rows
+      'has-[>[data-slot=picker]]:flex-col has-[>[data-slot=picker]]:items-stretch',
       'has-[>[data-slot=button]]:pl-cursor-column',
     ],
   }),

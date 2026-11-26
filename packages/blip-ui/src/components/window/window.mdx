@@ -42,6 +42,9 @@ building.
 - **Do** use Tabs for a window with pages, not a Window with tabs put on
   it.
 - **Don't** nest windows. A description box sits beside its window, not in it.
+- **Don't** give a window a height or an overflow to fit it on a screen.
+  In a `Screen` it is never taller than the stage: its list gives up the
+  room and scrolls, the rest keeps its size.
 - **Don't** clip what's inside: the content is never cut at a corner, so
   keep it inside the padding.
 

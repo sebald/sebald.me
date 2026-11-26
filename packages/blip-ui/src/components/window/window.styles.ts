@@ -1,7 +1,9 @@
 import { cva } from '../../utils/styles';
 
 export const window = {
-  root: cva({ base: 'relative flex flex-col' }),
+  // In a bounded column (a `Screen`) it may get less room than it would
+  // take: `min-h-0` lets it, and its menu takes the cut by scrolling
+  root: cva({ base: 'relative flex min-h-0 flex-col' }),
   // The ink and the frame's rings, each a pixel further in
   ring: cva({ base: 'absolute' }),
   body: cva({
@@ -13,6 +15,9 @@ export const window = {
       // from what is above it
       '[&>[data-slot=title]+*]:mt-regular',
       '*:data-[slot=actions]:mt-regular',
+      // Given less room than it needs, the window's list gives it up and
+      // scrolls; the title, the content and the legend keep their size
+      '*:data-[slot=actions]:min-h-0 *:not-data-[slot=actions]:shrink-0',
       '*:data-[slot=legend]:mt-auto *:data-[slot=legend]:pt-regular *:data-[slot=legend]:text-right',
     ],
   }),

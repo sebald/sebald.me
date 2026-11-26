@@ -65,6 +65,18 @@ a screen starts with `Screen`.
 <Canvas of={ScreenStories.Shop} />
 <Canvas of={ScreenStories.TitleCard} />
 
+## A list longer than the stage
+
+The frame is as tall as the stage, so a window in it is never taller.
+Given more rows than fit, the window's list takes the room that is left
+and scrolls: the screen's title, the window's title, what it says and its
+legend stay. The arrows keep the cursor's row in view, jumping to it, as
+list navigation doesn't move; a finger drags the list, and the rail
+beside it shows where it is. At 1x a shop has room for two rows and a
+half, so move through it by keys.
+
+<Canvas of={ScreenStories.LongList} />
+
 <Rules for="screen" />
 
 ## Input
