@@ -3,7 +3,9 @@ import type { StepProps } from './setting';
 
 export const setting = {
   root: cva({
-    base: 'ml-auto flex items-center gap-related',
+    // The arrows a gap from the value, so even a value of six characters
+    // stands clear of them; the same in a menu and in a form
+    base: 'ml-auto flex items-center gap-regular',
   }),
   /** Left or right of the value: a pixel triangle, dim at the end it cannot go past */
   step: cva({
