@@ -44,6 +44,7 @@ export function Back() {
           <Legend
             keys={[
               ['↑↓', 'choose'],
+              ['Enter', 'confirm'],
               ['Esc', 'back'],
             ]}
             touch="Tap a line"
@@ -67,6 +68,7 @@ export function Back() {
           <Legend
             keys={[
               ['↑↓', 'row'],
+              ['Enter', 'save'],
               ['Esc', 'back'],
             ]}
             touch="Tap a field to type"

@@ -17,6 +17,7 @@ const noop = () => {};
  * and Back, which Esc does too. Put it on a `Stage`
  */
 export function PickARole() {
+  // A real screen goes back here: the Back item and Esc do the same
   const back = noop;
   useKeys({ Escape: back });
   return (

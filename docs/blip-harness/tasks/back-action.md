@@ -39,3 +39,5 @@ Decided 2026-11-22, after the design review of `TextField` (#215) and the resear
 - Rules: `C-PICKER-4` (check `menu-back-item`), `C-PICKER-5` (Esc, review), a new `button.blip-rules.yaml` with `C-BUTTON-1` (check `form-back-button`), `C-BUTTON-2` (Esc, review) and a `when-not` to `picker`. The checks wait for `validate`
 - The Game workflow now runs on pull requests into `blip-harness` too, as the Blip UI visual workflow does: #249 broke the game's test helper, and only the baseline update's game run caught it
 - `pnpm test:game` locally: timeouts only (the machine at load ~37); CI's Game run is the judge
+- Review: the prose in `picker.mdx` and `form.mdx` now says why, not the rule again; `C-PICKER-4` no longer asks for a `PickerGroup` (short lists, the dialog's Options and the Picker's `Default`, have none, and need no room); the Back example's legends name Enter too
+- Left as they are: the other menu examples (in-a-window, a-menu, shop, game-options, the mood board) have a Back but no `useKeys({ Escape })` or `Esc` in their legend (`C-PICKER-5`); the game's pause menu has an `id="back"` item without `variant="back"` (it opens a leave question)
