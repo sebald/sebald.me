@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N+ # design adjustment from the mood board
 depends: [look-here, stepper-cursor]
-pr:
+pr: 247
 ---
 
 # `menu-white`: The menu row under the cursor is bright, not gold
