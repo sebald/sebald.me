@@ -56,6 +56,8 @@ const ALLOWED: Record<string, string> = {
   // Set against the letters: the speaker's mark and a ledger's dots on the baseline
   'line/line.styles.ts mt-[0.4em]': 'on the text',
   'ledger/ledger.styles.ts mb-[0.3em]': 'on the text',
+  // A picker row's cursor centred on its name's line, over a detail under it
+  'picker/picker.styles.ts mt-[calc((1lh-var(--bui-px)*5)/2)]': 'on the text',
   // Art on the grid: neighbouring window tabs share their ink column
   'tabs/tabs.styles.ts -ml-(--px)': 'art',
   // The darkened inside of a stamp, not a disabled state

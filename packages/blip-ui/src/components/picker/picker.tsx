@@ -529,6 +529,62 @@ export const PickerSetting = ({
   </Row>
 );
 
+export interface PickerItemPartProps {
+  children: ReactNode;
+  className?: string;
+}
+
+/**
+ * A second line under the item's name, quieter and smaller: who gave a
+ * quest and what to do next, where a save was made, why a ware is out of
+ * reach. The item's own text stays its name
+ */
+export const PickerItemDetail = ({
+  className,
+  children,
+}: PickerItemPartProps) => (
+  <span data-slot="picker-item-detail" className={styles.detail({ className })}>
+    {children}
+  </span>
+);
+
+/**
+ * A value at the row's end, where every value in a window ends: a price,
+ * a play time, a count. Figures keep their width as they change
+ */
+export const PickerItemValue = ({
+  className,
+  children,
+}: PickerItemPartProps) => (
+  <span data-slot="picker-item-value" className={styles.value({ className })}>
+    {children}
+  </span>
+);
+
+export interface PickerItemMarkProps extends PickerItemPartProps {
+  /**
+   * What it marks: `new`, something the player has not looked at yet, in
+   * the second accent; `done`, something finished, quiet. Its words say
+   * it too (`New`, `Done`), never the colour alone
+   * @default 'new'
+   */
+  variant?: 'new' | 'done';
+}
+
+/** A short word beside the item's name: new, done */
+export const PickerItemMark = ({
+  variant,
+  className,
+  children,
+}: PickerItemMarkProps) => (
+  <span
+    data-slot="picker-item-mark"
+    className={styles.mark({ variant, className })}
+  >
+    {children}
+  </span>
+);
+
 /** Items that belong together, apart from the rest: room above them */
 export const PickerGroup = ({ children }: { children: ReactNode }) => (
   <li data-slot="picker-group">

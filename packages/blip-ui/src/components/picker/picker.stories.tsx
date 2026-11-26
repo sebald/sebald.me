@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { InAWindow as InAWindowExample } from './examples/in-a-window';
+import { QuestLog as QuestLogExample } from './examples/quest-log';
+import { SaveSlots as SaveSlotsExample } from './examples/save-slots';
 import { ScrollingList as ScrollingListExample } from './examples/scrolling-list';
+import { ShopWares as ShopWaresExample } from './examples/shop-wares';
 import { TwoMenus as TwoMenusExample } from './examples/two-menus';
 import { Picker, PickerItem } from './picker';
 
@@ -130,4 +133,25 @@ export const TwoMenus: Story = {
   name: 'Two menus',
   parameters: { controls: { disable: true } },
   render: () => <TwoMenusExample />,
+};
+
+/** An item with parts: its name, a detail line each for who gave it and what to do next, a mark */
+export const QuestLog: Story = {
+  name: 'Quest log',
+  parameters: { controls: { disable: true } },
+  render: () => <QuestLogExample />,
+};
+
+/** An item with a value at its end and a detail under its name */
+export const SaveSlots: Story = {
+  name: 'Save slots',
+  parameters: { controls: { disable: true } },
+  render: () => <SaveSlotsExample />,
+};
+
+/** Prices at the rows' end; one out of reach, dimmed with its parts, says what is missing */
+export const ShopWares: Story = {
+  name: 'Shop wares',
+  parameters: { controls: { disable: true } },
+  render: () => <ShopWaresExample />,
 };

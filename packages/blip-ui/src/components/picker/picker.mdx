@@ -48,11 +48,14 @@ and its window's title is its name:
 
 ## Parts
 
-| Part            | What it is                                                                                                             |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `PickerItem`    | Something to pick                                                                                                      |
-| `PickerSetting` | A setting: its name and its value between the step arrows, shown on the cursor's row; left and right step it (Setting) |
-| `PickerGroup`   | Items that belong together, with room above them                                                                       |
+| Part               | What it is                                                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `PickerItem`       | Something to pick                                                                                                      |
+| `PickerSetting`    | A setting: its name and its value between the step arrows, shown on the cursor's row; left and right step it (Setting) |
+| `PickerGroup`      | Items that belong together, with room above them                                                                       |
+| `PickerItemDetail` | In an item: a second line under its name, quieter and smaller                                                          |
+| `PickerItemValue`  | In an item: a value at the row's end, where a setting's value ends                                                     |
+| `PickerItemMark`   | In an item: a short word beside its name, `new` or `done`                                                              |
 
 ## Variants and states
 
@@ -75,6 +78,35 @@ shows the rail. In a window in a `Screen` the room is what the stage has
 left (`Screen`, a list longer than the stage).
 
 <Canvas of={PickerStories.ScrollingList} />
+
+### An item with parts
+
+An item's text is its name. Where a row says more, a quest's giver and
+next step, a save's play time, a ware's price, its parts go in it after
+the name, in any order: the item places them by their slot. A detail is a
+line of its own under the name (one for each), a value ends at the row's
+end, a mark sits beside the name. Written as parts, never as `span`s with
+a size or an opacity of their own, every list says the same thing the
+same way, and a disabled item dims them all with its name.
+
+```tsx
+<PickerItem id="rope" disabled note="Sell something first." onSelect={buy}>
+  Rope
+  <PickerItemValue>45g</PickerItemValue>
+  <PickerItemDetail>15g short</PickerItemDetail>
+</PickerItem>
+```
+
+<Canvas of={PickerStories.QuestLog} />
+<Canvas of={PickerStories.SaveSlots} />
+<Canvas of={PickerStories.ShopWares} />
+
+A screen reader reads the row as its words in order, each part one of them
+(`Rope 45g 15g short`, dimmed). A mark says what it means in words
+(`New`, `Done`), never by colour alone. What a whole quest or ware says
+belongs in its `note`, not in a third line.
+
+### Menus side by side
 
 Menus side by side share the keys: the one the player last clicked or
 focused has them. Each is named by its own window's title.

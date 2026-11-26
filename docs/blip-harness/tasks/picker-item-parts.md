@@ -1,5 +1,5 @@
 ---
-status: todo # todo | doing | done
+status: doing # todo | doing | done
 step: D+ # proposal from day-zero: accept, change or cut
 depends: [day-zero]
 pr:
@@ -45,4 +45,18 @@ a `PickerItem`) should fall in `quests`, `saves`, `shop`.
 
 ## Notes
 
-Filled in while the task is worked on: what changed, decisions, numbers.
+**Parts.** Three, exported from the picker: `PickerItemDetail` (a line of its own under the name, 0.85em, muted; one per line, so a quest's giver and next step are two), `PickerItemValue` (at the row's end, where a `PickerSetting`'s value ends, tabular figures) and `PickerItemMark` (beside the name, 0.75em, `variant: 'new' | 'done'`: the second accent or muted, its words saying it, never the colour alone). The item's own text stays its name: no name part.
+
+**`Title` and `Content` checked first, and they don't fit.** A `Title` is a heading (an `h2`) and wears the window's title id (`TitleIdContext`), so in a row it would put a heading inside a button and rename the menu; `Content` is a `div`. A row's parts are phrasing content of their own role, which no other container has, so they are the picker's, named after it as `PickerGroup` is.
+
+**Placed by the item.** The label span becomes a wrapping flex row only when it holds a part (`has-[>[data-slot^=picker-item-]]`), so every existing item, plain text, renders as before (no baseline of an existing story should change). The detail goes last and full width whatever its place in the JSX, the value to the end. With a detail, the row aligns to the top and the cursor is centred on the name's line (`mt-[calc((1lh-var(--bui-px)*5)/2)]`, allowed in `uniformity.test.ts` as "on the text", like the speaker's mark and the ledger's dots).
+
+**Disabled.** The parts sit inside the label that `bui-disabled` dims, so they dim with the name, nothing to add.
+
+**A screen reader** reads the row's words in order, the parts as words of their own (`Rope 45g 15g short`, disabled), as the flex items are blocks; `tests/visual/picker-item-parts.spec.ts` pins it, with the dimming, the cursor's line and `escapes`/`cursorRoom` for the three examples at 3x, 1x and tall.
+
+**Examples.** `quest-log`, `save-slots`, `shop-wares` in the picker's `examples/`, one story each: the three day-zero shapes written with the parts and no `span` of their own. Upright the note goes under the window, so each reserves room for it below (`tall:pb-[9em]`), as `InAWindow` does.
+
+**Rule.** `C-PICKER-6` (review): a row's extras as parts, never styled `span`s or text run into the name.
+
+**Base UI.** Not moved. A move of `Picker` to Base UI's `Menu` or `Select` would have to keep: the key layer (`useKeydown`, one menu on a layer has the keys, handed over by pointer and focus, Esc left to the screen), the one cursor (the keys' and the pointer's the same, `aria-current` not focus), the sounds on move, confirm, back and bump, a disabled item reachable and bumping, the note beside the row, the scrolling with no glide and the rail, and the name from the window's title.
