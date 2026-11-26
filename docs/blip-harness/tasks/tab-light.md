@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N+ # design adjustment from the mood board
 depends: [mood-board]
 pr: 243
