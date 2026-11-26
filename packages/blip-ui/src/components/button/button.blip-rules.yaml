@@ -1,0 +1,18 @@
+page: button
+rules:
+  - id: C-BUTTON-1
+    text: Make a form window's Back a secondary Button in its Actions, beside the main one; never a PickerItem in a form.
+    severity: warning
+    check: form-back-button
+    fix: |
+      <Actions>
+        <Button type="submit">Save</Button>
+        <Button variant="secondary" onClick={back}>Back</Button>
+      </Actions>
+  - id: C-BUTTON-2
+    text: Give Escape the handler of the form's Back button (useKeys on the screen); a TextField takes the first Esc to let go of itself.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+when-not:
+  - text: A list of choices or places to go is a Picker in a menu window, not a column of buttons.
+    use: picker
