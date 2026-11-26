@@ -134,6 +134,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`pattern-filtered-list`](pattern-filtered-list.md)   | Reference pattern: a list with columns, a filter, a position and scrolling                                       |
 | [`pattern-options`](pattern-options.md)               | Reference pattern: an options screen                                                                             |
 | [`mood-board`](mood-board.md)                         | Every control on one sheet, captioned, in the visual tests: the kit kept one look                                |
+| [`look-here`](look-here.md)                           | Yellow says "look here" alone; a paper primary button, a text secondary                                          |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
 every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model
