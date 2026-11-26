@@ -1,10 +1,11 @@
 import { cva } from '../../utils/styles';
+import { setting } from '../setting/setting.styles';
 
 /**
  * A value between its step arrows, the control of a `Field`. It takes the
  * control's whole cell, so a tap anywhere on the row reaches it. The
  * arrows show only where Left and Right work: while it has the keys'
- * focus (bright, the `Field`'s cursor at the label in yellow) or the
+ * focus (bright, beside the `Field`'s cursor) or the
  * pointer, so a window of steppers reads as names and values, not a
  * column of arrows. Their room is kept, so nothing shifts. Under a
  * finger there is no cursor: the arrows stay, dim, as the sign that a
@@ -39,5 +40,5 @@ export const stepper = {
    * in a window ends. The stepper itself still takes the whole column, so
    * a tap anywhere on the row reaches it
    */
-  value: cva({ base: 'min-w-[6ch] text-center text-(--bui-text-bright)' }),
+  value: cva({ base: [setting.value(), 'text-(--bui-text-bright)'] }),
 };

@@ -18,5 +18,9 @@ export const setting = {
       more: { true: '', false: 'bui-disabled' },
     },
   }),
-  value: cva({ base: 'w-[6ch] text-center' }),
+  /**
+   * Centred in six characters, so the arrows stay put as it changes; a
+   * longer value grows to the left. A `Stepper`'s value is this one
+   */
+  value: cva({ base: 'min-w-[6ch] text-center' }),
 };
