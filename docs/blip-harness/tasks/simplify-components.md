@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N+ # asked for by the user after window-scroll
 depends: []
 pr: 253
