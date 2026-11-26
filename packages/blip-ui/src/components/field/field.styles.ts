@@ -34,7 +34,8 @@ export const field = {
       'has-[>[data-slot=stepper]]:*:data-[slot=field-label]:mb-0',
       // A stepper's words sit right under its row, a line's leading
       // already above them, so they read as its and not the next row's
-      // (about half the room the next row has, with its leading)
+      // (about half the room the next row has, with its leading), in a
+      // window's label column too: a text field's have its line between
       'has-[>[data-slot=stepper]]:*:data-[slot=field-description]:mt-joined',
       'has-[>[data-slot=stepper]]:*:data-[slot=field-error]:mt-joined',
       // Over the stepper's touch target, which reaches into the gap above

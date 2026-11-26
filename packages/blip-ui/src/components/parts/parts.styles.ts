@@ -15,8 +15,9 @@ export const rows = [
   '*:data-[slot=readout]:flex *:data-[slot=readout]:justify-between',
   // A field in it has its label in the column, the words under the
   // control after it, a stepper's as a text field's: every description
-  // and error in a window starts on one edge, the control column's. On a
-  // tall stage it stays stacked, as anywhere.
+  // and error in a window starts on one edge, the control column's. These
+  // areas override the `Field`'s own stepper areas by source order (the two
+  // selectors weigh the same). On a tall stage it stays stacked, as anywhere.
   // The label spans the rows and a last row takes what a label on two
   // lines adds, so the words stay right under the control
   'not-tall:*:data-[slot=field]:grid-cols-[var(--bui-label-width)_minmax(0,1fr)_auto]',
