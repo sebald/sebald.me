@@ -42,6 +42,8 @@ const shown = (page: Page, name: string) =>
 for (const shot of SHOTS) {
   test.describe(`a long list in a window, ${shot.name}`, () => {
     let errors: string[] = [];
+    // Upright is a phone, touched
+    test.use({ hasTouch: shot.layout === 'tall' });
     test.beforeEach(async ({ page }) => {
       errors = [];
       page.on('pageerror', error => errors.push(error.message));
@@ -86,20 +88,29 @@ for (const shot of SHOTS) {
         await expect(page.locator('[aria-current=true]')).toHaveText(row);
         // No glide: in view in the same frame the key moved the cursor
         expect(await shown(page, row.trim())).toBe(true);
+        expect(
+          await page
+            .locator('[data-slot=picker] > ul')
+            .evaluate(ul => getComputedStyle(ul).scrollBehavior),
+        ).not.toBe('smooth');
       }
       // Round to the first again, and up to it from the top
       await page.keyboard.press('ArrowDown');
       expect(await shown(page, rows[0]!.trim())).toBe(true);
     });
 
-    test('scrolled to its end, a tap picks a row there', async ({ page }) => {
+    test('scrolled to its end, a tap or a click picks a row there', async ({
+      page,
+    }) => {
       const list = page.locator('[data-slot=picker] > ul');
       await list.evaluate(ul => {
         ul.scrollTop = ul.scrollHeight;
       });
       const back = page.getByRole('button', { name: 'Back' });
       await expect(back).toBeInViewport();
-      await back.click();
+      // A finger on the phone, the pointer on the wide stage
+      if (shot.layout === 'tall') await back.tap();
+      else await back.click();
       await expect(page.locator('[aria-current=true]')).toHaveText('Back');
     });
   });

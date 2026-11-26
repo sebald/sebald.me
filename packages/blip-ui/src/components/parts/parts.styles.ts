@@ -54,10 +54,12 @@ export const parts = {
    */
   actions: cva({
     base: [
-      'flex flex-wrap items-center gap-x-cursor-apart gap-y-regular *:data-[slot=picker]:basis-full',
-      // Holding a menu, a column it can shrink in, so the menu scrolls
-      // when its window has less room than its rows
-      'has-[>[data-slot=picker]]:flex-col has-[>[data-slot=picker]]:items-stretch',
+      'flex flex-wrap items-center gap-x-cursor-apart gap-y-regular',
+      // Holding a menu, a column that may get less room than the menu's
+      // rows (a window in a `Screen`): the menu takes the cut and scrolls,
+      // the rest of the window keeps its size. The menu spans the width,
+      // a button beside it keeps its own
+      'has-[>[data-slot=picker]]:min-h-0 has-[>[data-slot=picker]]:flex-col has-[>[data-slot=picker]]:items-start *:data-[slot=picker]:self-stretch',
       'has-[>[data-slot=button]]:pl-cursor-column',
     ],
   }),

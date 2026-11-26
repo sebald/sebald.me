@@ -43,8 +43,11 @@ change.
 
 2026-11-26:
 
-- The `Picker` already scrolled, kept its row in view by setting `scrollTop` (a jump, no glide) and showed its rail; what was missing was a window that gives it less room. Two `min-h-0`s did it: the `Window` (a flex item in the `Screen`'s column) and `Actions` in its body; `Actions` holding a `Picker` is a column, so the menu shrinks in it. The window's other parts don't shrink (`shrink-0`): the title, the content and the legend keep their size
+- The `Picker` already scrolled, kept its row in view by setting `scrollTop` (a jump, no glide) and showed its rail; what was missing was a window that gives it less room. Two `min-h-0`s did it: the `Window` (a flex item in the `Screen`'s column) and an `Actions` holding a `Picker`, now a column the menu shrinks in (a button beside it keeps its own width). The window's other parts keep their size without a class: a flex item doesn't shrink below its content
+- Review: a first version put `shrink-0` on every other child of the window's body. That froze a `Picker` placed straight in the body: the Picker's own `ScrollingList`, and the game's roster and duel menus, which rely on it shrinking. Gone; only an `Actions` with a menu changes
+- `tests/visual/layout.ts` had a bug: a scrolling list is `overflow: auto` both ways, so the walk up passed over it as "doesn't clip" before its "stop at a scroller" line, and reported rows only scrolled out of view as cut by the stage. The scroller check now comes first
 - `Screen`'s new `LongList` story: twelve rows in a shop. At 1x two and a half rows show with the rail; upright (402 / 320) the rows are a thumb high and it scrolls too
 - `tests/visual/window-scroll.spec.ts`, at 1x and upright: the window stays inside the stage, its title and legend in view, the list scrolls; the arrows bring every row into view in the frame they move the cursor; scrolled to its end, a tap picks a row. `tests/visual/layout.ts` already leaves a scrolling list's clipped row alone
 - Docs: `screen.mdx` (a list longer than the stage), `picker.mdx`, `window.mdx`; rule `C-WINDOW-3` (no height or overflow of one's own to fit a screen)
-- The scroll by wheel or drag is the browser's: the test sets `scrollTop`, it doesn't drag
+- The scroll by wheel or drag is the browser's: the test sets `scrollTop`, then taps (upright, `hasTouch`) or clicks a row there; the no-glide check also asserts the list's `scroll-behavior` isn't `smooth`
+- At 1x the shop shows two and a half rows: the stage is 214 stage pixels high and the screen's title, the window's title and the legend take the rest. Left for the user to judge
