@@ -2,7 +2,7 @@
 status: doing # todo | doing | done
 step: N+ # design adjustment from the mood board
 depends: [mood-board]
-pr:
+pr: 243
 ---
 
 # `tab-light`: The open tab continues the window's light
