@@ -75,23 +75,18 @@ shows the rail.
 
 <Canvas of={PickerStories.ScrollingList} />
 
-Menus side by side share the keys, each named by its own window's title: the one the player last clicked or
-focused has them.
+Menus side by side share the keys: the one the player last clicked or
+focused has them. Each is named by its own window's title.
 
 <Canvas of={PickerStories.TwoMenus} />
 
 ## Usage
 
-- **A window is a menu or a form.** A menu window is its `Title`, one
-  picker in its `Actions` and a `Legend` with the picker's keys; fields
-  the player fills in are a `Form` in a window of their own (SNES menus
-  did the same: a list had no label, its window's title named it).
-- **The title names the menu.** In a `Window` or a `Dialog` with a
-  `Title`, the picker takes no `label`: the title is its name for a
-  screen reader too, so the name the player sees and the one they hear
-  can't drift apart. Give a `label` only where nothing names the list
-  (a menu straight on the stage); one given wins over the title, for a
-  window whose title says something else (`Gold: 120` over a shop).
+- **The title names the menu**, as on the SNES, where a list had no
+  label of its own: the name the player reads is the one a screen reader
+  says, so the two can't drift apart. A `label` given wins over the
+  title, for a menu straight on the stage or a window whose title says
+  something else (`Gold: 120` over a shop).
 - **Do** put a picker in a Window, with a Legend that names the keys.
 - **Do** keep a disabled item in the list and say why in its note.
 - **Don't** hide what is not available. Nothing in a menu is hidden.

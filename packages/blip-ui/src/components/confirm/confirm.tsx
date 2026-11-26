@@ -50,7 +50,7 @@ export const Confirm = ({
       <Text className="text-balance">{children}</Text>
     </Content>
     <Actions>
-      <Picker label={title} initial="cancel">
+      <Picker initial="cancel">
         <PickerItem id="cancel" variant="back" onSelect={onCancel}>
           {cancel}
         </PickerItem>

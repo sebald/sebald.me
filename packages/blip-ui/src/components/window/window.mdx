@@ -28,16 +28,9 @@ screen positions and sizes it.
 ## A menu or a form
 
 A window holds one kind of thing the player does, so its keys mean one
-thing:
-
-- **A menu**: its `Title`, a `Picker` in its `Actions` and a `Legend`.
-  The title is the menu's name, for a screen reader too; the picker
-  takes no label of its own
-- **A form**: its `Title` and a `Form` of fields and buttons in its
-  `Content`
-
-Never both: a list beside fields gets a window of its own, or a step of
-its own. A `Picker` inside a `Form` is refused while building.
+thing, and its title says what that is. A list beside fields gets a
+window or a step of its own; a `Picker` inside a `Form` is refused while
+building.
 
 <Canvas of={WindowStories.AMenu} />
 

@@ -5,8 +5,9 @@ import { Picker, PickerItem } from '../picker';
 const noop = () => {};
 
 /**
- * Two menus on one screen, each named by its window's title: the keys go to the one the player clicked or
- * moved the focus into, and until then to the first
+ * Two menus on one screen, each named by its window's title: the keys
+ * go to the one the player clicked or moved the focus into, and until
+ * then to the first
  */
 export function TwoMenus() {
   return (
