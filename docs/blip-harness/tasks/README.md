@@ -140,6 +140,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`stepper-cursor`](stepper-cursor.md)                 | A stepper shows its field's cursor, its arrows white; the arrows a gap from the value                            |
 | [`field-ground`](field-ground.md)                     | A text field is a line to write on, no ground, a pixel taller                                                    |
 | [`help-column`](help-column.md)                       | Every description and error in a form starts on one edge, the control column's                                   |
+| [`min-width-reset`](min-width-reset.md)               | A `min-w-*` class wins over the site's reset: the reset in the base layer                                        |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
 every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model

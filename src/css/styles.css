@@ -17,8 +17,16 @@
 /*    Mini Reset    */
 /*------------------*/
 
+/* In the base layer, so a `min-w-*` class wins over it, as it reads: an
+   unlayered rule beats every layered utility, and a `min-w-[6ch]` or
+   `min-w-11` (a thumb's width) silently came out 0 */
+@layer base {
+  * {
+    min-width: 0;
+  }
+}
+
 * {
-  min-width: 0;
   text-box: trim-both cap alphabetic;
 }
 
