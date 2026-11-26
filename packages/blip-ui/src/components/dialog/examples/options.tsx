@@ -31,7 +31,7 @@ export function Options(props: Partial<ComponentProps<typeof Dialog>>) {
       <Dialog {...props} open={open} onOpenChange={setOpen}>
         <Title>Options</Title>
         <Actions>
-          <Picker label="Options">
+          <Picker>
             <PickerSetting
               id="music"
               value={music ? 'On' : 'Off'}

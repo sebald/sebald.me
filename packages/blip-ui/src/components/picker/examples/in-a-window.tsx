@@ -29,7 +29,7 @@ export function InAWindow() {
         <Window className="w-[19em] tall:w-full">
           <Title>Options</Title>
           <Actions>
-            <Picker label="Options">
+            <Picker>
               <PickerSetting
                 id="mode"
                 value="Easy"

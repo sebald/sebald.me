@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { AMenu as AMenuExample } from './examples/a-menu';
 import { OnTheStage as OnTheStageExample } from './examples/on-the-stage';
 import { WithLegend as WithLegendExample } from './examples/with-legend';
 import { Window } from './window';
@@ -36,4 +37,10 @@ export const WithLegend: Story = {
 export const OnTheStage: Story = {
   parameters: { controls: { disable: true } },
   render: () => <OnTheStageExample />,
+};
+
+/** A window that is a menu: its title names the list, for a screen reader too */
+export const AMenu: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <AMenuExample />,
 };

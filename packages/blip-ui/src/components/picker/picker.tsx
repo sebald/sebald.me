@@ -19,6 +19,8 @@ import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
 import { type Feedback, useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
+import { building } from '../../utils/dev';
+import { TitleIdContext } from '../parts/parts';
 import { Setting } from '../setting/setting';
 import { Text } from '../text/text';
 import { Window } from '../window/window';
@@ -182,8 +184,11 @@ export interface PickerProps {
    * @default true
    */
   active?: boolean;
-  /** The list's accessible name */
-  label: string;
+  /**
+   * The list's accessible name, only where nothing names it: in a window
+   * or a dialog with a `Title`, the title is its name
+   */
+  label?: string;
   /** On the list itself */
   className?: string;
 }
@@ -213,6 +218,7 @@ export const Picker = ({
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
+  const titleId = use(TitleIdContext);
 
   /** The items' ids in the order the list shows them */
   const order = () =>
@@ -221,6 +227,19 @@ export const Picker = ({
         '[data-slot=picker-item]',
       ) ?? []),
     ].map(row => row.dataset.id!);
+
+  // A menu has a name: its window's title, or its label where nothing
+  // names it. Say so while building one
+  useEffect(() => {
+    if (!building()) return;
+    const named =
+      label !== undefined ||
+      (titleId !== undefined && document.getElementById(titleId));
+    if (!named)
+      console.error(
+        'Blip UI: a Picker with no name. Give its window a Title (it names the menu), or the Picker a label where nothing names it.',
+      );
+  }, [label, titleId]);
 
   // The cursor on an item that is there: the first enabled one at first,
   // and again when its item goes
@@ -298,6 +317,7 @@ export const Picker = ({
           ref={listRef}
           className={styles.menu({ className })}
           aria-label={label}
+          aria-labelledby={label === undefined ? titleId : undefined}
         >
           {children}
         </ul>

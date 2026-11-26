@@ -126,7 +126,10 @@ parts by role.
   never a place (`Footer`, `Header`).
 - **The container says what the part can't know, through context**
   (`PartsContext`): the element that draws it there (a dialog's title is
-  its name). Only meaning goes through context,
+  its name). A window's or a dialog's title also names a menu in it
+  (`NamedByTitle`): one id the container makes, the `Title` wears and a
+  `Picker` points at, so a menu needs no second name to keep in step.
+  Only meaning goes through context,
   never a look and never a place.
 - **The container places the parts by their slot**, in its own styles,
   as with any child: the window's body puts room under a title and above

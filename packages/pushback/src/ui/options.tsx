@@ -118,7 +118,7 @@ export const Options = ({
     // Escape or a tap outside closes it, as Back does
     <Dialog open onOpenChange={open => !open && onClose()} className="w-[19em]">
       <Title>Options</Title>
-      <Picker label="Options" active={asking === null}>
+      <Picker active={asking === null}>
         <PickerSetting
           id="mode"
           value={MODE_LABELS[mode]}
