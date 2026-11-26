@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: N+ # found while reviewing back-action
 depends: []
 pr: 251
