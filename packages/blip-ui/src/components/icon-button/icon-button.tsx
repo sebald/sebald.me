@@ -11,7 +11,7 @@ import {
 import { ControlsLayout } from '../controls/controls';
 import { type IconName } from '../pixel-icon/icons';
 import { PixelIcon } from '../pixel-icon/pixel-icon';
-import { iconButton, iconButtonCursor } from './icon-button.styles';
+import { iconButton } from './icon-button.styles';
 
 // A tap on a control is not a tap that opens a menu, moves a duel on or
 // leaves a demo: it stays with the control
@@ -56,12 +56,19 @@ export const IconButton = ({
 }: IconButtonProps) => {
   const layout = useContext(ControlsLayout);
   const bar = layout === 'bar';
+  const cursor = (
+    <span
+      aria-hidden
+      data-slot="cursor"
+      className={iconButton.cursor({ layout })}
+    />
+  );
   return (
     <button
       type="button"
       data-slot="icon-button"
       slot={slot}
-      className={iconButton({ layout, className })}
+      className={iconButton.root({ layout, className })}
       onPointerDown={keep}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
@@ -71,22 +78,14 @@ export const IconButton = ({
     >
       {bar ? (
         <>
-          <span
-            aria-hidden
-            data-slot="cursor"
-            className={iconButtonCursor({ layout })}
-          />
+          {cursor}
           <PixelIcon icon={icon} />
           {label}
         </>
       ) : (
         // The cursor beside the icon: the box is wider than the icon
         <span data-cursor-target className="relative">
-          <span
-            aria-hidden
-            data-slot="cursor"
-            className={iconButtonCursor({ layout })}
-          />
+          {cursor}
           <PixelIcon icon={icon} />
         </span>
       )}

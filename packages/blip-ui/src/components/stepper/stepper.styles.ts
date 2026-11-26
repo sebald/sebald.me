@@ -25,7 +25,7 @@ export const stepper = {
       'aria-disabled:pointer-events-none aria-disabled:bui-disabled',
     ],
   }),
-  /** A `Setting`'s arrows, centred on the line, either side of the value at the row's end. Hidden at rest where there is a pointer */
+  /** The step arrows, centred on the line, either side of the value at the row's end. Hidden at rest where there is a pointer */
   step: cva({
     base: [
       'self-center',
@@ -34,7 +34,7 @@ export const stepper = {
     ],
   }),
   /**
-   * As a `Setting`'s value: centred in six characters, so the arrows stay
+   * The value, centred in six characters, so the arrows stay
    * put as it changes, and with them at the row's end, where every value
    * in a window ends. The stepper itself still takes the whole column, so
    * a tap anywhere on the row reaches it

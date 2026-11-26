@@ -3,9 +3,9 @@
 import { useContext } from 'react';
 
 import { DOT, FLOOR, px } from '../../foundations/pixel';
-import { cn } from '../../utils/styles';
 import { ControlsLayout } from '../controls/controls';
 import { ICONS, ICON_COLOURS, type IconName } from './icons';
+import { pixelIcon } from './pixel-icon.styles';
 
 /** CSS pixels per icon pixel on the tall stage's bar, where a thumb sets the size */
 const BAR_DOT = 1.5;
@@ -33,7 +33,7 @@ export const PixelIcon = ({ icon, className }: PixelIconProps) => {
       data-slot="pixel-icon"
       viewBox={`0 0 ${rows[0].length} ${rows.length}`}
       shapeRendering="crispEdges"
-      className={cn('block shrink-0', className)}
+      className={pixelIcon.root({ className })}
       style={{ width: size(rows[0].length), height: size(rows.length) }}
     >
       {rows.flatMap((row, y) =>

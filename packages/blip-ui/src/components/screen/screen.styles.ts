@@ -20,8 +20,7 @@ export const screen = {
         /** A column from the top down */
         default: '',
         /** One group in the middle, its text centred */
-        centered:
-          '[--s-bottom:calc(var(--bui-bar)+--theme(--spacing-edge))] items-center justify-center p-edge pb-(--s-bottom) text-center',
+        centered: 'items-center justify-center text-center',
       } satisfies Record<NonNullable<ScreenProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'default' },

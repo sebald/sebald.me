@@ -82,6 +82,7 @@ export const TextInput = ({
   const [inner, setInner] = useState(defaultValue);
   const text = value ?? inner;
   const full = maxLength !== undefined && text.length >= maxLength;
+  const limit = `Limit of ${maxLength} characters reached`;
 
   // The field shows the characters left and says the limit
   useLayoutEffect(() => {
@@ -122,7 +123,7 @@ export const TextInput = ({
     ) {
       // Typing past the limit: the field refuses and says so
       play('bump');
-      announce(`Limit of ${maxLength} characters reached`);
+      announce(limit);
     }
   };
 
@@ -150,7 +151,7 @@ export const TextInput = ({
         setInner(next);
         onValueChange?.(next);
         if (maxLength !== undefined && next.length >= maxLength)
-          announce(`Limit of ${maxLength} characters reached`);
+          announce(limit);
       }}
     />
   );

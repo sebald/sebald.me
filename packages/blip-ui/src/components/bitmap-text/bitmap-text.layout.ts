@@ -9,7 +9,7 @@ import { type Font, glyphOf, lit, supported } from '../../foundations/bitmap';
  */
 
 /** The letters, digits and a few marks, five by seven pixels each, `#` inked */
-export const FONT: Font = {
+const FONT: Font = {
   A: ['.###.', '#...#', '#...#', '#####', '#...#', '#...#', '#...#'],
   B: ['####.', '#...#', '#...#', '####.', '#...#', '#...#', '####.'],
   C: ['.####', '#....', '#....', '#....', '#....', '#....', '.####'],
@@ -64,7 +64,7 @@ export const BITMAP_GLYPHS = supported(FONT);
 /** Characters drawn as another: the dashes of a range or score (`23–9`) as the hyphen */
 const ALIASES: Readonly<Record<string, string>> = { '–': '-', '—': '-' };
 
-export const GLYPH = { width: 5, height: 7, gap: 1 } as const;
+const GLYPH = { width: 5, height: 7, gap: 1 } as const;
 
 /** Room round the word: its ink line (one pixel) all round, its drop (two) below and right */
 const INK = 1;
@@ -79,8 +79,6 @@ export interface BitmapRect {
   width: number;
   height: number;
   part: BitmapPart;
-  /** The letter it belongs to, by place */
-  letter: number;
 }
 
 export interface BitmapLayout {
@@ -121,30 +119,24 @@ export const bitmapTextLayout = (text: string, scale: number): BitmapLayout => {
       y: INK + y * scale,
       row: y,
     }));
+    // The ink under each pixel, moved by `by` and `grow` larger
+    const ink = (by: number, grow: number): BitmapRect[] =>
+      at.map(({ x, y }) => ({
+        x: x + by,
+        y: y + by,
+        width: scale + grow,
+        height: scale + grow,
+        part: 'ink',
+      }));
     return [
-      ...at.map(({ x, y }) => ({
-        x: x + 2,
-        y: y + 2,
-        width: scale + 1,
-        height: scale + 1,
-        part: 'ink' as const,
-        letter,
-      })),
-      ...at.map(({ x, y }) => ({
-        x: x - 1,
-        y: y - 1,
-        width: scale + 2,
-        height: scale + 2,
-        part: 'ink' as const,
-        letter,
-      })),
+      ...ink(2, 1),
+      ...ink(-1, 2),
       ...at.map(({ x, y, row }) => ({
         x,
         y,
         width: scale,
         height: scale,
         part: partOf(row),
-        letter,
       })),
     ];
   });

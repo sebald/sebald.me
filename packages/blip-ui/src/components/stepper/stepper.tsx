@@ -50,8 +50,8 @@ export interface StepperControlProps {
  * A value between two step arrows, as the control of a `Field`: Left and
  * Right step it and it goes round, Enter, Space and a tap step it on.
  * Off and On are a switch to a screen reader; any other values a slider
- * that says its value (`Difficulty, Normal`), two of them included. Up and Down are left to the `Form`, so it is a row like any
- * other. A tap on its label steps it too, so the whole row is the target.
+ * that says its value (`Difficulty, Normal`), two of them included.
+ * Up and Down are left to the `Form`, so it is a row like any other. A tap on its label steps it too, so the whole row is the target.
  */
 export const StepperControl = ({
   values,
@@ -89,6 +89,8 @@ export const StepperControl = ({
     setInner(values[index]!);
     onValueChange?.(values[index]!);
   };
+  /** On to the next value, as a tap */
+  const forward = () => go(stepTo('ArrowRight', at, values.length));
 
   // A tap on its field's label steps it as a tap on the value does: the
   // label is not tied to it by `for`, which only a native control takes.
@@ -97,7 +99,7 @@ export const StepperControl = ({
     if (!(event.target as Element | null)?.closest?.('[data-slot=field-label]'))
       return;
     ref.current?.focus({ preventScroll: true });
-    go(stepTo('ArrowRight', at, values.length));
+    forward();
   });
   useEffect(() => {
     const row = ref.current?.closest('[data-slot=field]');
@@ -140,7 +142,7 @@ export const StepperControl = ({
       tabIndex={disabled ? undefined : 0}
       className={styles.root({ className })}
       onKeyDown={keydown}
-      onClick={() => go(stepTo('ArrowRight', at, values.length))}
+      onClick={forward}
     >
       <Step points="left" className={styles.step()} />
       <span className={styles.value()}>{values[at]}</span>

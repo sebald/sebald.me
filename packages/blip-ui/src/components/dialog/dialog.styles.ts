@@ -12,8 +12,7 @@ export const dialog = {
     base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:pl-0',
     variants: {
       size: {
-        /** A question, a few settings */
-        /** Held upright, all of the stage inside its margin */
+        /** A question, a few settings; held upright, all of the stage inside its margin */
         default: 'w-[70%] tall:w-full',
         /** A lot to read: as wide as the stage lets it */
         large: 'w-full',
