@@ -295,8 +295,8 @@ export const current = (page: Page) =>
 /**
  * Move down the menu that holds the item named `name` to it and pick it.
  * The menu's own current item: a window over a list (the pause over the
- * duel's replies) has one of its own. The menu is the list with a name;
- * a group of its items is a list without one.
+ * duel's replies) has one of its own. The menu is the list with a name,
+ * its own or its window's title; a group of its items is a list without one.
  */
 export const choose = async (page: Page, name: string | RegExp) => {
   const item = screen(page).getByRole('button', { name });
@@ -304,7 +304,9 @@ export const choose = async (page: Page, name: string | RegExp) => {
   const label = (await item.textContent())!.trim();
   // The menu is the named list (a group inside it is a list too)
   const on = item
-    .locator('xpath=ancestor::*[(@role="list" or self::ul) and @aria-label][1]')
+    .locator(
+      'xpath=ancestor::*[(@role="list" or self::ul) and (@aria-label or @aria-labelledby)][1]',
+    )
     .locator('[aria-current=true]');
   for (let i = 0; i < 12; i++) {
     if ((await on.textContent())?.trim() === label) break;

@@ -10,22 +10,29 @@ import * as PickerStories from './picker.stories';
 A list the player moves through with a cursor: the title menu, options,
 the choices in a duel. It is always open and always listening, and
 with several on a layer it listens for the one the player is in. Lists of
-choices are a Picker, not a column of buttons. It is built from its parts, so the JSX reads like the menu:
+choices are a Picker, not a column of buttons. It is built from its parts, so the JSX reads like the menu,
+and its window's title is its name:
 
 ```tsx
-<Picker label="Options">
-  <PickerSetting id="mode" value="Normal" onStep={step}>
-    Mode
-  </PickerSetting>
-  <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
-    Hard mode
-  </PickerItem>
-  <PickerGroup>
-    <PickerItem id="back" variant="back" onSelect={close}>
-      Back
-    </PickerItem>
-  </PickerGroup>
-</Picker>
+<Window>
+  <Title>Options</Title>
+  <Actions>
+    <Picker>
+      <PickerSetting id="mode" value="Normal" onStep={step}>
+        Mode
+      </PickerSetting>
+      <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
+        Hard mode
+      </PickerItem>
+      <PickerGroup>
+        <PickerItem id="back" variant="back" onSelect={close}>
+          Back
+        </PickerItem>
+      </PickerGroup>
+    </Picker>
+  </Actions>
+  <Legend keys={[['↑↓', 'choose'], ['Enter', 'confirm']]} touch="Tap a line" />
+</Window>
 ```
 
 <Canvas of={PickerStories.Default} />
@@ -69,12 +76,17 @@ shows the rail.
 <Canvas of={PickerStories.ScrollingList} />
 
 Menus side by side share the keys: the one the player last clicked or
-focused has them.
+focused has them. Each is named by its own window's title.
 
 <Canvas of={PickerStories.TwoMenus} />
 
 ## Usage
 
+- **The title names the menu**, as on the SNES, where a list had no
+  label of its own: the name the player reads is the one a screen reader
+  says, so the two can't drift apart. A `label` given wins over the
+  title, for a menu straight on the stage or a window whose title says
+  something else (`Gold: 120` over a shop).
 - **Do** put a picker in a Window, with a Legend that names the keys.
 - **Do** keep a disabled item in the list and say why in its note.
 - **Don't** hide what is not available. Nothing in a menu is hidden.
@@ -125,7 +137,8 @@ picked, `back` for a `back` item and `bump` for a disabled one.
 
 ## Accessibility
 
-- A `<ul>` named by `label` with a button per row; the current one has
+- A `<ul>` named by its window's or dialog's `Title` (`aria-labelledby`),
+  or by `label` where it has one, with a button per row; the current one has
   `aria-current`, a disabled one `aria-disabled`
 - The note is an `aria-live` region
 - The focus mark (`foundations/focus.mdx`) is the cursor, always in the
@@ -133,3 +146,5 @@ picked, `back` for a `back` item and `bump` for a disabled one.
   reaches, so there is one cursor and a row does not grow an outline.
   2.4.7 and 1.4.11 pass. 2.4.13 (AAA) fails: a pointer 3 by 5 pixels is
   smaller than a 2 pixel line round the row
+- A picker with no name, no title over it and no `label`, is refused
+  while building, with a message in the console

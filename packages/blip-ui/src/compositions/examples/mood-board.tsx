@@ -71,7 +71,7 @@ export function MoodBoard() {
         <Window>
           <Title>Menu</Title>
           <Actions>
-            <Picker label="Menu" initial="mode">
+            <Picker initial="mode">
               <PickerItem
                 id="new"
                 variant="accent"

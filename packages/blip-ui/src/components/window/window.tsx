@@ -9,6 +9,7 @@ import {
   ditherRows,
 } from '../../foundations/dither';
 import { useInputKind } from '../../hooks/use-input-kind';
+import { NamedByTitle } from '../parts/parts';
 import { window as styles } from './window.styles';
 
 /** The window's rings, from the outside in, one stage pixel each */
@@ -84,7 +85,8 @@ export const WindowFrame = ({ className, style, children }: WindowProps) => (
       className={styles.body()}
       style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...FILL }}
     >
-      {children}
+      {/* Its title names it, and a menu in it */}
+      <NamedByTitle>{children}</NamedByTitle>
     </div>
   </div>
 );

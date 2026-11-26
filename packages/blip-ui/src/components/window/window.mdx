@@ -1,5 +1,6 @@
 import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
 
+import { Rules } from '../../../.storybook/blocks';
 import * as WindowStories from './window.stories';
 
 <Meta of={WindowStories} />
@@ -24,6 +25,15 @@ screen positions and sizes it.
 5. **Legend**, optional, the control hints along the bottom edge: a
    `Legend` as the window's last child
 
+## A menu or a form
+
+A window holds one kind of thing the player does, so its keys mean one
+thing, and its title says what that is. A list beside fields gets a
+window or a step of its own; a `Picker` inside a `Form` is refused while
+building.
+
+<Canvas of={WindowStories.AMenu} />
+
 ## Usage
 
 - **Do** put all text that the player reads on the stage in a window, so it
@@ -34,6 +44,8 @@ screen positions and sizes it.
 - **Don't** nest windows. A description box sits beside its window, not in it.
 - **Don't** clip what's inside: the content is never cut at a corner, so
   keep it inside the padding.
+
+<Rules for="window" />
 
 ## Legend
 
@@ -51,3 +63,9 @@ held upright it centres over the bar of controls.
 The frame is drawn in stage pixels; the padding inside it is 4 `--bui-px`,
 the stage pixel never finer than 3 CSS pixels, because on a phone's tall
 stage a stage pixel is too fine to keep the text off the frame.
+
+## Accessibility
+
+- A window's `Title` is an `h2`, and the name of a `Picker` in the
+  window (`aria-labelledby`): the menu is called what the player reads
+  over it. A `Title` inside its `Content` is only a heading

@@ -6,3 +6,21 @@ rules:
   - id: C-PICKER-2
     text: Use `active={false}` for a menu that must not listen yet (a demo, a menu not shown); directional input alone cannot hand the keys to a second menu on the same layer.
     markers: [review]
+  - id: C-PICKER-3
+    text: Give a Picker under a Window's or Dialog's Title no label that repeats it; the title names the menu. A label is for a menu nothing names, or whose title says something else.
+    severity: warning
+    check: picker-named-by-title
+    fix: |
+      <Window>
+        <Title>Options</Title>
+        <Actions>
+          <Picker>…</Picker>
+        </Actions>
+      </Window>
+  - id: A-PICKER-1
+    text: Give every Picker a name a screen reader says, its window's Title or its label, and the same words the player sees.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html
+when-not:
+  - text: Values the player fills in or sets on one screen, saved together, are fields in a Form, not a Picker.
+    use: form
