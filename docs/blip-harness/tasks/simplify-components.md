@@ -47,4 +47,4 @@ Skipped, with the reason:
 - **bitmapTextSize upper-casing**: changes behaviour (ß)
 - **Shared figure class (readout, ledger), typewriter's empty cva, field count's `data-disabled`, a `wrap` helper, `PickerItem = Row`, defaults in setting, speech-bubble background**: house style, or too small to be worth the churn
 
-Also in this pull request: the `short-stage-room` task (todo), the follow-up to window-scroll's options 2 and 3, filed here so it is not lost.
+Also in this pull request: the `short-stage-room` task (since dropped, #254), the follow-up to window-scroll's options 2 and 3, filed here so it is not lost.

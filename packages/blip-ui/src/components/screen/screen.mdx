@@ -72,8 +72,11 @@ Given more rows than fit, the window's list takes the room that is left
 and scrolls: the screen's title, the window's title, what it says and its
 legend stay. The arrows keep the cursor's row in view, jumping to it, as
 list navigation doesn't move; a finger drags the list, and the rail
-beside it shows where it is. At 1x a shop has room for two rows and a
-half, so move through it by keys.
+beside it shows where it is. The smallest wide stage a game shows is
+2.25x (`MIN_SCALE`; below it the game asks for a bigger window), where
+this shop shows eleven of its twelve rows, and nine upright on a phone.
+The docs' 1x shot is smaller than any game's, so it has room for two and
+a half.
 
 <Canvas of={ScreenStories.LongList} />
 
