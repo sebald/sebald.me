@@ -21,6 +21,21 @@ rules:
     text: Give every Picker a name a screen reader says, its window's Title or its label, and the same words the player sees.
     markers: [review]
     source: https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html
+  - id: C-PICKER-4
+    text: Make a menu's Back its last PickerItem, variant="back", in a PickerGroup of its own; never a Button beside the Picker.
+    severity: warning
+    check: menu-back-item
+    fix: |
+      <Picker>
+        <PickerItem id="sound" onSelect={openSound}>Sound</PickerItem>
+        <PickerGroup>
+          <PickerItem id="back" variant="back" onSelect={back}>Back</PickerItem>
+        </PickerGroup>
+      </Picker>
+  - id: C-PICKER-5
+    text: Give Escape the handler of the menu's Back item (useKeys on the screen), and name it in the Legend.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
 when-not:
   - text: Values the player fills in or sets on one screen, saved together, are fields in a Form, not a Picker.
     use: form

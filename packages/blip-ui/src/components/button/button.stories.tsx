@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from './button';
+import { Back as BackExample } from './examples/back';
 import { Pair as PairExample } from './examples/pair';
 
 const meta = {
@@ -67,4 +68,10 @@ export const Overview: Story = {
 export const Pair: Story = {
   parameters: { controls: { disable: true } },
   render: () => <PairExample />,
+};
+
+/** Back in a menu window and in a form window, Esc the same in both */
+export const Back: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <BackExample />,
 };
