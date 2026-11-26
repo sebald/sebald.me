@@ -7,15 +7,19 @@ import {
 } from '../../../components/picker/picker';
 import { ScreenTitle, Text } from '../../../components/text/text';
 import { Legend, Window } from '../../../components/window/window';
+import { useKeys } from '../../../hooks/use-keys';
 
 const noop = () => {};
 
 /**
  * A menu screen: the title along the top, a window with a title, what
  * it says and a picker with a setting and a disabled item, its legend,
- * and the buttons under it. Put it on a `Stage`
+ * and Back, which Esc does too. Put it on a `Stage`
  */
 export function PickARole() {
+  // A real screen goes back here: the Back item and Esc do the same
+  const back = noop;
+  useKeys({ Escape: back });
   return (
     <>
       <ScreenTitle blurb="Whose side are you on today?">
@@ -44,7 +48,7 @@ export function PickARole() {
                 Hard mode
               </PickerItem>
               <PickerGroup>
-                <PickerItem id="back" variant="back" onSelect={noop}>
+                <PickerItem id="back" variant="back" onSelect={back}>
                   Back
                 </PickerItem>
               </PickerGroup>
@@ -54,6 +58,7 @@ export function PickARole() {
             keys={[
               ['↑↓', 'choose'],
               ['Enter', 'confirm'],
+              ['Esc', 'back'],
             ]}
             touch="Tap a line"
           />

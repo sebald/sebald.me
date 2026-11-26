@@ -6,7 +6,10 @@ name: Game
 # tests or this workflow change, or by hand.
 on:
   pull_request:
-    branches: [main]
+    # blip-harness: its task pull requests change the kit the game is built
+    # from, so the flows run before they merge, not after on the branch's
+    # own pull request into main. Drop it once the branch has merged
+    branches: [main, blip-harness]
     paths:
       - 'packages/pushback/**'
       - 'packages/blip-ui/**'
