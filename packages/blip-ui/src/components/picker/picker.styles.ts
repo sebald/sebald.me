@@ -1,5 +1,5 @@
 import { type ClassValue, cva } from '../../utils/styles';
-import type { PickerItemProps } from './picker';
+import type { PickerItemMarkProps, PickerItemProps } from './picker';
 
 /** The picker's parts, and the rail and description box beside it */
 export const picker = {
@@ -28,6 +28,8 @@ export const picker = {
   item: cva({
     base: [
       'group flex w-full items-center gap-cursor px-control py-joined text-left',
+      // With a detail under its name, the cursor stays on the name's line
+      'has-[[data-slot=picker-item-detail]]:items-start has-[[data-slot=picker-item-detail]]:*:data-[slot=cursor]:mt-[calc((1lh-var(--bui-px)*5)/2)]',
       // The cursor's row lit at once: moved by the arrows, list
       // navigation doesn't animate
       'cursor-pointer',
@@ -77,9 +79,41 @@ export const picker = {
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
-    // Dimmed or lit by a change of state, a short fade
+    // Dimmed or lit by a change of state, a short fade; its parts with it
     base: 'min-w-0 flex-1 transition-opacity duration-200 ease-bui-out',
     variants: { disabled: { true: 'bui-disabled' } },
+  }),
+  /**
+   * What holds an item's text, the label or an accent item's blinking
+   * call: holding parts, a row that wraps. The name and its mark, the
+   * value at the end, the detail on a line of its own under them. Without
+   * parts it stays plain text
+   */
+  parts: cva({
+    base: [
+      'has-[>[data-slot^=picker-item-]]:flex has-[>[data-slot^=picker-item-]]:flex-wrap has-[>[data-slot^=picker-item-]]:items-baseline has-[>[data-slot^=picker-item-]]:gap-x-related',
+      '*:data-[slot=picker-item-value]:ml-auto *:data-[slot=picker-item-value]:pl-regular',
+      // The value ends where a setting's does, every value in a window
+      '*:data-[slot=picker-item-value]:-mr-control',
+      '*:data-[slot=picker-item-detail]:basis-full',
+    ],
+  }),
+  /** A second line: quieter and smaller */
+  detail: cva({ base: 'text-[0.85em] text-(--bui-muted)' }),
+  /** A value at the row's end: its figures keep their width */
+  value: cva({ base: 'tabular-nums' }),
+  mark: cva({
+    base: 'text-[0.75em] font-semibold',
+    variants: {
+      variant: {
+        new: 'text-(--bui-secondary)',
+        done: 'text-(--bui-muted)',
+      } satisfies Record<
+        NonNullable<PickerItemMarkProps['variant']>,
+        ClassValue
+      >,
+    },
+    defaultVariants: { variant: 'new' },
   }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
