@@ -1,5 +1,5 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # follow-up of screen-layout, before a game screen relies on Screen
 depends: [screen-layout]
 pr: 252
