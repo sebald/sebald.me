@@ -9,7 +9,10 @@ export const rows = [
   // Form rows start 8 in, a cursor column as a Picker's and Actions':
   // a focused field's cursor has room left of its label, and the
   // names line up with a menu's labels and the buttons
-  '*:data-[slot=field]:ml-cursor-column *:data-[slot=readout]:ml-cursor-column',
+  '*:data-[slot=field]:ml-cursor-column *:data-[slot=readout]:ml-cursor-column *:data-[slot=ledger]:ml-cursor-column',
+  // Every value in a window ends at the row's end, as a menu setting's
+  // and a ledger's do: a readout's name at the start, its number at the end
+  '*:data-[slot=readout]:flex *:data-[slot=readout]:justify-between',
   // A field in it has its label in the column, the words under the
   // control after it; on a tall stage it stays stacked, as anywhere.
   // The label spans the rows and a last row takes what a label on two

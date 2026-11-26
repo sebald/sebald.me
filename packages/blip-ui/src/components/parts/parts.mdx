@@ -62,7 +62,11 @@ along the bottom edge.
   a wide stage, not set on a tall one) which each takes as the width of its
   label, so the names line up, and starts them 8 in, the cursor column a
   `Picker` and `Actions` have, so a focused field's cursor has room and
-  the labels line up with a menu's.
+  the labels line up with a menu's. A `Ledger` starts there too.
+- **One edge for values.** Every value in a window ends at the row's end:
+  a `Readout`'s number, a `Ledger`'s, a text box, and a `Stepper`'s and a
+  menu setting's right arrow (their value just inside it). A `Content` sets the readout's; the others end
+  there by themselves.
 - **Don't** wrap rows in a `div` to space them or give the `Content` a
   `className` for a gap: the gap is its own.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new

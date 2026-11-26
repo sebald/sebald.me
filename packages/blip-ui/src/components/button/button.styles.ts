@@ -34,16 +34,27 @@ export const button = {
     ],
     variants: {
       variant: {
-        /** The main action: a key in the primary colour */
+        /**
+         * The main action: a paper key, ink letters. It stands out on a
+         * window (15.9:1) and on the bare stage (18:1) alike, and leaves
+         * yellow to the cursor (`foundations/colour.mdx`: yellow says
+         * "look here"). Its light row is barely lighter than paper: the
+         * shade row along the bottom carries the bevel
+         */
         primary: [
-          '[--b-face:var(--bui-primary)] [--b-light:var(--bui-primary-light)] [--b-shade:var(--bui-primary-shade)]',
-          '[--b-text:var(--bui-primary-foreground)]',
+          '[--b-face:var(--bui-paper)] [--b-light:var(--bui-spark)] [--b-shade:var(--bui-paper-shade)]',
+          '[--b-text:var(--bui-paper-foreground)]',
         ],
-        /** A quieter one beside it: a key a step lighter than the window, light letters */
+        /**
+         * A quieter one beside it: its label alone, no key and no ink, as
+         * a game menu's choices; the same size, so a row lines up, and
+         * the cursor shows its focus as a key's
+         */
         secondary: [
-          '[--b-face:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_22%)]',
-          '[--b-light:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_45%)] [--b-shade:var(--bui-surface-shade)]',
-          '[--b-text:var(--bui-text-bright)]',
+          '[--b-ink:transparent] [--b-face:transparent] [--b-light:transparent] [--b-shade:transparent]',
+          // Hover brightens it, a press dims it: the key's own feedback, since
+          // it has no face to light or darken
+          '[--b-text:var(--bui-text-bright)] enabled:hover:[--b-text:var(--bui-heading)] enabled:active:[--b-text:var(--bui-muted)]',
         ],
         /** What can't be undone: the key, in the danger colour */
         destructive: [
@@ -71,7 +82,7 @@ export const button = {
     ],
   }),
   /** The ink line round the key */
-  ink: cva({ base: 'block bg-(--bui-ink) p-(--b-px)' }),
+  ink: cva({ base: 'block bg-(--b-ink,var(--bui-ink)) p-(--b-px)' }),
   face: cva({
     base: [
       'min-h-(--b-height) px-(--b-inline)',

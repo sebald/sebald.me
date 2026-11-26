@@ -134,6 +134,8 @@ parallel, a row starts when the rows it needs are merged.
 | [`pattern-filtered-list`](pattern-filtered-list.md)   | Reference pattern: a list with columns, a filter, a position and scrolling                                       |
 | [`pattern-options`](pattern-options.md)               | Reference pattern: an options screen                                                                             |
 | [`mood-board`](mood-board.md)                         | Every control on one sheet, captioned, in the visual tests: the kit kept one look                                |
+| [`look-here`](look-here.md)                           | Yellow says "look here" alone; a paper primary button, a text secondary                                          |
+| [`window-edge`](window-edge.md)                       | One left edge and one right edge in a window: ledger, readouts, steppers, menu settings                          |
 | [`tab-light`](tab-light.md)                           | The open tab continues the window's light instead of a flat fill                                                 |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
