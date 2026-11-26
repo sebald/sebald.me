@@ -15,12 +15,11 @@ export const textField = {
       // then lets nothing be typed
       'm-0 w-full min-w-0 select-text appearance-none rounded-none border-0 outline-none',
       'bg-transparent font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
-      // A line of text with three pixels above and below (a control's
-      // inset and one more), so it holds its own beside a button; not a
-      // Button's height, which made it read as a second window. No inset
+      // A line of text with four pixels above and below (`field`), so it
+      // holds its own beside a button and is a thumb's height. No inset
       // at the sides: with no ground, the text starts where its line and
       // the words under it start
-      'px-0 py-[calc(--theme(--spacing-control)+--theme(--spacing-joined))]',
+      'px-0 py-field',
       // The underline (`--ul`: its colour), one pixel, inside the box so
       // nothing moves between states. It is the only edge: focus and
       // invalid turn its colour, no outline. Dim, the dimmest tone that
