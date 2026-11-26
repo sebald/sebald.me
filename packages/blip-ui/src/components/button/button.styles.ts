@@ -46,15 +46,14 @@ export const button = {
           '[--b-text:var(--bui-paper-foreground)]',
         ],
         /**
-         * A quieter one beside it: its label alone, no key and no ink, as
-         * a game menu's choices; the same size, so a row lines up, and
-         * the cursor shows its focus as a key's
+         * A quieter one beside it: a muted key a step lighter than the
+         * window, light letters, so it reads as a key beside the paper one
+         * without pulling the eye from it
          */
         secondary: [
-          '[--b-ink:transparent] [--b-face:transparent] [--b-light:transparent] [--b-shade:transparent]',
-          // Hover brightens it, a press dims it: the key's own feedback, since
-          // it has no face to light or darken
-          '[--b-text:var(--bui-text-bright)] enabled:hover:[--b-text:var(--bui-heading)] enabled:active:[--b-text:var(--bui-muted)]',
+          '[--b-face:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_22%)]',
+          '[--b-light:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_45%)] [--b-shade:var(--bui-surface-shade)]',
+          '[--b-text:var(--bui-text-bright)]',
         ],
         /** What can't be undone: the key, in the danger colour */
         destructive: [
