@@ -36,6 +36,9 @@ export const picker = {
       'aria-disabled:cursor-default',
       // Held upright, a row is a thumb's height
       'tall:min-h-11',
+      // A setting's arrows bright, whatever the row's colour: never a
+      // second yellow beside the cursor, whatever a game makes it
+      '[&_[data-slot=step]]:text-(--bui-text-bright)',
     ],
     variants: {
       selected: {

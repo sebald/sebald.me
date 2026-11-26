@@ -139,6 +139,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`tab-light`](tab-light.md)                           | The open tab continues the window's light instead of a flat fill                                                 |
 | [`stepper-cursor`](stepper-cursor.md)                 | A stepper shows its field's cursor, its arrows white; the arrows a gap from the value                            |
 | [`field-ground`](field-ground.md)                     | A text field is a line to write on, no ground, a pixel taller                                                    |
+| [`menu-white`](menu-white.md)                         | The menu row under the cursor is bright, not gold; a setting's arrows always bright                              |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
 every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model
