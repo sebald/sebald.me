@@ -151,6 +151,9 @@ const foot = (side: 'left' | 'right') => ({
   ].join(', '),
 });
 
+/** The face's and its light's box: inside the rings, down to the panel */
+const FACE_INSET = 'var(--t-ring) var(--t-ring) var(--t-below, 0)';
+
 /** One tab; its `value` names the `TabPanel` it shows */
 export const Tab = ({ className, children, ...props }: TabProps) => (
   <BaseTabs.Tab
@@ -170,16 +173,12 @@ export const Tab = ({ className, children, ...props }: TabProps) => (
         }}
       />
     ))}
-    <span
-      aria-hidden
-      className={styles.face()}
-      style={{ inset: 'var(--t-ring) var(--t-ring) var(--t-below, 0)' }}
-    />
+    <span aria-hidden className={styles.face()} style={{ inset: FACE_INSET }} />
     <span
       aria-hidden
       className={styles.light()}
       style={{
-        inset: 'var(--t-ring) var(--t-ring) var(--t-below, 0)',
+        inset: FACE_INSET,
         ...WINDOW_LIGHT,
       }}
     />

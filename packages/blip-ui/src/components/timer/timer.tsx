@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  useEffect,
-  useMemo,
-  type CSSProperties,
-  type ReactNode,
-  type SVGAttributes,
-} from 'react';
+import { useEffect, useMemo, type ReactNode, type SVGAttributes } from 'react';
 
 import { DOT, FLOOR, px } from '../../foundations/pixel';
 import { useFeedback } from '../../providers/feedback';
@@ -144,7 +138,6 @@ export interface TimerProps extends Omit<
    * @default false
    */
   sound?: boolean;
-  style?: CSSProperties;
 }
 
 /**

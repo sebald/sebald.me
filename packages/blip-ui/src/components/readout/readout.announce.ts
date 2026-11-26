@@ -6,7 +6,7 @@ const formatter = new Intl.NumberFormat(LOCALE);
 export const formatNumber = (value: number) => formatter.format(value);
 
 /** How a value is said, with and without a `max`: `HP 42 of 50`, `Gold 120` */
-export const say = (label: string, value: number, max?: number) =>
+const say = (label: string, value: number, max?: number) =>
   max === undefined
     ? `${label} ${formatNumber(value)}`
     : `${label} ${formatNumber(value)} of ${formatNumber(max)}`;

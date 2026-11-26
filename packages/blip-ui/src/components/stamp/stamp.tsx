@@ -35,6 +35,12 @@ const BODY = 5 + 4;
 
 type Pixel = { x: number; y: number; part: 'ink' | 'air' };
 
+/** A stamp of `count` letters: its width, and how far its tilt rises */
+const sizeOf = (count: number) => ({
+  width: count * 4 - 1 + 4,
+  rise: Math.floor((count - 1) / TILT),
+});
+
 /**
  * A stamp's pixels, the tilt applied, and its size. Worn, as a rubber
  * stamp is, in a few pixels of the frame at the same places along any
@@ -42,8 +48,7 @@ type Pixel = { x: number; y: number; part: 'ink' | 'air' };
  */
 const draw = (word: string) => {
   const chars = [...word];
-  const width = chars.length * 4 - 1 + 4;
-  const rise = Math.floor((chars.length - 1) / TILT);
+  const { width, rise } = sizeOf(chars.length);
   const drop = (x: number) =>
     rise - Math.min(rise, Math.floor(Math.max(0, x - 2) / 4 / TILT));
   const worn = new Set([
@@ -77,8 +82,8 @@ const draw = (word: string) => {
 
 /** A stamp's size in stage pixels, to place it */
 export const stampSize = (word: string) => {
-  const { width, height } = draw(word.toUpperCase());
-  return { width, height };
+  const { width, rise } = sizeOf([...word.toUpperCase()].length);
+  return { width, height: BODY + rise };
 };
 
 export interface StampProps extends Omit<

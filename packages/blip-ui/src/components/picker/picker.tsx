@@ -17,7 +17,7 @@ import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
-import { type Feedback, useFeedback } from '../../providers/feedback';
+import { useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
 import { building } from '../../utils/dev';
 import { TitleIdContext } from '../parts/parts';
@@ -163,15 +163,6 @@ const usePicker = () => {
   return context;
 };
 
-const choose = (entry: Entry, play: Feedback) => {
-  if (entry.disabled) {
-    play('bump');
-    return;
-  }
-  play(entry.variant === 'back' ? 'back' : 'confirm');
-  entry.onSelect();
-};
-
 export interface PickerProps {
   /** Its items: `PickerItem`s and `PickerSetting`s, in `PickerGroup`s where they belong together */
   children: ReactNode;
@@ -253,7 +244,15 @@ export const Picker = ({
     if (first !== undefined) setCurrent(first);
   }, [children, current, entries]);
 
-  const pick = (entry: Entry) => choose(entry, play);
+  // An item chosen: refused with a bump when disabled
+  const choose = (entry: Entry) => {
+    if (entry.disabled) {
+      play('bump');
+      return;
+    }
+    play(entry.variant === 'back' ? 'back' : 'confirm');
+    entry.onSelect();
+  };
 
   useKeydown(event => {
     // Another menu on this layer has the keys
@@ -291,7 +290,7 @@ export const Picker = ({
       case ' ':
         if (entry) {
           event.preventDefault();
-          pick(entry);
+          choose(entry);
         }
         break;
     }
@@ -302,7 +301,7 @@ export const Picker = ({
       value={{
         current,
         setCurrent,
-        choose: pick,
+        choose,
         entries,
         active,
         resting,

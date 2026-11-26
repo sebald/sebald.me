@@ -5,6 +5,10 @@ import type { ButtonHTMLAttributes } from 'react';
 import { CORNERS, rounded } from '../../foundations/corners';
 import { button } from './button.styles';
 
+/** The ink's and the key's stepped corners: the same for every button */
+const INK = { clipPath: rounded(CORNERS[0], '--b-px') };
+const FACE = { clipPath: rounded(CORNERS[1], '--b-px') };
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * The action's weight: `primary` for the one action a screen is for,
@@ -31,7 +35,6 @@ export const Button = ({
   variant,
   size,
   className,
-  style,
   children,
   ...props
 }: ButtonProps) => (
@@ -39,21 +42,13 @@ export const Button = ({
     type="button"
     data-slot="button"
     className={button.root({ variant, size, className })}
-    style={style}
     {...props}
   >
     {/* The focus cursor, left of the button; the ink and the key in spans
         below it, so the button itself is not clipped and the cursor shows */}
     <span aria-hidden data-slot="cursor" className={button.cursor()} />
-    <span
-      className={button.ink()}
-      style={{ clipPath: rounded(CORNERS[0], '--b-px') }}
-    >
-      <span
-        data-cursor-target
-        className={button.face()}
-        style={{ clipPath: rounded(CORNERS[1], '--b-px') }}
-      >
+    <span className={button.ink()} style={INK}>
+      <span data-cursor-target className={button.face()} style={FACE}>
         {children}
       </span>
     </span>

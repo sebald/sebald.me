@@ -15,6 +15,7 @@ import {
   tallFor,
 } from '../../foundations/scale';
 import type { PixelsValue } from '../../providers/pixels';
+import { watchPixelRatio } from './watch-pixel-ratio';
 
 /** The side gutter the stage keeps to the viewport, in CSS pixels */
 const STAGE_GUTTER = 24;
@@ -141,20 +142,8 @@ export const useScale = (
         small: fit.scale < MIN_SCALE,
       });
     };
-    // A media query that stops matching when the ratio changes; it fires
-    // once, so it is set up again after each change
-    let media: MediaQueryList | null = null;
-    const onChange = () => {
-      measure();
-      watch();
-    };
-    const watch = () => {
-      media?.removeEventListener('change', onChange);
-      media = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
-      media.addEventListener('change', onChange);
-    };
     measure();
-    watch();
+    const unwatch = watchPixelRatio(measure);
     window.addEventListener('resize', measure);
     upright.addEventListener('change', measure);
     sideways.addEventListener('change', measure);
@@ -164,7 +153,7 @@ export const useScale = (
       window.removeEventListener('resize', measure);
       upright.removeEventListener('change', measure);
       sideways.removeEventListener('change', measure);
-      media?.removeEventListener('change', onChange);
+      unwatch();
     };
   }, [fixed, width, height]);
   return state;
