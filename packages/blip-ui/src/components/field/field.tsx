@@ -68,7 +68,6 @@ export const Field = ({
     error: change => setErrors(n => n + change),
   }));
   const left = count && count.max - count.length;
-  const full = left !== null && left <= 0;
   return (
     <BaseField.Root
       data-slot="field"
@@ -87,7 +86,6 @@ export const Field = ({
           <span
             aria-hidden
             data-slot="field-count"
-            data-full={full || undefined}
             data-disabled={disabled || undefined}
             className={styles.count()}
           >

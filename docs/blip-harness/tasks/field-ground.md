@@ -16,3 +16,4 @@ pr: 245
 - Options compared in the browser (ink, none, lighter); the user chose none
 - Contrast figures in `text-field.mdx` and `focus.mdx` are against the window
 - Baselines looked at
+- A `Field`'s characters left stay muted when full, never yellow (user, 2026-11-26)
