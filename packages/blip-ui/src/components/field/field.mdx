@@ -38,8 +38,9 @@ in one element.
 4. **`FieldError`**, under that: what is wrong, a sentence in red. While it
    is there the control is invalid
 5. **Characters left**, at the end of the line under the control, for a
-   control with a limit (a `TextInput` with `maxLength`); it turns to the
-   primary colour once the control is full. The field draws it itself, from
+   control with a limit (a `TextInput` with `maxLength`); muted, full or
+   not: a hint, never yellow (`foundations/colour.mdx`), and a 0 says it is
+   full. The field draws it itself, from
    what the control tells it
 
 The parts are children in any order; the field places them by their slots.

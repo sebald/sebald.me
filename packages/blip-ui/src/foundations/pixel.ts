@@ -34,9 +34,11 @@ export const SPACING = {
   /** Regions: the stage's parts, windows side by side */
   section: 8,
   // The padding inside, by what holds it
-  /** Inside a control, and its block axis: a field, a menu row, a corner button */
+  /** Inside a control, and its block axis: a menu row, a corner button */
   control: 2,
-  /** Inside a control, its inline axis: a field's text, a button's label, a tab's */
+  /** Inside a text field, above and below its text: a line to write on */
+  field: 4,
+  /** Inside a control, its inline axis: a button's label, a tab's */
   'control-x': 4,
   /** Inside a window or a speech bubble */
   window: 4,

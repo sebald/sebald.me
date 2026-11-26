@@ -32,8 +32,9 @@ choices are never a pixel apart.
 | `regular`       | 4    | Separate items of one group: a form's fields, a menu's groups, a name and its value, the content and the buttons under it, a title and its window's content |
 | `section`       | 8    | Regions: the stage's parts, windows side by side                                                                                                            |
 | **Inset**       |      | the padding inside, by what holds it                                                                                                                        |
-| `control`       | 2    | Inside a control, on its block axis: a field, a menu row, a corner button                                                                                   |
-| `control-x`     | 4    | Inside a control, on its inline axis: a field's text, a button's label, a tab's                                                                             |
+| `control`       | 2    | Inside a control, on its block axis: a menu row, a corner button                                                                                            |
+| `field`         | 4    | Inside a text field, above and below its text: a line to write on, a thumb's height                                                                         |
+| `control-x`     | 4    | Inside a control, on its inline axis: a button's label, a tab's                                                                                             |
 | `window`        | 4    | Inside a window or a speech bubble                                                                                                                          |
 | `edge`          | 8    | From the stage's or a screen's edge, and round a dialog                                                                                                     |
 | **Cursor**      |      | the cursor's room, for nothing else                                                                                                                         |
@@ -47,7 +48,8 @@ choices are never a pixel apart.
 1. **Is it the cursor's room?** Then it is a `cursor-*`, whatever else is
    near.
 2. **Is it inside something** (between a box's edge and what it holds)?
-   Then it is an inset: `control`/`control-x` in a control, `window` in a
+   Then it is an inset: `control`/`control-x` in a control (`field` above
+   and below a text field's text), `window` in a
    window, `edge` at the stage or a screen.
 3. **Otherwise it is a gap.** Ask how related the two are: the same thing
    repeated is `joined`, a thing and its own part is `related`, two items

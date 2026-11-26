@@ -64,11 +64,15 @@ export const field = {
   description: cva({ base: 'm-0 text-[0.75em] text-(--bui-muted)' }),
   /** What is wrong, in words and red */
   error: cva({ base: 'm-0 text-[0.85em] text-(--bui-danger-light)' }),
-  /** Muted while there is room, in the primary colour once it is full */
+  /**
+   * Muted, full or not: a hint, never yellow, which says "look here"
+   * (`foundations/colour.mdx`). A 0 says it is full; the limit is said
+   * through the live region when it is reached
+   */
   count: cva({
     base: [
       'text-[0.85em] text-(--bui-muted) tabular-nums',
-      'data-[full]:text-(--bui-primary) data-[disabled]:bui-disabled',
+      'data-[disabled]:bui-disabled',
     ],
   }),
 };

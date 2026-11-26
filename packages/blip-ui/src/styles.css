@@ -105,6 +105,7 @@
   --spacing-regular: calc(var(--bui-px) * 4);
   --spacing-section: calc(var(--bui-px) * 8);
   --spacing-control: calc(var(--bui-px) * 2);
+  --spacing-field: calc(var(--bui-px) * 4);
   --spacing-control-x: calc(var(--bui-px) * 4);
   --spacing-window: calc(var(--bui-px) * 4);
   --spacing-edge: calc(var(--bui-px) * 8);
