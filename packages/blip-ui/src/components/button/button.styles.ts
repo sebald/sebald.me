@@ -81,7 +81,7 @@ export const button = {
     ],
   }),
   /** The ink line round the key */
-  ink: cva({ base: 'block bg-(--b-ink,var(--bui-ink)) p-(--b-px)' }),
+  ink: cva({ base: 'block bg-(--bui-ink) p-(--b-px)' }),
   face: cva({
     base: [
       'min-h-(--b-height) px-(--b-inline)',

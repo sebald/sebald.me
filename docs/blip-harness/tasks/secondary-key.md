@@ -20,4 +20,5 @@ pr: 251
 ## Notes
 
 - The styles are #241's predecessor's, unchanged: face `surface-light` with 22% `neutral`, light row with 45%, shade `surface-shade`, letters `text-bright`. Its hover and press are the key's own (brighter, then a darker face with the shade on top), so the text-only hover colours went with it
-- `button.mdx`'s accessibility line (letters 6.44:1 on the face, the face 1.79:1 to the window) was never changed in #241 and is right again
+- `button.mdx`'s accessibility line (the face 1.79:1 to the window) went untouched in #241, wrong while the secondary had no face, right again; the letters are 6.47:1 (it said 6.44)
+- Review: no important findings; the `--b-ink` fallback #241 added for the transparent secondary is gone with it
