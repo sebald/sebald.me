@@ -19,7 +19,7 @@ pr: 253
 
 ## Notes
 
-Six read-only agents reported 49 findings. Each was checked against the code. Kept and integrated:
+Six read-only agents reported 47 findings. Each was checked against the code. Kept and integrated:
 
 - **timer**: `style` was declared twice (it comes from `SVGAttributes`)
 - **readout**: `say` is used only inside `announce.ts`, so it is no longer exported
@@ -27,7 +27,7 @@ Six read-only agents reported 49 findings. Each was checked against the code. Ke
 - **icon-button**: the cursor span is written once, not twice; the styles are one object (`root`, `cursor`) like every other component's
 - **dialog**: two doc comments stacked on one variant merged into one
 - **tabs**: the face's and the light's shared inset is one constant
-- **bitmap-text**: removed `BitmapRect.letter`, which nothing read; `FONT` and `GLYPH` are no longer exported; the two ink maps are one helper (same rects, same order)
+- **bitmap-text**: removed `BitmapRect.letter`, which nothing read (a public type, so the changeset is `minor`); `FONT` and `GLYPH` are no longer exported; the two ink maps are one helper (same rects, same order)
 - **stamp**: `stampSize` computes the size from the letter count (shared `sizeOf`) instead of drawing every pixel to measure it
 - **pixel-icon**: its class moved into a `pixel-icon.styles.ts` like the rest
 - **screen**: `centered` repeated the base's `--s-bottom` and padding, which tailwind-merge collapsed anyway
@@ -46,3 +46,5 @@ Skipped, with the reason:
 - **Timer `beat` algebra**: the same on paper, but float rounding could move a beat at its edge
 - **bitmapTextSize upper-casing**: changes behaviour (ß)
 - **Shared figure class (readout, ledger), typewriter's empty cva, field count's `data-disabled`, a `wrap` helper, `PickerItem = Row`, defaults in setting, speech-bubble background**: house style, or too small to be worth the churn
+
+Also in this pull request: the `short-stage-room` task (todo), the follow-up to window-scroll's options 2 and 3, filed here so it is not lost.

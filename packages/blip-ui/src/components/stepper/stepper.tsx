@@ -51,7 +51,8 @@ export interface StepperControlProps {
  * Right step it and it goes round, Enter, Space and a tap step it on.
  * Off and On are a switch to a screen reader; any other values a slider
  * that says its value (`Difficulty, Normal`), two of them included.
- * Up and Down are left to the `Form`, so it is a row like any other. A tap on its label steps it too, so the whole row is the target.
+ * Up and Down are left to the `Form`, so it is a row like any other.
+ * A tap on its label steps it too, so the whole row is the target.
  */
 export const StepperControl = ({
   values,
