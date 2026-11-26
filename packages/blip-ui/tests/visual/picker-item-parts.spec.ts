@@ -33,6 +33,12 @@ const SHOTS = [
   },
 ];
 
+/** The note of the row the cursor starts on, where it has one */
+const FIRST_NOTE: Record<string, string | undefined> = {
+  'quest-log': "Maud's ferry rope snapped",
+  'shop-wares': 'Heals a little.',
+};
+
 test('each part is read as a word of its own', async ({ page }) => {
   await page.goto(story('shop-wares', 3, 'wide'));
   const menu = page.getByRole('list', { name: 'Wares · 30g' });
@@ -57,8 +63,10 @@ test('a disabled item dims its parts with its name', async ({ page }) => {
   await expect(label.locator('[data-slot=picker-item-detail]')).toHaveText(
     '15g short',
   );
-  const opacity = await label.evaluate(el => getComputedStyle(el).opacity);
-  expect(Number(opacity)).toBeLessThan(1);
+  // `bui-disabled`, after the label's short fade
+  await expect
+    .poll(() => label.evaluate(el => Number(getComputedStyle(el).opacity)))
+    .toBeCloseTo(0.4, 2);
 });
 
 test('the cursor points at the name, not between its lines', async ({
@@ -91,6 +99,10 @@ for (const shot of SHOTS)
       await page.goto(story(id, shot.scale, shot.layout));
       await page.locator('[data-slot=picker]').waitFor();
       await page.evaluate(() => document.fonts.ready);
+      // The first row's note is out where it has one, so its room counts
+      const note = FIRST_NOTE[id];
+      if (note)
+        await expect(page.locator('p', { hasText: note })).toBeInViewport();
       expect(await escapes(page)).toEqual([]);
       expect(await cursorRoom(page)).toEqual([]);
     });

@@ -79,19 +79,24 @@ export const picker = {
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
+    // Dimmed or lit by a change of state, a short fade; its parts with it
+    base: 'min-w-0 flex-1 transition-opacity duration-200 ease-bui-out',
+    variants: { disabled: { true: 'bui-disabled' } },
+  }),
+  /**
+   * What holds an item's text, the label or an accent item's blinking
+   * call: holding parts, a row that wraps. The name and its mark, the
+   * value at the end, the detail on a line of its own under them. Without
+   * parts it stays plain text
+   */
+  parts: cva({
     base: [
-      // Dimmed or lit by a change of state, a short fade; its parts with it
-      'min-w-0 flex-1 transition-opacity duration-200 ease-bui-out',
-      // Holding parts, a row that wraps: the name and its mark, the value
-      // at the end, the detail on a line of its own under them, wherever
-      // it is written. Without parts it stays plain text
       'has-[>[data-slot^=picker-item-]]:flex has-[>[data-slot^=picker-item-]]:flex-wrap has-[>[data-slot^=picker-item-]]:items-baseline has-[>[data-slot^=picker-item-]]:gap-x-related',
       '*:data-[slot=picker-item-value]:ml-auto *:data-[slot=picker-item-value]:pl-regular',
       // The value ends where a setting's does, every value in a window
       '*:data-[slot=picker-item-value]:-mr-control',
-      '*:data-[slot=picker-item-detail]:order-last *:data-[slot=picker-item-detail]:basis-full',
+      '*:data-[slot=picker-item-detail]:basis-full',
     ],
-    variants: { disabled: { true: 'bui-disabled' } },
   }),
   /** A second line: quieter and smaller */
   detail: cva({ base: 'text-[0.85em] text-(--bui-muted)' }),

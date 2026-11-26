@@ -452,12 +452,19 @@ const Row = ({
         />
         <span
           data-cursor-target
-          className={styles.label({ disabled })}
+          className={styles.label({
+            disabled,
+            // An accent item's call holds its parts, so it places them
+            className: variant === 'accent' ? undefined : styles.parts(),
+          })}
           style={ruledOut ? { opacity: 1 - 0.75 * ruledOut } : undefined}
         >
           {/* The loud one blinks; the cursor beside it does not */}
           {variant === 'accent' ? (
-            <Text variant="call" className="text-inherit">
+            <Text
+              variant="call"
+              className={styles.parts({ className: 'text-inherit' })}
+            >
               {children}
             </Text>
           ) : (

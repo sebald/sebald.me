@@ -83,9 +83,10 @@ left (`Screen`, a list longer than the stage).
 
 An item's text is its name. Where a row says more, a quest's giver and
 next step, a save's play time, a ware's price, its parts go in it after
-the name, in any order: the item places them by their slot. A detail is a
-line of its own under the name (one for each), a value ends at the row's
-end, a mark sits beside the name. Written as parts, never as `span`s with
+the name, in reading order: the mark, the value, then the details. The
+item places them by their slot: a mark beside the name, a value at the
+row's end, a detail on a line of its own under them (one for each). A
+screen reader reads them in the order they are written. Written as parts, never as `span`s with
 a size or an opacity of their own, every list says the same thing the
 same way, and a disabled item dims them all with its name.
 
@@ -104,7 +105,9 @@ same way, and a disabled item dims them all with its name.
 A screen reader reads the row as its words in order, each part one of them
 (`Rope 45g 15g short`, dimmed). A mark says what it means in words
 (`New`, `Done`), never by colour alone. What a whole quest or ware says
-belongs in its `note`, not in a third line.
+belongs in its `note`, not in a third line. A disabled item dims its details with its
+name, so a detail may say why (`15g short`) but is never the only place
+it is said: its `note` says it in full, readable, on the cursor's row.
 
 ### Menus side by side
 

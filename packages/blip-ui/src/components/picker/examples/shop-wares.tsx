@@ -44,7 +44,7 @@ export function ShopWares() {
             <PickerItem
               id="rope"
               disabled
-              note="Strong enough for a ferry. Sell something first."
+              note="15g short. Sell something first: it is strong enough for a ferry."
               onSelect={noop}
             >
               Rope
