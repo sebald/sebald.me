@@ -53,10 +53,11 @@ it, a `Field` with a label holding one: its children are the label,
    numbers end, the value just inside it, as a menu setting's. A longer
    value grows to the left, so the arrows stay put. The stepper still
    takes the whole column, so a tap anywhere on the row reaches it
-4. **Description** and **error**, the `Field`'s, under the row from the
-   label's start across its width, as a phone's settings screen explains
-   a setting: they are about the row, not about the value. A
-   `TextField`'s stay under its box, with its count
+4. **Description** and **error**, the `Field`'s, right under the row.
+   In a window's label column they start where a `TextField`'s do, at the
+   control column, so every description and error in a form shares one
+   edge; on a tall stage, where there is no label column, they take the
+   row's width
 
 <Canvas of={StepperStories.Overview} />
 

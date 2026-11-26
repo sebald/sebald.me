@@ -28,8 +28,8 @@ export const field = {
       // A stepper's row is a setting's, as on a phone's settings screen:
       // the name and the value on one line, the value at its end, its
       // words under the whole row. In a container with a label column
-      // (`Content`, wide) the label goes in that column, the value and its
-      // arrows still at the row's end
+      // (`Content`, wide) the container's areas apply instead: the label
+      // in that column, the words in the control's, as a text field's
       "has-[>[data-slot=stepper]]:[grid-template-areas:'label_control'_'description_description'_'error_error']",
       'has-[>[data-slot=stepper]]:*:data-[slot=field-label]:mb-0',
       // A stepper's words sit right under its row, a line's leading
