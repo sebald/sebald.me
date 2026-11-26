@@ -47,9 +47,11 @@ export const tabs = {
       'data-[active]:[--t-frame:var(--bui-frame)] data-[active]:[--t-inner:var(--bui-frame-inner)] data-[active]:[--t-face:var(--bui-surface)]',
       // Open, it carries the window's light from its top edge, and its face
       // runs on over the panel's top room, so the panel's own light does
-      // not cross under it: one light, falling from the tab into the window
+      // not cross under it: one light, falling from the tab into the window.
+      // It ends where the panel's content starts (the tab already stands a
+      // stage pixel into the panel's body), never over it
       'data-[active]:[--t-light:inset_0_var(--px)_0_var(--bui-surface-light)]',
-      'data-[active]:[--t-below:calc(--theme(--spacing-window)*-1)]',
+      'data-[active]:[--t-below:calc(var(--px)-(--theme(--spacing-window)))]',
     ],
   }),
   /** A ring of a window tab, like the window's: square at the bottom, where it stands */
