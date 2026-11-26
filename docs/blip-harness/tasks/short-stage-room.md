@@ -2,7 +2,7 @@
 status: done # todo | doing | done
 step: N+ # found while finishing window-scroll
 depends: [window-scroll]
-pr:
+pr: 254
 ---
 
 # `short-stage-room`: A list gets more rows on the short stage
