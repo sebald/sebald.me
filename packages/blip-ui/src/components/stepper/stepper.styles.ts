@@ -15,7 +15,7 @@ export const stepper = {
   root: cva({
     base: [
       // On the value's baseline, so it lines up with the label beside it
-      'group/stepper flex min-w-0 cursor-pointer items-baseline gap-related outline-none select-none',
+      'group/stepper flex min-w-0 cursor-pointer items-baseline justify-end gap-related outline-none select-none',
       'text-(--bui-dim) focus-visible:text-(--bui-primary)',
       // A thumb's target (44 CSS pixels and more) that reaches into the
       // gaps around the row instead of making it taller: a taller row
@@ -25,7 +25,7 @@ export const stepper = {
       'aria-disabled:pointer-events-none aria-disabled:bui-disabled',
     ],
   }),
-  /** A `Setting`'s arrows, centred on the line, at the ends of the control's column, so they line up with a text field's box. Hidden at rest where there is a pointer */
+  /** A `Setting`'s arrows, centred on the line, either side of the value at the row's end. Hidden at rest where there is a pointer */
   step: cva({
     base: [
       'self-center',
@@ -34,11 +34,10 @@ export const stepper = {
     ],
   }),
   /**
-   * Centred in the room between the arrows, the whole column: every
-   * stepper's value on one centre whatever its length, and the arrows
-   * stay put. Six characters at least, where the column is narrow
+   * As a `Setting`'s value: centred in six characters, so the arrows stay
+   * put as it changes, and with them at the row's end, where every value
+   * in a window ends. The stepper itself still takes the whole column, so
+   * a tap anywhere on the row reaches it
    */
-  value: cva({
-    base: 'min-w-[6ch] flex-1 text-center text-(--bui-text-bright)',
-  }),
+  value: cva({ base: 'min-w-[6ch] text-center text-(--bui-text-bright)' }),
 };
