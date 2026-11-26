@@ -8,7 +8,7 @@ import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { Step } from '../setting/setting';
-import { WindowFrame } from '../window/window';
+import { WINDOW_LIGHT, WindowFrame } from '../window/window';
 import { tabs as styles } from './tabs.styles';
 
 /**
@@ -173,7 +173,15 @@ export const Tab = ({ className, children, ...props }: TabProps) => (
     <span
       aria-hidden
       className={styles.face()}
-      style={{ inset: 'var(--t-ring) var(--t-ring) 0' }}
+      style={{ inset: 'var(--t-ring) var(--t-ring) var(--t-below, 0)' }}
+    />
+    <span
+      aria-hidden
+      className={styles.light()}
+      style={{
+        inset: 'var(--t-ring) var(--t-ring) var(--t-below, 0)',
+        ...WINDOW_LIGHT,
+      }}
     />
     <span aria-hidden className={styles.foot()} style={foot('left')} />
     <span aria-hidden className={styles.foot()} style={foot('right')} />
