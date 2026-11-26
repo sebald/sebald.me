@@ -66,16 +66,25 @@ export function MoodBoard() {
     <div className="columns-2 gap-section *:mb-section *:break-inside-avoid tall:columns-1">
       <Group
         noted
-        caption="Choose: a menu, a place or an action. Focus: the cursor on the row, a setting's arrows on that row only, and its note in a window beside the menu."
+        caption="Choose: a menu, a place or an action. Focus: the cursor on the row, a setting's arrows on that row only, and every row's note in a window beside the menu."
       >
         <Window>
           <Title>Menu</Title>
           <Actions>
             <Picker label="Menu" initial="mode">
-              <PickerItem id="new" variant="accent" onSelect={noop}>
+              <PickerItem
+                id="new"
+                variant="accent"
+                note="Start over from the first act."
+                onSelect={noop}
+              >
                 New run
               </PickerItem>
-              <PickerItem id="continue" onSelect={noop}>
+              <PickerItem
+                id="continue"
+                note="Act two, three duels won."
+                onSelect={noop}
+              >
                 Continue
               </PickerItem>
               <PickerSetting
@@ -86,11 +95,21 @@ export function MoodBoard() {
               >
                 Mode
               </PickerSetting>
-              <PickerItem id="erase" disabled onSelect={noop}>
+              <PickerItem
+                id="erase"
+                disabled
+                note="Nothing to erase yet."
+                onSelect={noop}
+              >
                 Erase save
               </PickerItem>
               <PickerGroup>
-                <PickerItem id="back" variant="back" onSelect={noop}>
+                <PickerItem
+                  id="back"
+                  variant="back"
+                  note="To the title."
+                  onSelect={noop}
+                >
                   Back
                 </PickerItem>
               </PickerGroup>
@@ -106,7 +125,7 @@ export function MoodBoard() {
         </Window>
       </Group>
 
-      <Group caption="Set and type: a form. Focus: a stepper's arrows in primary; a text field's cursor and underline; a button's cursor.">
+      <Group caption="Set and type: a form. Focus: the cursor at the label; a stepper's arrows, bright, and a text field's underline as its second cue; a button's cursor.">
         <Window>
           <Title>Form</Title>
           <Content>

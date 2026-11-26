@@ -50,8 +50,6 @@ export const field = {
   /**
    * The menus' cursor, 3 stage pixels left of the label, while the control
    * has the keys' focus (the field's focus mark, `foundations/focus.mdx`).
-   * A control that marks its own focus (`data-marks-focus`: a stepper's
-   * arrows) gets none, so a row shows one mark, never two.
    * Under a finger there is no cursor, as on a menu: the caret and the
    * control's own mark show the focus
    */
@@ -59,7 +57,7 @@ export const field = {
     base: [
       'pointer-events-none absolute top-1/2 right-[calc(100%+--theme(--spacing-cursor))] -translate-y-1/2',
       'h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] text-(--bui-primary) bui-point-right',
-      'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible:not([data-marks-focus])]/field:opacity-100',
+      'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100',
     ],
   }),
   /** What to type or in what form, small and muted */

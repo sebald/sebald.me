@@ -137,6 +137,7 @@ parallel, a row starts when the rows it needs are merged.
 | [`look-here`](look-here.md)                           | Yellow says "look here" alone; a paper primary button, a text secondary                                          |
 | [`window-edge`](window-edge.md)                       | One left edge and one right edge in a window: ledger, readouts, steppers, menu settings                          |
 | [`tab-light`](tab-light.md)                           | The open tab continues the window's light instead of a flat fill                                                 |
+| [`stepper-cursor`](stepper-cursor.md)                 | A stepper shows its field's cursor, its arrows white; the arrows a gap from the value                            |
 
 The pattern tasks are meant to be good enough for an agent to copy: built only from components,
 every control used as its docs say, looked at at 1x, 3x and on the phone, the keyboard model

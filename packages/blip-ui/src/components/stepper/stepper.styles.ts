@@ -4,7 +4,7 @@ import { cva } from '../../utils/styles';
  * A value between its step arrows, the control of a `Field`. It takes the
  * control's whole cell, so a tap anywhere on the row reaches it. The
  * arrows show only where Left and Right work: while it has the keys'
- * focus (in the primary colour, beside the `Field`'s cursor) or the
+ * focus (bright, the `Field`'s cursor at the label in yellow) or the
  * pointer, so a window of steppers reads as names and values, not a
  * column of arrows. Their room is kept, so nothing shifts. Under a
  * finger there is no cursor: the arrows stay, dim, as the sign that a
@@ -15,8 +15,8 @@ export const stepper = {
   root: cva({
     base: [
       // On the value's baseline, so it lines up with the label beside it
-      'group/stepper flex min-w-0 cursor-pointer items-baseline justify-end gap-related outline-none select-none',
-      'text-(--bui-dim) focus-visible:text-(--bui-primary)',
+      'group/stepper flex min-w-0 cursor-pointer items-baseline justify-end gap-regular outline-none select-none',
+      'text-(--bui-dim) focus-visible:text-(--bui-text-bright)',
       // A thumb's target (44 CSS pixels and more) that reaches into the
       // gaps around the row instead of making it taller: a taller row
       // would push its value and arrows apart and its words away from it

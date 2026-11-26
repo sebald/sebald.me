@@ -216,8 +216,8 @@ const FOCUS_ALLOWED: Record<string, string> = {
   // A field's underline: its colour and thickness turn, nothing moves
   'text-field/text-field.styles.ts focus:[--ul:var(--bui-primary)]':
     'underline',
-  // A stepper's arrows show, in primary, while it has the keys' focus: its focus mark, in place of its field's cursor
-  'stepper/stepper.styles.ts focus-visible:text-(--bui-primary)': 'arrows',
+  // A stepper's arrows show, bright, while it has the keys' focus: its second cue, beside its field's cursor
+  'stepper/stepper.styles.ts focus-visible:text-(--bui-text-bright)': 'arrows',
   'stepper/stepper.styles.ts group-focus-visible/stepper:opacity-100': 'arrows',
   // A button's cursor, left of it, shows: the menus' mark, on every variant
   'button/button.styles.ts group-focus-visible:opacity-100': 'cursor',
@@ -225,7 +225,7 @@ const FOCUS_ALLOWED: Record<string, string> = {
   'icon-button/icon-button.styles.ts group-focus-visible:opacity-100': 'cursor',
   // A picker row's cursor shows, in the primary colour
   // A field's cursor shows while its control has the keys' focus
-  'field/field.styles.ts [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible:not([data-marks-focus])]/field:opacity-100':
+  'field/field.styles.ts [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100':
     'cursor',
 };
 

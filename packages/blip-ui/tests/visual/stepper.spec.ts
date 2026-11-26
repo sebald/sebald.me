@@ -63,19 +63,23 @@ test.describe('a stepper', () => {
     await expect(music).toBeFocused();
   });
 
-  test('its arrows are its focus: its field shows no cursor', async ({
+  test("its focus is its field's cursor, its arrows bright beside it", async ({
     page,
   }) => {
     await page.keyboard.press('ArrowDown');
     const row = page.locator('[data-slot=field]', {
       has: page.getByRole('switch', { name: 'Music' }),
     });
-    // What the player sees of the marks: the field's cursor stays out,
-    // the arrows either side of the value show
-    await expect(row.locator('[data-slot=cursor]')).toHaveCSS('opacity', '0');
+    // What the player sees of the marks: the field's cursor at the label,
+    // the arrows either side of the value showing, not yellow
+    await expect(row.locator('[data-slot=cursor]')).toHaveCSS('opacity', '1');
     await expect(row.locator('[data-slot=step]').first()).toHaveCSS(
       'opacity',
       '1',
+    );
+    await expect(row.getByRole('switch')).toHaveCSS(
+      'color',
+      'rgb(214, 209, 194)',
     );
   });
 

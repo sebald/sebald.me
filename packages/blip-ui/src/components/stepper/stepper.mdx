@@ -36,12 +36,14 @@ it, a `Field` with a label holding one: its children are the label,
 1. **Label**, its children, the `Field`'s label: in the window's label
    column on a wide stage; on a tall one, or outside a window's rows,
    beside the value too, the value at the row's end, as on a phone's
-   settings screen. No cursor points at it: the arrows are the
-   stepper's focus
+   settings screen. The `Field`'s cursor points at it while the
+   stepper has the keys' focus, as at every field
 2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`),
-   shown only where Left and Right work: in `--bui-primary` while it has
-   the keys' focus, its focus mark in place of the `Field`'s cursor (one
-   mark on the row, not a cursor and two arrows), and under the pointer.
+   shown only where Left and Right work: bright (`--bui-text-bright`)
+   while it has the keys' focus, its second cue beside the `Field`'s
+   cursor, not yellow (the cursor is the row's one yellow sign,
+   `foundations/colour.mdx`), and under the pointer. A gap (`regular`)
+   from the value, so a value of six characters stands clear of them.
    At rest a row is its name and value, as on a game's
    options screen, so a window of steppers is not a column of arrows; their room
    is kept, so nothing shifts when they show. Under a finger there is no
@@ -101,16 +103,16 @@ it, a `Field` with a label holding one: its children are the label,
 - A change is said by the role's own state, which a screen reader reads
   for the control it is on, not by the stage's live region, which would
   say it twice
-- A Tab stop; the focus is the arrows showing either side of the value,
-  in primary, in place of the `Field`'s cursor (`data-marks-focus`,
-  `foundations/focus.mdx`). Not dim: 3.05:1 is too close to the 3:1 of
-  WCAG 1.4.11 for the only mark. On a touch screen with a keyboard
-  attached the arrows are already there, dim: the focus is their turn to
-  primary, a change of 3.44:1, and no cursor shows there (as on a menu)
+- A Tab stop; the focus is the `Field`'s cursor left of the label, in
+  primary (10.51:1), and the arrows showing bright either side of the
+  value as its second cue (`foundations/focus.mdx`). On a touch screen
+  with a keyboard attached the arrows are already there, dim: the focus
+  is their turn to bright, a change of 3.79:1, and no cursor shows there
+  (as on a menu)
 - The value is in words, so the state never rests on colour. The arrows
-  are 10.51:1 on the window with the focus (primary) and 3.05:1 at rest
-  under a finger (dim, the 3:1 of WCAG 1.4.11); the value is bright,
-  11.56:1
+  are 11.56:1 on the window with the focus (bright) and 3.05:1 at rest
+  under a finger (dim, the 3:1 of WCAG 1.4.11); the cursor is 10.51:1
+  (primary); the value is bright, 11.56:1
 - A touch screen gets a target at least 44 CSS pixels high (a line and 4
   stage pixels above and below it, at least 3 CSS pixels each), reaching
   into the gaps around the row, so the row keeps its line's height; the
