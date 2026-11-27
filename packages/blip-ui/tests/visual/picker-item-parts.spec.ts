@@ -92,6 +92,55 @@ test('the cursor points at the name, not between its lines', async ({
   expect(Math.abs(middle(cursor) - middle(name))).toBeLessThan(2);
 });
 
+test('a long name wraps like text: the mark and value stay on its last line, inside the window', async ({
+  page,
+}) => {
+  await page.goto(story('shop-wares', 3, 'wide'));
+  const item = page.locator('[data-slot=picker-item][data-id=lantern]');
+  await expect(item.locator('[data-slot=picker-item-mark]')).toHaveText('New');
+  const found = await item.evaluate(li => {
+    const label = li.querySelector('[data-cursor-target]')!;
+    // A name over several lines, one word longer than the window
+    label.firstChild!.textContent =
+      'A lantern for the long road north Unbreakablelanternwordthatneverends';
+    const range = document.createRange();
+    range.selectNodeContents(label.firstChild!);
+    const lines = [...range.getClientRects()];
+    const last = lines.at(-1)!;
+    const box = (slot: string) =>
+      li.querySelector(`[data-slot=${slot}]`)!.getBoundingClientRect();
+    const middle = (r: DOMRect) => (r.top + r.bottom) / 2;
+    const frame = li.closest('[data-slot=window]')!.getBoundingClientRect();
+    return {
+      lines: new Set(lines.map(r => Math.round(r.top))).size,
+      mark: Math.abs(middle(box('picker-item-mark')) - middle(last)),
+      value: Math.abs(middle(box('picker-item-value')) - middle(last)),
+      inside: [label, ...label.children].every(
+        el => el.getBoundingClientRect().right <= frame.right,
+      ),
+    };
+  });
+  expect(found.lines).toBeGreaterThan(1);
+  expect(found.mark).toBeLessThan(4);
+  expect(found.value).toBeLessThan(4);
+  expect(found.inside).toBe(true);
+});
+
+test('a loud item’s detail keeps the quiet weight', async ({ page }) => {
+  await page.goto(story('quest-log', 3, 'wide'));
+  const detail = page
+    .locator(
+      '[data-slot=picker-item][data-id=ferry] [data-slot=picker-item-detail]',
+    )
+    .first();
+  // An accent item's blinking call is bold (`Text variant="call"`)
+  const weight = await detail.evaluate(el => {
+    el.parentElement!.style.fontWeight = '600';
+    return getComputedStyle(el).fontWeight;
+  });
+  expect(weight).toBe('400');
+});
+
 for (const shot of SHOTS)
   for (const id of ['quest-log', 'save-slots', 'shop-wares'])
     test(`${id} has its room at ${shot.name}`, async ({ page }) => {

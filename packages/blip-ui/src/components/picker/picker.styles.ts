@@ -79,27 +79,29 @@ export const picker = {
     variants: { shown: { true: 'opacity-100', false: 'opacity-0' } },
   }),
   label: cva({
-    // Dimmed or lit by a change of state, a short fade; its parts with it
-    base: 'min-w-0 flex-1 transition-opacity duration-200 ease-bui-out',
+    // Dimmed or lit by a change of state, a short fade; its parts with it.
+    // A word longer than the window breaks, so no row widens the list
+    base: 'min-w-0 flex-1 wrap-anywhere transition-opacity duration-200 ease-bui-out',
     variants: { disabled: { true: 'bui-disabled' } },
   }),
   /**
    * What holds an item's text, the label or an accent item's blinking
-   * call: holding parts, a row that wraps. The name and its mark, the
-   * value at the end, the detail on a line of its own under them. Without
-   * parts it stays plain text
+   * call: holding parts, a block of text. The mark follows the name's last
+   * word, the value floats to the end of that line, the detail is a line
+   * of its own under them. Without parts it stays plain text
    */
   parts: cva({
     base: [
-      'has-[>[data-slot^=picker-item-]]:flex has-[>[data-slot^=picker-item-]]:flex-wrap has-[>[data-slot^=picker-item-]]:items-baseline has-[>[data-slot^=picker-item-]]:gap-x-related',
-      '*:data-[slot=picker-item-value]:ml-auto *:data-[slot=picker-item-value]:pl-regular',
+      'has-[>[data-slot^=picker-item-]]:flow-root',
+      '*:data-[slot=picker-item-mark]:inline-block *:data-[slot=picker-item-mark]:ml-related',
+      '*:data-[slot=picker-item-value]:float-right *:data-[slot=picker-item-value]:pl-regular',
       // The value ends where a setting's does, every value in a window
       '*:data-[slot=picker-item-value]:-mr-control',
-      '*:data-[slot=picker-item-detail]:basis-full',
+      '*:data-[slot=picker-item-detail]:block *:data-[slot=picker-item-detail]:clear-both',
     ],
   }),
-  /** A second line: quieter and smaller */
-  detail: cva({ base: 'text-[0.85em] text-(--bui-muted)' }),
+  /** A second line: quieter and smaller, never the loud one's weight */
+  detail: cva({ base: 'text-[0.85em] font-normal text-(--bui-muted)' }),
   /** A value at the row's end: its figures keep their width */
   value: cva({ base: 'tabular-nums' }),
   mark: cva({
