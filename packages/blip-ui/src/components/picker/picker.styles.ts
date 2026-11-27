@@ -108,7 +108,8 @@ export const picker = {
     variants: {
       variant: {
         default: '',
-        // Only the colour: a smaller float would leave the name's baseline
+        // Only the colour, never a smaller size: the value floats, and a
+        // float of other letters need not share the name's baseline
         progress: 'text-(--bui-muted)',
       } satisfies Record<
         NonNullable<PickerItemValueProps['variant']>,
