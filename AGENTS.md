@@ -35,7 +35,7 @@ pnpm vrt:blip-ui       # Visual regression tests of Blip UI's stories (Docker)
 pnpm vrt:blip-ui:update # Regenerate Blip UI's baselines (Docker)
 ```
 
-CI runs `lint`, `format:check`, `test` and, in their own jobs, `narrate:check` and the changeset check (see Versioning) on every pull request (keep the jobs' commands in sync with the scripts). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
+CI runs `lint`, `format:check`, `test`, Blip UI's docs build (`pnpm --filter @sebald/blip-ui run prepack`, what the `blip` CLI reads) and, in their own jobs, `narrate:check` and the changeset check (see Versioning) on every pull request (keep the jobs' commands in sync with the scripts). Lint warnings don't fail CI; errors do. The visual regression workflow also runs on every pull request.
 
 ### The game's flows
 
