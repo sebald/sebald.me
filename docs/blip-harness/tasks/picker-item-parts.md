@@ -47,7 +47,7 @@ a `PickerItem`) should fall in `quests`, `saves`, `shop`.
 
 **Accepted** by the user (2026-11-26), as written.
 
-**Parts.** Three, exported from the picker: `PickerItemDetail` (a line of its own under the name, 0.85em, muted; one per line, so a quest's giver and next step are two), `PickerItemValue` (at the row's end, where a `PickerSetting`'s value ends, tabular figures) and `PickerItemMark` (beside the name, 0.75em, `variant: 'new' | 'done'`: the second accent or muted, its words saying it, never the colour alone). The item's own text stays its name: no name part.
+**Parts.** Three, exported from the picker: `PickerItemDetail` (a line of its own under the name, 0.85em, muted; one per line, so a quest's giver and next step are two), `PickerItemValue` (at the row's end, where a `PickerSetting`'s value ends, tabular figures) and `PickerItemMark` (now [`Tag`](tag.md), any container's; beside the name, 0.75em, `variant: 'new' | 'done'`: the second accent or muted, its words saying it, never the colour alone). The item's own text stays its name: no name part.
 
 **`Title` and `Content` checked first, and they don't fit.** A `Title` is a heading (an `h2`) and wears the window's title id (`TitleIdContext`), so in a row it would put a heading inside a button and rename the menu; `Content` is a `div`. A row's parts are phrasing content of their own role, which no other container has, so they are the picker's, named after it as `PickerGroup` is.
 

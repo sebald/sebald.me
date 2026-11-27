@@ -1,8 +1,8 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # follow-up of picker-item-parts, accepted by the user (2026-11-27)
 depends: [picker-item-parts]
-pr:
+pr: 258
 ---
 
 # `tag`: The picker's mark as a Tag, for any container
