@@ -48,13 +48,13 @@ and its window's title is its name:
 
 ## Parts
 
-| Part               | What it is                                                                                                             |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------------- |
-| `PickerItem`       | Something to pick                                                                                                      |
-| `PickerSetting`    | A setting: its name and its value between the step arrows, shown on the cursor's row; left and right step it (Setting) |
-| `PickerGroup`      | Items that belong together, with room above them                                                                       |
-| `PickerItemDetail` | In an item: a second line under its name, quieter and smaller                                                          |
-| `PickerItemValue`  | In an item: a value at the row's end, where a setting's value ends                                                     |
+| Part               | What it is                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `PickerItem`       | Something to pick                                                                                                         |
+| `PickerSetting`    | A setting: its name and its value between the step arrows, shown on the cursor's row; left and right step it (Setting)    |
+| `PickerGroup`      | Items that belong together, with room above them                                                                          |
+| `PickerItemDetail` | In an item: a second line under its name, quieter and smaller                                                             |
+| `PickerItemValue`  | In an item: a value at the row's end, where a setting's value ends; `variant="progress"` for how far along (`3/8`), muted |
 
 ## Variants and states
 
@@ -108,6 +108,11 @@ A screen reader reads the row as its words in order, each part one of them
 belongs in its `note`, not in a third line. A disabled item dims its details with its
 name, so a detail may say why (`15g short`) but is never the only place
 it is said: its `note` says it in full, readable, on the cursor's row.
+
+A count of how far along (`3/8` colleagues, `12/60` collected) is a
+`PickerItemValue variant="progress"`: muted, on the cursor's row too, as
+a detail is, so the name stays what the eye reads first. A price or a play
+time is the default, in the row's colour.
 
 ### Menus side by side
 

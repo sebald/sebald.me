@@ -337,7 +337,7 @@ export const TitleScreen = ({
             {running && (
               <PickerItem id="continue" onSelect={onContinue}>
                 Continue
-                <PickerItemValue>
+                <PickerItemValue variant="progress">
                   {running.beaten}/{running.slots}
                 </PickerItemValue>
               </PickerItem>
@@ -353,7 +353,7 @@ export const TitleScreen = ({
               onSelect={() => show('glossary')}
             >
               Glossary
-              <PickerItemValue>
+              <PickerItemValue variant="progress">
                 {collected}/{PAIRS.length}
               </PickerItemValue>
             </PickerItem>
