@@ -1,29 +1,29 @@
 import type { ReactNode } from 'react';
 
-import { BitmapText } from '../../components/bitmap-text/bitmap-text';
-import { Button } from '../../components/button/button';
-import { Form } from '../../components/form/form';
-import { Ledger, LedgerRow } from '../../components/ledger/ledger';
-import { Line } from '../../components/line/line';
-import { Meter } from '../../components/meter/meter';
-import { Actions, Content, Title } from '../../components/parts/parts';
+import { BitmapText } from '../components/bitmap-text/bitmap-text';
+import { Button } from '../components/button/button';
+import { Form } from '../components/form/form';
+import { Ledger, LedgerRow } from '../components/ledger/ledger';
+import { Line } from '../components/line/line';
+import { Meter } from '../components/meter/meter';
+import { Actions, Content, Title } from '../components/parts/parts';
 import {
   Picker,
   PickerGroup,
   PickerItem,
   PickerSetting,
-} from '../../components/picker/picker';
-import { PixelIcon } from '../../components/pixel-icon/pixel-icon';
-import { Readout } from '../../components/readout/readout';
-import { SpeechBubble } from '../../components/speech-bubble/speech-bubble';
-import { Stamp } from '../../components/stamp/stamp';
-import { Stepper } from '../../components/stepper/stepper';
-import { Tab, TabList, TabPanel, Tabs } from '../../components/tabs/tabs';
-import { TextField } from '../../components/text-field/text-field';
-import { Heading, Text } from '../../components/text/text';
-import { Timer } from '../../components/timer/timer';
-import { Typewriter } from '../../components/typewriter/typewriter';
-import { Legend, Window } from '../../components/window/window';
+} from '../components/picker/picker';
+import { PixelIcon } from '../components/pixel-icon/pixel-icon';
+import { Readout } from '../components/readout/readout';
+import { SpeechBubble } from '../components/speech-bubble/speech-bubble';
+import { Stamp } from '../components/stamp/stamp';
+import { Stepper } from '../components/stepper/stepper';
+import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
+import { TextField } from '../components/text-field/text-field';
+import { Heading, Text } from '../components/text/text';
+import { Timer } from '../components/timer/timer';
+import { Typewriter } from '../components/typewriter/typewriter';
+import { Legend, Window } from '../components/window/window';
 
 const noop = () => {};
 

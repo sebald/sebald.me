@@ -36,6 +36,12 @@ jobs:
       - name: Run tests
         run: pnpm test
 
+      # What `blip docs`, `blip search` and `blip examples` read: an example
+      # without its page, a broken sidecar or an import the CLI can't
+      # rewrite fails here, not when the docs are next packed
+      - name: Build Blip UI's docs
+        run: pnpm --filter @sebald/blip-ui run prepack
+
   # A pull request that changes a package's code (Blip UI, Pushback) adds
   # a changeset naming it; which files count is `changedFilePatterns` in
   # `.changeset/config.json`. `pnpm changeset --empty` for none.

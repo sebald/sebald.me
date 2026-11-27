@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Pixels, usePixels } from '../providers/pixels';
-import { MoodBoard as Board } from './examples/mood-board';
+import { MoodBoard as Board } from './mood-board';
 
 /**
  * Every control and element of the kit on one sheet, grouped by what the
