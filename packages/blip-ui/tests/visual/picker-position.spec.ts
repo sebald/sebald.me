@@ -39,6 +39,10 @@ test('a group counts on from the rows before it', async ({ page }) => {
   const back = page.locator('[data-slot=picker-item][data-id=back]');
   await expect(back).toHaveAttribute('aria-posinset', '4');
   await expect(back).toHaveAttribute('aria-setsize', '4');
+  // A disabled ware counts too
+  await expect(
+    page.locator('[data-slot=picker-item][data-id=rope]'),
+  ).toHaveAttribute('aria-posinset', '3');
 });
 
 for (const shot of [

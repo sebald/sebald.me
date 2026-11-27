@@ -189,7 +189,8 @@ const Position = ({
   const at = current === undefined ? -1 : ids.indexOf(current);
   return (
     <p aria-hidden data-slot="picker-position" className={styles.position()}>
-      {at < 0 ? '' : `${at + 1} of ${ids.length}`}
+      {/* No cursor yet: the line keeps its height, so the list stays put */}
+      {at < 0 ? '\u00a0' : `${at + 1} of ${ids.length}`}
     </p>
   );
 };
@@ -286,13 +287,14 @@ export const Picker = ({
   const [ids, setIds] = useState<readonly string[]>([]);
   useLayoutEffect(() => {
     const next = order();
-    // Synced with the DOM's order, which is there only after a render; set
-    // only when it changed, so this settles at once
+    // Synced with the DOM's order after every render, an item's own too
+    // (one that comes or goes inside a wrapper); set only when it changed,
+    // so this settles at once
     // oxlint-disable-next-line react/set-state-in-effect
     setIds(previous =>
       previous.join('\n') === next.join('\n') ? previous : next,
     );
-  }, [children]);
+  });
 
   // The cursor on an item that is there: the first enabled one at first,
   // and again when its item goes
@@ -417,7 +419,9 @@ export const Picker = ({
       >
         {position ? (
           <>
-            <div className={styles.body()}>{list}</div>
+            <div data-slot="picker-body" className={styles.body()}>
+              {list}
+            </div>
             <Position ids={ids} current={current} />
           </>
         ) : (
