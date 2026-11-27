@@ -542,6 +542,14 @@ export interface PickerItemPartProps {
 }
 
 /**
+ * The space a screen reader reads between the name and a part beside it
+ * (`Lantern New 12g`): the part sits in the name's line, with no space
+ * written between them, so the words don't rely on how a browser builds
+ * the name from inline boxes. The gap the eye sees is the part's margin
+ */
+const Gap = () => <span className="sr-only"> </span>;
+
+/**
  * A second line under the item's name, quieter and smaller: who gave a
  * quest and what to do next, where a save was made, why a ware is out of
  * reach. The item's own text stays its name
@@ -564,6 +572,7 @@ export const PickerItemValue = ({
   children,
 }: PickerItemPartProps) => (
   <span data-slot="picker-item-value" className={styles.value({ className })}>
+    <Gap />
     {children}
   </span>
 );
@@ -588,6 +597,7 @@ export const PickerItemMark = ({
     data-slot="picker-item-mark"
     className={styles.mark({ variant, className })}
   >
+    <Gap />
     {children}
   </span>
 );

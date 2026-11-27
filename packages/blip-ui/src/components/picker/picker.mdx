@@ -84,8 +84,9 @@ left (`Screen`, a list longer than the stage).
 An item's text is its name. Where a row says more, a quest's giver and
 next step, a save's play time, a ware's price, its parts go in it after
 the name, in reading order: the mark, the value, then the details. The
-item places them by their slot: a mark beside the name, a value at the
-row's end, a detail on a line of its own under them (one for each). A
+item places them by their slot, wrapped like text: a mark after the
+name's last word, a value at the end of that line, a detail on a line of
+its own under them (one for each). A word longer than the window breaks. A
 screen reader reads them in the order they are written. Written as parts, never as `span`s with
 a size or an opacity of their own, every list says the same thing the
 same way, and a disabled item dims them all with its name.
