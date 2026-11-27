@@ -55,7 +55,6 @@ and its window's title is its name:
 | `PickerGroup`      | Items that belong together, with room above them                                                                       |
 | `PickerItemDetail` | In an item: a second line under its name, quieter and smaller                                                          |
 | `PickerItemValue`  | In an item: a value at the row's end, where a setting's value ends                                                     |
-| `PickerItemMark`   | In an item: a short word beside its name, `new` or `done`                                                              |
 
 ## Variants and states
 
@@ -83,8 +82,8 @@ left (`Screen`, a list longer than the stage).
 
 An item's text is its name. Where a row says more, a quest's giver and
 next step, a save's play time, a ware's price, its parts go in it after
-the name, in reading order: the mark, the value, then the details. The
-item places them by their slot, wrapped like text: a mark after the
+the name, in reading order: a `Tag`, the value, then the details. The
+item places them by their slot, wrapped like text: a tag after the
 name's last word, a value at the end of that line, a detail on a line of
 its own under them (one for each). A word longer than the window breaks. A
 screen reader reads them in the order they are written. Written as parts, never as `span`s with
@@ -104,7 +103,7 @@ same way, and a disabled item dims them all with its name.
 <Canvas of={PickerStories.ShopWares} />
 
 A screen reader reads the row as its words in order, each part one of them
-(`Rope 45g 15g short`, dimmed). A mark says what it means in words
+(`Rope 45g 15g short`, dimmed). A tag says what it means in words
 (`New`, `Done`), never by colour alone. What a whole quest or ware says
 belongs in its `note`, not in a third line. A disabled item dims its details with its
 name, so a detail may say why (`15g short`) but is never the only place

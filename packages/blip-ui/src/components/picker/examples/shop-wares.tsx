@@ -1,11 +1,11 @@
 import { Actions, Title } from '../../parts/parts';
+import { Tag } from '../../tag/tag';
 import { Legend, Window } from '../../window/window';
 import {
   Picker,
   PickerGroup,
   PickerItem,
   PickerItemDetail,
-  PickerItemMark,
   PickerItemValue,
 } from '../picker';
 
@@ -38,7 +38,7 @@ export function ShopWares() {
               onSelect={noop}
             >
               Lantern
-              <PickerItemMark>New</PickerItemMark>
+              <Tag>New</Tag>
               <PickerItemValue>12g</PickerItemValue>
             </PickerItem>
             <PickerItem

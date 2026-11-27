@@ -52,6 +52,7 @@ user to accept, change or cut; each has `step: D+` and no place in the table abo
 
 Follow-up: [`window-scroll`](window-scroll.md), a long list in a window scrolls instead of being cut off
 (found by `screen-layout`; before a game screen relies on `Screen`).
+Follow-up: [`tag`](tag.md), the picker's mark as a `Tag` any container can hold (found testing `picker-item-parts`).
 
 ## Common components
 

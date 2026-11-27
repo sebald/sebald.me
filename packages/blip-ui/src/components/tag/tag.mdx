@@ -1,0 +1,65 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as TagStories from './tag.stories';
+
+<Meta of={TagStories} />
+
+# Tag
+
+A short word beside a name that says something about it: `New` on a ware
+or a tab the player has not looked at, `Done` on a finished quest. It sits
+in the name's line, smaller and bold, and is read with it.
+
+```tsx
+<PickerItem id="lantern" onSelect={buy}>
+  Lantern
+  <Tag>New</Tag>
+  <PickerItemValue>12g</PickerItemValue>
+</PickerItem>
+```
+
+<Canvas of={TagStories.Default} />
+<Controls of={TagStories.Default} />
+
+## Anatomy
+
+1. **Word**, in letters at 0.75em, bold, in the variant's colour
+
+## Variants
+
+| Variant | Colour            | When to use                                |
+| ------- | ----------------- | ------------------------------------------ |
+| `new`   | `--bui-secondary` | Something the player has not looked at yet |
+| `done`  | `--bui-muted`     | Something finished, still there to look at |
+
+<Canvas of={TagStories.Overview} />
+
+## Compositions
+
+A container that holds a tag gives it its room, a `related` gap after the
+name: a `PickerItem` (`Picker`, An item with parts) and a `Tab`.
+
+<Canvas of={TagStories.InATab} />
+
+## Usage
+
+- **Do** write it after the name it marks, in the same line.
+- **Do** keep it to one short word, written out: its child is a string,
+  so a count or an icon is something else (a value, a `Readout`).
+- **Don't** give it a margin, a size or a colour of its own: the container
+  places it, the variant colours it.
+- **Tag or Stamp:** a tag is a word in the text, read in order. A `Stamp`
+  is art drawn over a face or a card (SHIPPED), hidden from a screen
+  reader, which reads the result elsewhere.
+
+<Rules for="tag" />
+
+## Accessibility
+
+- Read with the name, as a word of its own (`Lantern New`): a hidden space
+  comes before it, so the words never run together
+- Inline in the name's line, so a line under the name, a `Tab`'s focus
+  underline, runs on under it
+- The word says what it marks; the colour only repeats it (1.4.1)
+- No role and no live region: it is part of the name's text

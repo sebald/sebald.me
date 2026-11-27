@@ -577,31 +577,6 @@ export const PickerItemValue = ({
   </span>
 );
 
-export interface PickerItemMarkProps extends PickerItemPartProps {
-  /**
-   * What it marks: `new`, something the player has not looked at yet, in
-   * the second accent; `done`, something finished, quiet. Its words say
-   * it too (`New`, `Done`), never the colour alone
-   * @default 'new'
-   */
-  variant?: 'new' | 'done';
-}
-
-/** A short word beside the item's name: new, done */
-export const PickerItemMark = ({
-  variant,
-  className,
-  children,
-}: PickerItemMarkProps) => (
-  <span
-    data-slot="picker-item-mark"
-    className={styles.mark({ variant, className })}
-  >
-    <Gap />
-    {children}
-  </span>
-);
-
 /** Items that belong together, apart from the rest: room above them */
 export const PickerGroup = ({ children }: { children: ReactNode }) => (
   <li data-slot="picker-group">

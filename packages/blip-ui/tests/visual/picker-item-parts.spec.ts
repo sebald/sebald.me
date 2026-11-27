@@ -4,7 +4,7 @@ import { cursorRoom, escapes } from './layout';
 
 /**
  * A menu's items built from parts (`PickerItemDetail`, `PickerItemValue`,
- * `PickerItemMark`), as a player and a screen reader get them: each part
+ * `Tag`), as a player and a screen reader get them: each part
  * read as its own word, a disabled item dimmed with its parts, the cursor
  * on the name's line, and nothing cut off at any of the shots. No
  * screenshots, so it runs on any system
@@ -116,7 +116,7 @@ const lantern = (page: Page, name: string) =>
       const frame = li.closest('[data-slot=window]')!.getBoundingClientRect();
       return {
         lines: new Set(lines.map(r => Math.round(r.top))).size,
-        mark: off('picker-item-mark'),
+        mark: off('tag'),
         value: off('picker-item-value'),
         inside: [label, ...label.children].every(
           el => el.getBoundingClientRect().right <= frame.right,

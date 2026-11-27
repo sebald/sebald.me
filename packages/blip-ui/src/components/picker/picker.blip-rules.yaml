@@ -37,7 +37,7 @@ rules:
     markers: [review]
     source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
   - id: C-PICKER-6
-    text: Write what a row says besides its name as the item's parts (PickerItemDetail, PickerItemValue, PickerItemMark), never as spans with a size, an opacity or a colour of their own, nor as text run into the name (`Tonic · 25g`).
+    text: Write what a row says besides its name as the item's parts (PickerItemDetail, PickerItemValue, a Tag), never as spans with a size, an opacity or a colour of their own, nor as text run into the name (`Tonic · 25g`).
     markers: [review]
     fix: |
       <PickerItem id="tonic" onSelect={buy}>
