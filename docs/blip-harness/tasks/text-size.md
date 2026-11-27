@@ -1,8 +1,8 @@
 ---
-status: doing # todo | doing | done
+status: done # todo | doing | done
 step: D+ # found testing picker-item-parts, accepted by the user (2026-11-27)
 depends: [picker-item-parts]
-pr:
+pr: 260
 ---
 
 # `text-size`: One size for a line that says less

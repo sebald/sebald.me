@@ -95,7 +95,7 @@ export interface TextProps extends BaseProps {
 /** A line of text by what it is for: a hint, or the call to act */
 export const Text = ({
   variant = 'hint',
-  size,
+  size = 'default',
   className,
   style,
   children,
