@@ -45,6 +45,17 @@ rules:
         <PickerItemValue>25g</PickerItemValue>
         <PickerItemDetail>Heals a little</PickerItemDetail>
       </PickerItem>
+  - id: C-PICKER-7
+    text: Give a Picker whose rows have more than one value its `columns`, the name's column first and one name per PickerItemValue in the order the rows write them; every row writes its values in the columns' order, one it has none for as `–` (values fill the columns by place, so a value left out moves the next under the wrong name); never a grid, fixed widths or spaces of your own to line values up, and never a header row written as an item.
+    markers: [review]
+    fix: |
+      <Picker columns={['Item', 'Price', 'Owned']}>
+        <PickerItem id="tonic" onSelect={buy}>
+          Tonic
+          <PickerItemValue>25g</PickerItemValue>
+          <PickerItemValue>3</PickerItemValue>
+        </PickerItem>
+      </Picker>
 when-not:
   - text: Values the player fills in or sets on one screen, saved together, are fields in a Form, not a Picker.
     use: form

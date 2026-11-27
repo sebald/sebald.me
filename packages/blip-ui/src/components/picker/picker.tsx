@@ -2,9 +2,11 @@
 
 import {
   Children,
+  type CSSProperties,
   type ReactNode,
   type RefObject,
   createContext,
+  isValidElement,
   use,
   useEffect,
   useLayoutEffect,
@@ -20,6 +22,7 @@ import { useAnnounce } from '../../providers/announcer';
 import { useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
 import { building } from '../../utils/dev';
+import { cn } from '../../utils/styles';
 import { TitleIdContext } from '../parts/parts';
 import { Setting } from '../setting/setting';
 import { Text } from '../text/text';
@@ -153,7 +156,14 @@ interface PickerContextValue {
   overflow: boolean;
   scrollTop: number;
   listRef: RefObject<HTMLUListElement | null>;
+  /** The columns' names, the name's first, where the list has columns */
+  columns: readonly string[] | undefined;
 }
+
+/** The column a value sits in: its name, read out before it, and whether it is the last */
+const ColumnContext = createContext<
+  { name: string; last: boolean } | undefined
+>(undefined);
 
 const PickerContext = createContext<PickerContextValue | null>(null);
 
@@ -180,6 +190,14 @@ export interface PickerProps {
    * or a dialog with a `Title`, the title is its name
    */
   label?: string;
+  /**
+   * Its columns' names, for a list whose rows have more than one value (a
+   * shop's Item, Price, Owned): the name's column first, then one per
+   * `PickerItemValue`, in the order a row writes them. A header row over
+   * the list names them, each row's values line up under it, and a screen
+   * reader hears each value with its column's name (`Tonic Price 25g`)
+   */
+  columns?: readonly string[];
   /** On the list itself */
   className?: string;
 }
@@ -198,6 +216,7 @@ export const Picker = ({
   initial,
   active = true,
   label,
+  columns,
   className,
 }: PickerProps) => {
   const play = useFeedback();
@@ -210,6 +229,7 @@ export const Picker = ({
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
   const titleId = use(TitleIdContext);
+  const hasColumns = Boolean(columns?.length);
 
   /** The items' ids in the order the list shows them */
   const order = () =>
@@ -309,15 +329,34 @@ export const Picker = ({
         overflow,
         scrollTop: scroll.top,
         listRef,
+        columns: hasColumns ? columns : undefined,
       }}
     >
       <div ref={rootRef} data-slot="picker" className={styles.root()}>
         <ul
           ref={listRef}
-          className={styles.menu({ className })}
+          className={styles.menu({ columned: hasColumns, className })}
+          style={
+            hasColumns
+              ? ({ '--picker-values': columns!.length - 1 } as CSSProperties)
+              : undefined
+          }
           aria-label={label}
           aria-labelledby={label === undefined ? titleId : undefined}
         >
+          {columns && (
+            // For the eye: each value says its column's name itself
+            <li
+              aria-hidden
+              data-slot="picker-header"
+              className={styles.header()}
+            >
+              <span />
+              {columns.map(name => (
+                <span key={name}>{name}</span>
+              ))}
+            </li>
+          )}
           {children}
         </ul>
         {overflow && <ScrollRail scroll={scroll} />}
@@ -357,6 +396,43 @@ export interface PickerItemProps {
   ruledOut?: number;
   onSelect: () => void;
 }
+
+/**
+ * An item's parts sorted into the columns: the name and its tag in the
+ * name's column, each value in the next column, with that column's name
+ * to read out, a detail under them. Parts are the item's own children,
+ * as `PickerItem` documents them
+ */
+const inColumns = (children: ReactNode, columns: readonly string[]) => {
+  const all = Children.toArray(children);
+  const isA = (child: ReactNode, part: unknown) =>
+    isValidElement(child) && child.type === part;
+  const values = all.filter(child => isA(child, PickerItemValue));
+  const details = all.filter(child => isA(child, PickerItemDetail));
+  const name = all.filter(
+    child => !isA(child, PickerItemValue) && !isA(child, PickerItemDetail),
+  );
+  const count = columns.length - 1;
+  // A value for every column, in its order: one more has no column
+  if (building() && values.length > count)
+    console.error(
+      `Blip UI: a PickerItem with ${values.length} values in a Picker with ${count} value columns. Give the Picker a column for each, or write fewer values; the rest are left out.`,
+    );
+  return (
+    <>
+      <span data-slot="picker-item-name">{name}</span>
+      {values.slice(0, count).map((value, at) => (
+        <ColumnContext
+          key={at}
+          value={{ name: columns[at + 1]!, last: at === count - 1 }}
+        >
+          {value}
+        </ColumnContext>
+      ))}
+      {details}
+    </>
+  );
+};
 
 /** The row itself, for an item and a setting */
 const Row = ({
@@ -422,6 +498,10 @@ const Row = ({
   const marked =
     isCurrent && !picker.resting && (!picker.touch || Boolean(note));
 
+  const { columns } = picker;
+  const parts = columns ? inColumns(children, columns) : children;
+  const placed = columns ? styles.columns() : styles.parts();
+
   return (
     <li ref={rowRef} data-slot="picker-item" data-id={id}>
       <button
@@ -432,6 +512,7 @@ const Row = ({
           selected: marked,
           stepsShown: marked || picker.touch,
           variant,
+          className: columns && styles.itemColumned(),
         })}
         onPointerEnter={() => picker.setCurrent(id)}
         // Tab (or any keyboard focus) puts the cursor here, so there is one
@@ -454,8 +535,12 @@ const Row = ({
           data-cursor-target
           className={styles.label({
             disabled,
-            // An accent item's call holds its parts, so it places them
-            className: variant === 'accent' ? undefined : styles.parts(),
+            // An accent item's call holds its parts, so it places them; in
+            // columns it spans them, as the label does
+            className:
+              variant !== 'accent'
+                ? placed
+                : columns && 'grid grid-cols-subgrid',
           })}
           style={ruledOut ? { opacity: 1 - 0.75 * ruledOut } : undefined}
         >
@@ -463,12 +548,12 @@ const Row = ({
           {variant === 'accent' ? (
             <Text
               variant="call"
-              className={styles.parts({ className: 'text-inherit' })}
+              className={cn(placed, columns && 'col-span-full', 'text-inherit')}
             >
-              {children}
+              {parts}
             </Text>
           ) : (
-            children
+            parts
           )}
         </span>
       </button>
@@ -581,19 +666,30 @@ export const PickerItemValue = ({
   variant,
   className,
   children,
-}: PickerItemValueProps) => (
-  <span
-    data-slot="picker-item-value"
-    className={styles.value({ variant, className })}
-  >
-    <Gap />
-    {children}
-  </span>
-);
+}: PickerItemValueProps) => {
+  const column = use(ColumnContext);
+  return (
+    <span
+      data-slot="picker-item-value"
+      data-last-column={column?.last || undefined}
+      className={styles.value({ variant, className })}
+    >
+      <Gap />
+      {/* In columns, the column's name before it: `Price 25g` */}
+      {column && <span className="sr-only">{column.name} </span>}
+      {children}
+    </span>
+  );
+};
 
 /** Items that belong together, apart from the rest: room above them */
-export const PickerGroup = ({ children }: { children: ReactNode }) => (
-  <li data-slot="picker-group">
-    <ul className={styles.group()}>{children}</ul>
-  </li>
-);
+export const PickerGroup = ({ children }: { children: ReactNode }) => {
+  const columns = use(PickerContext)?.columns;
+  return (
+    <li data-slot="picker-group">
+      <ul className={styles.group({ columned: Boolean(columns) })}>
+        {children}
+      </ul>
+    </li>
+  );
+};

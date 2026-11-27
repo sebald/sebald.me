@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: N2 # forms and navigation
 depends: [picker-item-parts]
-pr:
+pr: 261
 ---
 
 # `columns`: Column headers for a list with more than one value
@@ -31,5 +31,31 @@ pr:
 ## Notes
 
 Filled in while the task is worked on: what changed, decisions, numbers.
+
+**Decided: a prop of `Picker`, `columns`** (`['Item', 'Price', 'Owned']`), not a `PickerItem` variant
+and not `Ledger`. A list's columns belong to the list: one place names them, and the rows stay
+written as before, the price slot of `picker-item-parts` its first value column. A variant of the
+item would let two rows of one list disagree; `Ledger` is a `dl` of one value per term, not a list
+to move through. Strings, not a header part: the values need the names to be read with them.
+
+**Layout.** CSS subgrid. The list is a grid of the cursor's column, the name's (`minmax(0,1fr)`)
+and one `auto` column per value. Every row, group and the header take those columns as their own,
+so a column is as wide as its widest value, with no measuring in script. No gap between columns
+at any depth: a subgrid with a gap of its own shifts its cells by half the difference, which put
+the header 2px off. The cursor's room is its margin and a value's room is its padding instead. In
+columns a row sorts its own children into a name cell (the text and its `Tag`), its values and
+then its details. A row with no values (Back, a setting) spans the whole width.
+
+**Reading.** Each value reads its column's name first, as a hidden word (`Tonic Price 25g Owned 3`).
+The header row is `aria-hidden`, so it is not counted as an item of the list. A list whose items
+read their names was chosen over a table: the list's keys, cursor and sounds stay the same.
+
+**Measured** (Storybook, Chrome): the name, Price and Owned cells match the header's to the pixel
+in every row at 3x, at 1x and on the phone (`tests/visual/picker-columns.spec.ts`). An accent row
+in columns keeps its values in place. The name starts at the same x as in the plain shop.
+
+**Left out.** The header scrolls with the list. Keeping it in place belongs to `window-scroll`.
+`blip`'s docs build already fails on `blip-harness` with `compositions/examples/mood-board.tsx: there
+is no page "compositions"` (since #249). This branch doesn't touch that file.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).

@@ -9,12 +9,38 @@ export const picker = {
       'grid min-h-0 flex-1 content-start gap-joined overflow-y-auto',
       // The native scrollbar is off: the pixel one beside it shows the rest
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-      // A group after other items: room above it
+      // A group after other items: room above it; not right under the
+      // columns' names, which belong to the rows under them
       '*:data-[slot=picker-group]:not-first:mt-regular',
+      '[&>[data-slot=picker-header]+[data-slot=picker-group]]:mt-0',
     ],
+    variants: {
+      /**
+       * In columns: the cursor's, the name's, then one per value
+       * (`--picker-values` of them), each as wide as its widest value.
+       * Every row and group takes the list's columns as its own, so a
+       * value lines up with its column's other values and its header
+       */
+      columned: {
+        true: [
+          'grid-cols-[auto_minmax(0,1fr)_repeat(var(--picker-values),auto)]',
+          // No gap between columns at any depth: a subgrid with a gap of
+          // its own would shift its cells off the header's
+          'gap-x-0',
+          '*:col-span-full *:grid *:grid-cols-subgrid',
+        ],
+      },
+    },
   }),
   /** A group's items, spaced as the menu's */
-  group: cva({ base: 'grid gap-joined' }),
+  group: cva({
+    base: 'grid gap-joined',
+    variants: {
+      columned: {
+        true: 'col-span-full grid-cols-subgrid gap-x-0 *:col-span-full *:grid *:grid-cols-subgrid',
+      },
+    },
+  }),
   /** A setting's row: its name, the value at the end */
   setting: cva({
     base: [
@@ -73,6 +99,17 @@ export const picker = {
     ],
     defaultVariants: { selected: false, stepsShown: true, variant: 'default' },
   }),
+  /**
+   * A row in columns: the cursor in the first, its text across the rest.
+   * No gaps in the columns: the cursor's room is its margin, a value's its
+   * padding, so each counts in its column's width the same in every row
+   */
+  itemColumned: cva({
+    base: [
+      'col-span-full grid grid-cols-subgrid gap-0',
+      '*:data-[slot=cursor]:mr-cursor *:data-cursor-target:col-[2/-1]',
+    ],
+  }),
   /** The cursor: a stepped pixel triangle, in `--bui-px` like every control */
   cursor: cva({
     base: 'text-(--bui-primary) h-[calc(var(--bui-px)*5)] w-[calc(var(--bui-px)*3)] shrink-0 bui-point-right',
@@ -98,6 +135,36 @@ export const picker = {
       // The value ends where a setting's does, every value in a window
       '*:data-[slot=picker-item-value]:-mr-control',
       '*:data-[slot=picker-item-detail]:block *:data-[slot=picker-item-detail]:clear-both',
+    ],
+  }),
+  /**
+   * An item's text in columns, the label or an accent item's call: the
+   * name (and its tag) in the name's column, each value in its own, a
+   * detail a line of its own under them all
+   */
+  columns: cva({
+    base: [
+      'grid grid-cols-subgrid items-baseline',
+      '*:data-[slot=picker-item-name]:min-w-0',
+      '[&>[data-slot=picker-item-name]>[data-slot=tag]]:ml-related',
+      // A row with no values (Back, a setting): its name across them all
+      'not-has-[>[data-slot=picker-item-value]]:*:data-[slot=picker-item-name]:col-span-full',
+      '*:data-[slot=picker-item-value]:pl-regular *:data-[slot=picker-item-value]:text-right',
+      // The last column's value ends where a setting's does, every value
+      // in a window
+      '*:data-last-column:-mr-control',
+      '*:data-[slot=picker-item-detail]:col-span-full',
+    ],
+  }),
+  /**
+   * The columns' names over the list, quieter than the rows, each over its
+   * column: the name's left, a value's right, as its values are
+   */
+  header: cva({
+    base: [
+      'items-baseline px-control text-[0.85em] text-(--bui-muted)',
+      '*:not-first:not-nth-2:pl-regular *:not-first:not-nth-2:text-right',
+      '*:last:not-nth-2:-mr-control',
     ],
   }),
   /** A second line: quieter and smaller, never the loud one's weight */
