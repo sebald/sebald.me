@@ -156,6 +156,7 @@ export {
   PickerItemDetail,
   type PickerItemPartProps,
   PickerItemValue,
+  type PickerItemValueProps,
   type PickerItemProps,
   type PickerProps,
   PickerSetting,

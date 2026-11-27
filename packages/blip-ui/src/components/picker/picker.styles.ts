@@ -1,5 +1,5 @@
 import { type ClassValue, cva } from '../../utils/styles';
-import type { PickerItemProps } from './picker';
+import type { PickerItemProps, PickerItemValueProps } from './picker';
 
 /** The picker's parts, and the rail and description box beside it */
 export const picker = {
@@ -103,7 +103,20 @@ export const picker = {
   /** A second line: quieter and smaller, never the loud one's weight */
   detail: cva({ base: 'text-[0.85em] font-normal text-(--bui-muted)' }),
   /** A value at the row's end: its figures keep their width */
-  value: cva({ base: 'tabular-nums' }),
+  value: cva({
+    base: 'tabular-nums',
+    variants: {
+      variant: {
+        default: '',
+        // Only the colour: a smaller float would leave the name's baseline
+        progress: 'text-(--bui-muted)',
+      } satisfies Record<
+        NonNullable<PickerItemValueProps['variant']>,
+        ClassValue
+      >,
+    },
+    defaultVariants: { variant: 'default' },
+  }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
     base: 'ml-related flex w-[calc(var(--bui-px)*5)] shrink-0 flex-col items-center',

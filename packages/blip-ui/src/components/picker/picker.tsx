@@ -563,15 +563,29 @@ export const PickerItemDetail = ({
   </span>
 );
 
+export interface PickerItemValueProps extends PickerItemPartProps {
+  /**
+   * What it is: `default`, what the row is about (a price, a play time),
+   * in the row's colour; `progress`, how far along it is (`3/8`), muted,
+   * so the name stays what the eye reads first
+   * @default 'default'
+   */
+  variant?: 'default' | 'progress';
+}
+
 /**
  * A value at the row's end, where every value in a window ends: a price,
  * a play time, a count. Figures keep their width as they change
  */
 export const PickerItemValue = ({
+  variant,
   className,
   children,
-}: PickerItemPartProps) => (
-  <span data-slot="picker-item-value" className={styles.value({ className })}>
+}: PickerItemValueProps) => (
+  <span
+    data-slot="picker-item-value"
+    className={styles.value({ variant, className })}
+  >
     <Gap />
     {children}
   </span>
