@@ -9,8 +9,10 @@ export const picker = {
       'grid min-h-0 flex-1 content-start gap-joined overflow-y-auto',
       // The native scrollbar is off: the pixel one beside it shows the rest
       '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-      // A group after other items: room above it
+      // A group after other items: room above it; not right under the
+      // columns' names, which belong to the rows under them
       '*:data-[slot=picker-group]:not-first:mt-regular',
+      '[&>[data-slot=picker-header]+[data-slot=picker-group]]:mt-0',
     ],
     variants: {
       /**
@@ -143,19 +145,16 @@ export const picker = {
   columns: cva({
     base: [
       'grid grid-cols-subgrid items-baseline',
+      '*:data-[slot=picker-item-name]:min-w-0',
+      '[&>[data-slot=picker-item-name]>[data-slot=tag]]:ml-related',
+      // A row with no values (Back, a setting): its name across them all
+      'not-has-[>[data-slot=picker-item-value]]:*:data-[slot=picker-item-name]:col-span-full',
       '*:data-[slot=picker-item-value]:pl-regular *:data-[slot=picker-item-value]:text-right',
-      // The last value ends where a setting's does, every value in a window
-      '[&>[data-slot=picker-item-value]:not(:has(~[data-slot=picker-item-value]))]:-mr-control',
+      // The last column's value ends where a setting's does, every value
+      // in a window
+      '*:data-last-column:-mr-control',
       '*:data-[slot=picker-item-detail]:col-span-full',
     ],
-  }),
-  /** The name's column: the name, a tag after its last word */
-  name: cva({
-    base: 'min-w-0 *:data-[slot=tag]:ml-related',
-    variants: {
-      /** A row with no values (Back, a setting): its name across them all */
-      alone: { true: 'col-span-full' },
-    },
   }),
   /**
    * The columns' names over the list, quieter than the rows, each over its
@@ -163,7 +162,7 @@ export const picker = {
    */
   header: cva({
     base: [
-      'items-baseline px-control pb-joined text-[0.85em] text-(--bui-muted)',
+      'items-baseline px-control text-[0.85em] text-(--bui-muted)',
       '*:not-first:not-nth-2:pl-regular *:not-first:not-nth-2:text-right',
       '*:last:not-nth-2:-mr-control',
     ],

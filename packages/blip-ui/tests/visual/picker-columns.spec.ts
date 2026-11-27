@@ -104,13 +104,16 @@ test('each value is read with its column’s name', async ({ page }) => {
 
 test('a row with no values takes the whole width', async ({ page }) => {
   await page.goto(story(3, 'wide'));
-  const back = page.locator(
-    '[data-slot=picker-item][data-id=back] [data-slot=picker-item-name]',
-  );
-  // One line, not a letter a line in the name's column
-  const height = await back.evaluate(el => el.getBoundingClientRect().height);
-  const line = await back.evaluate(el =>
-    parseFloat(getComputedStyle(el).lineHeight),
-  );
-  expect(height).toBeLessThan(line * 1.5);
+  await page.locator('[data-slot=picker]').waitFor();
+  const { name, price } = await page.evaluate(() => ({
+    name: document
+      .querySelector('[data-id=back] [data-slot=picker-item-name]')!
+      .getBoundingClientRect().right,
+    // The first value column's names, over Price
+    price: document
+      .querySelectorAll('[data-slot=picker-header] > span')[2]!
+      .getBoundingClientRect().right,
+  }));
+  // Across the value columns, not squeezed into the name's
+  expect(name).toBeGreaterThan(price);
 });

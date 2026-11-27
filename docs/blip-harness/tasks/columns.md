@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: N2 # forms and navigation
 depends: [picker-item-parts]
-pr:
+pr: 261
 ---
 
 # `columns`: Column headers for a list with more than one value

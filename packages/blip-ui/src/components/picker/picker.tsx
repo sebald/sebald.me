@@ -160,8 +160,10 @@ interface PickerContextValue {
   columns: readonly string[] | undefined;
 }
 
-/** The name of the column a value sits in, read out before it */
-const ColumnContext = createContext<string | undefined>(undefined);
+/** The column a value sits in: its name, read out before it, and whether it is the last */
+const ColumnContext = createContext<
+  { name: string; last: boolean } | undefined
+>(undefined);
 
 const PickerContext = createContext<PickerContextValue | null>(null);
 
@@ -227,6 +229,7 @@ export const Picker = ({
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
   const titleId = use(TitleIdContext);
+  const hasColumns = Boolean(columns?.length);
 
   /** The items' ids in the order the list shows them */
   const order = () =>
@@ -326,16 +329,16 @@ export const Picker = ({
         overflow,
         scrollTop: scroll.top,
         listRef,
-        columns,
+        columns: hasColumns ? columns : undefined,
       }}
     >
       <div ref={rootRef} data-slot="picker" className={styles.root()}>
         <ul
           ref={listRef}
-          className={styles.menu({ columned: Boolean(columns), className })}
+          className={styles.menu({ columned: hasColumns, className })}
           style={
-            columns
-              ? ({ '--picker-values': columns.length - 1 } as CSSProperties)
+            hasColumns
+              ? ({ '--picker-values': columns!.length - 1 } as CSSProperties)
               : undefined
           }
           aria-label={label}
@@ -409,16 +412,20 @@ const inColumns = (children: ReactNode, columns: readonly string[]) => {
   const name = all.filter(
     child => !isA(child, PickerItemValue) && !isA(child, PickerItemDetail),
   );
+  const count = columns.length - 1;
+  // A value for every column, in its order: one more has no column
+  if (building() && values.length > count)
+    console.error(
+      `Blip UI: a PickerItem with ${values.length} values in a Picker with ${count} value columns. Give the Picker a column for each, or write fewer values; the rest are left out.`,
+    );
   return (
     <>
-      <span
-        data-slot="picker-item-name"
-        className={styles.name({ alone: values.length === 0 })}
-      >
-        {name}
-      </span>
-      {values.map((value, at) => (
-        <ColumnContext key={at} value={columns[at + 1]}>
+      <span data-slot="picker-item-name">{name}</span>
+      {values.slice(0, count).map((value, at) => (
+        <ColumnContext
+          key={at}
+          value={{ name: columns[at + 1]!, last: at === count - 1 }}
+        >
           {value}
         </ColumnContext>
       ))}
@@ -664,11 +671,12 @@ export const PickerItemValue = ({
   return (
     <span
       data-slot="picker-item-value"
+      data-last-column={column?.last || undefined}
       className={styles.value({ variant, className })}
     >
       <Gap />
       {/* In columns, the column's name before it: `Price 25g` */}
-      {column && <span className="sr-only">{column} </span>}
+      {column && <span className="sr-only">{column.name} </span>}
       {children}
     </span>
   );
