@@ -24,7 +24,12 @@ export const text = {
           'animate-bui-blink motion-reduce:animate-none',
         ],
       } satisfies Record<NonNullable<TextProps['variant']>, ClassValue>,
+      size: {
+        default: '',
+        /** A line under what it belongs to, saying less */
+        small: 'text-[0.85em]',
+      } satisfies Record<NonNullable<TextProps['size']>, ClassValue>,
     },
-    defaultVariants: { variant: 'hint' },
+    defaultVariants: { variant: 'hint', size: 'default' },
   }),
 };

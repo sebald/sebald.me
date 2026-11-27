@@ -5,12 +5,17 @@ import { Heading, ScreenTitle, Text } from './text';
 const meta = {
   title: 'Components/Text',
   component: Text,
-  args: { children: 'Pick your counter.', variant: 'hint' },
+  args: { children: 'Pick your counter.', variant: 'hint', size: 'default' },
   argTypes: {
     variant: {
       control: 'inline-radio',
       options: ['hint', 'call'],
       table: { defaultValue: { summary: 'hint' } },
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['default', 'small'],
+      table: { defaultValue: { summary: 'default' } },
     },
     children: { control: 'text' },
   },
@@ -26,7 +31,7 @@ const Label = ({ children }: { children: string }) => (
   <span className="text-[0.75em] text-(--bui-dim)">{children}</span>
 );
 
-/** The letters by role side by side: a heading, both variants of Text, a screen's title */
+/** The letters by role side by side: a heading, both variants of Text and its small size, a screen's title */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
@@ -35,6 +40,8 @@ export const Overview: Story = {
       <Heading>Your run as the PM</Heading>
       <Label>hint</Label>
       <Text>Pick your counter.</Text>
+      <Label>hint, small</Label>
+      <Text size="small">Whose side are you on today?</Text>
       <Label>call</Label>
       <Text variant="call">Press Enter to play</Text>
       <Label>ScreenTitle</Label>

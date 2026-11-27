@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 
+import { text as textStyles } from '../text/text.styles';
 import { field as styles } from './field.styles';
 
 /** How much more a control takes, as it tells its field */
@@ -117,11 +118,14 @@ export const FieldLabel = ({ children, className }: FieldPartProps) => (
   </BaseField.Label>
 );
 
-/** A line that says what to type or in what form, read with the control */
+/**
+ * A line that says what to type or in what form, read with the control:
+ * a hint, small (`Text size="small"`'s letters)
+ */
 export const FieldDescription = ({ children, className }: FieldPartProps) => (
   <BaseField.Description
     data-slot="field-description"
-    className={styles.description({ className })}
+    className={textStyles.text({ size: 'small', className })}
   >
     {children}
   </BaseField.Description>
