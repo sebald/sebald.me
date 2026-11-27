@@ -135,7 +135,7 @@ export const TwoMenus: Story = {
   render: () => <TwoMenusExample />,
 };
 
-/** An item with parts: its name, a detail line each for who gave it and what to do next, a mark */
+/** An item with parts: its name, a detail line each for who gave it and what to do next, a tag */
 export const QuestLog: Story = {
   name: 'Quest log',
   parameters: { controls: { disable: true } },

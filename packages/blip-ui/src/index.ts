@@ -154,8 +154,6 @@ export {
   PickerGroup,
   PickerItem,
   PickerItemDetail,
-  PickerItemMark,
-  type PickerItemMarkProps,
   type PickerItemPartProps,
   PickerItemValue,
   type PickerItemProps,
@@ -186,6 +184,7 @@ export {
   Tabs,
   type TabsProps,
 } from './components/tabs/tabs';
+export { Tag, type TagProps } from './components/tag/tag';
 export { Form, type FormProps } from './components/form/form';
 export {
   Field,

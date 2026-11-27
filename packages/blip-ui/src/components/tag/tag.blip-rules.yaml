@@ -1,0 +1,14 @@
+page: tag
+rules:
+  - id: C-TAG-1
+    text: Say what a tag marks in its word (`New`, `Done`); its colour only repeats it, never says it alone.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html
+  - id: C-TAG-2
+    text: Put a tag in the line of the name it marks and leave its room to the container (a menu row, a tab); don't give it a margin, a size or a colour of your own.
+    markers: [review]
+when-not:
+  - text: A mark drawn over a face or a card, like SHIPPED, is a Stamp, not a Tag.
+    use: stamp
+  - text: A number at a row's end is a value (PickerItemValue, a Readout), not a Tag.
+    use: picker

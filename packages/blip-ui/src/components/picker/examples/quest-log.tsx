@@ -1,12 +1,7 @@
 import { Actions, Title } from '../../parts/parts';
+import { Tag } from '../../tag/tag';
 import { Legend, Window } from '../../window/window';
-import {
-  Picker,
-  PickerGroup,
-  PickerItem,
-  PickerItemDetail,
-  PickerItemMark,
-} from '../picker';
+import { Picker, PickerGroup, PickerItem, PickerItemDetail } from '../picker';
 
 const noop = () => {};
 
@@ -29,7 +24,7 @@ export function QuestLog() {
               onSelect={noop}
             >
               The broken ferry
-              <PickerItemMark>New</PickerItemMark>
+              <Tag>New</Tag>
               <PickerItemDetail>From Ferrywoman Maud</PickerItemDetail>
               <PickerItemDetail>Next: buy rope at the market</PickerItemDetail>
             </PickerItem>
@@ -51,7 +46,7 @@ export function QuestLog() {
                 onSelect={noop}
               >
                 The lost cat
-                <PickerItemMark variant="done">Done</PickerItemMark>
+                <Tag variant="done">Done</Tag>
                 <PickerItemDetail>From Old Bess</PickerItemDetail>
               </PickerItem>
             </PickerGroup>

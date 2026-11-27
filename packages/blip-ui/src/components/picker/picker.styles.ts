@@ -1,5 +1,5 @@
 import { type ClassValue, cva } from '../../utils/styles';
-import type { PickerItemMarkProps, PickerItemProps } from './picker';
+import type { PickerItemProps } from './picker';
 
 /** The picker's parts, and the rail and description box beside it */
 export const picker = {
@@ -86,14 +86,14 @@ export const picker = {
   }),
   /**
    * What holds an item's text, the label or an accent item's blinking
-   * call: holding parts, a block of text. The mark follows the name's last
+   * call: holding parts, a block of text. A tag follows the name's last
    * word, the value floats to the end of that line, the detail is a line
    * of its own under them. Without parts it stays plain text
    */
   parts: cva({
     base: [
-      'has-[>[data-slot^=picker-item-]]:flow-root',
-      '*:data-[slot=picker-item-mark]:inline-block *:data-[slot=picker-item-mark]:ml-related',
+      'has-[>[data-slot^=picker-item-],>[data-slot=tag]]:flow-root',
+      '*:data-[slot=tag]:ml-related',
       '*:data-[slot=picker-item-value]:float-right *:data-[slot=picker-item-value]:pl-regular',
       // The value ends where a setting's does, every value in a window
       '*:data-[slot=picker-item-value]:-mr-control',
@@ -104,19 +104,6 @@ export const picker = {
   detail: cva({ base: 'text-[0.85em] font-normal text-(--bui-muted)' }),
   /** A value at the row's end: its figures keep their width */
   value: cva({ base: 'tabular-nums' }),
-  mark: cva({
-    base: 'text-[0.75em] font-semibold',
-    variants: {
-      variant: {
-        new: 'text-(--bui-secondary)',
-        done: 'text-(--bui-muted)',
-      } satisfies Record<
-        NonNullable<PickerItemMarkProps['variant']>,
-        ClassValue
-      >,
-    },
-    defaultVariants: { variant: 'new' },
-  }),
   /** The rail beside a list that does not fit: an arrow, a track, an arrow */
   rail: cva({
     base: 'ml-related flex w-[calc(var(--bui-px)*5)] shrink-0 flex-col items-center',

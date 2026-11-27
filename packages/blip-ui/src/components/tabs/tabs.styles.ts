@@ -71,7 +71,13 @@ export const tabs = {
     base: 'absolute bottom-0 hidden size-(--t-ring) group-data-[active]:block',
   }),
   /** The focus mark is an underline of the label (`bui-focus-line`) */
-  label: cva({ base: 'relative group-focus-visible:bui-focus-line' }),
+  label: cva({
+    base: [
+      'relative group-focus-visible:bui-focus-line',
+      // A tag after the name, in its line
+      '*:data-[slot=tag]:ml-related',
+    ],
+  }),
   panel: cva({
     base: [
       'relative flex min-h-0 flex-1 flex-col outline-none',
