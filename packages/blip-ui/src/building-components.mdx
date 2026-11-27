@@ -284,7 +284,7 @@ import from a story and no story repeats an example's JSX. Pattern pages
 (`src/patterns/<name>/<name>.mdx`) are the same, with their examples in
 `src/patterns/<name>/examples/`. A sheet that is only for checking the kit
 (`compositions/mood-board.tsx`) has no page and is no example: it sits next
-to its story, outside `examples/`, since every `examples/` folder needs a
+to its story, outside `examples/` and out of the build (`tsconfig.build.json`), since every `examples/` folder needs a
 page of the same name (CI builds the docs and fails on one without).
 
 ## Checked by tests
