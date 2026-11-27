@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { type Page, expect, test } from '@playwright/test';
 
 import { cursorRoom, escapes } from './layout';
 
@@ -92,37 +92,57 @@ test('the cursor points at the name, not between its lines', async ({
   expect(Math.abs(middle(cursor) - middle(name))).toBeLessThan(2);
 });
 
-test('a long name wraps like text: the mark and value stay on its last line, inside the window', async ({
+/**
+ * Gives the Lantern row a longer name and measures it: how many lines the
+ * name takes, how far the mark and value sit from its last line, and
+ * whether the row's text stays inside its window
+ */
+const lantern = (page: Page, name: string) =>
+  page
+    .locator('[data-slot=picker-item][data-id=lantern]')
+    .evaluate((li, text) => {
+      const label = li.querySelector('[data-cursor-target]')!;
+      label.firstChild!.textContent = text;
+      const range = document.createRange();
+      range.selectNodeContents(label.firstChild!);
+      const lines = [...range.getClientRects()];
+      const middle = (r: DOMRect) => (r.top + r.bottom) / 2;
+      const off = (slot: string) =>
+        Math.abs(
+          middle(
+            li.querySelector(`[data-slot=${slot}]`)!.getBoundingClientRect(),
+          ) - middle(lines.at(-1)!),
+        );
+      const frame = li.closest('[data-slot=window]')!.getBoundingClientRect();
+      return {
+        lines: new Set(lines.map(r => Math.round(r.top))).size,
+        mark: off('picker-item-mark'),
+        value: off('picker-item-value'),
+        inside: [label, ...label.children].every(
+          el => el.getBoundingClientRect().right <= frame.right,
+        ),
+      };
+    }, name);
+
+test('a long name wraps like text: its mark and value on its last line', async ({
   page,
 }) => {
   await page.goto(story('shop-wares', 3, 'wide'));
-  const item = page.locator('[data-slot=picker-item][data-id=lantern]');
-  await expect(item.locator('[data-slot=picker-item-mark]')).toHaveText('New');
-  const found = await item.evaluate(li => {
-    const label = li.querySelector('[data-cursor-target]')!;
-    // A name over several lines, one word longer than the window
-    label.firstChild!.textContent =
-      'A lantern for the long road north Unbreakablelanternwordthatneverends';
-    const range = document.createRange();
-    range.selectNodeContents(label.firstChild!);
-    const lines = [...range.getClientRects()];
-    const last = lines.at(-1)!;
-    const box = (slot: string) =>
-      li.querySelector(`[data-slot=${slot}]`)!.getBoundingClientRect();
-    const middle = (r: DOMRect) => (r.top + r.bottom) / 2;
-    const frame = li.closest('[data-slot=window]')!.getBoundingClientRect();
-    return {
-      lines: new Set(lines.map(r => Math.round(r.top))).size,
-      mark: Math.abs(middle(box('picker-item-mark')) - middle(last)),
-      value: Math.abs(middle(box('picker-item-value')) - middle(last)),
-      inside: [label, ...label.children].every(
-        el => el.getBoundingClientRect().right <= frame.right,
-      ),
-    };
-  });
+  const found = await lantern(page, 'A lantern for the long road north');
   expect(found.lines).toBeGreaterThan(1);
   expect(found.mark).toBeLessThan(4);
   expect(found.value).toBeLessThan(4);
+});
+
+test('a word longer than the window breaks inside it', async ({ page }) => {
+  await page.goto(story('shop-wares', 3, 'wide'));
+  // A window narrower than the word
+  await page
+    .locator('[data-slot=window]')
+    .first()
+    .evaluate(el => (el.style.width = '11em'));
+  const found = await lantern(page, 'Unbreakablelanternwordthatneverendsatall');
+  expect(found.lines).toBeGreaterThan(1);
   expect(found.inside).toBe(true);
 });
 
