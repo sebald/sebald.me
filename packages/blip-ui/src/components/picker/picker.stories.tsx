@@ -4,6 +4,7 @@ import { InAWindow as InAWindowExample } from './examples/in-a-window';
 import { QuestLog as QuestLogExample } from './examples/quest-log';
 import { SaveSlots as SaveSlotsExample } from './examples/save-slots';
 import { ScrollingList as ScrollingListExample } from './examples/scrolling-list';
+import { ShopColumns as ShopColumnsExample } from './examples/shop-columns';
 import { ShopWares as ShopWaresExample } from './examples/shop-wares';
 import { TwoMenus as TwoMenusExample } from './examples/two-menus';
 import { Picker, PickerItem } from './picker';
@@ -154,4 +155,11 @@ export const ShopWares: Story = {
   name: 'Shop wares',
   parameters: { controls: { disable: true } },
   render: () => <ShopWaresExample />,
+};
+
+/** Two values a row, Price and Owned, lined up under the columns' names */
+export const ShopColumns: Story = {
+  name: 'Shop in columns',
+  parameters: { controls: { disable: true } },
+  render: () => <ShopColumnsExample />,
 };

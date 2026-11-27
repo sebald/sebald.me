@@ -114,6 +114,34 @@ A count of how far along (`3/8` colleagues, `12/60` collected) is a
 a detail is, so the name stays what the eye reads first. A price or a play
 time is the default, in the row's colour.
 
+### Columns
+
+Where a row has more than one value, a ware's price and how many the player
+owns, the `Picker`'s `columns` name them: the name's column first, then one
+per `PickerItemValue`, in the order a row writes its values. A header row
+over the list says the names, quieter than the rows, and each value lines
+up under its own, as wide as the column's widest, so the eye runs down a
+column as it does in a shop's ledger. The rows are written as before;
+nothing in them is a grid of their own. A row with no values (Back) takes
+the whole width.
+
+```tsx
+<Picker columns={['Item', 'Price', 'Owned']}>
+  <PickerItem id="tonic" onSelect={buy}>
+    Tonic
+    <PickerItemValue>25g</PickerItemValue>
+    <PickerItemValue>3</PickerItemValue>
+  </PickerItem>
+</Picker>
+```
+
+<Canvas of={PickerStories.ShopColumns} />
+
+A screen reader hears each value with its column's name (`Tonic Price
+25g Owned 3`), so the header row is for the eye only. One value a row
+needs no columns: it sits at the row's end, and the window's title says
+what it is (`Wares · 30g`).
+
 ### Menus side by side
 
 Menus side by side share the keys: the one the player last clicked or
@@ -184,6 +212,9 @@ picked, `back` for a `back` item and `bump` for a disabled one.
 - A `<ul>` named by its window's or dialog's `Title` (`aria-labelledby`),
   or by `label` where it has one, with a button per row; the current one has
   `aria-current`, a disabled one `aria-disabled`
+- In columns each value is read with its column's name before it
+  (`Price 25g`); the header row is hidden from assistive technology, so it
+  is not read as an item of the list
 - The note is an `aria-live` region
 - The focus mark (`foundations/focus.mdx`) is the cursor, always in the
   primary colour (10.51:1 on the window): Tab puts the cursor on the row it
