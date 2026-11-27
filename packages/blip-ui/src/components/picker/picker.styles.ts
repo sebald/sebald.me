@@ -3,7 +3,22 @@ import type { PickerItemProps, PickerItemValueProps } from './picker';
 
 /** The picker's parts, and the rail and description box beside it */
 export const picker = {
-  root: cva({ base: 'flex min-h-0' }),
+  root: cva({
+    base: 'flex min-h-0',
+    variants: {
+      /** With the cursor's place under the list: the list and its rail, then it */
+      positioned: { true: 'flex-col' },
+    },
+  }),
+  /** The list and its rail, over the position */
+  body: cva({ base: 'flex min-h-0 flex-1' }),
+  /**
+   * The cursor's place, `3 of 12`: quiet and small, at the list's end
+   * where values end, its figures keeping their width as it changes
+   */
+  position: cva({
+    base: 'm-0 mt-related text-right text-[0.85em] text-(--bui-muted) tabular-nums',
+  }),
   menu: cva({
     base: [
       'grid min-h-0 flex-1 content-start gap-joined overflow-y-auto',
