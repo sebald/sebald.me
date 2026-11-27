@@ -61,8 +61,6 @@ export const field = {
       'opacity-0 [@media(hover:hover),(pointer:fine)]:group-has-[:focus-visible]/field:opacity-100',
     ],
   }),
-  /** What to type or in what form, small and muted */
-  description: cva({ base: 'm-0 text-[0.75em] text-(--bui-muted)' }),
   /** What is wrong, in words and red */
   error: cva({ base: 'm-0 text-[0.85em] text-(--bui-danger-light)' }),
   /**

@@ -13,12 +13,13 @@ them from the screen, never in CSS pixels.
 <Canvas of={TextStories.Default} />
 <Controls of={TextStories.Default} />
 
-| Role                  | Colour          | Use                                                                |
-| --------------------- | --------------- | ------------------------------------------------------------------ |
-| `Heading`             | `--bui-heading` | The title inside a window, a name; an `h2` or `h3`                 |
-| `Text`                | `--bui-muted`   | A hint: a prompt over options, a blurb; a paragraph                |
-| `Text variant="call"` | `--bui-primary` | The call to act right now, blinking; inline                        |
-| `ScreenTitle`         | `--bui-primary` | A menu screen's title along the stage's top, in the bitmap letters |
+| Role                  | Colour          | Use                                                                                                         |
+| --------------------- | --------------- | ----------------------------------------------------------------------------------------------------------- |
+| `Heading`             | `--bui-heading` | The title inside a window, a name; an `h2` or `h3`                                                          |
+| `Text`                | `--bui-muted`   | A hint: a prompt over options, a blurb; a paragraph                                                         |
+| `Text variant="call"` | `--bui-primary` | The call to act right now, blinking; inline                                                                 |
+| `Text size="small"`   | as its variant  | A line under what it belongs to, saying less: a blurb, a field's description, a count under a meter; 0.85em |
+| `ScreenTitle`         | `--bui-primary` | A menu screen's title along the stage's top, in the bitmap letters                                          |
 
 `Heading` and `ScreenTitle` are components of their own because they do
 something else: a heading is in the page's outline, a screen title is drawn
@@ -36,6 +37,9 @@ are both a line of text, so they are variants of one.
 - **Do** keep a screen title to a few words; the blurb says the rest. On
   the tall stage its letters are `medium` (three stage pixels a letter
   pixel), so a title of up to 17 characters fits.
+- **Do** make a line that says less `size="small"`, never a size of its
+  own (`className="text-[0.8em]"`): every blurb and description is the
+  same size.
 - **Don't** colour text yourself. If a role is missing, it's a token to add.
 
 ## Motion

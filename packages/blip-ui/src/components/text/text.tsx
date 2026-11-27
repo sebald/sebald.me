@@ -68,7 +68,7 @@ export const ScreenTitle = ({
     >
       <h2 className={styles.titleText()}>{children}</h2>
       <BitmapText size={tall ? 'medium' : 'default'}>{children}</BitmapText>
-      {blurb && <Text className="text-[0.85em]">{blurb}</Text>}
+      {blurb && <Text size="small">{blurb}</Text>}
     </header>
   );
 };
@@ -83,11 +83,19 @@ export interface TextProps extends BaseProps {
    * @default 'hint'
    */
   variant?: 'hint' | 'call';
+  /**
+   * How much it says: `default`, the line itself; `small`, a line under
+   * something it belongs to, saying less (a blurb under a title, a
+   * field's description, a count under a meter), at 0.85em
+   * @default 'default'
+   */
+  size?: 'default' | 'small';
 }
 
 /** A line of text by what it is for: a hint, or the call to act */
 export const Text = ({
   variant = 'hint',
+  size,
   className,
   style,
   children,
@@ -96,7 +104,7 @@ export const Text = ({
   return (
     <Tag
       data-slot="text"
-      className={styles.text({ variant, className })}
+      className={styles.text({ variant, size, className })}
       style={style}
     >
       {children}
