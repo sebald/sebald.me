@@ -56,6 +56,13 @@ rules:
           <PickerItemValue>3</PickerItemValue>
         </PickerItem>
       </Picker>
+  - id: C-PICKER-8
+    text: Give a Picker that scrolls, or whose count the player needs, `position` for the cursor's place (`3 of 12`); never a Readout or text of your own that counts the rows. A list that fits its window needs none.
+    markers: [review]
+    fix: |
+      <Picker label="Colleagues" position>
+        <PickerItem id="ada" onSelect={pick}>Ada</PickerItem>
+      </Picker>
 when-not:
   - text: Values the player fills in or sets on one screen, saved together, are fields in a Form, not a Picker.
     use: form

@@ -76,6 +76,20 @@ A list that is taller than its room scrolls, keeps the cursor in view and
 shows the rail. In a window in a `Screen` the room is what the stage has
 left (`Screen`, a list longer than the stage).
 
+The rail shows how far down the list is, not which item the cursor is on.
+For a list that long, `position` adds the cursor's place under the list at
+its end (`3 of 12`): quiet and small, following the cursor, wrapping with
+it. It counts every item, a disabled one and those in groups too. A list
+that fits its window needs none, since every row is in sight: use it
+where the list scrolls, or where the player needs the count (a roster, an
+inventory page).
+
+```tsx
+<Picker label="Colleagues" position>
+  …
+</Picker>
+```
+
 <Canvas of={PickerStories.ScrollingList} />
 
 ### An item with parts
@@ -220,6 +234,9 @@ picked, `back` for a `back` item and `bump` for a disabled one.
 - In columns each value is read with its column's name before it
   (`Price 25g`); the header row is hidden from assistive technology, so it
   is not read as an item of the list
+- Each row carries its place in the whole list, groups and all
+  (`aria-posinset`, `aria-setsize`), so a screen reader says `3 of 12` with
+  its name; the position under the list is for the eye only
 - The note is an `aria-live` region
 - The focus mark (`foundations/focus.mdx`) is the cursor, always in the
   primary colour (10.51:1 on the window): Tab puts the cursor on the row it

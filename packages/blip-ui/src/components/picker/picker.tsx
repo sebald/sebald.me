@@ -158,6 +158,8 @@ interface PickerContextValue {
   listRef: RefObject<HTMLUListElement | null>;
   /** The columns' names, the name's first, where the list has columns */
   columns: readonly string[] | undefined;
+  /** The items' ids in the list's order, across its groups: each row's place in it */
+  ids: readonly string[];
 }
 
 /** The column a value sits in: its name, read out before it, and whether it is the last */
@@ -171,6 +173,25 @@ const usePicker = () => {
   const context = use(PickerContext);
   if (!context) throw new Error('A PickerItem goes in a Picker');
   return context;
+};
+
+/**
+ * The cursor's place in the list, `3 of 12`: for the eye, as each row
+ * carries its own place for a screen reader (`aria-posinset`)
+ */
+const Position = ({
+  ids,
+  current,
+}: {
+  ids: readonly string[];
+  current: string | undefined;
+}) => {
+  const at = current === undefined ? -1 : ids.indexOf(current);
+  return (
+    <p aria-hidden data-slot="picker-position" className={styles.position()}>
+      {at < 0 ? '' : `${at + 1} of ${ids.length}`}
+    </p>
+  );
 };
 
 export interface PickerProps {
@@ -198,6 +219,13 @@ export interface PickerProps {
    * reader hears each value with its column's name (`Tonic Price 25g`)
    */
   columns?: readonly string[];
+  /**
+   * Where the cursor is, `3 of 12`, under the list at its end: for a list
+   * longer than its window, whose rail shows how far down it is but not
+   * which. A short list needs none
+   * @default false
+   */
+  position?: boolean;
   /** On the list itself */
   className?: string;
 }
@@ -217,6 +245,7 @@ export const Picker = ({
   active = true,
   label,
   columns,
+  position = false,
   className,
 }: PickerProps) => {
   const play = useFeedback();
@@ -251,6 +280,19 @@ export const Picker = ({
         'Blip UI: a Picker with no name. Give its window a Title (it names the menu), or the Picker a label where nothing names it.',
       );
   }, [label, titleId]);
+
+  // The items in the list's order, kept for each row's place in it (a
+  // screen reader's `3 of 12`, across groups) and for the position
+  const [ids, setIds] = useState<readonly string[]>([]);
+  useLayoutEffect(() => {
+    const next = order();
+    // Synced with the DOM's order, which is there only after a render; set
+    // only when it changed, so this settles at once
+    // oxlint-disable-next-line react/set-state-in-effect
+    setIds(previous =>
+      previous.join('\n') === next.join('\n') ? previous : next,
+    );
+  }, [children]);
 
   // The cursor on an item that is there: the first enabled one at first,
   // and again when its item goes
@@ -316,6 +358,41 @@ export const Picker = ({
     }
   }, active);
 
+  // The list and the rail beside it: under it the position, where shown
+  const list = (
+    <>
+      <ul
+        ref={listRef}
+        className={styles.menu({ columned: hasColumns, className })}
+        style={
+          hasColumns
+            ? ({ '--picker-values': columns!.length - 1 } as CSSProperties)
+            : undefined
+        }
+        aria-label={label}
+        aria-labelledby={label === undefined ? titleId : undefined}
+      >
+        {hasColumns && (
+          // For the eye: each value says its column's name itself, and
+          // the names are no item of the list
+          <li
+            aria-hidden
+            role="presentation"
+            data-slot="picker-header"
+            className={styles.header()}
+          >
+            <span />
+            {columns!.map((name, at) => (
+              <span key={at}>{name}</span>
+            ))}
+          </li>
+        )}
+        {children}
+      </ul>
+      {overflow && <ScrollRail scroll={scroll} />}
+    </>
+  );
+
   return (
     <PickerContext
       value={{
@@ -330,36 +407,22 @@ export const Picker = ({
         scrollTop: scroll.top,
         listRef,
         columns: hasColumns ? columns : undefined,
+        ids,
       }}
     >
-      <div ref={rootRef} data-slot="picker" className={styles.root()}>
-        <ul
-          ref={listRef}
-          className={styles.menu({ columned: hasColumns, className })}
-          style={
-            hasColumns
-              ? ({ '--picker-values': columns!.length - 1 } as CSSProperties)
-              : undefined
-          }
-          aria-label={label}
-          aria-labelledby={label === undefined ? titleId : undefined}
-        >
-          {columns && (
-            // For the eye: each value says its column's name itself
-            <li
-              aria-hidden
-              data-slot="picker-header"
-              className={styles.header()}
-            >
-              <span />
-              {columns.map(name => (
-                <span key={name}>{name}</span>
-              ))}
-            </li>
-          )}
-          {children}
-        </ul>
-        {overflow && <ScrollRail scroll={scroll} />}
+      <div
+        ref={rootRef}
+        data-slot="picker"
+        className={styles.root({ positioned: position })}
+      >
+        {position ? (
+          <>
+            <div className={styles.body()}>{list}</div>
+            <Position ids={ids} current={current} />
+          </>
+        ) : (
+          list
+        )}
       </div>
     </PickerContext>
   );
@@ -498,12 +561,21 @@ const Row = ({
   const marked =
     isCurrent && !picker.resting && (!picker.touch || Boolean(note));
 
+  const at = picker.ids.indexOf(id);
+
   const { columns } = picker;
   const parts = columns ? inColumns(children, columns) : children;
   const placed = columns ? styles.columns() : styles.parts();
 
   return (
-    <li ref={rowRef} data-slot="picker-item" data-id={id}>
+    <li
+      ref={rowRef}
+      data-slot="picker-item"
+      data-id={id}
+      // Its place in the whole list, groups and all, read with its name
+      aria-posinset={at >= 0 ? at + 1 : undefined}
+      aria-setsize={at >= 0 ? picker.ids.length : undefined}
+    >
       <button
         type="button"
         aria-disabled={disabled || undefined}
