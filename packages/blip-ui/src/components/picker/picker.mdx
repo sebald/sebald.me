@@ -123,8 +123,10 @@ over the list says the names, quieter than the rows, and each value lines
 up under its own, as wide as the column's widest, so the eye runs down a
 column as it does in a shop's ledger. The rows are written as before;
 nothing in them is a grid of their own, and their parts are the item's own
-children, not wrapped. A row's values fill the columns in order: one with
-fewer leaves the last empty, never shifted, and one with more than there are
+children, not wrapped. A row's values fill the columns in order, by
+place, not by name: a row writes every value, one it has none for as `–`
+(`<PickerItemValue>–</PickerItemValue>`), so the next stays under its own
+name. One with fewer leaves the last columns empty, and one with more than there are
 columns is refused while building (the rest are left out). A row with no
 values (Back, a `PickerSetting`) takes the whole width.
 
