@@ -20,6 +20,15 @@ rules:
     text: Do not put a Screen inside a Window or another Screen.
     source: task screen-layout, candidate rule
     markers: [review]
+  - id: C-SCREEN-6
+    text: Put two windows side by side with variant="split", the one read first written first; never a flex row, a grid or a breakpoint of your own around them.
+    markers: [review]
+    fix: |
+      <Screen variant="split">
+        <ScreenTitle>Shop</ScreenTitle>
+        <Window>…</Window>
+        <Window>…</Window>
+      </Screen>
 when-not:
   - text: A question or options that interrupt a screen are a Dialog, which covers the stage itself.
     use: dialog

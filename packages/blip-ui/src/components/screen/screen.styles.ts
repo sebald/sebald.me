@@ -21,6 +21,18 @@ export const screen = {
         default: '',
         /** One group in the middle, its text centred */
         centered: 'items-center justify-center text-center',
+        /**
+         * Two windows: side by side on the wide stage, as tall as the room
+         * under the title, each its own column; upright, one above the
+         * other as the column has them. Each keeps its own title, legend
+         * and keys, and its list scrolls in its own room
+         */
+        split: [
+          'grid grid-cols-2 grid-rows-[minmax(0,1fr)] gap-x-section',
+          'has-[>[data-slot=screen-title]]:grid-rows-[auto_minmax(0,1fr)]',
+          '*:data-[slot=screen-title]:col-span-full',
+          'tall:flex',
+        ],
       } satisfies Record<NonNullable<ScreenProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'default' },

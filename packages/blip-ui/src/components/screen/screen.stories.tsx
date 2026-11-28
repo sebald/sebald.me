@@ -5,6 +5,7 @@ import { Pixels, usePixels } from '../../providers/pixels';
 import { TALL_BAR } from '../stage/stage';
 import { ScreenTitle, Text } from '../text/text';
 import { Window } from '../window/window';
+import { BuyAndSell as BuyAndSellExample } from './examples/buy-and-sell';
 import { LongList as LongListExample } from './examples/long-list';
 import { Shop as ShopExample } from './examples/shop';
 import { TitleCard as TitleCardExample } from './examples/title-card';
@@ -49,7 +50,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'inline-radio',
-      options: ['default', 'centered'],
+      options: ['default', 'centered', 'split'],
       table: { defaultValue: { summary: 'default' } },
     },
     children: { control: false },
@@ -70,7 +71,7 @@ const onAStage: Story['decorators'] = [
 
 export const Default: Story = { decorators: onAStage };
 
-/** Both variants, and a column with and without a screen's title */
+/** Every variant, and a column with and without a screen's title */
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   decorators: [
@@ -104,6 +105,16 @@ export const Overview: Story = {
           </Window>
         </Screen>
       </Stage>
+      <Stage>
+        <Screen variant="split">
+          <Window>
+            <Text>Two windows: this one first,</Text>
+          </Window>
+          <Window>
+            <Text>this one beside it, or under it upright.</Text>
+          </Window>
+        </Screen>
+      </Stage>
     </>
   ),
 };
@@ -120,6 +131,18 @@ export const LongList: Story = {
   decorators: onAStage,
   parameters: { controls: { disable: true } },
   render: () => <LongListExample />,
+};
+
+/** Two windows, side by side on the wide stage and one above the other upright */
+export const BuyAndSell: Story = {
+  name: 'Buy and sell',
+  // Two menus across a whole stage have no room for their words at 1x,
+  // which a game never shows (under `MIN_SCALE`, 2.25, the stage asks for
+  // a bigger window): `picker-position`'s spec checks it at 2.25 instead
+  tags: ['no-vrt-1x'],
+  decorators: onAStage,
+  parameters: { controls: { disable: true } },
+  render: () => <BuyAndSellExample />,
 };
 
 /** A title card: one group in the middle of the stage */

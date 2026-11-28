@@ -120,6 +120,9 @@ export const InAWindow: Story = {
  * beside it shows where it is, an arrow lit at each end with more
  */
 export const ScrollingList: Story = {
+  // A window on a whole stage, sized in stage pixels: at 1x, under any
+  // game's scale (`MIN_SCALE`, 2.25), its words have no room
+  tags: ['no-vrt-1x'],
   name: 'Scrolling list',
   parameters: { controls: { disable: true } },
   // Upright the window spans the stage and shows more rows

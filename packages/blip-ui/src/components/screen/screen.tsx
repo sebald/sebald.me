@@ -6,10 +6,12 @@ export interface ScreenProps extends PropsWithChildren {
   /**
    * What the screen is: `default`, a column from the top down (a menu, a
    * shop, a list of saves); `centered`, one group in the middle (a title
-   * card, a message)
+   * card, a message); `split`, two windows side by side on the wide stage
+   * and one above the other on the tall (a shop's wares and the bag, two
+   * lists to compare)
    * @default 'default'
    */
-  variant?: 'default' | 'centered';
+  variant?: 'default' | 'centered' | 'split';
   className?: string;
   style?: CSSProperties;
 }
