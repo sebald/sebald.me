@@ -2,7 +2,7 @@
 status: done # todo | doing | done
 step: N2 # forms and navigation
 depends: [screen-layout, window-scroll]
-pr: PENDING
+pr: 265
 ---
 
 # `window-layout`: Windows side by side on the wide stage, stacked on the tall
