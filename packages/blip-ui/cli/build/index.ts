@@ -39,7 +39,7 @@ import { propsSection, readProps } from './props.ts';
 const NOT_SHIPPED = new Set(['building-components']);
 
 /** Pages outside `components/` */
-const FOUNDATIONS = new Set(['introduction', 'hooks']);
+const FOUNDATIONS = new Set(['introduction', 'hooks', 'menus-and-forms']);
 
 const root = process.cwd();
 const src = join(root, 'src');

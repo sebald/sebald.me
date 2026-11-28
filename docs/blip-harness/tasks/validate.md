@@ -54,3 +54,4 @@ Filled in while the task is worked on: what changed, decisions, numbers.
 
 - From `rule-format`: an unknown or unused `check` only warns in `checkSidecars` while no checks
   exist. Once `cli/validate/checks/` does, make both build errors.
+- From `menus-and-forms-guide`: two more named checks, `no-own-arrow-keys` (a `keydown` or `useKeys` handler for an arrow, Enter or Space in a file with a `Picker` or a `Form`) and `tab-untouched` (a positive `tabIndex`, or a handler for Tab). With `window-menu-or-form`, `picker-named-by-title`, `menu-back-item` and `form-back-button`, they are the menu and form checks this task writes.

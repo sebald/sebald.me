@@ -1,0 +1,127 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rule, Rules } from '../../../.storybook/blocks';
+import * as GuideStories from './menus-and-forms.stories';
+
+<Meta title="Guides/Menus and forms" />
+
+# Menus and forms
+
+How a game's menus, settings and forms take input: every window is a menu
+or a form, each job has one control, and the keys work the same on every
+screen. Read it before building a title, an options, a shop or a naming
+screen; each control's own page has the details.
+
+<Canvas of={GuideStories.MenuAndForm} />
+
+## A window is a menu or a form
+
+|                | A menu                                           | A form                                                                           |
+| -------------- | ------------------------------------------------ | -------------------------------------------------------------------------------- |
+| What it is for | Actions and places: Start, Shop, Options, Back   | Values the player fills in or sets, saved together: a name, a class, options     |
+| Built from     | `Title`, one `Picker` in `Actions`, a `Legend`   | `Title`, one `Form` in `Content` (fields, then `Actions` of buttons), a `Legend` |
+| Its name       | The window's `Title` names the list              | The window's `Title`; each field's label names it                                |
+| A choice       | A `PickerSetting` row, stepped by Left and Right | A `Stepper` in a `Field`                                                         |
+| Back           | The last `PickerItem`, `variant="back"`          | A secondary `Button` beside the main one                                         |
+
+Never both in one window: a list next to fields gets its own window or its
+own step.
+
+- <Rule id="C-WINDOW-1" />
+- <Rule id="C-FORM-3" />
+- <Rule id="C-WINDOW-2" />
+
+## Which control for which job
+
+| The player wants to                          | Use                                          | Where                   |
+| -------------------------------------------- | -------------------------------------------- | ----------------------- |
+| Do something or go somewhere                 | `PickerItem`                                 | a menu                  |
+| Change a setting on the spot                 | `PickerSetting`                              | a menu                  |
+| Choose one of several values, On and Off too | `Stepper` (`values={['Off', 'On']}`)         | a form                  |
+| Type a name or a line                        | `TextField`                                  | a form                  |
+| Set a value with a control of your own       | `Field` around it, with a `FieldLabel`       | a form                  |
+| Send or leave a form                         | `Button type="submit"`, a secondary `Button` | a form's `Actions`      |
+| Read a number (gold, HP 42/50)               | `Readout`; rows of numbers a `Ledger`        | anywhere, not a control |
+| Leave a screen                               | Back as above, and Esc                       | every screen            |
+
+There is no switch: a setting that is on or off is a `Stepper` of
+`['Off', 'On']` in a form, a `PickerSetting` in a menu. The `Stepper` and
+`TextField` bring their own `Field`, so their label lines up with the
+others: a label column on the wide stage, above the control on a phone.
+
+- <Rule id="C-STEPPER-1" />
+- <Rule id="C-STEPPER-2" />
+- <Rule id="C-FIELD-1" />
+- <Rule id="C-FORM-1" />
+- <Rule id="C-BUTTON-1" />
+- <Rule id="C-PICKER-4" />
+
+## The keys
+
+The same keys on every screen, by the control the player is on. A game
+writes none of them: the `Picker` and the `Form` handle them, and the game
+gives Esc its screen's back (`useKeys({ Escape: back })`).
+
+| On                        | Up, Down                                | Left, Right            | Enter, Space                         | Esc                             | Tab              |
+| ------------------------- | --------------------------------------- | ---------------------- | ------------------------------------ | ------------------------------- | ---------------- |
+| A menu row (`PickerItem`) | the row above, below; round at the ends | —                      | picks it                             | the screen's back               | the next control |
+| A `PickerSetting`         | the row above, below                    | steps the value        | steps it on                          | the screen's back               | the next control |
+| A form's `Stepper`        | the row above, below; round             | steps the value, round | steps it on (a flip on two values)   | the screen's back               | the next control |
+| A `TextField`             | the row above, below                    | the caret              | Enter sends the form; Space is typed | lets go of the field, then back | the next control |
+| A button in a row         | the row above, below                    | the next button        | presses it                           | the screen's back               | the next control |
+
+- **Round at the ends.** Down from the last row is the first, as a game's
+  menu is (Xbox guideline 112)
+- **The cursor is the focus.** A menu's cursor and a form's focus mark show
+  where the keys go; a move by the keys takes the focus with it, so a
+  screen reader says the row it reaches
+- **Tab is the web's.** It visits every control in reading order, for a
+  keyboard and a screen reader; the arrows are the game's way through
+- **One set of arrows a screen.** Two windows on one screen share them: the
+  one the player last pointed at, tapped or moved the focus into has them,
+  the first until then. A `Dialog` takes them while it is open
+- **Name them.** Each window's `Legend` says its keys, as the keyboard has
+  them; there are no controller buttons yet
+
+- <Rule id="C-PICKER-5" />
+- <Rule id="C-BUTTON-2" />
+- <Rule id="C-FORM-4" />
+
+## Screens in steps
+
+A screen does one thing per window. Where a game needs a list and the
+values of one of its items, it is two steps, or two windows side by side
+(`Screen variant="split"`):
+
+- **A form window**: the values of one thing, saved together
+- **Pick, then edit**: a menu picks the item, a form window edits it
+- **A filtered list**: a search is its own form window, its result the menu
+- **An options screen**: a form window of steppers
+
+## Game guidelines to orient on
+
+A game screen is played with arrow keys or a thumb, where every row is a
+stop for one cursor. Check a screen against these, the game's side first
+and the web's second:
+
+- Xbox Accessibility Guidelines:
+  [112 navigation](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112)
+  (every menu works by direction alone, focus moves in a logical order,
+  lists loop, the same prompts on every screen),
+  [101 text](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101),
+  [102 contrast](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102),
+  [103 additional channels](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/103)
+  (never colour or sound alone)
+- [Game Accessibility Guidelines](https://gameaccessibilityguidelines.com/):
+  a checklist by level for the whole game
+- [Unity](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/script-SelectableNavigation.html),
+  [Godot](https://docs.godotengine.org/en/stable/tutorials/ui/gui_navigation.html)
+  and [Unreal](https://dev.epicgames.com/documentation/en-us/unreal-engine/widget-navigation-in-unreal-engine)
+  navigation: how a direction finds the next control, and that a control
+  using a direction itself keeps it
+- [Game UI Database](https://www.gameuidatabase.com/): real games'
+  settings, shop, inventory and save screens, for what such a screen holds
+- [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/): the
+  roles, names and keys a screen reader needs
+
+<Rules for="menus-and-forms" />

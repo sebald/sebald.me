@@ -1,8 +1,8 @@
 ---
-status: todo # todo | doing | done
+status: done # todo | doing | done
 step: N4 # forms and navigation
 depends: [form-navigation, menu-title, stepper, field]
-pr:
+pr: PENDING
 ---
 
 # `menus-and-forms-guide`: The decisions reach the agents that use Blip
@@ -27,3 +27,33 @@ pr:
 ## Notes
 
 Filled in while the task is worked on.
+
+**Where.** `src/guides/menus-and-forms/` (the page, its sidecar, `examples/menu-and-form.tsx`, a story
+under "Guides/Menus and forms"), a folder so the example has its page by name. The build lists it as
+a foundation (`FOUNDATIONS` in `cli/build/index.ts`). `blip` with no arguments now starts with
+"Building a screen? Start with blip docs menus-and-forms".
+
+**What it says.** A menu and a form side by side in a table (what each is for, its parts, its name,
+its choice control, its Back). Which control for which job, with "there is no switch". The keys as one
+table per control, from `form.mdx`, `picker.mdx`, `stepper.mdx` and `text-field.mdx`: no new
+behaviour. Screens in steps, the four patterns by their names. The game guidelines from
+`building-components.mdx`, worded for a game's screens.
+
+**Rules, no duplicates.** The decisions with a rule already (C-WINDOW-1, C-FORM-1, C-FORM-3, C-FIELD-1,
+C-STEPPER-1/2, C-BUTTON-1/2, C-PICKER-4/5, C-FORM-4) are cited inline (`<Rule id>`), so each decision
+keeps one ID. The sidecar adds the ones no page had: no own arrow keys, Tab left alone, keyboard keys
+in a Legend (no controller hints, Q18), a list beside a form in its own window or step, search as its
+own step, every screen playable by keys alone and by touch alone.
+
+**Checks.** `no-own-arrow-keys` and `tab-untouched` are named, with a fix, and warn "no check yet",
+as every named check does: the runner is [`validate`](validate.md) (step G), which writes a check for
+every name. The criterion "the checks that can be written are" waits for it; the names are listed in
+its notes.
+
+**Links.** From `introduction.mdx` and from the pages of Picker, Form, Field, TextField, Stepper,
+Button, Readout and Window. A Storybook link to a page whose title is words (`guides-menus-and-forms`)
+did not become `blip docs …`: `pageForSlug` matched only the slug's last word. It now matches the
+longest page id that ends the slug, then the old way (a test each).
+
+**Checked.** `blip docs menus-and-forms` prints it. `blip search` finds it first for "menu", "form",
+"keys" and "settings". `blip rules` lists its six rules.

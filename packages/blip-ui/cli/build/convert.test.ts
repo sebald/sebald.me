@@ -88,6 +88,14 @@ describe('mdxToMarkdown', () => {
     );
   });
 
+  it('finds a page whose title is words, its dashes kept', () => {
+    const text = 'See [Menus and forms](?path=/docs/guides-menus-and-forms--docs).';
+    assert.equal(
+      mdxToMarkdown(text, ['forms', 'menus-and-forms']),
+      'See Menus and forms (`blip docs menus-and-forms`).\n',
+    );
+  });
+
   it('keeps only the text of a link to a page that is not shipped', () => {
     const text = 'See [Gone](?path=/docs/components-gone--docs).';
     assert.equal(mdxToMarkdown(text, ['button']), 'See Gone.\n');

@@ -17,6 +17,9 @@ export const COMMANDS = [
   ['blip rules [<page>] [--kind C|P|A|T|F|X]', 'list the rules'],
 ] as const;
 
+/** The page to read before building a screen */
+const START = 'menus-and-forms';
+
 const KINDS = [
   ['component', 'Components'],
   ['foundation', 'Foundations'],
@@ -45,6 +48,9 @@ export const indexCommand = (docs: Docs, json: boolean, io: Io) => {
     return 0;
   }
   const lines = ['Blip UI: look up its docs before building with it', ''];
+  // Where a screen's input starts: menus, forms and the keys
+  if (docs.manifest.pages.some(page => page.id === START))
+    lines.push(`Building a screen? Start with blip docs ${START}`, '');
   lines.push('Commands');
   const width = Math.max(...COMMANDS.map(([usage]) => usage.length));
   for (const [usage, does] of COMMANDS) {

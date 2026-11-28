@@ -1,0 +1,31 @@
+page: menus-and-forms
+rules:
+  - id: C-MENUS-AND-FORMS-1
+    text: Write no key handling of your own for Up, Down, Left, Right, Enter or Space in a menu or a form window; the Picker and the Form own them. useKeys is for Escape's back and for keys of the whole screen.
+    severity: warning
+    check: no-own-arrow-keys
+    fix: |
+      useKeys({ Escape: back });
+  - id: C-MENUS-AND-FORMS-2
+    text: Leave Tab to the browser; no tabIndex order of your own and no handler for Tab, so a screen reader and a keyboard reach every control in reading order.
+    severity: warning
+    check: tab-untouched
+    fix: |
+      <Form onSubmit={save}>
+        <TextField name="name">Name</TextField>
+        <Stepper name="hints" values={['Off', 'On']}>Hints</Stepper>
+      </Form>
+  - id: C-MENUS-AND-FORMS-3
+    text: Name keys in a Legend as the keyboard has them (↑↓, ←→, Enter, Esc); no controller buttons (A, B, ✕, ○), which the kit does not support yet.
+    markers: [review]
+    source: docs/open-questions.md (Q18)
+  - id: P-MENUS-AND-FORMS-1
+    text: Give a list beside a form its own window, or its own step before the form (pick, then edit); never a Picker and fields in one window.
+    markers: [review]
+  - id: P-MENUS-AND-FORMS-2
+    text: Make a search over a list its own step, a form window with a TextField whose result is the list's menu; never a text field inside the menu's window.
+    markers: [review]
+  - id: A-MENUS-AND-FORMS-1
+    text: Make every menu and form screen playable by the arrows, Enter and Esc alone, and by touch alone; the keys it uses are in its Legend.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
