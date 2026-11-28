@@ -73,7 +73,9 @@ tall stage, `regular` apart as the column's rows are. A shop's wares and the bag
 to compare, a list and what its row shows. Each window is its own: its
 title names it, its legend says its keys, and its list takes the keys when
 the player last pointed at or tapped it (`Picker`, several on one layer).
-Each list scrolls in its own room. Write the two windows in the order they
+Each list scrolls in its own room. A window holding a `Form` keeps its
+height, since a form doesn't scroll: upright, the menu beside it takes the
+cut. Write the two windows in the order they
 are read: the left one first, which upright is the upper one, so a screen
 reader hears them as they are seen. It is for exactly two: one window is
 the `default` column, and more than two is no `split`.
