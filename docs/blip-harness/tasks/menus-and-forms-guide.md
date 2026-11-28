@@ -2,7 +2,7 @@
 status: done # todo | doing | done
 step: N4 # forms and navigation
 depends: [form-navigation, menu-title, stepper, field]
-pr: PENDING
+pr: 266
 ---
 
 # `menus-and-forms-guide`: The decisions reach the agents that use Blip
