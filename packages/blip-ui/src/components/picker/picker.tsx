@@ -9,6 +9,7 @@ import {
   isValidElement,
   use,
   useEffect,
+  useEffectEvent,
   useLayoutEffect,
   useRef,
   useState,
@@ -160,6 +161,8 @@ interface PickerContextValue {
   columns: readonly string[] | undefined;
   /** The items' ids in the list's order, across its groups: each row's place in it */
   ids: readonly string[];
+  /** Whether the keys moved the cursor to this row, asked once by the row it reaches: it takes the focus */
+  takeKeyMove: (id: string) => boolean;
 }
 
 /** The column a value sits in: its name, read out before it, and whether it is the last */
@@ -253,6 +256,15 @@ export const Picker = ({
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
+  // The row the keys last moved the cursor to, until a row that becomes
+  // current asks: whichever asks, it is cleared, so a later hover or tap
+  // never takes the focus by an old move
+  const movedByKeys = useRef<string | null>(null);
+  const takeKeyMove = (id: string) => {
+    const moved = movedByKeys.current === id;
+    movedByKeys.current = null;
+    return moved;
+  };
   const rootRef = useRef<HTMLDivElement>(null);
   const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
@@ -326,7 +338,10 @@ export const Picker = ({
       if (!ids.length) return;
       play('move');
       const at = current === undefined ? -1 : ids.indexOf(current);
-      setCurrent(ids[(at + step + ids.length) % ids.length]);
+      const next = ids[(at + step + ids.length) % ids.length]!;
+      // A list of one goes nowhere: no row to take the focus
+      movedByKeys.current = next === current ? null : next;
+      setCurrent(next);
     };
     const entry = current === undefined ? undefined : entries.get(current);
     switch (event.key) {
@@ -410,6 +425,7 @@ export const Picker = ({
         listRef,
         columns: hasColumns ? columns : undefined,
         ids,
+        takeKeyMove,
       }}
     >
       <div
@@ -514,7 +530,21 @@ const Row = ({
 }: PickerItemProps & { onStep?: (step: 1 | -1) => void }) => {
   const picker = usePicker();
   const rowRef = useRef<HTMLLIElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const isCurrent = picker.current === id;
+
+  // Moved here by the keys, the row takes the focus: a screen reader says
+  // it as the cursor reaches it, its name and its place (`3 of 12`), as
+  // the cursor is the focus. Never when the list opens or a pointer
+  // moves the cursor, so a menu takes no focus the player didn't move.
+  // The list scrolls itself (below), never the page
+  const { takeKeyMove } = picker;
+  const takeFocus = useEffectEvent(() => {
+    if (takeKeyMove(id)) buttonRef.current?.focus({ preventScroll: true });
+  });
+  useEffect(() => {
+    if (isCurrent) takeFocus();
+  }, [isCurrent]);
 
   // The keys reach the item through the picker: its latest handlers
   const entry: Entry = { disabled, variant, onSelect, onStep };
@@ -581,6 +611,7 @@ const Row = ({
       aria-setsize={at >= 0 ? picker.ids.length : undefined}
     >
       <button
+        ref={buttonRef}
         type="button"
         aria-disabled={disabled || undefined}
         aria-current={isCurrent ? 'true' : undefined}

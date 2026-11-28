@@ -69,3 +69,45 @@ for (const shot of [
     expect(await escapes(page)).toEqual([]);
     expect(await cursorRoom(page)).toEqual([]);
   });
+
+test('the focus moves with the cursor, by the keys only', async ({ page }) => {
+  await page.goto(story('scrolling-list'));
+  await expect(page.locator('[data-slot=picker-position]')).toHaveText(
+    '1 of 12',
+  );
+  const focusedRow = () =>
+    page.evaluate(
+      () =>
+        document.activeElement?.closest('[data-slot=picker-item]')
+          ?.textContent ?? null,
+    );
+  // The list's opening takes no focus
+  expect(await focusedRow()).toBeNull();
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('button', { name: 'Colleague 3' })).toBeFocused();
+  // The list scrolls itself, never the page
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  // A pointer moves the cursor, not the focus
+  await page.getByRole('button', { name: 'Colleague 1', exact: true }).hover();
+  await expect(
+    page.getByRole('button', { name: 'Colleague 1', exact: true }),
+  ).toHaveAttribute('aria-current', 'true');
+  await expect(page.getByRole('button', { name: 'Colleague 3' })).toBeFocused();
+});
+
+test('Enter and Space on a focused row pick it once', async ({ page }) => {
+  await page.goto('/iframe.html?id=components-dialog--default&viewMode=story');
+  // The story opens with the dialog open, the cursor on Music
+  const music = page.getByRole('dialog').getByRole('button', { name: /Music/ });
+  await expect(music).toContainText('On');
+  // Round to Music by the keys: it takes the focus
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(music).toBeFocused();
+  // Each key flips it once; picked twice, it would stay as it was
+  await page.keyboard.press('Enter');
+  await expect(music).toContainText('Off');
+  await page.keyboard.press(' ');
+  await expect(music).toContainText('On');
+});
