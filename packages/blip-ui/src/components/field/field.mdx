@@ -61,11 +61,13 @@ own caveat is the case on a wide stage: a list of settings, where the player
 scans the names down one column and the controls are short, is better with
 the labels in a column to their left, as option screens in games have them.
 
-The column is the window's: `Content` sets `--bui-label-width` for what is
-in it and, on a wide stage, places a field in it with its label in that
-column and the words under the control after it, a `Stepper`'s too, so
-every description and error in a form starts on one edge; a `Readout`'s name takes
-the same width, so they line up. Anywhere else, a
+The column is the window's: `Content` gives its rows one label column, as
+wide as the longest label, and the controls start right after it. On a
+wide stage it places a field in it with its label in that column and the
+words under the control after it, a `Stepper`'s too, so every description
+and error in a form starts on one edge; a `Readout`'s name takes the same
+column and its number starts where the controls do, so they line up and
+each value sits by its name. Anywhere else, a
 field in a dialog's body or on the stage, the label goes above the control,
 as on a phone: a column is only worth it where there are rows to line up.
 

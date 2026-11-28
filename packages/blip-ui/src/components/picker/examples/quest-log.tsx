@@ -14,7 +14,7 @@ export function QuestLog() {
   return (
     // Upright the note goes under the window: room for it below
     <div className="tall:pb-[9em]">
-      <Window className="w-[24em] tall:w-full">
+      <Window>
         <Title>Quests</Title>
         <Actions>
           <Picker>

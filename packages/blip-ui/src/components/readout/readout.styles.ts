@@ -9,7 +9,7 @@ export const readout = {
   root: cva({
     base: 'm-0 inline-flex items-baseline gap-regular',
   }),
-  /** As wide as the container's label column when it has one (`--bui-label-width`) */
-  label: cva({ base: 'w-(--bui-label-width,auto) shrink-0' }),
+  /** In a `Content`, in its label column (the readout takes its columns) */
+  label: cva({ base: 'shrink-0' }),
   value: cva({ base: 'text-(--bui-heading) tabular-nums' }),
 };

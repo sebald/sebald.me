@@ -25,7 +25,7 @@ export function PickARole() {
       <ScreenTitle blurb="Whose side are you on today?">
         Pick a role
       </ScreenTitle>
-      <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)]">
+      <div className="absolute inset-x-[calc(var(--px)*80)] top-[calc(var(--px)*44)] grid justify-items-center gap-[calc(var(--px)*6)] tall:inset-x-[calc(var(--px)*12)] tall:top-[calc(var(--px)*70)] tall:justify-items-stretch">
         <Window>
           <Title>Developer</Title>
           <Content>

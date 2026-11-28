@@ -32,7 +32,8 @@ test('side by side on the wide stage', async ({ page }) => {
   await open(page, 2.25, 'wide');
   const [buy, sell] = await boxes(page);
   expect(buy!.top).toBeCloseTo(sell!.top, 0);
-  expect(buy!.bottom).toBeCloseTo(sell!.bottom, 0);
+  // Each as tall as its rows: Sell, with fewer, ends higher
+  expect(sell!.bottom).toBeLessThan(buy!.bottom);
   expect(sell!.left).toBeGreaterThan(buy!.right);
   expect(await escapes(page)).toEqual([]);
   expect(await cursorRoom(page)).toEqual([]);

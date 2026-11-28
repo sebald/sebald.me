@@ -12,7 +12,7 @@ const noop = () => {};
 export function TwoMenus() {
   return (
     <div className="flex flex-wrap gap-regular">
-      <Window className="w-[12em]">
+      <Window>
         <Title>Party</Title>
         <Actions>
           <Picker>
@@ -25,7 +25,7 @@ export function TwoMenus() {
           </Picker>
         </Actions>
       </Window>
-      <Window className="w-[12em]">
+      <Window>
         <Title>Bag</Title>
         <Actions>
           <Picker>

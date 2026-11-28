@@ -8,8 +8,10 @@ import * as WindowStories from './window.stories';
 # Window
 
 The quiet window every text sits in: the opponent's line, the menus, the
-results, a picker's description box. It grows with what is in it; the
-screen positions and sizes it.
+results, a picker's description box. It is as wide and as tall as what is
+in it, never wider than what holds it, as a game's menu box hugs its rows;
+the screen positions it, and widens it where it should (a `Dialog`, a
+`Screen` held upright).
 
 What makes a window a menu or a form, and the keys: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
 
@@ -44,6 +46,10 @@ building.
 - **Do** use Tabs for a window with pages, not a Window with tabs put on
   it.
 - **Don't** nest windows. A description box sits beside its window, not in it.
+- **Don't** give a window a width of your own: it is as wide as its
+  longest row (its legend too), so a value sits by its name. A screen
+  that wants it wider says so for every window (a `Dialog`'s size, a
+  `Screen` held upright).
 - **A window fits its screen by itself.** In a `Screen` it is never
   taller than the stage: its list gives up the room and scrolls, the rest
   keeps its size (`Screen`, a list longer than the stage).

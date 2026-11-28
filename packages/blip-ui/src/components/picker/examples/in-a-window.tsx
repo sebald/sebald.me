@@ -26,7 +26,7 @@ export function InAWindow() {
       }}
     >
       <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
-        <Window className="w-[19em] tall:w-full">
+        <Window>
           <Title>Options</Title>
           <Actions>
             <Picker>

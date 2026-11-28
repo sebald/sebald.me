@@ -1018,7 +1018,7 @@ export const DuelScreen = ({
               }
         }
       >
-        <Window className="min-h-0 flex-1">
+        <Window className="min-h-0 w-full flex-1">
           {/* The silence bar: a stopwatch in the corner, beside the
               phrase being answered */}
           {timing && (
@@ -1047,7 +1047,7 @@ export const DuelScreen = ({
             className="absolute"
             style={{ height: px(WINDOW_HEIGHT) }}
           />
-          <Window>
+          <Window className="w-full">
             {contents(true)}
             {legend}
           </Window>

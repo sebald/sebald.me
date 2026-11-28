@@ -20,6 +20,9 @@ rules:
   - id: C-WINDOW-3
     text: Give a Window, its Actions or its Picker no height, max-height or overflow of your own to fit a screen; in a Screen the list takes the room that is left and scrolls.
     markers: [review]
+  - id: C-WINDOW-4
+    text: Give a Window no width of your own; it is as wide as what is in it, and a Dialog or a Screen held upright widens it.
+    markers: [review]
 when-not:
   - text: A window with pages is Tabs, not a Window with tabs put on it.
     use: tabs

@@ -58,15 +58,16 @@ along the bottom edge.
 - **Do** put text inside a `Text`: every direct child of the `Content` is
   a row, so loose words beside an inline element would split into rows.
 - **Do** put rows of a `Field` (a `TextField` and a `Stepper` are one) and
-  a `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
-  a wide stage, not set on a tall one) which each takes as the width of its
-  label, so the names line up, and starts them 8 in, the cursor column a
+  a `Readout` in a `Content`: it gives them one label column on a wide
+  stage (none on a tall one), as wide as the longest label, so the names
+  line up and each value sits right after them, and starts them 8 in, the cursor column a
   `Picker` and `Actions` have, so a focused field's cursor has room and
   the labels line up with a menu's. A `Ledger` starts there too.
-- **One edge for values.** Every value in a window ends at the row's end:
-  a `Readout`'s number, a `Ledger`'s, a text box, and a `Stepper`'s and a
-  menu setting's right arrow (their value just inside it). A `Content` sets the readout's; the others end
-  there by themselves.
+- **One edge for values.** In a `Content` every value starts on one edge,
+  right after the longest label: a `Readout`'s number, a text field's
+  line, a `Stepper`'s left arrow. In a menu a setting's right arrow and a
+  price end where the list's rows end, which are as wide as the longest.
+  Neither stretches across the window, so a value sits by its name.
 - **Don't** wrap rows in a `div` to space them or give the `Content` a
   `className` for a gap: the gap is its own.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new
