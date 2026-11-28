@@ -15,8 +15,8 @@ export const screen = {
       // height (a blurb, the tall stage's larger letters)
       'has-[>[data-slot=screen-title]]:pt-(--s-top) *:data-[slot=screen-title]:static',
       // A form has no scroll of its own: its window keeps its height, and a
-      // menu beside it, which scrolls, takes the cut instead
-      '*:has-[[data-slot=form]]:shrink-0',
+      // menu window in the same column, which scrolls, takes the cut
+      '*:data-[slot=window]:has-[[data-slot=form]]:shrink-0',
     ],
     variants: {
       variant: {
