@@ -48,6 +48,8 @@ There is no switch: a setting that is on or off is a `Stepper` of
 `['Off', 'On']` in a form, a `PickerSetting` in a menu. The `Stepper` and
 `TextField` bring their own `Field`, so their label lines up with the
 others: a label column on the wide stage, above the control on a phone.
+The `Field` also holds what is said around the control: a description, an
+error while it is true, and how many characters are left.
 
 - <Rule id="C-STEPPER-1" />
 - <Rule id="C-STEPPER-2" />
@@ -80,6 +82,11 @@ gives Esc its screen's back (`useKeys({ Escape: back })`).
 - **One set of arrows a screen.** Two windows on one screen share them: the
   one the player last pointed at, tapped or moved the focus into has them,
   the first until then. A `Dialog` takes them while it is open
+- **Onto a row of buttons**, Down lands on its first button; Left and Right
+  go along it
+- **More keys, the same jobs.** A menu also takes W and S for Up and Down, A
+  and D for Left and Right; a `Stepper` takes Home and End for its first and
+  last value
 - **Name them.** Each window's `Legend` says its keys, as the keyboard has
   them; there are no controller buttons yet
 
@@ -123,5 +130,9 @@ and the web's second:
   settings, shop, inventory and save screens, for what such a screen holds
 - [WAI-ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/): the
   roles, names and keys a screen reader needs
+
+Two of these rules name a check (`no-own-arrow-keys`, `tab-untouched`)
+that `blip validate` will run once it ships; until then a review checks
+them, as it does the rules marked review.
 
 <Rules for="menus-and-forms" />

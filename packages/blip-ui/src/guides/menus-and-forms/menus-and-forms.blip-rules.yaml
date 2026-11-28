@@ -1,7 +1,7 @@
 page: menus-and-forms
 rules:
   - id: C-MENUS-AND-FORMS-1
-    text: Write no key handling of your own for Up, Down, Left, Right, Enter or Space in a menu or a form window; the Picker and the Form own them. useKeys is for Escape's back and for keys of the whole screen.
+    text: Write no key handling of your own for Up, Down, Left, Right, Enter or Space in a menu window, as C-FORM-1 says for a form; the Picker owns them. useKeys is for Escape's back and for keys of the whole screen.
     severity: warning
     check: no-own-arrow-keys
     fix: |

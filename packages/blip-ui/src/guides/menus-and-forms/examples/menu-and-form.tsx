@@ -13,6 +13,7 @@ import { Screen } from '../../../components/screen/screen';
 import { Stepper } from '../../../components/stepper/stepper';
 import { TextField } from '../../../components/text-field/text-field';
 import { Legend, Window } from '../../../components/window/window';
+import { useKeys } from '../../../hooks/use-keys';
 
 const noop = () => {};
 
@@ -26,6 +27,8 @@ const noop = () => {};
  */
 export function MenuAndForm() {
   const [sound, setSound] = useState(true);
+  // Esc is the screen's back, the same as each window's Back
+  useKeys({ Escape: noop });
   return (
     <Screen variant="split">
       <Window>
@@ -53,6 +56,7 @@ export function MenuAndForm() {
           keys={[
             ['↑↓', 'choose'],
             ['Enter', 'confirm'],
+            ['Esc', 'back'],
           ]}
           touch="Tap a line"
         />
@@ -82,6 +86,8 @@ export function MenuAndForm() {
           keys={[
             ['↑↓', 'row'],
             ['←→', 'change'],
+            ['Enter', 'save'],
+            ['Esc', 'back'],
           ]}
           touch="Tap a row"
         />
