@@ -52,9 +52,11 @@ for (const shot of [
     layout: 'wide',
     viewport: { width: 960, height: 600 },
   },
+  // The smallest wide stage a game shows (`MIN_SCALE`): under it the
+  // stage asks for a bigger window, so the docs' 1x shot leaves it out
   {
-    name: '1x',
-    scale: 1,
+    name: 'MIN_SCALE',
+    scale: 2.25,
     layout: 'wide',
     viewport: { width: 960, height: 600 },
   },

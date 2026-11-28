@@ -7,7 +7,7 @@ import * as ScreenStories from './screen.stories';
 
 # Screen
 
-The frame of a full screen: a menu, a shop, a list of saves, a title card.
+The frame of a full screen: a menu, a shop, a list of saves, a title card, two windows side by side.
 It fills the stage, keeps clear of the bar of controls on the tall stage,
 and places what is in it as a column with the stage's spacing, so a screen
 has no `position`, `inset` or `--bui-bar` of its own.
@@ -47,6 +47,8 @@ has no `position`, `inset` or `--bui-bar` of its own.
   on the frame.
 - **Do** use `variant="centered"` for one group in the middle, a title card
   or a message.
+- **Do** use `variant="split"` for two windows side by side, never a flex
+  row or a grid of your own: upright they stack by themselves.
 - **Don't** write `position: absolute`, `inset` or `--bui-bar` on a screen's
   box. The frame is the only box that knows the bar.
 - **Don't** put a `Screen` inside a `Window` or another `Screen`.
@@ -64,6 +66,31 @@ a screen starts with `Screen`.
 
 <Canvas of={ScreenStories.Shop} />
 <Canvas of={ScreenStories.TitleCard} />
+
+`split` holds two windows: side by side on the wide stage, each as tall as
+the room under the title, `section` apart, and one above the other on the
+tall stage, `regular` apart as the column's rows are. A shop's wares and the bag, two saves
+to compare, a list and what its row shows. Each window is its own: its
+title names it, its legend says its keys, and its list takes the keys when
+the player last pointed at or tapped it (`Picker`, several on one layer).
+Each list scrolls in its own room. Write the two windows in the order they
+are read: the left one first, which upright is the upper one, so a screen
+reader hears them as they are seen. It is for exactly two: one window is
+the `default` column, and more than two is no `split`.
+
+```tsx
+<Screen variant="split">
+  <ScreenTitle>Shop</ScreenTitle>
+  <Window>…Buy…</Window>
+  <Window>…Sell…</Window>
+</Screen>
+```
+
+<Canvas of={ScreenStories.BuyAndSell} />
+
+The docs' 1x shot leaves this story out: two menus on a whole stage have no
+room for their words that small, and a game never shows a stage under
+2.25x (`MIN_SCALE`), where both fit.
 
 ## A list longer than the stage
 
