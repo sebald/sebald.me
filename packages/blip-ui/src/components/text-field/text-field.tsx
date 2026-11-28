@@ -2,6 +2,7 @@
 
 import { Input } from '@base-ui/react/input';
 import {
+  type CSSProperties,
   type ComponentProps,
   type KeyboardEvent,
   type ReactNode,
@@ -136,6 +137,11 @@ export const TextInput = ({
       // The phone's keyboard shows its own "done" for Enter
       enterKeyHint="done"
       className={styles.input({ className })}
+      style={
+        maxLength === undefined
+          ? props.style
+          : ({ '--tf-chars': maxLength, ...props.style } as CSSProperties)
+      }
       onKeyDown={keydown}
       onFocus={event => {
         onFocus?.(event);

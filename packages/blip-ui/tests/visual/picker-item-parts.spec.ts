@@ -128,6 +128,11 @@ test('a long name wraps like text: its mark and value on its last line', async (
   page,
 }) => {
   await page.goto(story('shop-wares', 3, 'wide'));
+  // A window narrower than the name (it would grow to fit it otherwise)
+  await page
+    .locator('[data-slot=window]')
+    .first()
+    .evaluate(el => (el.style.width = '22em'));
   const found = await lantern(page, 'A lantern for the long road north');
   expect(found.lines).toBeGreaterThan(1);
   expect(found.mark).toBeLessThan(4);

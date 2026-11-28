@@ -201,7 +201,7 @@ export interface TabPanelProps extends Omit<
  */
 export const TabPanel = ({ className, children, ...props }: TabPanelProps) => (
   <BaseTabs.Panel data-slot="tab-panel" className={styles.panel()} {...props}>
-    <WindowFrame className={cn('min-h-0 flex-1', className)}>
+    <WindowFrame className={cn('min-h-0 w-full flex-1', className)}>
       {children}
     </WindowFrame>
   </BaseTabs.Panel>

@@ -24,7 +24,7 @@ export function Back() {
   return (
     <div className="flex flex-col gap-regular">
       <div className="flex flex-wrap items-start gap-regular">
-        <Window className="w-[14em]">
+        <Window>
           <Title>Options</Title>
           <Actions>
             <Picker>
@@ -50,7 +50,7 @@ export function Back() {
             touch="Tap a line"
           />
         </Window>
-        <Window className="w-[20em]">
+        <Window>
           <Title>Save</Title>
           <Content>
             <Form onSubmit={noop}>

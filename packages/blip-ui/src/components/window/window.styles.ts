@@ -1,9 +1,13 @@
 import { cva } from '../../utils/styles';
 
 export const window = {
-  // In a bounded column (a `Screen`) it may get less room than it would
-  // take: `min-h-0` lets it, and its menu takes the cut by scrolling
-  root: cva({ base: 'relative flex min-h-0 flex-col' }),
+  // As wide as what is in it, never wider than its container: a box that
+  // hugs its rows, as a game's menu does, not one that fills the stage.
+  // The parent widens it where it should (a `Dialog`, a `Screen` held
+  // upright). In a bounded column (a `Screen`) it may get less room than
+  // it would take: `min-h-0` lets it, and its menu takes the cut by
+  // scrolling
+  root: cva({ base: 'relative flex min-h-0 w-fit max-w-full flex-col' }),
   // The ink and the frame's rings, each a pixel further in
   ring: cva({ base: 'absolute' }),
   body: cva({

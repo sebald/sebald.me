@@ -158,7 +158,7 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
         className="absolute m-0 h-auto max-h-none w-auto max-w-none border-0 bg-transparent p-0 text-inherit outline-none"
         style={{ left: px(12), right: px(12), top: px(10), bottom: px(10) }}
       >
-        <Window className="h-full">
+        <Window className="h-full w-full">
           <div
             role="tablist"
             aria-label="Pools"

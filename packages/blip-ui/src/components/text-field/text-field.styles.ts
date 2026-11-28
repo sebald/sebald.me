@@ -13,7 +13,11 @@ export const textField = {
     base: [
       // A field is typed in: the stage turns selecting off, and Safari
       // then lets nothing be typed
-      'm-0 w-full min-w-0 select-text appearance-none rounded-none border-0 outline-none',
+      'm-0 min-w-0 select-text appearance-none rounded-none border-0 outline-none',
+      // As wide as the longest text it takes and a caret (`--tf-chars`,
+      // its `maxLength`, 15 without one), so the line ends where the
+      // name can; held upright, the row's width, for a thumb
+      'w-[calc((var(--tf-chars,15)+1)*1ch)] max-w-full tall:w-full',
       'bg-transparent font-[inherit] text-[1em] leading-[1.25] text-(--bui-text-bright)',
       // A line of text with four pixels above and below (`field`), so it
       // holds its own beside a button and is a thumb's height. No inset

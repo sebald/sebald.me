@@ -14,7 +14,9 @@ import { cva } from '../../utils/styles';
  * room at any scale.
  */
 export const tabs = {
-  root: cva({ base: 'flex min-h-0 flex-col' }),
+  // As wide as the wider of its tabs and its panel's content, as a
+  // window is: the panel then spans under every tab
+  root: cva({ base: 'flex min-h-0 w-fit max-w-full flex-col' }),
   // Neighbours share their ink column
   list: cva({ base: 'flex items-end [&>*+*]:-ml-(--px)' }),
   /** The row: the arrows and the list, from the window's top left */

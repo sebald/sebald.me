@@ -20,18 +20,23 @@ export const screen = {
     ],
     variants: {
       variant: {
-        /** A column from the top down */
-        default: '',
+        /**
+         * A column from the top down. Its windows are as wide as what is in
+         * them; held upright, as wide as the stage, for a thumb
+         */
+        default: 'tall:*:data-[slot=window]:w-full',
         /** One group in the middle, its text centred */
         centered: 'items-center justify-center text-center',
         /**
-         * Two windows: side by side on the wide stage, as tall as the room
-         * under the title, each its own column; upright, one above the
-         * other as the column has them. Each keeps its own title, legend
-         * and keys, and its list scrolls in its own room
+         * Two windows: side by side on the wide stage, each as wide and as
+         * tall as what is in it, at most the room under the title; upright,
+         * one above the other as the column has them, as wide as the stage.
+         * Each keeps its own title, legend and keys, and its list scrolls
+         * in its own room
          */
         split: [
-          'grid grid-cols-2 grid-rows-[minmax(0,1fr)] gap-x-section',
+          'grid grid-cols-[repeat(2,minmax(0,max-content))] grid-rows-[minmax(0,1fr)] items-start justify-start gap-x-section',
+          '*:data-[slot=window]:max-h-full tall:*:data-[slot=window]:w-full',
           'has-[>[data-slot=screen-title]]:grid-rows-[auto_minmax(0,1fr)]',
           '*:data-[slot=screen-title]:col-span-full',
           'tall:flex',
