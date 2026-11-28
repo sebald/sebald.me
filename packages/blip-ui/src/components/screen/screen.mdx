@@ -92,6 +92,13 @@ The docs' 1x shot leaves this story out: two menus on a whole stage have no
 room for their words that small, and a game never shows a stage under
 2.25x (`MIN_SCALE`), where both fit.
 
+## A form beside a menu
+
+A window holding a `Form` keeps its height in the column (the `default`
+one, and `split` upright): a form has no scroll of its own, so a menu
+window in the same column takes the cut and scrolls. A form has to fit
+the stage; one with more rows than that is two steps, or a `Dialog`.
+
 ## A list longer than the stage
 
 The frame is as tall as the stage, so a window in it is never taller.
