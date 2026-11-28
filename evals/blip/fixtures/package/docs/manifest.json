@@ -1,0 +1,23 @@
+{
+  "version": "0.0.0-fixture",
+  "pages": [],
+  "exports": {
+    "Button": {
+      "page": "button",
+      "kind": "component"
+    },
+    "Tabs": {
+      "page": "tabs",
+      "kind": "component"
+    },
+    "Tabs.Tab": {
+      "page": "tabs",
+      "kind": "component"
+    },
+    "Window": {
+      "page": "window",
+      "kind": "component"
+    }
+  },
+  "examples": []
+}

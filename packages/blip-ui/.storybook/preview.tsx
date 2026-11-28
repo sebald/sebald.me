@@ -56,6 +56,21 @@ const preview: Preview = {
     docs: { theme: themes.dark },
     controls: { expanded: true },
     a11y: { test: 'error' },
+    // The pages to read first on top, then what a game is built from
+    options: {
+      storySort: {
+        order: [
+          'Introduction',
+          'Building components',
+          'Foundations',
+          'Guides',
+          'Hooks',
+          'Components',
+          'Patterns',
+          'Compositions',
+        ],
+      },
+    },
   },
 };
 

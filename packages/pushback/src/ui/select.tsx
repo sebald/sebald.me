@@ -93,7 +93,7 @@ const tallTop = (rows: number, scale: number) =>
 
 const styles = {
   tile: cva({
-    base: 'group relative block cursor-pointer bg-(--pb-fill) outline-none focus-visible:pb-focus',
+    base: 'group relative block cursor-pointer bg-(--pb-fill) outline-none focus-visible:bui-focus',
   }),
   /** The face, dimmed unless chosen; the stamp over it stays lit */
   face: cva({

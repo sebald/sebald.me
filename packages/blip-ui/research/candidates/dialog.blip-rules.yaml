@@ -1,0 +1,10 @@
+page: dialog
+rules:
+  # Web track (research-web-ux), from 201
+  # NN/g's wording: modals for "nonessential information that is not related to
+  # the current user flow". The controls and how-it-works dialogs the pause and
+  # help pages ask for are related to it.
+  - id: P-DIALOG-201
+    text: Never open a Dialog for information the player doesn't need and that is unrelated to what they are doing.
+    markers: [review]
+    source: https://www.nngroup.com/articles/modal-nonmodal-dialog/

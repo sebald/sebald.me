@@ -1,0 +1,63 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as ReadoutStories from './readout.stories';
+
+<Meta of={ReadoutStories} />
+
+# Readout
+
+One number with its label, `Gold 120` or `HP 42/50`: what a screen shows
+the player to read at a glance. When the number changes it says so to a
+screen reader itself. It is `Ledger`'s sibling for one number, not a second
+table. With a `max` it is built on Base UI's Meter, so the current value
+out of the maximum has the meter role.
+
+The controls around a number, in menus and forms: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
+
+<Canvas of={ReadoutStories.Default} />
+<Controls of={ReadoutStories.Default} />
+
+```tsx
+<Readout value={gold}>Gold</Readout>
+<Readout value={hp} max={maxHp}>HP</Readout>
+```
+
+## Anatomy
+
+1. **Label**, its children, in the text colour
+2. **Value**, in the heading colour with tabular figures, thousands
+   separated (`1,200`); with a `max`, `value/max`
+
+The readout is as wide as its content and sits inline, so a screen places
+it, in a row or a column, as it places any text.
+
+<Canvas of={ReadoutStories.Overview} />
+
+## Usage
+
+- **Why not a variant of Ledger?** A `Ledger` row is a term and its value
+  in a table of rows; a readout stands alone and has behaviour of its own,
+  the announcement and the meter role. One number is a `Readout`, several
+  to read across are a `Ledger`.
+- **Do** keep the label short, one word.
+- **Do** give a pool its `max` rather than writing `42/50` into the label.
+- **Don't** put a `Heading` or a bare `span` around a number.
+- **Don't** add an `aria-live` of your own; the readout uses the stage's.
+
+<Rules for="readout" />
+
+<Canvas of={ReadoutStories.PartyStatus} />
+
+## Accessibility
+
+- With a `max`, `role="meter"` (Base UI) named by its label, with the
+  value read as `42 of 50`. Without one, plain text: a screen reader reads
+  `Gold 120` as it reads any text
+- A change is announced politely, through the stage's live region
+  (`useAnnounce`): `HP 34 of 50`, `Gold 150`. Never on the first render,
+  so a screen that opens is not read twice, and not when the value is
+  set to what it already was. `silent` turns it off for a number that
+  moves too often
+- Outside a `Stage` or `Pixels` there is no live region, and nothing is
+  announced

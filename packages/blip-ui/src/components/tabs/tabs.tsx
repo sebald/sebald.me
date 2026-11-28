@@ -4,11 +4,11 @@ import { Tabs as BaseTabs } from '@base-ui/react/tabs';
 import { useRef } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
-import { useKeydown } from '../../hooks/key-layer';
+import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { cn } from '../../utils/styles';
 import { Step } from '../setting/setting';
-import { WindowFrame } from '../window/window';
+import { WINDOW_LIGHT, WindowFrame } from '../window/window';
 import { tabs as styles } from './tabs.styles';
 
 /**
@@ -70,7 +70,10 @@ export const Tabs = ({
 }: TabsProps) => {
   const play = useFeedback();
   const ref = useRef<HTMLDivElement>(null);
+  const { holds } = useKeyScope('tabs', ref, keys);
   useKeydown(event => {
+    // Another tabs on this layer has the keys
+    if (!holds()) return;
     const by = STEPS[event.key];
     if (by && stepTab(ref.current, by)) event.preventDefault();
   }, keys);
@@ -148,6 +151,9 @@ const foot = (side: 'left' | 'right') => ({
   ].join(', '),
 });
 
+/** The face's and its light's box: inside the rings, down to the panel */
+const FACE_INSET = 'var(--t-ring) var(--t-ring) var(--t-below, 0)';
+
 /** One tab; its `value` names the `TabPanel` it shows */
 export const Tab = ({ className, children, ...props }: TabProps) => (
   <BaseTabs.Tab
@@ -167,10 +173,14 @@ export const Tab = ({ className, children, ...props }: TabProps) => (
         }}
       />
     ))}
+    <span aria-hidden className={styles.face()} style={{ inset: FACE_INSET }} />
     <span
       aria-hidden
-      className={styles.face()}
-      style={{ inset: 'var(--t-ring) var(--t-ring) 0' }}
+      className={styles.light()}
+      style={{
+        inset: FACE_INSET,
+        ...WINDOW_LIGHT,
+      }}
     />
     <span aria-hidden className={styles.foot()} style={foot('left')} />
     <span aria-hidden className={styles.foot()} style={foot('right')} />

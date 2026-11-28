@@ -1,0 +1,73 @@
+# Candidates for the foundations (Q9: kind F, on the introduction page).
+page: introduction
+rules:
+  # Open: no external source says it (MDN only describes image-rendering). It is
+  # Blip's own doctrine, written in introduction.mdx; the check foundations-length
+  # waits until the rule has a source or is adopted as Blip's own.
+  - id: F-LENGTH-101
+    text: Size nothing inside the stage in CSS pixels, except a touch target.
+    markers: [open]
+    source: https://developer.mozilla.org/en-US/docs/Web/CSS/image-rendering
+  - id: F-LENGTH-102
+    text: On the tall stage, keep every window clear of the bar of controls.
+    markers: [review]
+    source: https://developer.apple.com/design/human-interface-guidelines/game-controls
+  # The source sets a floor (9 px high at 1280x800); 0.75em is Blip's number.
+  - id: F-TEXT-101
+    text: Set no text smaller than 0.75em.
+    severity: error
+    check: foundations-text-size
+    fix: |
+      <Text className="text-[0.75em]">Esc back</Text>
+    source: https://partner.steamgames.com/doc/steamdeck/compat
+  # XAG 101 exempts a one- or two-word label.
+  - id: F-TEXT-102
+    text: Write running text in sentence case, not in capitals.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101
+  # Open: the source asks for adjustable text size; keeping the art unscaled is
+  # Blip's own call (conflict 6).
+  - id: F-TEXT-103
+    text: Offer a setting that makes text larger without scaling the art.
+    markers: [open]
+    source: https://gameaccessibilityguidelines.com/allow-the-font-size-to-be-adjusted/
+  - id: F-COLOUR-101
+    text: Pair every colour that carries meaning with a word or a shape.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/ensure-no-essential-information-is-conveyed-by-a-fixed-colour-alone/
+  - id: F-COLOUR-102
+    text: Keep the text of something unavailable at 3:1 against its background.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/102
+  - id: F-MOTION-101
+    text: Let nothing larger than a quarter of the screen flash more than three times in one second.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/avoid-flickering-images-and-repetitive-patterns/
+  # Open: XAG 117 asks for a way to pause or hide blinking content, not for a limit
+  # of one. One call per screen is Blip's own call (text.mdx:32); the check
+  # one-blink waits until it is settled.
+  - id: F-MOTION-102
+    text: Keep one blinking element on a screen at a time.
+    markers: [open]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/117
+  # Web track (research-web-ux), from 201
+  - id: F-MOTION-201
+    text: Let the player stop, from inside the game, anything that blinks for more than five seconds beside other content, unless the blinking is essential.
+    markers: [open]
+    wcag: 2.2.2 Pause, Stop, Hide (A)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/pause-stop-hide.html
+  # WCAG 1.4.3 exempts inactive components, so a disabled item is left to
+  # F-COLOUR-102.
+  - id: F-COLOUR-201
+    text: Keep the text of an item that is not disabled at 4.5:1 against what is behind it (3:1 for large text), however faded.
+    severity: error
+    markers: [review]
+    wcag: 1.4.3 Contrast (Minimum) (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html
+  # 2.4.11 exempts what the player opens over a screen, if the cursor's item can be
+  # brought back into view without closing it.
+  - id: F-LAYER-201
+    text: Let nothing the game lays over a screen by itself hide the item the cursor is on entirely.
+    markers: [review]
+    wcag: 2.4.11 Focus Not Obscured (Minimum) (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/focus-not-obscured-minimum.html

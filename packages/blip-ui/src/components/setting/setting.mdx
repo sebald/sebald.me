@@ -6,9 +6,10 @@ import * as SettingStories from './setting.stories';
 
 # Setting
 
-A value between two step arrows, for a menu row that is a setting: Mode
-◀ Normal ▶. It shows the value; in a Picker, `PickerSetting` draws it and takes
-the keys.
+A value between two step arrows, for a row that is a setting: Mode
+◀ Normal ▶. It shows the value; in a menu, `PickerSetting` draws it and
+takes the `Picker`'s keys, and in a form a `Stepper` draws the same arrows (`Step`) and takes its own. Both show the arrows only on the row Left and Right reach (the cursor's, or the one under the pointer) and always under a finger; on its own a `Setting` always shows them.
+The same look in both, so a choice reads alike wherever it is.
 
 <Canvas of={SettingStories.Default} />
 <Controls of={SettingStories.Default} />
@@ -16,7 +17,9 @@ the keys.
 ## Anatomy
 
 1. **Left step**, a pixel triangle, dim only at a range's first value
-2. **Value**, centred in six characters so the arrows stay put
+2. **Value**, centred in six characters so the arrows stay put, a
+   `regular` gap (4 stage pixels) from each arrow, so even a six-letter
+   value stands clear of them
 3. **Right step**, dim only at a range's last value
 
 <Canvas of={SettingStories.Overview} />
@@ -25,8 +28,10 @@ the keys.
 
 - **Do** use `PickerSetting` in a Picker: it draws the Setting and takes
   the keys.
-- **Do** use it on every menu row that is a setting, even one of two
-  values (On and Off), so they all read and work alike.
+- **Do** use `Stepper` in a form: it draws the same arrows, takes the
+  focus and the keys, and sends its value with the form.
+- **Do** show every setting this way, even one of two values (On and
+  Off), in a menu and in a form, so they all read and work alike.
 - **Do** let a choice go round: left from the first value goes to the
   last, both arrows lit (Mode, Music On/Off). Leave `first` and `last`
   unset.

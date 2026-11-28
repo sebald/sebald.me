@@ -7,6 +7,7 @@ import {
   Legend,
   Picker,
   PickerItem,
+  PickerItemValue,
   Text,
   Window,
   useAnnounce,
@@ -335,12 +336,10 @@ export const TitleScreen = ({
             {/* Only with a run to go back to: a role picked starts one */}
             {running && (
               <PickerItem id="continue" onSelect={onContinue}>
-                <span className="flex items-center gap-[1ch]">
-                  Continue
-                  <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-                    {running.beaten}/{running.slots}
-                  </span>
-                </span>
+                Continue
+                <PickerItemValue variant="progress">
+                  {running.beaten}/{running.slots}
+                </PickerItemValue>
               </PickerItem>
             )}
             <PickerItem
@@ -353,12 +352,10 @@ export const TitleScreen = ({
               }
               onSelect={() => show('glossary')}
             >
-              <span className="flex items-center gap-[1ch]">
-                Glossary
-                <span className="ml-auto text-[0.8em] text-(--pb-muted)">
-                  {collected}/{PAIRS.length}
-                </span>
-              </span>
+              Glossary
+              <PickerItemValue variant="progress">
+                {collected}/{PAIRS.length}
+              </PickerItemValue>
             </PickerItem>
             <PickerItem id="how" onSelect={() => show('how')}>
               How to play

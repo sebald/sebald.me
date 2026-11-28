@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { AboveSpeaker as AboveSpeakerExample } from './examples/above-speaker';
 import { SpeechBubble } from './speech-bubble';
 
 const meta = {
@@ -75,12 +76,5 @@ export const Overview: Story = {
 /** Pointing up to the speaker under the bubble's tail */
 export const AboveSpeaker: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="grid w-[calc(var(--px)*160)] max-w-full justify-items-end gap-[calc(var(--px)*6)] tall:w-full">
-      <div className="mr-[calc(var(--px)*6)] size-[calc(var(--px)*16)] bg-(--bui-secondary)" />
-      <SpeechBubble className="w-full" offset={14}>
-        Let’s take this offline.
-      </SpeechBubble>
-    </div>
-  ),
+  render: () => <AboveSpeakerExample />,
 };

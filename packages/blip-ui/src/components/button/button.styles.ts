@@ -1,16 +1,22 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { ButtonProps } from './button';
 
 /**
- * The button's parts. Inside the ink line every sprite and window has:
- * the ring (the outline's frame), and the face. The variant sets the
- * colours and the cut through `--b-*` variables, so the parts' classes
- * stay the same.
+ * The button's parts: the ink line every sprite and window has, and the
+ * key inside it. The variant sets the colours through `--b-*` variables,
+ * so the parts' classes stay the same.
  *
  * A key is lit like the icons: a light row along its top, a shade row
  * along its bottom, the same thickness, so the label sits in the middle.
  * Pressed, the whole face goes a step darker with the shade along its
  * top, and nothing moves: a swap of the two rows alone was too small a
  * change for a click's tenth of a second and read as a blink.
+ *
+ * Focus is the menus' cursor, left of the button, the same on every
+ * variant: a mark on the face would have to change with its colour. It
+ * sits outside the box, so the button keeps its size: two pixels from the
+ * ink, three from the face you see, as a menu's from its label. A row of
+ * buttons leaves it room (`Actions`, `foundations/focus.mdx`).
  *
  * The pixel is `--bui-px`, the stage's never finer than `--bui-min-px`:
  * on a phone's tall stage a stage pixel is barely more than one CSS
@@ -20,57 +26,74 @@ export const button = {
   root: cva({
     base: [
       '[--b-px:var(--bui-px)]',
-      'group inline-block cursor-pointer bg-(--bui-ink) p-(--b-px) align-middle outline-none',
-      'focus-visible:bui-focus',
+      'group relative inline-block cursor-pointer border-0 bg-transparent p-0 align-middle outline-none',
       'disabled:cursor-default disabled:bui-disabled',
+      // Pressed, a key goes a step darker with the shade along its top
+      '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
+      '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
     ],
     variants: {
       variant: {
-        /** The main action: a key, lit from above, pressed in */
+        /**
+         * The main action: a paper key, ink letters, the face a step down
+         * from paper so it doesn't glare beside the muted key. It stands
+         * out on a window (12.9:1) and on the bare stage (14.6:1) alike,
+         * and leaves yellow to the cursor (`foundations/colour.mdx`:
+         * yellow says "look here"). Full paper is its light row, a shade
+         * a step past paper's its bottom row: the bevel
+         */
         primary: [
-          '[--b-face:var(--bui-primary)] [--b-light:var(--bui-primary-light)] [--b-shade:var(--bui-primary-shade)]',
-          '[--b-text:var(--bui-primary-foreground)] [--b-text-down:var(--bui-primary-foreground)]',
-          '[--b-pad:0px]',
-          '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
-          '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
+          '[--b-face:color-mix(in_srgb,var(--bui-paper),var(--bui-paper-shade)_55%)] [--b-light:var(--bui-paper)]',
+          '[--b-shade:color-mix(in_srgb,var(--bui-paper-shade),var(--bui-ink)_22%)]',
+          '[--b-text:var(--bui-paper-foreground)]',
         ],
-        /** A quieter one beside it: a frame, filled while pressed */
+        /**
+         * A quieter one beside it: a muted key a step lighter than the
+         * window, light letters, so it reads as a key beside the paper one
+         * without pulling the eye from it. Its shade row is halfway to the
+         * window's shade, not all the way: that is the stage's own dark,
+         * and on the bare stage the key's bottom edge would vanish
+         */
         secondary: [
-          '[--b-face:var(--bui-ground)] [--b-ring:var(--bui-neutral)]',
-          '[--b-text:var(--bui-neutral)] [--b-text-down:var(--bui-neutral-foreground)]',
-          '[--b-pad:var(--b-px)]',
-          '[--b-rest:none] [--b-down:inset_0_0_0_999px_var(--bui-neutral)]',
+          '[--b-face:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_22%)]',
+          '[--b-light:color-mix(in_srgb,var(--bui-surface-light),var(--bui-neutral)_45%)]',
+          '[--b-shade:color-mix(in_srgb,var(--b-face),var(--bui-surface-shade)_55%)]',
+          '[--b-text:var(--bui-text-bright)]',
         ],
         /** What can't be undone: the key, in the danger colour */
         destructive: [
           '[--b-face:var(--bui-danger)] [--b-light:var(--bui-danger-light)] [--b-shade:var(--bui-danger-shade)]',
-          '[--b-text:var(--bui-danger-foreground)] [--b-text-down:var(--bui-danger-foreground)]',
-          '[--b-pad:0px]',
-          '[--b-rest:inset_0_var(--b-px)_0_var(--b-light),inset_0_calc(var(--b-px)*-1)_0_var(--b-shade)]',
-          '[--b-face-down:color-mix(in_srgb,var(--b-face),var(--b-shade)_55%)] [--b-down:inset_0_var(--b-px)_0_var(--b-shade)]',
+          '[--b-text:var(--bui-danger-foreground)]',
         ],
-      },
+      } satisfies Record<NonNullable<ButtonProps['variant']>, ClassValue>,
       size: {
         /** A thumb's height, 44 CSS pixels at least */
         default:
-          '[--b-height:--spacing(11)] [--b-inline:calc(var(--bui-px)*6)] text-[1em]',
+          '[--b-height:--spacing(11)] [--b-inline:--theme(--spacing-control-x)] text-[1em]',
         /** Dense menus where a pointer aims */
         small:
-          '[--b-height:--spacing(8)] [--b-inline:calc(var(--bui-px)*4)] text-[0.85em]',
-      },
+          '[--b-height:--spacing(8)] [--b-inline:--theme(--spacing-control-x)] text-[0.85em]',
+      } satisfies Record<NonNullable<ButtonProps['size']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary', size: 'default' },
   }),
-  // The outline's frame; a key has none (no padding, the face fills it)
-  ring: cva({ base: 'block bg-(--b-ring,transparent) p-(--b-pad)' }),
+  /** The cursor: a stepped triangle as a Picker's, 3 seen pixels from the face */
+  cursor: cva({
+    base: [
+      'pointer-events-none absolute top-1/2 right-[calc(100%+--theme(--spacing-cursor)-var(--b-px))] -translate-y-1/2',
+      'h-[calc(var(--b-px)*5)] w-[calc(var(--b-px)*3)] text-(--bui-primary) bui-point-right',
+      'opacity-0 group-focus-visible:opacity-100',
+    ],
+  }),
+  /** The ink line round the key */
+  ink: cva({ base: 'block bg-(--bui-ink) p-(--b-px)' }),
   face: cva({
     base: [
-      // Less the ring, so the outline and the key come out one size
-      '[--b-x:calc(var(--b-inline)-var(--b-pad))] min-h-[calc(var(--b-height)-var(--b-pad)*2)] px-(--b-x)',
+      'min-h-(--b-height) px-(--b-inline)',
       'flex items-center justify-center',
       'bg-(--b-face) text-(--b-text) shadow-(--b-rest)',
       'group-enabled:group-hover:brightness-110 group-enabled:group-active:brightness-100',
-      'group-enabled:group-active:bg-(--b-face-down,var(--b-face)) group-enabled:group-active:text-(--b-text-down) group-enabled:group-active:shadow-(--b-down)',
+      'group-enabled:group-active:bg-(--b-face-down) group-enabled:group-active:shadow-(--b-down)',
       'font-semibold tracking-[0.12em] uppercase',
     ],
   }),

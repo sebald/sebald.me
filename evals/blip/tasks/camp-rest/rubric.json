@@ -1,0 +1,50 @@
+{
+  "task": "camp-rest",
+  "scope": "changed-lines",
+  "urls": [
+    { "id": "start", "url": "?screen=camp&state=start" },
+    { "id": "broke", "url": "?screen=camp&state=broke" }
+  ],
+  "statements": [
+    {
+      "id": "same-screen",
+      "text": "Resting is added to `src/screens/camp.tsx`, and no new screen is registered for it.",
+      "unstated": false,
+      "from": "diff"
+    },
+    {
+      "id": "cost-shown",
+      "text": "The camp shows that resting costs 20 gold before the player rests.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "uses-rest",
+      "text": "Resting calls the game's `rest`, and the screen changes no gold, HP or MP itself.",
+      "unstated": false,
+      "from": "diff"
+    },
+    {
+      "id": "told",
+      "text": "After resting, the screen tells the player the party has rested.",
+      "unstated": false,
+      "from": "diff"
+    },
+    {
+      "id": "broke-shown",
+      "text": "With 5 gold, resting is shown as not possible, or says it needs 20 gold, rather than being offered as if it would work.",
+      "unstated": true,
+      "from": "screenshot",
+      "screenshot": "broke@wide"
+    },
+    {
+      "id": "broke-refused",
+      "text": "Choosing to rest without enough gold doesn't rest the party and tells the player why.",
+      "unstated": true,
+      "from": "diff",
+      "url": "broke",
+      "note": "`rest` in state.ts already refuses and returns `{ ok: false, reason: 'gold' }`. Calling it and showing nothing when it is refused fails this."
+    }
+  ]
+}

@@ -3,10 +3,11 @@
 import type { ButtonHTMLAttributes } from 'react';
 
 import { CORNERS, rounded } from '../../foundations/corners';
-import type { VariantProps } from '../../utils/styles';
 import { button } from './button.styles';
 
-type Variants = VariantProps<typeof button.root>;
+/** The ink's and the key's stepped corners: the same for every button */
+const INK = { clipPath: rounded(CORNERS[0], '--b-px') };
+const FACE = { clipPath: rounded(CORNERS[1], '--b-px') };
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -14,53 +15,42 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * `secondary` beside it, `destructive` for what can't be undone
    * @default 'primary'
    */
-  variant?: NonNullable<Variants['variant']>;
+  variant?: 'primary' | 'secondary' | 'destructive';
   /**
    * `default` is a thumb's height (44 CSS pixels); `small` only where a
    * pointer aims
    * @default 'default'
    */
-  size?: NonNullable<Variants['size']>;
+  size?: 'default' | 'small';
 }
 
 /**
- * A pixel button, for the actions a screen offers outside its menus:
- * stepped corners like the windows', `primary` for the main action,
- * `secondary` beside it and `destructive` for what can't be undone.
+ * A pixel button, for the actions a screen offers outside its menus: a
+ * key with stepped corners like the windows', `primary` for the main
+ * action, `secondary` beside it and `destructive` for what can't be undone.
+ * Focused, the menus' cursor points at it from the left.
  * Sized in the stage's pixel (`--px`), never finer than 3 CSS pixels.
  */
 export const Button = ({
   variant,
   size,
   className,
-  style,
   children,
   ...props
-}: ButtonProps) => {
-  // The outline's face rounds its own corners a step in, or it would
-  // square the frame's
-  const framed = variant === 'secondary';
-  return (
-    <button
-      type="button"
-      data-slot="button"
-      className={button.root({ variant, size, className })}
-      style={{ clipPath: rounded(CORNERS[0], '--b-px'), ...style }}
-      {...props}
-    >
-      <span
-        className={button.ring()}
-        style={{ clipPath: rounded(CORNERS[1], '--b-px') }}
-      >
-        <span
-          className={button.face()}
-          style={
-            framed ? { clipPath: rounded(CORNERS[2], '--b-px') } : undefined
-          }
-        >
-          {children}
-        </span>
+}: ButtonProps) => (
+  <button
+    type="button"
+    data-slot="button"
+    className={button.root({ variant, size, className })}
+    {...props}
+  >
+    {/* The focus cursor, left of the button; the ink and the key in spans
+        below it, so the button itself is not clipped and the cursor shows */}
+    <span aria-hidden data-slot="cursor" className={button.cursor()} />
+    <span className={button.ink()} style={INK}>
+      <span data-cursor-target className={button.face()} style={FACE}>
+        {children}
       </span>
-    </button>
-  );
-};
+    </span>
+  </button>
+);

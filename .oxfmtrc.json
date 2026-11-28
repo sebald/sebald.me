@@ -40,6 +40,10 @@
     "*.log",
     "src/ui/logo-dither.ts",
     "**/storybook-static/**",
-    "**/playwright-report/**"
+    "**/playwright-report/**",
+    "packages/blip-ui/dist/**",
+    "packages/blip-ui/docs/**",
+    "evals/blip/template/**",
+    "evals/blip/fixtures/**"
   ]
 }

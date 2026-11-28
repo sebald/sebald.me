@@ -1,0 +1,77 @@
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Button } from '../components/button/button';
+import { Form } from '../components/form/form';
+import { IconButton } from '../components/icon-button/icon-button';
+import { Actions, Content } from '../components/parts/parts';
+import { Picker, PickerItem } from '../components/picker/picker';
+import { Tab, TabList, TabPanel, Tabs } from '../components/tabs/tabs';
+import { TextField } from '../components/text-field/text-field';
+import { Text } from '../components/text/text';
+
+const noop = () => {};
+
+const meta = {
+  title: 'Foundations/Focus',
+} satisfies Meta;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+/**
+ * Every control in a tab's panel, to Tab through: each shows the mark
+ * (foundations/focus.mdx). Looked at by hand, so no visual test takes it
+ */
+export const Overview: Story = {
+  tags: ['no-vrt'],
+  parameters: { controls: { disable: true } },
+  render: () => (
+    <div className="w-[max(calc(var(--px)*200),30em)] max-w-full">
+      <Tabs defaultValue="controls">
+        <TabList aria-label="Controls">
+          <Tab value="controls">Controls</Tab>
+          <Tab value="menu">Menu</Tab>
+        </TabList>
+        {/* A tab's panel is drawn as a window: its parts go straight in */}
+        <TabPanel value="controls">
+          <Content>
+            <Form>
+              <TextField defaultValue="Ada">Name</TextField>
+              <TextField defaultValue="" error="Needs a name">
+                Invalid
+              </TextField>
+              <Actions>
+                <Button>Primary</Button>
+                <Button variant="secondary">Secondary</Button>
+                <Button variant="destructive">Destructive</Button>
+              </Actions>
+            </Form>
+            <Actions>
+              <IconButton
+                icon="back"
+                label="Back"
+                aria-label="Back"
+                slot="leave"
+              />
+            </Actions>
+          </Content>
+        </TabPanel>
+        <TabPanel value="menu">
+          <Content>
+            <Text>Tab to a row, or use the arrows: the cursor marks it.</Text>
+          </Content>
+          <Actions>
+            <Picker label="Menu">
+              <PickerItem id="start" onSelect={noop}>
+                Start
+              </PickerItem>
+              <PickerItem id="options" onSelect={noop}>
+                Options
+              </PickerItem>
+            </Picker>
+          </Actions>
+        </TabPanel>
+      </Tabs>
+    </div>
+  ),
+};

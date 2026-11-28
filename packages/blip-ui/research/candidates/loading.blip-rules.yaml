@@ -1,0 +1,17 @@
+# Pattern: waiting for something to load (a gap).
+page: loading
+rules:
+  # Web track (research-web-ux), from 201
+  - id: P-LOADING-201
+    text: Show a progress indicator during any wait longer than about a second.
+    markers: [review]
+    source: https://www.nngroup.com/articles/progress-indicators/
+  - id: P-LOADING-202
+    text: Show how far along a wait is when it takes ten seconds or more.
+    markers: [review]
+    source: https://www.nngroup.com/articles/progress-indicators/
+  - id: A-LOADING-201
+    text: Announce when a wait the player started is over.
+    markers: [review]
+    wcag: 4.1.3 Status Messages (AA)
+    source: https://www.w3.org/WAI/WCAG22/Understanding/status-messages.html

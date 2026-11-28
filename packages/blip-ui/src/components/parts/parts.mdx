@@ -34,7 +34,9 @@ names it) tells them how.
 2. **Content**, what it says: a line or two, a list. In a dialog it
    describes it
 3. **Actions**, what can be done: a `Picker` across the width, or buttons
-   side by side
+   side by side, 12 stage pixels apart and 8 in from the left, the room a
+   focused button's cursor takes (centred in a dialog, where the space
+   either side holds it)
 
 Each marks itself (`data-slot="title"`, `"content"`, `"actions"`) and
 places nothing. A window's body puts room under a title and above the
@@ -50,6 +52,23 @@ along the bottom edge.
   a dialog needs its title to have a name.
 - **Do** use `Heading` for a heading inside the content (a pool's name):
   a `Title` in a `Content` is only a heading, never the container's name.
+- **Do** put the rows as children of the `Content` and write no `grid`,
+  `gap` or margin between them: it sets the same gap, 4 stage pixels,
+  between its children, so every screen's rows are as far apart as the others'.
+- **Do** put text inside a `Text`: every direct child of the `Content` is
+  a row, so loose words beside an inline element would split into rows.
+- **Do** put rows of a `Field` (a `TextField` and a `Stepper` are one) and
+  a `Readout` in a `Content`: it sets `--bui-label-width` (a label column on
+  a wide stage, not set on a tall one) which each takes as the width of its
+  label, so the names line up, and starts them 8 in, the cursor column a
+  `Picker` and `Actions` have, so a focused field's cursor has room and
+  the labels line up with a menu's. A `Ledger` starts there too.
+- **One edge for values.** Every value in a window ends at the row's end:
+  a `Readout`'s number, a `Ledger`'s, a text box, and a `Stepper`'s and a
+  menu setting's right arrow (their value just inside it). A `Content` sets the readout's; the others end
+  there by themselves.
+- **Don't** wrap rows in a `div` to space them or give the `Content` a
+  `className` for a gap: the gap is its own.
 - **Don't** add a `WindowTitle` or `DialogActions` of your own: a new
   container provides `PartsContext` (what the parts can't know) and
   places them by their slot.
@@ -58,5 +77,7 @@ along the bottom edge.
 
 - In a `Dialog`, the title is its accessible name (`aria-labelledby`)
   and the content its description (`aria-describedby`)
+- In a `Window` or a `Dialog`, the title is also the name of a `Picker`
+  in it, unless the picker has a `label`
 - Elsewhere the title is an `h2`, so the
   screen's outline stays right

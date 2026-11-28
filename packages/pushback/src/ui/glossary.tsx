@@ -32,7 +32,7 @@ const SCROLL_STEP = 0.3;
 const styles = {
   tab: cva({
     base: [
-      'cursor-pointer px-[calc(var(--px)*2)] pb-[var(--px)] outline-none focus-visible:pb-focus',
+      'cursor-pointer px-[calc(var(--px)*2)] pb-[var(--px)] outline-none focus-visible:bui-focus',
       'border-b-[length:var(--px)]',
     ],
     variants: {
@@ -182,7 +182,7 @@ export const Glossary = ({ glossary, role, onClose }: GlossaryProps) => {
               </button>
             ))}
           </div>
-          <Text className="mb-[calc(var(--px)*8)] text-center text-[0.8em]">
+          <Text size="small" className="mb-[calc(var(--px)*8)] text-center">
             Gather every line thrown at you, and the comeback that beats it.
           </Text>
           <div className="flex min-h-0 flex-1">

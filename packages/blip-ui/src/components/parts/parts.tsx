@@ -5,6 +5,7 @@ import {
   type ReactNode,
   createContext,
   useContext,
+  useId,
 } from 'react';
 
 import { parts as styles } from './parts.styles';
@@ -25,19 +26,36 @@ export interface PartsValue {
 /** The parts' context; a container that wires its parts provides it */
 export const PartsContext = createContext<PartsValue | null>(null);
 
+/**
+ * The id of the `Title` that names the container a part is in, for a
+ * list in it to take as its name (`Picker`); `undefined` outside one, and
+ * in a `Content`, where a Title is only a heading
+ */
+export const TitleIdContext = createContext<string | undefined>(undefined);
+
+/**
+ * Lets the `Title` in it name what is in it: a container whose title is
+ * its name wraps its parts in it (a window, a dialog), so a menu in it is
+ * called what the title says, with no second name to keep in step
+ */
+export const NamedByTitle = ({ children }: { children: ReactNode }) => (
+  <TitleIdContext value={useId()}>{children}</TitleIdContext>
+);
+
 export interface PartProps {
   children: ReactNode;
   className?: string;
 }
 
 /**
- * What names the container it is in: a dialog's title, a window's.
- * Outside any, a heading
+ * What names the container it is in: a dialog's title, a window's, and
+ * the menu in it. Outside any, a heading
  */
 export const Title = ({ className, children }: PartProps) => {
   const Tag: ElementType = useContext(PartsContext)?.title ?? 'h2';
+  const id = useContext(TitleIdContext);
   return (
-    <Tag data-slot="title" className={styles.title({ className })}>
+    <Tag id={id} data-slot="title" className={styles.title({ className })}>
       {children}
     </Tag>
   );
@@ -51,7 +69,9 @@ export const Content = ({ className, children }: PartProps) => {
   const Tag: ElementType = useContext(PartsContext)?.content ?? 'div';
   return (
     <Tag data-slot="content" className={styles.content({ className })}>
-      <PartsContext value={null}>{children}</PartsContext>
+      <TitleIdContext value={undefined}>
+        <PartsContext value={null}>{children}</PartsContext>
+      </TitleIdContext>
     </Tag>
   );
 };

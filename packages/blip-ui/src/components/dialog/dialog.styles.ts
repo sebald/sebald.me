@@ -1,21 +1,22 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { DialogProps } from './dialog';
 
 export const dialog = {
   /** The stage dimmed down to the bar of controls, and over the controls (`--bui-layer-dialog` to their `--bui-layer-controls`), which a tap only closes it from; the window in the middle */
   root: cva({
-    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-(--bui-layer-dialog) flex items-center justify-center bg-(--bui-scrim) p-[calc(var(--bui-px)*6)]',
+    base: 'absolute inset-x-0 top-0 bottom-(--bui-bar) z-(--bui-layer-dialog) flex items-center justify-center bg-(--bui-scrim) p-edge',
   }),
   popup: cva({
-    // What can be done, centred under what it says
-    base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center',
+    // What can be done, centred under what it says: no cursor column
+    // then, the room either side holds the first button's cursor
+    base: 'outline-none [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:justify-center [&>[data-slot=window]>[data-slot=window-body]>[data-slot=actions]]:pl-0',
     variants: {
       size: {
-        /** A question, a few settings */
-        /** Held upright, all of the stage inside its margin */
+        /** A question, a few settings; held upright, all of the stage inside its margin */
         default: 'w-[70%] tall:w-full',
         /** A lot to read: as wide as the stage lets it */
         large: 'w-full',
-      },
+      } satisfies Record<NonNullable<DialogProps['size']>, ClassValue>,
     },
     defaultVariants: { size: 'default' },
   }),

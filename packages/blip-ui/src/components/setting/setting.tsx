@@ -16,7 +16,11 @@ export const Step = ({
   more = true,
   className,
 }: StepProps) => (
-  <span aria-hidden className={styles.step({ points, more, className })} />
+  <span
+    aria-hidden
+    data-slot="step"
+    className={styles.step({ points, more, className })}
+  />
 );
 
 export interface SettingProps {

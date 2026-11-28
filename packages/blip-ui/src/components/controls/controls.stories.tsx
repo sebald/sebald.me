@@ -46,13 +46,15 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The layout follows the toolbar. `show` is `always` here so the corners
+ * A slice of a wide stage, 200 stage pixels: a real one is 320 at a scale
+ * of 2.25 or more, and the corners need room for a focused button's
+ * cursor at 1x too. The layout follows the toolbar. `show` is `always` here so the corners
  * show without a touch screen; the default is `touch`
  */
 export const Default: Story = {
   decorators: [
     Story => (
-      <div className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] max-w-full overflow-hidden border border-dashed border-(--bui-frame-dim) bg-(--bui-ground) tall:h-[480px] tall:w-[320px]">
+      <div className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*200)] max-w-full overflow-hidden border border-dashed border-(--bui-frame-dim) bg-(--bui-ground) tall:h-[480px] tall:w-[320px]">
         <Story />
       </div>
     ),
@@ -80,7 +82,7 @@ export const Overview: Story = {
     <div className="flex flex-wrap items-start gap-8">
       <div
         hidden={globals.layout === 'tall'}
-        className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*160)] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
+        className="relative h-[calc(var(--px)*107)] w-[calc(var(--px)*200)] border border-dashed border-(--bui-frame-dim) bg-(--bui-ground)"
       >
         <Controls show="always">
           <Groups />

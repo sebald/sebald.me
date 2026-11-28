@@ -1,0 +1,138 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as TextFieldStories from './text-field.stories';
+
+<Meta of={TextFieldStories} />
+
+# TextField
+
+A text input, one line the player types: a name entry for the hero, a
+save, a pet. `TextInput` is the line itself, the text in the stage's own
+font with a caret, a native `<input>`, so the phone's keyboard opens on its
+own; built on Base UI's Input. `TextField` is the commonest form of it, a
+`Field` with a label holding a `TextInput`, in one element: its children are
+the label, `description` and `error` the field's words, the rest goes to the
+input. Where the field needs anything else around the input, compose the
+`Field` yourself.
+
+Which control a form uses for which job, and its keys: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
+
+<Canvas of={TextFieldStories.Default} />
+<Controls of={TextFieldStories.Default} />
+
+```tsx
+<TextField maxLength={10} onSubmit={name => start(name)}>
+  Name
+</TextField>
+
+// the same, composed
+<Field>
+  <FieldLabel>Name</FieldLabel>
+  <TextInput maxLength={10} onSubmit={name => start(name)} />
+</Field>
+```
+
+## Anatomy
+
+1. **Label**, its children, the `Field`'s label: to the left of the field
+   on a wide stage, above it on a tall one
+2. **The field**, the `TextInput`, on the window's own ground, with
+   one underline as its only edge, one stage pixel: `--bui-dim` at rest,
+   `--bui-primary` with the focus, `--bui-danger` when invalid; it never
+   grows. A line of text with four stage pixels above and below (the
+   `field` inset, 44 CSS pixels at 3x, a thumb's height); none at the
+   sides, so the text, its line and the words under it start on one
+   edge
+3. **Description** and **error**, the `Field`'s, under the field: what to
+   type, and what is wrong, in words
+4. **Characters left**, drawn by the `Field` at the end of that line when
+   there is a `maxLength`; muted, full or not (a hint never turns
+   yellow), a 0 saying it is full
+
+<Canvas of={TextFieldStories.Overview} />
+
+## Usage
+
+**Why only an underline.** A field lives in a `Window`, and a framed
+box there reads as a window inside a window, a container, where a field is
+a place to type. So it has no outline and no fill: one underline is the
+edge, a line to write on. A dark ink fill was tried: at 1.10:1 against the
+window it added nothing that 1.4.11 counts, and with the `Field`'s cursor
+marking the row it said nothing the line didn't (a lighter fill, 1.27:1,
+read as a box on a box). Without it a field sits in a form as a
+`Stepper` does, a label and a value, the line telling them apart.
+The underline's rest colour is `--bui-dim`,
+the dimmest tone that still holds 3:1 against the
+window. The field's own state is the underline's colour: bright with the focus,
+red when invalid, the same one pixel in every state (a line that thickened
+with the focus looked odd, decided). The focus itself is the
+`Field`'s cursor, left of the label, as on every control; the underline is
+its second cue. So an invalid field, whose underline stays red, still
+shows the focus by the cursor.
+
+**Where the label goes** is the `Field`'s: beside the field in a window's
+label column, above it on a phone ([Field](?path=/docs/components-field--docs)).
+
+<Canvas of={TextFieldStories.OptionsRows} />
+
+A game rarely asks for text, and a name is the usual reason; every
+screen that does makes typing the exception to a game's own keys, so
+ask only where the player gains by it. The limit belongs to what the
+text is for: a name that is drawn in a fixed space gets the width it can
+hold, and the characters left show it before it is reached. A screen
+reader hears it too, when the field is full and again when more is typed.
+
+An error is a sentence, not a colour, as on any `Field`: say what to do
+about it, not only that it is wrong.
+
+<Canvas of={TextFieldStories.NamingTheHero} />
+
+<Rules for="text-field" />
+
+## Input
+
+- A focused field takes every key typed in it. The kit's key layer
+  (`useKeydown`, `useKeys`, a `Picker`) leaves a key alone while the focus
+  is in a text field, so letters and arrows are typed and a menu elsewhere
+  on the screen does not move
+- Enter submits (`onSubmit`, with the text) and the field keeps the focus;
+  the screen decides what happens next. Inside a `Form`, Enter sends the
+  form instead and `onSubmit` is not called (a console error says so
+  while building): read the value in the form's `onSubmit`
+- Escape gives the keys back to the screen without leaving it: the field
+  lets go of the focus, the next Escape is the screen's own back. It does
+  not close a `Dialog` the field is in
+- A tap on the field focuses it and, on a phone, opens the keyboard; the
+  field scrolls into view, and its text is as large as the tall stage's,
+  which keeps the browser from zooming in on it
+- Sounds: `type` for a key typed, `confirm` for Enter, `back` for Escape
+  and `bump` for a key pressed at the limit
+
+## Accessibility
+
+- A native `<input type="text">`, labelled by its `Field`'s label (a
+  `TextField`'s children)
+- Described by the field's description and the limit (`Up to 10
+characters.`); an error is linked to it and marked invalid
+  (`aria-invalid`)
+- The limit is announced when it is reached, through the stage's live
+  region, not only drawn
+- Contrast, all on the window: the text is 11.56:1 and the placeholder
+  (`--bui-muted`) 5.78:1 (WCAG 1.4.3). The underline at rest is 3.05:1,
+  the 3:1 that 1.4.11 asks of a control's edge, and it is the field's only
+  edge. Focus (`--bui-primary`) is 10.51:1 and 3.44:1 against the rest
+  underline. Red is 4.15:1; the caret (`--bui-danger-light`) 6.46:1. The characters left are
+  the `Field`'s, muted, 5.78:1 on the window
+- Focus is the `Field`'s cursor left of the label (the kit's one mark,
+  `foundations/focus.mdx`), with the underline turning from dim to
+  primary as a second cue, and the caret; together they meet 2.4.7. An
+  outline outside the field made the focused field look much larger than
+  the rest. For 2.4.13 (AAA) the change of contrast passes (3.44:1); the
+  area fails: a one pixel line (3 CSS pixels) is less than a 2 pixel line
+  round the field (a thicker line passed, and looked odd: decided)
+- Invalid, the underline is red whether the field is focused or not; the
+  cursor and the caret show the focus. Under a finger there is no cursor,
+  and the open keyboard and the caret show it
+- The error is a sentence under the field and linked to it, so red is
+  never the only signal

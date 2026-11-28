@@ -3,6 +3,7 @@
 import { useLayoutEffect } from 'react';
 
 import { crisp, snapOffset } from '../../foundations/scale';
+import { watchPixelRatio } from './watch-pixel-ratio';
 
 /**
  * Keep the stage's origin on a whole device pixel. The scale is snapped
@@ -48,20 +49,8 @@ export const useSnap = (root: HTMLElement | null, scale: number) => {
         snapOffset(box.top - shift.y, dpr),
       );
     };
-    // The ratio changes on another screen or a page zoom; the query fires
-    // once, so it is set up again after each change
-    let media: MediaQueryList | null = null;
-    const watch = () => {
-      media?.removeEventListener('change', onRatio);
-      media = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
-      media.addEventListener('change', onRatio);
-    };
-    const onRatio = () => {
-      measure();
-      watch();
-    };
     measure();
-    watch();
+    const unwatch = watchPixelRatio(measure);
     // Any scroller, the page's or one around the game (captured: scroll
     // does not bubble)
     document.addEventListener('scroll', measure, {
@@ -76,7 +65,7 @@ export const useSnap = (root: HTMLElement | null, scale: number) => {
     return () => {
       document.removeEventListener('scroll', measure, { capture: true });
       window.removeEventListener('resize', measure);
-      media?.removeEventListener('change', onRatio);
+      unwatch();
       resize.disconnect();
       root.style.translate = '';
     };

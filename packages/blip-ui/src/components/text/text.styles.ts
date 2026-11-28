@@ -1,4 +1,5 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { TextProps } from './text';
 
 /**
  * The letters by role, so every screen says the same thing the same way.
@@ -7,7 +8,7 @@ import { cva } from '../../utils/styles';
 export const text = {
   heading: cva({ base: 'm-0 font-semibold text-(--bui-heading)' }),
   title: cva({
-    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-[calc(var(--bui-px)*2)] text-center',
+    base: 'absolute inset-x-0 m-0 grid justify-items-center gap-related text-center',
   }),
   // The heading under the bitmap letters, for assistive technology
   titleText: cva({ base: 'sr-only' }),
@@ -22,8 +23,13 @@ export const text = {
           'font-semibold text-(--bui-primary)',
           'animate-bui-blink motion-reduce:animate-none',
         ],
-      },
+      } satisfies Record<NonNullable<TextProps['variant']>, ClassValue>,
+      size: {
+        default: '',
+        /** A line under what it belongs to, saying less */
+        small: 'text-[0.85em]',
+      } satisfies Record<NonNullable<TextProps['size']>, ClassValue>,
     },
-    defaultVariants: { variant: 'hint' },
+    defaultVariants: { variant: 'hint', size: 'default' },
   }),
 };

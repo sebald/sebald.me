@@ -1,0 +1,7 @@
+# Pattern: the title screen (menu-screen, planned by examples-and-patterns).
+page: title
+rules:
+  - id: P-TITLE-101
+    text: Start or continue a game from the title in one pick.
+    markers: [review]
+    source: https://gameaccessibilityguidelines.com/allow-the-game-to-be-started-without-the-need-to-navigate-through-multiple-levels-of-menus/

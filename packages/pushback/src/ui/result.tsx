@@ -222,7 +222,7 @@ export const ResultScreen = ({
                   {pool.collected}/{pool.total}
                 </dd>
                 <dd className="m-0 text-right tall:col-span-full tall:-mt-[calc(var(--px)*2)]">
-                  <Text className="text-[0.85em]">
+                  <Text size="small">
                     {pool.missed === 0
                       ? 'none missed'
                       : `${pool.missed} missed`}

@@ -16,10 +16,17 @@ export const controls = {
           'border-t border-(--bui-frame-dim) bg-(--bui-ground)',
           // At the bar's right the label comes first, the icon at the edge
           '[&>:not([slot=leave])]:flex-row-reverse',
+          // Two side by side: a focused one's cursor, in its own padding,
+          // twice as far from the one before as from its own content (3,
+          // not 2: a label's letters fall a little differently per system)
+          '[&>*+*]:ml-cursor',
         ],
         /** Along the wide stage's top, the buttons in its corners; the row between lets taps through */
         corner: [
           'pointer-events-none absolute inset-x-[calc(var(--px)*5)] top-[calc(var(--px)*5)] z-(--bui-layer-controls)',
+          // Room for a focused button's cursor, three pixels left of its
+          // icon: twice that from the icon before, and on the stage
+          'left-[max(calc(var(--px)*5),--theme(--spacing-cursor-clear))] [&>*+*]:ml-cursor-column',
           '[&>*]:pointer-events-auto',
         ],
       },

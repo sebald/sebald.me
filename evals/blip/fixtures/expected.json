@@ -1,0 +1,73 @@
+{
+  "_": "Over the whole label. One candidate: the same colours on Button in 3 runs of 2 tasks. Not: Tabs.Tab in 3 runs of one task; a margin on Button in 3 runs of 2 tasks.",
+  "candidates": [
+    {
+      "key": "blip:Button|bg-red-700,text-white",
+      "kind": "blip",
+      "element": "Button",
+      "classes": [
+        "bg-red-700",
+        "text-white"
+      ],
+      "runs": [
+        "cli/shop-1",
+        "cli/shop-2",
+        "no-cli/saves-1"
+      ],
+      "tasks": [
+        "saves",
+        "shop"
+      ]
+    },
+    {
+      "key": "raw:div|style:display:'flex';gap:*;inset:0;position:'absolute'",
+      "kind": "raw",
+      "element": "div",
+      "classes": [],
+      "style": [
+        "display:'flex'",
+        "gap:*",
+        "inset:0",
+        "position:'absolute'"
+      ],
+      "runs": [
+        "cli/pause-1",
+        "cli/pause-2",
+        "cli/shop-1"
+      ],
+      "tasks": [
+        "pause",
+        "shop"
+      ]
+    }
+  ],
+  "runs": {
+    "cli": 10,
+    "no-cli": 1
+  },
+  "shop": {
+    "_": "cli, task shop: two runs (shop-1, shop-2)",
+    "runs": 2,
+    "outputTokens": {
+      "median": 220,
+      "min": 40,
+      "max": 400,
+      "n": 2
+    },
+    "blipCalls": {
+      "median": 1,
+      "min": 0,
+      "max": 2,
+      "n": 2
+    },
+    "overBudget": {
+      "yes": 1,
+      "of": 2
+    },
+    "lookupFirst": {
+      "yes": 1,
+      "of": 2
+    }
+  },
+  "cliVersion": "0.0.0-fixture"
+}

@@ -1,0 +1,34 @@
+page: screen
+rules:
+  - id: C-SCREEN-1
+    text: Make a screen's top-level box a Screen, the first child of the Stage.
+    source: day-zero; 21 of 24 screens hand-built it
+    markers: [review]
+  - id: C-SCREEN-2
+    text: Give a Screen no position, inset, padding-bottom or --bui-bar of its own, and no top padding to clear a ScreenTitle; the frame has them.
+    source: day-zero; 17 inline styles and 4 class lists wrote them, 3 guessed 22 to 24 stage pixels for the title
+    markers: [review]
+  - id: C-SCREEN-3
+    text: Put a ScreenTitle first in the Screen, not beside it.
+    source: day-zero; the title is the column's first row
+    markers: [review]
+  - id: C-SCREEN-4
+    text: Use variant="centered" for one group in the middle of the stage, not Stage.Center.
+    source: day-zero; 2 of the 3 screens without a hand-built frame wrapped in Stage.Center
+    markers: [review]
+  - id: C-SCREEN-5
+    text: Do not put a Screen inside a Window or another Screen.
+    source: task screen-layout, candidate rule
+    markers: [review]
+  - id: C-SCREEN-6
+    text: Put two windows side by side with variant="split", the one read first written first; never a flex row, a grid or a breakpoint of your own around them.
+    markers: [review]
+    fix: |
+      <Screen variant="split">
+        <ScreenTitle>Shop</ScreenTitle>
+        <Window>…</Window>
+        <Window>…</Window>
+      </Screen>
+when-not:
+  - text: A question or options that interrupt a screen are a Dialog, which covers the stage itself.
+    use: dialog

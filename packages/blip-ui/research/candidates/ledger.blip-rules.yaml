@@ -1,0 +1,5 @@
+page: ledger
+rules: []
+when-not:
+  - text: A row the player picks, such as an item for sale, is a PickerItem.
+    use: picker

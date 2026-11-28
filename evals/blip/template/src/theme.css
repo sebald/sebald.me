@@ -1,0 +1,55 @@
+/* The game's own palette: a marsh at dusk, greens and sand */
+[data-stage] {
+  --bui-ground: #0b1712;
+  --bui-ink: #07100c;
+
+  --bui-surface: #14281e;
+  --bui-surface-light: #21402f;
+  --bui-surface-shade: #0c1a13;
+  --bui-frame: #c9b878;
+  --bui-frame-dim: #5b6b4a;
+  --bui-frame-inner: #1a3226;
+
+  --bui-text: #cfd9b8;
+  --bui-text-bright: #e1e9cc;
+  --bui-text-selected: #ffffff;
+  --bui-heading: #f1e7b8;
+  --bui-muted: #8fa586;
+  --bui-dim: #5d7358;
+
+  --bui-empty: #102319;
+  --bui-empty-dots: #1b3a2a;
+
+  --bui-paper: #efe6c8;
+  --bui-paper-shade: #c4b88f;
+  --bui-paper-foreground: #07100c;
+
+  --bui-primary: #8fd14f;
+  --bui-primary-light: #d3f5a6;
+  --bui-primary-shade: #4f8a22;
+  --bui-primary-foreground: #07100c;
+
+  --bui-secondary: #e0795a;
+  --bui-secondary-light: #f5b69f;
+  --bui-secondary-shade: #a24629;
+  --bui-secondary-foreground: #07100c;
+
+  --bui-neutral: #9bb08f;
+  --bui-neutral-light: #d4e0c8;
+  --bui-neutral-shade: #627857;
+  --bui-neutral-foreground: #07100c;
+
+  --bui-info: #5fc4b8;
+  --bui-info-light: #aeeae2;
+  --bui-info-shade: #327f77;
+  --bui-info-foreground: #07100c;
+
+  --bui-danger: #c8472f;
+  --bui-danger-light: #ee8a72;
+  --bui-danger-shade: #8a2918;
+  --bui-danger-foreground: #fff6e0;
+  --bui-danger-rim: #4d140b;
+
+  --bui-spark: #fff8dc;
+  --bui-scrim: rgb(7 16 12 / 0.8);
+}

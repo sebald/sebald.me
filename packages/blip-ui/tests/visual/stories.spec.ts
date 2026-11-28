@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { escapes } from './layout';
+import { cursorRoom, escapes, windowsInWindows } from './layout';
 
 /**
  * Every story, screenshotted the ways a game shows it: wide at 3x (a
@@ -13,7 +13,8 @@ import { escapes } from './layout';
  * A screenshot only says a story looks as it did when its baseline was
  * taken, a fault included. So each shot is also checked for what a
  * picture can't show is wrong: nothing of the story may lie outside the
- * box the screenshot takes.
+ * box the screenshot takes, and every focus cursor has its room, focused
+ * or not.
  */
 interface Entry {
   id: string;
@@ -64,11 +65,40 @@ test('stories', async ({ page, baseURL }) => {
           `/iframe.html?id=${id}&viewMode=story&globals=scale:${shot.scale};layout:${shot.layout}`,
         );
         await page.locator('#storybook-root > *').first().waitFor();
+        // A story's `play` (a focus set, as the mood board's) runs after it
+        // renders: shoot it once Storybook says the story is finished. Its
+        // render phase is Storybook's internal, not an API: a short wait of
+        // its own, so a rename (look here after a Storybook bump) or a story
+        // that errors fails this one story, not the whole run by its timeout
+        await page
+          .waitForFunction(
+            () =>
+              (
+                window as {
+                  __STORYBOOK_PREVIEW__?: {
+                    currentRender?: { phase?: string };
+                  };
+                }
+              ).__STORYBOOK_PREVIEW__?.currentRender?.phase === 'finished',
+            undefined,
+            { timeout: 5_000 },
+          )
+          .catch(() => {
+            throw new Error(
+              `${id}: Storybook never said the story finished (its play failed, or __STORYBOOK_PREVIEW__.currentRender.phase changed in a Storybook update)`,
+            );
+          });
         await page.evaluate(() => document.fonts.ready);
         expect
           .soft(
             await escapes(page),
             'parts outside the story, cut off in the screenshot',
+          )
+          .toEqual([]);
+        expect
+          .soft(
+            await cursorRoom(page),
+            'a focus cursor without its room (foundations/focus.mdx)',
           )
           .toEqual([]);
         await expect
@@ -77,4 +107,28 @@ test('stories', async ({ page, baseURL }) => {
       });
     }
   }
+});
+
+/**
+ * No story draws a window in a window, those left out of the screenshots
+ * (`no-vrt`) included: a frame in a frame is never right, so each is
+ * opened once, wide, and looked at for one
+ */
+test('no window in a window', async ({ page, baseURL }) => {
+  const index = (await (await fetch(`${baseURL}/index.json`)).json()) as {
+    entries: Record<string, Entry>;
+  };
+  const stories = Object.values(index.entries).filter(
+    entry => entry.type === 'story',
+  );
+  test.setTimeout(stories.length * 10_000);
+  await page.setViewportSize({ width: 960, height: 600 });
+  const found: string[] = [];
+  for (const { id } of stories) {
+    await page.goto(`/iframe.html?id=${id}&viewMode=story&globals=scale:3`);
+    await page.locator('#storybook-root > *').first().waitFor();
+    for (const fault of await windowsInWindows(page))
+      found.push(`${id}: ${fault}`);
+  }
+  expect(found).toEqual([]);
 });

@@ -2,23 +2,29 @@
 
 import {
   Children,
+  type CSSProperties,
   type ReactNode,
   type RefObject,
   createContext,
+  isValidElement,
   use,
   useEffect,
+  useEffectEvent,
   useLayoutEffect,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useKeydown } from '../../hooks/key-layer';
+import { useKeyScope, useKeydown } from '../../hooks/key-layer';
 import { useInputKind } from '../../hooks/use-input-kind';
 import { type Scroll, overflows, useScroll } from '../../hooks/use-scroll';
 import { useAnnounce } from '../../providers/announcer';
-import { type Feedback, useFeedback } from '../../providers/feedback';
+import { useFeedback } from '../../providers/feedback';
 import { usePixels } from '../../providers/pixels';
+import { building } from '../../utils/dev';
+import { cn } from '../../utils/styles';
+import { TitleIdContext } from '../parts/parts';
 import { Setting } from '../setting/setting';
 import { Text } from '../text/text';
 import { Window } from '../window/window';
@@ -133,7 +139,7 @@ const useNotePlace = (
 /** What an item gives the picker, for the keys */
 interface Entry {
   disabled: boolean;
-  variant: ItemVariant;
+  variant: NonNullable<PickerItemProps['variant']>;
   onSelect: () => void;
   onStep?: (step: 1 | -1) => void;
 }
@@ -145,11 +151,24 @@ interface PickerContextValue {
   choose: (entry: Entry) => void;
   entries: Map<string, Entry>;
   active: boolean;
+  /** Another menu on the layer has the keys: no cursor, no note */
+  resting: boolean;
   touch: boolean;
   overflow: boolean;
   scrollTop: number;
   listRef: RefObject<HTMLUListElement | null>;
+  /** The columns' names, the name's first, where the list has columns */
+  columns: readonly string[] | undefined;
+  /** The items' ids in the list's order, across its groups: each row's place in it */
+  ids: readonly string[];
+  /** Whether the keys moved the cursor to this row, asked once by the row it reaches: it takes the focus */
+  takeKeyMove: (id: string) => boolean;
 }
+
+/** The column a value sits in: its name, read out before it, and whether it is the last */
+const ColumnContext = createContext<
+  { name: string; last: boolean } | undefined
+>(undefined);
 
 const PickerContext = createContext<PickerContextValue | null>(null);
 
@@ -159,13 +178,24 @@ const usePicker = () => {
   return context;
 };
 
-const choose = (entry: Entry, play: Feedback) => {
-  if (entry.disabled) {
-    play('bump');
-    return;
-  }
-  play(entry.variant === 'back' ? 'back' : 'confirm');
-  entry.onSelect();
+/**
+ * The cursor's place in the list, `3 of 12`: for the eye, as each row
+ * carries its own place for a screen reader (`aria-posinset`)
+ */
+const Position = ({
+  ids,
+  current,
+}: {
+  ids: readonly string[];
+  current: string | undefined;
+}) => {
+  const at = current === undefined ? -1 : ids.indexOf(current);
+  return (
+    <p aria-hidden data-slot="picker-position" className={styles.position()}>
+      {/* No cursor yet: the line keeps its height, so the list stays put */}
+      {at < 0 ? '\u00a0' : `${at + 1} of ${ids.length}`}
+    </p>
+  );
 };
 
 export interface PickerProps {
@@ -174,13 +204,32 @@ export interface PickerProps {
   /** The item the cursor is on at first, by id; the first enabled one by default */
   initial?: string;
   /**
-   * Keyboard handling on (one menu at a time on a layer; a `Dialog` over
-   * it takes the keys by itself)
+   * Keyboard handling on. With several on one layer the keys go to the
+   * one the player last clicked or focused (the first until then); a
+   * `Dialog` over it takes the keys by itself
    * @default true
    */
   active?: boolean;
-  /** The list's accessible name */
-  label: string;
+  /**
+   * The list's accessible name, only where nothing names it: in a window
+   * or a dialog with a `Title`, the title is its name
+   */
+  label?: string;
+  /**
+   * Its columns' names, for a list whose rows have more than one value (a
+   * shop's Item, Price, Owned): the name's column first, then one per
+   * `PickerItemValue`, in the order a row writes them. A header row over
+   * the list names them, each row's values line up under it, and a screen
+   * reader hears each value with its column's name (`Tonic Price 25g`)
+   */
+  columns?: readonly string[];
+  /**
+   * Where the cursor is, `3 of 12`, under the list at its end: for a list
+   * longer than its window, whose rail shows how far down it is but not
+   * which. A short list needs none
+   * @default false
+   */
+  position?: boolean;
   /** On the list itself */
   className?: string;
 }
@@ -199,15 +248,30 @@ export const Picker = ({
   initial,
   active = true,
   label,
+  columns,
+  position = false,
   className,
 }: PickerProps) => {
   const play = useFeedback();
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
+  // The row the keys last moved the cursor to, until a row that becomes
+  // current asks: whichever asks, it is cleared, so a later hover or tap
+  // never takes the focus by an old move
+  const movedByKeys = useRef<string | null>(null);
+  const takeKeyMove = (id: string) => {
+    const moved = movedByKeys.current === id;
+    movedByKeys.current = null;
+    return moved;
+  };
+  const rootRef = useRef<HTMLDivElement>(null);
+  const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
   const overflow = overflows(scroll);
   const touch = useInputKind() === 'touch';
+  const titleId = use(TitleIdContext);
+  const hasColumns = Boolean(columns?.length);
 
   /** The items' ids in the order the list shows them */
   const order = () =>
@@ -216,6 +280,33 @@ export const Picker = ({
         '[data-slot=picker-item]',
       ) ?? []),
     ].map(row => row.dataset.id!);
+
+  // A menu has a name: its window's title, or its label where nothing
+  // names it. Say so while building one
+  useEffect(() => {
+    if (!building()) return;
+    const named =
+      label !== undefined ||
+      (titleId !== undefined && document.getElementById(titleId));
+    if (!named)
+      console.error(
+        'Blip UI: a Picker with no name. Give its window a Title (it names the menu), or the Picker a label where nothing names it.',
+      );
+  }, [label, titleId]);
+
+  // The items in the list's order, kept for each row's place in it (a
+  // screen reader's `3 of 12`, across groups) and for the position
+  const [ids, setIds] = useState<readonly string[]>([]);
+  useLayoutEffect(() => {
+    const next = order();
+    // Synced with the DOM's order after every render, an item's own too
+    // (one that comes or goes inside a wrapper); set only when it changed,
+    // so this settles at once
+    // oxlint-disable-next-line react/set-state-in-effect
+    setIds(previous =>
+      previous.join('\n') === next.join('\n') ? previous : next,
+    );
+  });
 
   // The cursor on an item that is there: the first enabled one at first,
   // and again when its item goes
@@ -229,15 +320,28 @@ export const Picker = ({
     if (first !== undefined) setCurrent(first);
   }, [children, current, entries]);
 
-  const pick = (entry: Entry) => choose(entry, play);
+  // An item chosen: refused with a bump when disabled
+  const choose = (entry: Entry) => {
+    if (entry.disabled) {
+      play('bump');
+      return;
+    }
+    play(entry.variant === 'back' ? 'back' : 'confirm');
+    entry.onSelect();
+  };
 
   useKeydown(event => {
+    // Another menu on this layer has the keys
+    if (!hasKeys()) return;
     const move = (step: number) => {
       const ids = order();
       if (!ids.length) return;
       play('move');
       const at = current === undefined ? -1 : ids.indexOf(current);
-      setCurrent(ids[(at + step + ids.length) % ids.length]);
+      const next = ids[(at + step + ids.length) % ids.length]!;
+      // A list of one goes nowhere: no row to take the focus
+      movedByKeys.current = next === current ? null : next;
+      setCurrent(next);
     };
     const entry = current === undefined ? undefined : entries.get(current);
     switch (event.key) {
@@ -265,41 +369,84 @@ export const Picker = ({
       case ' ':
         if (entry) {
           event.preventDefault();
-          pick(entry);
+          choose(entry);
         }
         break;
     }
   }, active);
+
+  // The list and the rail beside it: under it the position, where shown
+  const list = (
+    <>
+      <ul
+        ref={listRef}
+        className={styles.menu({ columned: hasColumns, className })}
+        style={
+          hasColumns
+            ? ({ '--picker-values': columns!.length - 1 } as CSSProperties)
+            : undefined
+        }
+        aria-label={label}
+        aria-labelledby={label === undefined ? titleId : undefined}
+      >
+        {hasColumns && (
+          // For the eye: each value says its column's name itself, and
+          // the names are no item of the list
+          <li
+            aria-hidden
+            role="presentation"
+            data-slot="picker-header"
+            className={styles.header()}
+          >
+            <span />
+            {columns!.map((name, at) => (
+              <span key={at}>{name}</span>
+            ))}
+          </li>
+        )}
+        {children}
+      </ul>
+      {overflow && <ScrollRail scroll={scroll} />}
+    </>
+  );
 
   return (
     <PickerContext
       value={{
         current,
         setCurrent,
-        choose: pick,
+        choose,
         entries,
         active,
+        resting,
         touch,
         overflow,
         scrollTop: scroll.top,
         listRef,
+        columns: hasColumns ? columns : undefined,
+        ids,
+        takeKeyMove,
       }}
     >
-      <div data-slot="picker" className={styles.root()}>
-        <ul
-          ref={listRef}
-          className={styles.menu({ className })}
-          aria-label={label}
-        >
-          {children}
-        </ul>
-        {overflow && <ScrollRail scroll={scroll} />}
+      <div
+        ref={rootRef}
+        data-slot="picker"
+        className={styles.root({ positioned: position })}
+      >
+        {position ? (
+          <>
+            <div data-slot="picker-body" className={styles.body()}>
+              {list}
+            </div>
+            <Position ids={ids} current={current} />
+          </>
+        ) : (
+          list
+        )}
       </div>
     </PickerContext>
   );
 };
-
-type ItemVariant = 'default' | 'accent' | 'back';
 
 export interface PickerItemProps {
   /** Names the item, for `initial` */
@@ -312,7 +459,7 @@ export interface PickerItemProps {
    * sounds like stepping back, not like confirming
    * @default 'default'
    */
-  variant?: ItemVariant;
+  variant?: 'default' | 'accent' | 'back';
   /**
    * Shown, dimmed, and reachable by the cursor, but picking it bumps:
    * nothing in a menu is hidden, so give it a `note` that says why
@@ -333,6 +480,43 @@ export interface PickerItemProps {
   onSelect: () => void;
 }
 
+/**
+ * An item's parts sorted into the columns: the name and its tag in the
+ * name's column, each value in the next column, with that column's name
+ * to read out, a detail under them. Parts are the item's own children,
+ * as `PickerItem` documents them
+ */
+const inColumns = (children: ReactNode, columns: readonly string[]) => {
+  const all = Children.toArray(children);
+  const isA = (child: ReactNode, part: unknown) =>
+    isValidElement(child) && child.type === part;
+  const values = all.filter(child => isA(child, PickerItemValue));
+  const details = all.filter(child => isA(child, PickerItemDetail));
+  const name = all.filter(
+    child => !isA(child, PickerItemValue) && !isA(child, PickerItemDetail),
+  );
+  const count = columns.length - 1;
+  // A value for every column, in its order: one more has no column
+  if (building() && values.length > count)
+    console.error(
+      `Blip UI: a PickerItem with ${values.length} values in a Picker with ${count} value columns. Give the Picker a column for each, or write fewer values; the rest are left out.`,
+    );
+  return (
+    <>
+      <span data-slot="picker-item-name">{name}</span>
+      {values.slice(0, count).map((value, at) => (
+        <ColumnContext
+          key={at}
+          value={{ name: columns[at + 1]!, last: at === count - 1 }}
+        >
+          {value}
+        </ColumnContext>
+      ))}
+      {details}
+    </>
+  );
+};
+
 /** The row itself, for an item and a setting */
 const Row = ({
   id,
@@ -346,7 +530,21 @@ const Row = ({
 }: PickerItemProps & { onStep?: (step: 1 | -1) => void }) => {
   const picker = usePicker();
   const rowRef = useRef<HTMLLIElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const isCurrent = picker.current === id;
+
+  // Moved here by the keys, the row takes the focus: a screen reader says
+  // it as the cursor reaches it, its name and its place (`3 of 12`), as
+  // the cursor is the focus. Never when the list opens or a pointer
+  // moves the cursor, so a menu takes no focus the player didn't move.
+  // The list scrolls itself (below), never the page
+  const { takeKeyMove } = picker;
+  const takeFocus = useEffectEvent(() => {
+    if (takeKeyMove(id)) buttonRef.current?.focus({ preventScroll: true });
+  });
+  useEffect(() => {
+    if (isCurrent) takeFocus();
+  }, [isCurrent]);
 
   // The keys reach the item through the picker: its latest handlers
   const entry: Entry = { disabled, variant, onSelect, onStep };
@@ -379,7 +577,8 @@ const Row = ({
       list.scrollTop = bottom - list.clientHeight;
   }, [isCurrent, picker.overflow, listRef]);
 
-  const shownNote = picker.active && isCurrent && Boolean(note);
+  const shownNote =
+    picker.active && !picker.resting && isCurrent && Boolean(note);
   // Read out as it shows, after the item's own name
   const announce = useAnnounce();
   useEffect(() => {
@@ -393,33 +592,75 @@ const Row = ({
   );
   // Under a finger there is no cursor to move, and a marked row would read
   // as chosen already: only the row a description is about is marked
-  const marked = isCurrent && (!picker.touch || Boolean(note));
+  const marked =
+    isCurrent && !picker.resting && (!picker.touch || Boolean(note));
+
+  const at = picker.ids.indexOf(id);
+
+  const { columns } = picker;
+  const parts = columns ? inColumns(children, columns) : children;
+  const placed = columns ? styles.columns() : styles.parts();
 
   return (
-    <li ref={rowRef} data-slot="picker-item" data-id={id}>
+    <li
+      ref={rowRef}
+      data-slot="picker-item"
+      data-id={id}
+      // Its place in the whole list, groups and all, read with its name
+      aria-posinset={at >= 0 ? at + 1 : undefined}
+      aria-setsize={at >= 0 ? picker.ids.length : undefined}
+    >
       <button
+        ref={buttonRef}
         type="button"
         aria-disabled={disabled || undefined}
         aria-current={isCurrent ? 'true' : undefined}
-        className={styles.item({ selected: marked, variant })}
+        className={styles.item({
+          selected: marked,
+          stepsShown: marked || picker.touch,
+          variant,
+          className: columns && styles.itemColumned(),
+        })}
         onPointerEnter={() => picker.setCurrent(id)}
+        // Tab (or any keyboard focus) puts the cursor here, so there is one
+        // cursor, not the keys' and another where the focus is
+        onFocus={event => {
+          if (event.currentTarget.matches(':focus-visible'))
+            picker.setCurrent(id);
+        }}
         onClick={() => {
           picker.setCurrent(id);
           picker.choose(entry);
         }}
       >
-        <span aria-hidden className={styles.cursor({ shown: marked })} />
         <span
-          className={styles.label({ disabled })}
+          aria-hidden
+          data-slot="cursor"
+          className={styles.cursor({ shown: marked })}
+        />
+        <span
+          data-cursor-target
+          className={styles.label({
+            disabled,
+            // An accent item's call holds its parts, so it places them; in
+            // columns it spans them, as the label does
+            className:
+              variant !== 'accent'
+                ? placed
+                : columns && 'grid grid-cols-subgrid',
+          })}
           style={ruledOut ? { opacity: 1 - 0.75 * ruledOut } : undefined}
         >
           {/* The loud one blinks; the cursor beside it does not */}
           {variant === 'accent' ? (
-            <Text variant="call" className="text-inherit">
-              {children}
+            <Text
+              variant="call"
+              className={cn(placed, columns && 'col-span-full', 'text-inherit')}
+            >
+              {parts}
             </Text>
           ) : (
-            children
+            parts
           )}
         </span>
       </button>
@@ -487,9 +728,75 @@ export const PickerSetting = ({
   </Row>
 );
 
-/** Items that belong together, apart from the rest: room above them */
-export const PickerGroup = ({ children }: { children: ReactNode }) => (
-  <li data-slot="picker-group">
-    <ul className={styles.group()}>{children}</ul>
-  </li>
+export interface PickerItemPartProps {
+  children: ReactNode;
+  className?: string;
+}
+
+/**
+ * The space a screen reader reads between the name and a part beside it
+ * (`Lantern New 12g`): the part sits in the name's line, with no space
+ * written between them, so the words don't rely on how a browser builds
+ * the name from inline boxes. The gap the eye sees is the part's margin
+ */
+const Gap = () => <span className="sr-only"> </span>;
+
+/**
+ * A second line under the item's name, quieter and smaller: who gave a
+ * quest and what to do next, where a save was made, why a ware is out of
+ * reach. The item's own text stays its name
+ */
+export const PickerItemDetail = ({
+  className,
+  children,
+}: PickerItemPartProps) => (
+  <span data-slot="picker-item-detail" className={styles.detail({ className })}>
+    {children}
+  </span>
 );
+
+export interface PickerItemValueProps extends PickerItemPartProps {
+  /**
+   * What it is: `default`, what the row is about (a price, a play time),
+   * in the row's colour; `progress`, how far along it is (`3/8`), muted,
+   * so the name stays what the eye reads first
+   * @default 'default'
+   */
+  variant?: 'default' | 'progress';
+}
+
+/**
+ * A value at the row's end, where every value in a window ends: a price,
+ * a play time, a count. Figures keep their width as they change
+ */
+export const PickerItemValue = ({
+  variant,
+  className,
+  children,
+}: PickerItemValueProps) => {
+  const column = use(ColumnContext);
+  return (
+    <span
+      data-slot="picker-item-value"
+      data-last-column={column?.last || undefined}
+      className={styles.value({ variant, className })}
+    >
+      <Gap />
+      {/* In columns, the column's name before it: `Price 25g` */}
+      {column && <span className="sr-only">{column.name} </span>}
+      {children}
+    </span>
+  );
+};
+
+/** Items that belong together, apart from the rest: room above them */
+export const PickerGroup = ({ children }: { children: ReactNode }) => {
+  const columns = use(PickerContext)?.columns;
+  return (
+    <li data-slot="picker-group">
+      <ul className={styles.group({ columned: Boolean(columns) })}>
+        {children}
+      </ul>
+    </li>
+  );
+};

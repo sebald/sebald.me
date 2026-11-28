@@ -1,8 +1,9 @@
-import { cva } from '../../utils/styles';
+import { type ClassValue, cva } from '../../utils/styles';
+import type { LineProps } from './line';
 
 export const line = {
   line: cva({
-    base: 'm-0 flex items-start gap-[calc(var(--bui-px)*3)]',
+    base: 'm-0 flex items-start gap-related',
     variants: { past: { true: 'text-(--bui-muted)' } },
   }),
   mark: cva({
@@ -12,7 +13,7 @@ export const line = {
       variant: {
         primary: 'bg-(--bui-primary)',
         secondary: 'bg-(--bui-secondary)',
-      },
+      } satisfies Record<NonNullable<LineProps['variant']>, ClassValue>,
     },
     defaultVariants: { variant: 'primary' },
   }),

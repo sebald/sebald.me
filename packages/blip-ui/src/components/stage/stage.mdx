@@ -68,6 +68,8 @@ scale to draw a canvas at), `turn` and `small`. The stage sets `--px`, `--bui-ba
   has one and the screen fits it (`fullscreenFits()`).
 - **Do** use `lift` on the tall stage to centre a group in the rows it does
   not need.
+- **Do** use `Stage.Center` for a group in the middle of the stage that is
+  not a whole screen; a screen's frame is `Screen` (`blip docs screen`).
 - **Don't** set sizes in CSS pixels inside it, except for touch targets.
 - **Don't** use `scale` in a game: it is for docs and workbenches (a fixed
   stage is never tall and never turned).

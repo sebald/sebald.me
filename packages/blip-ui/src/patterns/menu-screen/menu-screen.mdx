@@ -1,0 +1,47 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+
+import * as TogetherStories from '../../compositions/together.stories';
+
+<Meta title="Patterns/Menu screen" />
+
+# Menu screen
+
+A whole screen that asks the player to choose: pick a role, start the run,
+set an option. The screen's title sits along the top, and one window holds
+the choice: what it is about, the picker, the keys. Starting and going back
+are the menu's own items, not buttons beside it: a window is a menu or a
+form, and the arrow keys reach everything on a menu screen, where buttons
+under it would be reached by Tab alone.
+
+## When to use
+
+- The player picks one thing from a short list, or sets a few options,
+  before the game goes on: the title menu, a role or level select, options.
+- The choices need a sentence of context. For a question that interrupts a
+  screen, use a Dialog (`blip docs dialog`) or a Confirm (`blip docs confirm`)
+  instead, which cover the screen behind them.
+
+## Parts
+
+| Part          | What it does here                                                                   |
+| ------------- | ----------------------------------------------------------------------------------- |
+| `ScreenTitle` | The screen's name in bitmap letters along the top, with a one-line blurb under it   |
+| `Window`      | Holds the choice; `Title`, `Content` and `Actions` place themselves inside it       |
+| `Picker`      | The list: items, a setting, a disabled item with a `note`, a `PickerGroup` for Back |
+| `Legend`      | The keys at the window's bottom, or the one line a touch screen shows               |
+
+The picker's `Back` item is a `PickerItem` with `variant="back"` in its own
+`PickerGroup`, so it has room above it, and the screen gives Escape the
+same handler (`useKeys`). The main item is `variant="accent"`.
+
+## Layout
+
+The screen is placed in stage pixels (`calc(var(--px) * n)`), on a `Stage`,
+and has a `tall:` layout for a phone held upright: the same JSX, with the
+window given the stage's width and moved down.
+
+The example positions itself absolutely, so its parent must be the `Stage`.
+
+## Example
+
+<Canvas of={TogetherStories.Menu} />

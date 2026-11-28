@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import { Exchange as ExchangeExample } from './examples/exchange';
 import { Line } from './line';
 
 const meta = {
@@ -68,12 +69,5 @@ export const Overview: Story = {
 /** An exchange: the line being answered is past, the reply is live */
 export const Exchange: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="grid w-[calc(var(--px)*200)] max-w-full gap-3">
-      <Line variant="secondary" past>
-        Let’s take this offline.
-      </Line>
-      <Line variant="primary">Offline is where ideas go to die.</Line>
-    </div>
-  ),
+  render: () => <ExchangeExample />,
 };

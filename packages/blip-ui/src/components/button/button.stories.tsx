@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from './button';
+import { Back as BackExample } from './examples/back';
+import { Pair as PairExample } from './examples/pair';
 
 const meta = {
   title: 'Components/Button',
@@ -42,7 +44,7 @@ const SIZES = ['default', 'small'] as const;
 export const Overview: Story = {
   parameters: { controls: { disable: true } },
   render: () => (
-    <div className="grid w-fit grid-cols-[auto_repeat(3,auto)] items-center gap-4">
+    <div className="grid w-fit grid-cols-[auto_repeat(3,auto)] items-center gap-x-cursor-apart gap-y-4">
       {[...SIZES, 'disabled' as const].flatMap(row => [
         <span key={row} className="text-[0.75em] text-(--bui-dim)">
           {row}
@@ -65,10 +67,11 @@ export const Overview: Story = {
 /** A screen's actions: the main one first, the quieter one beside it */
 export const Pair: Story = {
   parameters: { controls: { disable: true } },
-  render: () => (
-    <div className="flex flex-wrap gap-3">
-      <Button>Start</Button>
-      <Button variant="secondary">Back</Button>
-    </div>
-  ),
+  render: () => <PairExample />,
+};
+
+/** Back in a menu window and in a form window, Esc the same in both */
+export const Back: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <BackExample />,
 };

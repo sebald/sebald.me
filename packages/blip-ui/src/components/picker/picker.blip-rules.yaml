@@ -1,0 +1,68 @@
+page: picker
+rules:
+  - id: C-PICKER-1
+    text: Don't turn a Picker's `active` off only because another Picker or a Dialog is on the screen. Pickers on one layer share the keys by themselves (the one last pointed at, clicked or focused has them, the first until then) and a Dialog is a layer of its own.
+    markers: [review]
+  - id: C-PICKER-2
+    text: Use `active={false}` for a menu that must not listen yet (a demo, a menu not shown); directional input alone cannot hand the keys to a second menu on the same layer.
+    markers: [review]
+  - id: C-PICKER-3
+    text: Give a Picker under a Window's or Dialog's Title no label that repeats it; the title names the menu. A label is for a menu nothing names, or whose title says something else.
+    severity: warning
+    check: picker-named-by-title
+    fix: |
+      <Window>
+        <Title>Options</Title>
+        <Actions>
+          <Picker>…</Picker>
+        </Actions>
+      </Window>
+  - id: A-PICKER-1
+    text: Give every Picker a name a screen reader says, its window's Title or its label, and the same words the player sees.
+    markers: [review]
+    source: https://www.w3.org/WAI/WCAG22/Understanding/label-in-name.html
+  - id: C-PICKER-4
+    text: Make a menu's Back its last PickerItem, variant="back"; never a Button beside the Picker.
+    severity: warning
+    check: menu-back-item
+    fix: |
+      <Picker>
+        <PickerItem id="sound" onSelect={openSound}>Sound</PickerItem>
+        <PickerGroup>
+          <PickerItem id="back" variant="back" onSelect={back}>Back</PickerItem>
+        </PickerGroup>
+      </Picker>
+  - id: C-PICKER-5
+    text: Give Escape the handler of the menu's Back item (useKeys on the screen), and name it in the Legend.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/112
+  - id: C-PICKER-6
+    text: Write what a row says besides its name as the item's parts (PickerItemDetail, PickerItemValue, a Tag), never as spans with a size, an opacity or a colour of their own, nor as text run into the name (`Tonic · 25g`). A count of how far along is a value with variant="progress", not a muted span.
+    markers: [review]
+    fix: |
+      <PickerItem id="tonic" onSelect={buy}>
+        Tonic
+        <PickerItemValue>25g</PickerItemValue>
+        <PickerItemDetail>Heals a little</PickerItemDetail>
+      </PickerItem>
+  - id: C-PICKER-7
+    text: Give a Picker whose rows have more than one value its `columns`, the name's column first and one name per PickerItemValue in the order the rows write them; every row writes its values in the columns' order, one it has none for as `–` (values fill the columns by place, so a value left out moves the next under the wrong name); never a grid, fixed widths or spaces of your own to line values up, and never a header row written as an item.
+    markers: [review]
+    fix: |
+      <Picker columns={['Item', 'Price', 'Owned']}>
+        <PickerItem id="tonic" onSelect={buy}>
+          Tonic
+          <PickerItemValue>25g</PickerItemValue>
+          <PickerItemValue>3</PickerItemValue>
+        </PickerItem>
+      </Picker>
+  - id: C-PICKER-8
+    text: Give a Picker that scrolls, or whose count the player needs, `position` for the cursor's place (`3 of 12`); never a Readout or text of your own that counts the rows. A list that fits its window needs none.
+    markers: [review]
+    fix: |
+      <Picker label="Colleagues" position>
+        <PickerItem id="ada" onSelect={pick}>Ada</PickerItem>
+      </Picker>
+when-not:
+  - text: Values the player fills in or sets on one screen, saved together, are fields in a Form, not a Picker.
+    use: form

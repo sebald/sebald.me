@@ -1,5 +1,6 @@
 import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
 
+import { Rules } from '../../../.storybook/blocks';
 import * as PickerStories from './picker.stories';
 
 <Meta of={PickerStories} />
@@ -7,25 +8,34 @@ import * as PickerStories from './picker.stories';
 # Picker
 
 A list the player moves through with a cursor: the title menu, options,
-the choices in a duel. It is always open and always listening, so one
-picker at a time is `active`. Lists of choices are a Picker, not a column
-of buttons. It is built from its parts, so the JSX reads like the menu:
+the choices in a duel. It is always open and always listening, and
+with several on a layer it listens for the one the player is in. Lists of
+choices are a Picker, not a column of buttons. It is built from its parts, so the JSX reads like the menu,
+and its window's title is its name:
 
 ```tsx
-<Picker label="Options">
-  <PickerSetting id="mode" value="Normal" onStep={step}>
-    Mode
-  </PickerSetting>
-  <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
-    Hard mode
-  </PickerItem>
-  <PickerGroup>
-    <PickerItem id="back" variant="back" onSelect={close}>
-      Back
-    </PickerItem>
-  </PickerGroup>
-</Picker>
+<Window>
+  <Title>Options</Title>
+  <Actions>
+    <Picker>
+      <PickerSetting id="mode" value="Normal" onStep={step}>
+        Mode
+      </PickerSetting>
+      <PickerItem id="hard" disabled note="Beat the Stakeholder first." onSelect={…}>
+        Hard mode
+      </PickerItem>
+      <PickerGroup>
+        <PickerItem id="back" variant="back" onSelect={close}>
+          Back
+        </PickerItem>
+      </PickerGroup>
+    </Picker>
+  </Actions>
+  <Legend keys={[['↑↓', 'choose'], ['Enter', 'confirm']]} touch="Tap a line" />
+</Window>
 ```
+
+Which control a menu or a form uses, and the keys on every screen: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
 
 <Canvas of={PickerStories.Default} />
 <Controls of={PickerStories.Default} />
@@ -40,11 +50,13 @@ of buttons. It is built from its parts, so the JSX reads like the menu:
 
 ## Parts
 
-| Part            | What it is                                                                                  |
-| --------------- | ------------------------------------------------------------------------------------------- |
-| `PickerItem`    | Something to pick                                                                           |
-| `PickerSetting` | A setting: its name and its value between the step arrows; left and right step it (Setting) |
-| `PickerGroup`   | Items that belong together, with room above them                                            |
+| Part               | What it is                                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| `PickerItem`       | Something to pick                                                                                                         |
+| `PickerSetting`    | A setting: its name and its value between the step arrows, shown on the cursor's row; left and right step it (Setting)    |
+| `PickerGroup`      | Items that belong together, with room above them                                                                          |
+| `PickerItemDetail` | In an item: a second line under its name, quieter and smaller                                                             |
+| `PickerItemValue`  | In an item: a value at the row's end, where a setting's value ends; `variant="progress"` for how far along (`3/8`), muted |
 
 ## Variants and states
 
@@ -63,18 +75,122 @@ of buttons. It is built from its parts, so the JSX reads like the menu:
 <Canvas of={PickerStories.InAWindow} />
 
 A list that is taller than its room scrolls, keeps the cursor in view and
-shows the rail.
+shows the rail. In a window in a `Screen` the room is what the stage has
+left (`Screen`, a list longer than the stage).
+
+The rail shows how far down the list is, not which item the cursor is on.
+For a list that long, `position` adds the cursor's place under the list at
+its end (`3 of 12`): quiet and small, following the cursor, wrapping with
+it. It counts every item, a disabled one and those in groups too. A list
+that fits its window needs none, since every row is in sight: use it
+where the list scrolls, or where the player needs the count (a roster, an
+inventory page).
+
+```tsx
+<Picker label="Colleagues" position>
+  …
+</Picker>
+```
 
 <Canvas of={PickerStories.ScrollingList} />
 
+### An item with parts
+
+An item's text is its name. Where a row says more, a quest's giver and
+next step, a save's play time, a ware's price, its parts go in it after
+the name, in reading order: a `Tag`, the value, then the details. The
+item places them by their slot, wrapped like text: a tag after the
+name's last word, a value at the end of that line, a detail on a line of
+its own under them (one for each). A word longer than the window breaks. A
+screen reader reads them in the order they are written. Written as parts, never as `span`s with
+a size or an opacity of their own, every list says the same thing the
+same way, and a disabled item dims them all with its name.
+
+```tsx
+<PickerItem id="rope" disabled note="Sell something first." onSelect={buy}>
+  Rope
+  <PickerItemValue>45g</PickerItemValue>
+  <PickerItemDetail>15g short</PickerItemDetail>
+</PickerItem>
+```
+
+<Canvas of={PickerStories.QuestLog} />
+<Canvas of={PickerStories.SaveSlots} />
+<Canvas of={PickerStories.ShopWares} />
+
+A screen reader reads the row as its words in order, each part one of them
+(`Rope 45g 15g short`, dimmed). A tag says what it means in words
+(`New`, `Done`), never by colour alone. What a whole quest or ware says
+belongs in its `note`, not in a third line. A disabled item dims its details with its
+name, so a detail may say why (`15g short`) but is never the only place
+it is said: its `note` says it in full, readable, on the cursor's row.
+
+A count of how far along (`3/8` colleagues, `12/60` collected) is a
+`PickerItemValue variant="progress"`: muted, on the cursor's row too, as
+a detail is, so the name stays what the eye reads first. A price or a play
+time is the default, in the row's colour.
+
+### Columns
+
+Where a row has more than one value, a ware's price and how many the player
+owns, the `Picker`'s `columns` name them: the name's column first, then one
+per `PickerItemValue`, in the order a row writes its values. A header row
+over the list says the names, quieter than the rows, and each value lines
+up under its own, as wide as the column's widest, so the eye runs down a
+column as it does in a shop's ledger. The rows are written as before;
+nothing in them is a grid of their own, and their parts are the item's own
+children, not wrapped. A row's values fill the columns in order, by
+place, not by name: a row writes every value, one it has none for as `–`
+(`<PickerItemValue>–</PickerItemValue>`), so the next stays under its own
+name. One with fewer leaves the last columns empty, and one with more than there are
+columns is refused while building (the rest are left out). A row with no
+values (Back, a `PickerSetting`) takes the whole width.
+
+```tsx
+<Picker columns={['Item', 'Price', 'Owned']}>
+  <PickerItem id="tonic" onSelect={buy}>
+    Tonic
+    <PickerItemValue>25g</PickerItemValue>
+    <PickerItemValue>3</PickerItemValue>
+  </PickerItem>
+</Picker>
+```
+
+<Canvas of={PickerStories.ShopColumns} />
+
+A screen reader hears each value with its column's name (`Tonic Price
+25g Owned 3`), so the header row is for the eye only. One value a row
+needs no columns: it sits at the row's end, and the window's title says
+what it is (`Wares · 30g`).
+
+### Menus side by side
+
+Menus side by side share the keys: the one the player last clicked or
+focused has them. Each is named by its own window's title.
+
+<Canvas of={PickerStories.TwoMenus} />
+
 ## Usage
 
+- **The title names the menu**, as on the SNES, where a list had no
+  label of its own: the name the player reads is the one a screen reader
+  says, so the two can't drift apart. A `label` given wins over the
+  title, for a menu straight on the stage or a window whose title says
+  something else (`Gold: 120` over a shop).
+- **Back is an item like the others**, so the cursor reaches it; a
+  `PickerGroup` gives it room in a longer list (`Button`, Back, shows it
+  beside a form's).
 - **Do** put a picker in a Window, with a Legend that names the keys.
 - **Do** keep a disabled item in the list and say why in its note.
 - **Don't** hide what is not available. Nothing in a menu is hidden.
-- **Don't** have two active pickers on one layer. One in a `Dialog` (or
-  a `Confirm`) is on a layer of its own: the menu under it hears no keys
-  until it closes, without turning its `active` off.
+- **Don't** switch a picker off for a `Dialog` (or a `Confirm`) over it.
+  A dialog is a layer of its own: the menu under it hears no keys until
+  it closes, without turning its `active` off.
+- **Do** leave several pickers on one layer as they are: they share the
+  keys by themselves (see Input). The list itself is what a click or the
+  pointer hands the keys over by, not the Window around it.
+
+<Rules for="picker" />
 
 ## The description box
 
@@ -86,11 +202,28 @@ layout it goes under the window, as wide as it.
 
 ## Input
 
-- Up and down, or W and S, move; the list wraps
+- Up and down, or W and S, move; the list wraps. The focus moves with the
+  cursor to the row it reaches, so the two are never apart
 - Left and right, or A and D, step a `PickerSetting`
 - Enter or Space picks the current item
 - Hovering a row moves the cursor; a click or tap picks it
 - Under a finger there is no cursor: only a row with a note is marked
+
+### Several pickers on one layer
+
+The keys go to one: the one the player last pointed at, clicked or moved
+the focus into (it keeps them until another is), and until then the first
+on the page. A screen with one menu needs no click. The menu without the
+keys is at rest: no cursor and no note (one cursor on a screen, as in a
+game, never two where one answers). A picker that goes
+away hands the keys back. A `Dialog` is a layer of its own, with its own
+pick of the keys, so the menu under it hears none. Only the menu with the
+keys moves the focus with its cursor; the one at rest never takes it.
+
+This follows the web: the keys change hands by pointer or focus (Tab). By
+directional input alone, with no pointer, a second menu cannot be
+reached; a screen that needs that switches `active` itself (directional
+handover waits for gamepad input, Q18).
 
 ## Sound
 
@@ -99,7 +232,24 @@ picked, `back` for a `back` item and `bump` for a disabled one.
 
 ## Accessibility
 
-- A `<ul>` named by `label` with a button per row; the current one has
+- A `<ul>` named by its window's or dialog's `Title` (`aria-labelledby`),
+  or by `label` where it has one, with a button per row; the current one has
   `aria-current`, a disabled one `aria-disabled`
+- In columns each value is read with its column's name before it
+  (`Price 25g`); the header row is hidden from assistive technology, so it
+  is not read as an item of the list
+- Each row carries its place in the whole list, groups and all
+  (`aria-posinset`, `aria-setsize`, on the row's `li`: a `button` can't
+  carry them), for a screen reader to say with its name. A move by the keys
+  takes the focus to the row, so the reader says the row as the cursor
+  reaches it; the list's opening and a pointer move take no focus. How each
+  reader says the place differs and is not checked with one yet. The position under the
+  list is for the eye only, and in English (`of`)
 - The note is an `aria-live` region
-- The focus ring shows for the keyboard only (`:focus-visible`)
+- The focus mark (`foundations/focus.mdx`) is the cursor, always in the
+  primary colour (10.51:1 on the window): Tab puts the cursor on the row it
+  reaches, so there is one cursor and a row does not grow an outline.
+  2.4.7 and 1.4.11 pass. 2.4.13 (AAA) fails: a pointer 3 by 5 pixels is
+  smaller than a 2 pixel line round the row
+- A picker with no name, no title over it and no `label`, is refused
+  while building, with a message in the console

@@ -1,0 +1,6 @@
+page: timer
+rules:
+  - id: C-TIMER-101
+    text: Let the player lengthen or turn off a time limit that isn't the game's challenge.
+    markers: [review]
+    source: https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/116

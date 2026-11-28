@@ -1,0 +1,59 @@
+{
+  "task": "quests",
+  "label": "day-zero",
+  "run": "no-cli/quests-2",
+  "runFolder": "~/.cache/blip-eval/day-zero/no-cli/quests-2",
+  "how": "Set each `pass` to true or false: does the claim hold for this run? Answer from what `look` names (the diff of src/ that `show` prints, or the screenshot) and nothing else. A screenshot is `<name>.png` in ~/.cache/blip-eval/<label>/.screenshots/<run>/, written by a collect that renders (or open the URL on the built app of the run). Do not open evals/blip/labels/judge/ before you are done.",
+  "statements": [
+    {
+      "id": "open-and-done",
+      "text": "The two open quests (The Lost Ferry, Wolves at Hollow Gate) are listed before, and visibly apart from, the done one (Herbs for Old Bess).",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=quests&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "giver-and-next",
+      "text": "Each open quest shows who gave it and what to do next (The Lost Ferry: Search the reeds south of the ford).",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=quests&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "done-mark",
+      "text": "The done quest is marked as done in words or a symbol, not only by colour or by being greyed out.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "start@wide",
+        "url": "?screen=quests&state=start"
+      },
+      "pass": null
+    },
+    {
+      "id": "description",
+      "text": "Choosing a quest shows its whole `description`.",
+      "from": "diff",
+      "look": {
+        "diff": "node evals/blip/labels.mjs show quests",
+        "files": ["src/screens/index.ts", "src/screens/quests.tsx"]
+      },
+      "pass": null
+    },
+    {
+      "id": "no-quests",
+      "text": "With no quests, the screen says there are none yet, instead of empty space or a heading with nothing under it.",
+      "from": "screenshot",
+      "look": {
+        "screenshot": "empty@wide",
+        "url": "?screen=quests&state=empty"
+      },
+      "pass": null
+    }
+  ]
+}

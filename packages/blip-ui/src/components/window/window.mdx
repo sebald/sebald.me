@@ -1,5 +1,6 @@
 import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
 
+import { Rules } from '../../../.storybook/blocks';
 import * as WindowStories from './window.stories';
 
 <Meta of={WindowStories} />
@@ -9,6 +10,8 @@ import * as WindowStories from './window.stories';
 The quiet window every text sits in: the opponent's line, the menus, the
 results, a picker's description box. It grows with what is in it; the
 screen positions and sizes it.
+
+What makes a window a menu or a form, and the keys: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
 
 <Canvas of={WindowStories.Default} />
 <Controls of={WindowStories.Default} />
@@ -24,6 +27,15 @@ screen positions and sizes it.
 5. **Legend**, optional, the control hints along the bottom edge: a
    `Legend` as the window's last child
 
+## A menu or a form
+
+A window holds one kind of thing the player does, so its keys mean one
+thing, and its title says what that is. A list beside fields gets a
+window or a step of its own; a `Picker` inside a `Form` is refused while
+building.
+
+<Canvas of={WindowStories.AMenu} />
+
 ## Usage
 
 - **Do** put all text that the player reads on the stage in a window, so it
@@ -32,8 +44,13 @@ screen positions and sizes it.
 - **Do** use Tabs for a window with pages, not a Window with tabs put on
   it.
 - **Don't** nest windows. A description box sits beside its window, not in it.
+- **A window fits its screen by itself.** In a `Screen` it is never
+  taller than the stage: its list gives up the room and scrolls, the rest
+  keeps its size (`Screen`, a list longer than the stage).
 - **Don't** clip what's inside: the content is never cut at a corner, so
   keep it inside the padding.
+
+<Rules for="window" />
 
 ## Legend
 
@@ -51,3 +68,9 @@ held upright it centres over the bar of controls.
 The frame is drawn in stage pixels; the padding inside it is 4 `--bui-px`,
 the stage pixel never finer than 3 CSS pixels, because on a phone's tall
 stage a stage pixel is too fine to keep the text off the frame.
+
+## Accessibility
+
+- A window's `Title` is an `h2`, and the name of a `Picker` in the
+  window (`aria-labelledby`): the menu is called what the player reads
+  over it. A `Title` inside its `Content` is only a heading

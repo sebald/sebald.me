@@ -1,0 +1,45 @@
+{
+  "task": "pause",
+  "scope": "changed-lines",
+  "urls": [
+    { "id": "camp", "url": "?screen=camp&state=start" },
+    { "id": "start", "url": "?screen=pause&state=start" }
+  ],
+  "statements": [
+    {
+      "id": "choices",
+      "text": "The pause screen offers Resume, Options and Leave the run, and the camp is still visible behind it.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "start@wide"
+    },
+    {
+      "id": "tap-to-pause",
+      "text": "The camp on a phone shows something to tap that pauses the game.",
+      "unstated": false,
+      "from": "screenshot",
+      "screenshot": "camp@phone"
+    },
+    {
+      "id": "options-kept",
+      "text": "Changing music volume, sound volume or message speed calls `setOption` as the value changes, not only when the pause screen closes.",
+      "unstated": false,
+      "from": "diff"
+    },
+    {
+      "id": "leave-asks",
+      "text": "Leave the run asks the player first, and `leaveRun` is only called after they agree.",
+      "unstated": true,
+      "from": "diff",
+      "url": "start"
+    },
+    {
+      "id": "camp-gets-no-keys",
+      "text": "While the pause screen is open, keys don't reach the camp underneath: arrow keys and Enter move or choose nothing on the camp.",
+      "unstated": true,
+      "from": "diff",
+      "url": "start",
+      "note": "camp.tsx, unchanged by the task, handles arrow keys and Enter in a `keydown` listener on `window`. A pause screen opened on top does not stop that listener on its own: a Blip `Dialog` keeps the arrow keys from it while focus is inside, but Enter still gets through. So the diff has to switch the listener off while paused or stop Enter (and the arrows, if the pause is not a `Dialog`) before it gets there; a diff that only handles Enter under a `Dialog` passes."
+    }
+  ]
+}

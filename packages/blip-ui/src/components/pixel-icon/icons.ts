@@ -1,3 +1,12 @@
+/** The name of an icon in `ICONS` */
+export type IconName =
+  | 'soundOn'
+  | 'soundOff'
+  | 'back'
+  | 'pause'
+  | 'fullscreen'
+  | 'exitFullscreen';
+
 /**
  * The icons as data, pixel for pixel (`PixelIcon` draws them at `DOT`),
  * in the primary colour so they are found on the dark ground: an ink
@@ -93,10 +102,7 @@ export const ICONS = {
     '..KOK...KOK..',
     '..KOK...KOK..',
   ],
-} as const;
-
-/** The name of an icon in `ICONS` */
-export type IconName = keyof typeof ICONS;
+} as const satisfies Record<IconName, readonly string[]>;
 
 /** The colour role of each letter in an icon's rows */
 export const ICON_COLOURS: Record<string, string> = {

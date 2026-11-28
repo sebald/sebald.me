@@ -11,10 +11,25 @@
 /* A touch screen without a mouse */
 @custom-variant touch (@media (hover: none) and (pointer: coarse));
 
-/* The keyboard's focus ring */
+/* The keyboard's focus mark: the primary colour, one --bui-px thick, drawn
+   inside the control's own box, so a focused control is never bigger than
+   an unfocused one (an outline is painted over the box, with a negative
+   offset, and takes no room). A control whose own face is the primary
+   colour sets --bui-focus-color to its letters' colour, and the mark may
+   sit further in (--bui-focus-inset, in --bui-px, negative). See
+   foundations/focus.mdx for each control's look and its ratios */
 @utility bui-focus {
-  @apply outline-2 outline-offset-2 outline-solid;
-  outline-color: var(--bui-focus);
+  outline: var(--bui-px) solid var(--bui-focus-color, var(--bui-primary));
+  outline-offset: calc(var(--bui-px) * var(--bui-focus-inset, -1));
+}
+
+/* The same mark for a line of text: a primary underline, one --bui-px
+   thick and two under the letters, which lengthens nothing */
+@utility bui-focus-line {
+  text-decoration-line: underline;
+  text-decoration-color: var(--bui-primary);
+  text-decoration-thickness: var(--bui-px);
+  text-underline-offset: calc(var(--bui-px) * 2);
 }
 
 /* What can't be used right now, everywhere in the kit: faded and grey */
@@ -80,6 +95,26 @@
  * a UI element moves smoothly, by a transition on the curves below;
  * art moves like a sprite, by stepped keyframes, in whole pixels.
  */
+/* The spacing roles (`foundations/pixel.ts` SPACING, `spacing.mdx`), in
+   stage pixels: `gap-related`, `p-window`, `--theme(--spacing-cursor)`. Inline,
+   so --bui-px is the stage's where the class is used. Not `screen`, which
+   would take over `h-screen` */
+@theme inline {
+  --spacing-joined: var(--bui-px);
+  --spacing-related: calc(var(--bui-px) * 2);
+  --spacing-regular: calc(var(--bui-px) * 4);
+  --spacing-section: calc(var(--bui-px) * 8);
+  --spacing-control: calc(var(--bui-px) * 2);
+  --spacing-field: calc(var(--bui-px) * 4);
+  --spacing-control-x: calc(var(--bui-px) * 4);
+  --spacing-window: calc(var(--bui-px) * 4);
+  --spacing-edge: calc(var(--bui-px) * 8);
+  --spacing-cursor: calc(var(--bui-px) * 3);
+  --spacing-cursor-clear: calc(var(--bui-px) * 6);
+  --spacing-cursor-apart: calc(var(--bui-px) * 12);
+  --spacing-cursor-column: calc(var(--bui-px) * 8);
+}
+
 @theme {
   /* The curves for a UI element: out for what enters, leaves or answers
      the player, in-out for what moves across the stage */

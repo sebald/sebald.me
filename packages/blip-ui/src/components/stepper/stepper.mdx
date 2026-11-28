@@ -1,0 +1,123 @@
+import { Canvas, Controls, Meta } from '@storybook/addon-docs/blocks';
+
+import { Rules } from '../../../.storybook/blocks';
+import * as StepperStories from './stepper.stories';
+
+<Meta of={StepperStories} />
+
+# Stepper
+
+The form's one choice control: a setting with its value between two step
+arrows, `Music ◀ On ▶`, `Text speed ◀ Normal ▶`. On and Off, Normal and
+Hard, Slow and Fast are all a stepper, as on an era game's options screen,
+so there is nothing to choose between: the toggle, the option and the
+settings row of a form are this. `StepperControl` is the value and
+its arrows, the control of a `Field`; `Stepper` is the commonest form of
+it, a `Field` with a label holding one: its children are the label,
+`description` and `error` the field's words, the rest goes to the control.
+
+Which control a form uses for which job, and its keys: [Menus and forms](?path=/docs/guides-menus-and-forms--docs).
+
+<Canvas of={StepperStories.Default} />
+<Controls of={StepperStories.Default} />
+
+```tsx
+<Stepper name="music" values={['Off', 'On']} defaultValue="On">
+  Music
+</Stepper>
+
+// the same, composed
+<Field name="music">
+  <FieldLabel>Music</FieldLabel>
+  <StepperControl values={['Off', 'On']} defaultValue="On" />
+</Field>
+```
+
+## Anatomy
+
+1. **Label**, its children, the `Field`'s label: in the window's label
+   column on a wide stage; on a tall one, or outside a window's rows,
+   beside the value too, the value at the row's end, as on a phone's
+   settings screen. The `Field`'s cursor points at it while the
+   stepper has the keys' focus, as at every field
+2. **Left step** and **right step**, the `Setting`'s pixel triangles (`Step`),
+   shown only where Left and Right work: bright (`--bui-text-bright`)
+   while it has the keys' focus, its second cue beside the `Field`'s
+   cursor, not yellow (the cursor is the row's one yellow sign,
+   `foundations/colour.mdx`), and under the pointer. A gap (`regular`)
+   from the value, so a value of six characters stands clear of them.
+   At rest a row is its name and value, as on a game's
+   options screen, so a window of steppers is not a column of arrows; their room
+   is kept, so nothing shifts when they show. Under a finger there is no
+   cursor to show them: they stay, dim, as the sign that a tap steps it
+3. **Value**, bright, centred in six characters between the arrows; the
+   right arrow ends at the row's end, where a readout's and a ledger's
+   numbers end, the value just inside it, as a menu setting's. A longer
+   value grows to the left, so the arrows stay put. The stepper still
+   takes the whole column, so a tap anywhere on the row reaches it
+4. **Description** and **error**, the `Field`'s, right under the row.
+   In a window's label column they start where a `TextField`'s do, at the
+   control column, so every description and error in a form shares one
+   edge; on a tall stage, where there is no label column, they take the
+   row's width
+
+<Canvas of={StepperStories.Overview} />
+
+## Usage
+
+- **Do** use it for every choice in a form, two values or seven. A menu
+  row that is a setting is a `PickerSetting`, which looks the same and
+  takes the `Picker`'s keys.
+- **Do** write a setting that is on or off as `['Off', 'On']`, in that
+  order, never Yes and No or Enabled and Disabled: only those words
+  make it a switch to a screen reader. Two other
+  values (`['Normal', 'Hard']`) are read as their words, so name the row
+  for the choice: `Difficulty`, not `Hard mode`.
+- **Do** write more values in the order Right goes through them: Slow,
+  Normal, Fast. It goes round: Right from the last is the first again.
+- **Don't** use it for a number the player only reads (a `Readout`), or a
+  choice among actions or places (a `Picker` in a menu window).
+
+<Canvas of={StepperStories.Options} />
+
+<Rules for="stepper" />
+
+## Input
+
+- Left and Right step it, back and on, and go round at the ends
+- Enter, Space and a tap step it on; on two values that is a flip. A tap
+  on its label does the same, so the whole row is the target
+- Home and End go to the first and the last value
+- Up and Down are not its own: in a `Form` they move to the row above or
+  below
+- A disabled stepper takes none of them and is not a stop
+- Each step plays the `move` sound through `useFeedback()`; the value
+  changes at once, as list navigation does: no motion
+
+## Accessibility
+
+- `['Off', 'On']`: `role="switch"`, `aria-checked` when on. Any other
+  values, two included: a `role="slider"` across
+  (`aria-orientation="horizontal"`), its value in words
+  (`aria-valuetext`), so Normal and Hard are heard as Normal and Hard, not
+  as off and on. The words on the stage are the same and are read once
+- Named by its `Field`'s label (`aria-labelledby`), the name the same in
+  every state; described by the field's description and error
+- A change is said by the role's own state, which a screen reader reads
+  for the control it is on, not by the stage's live region, which would
+  say it twice
+- A Tab stop; the focus is the `Field`'s cursor left of the label, in
+  primary (10.51:1), and the arrows showing bright either side of the
+  value as its second cue (`foundations/focus.mdx`). On a touch screen
+  with a keyboard attached the arrows are already there, dim: the focus
+  is their turn to bright, a change of 3.79:1, and no cursor shows there
+  (as on a menu)
+- The value is in words, so the state never rests on colour. The arrows
+  are 11.56:1 on the window with the focus (bright) and 3.05:1 at rest
+  under a finger (dim, the 3:1 of WCAG 1.4.11); the cursor is 10.51:1
+  (primary); the value is bright, 11.56:1
+- A touch screen gets a target at least 44 CSS pixels high (a line and 4
+  stage pixels above and below it, at least 3 CSS pixels each), reaching
+  into the gaps around the row, so the row keeps its line's height; the
+  description and error lie over it, so a tap on them steps nothing
+- `name` sends the value shown (`On`, `Fast`) with the form

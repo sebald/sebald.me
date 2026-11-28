@@ -59,5 +59,12 @@ pressing it does not also advance a screen behind it.
 
 - A native `<button>`; `aria-label` is required, the icon is decorative
 - A toggle sets `aria-pressed`
-- The focus ring shows for the keyboard only (`:focus-visible`)
+- Focus (`foundations/focus.mdx`) shows for the keyboard only
+  (`:focus-visible`): the menus' cursor, as on a `Button`, 3 pixels from
+  what it points at: the icon in a corner (`Controls` sets corner buttons
+  apart for it), the first of icon and label on the tall stage's bar, at
+  the edge of its left padding.
+  The button does not grow. 11.92:1 on the bar's ground; in a corner it is
+  over the scene, as the icons are, so a scene behind the corners keeps
+  them dark. 2.4.13 (AAA) fails, as for every cursor
 - At least 44 CSS pixels square (WCAG 2.5.5), whatever the scale

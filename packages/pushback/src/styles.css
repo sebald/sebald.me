@@ -1,7 +1,7 @@
 /*
  * Pushback's styles, for the host's Tailwind entry to import after
- * `tailwindcss`: the classes in the game's files, its variants, its
- * focus ring and the stage's leading.
+ * `tailwindcss`: the classes in the game's files, its variants and the
+ * stage's leading. Focus is Blip UI's mark (`bui-focus`).
  */
 @source './';
 
@@ -9,12 +9,6 @@
 @custom-variant tall (&:where([data-layout=tall] *));
 /* A touch screen without a mouse */
 @custom-variant touch (@media (hover: none) and (pointer: coarse));
-
-/* The keyboard's focus ring, in the gold of the title */
-@utility pb-focus {
-  @apply outline-2 outline-offset-2 outline-solid;
-  outline-color: oklch(0.74 0.1 65 / 0.8);
-}
 
 /* The stage stacks lines of text and wants normal leading, whatever the
    page around it trims */
@@ -91,8 +85,9 @@
   --bui-frame-inner: var(--pb-frame-inner);
   --bui-text: var(--pb-text);
   --bui-text-bright: var(--pb-text-bright);
-  /* The item the cursor is on, warm against the white-ish rest */
-  --bui-text-selected: var(--pb-gold-light);
+  /* The item the cursor is on, brighter than the rest: not gold, the
+     cursor is the row's one yellow (Blip UI's foundations/colour.mdx) */
+  --bui-text-selected: var(--pb-heading);
   --bui-heading: var(--pb-heading);
   --bui-muted: var(--pb-muted);
   --bui-dim: var(--pb-dim);

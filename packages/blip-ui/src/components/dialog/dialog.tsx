@@ -6,12 +6,9 @@ import { type ReactNode, useRef, useState } from 'react';
 import { KeyLayerContext, useKeyLayer } from '../../hooks/key-layer';
 import { useFeedback } from '../../providers/feedback';
 import { useStage } from '../../providers/pixels';
-import type { VariantProps } from '../../utils/styles';
 import { PartsContext, type PartsValue } from '../parts/parts';
 import { WindowFrame } from '../window/window';
 import { dialog as styles } from './dialog.styles';
-
-type Variants = VariantProps<typeof styles.popup>;
 
 /** What its content says, as Base UI's description (a `div`, it may hold a list) */
 const Description = (props: object) => (
@@ -41,7 +38,7 @@ export interface DialogProps {
    * How much of the stage it takes
    * @default 'default'
    */
-  size?: NonNullable<Variants['size']>;
+  size?: 'default' | 'large';
   /** Its parts: a `Title` (it names the dialog), `Content`, `Actions`, a `Legend` */
   children: ReactNode;
   className?: string;

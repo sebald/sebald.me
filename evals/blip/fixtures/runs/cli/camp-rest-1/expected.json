@@ -1,0 +1,70 @@
+{
+  "_": "scope changed-lines: camp.tsx has 3 divs from the template and the agent adds one (line 5); only that one counts",
+  "transcript": {
+    "status": "complete",
+    "overBudget": false,
+    "toolCalls": {
+      "total": 1,
+      "byTool": {
+        "Edit": 1
+      }
+    },
+    "blipCalls": {
+      "total": 0,
+      "byCommand": {}
+    },
+    "reads": {
+      "dist": 0,
+      "docs": 0
+    },
+    "lookupBeforeFirstTsxWrite": false,
+    "tsErrors": 0,
+    "turns": 2,
+    "tokens": {
+      "input": 10,
+      "output": 20,
+      "cacheRead": 0,
+      "cacheCreation": 0
+    },
+    "subagents": {
+      "messages": 0
+    },
+    "costUsd": 0.1,
+    "wallSeconds": 10,
+    "denials": 0,
+    "network": []
+  },
+  "tree": {
+    "rawTags": {
+      "total": 1,
+      "controls": 0,
+      "wrappers": 1,
+      "byTag": {
+        "div": 1
+      }
+    },
+    "components": {
+      "blip": 0,
+      "own": 0,
+      "other": 0
+    },
+    "classNames": {
+      "total": 1,
+      "onBlip": 0,
+      "onRaw": 1,
+      "placing": 1,
+      "restyling": 1
+    },
+    "inlineStyles": 0,
+    "imports": {
+      "fromBlip": 0,
+      "invented": []
+    },
+    "overrides": [
+      {
+        "key": "raw:div|bg-green-900",
+        "line": 5
+      }
+    ]
+  }
+}

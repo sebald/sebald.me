@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Stage } from '../stage/stage';
-import { Text } from '../text/text';
-import { Legend, Window } from './window';
+import { AMenu as AMenuExample } from './examples/a-menu';
+import { OnTheStage as OnTheStageExample } from './examples/on-the-stage';
+import { WithLegend as WithLegendExample } from './examples/with-legend';
+import { Window } from './window';
 
 const meta = {
   title: 'Components/Window',
@@ -29,27 +30,17 @@ export const Default: Story = {};
 
 /** With the control hints along the bottom: the keys, or the one line for touch */
 export const WithLegend: Story = {
-  render: args => (
-    <Window {...args}>
-      {args.children}
-      <Legend
-        keys={[
-          ['↑↓', 'choose'],
-          ['Enter', 'confirm'],
-        ]}
-        touch="Tap a line"
-      />
-    </Window>
-  ),
+  render: args => <WithLegendExample {...args} />,
 };
 
 /** The same legend on the stage itself: the stage puts it in its bottom right corner */
 export const OnTheStage: Story = {
   parameters: { controls: { disable: true } },
-  render: (_, { globals }) => (
-    <Stage scale={Number(globals.scale) || 3} width={200} height={60}>
-      <Text className="p-3">The stage</Text>
-      <Legend keys={[['Enter', 'start']]} touch="Tap to start" />
-    </Stage>
-  ),
+  render: () => <OnTheStageExample />,
+};
+
+/** A window that is a menu: its title names the list, for a screen reader too */
+export const AMenu: Story = {
+  parameters: { controls: { disable: true } },
+  render: () => <AMenuExample />,
 };

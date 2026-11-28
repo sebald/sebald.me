@@ -1,10 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import type { ReactNode } from 'react';
 
-import { Pixels, usePixels } from '../../providers/pixels';
-import { Heading } from '../text/text';
-import { Legend, Window } from '../window/window';
-import { Picker, PickerGroup, PickerItem, PickerSetting } from './picker';
+import { InAWindow as InAWindowExample } from './examples/in-a-window';
+import { QuestLog as QuestLogExample } from './examples/quest-log';
+import { SaveSlots as SaveSlotsExample } from './examples/save-slots';
+import { ScrollingList as ScrollingListExample } from './examples/scrolling-list';
+import { ShopColumns as ShopColumnsExample } from './examples/shop-columns';
+import { ShopWares as ShopWaresExample } from './examples/shop-wares';
+import { TwoMenus as TwoMenusExample } from './examples/two-menus';
+import { Picker, PickerItem } from './picker';
 
 const noop = () => {};
 
@@ -49,34 +52,6 @@ export const Default: Story = {
       </PickerItem>
     </Picker>
   ),
-};
-
-/** A stage of its own, in stage pixels: the description box is placed on it */
-const Stage = ({
-  width,
-  height,
-  fit,
-  children,
-}: {
-  width: number;
-  height: number;
-  /** At least this big, in em: text has a floor, so at 1x it needs more room than the stage pixels give */
-  fit?: { width: number; height: number };
-  children: ReactNode;
-}) => {
-  const pixels = usePixels();
-  return (
-    <Pixels
-      {...pixels}
-      className="bg-(--bui-ground)"
-      style={{
-        width: `max(calc(var(--px) * ${width}), ${fit?.width ?? 0}em)`,
-        height: `max(calc(var(--px) * ${height}), ${fit?.height ?? 0}em)`,
-      }}
-    >
-      {children}
-    </Pixels>
-  );
 };
 
 /** Two items with the same props, the cursor on the first */
@@ -137,58 +112,7 @@ export const InAWindow: Story = {
   parameters: { controls: { disable: true } },
   // Upright the rows are a thumb's height and the note goes under the
   // window: more rows, the full width
-  render: (_, { globals }) => (
-    <Stage
-      width={320}
-      height={globals.layout === 'tall' ? 300 : 110}
-      fit={{ width: 34, height: 14 }}
-    >
-      <div className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] tall:inset-x-[calc(var(--px)*6)]">
-        <Window className="w-[19em] tall:w-full">
-          <Heading>Options</Heading>
-          <Picker label="Options" className="mt-[calc(var(--px)*3)]">
-            <PickerSetting
-              id="mode"
-              value="Easy"
-              note="A ghost helps you and nothing rushes you."
-              onStep={noop}
-            >
-              Mode
-            </PickerSetting>
-            <PickerItem
-              id="music"
-              note="M mutes everything, anywhere."
-              onSelect={noop}
-            >
-              Music
-            </PickerItem>
-            <PickerGroup>
-              <PickerItem
-                id="erase"
-                disabled
-                note="Nothing saved yet."
-                onSelect={noop}
-              >
-                Erase save
-              </PickerItem>
-            </PickerGroup>
-            <PickerGroup>
-              <PickerItem id="back" variant="back" onSelect={noop}>
-                Back
-              </PickerItem>
-            </PickerGroup>
-          </Picker>
-          <Legend
-            keys={[
-              ['↑↓', 'choose'],
-              ['Enter', 'confirm'],
-            ]}
-            touch="Tap a line"
-          />
-        </Window>
-      </div>
-    </Stage>
-  ),
+  render: () => <InAWindowExample />,
 };
 
 /**
@@ -196,23 +120,49 @@ export const InAWindow: Story = {
  * beside it shows where it is, an arrow lit at each end with more
  */
 export const ScrollingList: Story = {
+  // A window on a whole stage, sized in stage pixels: at 1x, under any
+  // game's scale (`MIN_SCALE`, 2.25), its words have no room
+  tags: ['no-vrt-1x'],
   name: 'Scrolling list',
   parameters: { controls: { disable: true } },
   // Upright the window spans the stage and shows more rows
-  render: (_, { globals }) => (
-    <Stage
-      width={globals.layout === 'tall' ? 320 : 160}
-      height={globals.layout === 'tall' ? 172 : 110}
-    >
-      <Window className="absolute top-[calc(var(--px)*6)] left-[calc(var(--px)*30)] h-[calc(var(--px)*80)] w-[calc(var(--px)*100)] tall:inset-x-[calc(var(--px)*6)] tall:h-[calc(var(--px)*160)] tall:w-auto">
-        <Picker label="Colleagues">
-          {Array.from({ length: 12 }, (_, i) => (
-            <PickerItem key={i} id={`item-${i}`} onSelect={noop}>
-              Colleague {i + 1}
-            </PickerItem>
-          ))}
-        </Picker>
-      </Window>
-    </Stage>
-  ),
+  render: () => <ScrollingListExample />,
+};
+
+/**
+ * Two menus on one screen: Up and Down move the one the player clicked
+ * or focused, the first until then; clicking the other hands the keys over
+ */
+export const TwoMenus: Story = {
+  name: 'Two menus',
+  parameters: { controls: { disable: true } },
+  render: () => <TwoMenusExample />,
+};
+
+/** An item with parts: its name, a detail line each for who gave it and what to do next, a tag */
+export const QuestLog: Story = {
+  name: 'Quest log',
+  parameters: { controls: { disable: true } },
+  render: () => <QuestLogExample />,
+};
+
+/** An item with a value at its end and a detail under its name */
+export const SaveSlots: Story = {
+  name: 'Save slots',
+  parameters: { controls: { disable: true } },
+  render: () => <SaveSlotsExample />,
+};
+
+/** Prices at the rows' end; one out of reach, dimmed with its parts, says what is missing */
+export const ShopWares: Story = {
+  name: 'Shop wares',
+  parameters: { controls: { disable: true } },
+  render: () => <ShopWaresExample />,
+};
+
+/** Two values a row, Price and Owned, lined up under the columns' names */
+export const ShopColumns: Story = {
+  name: 'Shop in columns',
+  parameters: { controls: { disable: true } },
+  render: () => <ShopColumnsExample />,
 };

@@ -56,12 +56,19 @@ export const IconButton = ({
 }: IconButtonProps) => {
   const layout = useContext(ControlsLayout);
   const bar = layout === 'bar';
+  const cursor = (
+    <span
+      aria-hidden
+      data-slot="cursor"
+      className={iconButton.cursor({ layout })}
+    />
+  );
   return (
     <button
       type="button"
       data-slot="icon-button"
       slot={slot}
-      className={iconButton({ layout, className })}
+      className={iconButton.root({ layout, className })}
       onPointerDown={keep}
       onClick={(event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
@@ -69,8 +76,19 @@ export const IconButton = ({
       }}
       {...props}
     >
-      <PixelIcon icon={icon} />
-      {bar && label}
+      {bar ? (
+        <>
+          {cursor}
+          <PixelIcon icon={icon} />
+          {label}
+        </>
+      ) : (
+        // The cursor beside the icon: the box is wider than the icon
+        <span data-cursor-target className="relative">
+          {cursor}
+          <PixelIcon icon={icon} />
+        </span>
+      )}
       {children}
     </button>
   );

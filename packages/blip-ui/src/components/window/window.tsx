@@ -9,6 +9,7 @@ import {
   ditherRows,
 } from '../../foundations/dither';
 import { useInputKind } from '../../hooks/use-input-kind';
+import { NamedByTitle } from '../parts/parts';
 import { window as styles } from './window.styles';
 
 /** The window's rings, from the outside in, one stage pixel each */
@@ -29,12 +30,21 @@ const FADE: DitherRow[] = [
   { at: 6, period: 8, offset: 4 },
 ];
 
+/** The light along the top: a solid row, then the fade */
+const LIGHT = ditherRows(
+  [{ at: 0, period: 1, offset: 0 }, ...FADE],
+  'var(--bui-surface-light)',
+  'top',
+);
+
+/**
+ * The window's light alone, for a part that opens into a window and
+ * carries its light (the open tab, `Tab`); not exported from the kit
+ */
+export const WINDOW_LIGHT = ditherBackground(LIGHT);
+
 const FILL = ditherBackground([
-  ...ditherRows(
-    [{ at: 0, period: 1, offset: 0 }, ...FADE],
-    'var(--bui-surface-light)',
-    'top',
-  ),
+  ...LIGHT,
   ...ditherRows(
     FADE.map(row => ({ ...row, at: row.at - 1 })),
     'var(--bui-surface-shade)',
@@ -75,7 +85,8 @@ export const WindowFrame = ({ className, style, children }: WindowProps) => (
       className={styles.body()}
       style={{ margin: `calc(var(--px) * ${RINGS.length})`, ...FILL }}
     >
-      {children}
+      {/* Its title names it, and a menu in it */}
+      <NamedByTitle>{children}</NamedByTitle>
     </div>
   </div>
 );
