@@ -9,6 +9,7 @@ import {
   isValidElement,
   use,
   useEffect,
+  useEffectEvent,
   useLayoutEffect,
   useRef,
   useState,
@@ -160,8 +161,8 @@ interface PickerContextValue {
   columns: readonly string[] | undefined;
   /** The items' ids in the list's order, across its groups: each row's place in it */
   ids: readonly string[];
-  /** The cursor last moved by the keys: its row takes the focus with it */
-  movedByKeys: RefObject<boolean>;
+  /** Whether the keys moved the cursor last, once: its row takes the focus with it */
+  takeKeyMove: () => boolean;
 }
 
 /** The column a value sits in: its name, read out before it, and whether it is the last */
@@ -256,6 +257,11 @@ export const Picker = ({
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
   const movedByKeys = useRef(false);
+  const takeKeyMove = () => {
+    const moved = movedByKeys.current;
+    movedByKeys.current = false;
+    return moved;
+  };
   const rootRef = useRef<HTMLDivElement>(null);
   const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
@@ -414,7 +420,7 @@ export const Picker = ({
         listRef,
         columns: hasColumns ? columns : undefined,
         ids,
-        movedByKeys,
+        takeKeyMove,
       }}
     >
       <div
@@ -527,12 +533,13 @@ const Row = ({
   // the cursor is the focus. Never when the list opens or a pointer
   // moves the cursor, so a menu takes no focus the player didn't move.
   // The list scrolls itself (below), never the page
-  const { movedByKeys } = picker;
+  const { takeKeyMove } = picker;
+  const takeFocus = useEffectEvent(() => {
+    if (takeKeyMove()) buttonRef.current?.focus({ preventScroll: true });
+  });
   useEffect(() => {
-    if (!isCurrent || !movedByKeys.current) return;
-    movedByKeys.current = false;
-    buttonRef.current?.focus({ preventScroll: true });
-  }, [isCurrent, movedByKeys]);
+    if (isCurrent) takeFocus();
+  }, [isCurrent]);
 
   // The keys reach the item through the picker: its latest handlers
   const entry: Entry = { disabled, variant, onSelect, onStep };
