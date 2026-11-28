@@ -63,6 +63,7 @@ const preview: Preview = {
           'Introduction',
           'Building components',
           'Foundations',
+          'Guides',
           'Hooks',
           'Components',
           'Patterns',

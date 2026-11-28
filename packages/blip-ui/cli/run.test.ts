@@ -13,13 +13,14 @@ import { describe, it } from 'node:test';
 import { run } from './run.ts';
 
 /** A docs folder of two pages and a working directory, in a temp folder */
-const setup = () => {
+const setup = (more: readonly (readonly [string, string, string])[] = []) => {
   const root = mkdtempSync(join(tmpdir(), 'blip-cli-'));
   const docsDir = join(root, 'docs');
   mkdirSync(join(docsDir, 'pages'), { recursive: true });
   const pages = [
     ['confirm', 'Confirm', 'Asks before something is erased.'],
     ['dialog', 'Dialog', 'A window over the stage.'],
+    ...more,
   ] as const;
   for (const [id, title, summary] of pages) {
     writeFileSync(
@@ -60,8 +61,12 @@ const setup = () => {
   return { docsDir, cwd };
 };
 
-const call = (argv: string[], env: Record<string, string> = {}) => {
-  const { docsDir, cwd } = setup();
+const call = (
+  argv: string[],
+  env: Record<string, string> = {},
+  more: readonly (readonly [string, string, string])[] = [],
+) => {
+  const { docsDir, cwd } = setup(more);
   const out: string[] = [];
   const err: string[] = [];
   const code = run(argv, {
@@ -86,6 +91,17 @@ describe('run', () => {
     assert.equal(code, 0);
     assert.match(out, /blip search/);
     assert.match(out, /confirm {2}Asks before something is erased\./);
+  });
+
+  it('points to the menus and forms guide first, where it ships', () => {
+    assert.doesNotMatch(call([]).out, /Start with/);
+    const { out } = call([], {}, [
+      ['menus-and-forms', 'Menus and forms', 'How screens take input.'],
+    ]);
+    assert.match(
+      out.split('\n')[2]!,
+      /^Building a screen\? Start with blip docs menus-and-forms$/,
+    );
   });
 
   it('prints a page by id or by export name', () => {

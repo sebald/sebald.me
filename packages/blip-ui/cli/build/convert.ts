@@ -34,6 +34,13 @@ export interface RulesLookup {
 
 /** The page a Storybook slug (`components-iconbutton`) points at, if it is shipped */
 export const pageForSlug = (slug: string, ids: readonly string[]) => {
+  // A title of words keeps its dashes (`guides-menus-and-forms`), one in
+  // camel case loses them (`components-iconbutton`); of those spelled out,
+  // the longest page that ends it: `menus-and-forms`, not `forms`
+  const spelled = ids
+    .filter(id => slug === id || slug.endsWith(`-${id}`))
+    .sort((a, b) => b.length - a.length)[0];
+  if (spelled) return spelled;
   const last = slug.split('-').pop() ?? slug;
   return ids.find(id => id.replaceAll('-', '') === last);
 };
