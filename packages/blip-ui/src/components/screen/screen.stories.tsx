@@ -138,7 +138,7 @@ export const BuyAndSell: Story = {
   name: 'Buy and sell',
   // Two menus across a whole stage have no room for their words at 1x,
   // which a game never shows (under `MIN_SCALE`, 2.25, the stage asks for
-  // a bigger window): `picker-position`'s spec checks it at 2.25 instead
+  // a bigger window): `screen-split`'s spec checks it at 2.25 instead
   tags: ['no-vrt-1x'],
   decorators: onAStage,
   parameters: { controls: { disable: true } },

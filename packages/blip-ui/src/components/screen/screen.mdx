@@ -69,13 +69,14 @@ a screen starts with `Screen`.
 
 `split` holds two windows: side by side on the wide stage, each as tall as
 the room under the title, `section` apart, and one above the other on the
-tall stage, as the column has them. A shop's wares and the bag, two saves
+tall stage, `regular` apart as the column's rows are. A shop's wares and the bag, two saves
 to compare, a list and what its row shows. Each window is its own: its
 title names it, its legend says its keys, and its list takes the keys when
 the player last pointed at or tapped it (`Picker`, several on one layer).
 Each list scrolls in its own room. Write the two windows in the order they
 are read: the left one first, which upright is the upper one, so a screen
-reader hears them as they are seen. More than two windows is no `split`.
+reader hears them as they are seen. It is for exactly two: one window is
+the `default` column, and more than two is no `split`.
 
 ```tsx
 <Screen variant="split">

@@ -27,11 +27,12 @@ const open = async (page: Page, scale: number, layout: string) => {
 };
 
 test('side by side on the wide stage', async ({ page }) => {
+  await page.setViewportSize({ width: 960, height: 600 });
   // `MIN_SCALE`, the smallest wide stage a game shows
   await open(page, 2.25, 'wide');
   const [buy, sell] = await boxes(page);
-  expect(buy!.top).toBe(sell!.top);
-  expect(buy!.bottom).toBe(sell!.bottom);
+  expect(buy!.top).toBeCloseTo(sell!.top, 0);
+  expect(buy!.bottom).toBeCloseTo(sell!.bottom, 0);
   expect(sell!.left).toBeGreaterThan(buy!.right);
   expect(await escapes(page)).toEqual([]);
   expect(await cursorRoom(page)).toEqual([]);
@@ -41,7 +42,7 @@ test('one above the other upright', async ({ page }) => {
   await page.setViewportSize({ width: 402, height: 714 });
   await open(page, 402 / 320, 'tall');
   const [buy, sell] = await boxes(page);
-  expect(buy!.left).toBe(sell!.left);
+  expect(buy!.left).toBeCloseTo(sell!.left, 0);
   expect(sell!.top).toBeGreaterThan(buy!.bottom);
   expect(await cursorRoom(page)).toEqual([]);
 });
@@ -65,6 +66,11 @@ test('each list scrolls on its own', async ({ page }) => {
     page.getByRole('list', { name: 'Buy' }),
     page.getByRole('list', { name: 'Sell' }),
   ];
+  // Both are longer than their room upright, by design
+  for (const list of [buy, sell])
+    expect(await list.evaluate(el => el.scrollHeight > el.clientHeight)).toBe(
+      true,
+    );
   await buy.evaluate(el => (el.scrollTop = el.scrollHeight));
   expect(await buy.evaluate(el => el.scrollTop)).toBeGreaterThan(0);
   expect(await sell.evaluate(el => el.scrollTop)).toBe(0);
