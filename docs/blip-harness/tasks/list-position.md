@@ -1,5 +1,5 @@
 ---
-status: done # todo | doing | done
+status: doing # todo | doing | done
 step: N2 # forms and navigation
 depends: [picker-key-scope]
 pr: 263
@@ -53,3 +53,11 @@ the shop's Back is `4/4`. The tall shot of that story was already wider than the
 `key={name}` and no `role="presentation"`. Done here, said on #261.
 
 Decided 2026-11-22, after the design review of `TextField` (#215) and the research in [`research/forms-and-navigation.md`](../research/forms-and-navigation.md).
+
+**Reopened 2026-11-28.** "A screen reader hears the position with the item" was not met by #263 alone.
+The arrow keys moved the cursor and left the focus where it was, so a reader heard a row's place only
+when its own navigation reached the row. Fixed in the follow-up: a move by the keys takes the focus to
+the row (`focus({ preventScroll: true })`). The list's opening and a pointer move take none. In
+Chrome the focus follows, the page doesn't scroll, and Enter or Space doesn't fire the focused
+button's own click (the kit's capture listener prevents it), so nothing is picked twice. The game
+flows pass. **Left: a listen in VoiceOver** before this is `done`.

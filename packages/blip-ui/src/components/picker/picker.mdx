@@ -200,7 +200,8 @@ layout it goes under the window, as wide as it.
 
 ## Input
 
-- Up and down, or W and S, move; the list wraps
+- Up and down, or W and S, move; the list wraps. The focus moves with the
+  cursor to the row it reaches, so the two are never apart
 - Left and right, or A and D, step a `PickerSetting`
 - Enter or Space picks the current item
 - Hovering a row moves the cursor; a click or tap picks it
@@ -236,8 +237,10 @@ picked, `back` for a `back` item and `bump` for a disabled one.
   is not read as an item of the list
 - Each row carries its place in the whole list, groups and all
   (`aria-posinset`, `aria-setsize`, on the row's `li`: a `button` can't
-  carry them), for a screen reader to say with its name. How each reader
-  says it differs and is not checked with one yet. The position under the
+  carry them), for a screen reader to say with its name. A move by the keys
+  takes the focus to the row, so the reader says the row as the cursor
+  reaches it; the list's opening and a pointer move take no focus. How each
+  reader says the place differs and is not checked with one yet. The position under the
   list is for the eye only, and in English (`of`)
 - The note is an `aria-live` region
 - The focus mark (`foundations/focus.mdx`) is the cursor, always in the

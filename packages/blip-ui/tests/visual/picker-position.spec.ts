@@ -69,3 +69,33 @@ for (const shot of [
     expect(await escapes(page)).toEqual([]);
     expect(await cursorRoom(page)).toEqual([]);
   });
+
+test('the focus moves with the cursor, by the keys only', async ({ page }) => {
+  await page.goto(story('scrolling-list'));
+  const position = page.locator('[data-slot=picker-position]');
+  await expect(position).toHaveText('1 of 12');
+  // The list's opening takes no focus
+  expect(await page.evaluate(() => document.activeElement?.tagName)).toBe(
+    'BODY',
+  );
+  await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('ArrowDown');
+  await expect(page.getByRole('button', { name: 'Colleague 3' })).toBeFocused();
+  // The list scrolls itself, never the page
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  // Enter and Space pick through the keys, never a second time as the
+  // focused button's own click
+  await page.evaluate(() => {
+    (window as unknown as { clicks: number }).clicks = 0;
+    document.addEventListener(
+      'click',
+      () => (window as unknown as { clicks: number }).clicks++,
+      true,
+    );
+  });
+  await page.keyboard.press('Enter');
+  await page.keyboard.press(' ');
+  expect(
+    await page.evaluate(() => (window as unknown as { clicks: number }).clicks),
+  ).toBe(0);
+});

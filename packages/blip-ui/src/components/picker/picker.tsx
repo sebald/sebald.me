@@ -160,6 +160,8 @@ interface PickerContextValue {
   columns: readonly string[] | undefined;
   /** The items' ids in the list's order, across its groups: each row's place in it */
   ids: readonly string[];
+  /** The cursor last moved by the keys: its row takes the focus with it */
+  movedByKeys: RefObject<boolean>;
 }
 
 /** The column a value sits in: its name, read out before it, and whether it is the last */
@@ -253,6 +255,7 @@ export const Picker = ({
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
+  const movedByKeys = useRef(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const { holds: hasKeys, resting } = useKeyScope('menu', rootRef, active);
   const scroll = useScroll(listRef, Children.count(children));
@@ -326,6 +329,7 @@ export const Picker = ({
       if (!ids.length) return;
       play('move');
       const at = current === undefined ? -1 : ids.indexOf(current);
+      movedByKeys.current = true;
       setCurrent(ids[(at + step + ids.length) % ids.length]);
     };
     const entry = current === undefined ? undefined : entries.get(current);
@@ -410,6 +414,7 @@ export const Picker = ({
         listRef,
         columns: hasColumns ? columns : undefined,
         ids,
+        movedByKeys,
       }}
     >
       <div
@@ -514,7 +519,20 @@ const Row = ({
 }: PickerItemProps & { onStep?: (step: 1 | -1) => void }) => {
   const picker = usePicker();
   const rowRef = useRef<HTMLLIElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const isCurrent = picker.current === id;
+
+  // Moved here by the keys, the row takes the focus: a screen reader says
+  // it as the cursor reaches it, its name and its place (`3 of 12`), as
+  // the cursor is the focus. Never when the list opens or a pointer
+  // moves the cursor, so a menu takes no focus the player didn't move.
+  // The list scrolls itself (below), never the page
+  const { movedByKeys } = picker;
+  useEffect(() => {
+    if (!isCurrent || !movedByKeys.current) return;
+    movedByKeys.current = false;
+    buttonRef.current?.focus({ preventScroll: true });
+  }, [isCurrent, movedByKeys]);
 
   // The keys reach the item through the picker: its latest handlers
   const entry: Entry = { disabled, variant, onSelect, onStep };
@@ -581,6 +599,7 @@ const Row = ({
       aria-setsize={at >= 0 ? picker.ids.length : undefined}
     >
       <button
+        ref={buttonRef}
         type="button"
         aria-disabled={disabled || undefined}
         aria-current={isCurrent ? 'true' : undefined}
