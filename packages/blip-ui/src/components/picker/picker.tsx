@@ -161,8 +161,8 @@ interface PickerContextValue {
   columns: readonly string[] | undefined;
   /** The items' ids in the list's order, across its groups: each row's place in it */
   ids: readonly string[];
-  /** Whether the keys moved the cursor last, once: its row takes the focus with it */
-  takeKeyMove: () => boolean;
+  /** Whether the keys moved the cursor to this row, asked once by the row it reaches: it takes the focus */
+  takeKeyMove: (id: string) => boolean;
 }
 
 /** The column a value sits in: its name, read out before it, and whether it is the last */
@@ -256,10 +256,13 @@ export const Picker = ({
   const [current, setCurrent] = useState<string | undefined>(initial);
   const [entries] = useState(() => new Map<string, Entry>());
   const listRef = useRef<HTMLUListElement>(null);
-  const movedByKeys = useRef(false);
-  const takeKeyMove = () => {
-    const moved = movedByKeys.current;
-    movedByKeys.current = false;
+  // The row the keys last moved the cursor to, until a row that becomes
+  // current asks: whichever asks, it is cleared, so a later hover or tap
+  // never takes the focus by an old move
+  const movedByKeys = useRef<string | null>(null);
+  const takeKeyMove = (id: string) => {
+    const moved = movedByKeys.current === id;
+    movedByKeys.current = null;
     return moved;
   };
   const rootRef = useRef<HTMLDivElement>(null);
@@ -335,8 +338,10 @@ export const Picker = ({
       if (!ids.length) return;
       play('move');
       const at = current === undefined ? -1 : ids.indexOf(current);
-      movedByKeys.current = true;
-      setCurrent(ids[(at + step + ids.length) % ids.length]);
+      const next = ids[(at + step + ids.length) % ids.length]!;
+      // A list of one goes nowhere: no row to take the focus
+      movedByKeys.current = next === current ? null : next;
+      setCurrent(next);
     };
     const entry = current === undefined ? undefined : entries.get(current);
     switch (event.key) {
@@ -535,7 +540,7 @@ const Row = ({
   // The list scrolls itself (below), never the page
   const { takeKeyMove } = picker;
   const takeFocus = useEffectEvent(() => {
-    if (takeKeyMove()) buttonRef.current?.focus({ preventScroll: true });
+    if (takeKeyMove(id)) buttonRef.current?.focus({ preventScroll: true });
   });
   useEffect(() => {
     if (isCurrent) takeFocus();

@@ -59,5 +59,5 @@ The arrow keys moved the cursor and left the focus where it was, so a reader hea
 when its own navigation reached the row. Fixed in the follow-up: a move by the keys takes the focus to
 the row (`focus({ preventScroll: true })`). The list's opening and a pointer move take none. In
 Chrome the focus follows, the page doesn't scroll, and Enter or Space doesn't fire the focused
-button's own click (the kit's capture listener prevents it), so nothing is picked twice. The game
+button's own click (the kit's capture listener prevents it on keydown), so nothing is picked twice: checked in Chrome, Firefox and WebKit, by a setting that flips on each pick (the dialog's Music). A guard for a browser that clicks anyway was tried and taken out, since none of the three does. The game
 flows pass. **Left: a listen in VoiceOver** before this is `done`.
